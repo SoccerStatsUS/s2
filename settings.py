@@ -91,10 +91,7 @@ TEMPLATE_DIRS = (
     "/home/chris/www/s2/templates",
 )
 
-# No longer used?
-DATA_DIRS = (
-    "/home/chris/www/s2/data",
-)
+FIXTURE_DIR = "/home/chris/www/s2/fixtures",
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -104,6 +101,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     's2.bios',
     's2.games',
+    's2.teams',
     'django.contrib.admin',
     'gunicorn',
 )
