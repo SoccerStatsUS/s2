@@ -9,14 +9,15 @@ class Game(models.Model):
     # Should we have a date and a datetime field?
     date = models.DateField()
     
-    home_team = models.ForeignKey(Team)
+    home_team = models.ForeignKey(Team, related_name='home_games')
     home_score = models.IntegerField()
 
-    away_team = models.ForeignKey(Team)
+    away_team = models.ForeignKey(Team, related_name='away_games')
     away_score = models.IntegerField()
 
-    # This should probably be a many-to-many.
+    # This should probably be a many-to-many?
     competition = models.CharField(max_length=255)
+    season = models.CharField(max_length=255)
 
     location = models.CharField(max_length=255)
 
