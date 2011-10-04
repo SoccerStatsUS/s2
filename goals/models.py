@@ -1,8 +1,8 @@
 from django.db import models
 
 from s2.bios.models import Bio
+from s2.games.models import Game
 from s2.teams.models import Team
-from s2.teams.models import Game
 
 class Goal(models.Model):
     """

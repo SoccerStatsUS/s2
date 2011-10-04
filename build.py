@@ -12,8 +12,6 @@ from s2.bios.models import Bio
 from s2.games.models import Game
 from s2.teams.models import Team
 
-
-
 connection = pymongo.Connection()
 soccer_db = connection.soccer
 
@@ -29,21 +27,17 @@ def delete():
 
 
 def load():
-    load_fixtures()
+    #load_fixtures()
     load_bios()
     load_games()
+    load_goals()
 
 def load_fixtures():
     call_command("loaddata", "' + 'teams.yaml' + '", verbosity=0)
-    
-    pass
 
 
 @transaction.commit_on_success
 def load_bios():
-    # Need to delete tables first.
-
-
     for bio in soccer_db.bios.find():
         bio.pop('_id')
         Bio.objects.create(**bio)
@@ -64,6 +58,19 @@ def load_games():
             Game.objects.create(**game)
         except IntegrityError:
             print game
+
+@transaction.commit_on_success
+def load_goals():
+    for goal in soccer_db.goals.find():
+        team = Team.objects.find(goal['team'])
+        game = Game.objects.find(team=team, date=goal['date'])
+        goal['team'] = team
+        goal['game'] = game
+
+        goal.pop('_id')
+        goal.pop('competition')
+        goal.pop('season')
+
 
 
 if __name__ == "__main__":
