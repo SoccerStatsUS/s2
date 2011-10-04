@@ -2,6 +2,21 @@ from django.db import models
 
 from s2.teams.models import Team
 
+class GameManager(models.Manager):
+
+    def find(self, team, date):
+        """
+        Given a team name, determine the actual team.
+        """
+
+        try:
+            game = Game.objects.get(date=date, home_team=team)
+        except:
+            game = Game.objects.get(date=date, away_team=team)
+
+        return game
+            
+
 class Game(models.Model):
     """
     Represents a completed game.
@@ -25,6 +40,8 @@ class Game(models.Model):
 
     attendance = models.IntegerField(null=True, blank=True)
     referee = models.CharField(max_length=255)
+
+    objects = GameManager()
 
 
     class Meta:
