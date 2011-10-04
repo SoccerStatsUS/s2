@@ -1,13 +1,16 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 
+
 class DefunctTeamManager(models.Manager):
     def get_query_set(self):
         return super(DefunctTeamManager, self).get_query_set().filter(defunct=True, real=True)
 
+
 class RealTeamManager(models.Manager):
     def get_query_set(self):
         return super(RealTeamManager, self).get_query_set().filter(real=True)
+
 
 class TeamManager(models.Manager):
 
@@ -38,8 +41,12 @@ class Team(models.Model):
     # No way, it's useful when you want to display a better name.
     # Let's just be clear that it's very optional.
     short_name = models.CharField(max_length=200, unique=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=False)
     founded = models.IntegerField(null=True, blank=True)
+
+    # Not sure if we want this here.
+    # Some teams can have multiple cities?
+    city = models.CharField(max_length=255)
 
     # Have some virtual teams from USMNT drafts.
     real = models.BooleanField(default=True)
