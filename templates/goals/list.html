@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<ul>
+{% for goal in goals %}
+<li>{{ goal }}</li>
+{% endfor %}
+</ul>
+
+{% endblock %}
