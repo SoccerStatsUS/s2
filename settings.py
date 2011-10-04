@@ -6,7 +6,7 @@ PRODUCTION_SITES = (
 )
 
 
-PROJECT_DIR = "/home/chris/www/s2",
+PROJECT_DIR = "/home/chris/www/s2/",
 
 
 if socket.gethostname() in PRODUCTION_SITES:
@@ -25,7 +25,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': join(PROJECT_DIR, "db", "soccer.db"),                      # Or path to database file if using sqlite3.
+        'NAME': '/home/chris/www/s2/db/soccer.db',                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -60,7 +60,9 @@ USE_I18N = True
 # calendars according to the current locale
 USE_L10N = True
 
-MEDIA_ROOT = join(PROJECT_DIR, 'media')
+
+
+MEDIA_ROOT = '/home/chris/www/s2/media'
 
 # Make sure to use a trailing slash for these.
 MEDIA_URL = "http://media.socceroutsider.com/"
@@ -86,13 +88,12 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 's2.urls'
 
 TEMPLATE_DIRS = (
-    join(PROJECT_DIR, 'templates'),
+    "/home/chris/www/s2/templates",
 )
 
 # No longer used?
 DATA_DIRS = (
-    join(PROJECT_DIR, 'data'),
-    "/home/chris/www/soccer/data",
+    "/home/chris/www/s2/data",
 )
 
 INSTALLED_APPS = (
