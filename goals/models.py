@@ -14,7 +14,7 @@ class Goal(models.Model):
     player = models.ForeignKey(Bio)
 
     penalty = models.BooleanField(default=False)
-    own_goal = modles.BooleanField(default=False)
+    own_goal = models.BooleanField(default=False)
     
     class Meta:
         ordering = ('date', 'team', 'minute')
