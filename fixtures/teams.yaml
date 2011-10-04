@@ -1,0 +1,3924 @@
+- fields: {city: Nuremberg, defunct: false, founded: 1900, name: 1. FC Nuremberg,
+    notes: '', real: true, short_name: 1. FC Nuremberg, slug: fc-nuremberg}
+  model: teams.team
+  pk: 227
+- fields: {city: Berlin, defunct: false, founded: 1906, name: 1. FC Union Berlin,
+    notes: '', real: true, short_name: 1. FC Union Berlin, slug: 1-fc-union-berlin}
+  model: teams.team
+  pk: 534
+- fields: {city: Mainz, defunct: false, founded: 1905, name: "1. Fu\xDFball- und Sportverein\
+      \ Mainz 05 e. V", notes: '', real: true, short_name: 1. FSV Mainz 05, slug: mainz-05}
+  model: teams.team
+  pk: 226
+- fields: {city: Munich, defunct: false, founded: 1860, name: "Turn- und Sportverein\
+      \ M\xFCnchen von 1860", notes: '', real: true, short_name: 1860 Munich, slug: 1860-munich}
+  model: teams.team
+  pk: 532
+- fields: {city: Hoffenheim, defunct: false, founded: 1899, name: TSG 1899 Hoffenheim,
+    notes: '', real: true, short_name: 1899 Hoffenheim, slug: 1899-hoffenheim}
+  model: teams.team
+  pk: 220
+- fields: {city: Milan, defunct: false, founded: 1899, name: Associazione Calcio Milan,
+    notes: '', real: true, short_name: A.C. Milan, slug: ac-milan}
+  model: teams.team
+  pk: 255
+- fields: {city: Bellinzona, defunct: false, founded: 1904, name: AC Bellinzona, notes: '',
+    real: true, short_name: AC Bellinzona, slug: ac-bellinzona}
+  model: teams.team
+  pk: 550
+- fields: {city: Horsens, defunct: false, founded: 1994, name: AC Horsens, notes: '',
+    real: true, short_name: AC Horsens, slug: ac-horsens}
+  model: teams.team
+  pk: 602
+- fields: {city: 'St. Louis, Missouri', defunct: true, founded: 2010, name: Athletic
+      Club of St. Louis, notes: '', real: true, short_name: AC St. Louis, slug: ac-st-louis}
+  model: teams.team
+  pk: 974
+- fields: {city: The Hague, defunct: false, founded: 1905, name: Alles Door Oefening
+      Den Haag, notes: '', real: true, short_name: ADO Den Haag, slug: ado-den-haag}
+  model: teams.team
+  pk: 306
+- fields: {city: Athens, defunct: false, founded: 1924, name: AEK Athens F.C., notes: '',
+    real: true, short_name: AEK Athens, slug: aek-athens}
+  model: teams.team
+  pk: 470
+- fields: {city: Larnaca, defunct: false, founded: 1994, name: AEK Larnaca FC, notes: '',
+    real: true, short_name: AEK Larnaca FC, slug: aek-larnaca-fc}
+  model: teams.team
+  pk: 652
+- fields: {city: Limassol, defunct: false, founded: 1930, name: Athlitiki Enosi Lemesou,
+    notes: '', real: true, short_name: AELemesou, slug: aelemesou}
+  model: teams.team
+  pk: 648
+- fields: {city: Aarhus, defunct: false, founded: 1880, name: 'Aarhus Gymnastikforening ',
+    notes: '', real: true, short_name: AGF, slug: agf}
+  model: teams.team
+  pk: 603
+- fields: {city: Solna, defunct: false, founded: 1891, name: "Allm\xE4nna Idrottsklubben",
+    notes: '', real: true, short_name: AIK, slug: aik}
+  model: teams.team
+  pk: 610
+- fields: {city: '', defunct: true, founded: null, name: ATLGunner, notes: '', real: false,
+    short_name: ATLGunner, slug: ''}
+  model: teams.team
+  pk: 164
+- fields: {city: Alkmaar, defunct: false, founded: 1967, name: Alkmaar Zaanstreek,
+    notes: '', real: true, short_name: AZ, slug: az}
+  model: teams.team
+  pk: 297
+- fields: {city: Aalborg, defunct: false, founded: 1885, name: AaB Fodbold, notes: '',
+    real: true, short_name: AaB, slug: aab}
+  model: teams.team
+  pk: 597
+- fields: {city: Aberdeen, defunct: false, founded: 1903, name: Aberdeen Football
+      Club, notes: '', real: true, short_name: Aberdeen, slug: aberdeen}
+  model: teams.team
+  pk: 322
+- fields: {city: Combra, defunct: false, founded: 1876, name: "Associa\xE7\xE3o Acad\xE9\
+      mica de Coimbra \u2013 Organismo Aut\xF3nomo de Futebol", notes: '', real: true,
+    short_name: "Acad\xE9mica", slug: academica}
+  model: teams.team
+  pk: 436
+- fields: {city: Adelaide, defunct: false, founded: 2003, name: Adelaide United Football
+      Club, notes: '', real: true, short_name: Adelaide United, slug: adelaide-united}
+  model: teams.team
+  pk: 405
+- fields: {city: "M\xF6dling", defunct: false, founded: 1905, name: "FC Admira Wacker\
+      \ M\xF6dling ", notes: '', real: true, short_name: Admira, slug: admira}
+  model: teams.team
+  pk: 553
+- fields: {city: '', defunct: false, founded: 1922, name: Afghanistan national team,
+    notes: '', real: true, short_name: Afghanistan, slug: afghanistan}
+  model: teams.team
+  pk: 743
+- fields: {city: Airdrie, defunct: false, founded: 2002, name: Airdrie United Football
+      Club, notes: '', real: true, short_name: Airdrie United, slug: airdrie-united}
+  model: teams.team
+  pk: 709
+- fields: {city: Ajaccio, defunct: false, founded: 1910, name: Athletic Club Ajaccio,
+    notes: '', real: true, short_name: Ajaccio, slug: ajaccio}
+  model: teams.team
+  pk: 291
+- fields: {city: Amsterdam, defunct: false, founded: 1900, name: Amsterdamsche Football
+      Club Ajax, notes: '', real: true, short_name: Ajax, slug: ajax}
+  model: teams.team
+  pk: 295
+- fields: {city: '', defunct: false, founded: null, name: Albania national team, notes: '',
+    real: true, short_name: Albania, slug: albania}
+  model: teams.team
+  pk: 744
+- fields: {city: Coatbridge, defunct: false, founded: 1882, name: Albion Rovers Football
+      Club, notes: '', real: true, short_name: Albion Rovers, slug: albion-rovers}
+  model: teams.team
+  pk: 708
+- fields: {city: Niigata, defunct: false, founded: 1955, name: Albirex Niigata, notes: '',
+    real: true, short_name: Albirex Niigata, slug: albirex-niigata}
+  model: teams.team
+  pk: 427
+- fields: {city: Aachen, defunct: false, founded: 1900, name: Alemannia Aachen, notes: '',
+    real: true, short_name: Alemannia Aachen, slug: alemannia-aachen}
+  model: teams.team
+  pk: 533
+- fields: {city: '', defunct: false, founded: null, name: Algeria national team, notes: '',
+    real: true, short_name: Algeria, slug: algeria}
+  model: teams.team
+  pk: 745
+- fields: {city: Larnaca, defunct: false, founded: 1948, name: Alki Larnaca, notes: '',
+    real: true, short_name: Alki Larnaca, slug: alki-larnaca}
+  model: teams.team
+  pk: 659
+- fields: {city: 'Buenos Aires, Argentina', defunct: false, founded: 1913, name: "Club\
+      \ Atl\xE9tico All Boys", notes: '', real: true, short_name: All Boys, slug: all-boys}
+  model: teams.team
+  pk: 79
+- fields: {city: '', defunct: false, founded: null, name: American Samoa national
+      team, notes: '', real: true, short_name: American Samoa, slug: american-samoa}
+  model: teams.team
+  pk: 746
+- fields: {city: Perm, defunct: false, founded: 1993, name: FC Amkar Perm, notes: '',
+    real: true, short_name: Amkar Perm, slug: amkar-perm}
+  model: teams.team
+  pk: 399
+- fields: {city: Belo Horizonte, defunct: false, founded: 1912, name: "Am\xE9rica\
+      \ Futebol Clube", notes: '', real: true, short_name: "Am\xE9rica Mineiro", slug: america-mineiro}
+  model: teams.team
+  pk: 370
+- fields: {city: Cali, defunct: false, founded: 1918, name: "Corporaci\xF3n Deportiva\
+      \ Am\xE9rica", notes: '', real: true, short_name: "Am\xE9rica de Cali", slug: america-de-cali}
+  model: teams.team
+  pk: 382
+- fields: {city: Deryneia, defunct: false, founded: 1920, name: Anagennisi Deryneia,
+    notes: '', real: true, short_name: Anagennisi Deryneia, slug: anagennisi-deryneia}
+  model: teams.team
+  pk: 653
+- fields: {city: Anderlecht, defunct: false, founded: 1908, name: Royal Sporting Club
+      Anderlecht, notes: '', real: true, short_name: Anderlecht, slug: anderlecht}
+  model: teams.team
+  pk: 492
+- fields: {city: '', defunct: false, founded: null, name: Andorra national team, notes: '',
+    real: true, short_name: Andorra, slug: andorra}
+  model: teams.team
+  pk: 747
+- fields: {city: '', defunct: false, founded: null, name: Angola national team, notes: '',
+    real: true, short_name: Angola, slug: angola}
+  model: teams.team
+  pk: 748
+- fields: {city: '', defunct: false, founded: null, name: Anguilla national team,
+    notes: '', real: true, short_name: Anguilla, slug: anguilla}
+  model: teams.team
+  pk: 749
+- fields: {city: Ankara, defunct: false, founded: 1910, name: "MKE Ankarag\xFCc\xFC",
+    notes: '', real: true, short_name: "Ankarag\xFCc\xFC", slug: ankaragucu}
+  model: teams.team
+  pk: 466
+- fields: {city: Famagusta, defunct: false, founded: 1911, name: Anorthosis Famagusta
+      FC, notes: '', real: true, short_name: Anorthosis Famagusta FC, slug: anorthosis-famagusta-fc}
+  model: teams.team
+  pk: 651
+- fields: {city: antalya, defunct: false, founded: 1966, name: Antalyaspor, notes: '',
+    real: true, short_name: Antalyaspor, slug: antalyaspor}
+  model: teams.team
+  pk: 455
+- fields: {city: 'St. George, Antigua', defunct: false, founded: 2010, name: Antigua
+      Barracuda FC, notes: '', real: true, short_name: Antigua Barracuda, slug: antigua-barracuda}
+  model: teams.team
+  pk: 336
+- fields: {city: '', defunct: false, founded: null, name: Antigua and Barbuda national
+      team, notes: '', real: true, short_name: Antigua and Barbuda, slug: antigua-and-barbuda}
+  model: teams.team
+  pk: 750
+- fields: {city: Makhachkala, defunct: false, founded: 1991, name: FC Anzhi Makhachkala,
+    notes: '', real: true, short_name: Anzhi Makhachkala, slug: anzhi-makhachkala}
+  model: teams.team
+  pk: 394
+- fields: {city: Nicosia, defunct: false, founded: 1926, name: Athletikos Podosferikos
+      Omilos Ellinon Lefkosias, notes: '', real: true, short_name: Apoel Nicosia,
+    slug: apoel-nicosia}
+  model: teams.team
+  pk: 646
+- fields: {city: Limassol, defunct: false, founded: 1954, name: Apollon Limassol,
+    notes: '', real: true, short_name: Apollon Limassol, slug: apollon-limassol}
+  model: teams.team
+  pk: 649
+- fields: {city: '', defunct: true, founded: null, name: Apoo/Dead Fingers, notes: '',
+    real: false, short_name: Apoo/Dead Fingers, slug: ''}
+  model: teams.team
+  pk: 210
+- fields: {city: '', defunct: true, founded: null, name: Apoo/Deadfingers, notes: '',
+    real: false, short_name: Apoo/Deadfingers, slug: ''}
+  model: teams.team
+  pk: 186
+- fields: {city: '', defunct: true, founded: null, name: Apooo & Sean, notes: '',
+    real: false, short_name: Apooo & Sean, slug: ''}
+  model: teams.team
+  pk: 198
+- fields: {city: '', defunct: true, founded: null, name: Appoo/Dead Fingers, notes: '',
+    real: false, short_name: Appoo/Dead Fingers, slug: ''}
+  model: teams.team
+  pk: 194
+- fields: {city: '', defunct: true, founded: null, name: AppooOnU, notes: '', real: false,
+    short_name: AppooOnU, slug: ''}
+  model: teams.team
+  pk: 153
+- fields: {city: Arbroath, defunct: false, founded: 1878, name: Arbroath Football
+      Club, notes: '', real: true, short_name: Arbroath, slug: arbroath}
+  model: teams.team
+  pk: 701
+- fields: {city: '', defunct: false, founded: 1901, name: Argentina national team,
+    notes: '', real: true, short_name: Argentina, slug: argentina}
+  model: teams.team
+  pk: 751
+- fields: {city: 'Buenos Aires, Argentina', defunct: false, founded: 1904, name: "Asociaci\xF3\
+      n Atl\xE9tica Argentinos Juniors", notes: '', real: true, short_name: Argentinos,
+    slug: argentinos}
+  model: teams.team
+  pk: 72
+- fields: {city: Thessaloniki, defunct: false, founded: 1914, name: Aris Football
+      Club, notes: '', real: true, short_name: Aris F.C., slug: aris-fc}
+  model: teams.team
+  pk: 473
+- fields: {city: Limassol, defunct: false, founded: 1930, name: Aris Limassol, notes: '',
+    real: true, short_name: Aris Limassol, slug: aris-limassol}
+  model: teams.team
+  pk: 656
+- fields: {city: '', defunct: false, founded: null, name: Armenia national team, notes: '',
+    real: true, short_name: Armenia, slug: armenia}
+  model: teams.team
+  pk: 752
+- fields: {city: Bielefeld, defunct: false, founded: 1905, name: DSC Arminia Bielefeld,
+    notes: '', real: true, short_name: Arminia Bielefeld, slug: arminia-bielefeld}
+  model: teams.team
+  pk: 541
+- fields: {city: 'London, England', defunct: false, founded: 1886, name: Arsenal F.C.,
+    notes: '', real: true, short_name: Arsenal, slug: arsenal}
+  model: teams.team
+  pk: 22
+- fields: {city: 'Avellaneda, Argentina', defunct: false, founded: 1957, name: "Arsenal\
+      \ F\xFAtbol Club", notes: '', real: true, short_name: "Arsenal de Sarand\xED\
+      \ ", slug: arsenal-de-sarandi}
+  model: teams.team
+  pk: 68
+- fields: {city: '', defunct: false, founded: null, name: Aruba national team, notes: '',
+    real: true, short_name: Aruba, slug: aruba}
+  model: teams.team
+  pk: 753
+- fields: {city: Tripoli, defunct: false, founded: 1931, name: PAE Asteras Tripolis,
+    notes: '', real: true, short_name: Asteras Tripolis, slug: asteras-tripolis}
+  model: teams.team
+  pk: 480
+- fields: {city: 'Birmingham, England', defunct: false, founded: 1874, name: Aston
+      Villa Football Club, notes: '', real: true, short_name: Aston Villa, slug: aston-villa}
+  model: teams.team
+  pk: 25
+- fields: {city: "Ploie\u0219ti", defunct: false, founded: 1934, name: "Fotbal Club\
+      \ Astra Ploie\u015Fti", notes: '', real: true, short_name: "Astra Ploie\u015F\
+      ti", slug: astra-poliesti}
+  model: teams.team
+  pk: 585
+- fields: {city: Bergamo, defunct: false, founded: 1907, name: Atalanta Bergamasca
+      Calcio, notes: '', real: true, short_name: Atalanta, slug: atalanta}
+  model: teams.team
+  pk: 273
+- fields: {city: Bilbao, defunct: false, founded: 1898, name: Athletic Bilbao, notes: '',
+    real: true, short_name: Athletic Bilbao, slug: athletic-bilbao}
+  model: teams.team
+  pk: 241
+- fields: {city: Atlanta, defunct: false, founded: 1995, name: Atlanta Silverbacks,
+    notes: '', real: true, short_name: Atlanta Silverbacks, slug: atlanta-silverbacks}
+  model: teams.team
+  pk: 328
+- fields: {city: "Canc\xFAn, Mexico", defunct: false, founded: 1916, name: "Atlante\
+      \ F\xFAtbol Club", notes: '', real: true, short_name: Atlante, slug: atlante}
+  model: teams.team
+  pk: 45
+- fields: {city: Guadalajara, defunct: false, founded: 1916, name: Club Social y Deportivo
+      Atlas, notes: '', real: true, short_name: Atlas, slug: atlas}
+  model: teams.team
+  pk: 44
+- fields: {city: "Goi\xE2nia", defunct: false, founded: 1937, name: "Atl\xE9tico Clube\
+      \ Goianiense", notes: '', real: true, short_name: "Atl\xE9tico Goianiense",
+    slug: atletico-goianiense}
+  model: teams.team
+  pk: 361
+- fields: {city: Neiva, defunct: false, founded: 1990, name: "Atl\xE9tico Huila",
+    notes: '', real: true, short_name: "Atl\xE9tico Huila", slug: atletico-huila}
+  model: teams.team
+  pk: 386
+- fields: {city: Madrid, defunct: false, founded: 1903, name: "Club Atl\xE9tico de\
+      \ Madrid, S.A.D.", notes: '', real: true, short_name: "Atl\xE9tico Madrid",
+    slug: atletico-madrid}
+  model: teams.team
+  pk: 246
+- fields: {city: Belo Horizonte, defunct: false, founded: 1908, name: "Clube Atl\xE9\
+      tico Mineiro", notes: '', real: true, short_name: "Atl\xE9tico Mineiro", slug: atletico-mineiro}
+  model: teams.team
+  pk: 367
+- fields: {city: "Medell\xEDn", defunct: false, founded: 1947, name: "Corporaci\xF3\
+      n Deportiva Atl\xE9tico Nacional", notes: '', real: true, short_name: "Atl\xE9\
+      tico Nacional", slug: atletico-nacional}
+  model: teams.team
+  pk: 373
+- fields: {city: Curitiba, defunct: false, founded: 1924, name: "Clube Atl\xE9tico\
+      \ Paranaense", notes: '', real: true, short_name: "Atl\xE9tico Paranaense",
+    slug: atletico-paranense}
+  model: teams.team
+  pk: 369
+- fields: {city: Athens, defunct: false, founded: 1923, name: Atromitos F.C., notes: '',
+    real: true, short_name: Atromitos, slug: atromitos}
+  model: teams.team
+  pk: 478
+- fields: {city: '', defunct: false, founded: 1922, name: Australia national team,
+    notes: '', real: true, short_name: Australia, slug: australia}
+  model: teams.team
+  pk: 754
+- fields: {city: '', defunct: false, founded: null, name: Austria national team, notes: '',
+    real: true, short_name: Austria, slug: austria}
+  model: teams.team
+  pk: 755
+- fields: {city: Vienna, defunct: false, founded: 1911, name: "Fu\xDFballklub Austria\
+      \ Wien", notes: '', real: true, short_name: Austria Wien, slug: austria-wien}
+  model: teams.team
+  pk: 555
+- fields: {city: Auxerre, defunct: false, founded: 1905, name: Association de la Jeunesse
+      Auxerroise, notes: '', real: true, short_name: Auxerre, slug: auxerre}
+  model: teams.team
+  pk: 285
+- fields: {city: "Florian\xF3polis", defunct: false, founded: 1923, name: "Ava\xED\
+      \ Futebol Clube", notes: '', real: true, short_name: "Ava\xED", slug: avai}
+  model: teams.team
+  pk: 368
+- fields: {city: Hakata, defunct: false, founded: 1982, name: Avispa Fukuoka, notes: '',
+    real: true, short_name: Avispa Fukuoka, slug: avispa-fukuoka}
+  model: teams.team
+  pk: 432
+- fields: {city: Ayr, defunct: false, founded: 1910, name: Ayr United Football Club,
+    notes: '', real: true, short_name: Ayr United, slug: ayr-united}
+  model: teams.team
+  pk: 687
+- fields: {city: '', defunct: false, founded: null, name: Azerbaijan national team,
+    notes: '', real: true, short_name: Azerbaijan, slug: azerbaijan}
+  model: teams.team
+  pk: 756
+- fields: {city: '', defunct: true, founded: null, name: BARCAsox, notes: '', real: false,
+    short_name: BARCAsox, slug: ''}
+  model: teams.team
+  pk: 110
+- fields: {city: Gothenburg, defunct: false, founded: 1940, name: "BK H\xE4cken",
+    notes: '', real: true, short_name: "BK H\xE4cken", slug: bk-hacken}
+  model: teams.team
+  pk: 611
+- fields: {city: '', defunct: true, founded: null, name: BabyTiger2001, notes: '',
+    real: false, short_name: BabyTiger2001, slug: ''}
+  model: teams.team
+  pk: 147
+- fields: {city: '', defunct: false, founded: null, name: Bahamas national team, notes: '',
+    real: true, short_name: Bahamas, slug: bahamas}
+  model: teams.team
+  pk: 757
+- fields: {city: 'Salvador, Bahia', defunct: false, founded: 1931, name: Esporte Clube
+      Bahia, notes: '', real: true, short_name: Bahia, slug: bahia}
+  model: teams.team
+  pk: 366
+- fields: {city: '', defunct: false, founded: null, name: Bahrain national team, notes: '',
+    real: true, short_name: Bahrain, slug: bahrain}
+  model: teams.team
+  pk: 758
+- fields: {city: '', defunct: true, founded: null, name: Balerion, notes: '', real: false,
+    short_name: Balerion, slug: ''}
+  model: teams.team
+  pk: 165
+- fields: {city: 'Buenos Aires, Argentina', defunct: false, founded: 1896, name: "Club\
+      \ Atl\xE9tico Banfield", notes: '', real: true, short_name: Banfield, slug: banfield}
+  model: teams.team
+  pk: 62
+- fields: {city: '', defunct: false, founded: null, name: Bangladesh national team,
+    notes: '', real: true, short_name: Bangladesh, slug: bangladesh}
+  model: teams.team
+  pk: 759
+- fields: {city: '', defunct: false, founded: null, name: Barbados national team,
+    notes: '', real: true, short_name: Barbados, slug: barbados}
+  model: teams.team
+  pk: 760
+- fields: {city: Barnsley, defunct: false, founded: 1887, name: Barnsley Football
+      Club, notes: '', real: true, short_name: Barnsley, slug: barnsley}
+  model: teams.team
+  pk: 515
+- fields: {city: Leverkusen, defunct: false, founded: 1904, name: Bayer 04 Leverkusen,
+    notes: '', real: true, short_name: Bayer Leverkusen, slug: bayer-leverkusen}
+  model: teams.team
+  pk: 218
+- fields: {city: Munich, defunct: false, founded: 1900, name: FC Bayern Munich, notes: '',
+    real: true, short_name: Bayern Munich, slug: bayern-munich}
+  model: teams.team
+  pk: 216
+- fields: {city: Antwerp, defunct: false, founded: 1942, name: Koninklijke Beerschot
+      Antwerpen Club, notes: '', real: true, short_name: Beerschot, slug: beerschot}
+  model: teams.team
+  pk: 494
+- fields: {city: Beijing, defunct: false, founded: 1992, name: Beijing Guoan Football
+      Club, notes: '', real: true, short_name: Beijing Guoan, slug: beijing-guoan}
+  model: teams.team
+  pk: 728
+- fields: {city: Aveiro, defunct: false, founded: 1922, name: Sport Clube Beira-Mar,
+    notes: '', real: true, short_name: Beira-Mar, slug: beira-mar}
+  model: teams.team
+  pk: 437
+- fields: {city: '', defunct: false, founded: null, name: Belarus national team, notes: '',
+    real: true, short_name: Belarus, slug: belarus}
+  model: teams.team
+  pk: 761
+- fields: {city: '', defunct: false, founded: 1904, name: Belgium national team, notes: '',
+    real: true, short_name: Belgium, slug: belgium}
+  model: teams.team
+  pk: 762
+- fields: {city: '', defunct: false, founded: null, name: Belize national team, notes: '',
+    real: true, short_name: Belize, slug: belize}
+  model: teams.team
+  pk: 763
+- fields: {city: Lisbon, defunct: false, founded: 1904, name: Sport Lisboa e Benfica,
+    notes: '', real: true, short_name: Benfica, slug: benfica}
+  model: teams.team
+  pk: 434
+- fields: {city: '', defunct: false, founded: null, name: Benin national team, notes: '',
+    real: true, short_name: Benin, slug: benin}
+  model: teams.team
+  pk: 764
+- fields: {city: '', defunct: false, founded: null, name: Bermuda national team, notes: '',
+    real: true, short_name: Bermuda, slug: bermuda}
+  model: teams.team
+  pk: 765
+- fields: {city: Istanbul, defunct: false, founded: 1903, name: "Be\u015Fikta\u015F\
+      \ Jimnastik Kul\xFCb\xFC", notes: '', real: true, short_name: "Be\u015Fikta\u015F",
+    slug: besiktas}
+  model: teams.team
+  pk: 467
+- fields: {city: '', defunct: false, founded: null, name: Bhutan national team, notes: '',
+    real: true, short_name: Bhutan, slug: bhutan}
+  model: teams.team
+  pk: 766
+- fields: {city: 'Birmingham, England', defunct: false, founded: 1875, name: Birmingham
+      City Football Club, notes: '', real: true, short_name: Birmingham City, slug: birmingham-city}
+  model: teams.team
+  pk: 28
+- fields: {city: 'Blackburn, England', defunct: false, founded: 1875, name: Blackburn
+      Rovers Football Club, notes: '', real: true, short_name: Blackburn, slug: blackburn}
+  model: teams.team
+  pk: 29
+- fields: {city: 'Blackpool, England', defunct: false, founded: 1887, name: Blackpool
+      Football Club, notes: '', real: true, short_name: Blackpool, slug: blackpool}
+  model: teams.team
+  pk: 42
+- fields: {city: '', defunct: true, founded: null, name: Bob Morocco, notes: '', real: false,
+    short_name: Bob Morocco, slug: ''}
+  model: teams.team
+  pk: 143
+- fields: {city: '', defunct: true, founded: null, name: Bob Morocco/BedStypundit,
+    notes: '', real: false, short_name: Bob Morocco/BedStypundit, slug: ''}
+  model: teams.team
+  pk: 189
+- fields: {city: '', defunct: true, founded: null, name: Bob Morroco, notes: '', real: false,
+    short_name: Bob Morroco, slug: ''}
+  model: teams.team
+  pk: 138
+- fields: {city: 'Buenos Aires, Argentina', defunct: false, founded: 1905, name: "Club\
+      \ Atl\xE9tico Boca Juniors", notes: '', real: true, short_name: Boca Juniors,
+    slug: boca-juniors}
+  model: teams.team
+  pk: 73
+- fields: {city: '', defunct: false, founded: 1926, name: Bolivia national team, notes: '',
+    real: true, short_name: Bolivia, slug: bolivia}
+  model: teams.team
+  pk: 767
+- fields: {city: Bologna, defunct: false, founded: 1993, name: Bologna Football Club
+      1909, notes: '', real: true, short_name: Bologna FC, slug: bologna-fc}
+  model: teams.team
+  pk: 256
+- fields: {city: 'Bolton, England', defunct: false, founded: 1874, name: Bolton Wanderers
+      Football Club, notes: '', real: true, short_name: Bolton Wanderers, slug: bolton}
+  model: teams.team
+  pk: 33
+- fields: {city: Bordeaux, defunct: false, founded: 1881, name: Football Club des
+      Girondins de Bordeaux, notes: '', real: true, short_name: Bordeaux, slug: bordeaux}
+  model: teams.team
+  pk: 286
+- fields: {city: Dortmund, defunct: false, founded: 1909, name: Ballspielverein Borussia
+      (BVB) Dortmund, notes: '', real: true, short_name: Borussia Dortmund, slug: borussia-dortmund}
+  model: teams.team
+  pk: 225
+- fields: {city: "M\xF6nchengladbach", defunct: false, founded: 1900, name: "Borussia\
+      \ M\xF6nchengladbach", notes: '', real: true, short_name: "Borussia M\xF6nchengladbach",
+    slug: borussia-monchengladbach}
+  model: teams.team
+  pk: 217
+- fields: {city: '', defunct: false, founded: null, name: Bosnia and Herzegovina national
+      team, notes: '', real: true, short_name: Bosnia and Herzegovina, slug: bosnia-and-herzegovina}
+  model: teams.team
+  pk: 768
+- fields: {city: 'Botafogo Bairro, Zona Sul, Rio de Janeiro', defunct: false, founded: 1894,
+    name: Botafogo de Futebol e Regatas, notes: '', real: true, short_name: Botafogo,
+    slug: botafogo}
+  model: teams.team
+  pk: 354
+- fields: {city: '', defunct: false, founded: null, name: Botswana national team,
+    notes: '', real: true, short_name: Botswana, slug: botswana}
+  model: teams.team
+  pk: 769
+- fields: {city: 'Boscombe, Bournemouth', defunct: false, founded: 1890, name: A.F.C.
+      Bournemouth, notes: '', real: true, short_name: Bournemouth, slug: bournemouth}
+  model: teams.team
+  pk: 682
+- fields: {city: Tunja, defunct: false, founded: 1995, name: "Boyac\xE1 Chic\xF3 F\xFA\
+      tbol Club", notes: '', real: true, short_name: "Boyac\xE1 Chic\xF3", slug: boyaca-chico}
+  model: teams.team
+  pk: 379
+- fields: {city: '', defunct: true, founded: null, name: Br1an224/man_in_the_middle,
+    notes: '', real: false, short_name: Br1an224/man_in_the_middle, slug: ''}
+  model: teams.team
+  pk: 98
+- fields: {city: Bergen, defunct: false, founded: 1908, name: Sportsklubben Brann,
+    notes: '', real: true, short_name: Brann, slug: brann}
+  model: teams.team
+  pk: 695
+- fields: {city: '', defunct: false, founded: 1914, name: Brazil national team, notes: '',
+    real: true, short_name: Brazil, slug: brazil}
+  model: teams.team
+  pk: 770
+- fields: {city: "Bra\u015Fov", defunct: false, founded: 1936, name: "Fotbal Club\
+      \ Bra\u015Fov", notes: '', real: true, short_name: "Bra\u015Fov", slug: brasov}
+  model: teams.team
+  pk: 588
+- fields: {city: Brechin, defunct: false, founded: 1906, name: Brechin City Football
+      Club, notes: '', real: true, short_name: Brechin City, slug: brechin-city}
+  model: teams.team
+  pk: 705
+- fields: {city: Brentford, defunct: false, founded: 1889, name: Brentford Football
+      Club, notes: '', real: true, short_name: Brentford, slug: brentford}
+  model: teams.team
+  pk: 663
+- fields: {city: Brest, defunct: false, founded: 1903, name: Stade Brestois 29, notes: '',
+    real: true, short_name: Brest, slug: brest}
+  model: teams.team
+  pk: 288
+- fields: {city: 'Brighton and Hove ', defunct: false, founded: 1901, name: 'Brighton
+      & Hove Albion F.C. ', notes: '', real: true, short_name: Brighton & Hove Albion,
+    slug: brighton-hove-albion}
+  model: teams.team
+  pk: 500
+- fields: {city: Brisbane, defunct: false, founded: 1957, name: Brisbane Roar Football
+      Club, notes: '', real: true, short_name: Brisbane Roar, slug: bristbane-roar}
+  model: teams.team
+  pk: 406
+- fields: {city: Bristol, defunct: false, founded: 1897, name: Bristol City Football
+      Club, notes: '', real: true, short_name: Bristol City, slug: bristol-city}
+  model: teams.team
+  pk: 516
+- fields: {city: '', defunct: false, founded: null, name: British Virgin Islands national
+      team, notes: '', real: true, short_name: British Virgin Islands, slug: british-virgin-islands}
+  model: teams.team
+  pk: 771
+- fields: {city: '', defunct: false, founded: null, name: Brunei national team, notes: '',
+    real: true, short_name: Brunei, slug: brunei}
+  model: teams.team
+  pk: 772
+- fields: {city: "Br\xF8ndby", defunct: false, founded: 1964, name: "Br\xF8ndby IF",
+    notes: '', real: true, short_name: "Br\xF8ndby IF", slug: brondby-if}
+  model: teams.team
+  pk: 604
+- fields: {city: '', defunct: true, founded: null, name: BuffaloSoldier, notes: '',
+    real: false, short_name: BuffaloSoldier, slug: ''}
+  model: teams.team
+  pk: 132
+- fields: {city: '', defunct: true, founded: null, name: BuffloSoldier, notes: '',
+    real: false, short_name: BuffloSoldier, slug: ''}
+  model: teams.team
+  pk: 129
+- fields: {city: '', defunct: false, founded: null, name: Bulgaria national team,
+    notes: '', real: true, short_name: Bulgaria, slug: bulgaria}
+  model: teams.team
+  pk: 773
+- fields: {city: '', defunct: false, founded: null, name: Burkina Faso national team,
+    notes: '', real: true, short_name: Burkina Faso, slug: burkina-faso}
+  model: teams.team
+  pk: 774
+- fields: {city: 'Burnley, England', defunct: false, founded: 1882, name: Burnley
+      Football Club, notes: '', real: true, short_name: Burnley, slug: burnley}
+  model: teams.team
+  pk: 37
+- fields: {city: Bursa, defunct: false, founded: 1963, name: Bursaspor, notes: '',
+    real: true, short_name: Bursaspor, slug: bursaspor}
+  model: teams.team
+  pk: 456
+- fields: {city: '', defunct: false, founded: null, name: Burundi national team, notes: '',
+    real: true, short_name: Burundi, slug: burundi}
+  model: teams.team
+  pk: 775
+- fields: {city: Bury, defunct: false, founded: 1885, name: Bury Football Club is,
+    notes: '', real: true, short_name: Bury, slug: bury}
+  model: teams.team
+  pk: 675
+- fields: {city: Busan, defunct: false, founded: 1983, name: Busan I'Park FC, notes: '',
+    real: true, short_name: Busan I'Park FC, slug: busan-Ipark-fc}
+  model: teams.team
+  pk: 716
+- fields: {city: 'Santa Ana, El Salvador', defunct: false, founded: 1947, name: Club
+      Deportivo Futbolistas Asociados Santanecos, notes: '', real: true, short_name: C.D.
+      FAS, slug: fas}
+  model: teams.team
+  pk: 88
+- fields: {city: 'San Pedro Sula, Honduras', defunct: false, founded: 1925, name: "Club\
+      \ Deportivo Marath\xF3n", notes: '', real: true, short_name: "C.D. Marath\xF3\
+      n", slug: marathon}
+  model: teams.team
+  pk: 83
+- fields: {city: 'Tegucigalpa, Honduras', defunct: false, founded: 1912, name: Club
+      Deportivo Olimpia, notes: '', real: true, short_name: C.D. Olimpia, slug: olimpia}
+  model: teams.team
+  pk: 86
+- fields: {city: 'Guatemala City, Guatemala', defunct: false, founded: 1949, name: Club
+      Social y Deportivo Comunicaciones, notes: '', real: true, short_name: C.S.D.
+      Comunicaciones, slug: comunicaciones}
+  model: teams.team
+  pk: 91
+- fields: {city: Pamplona, defunct: false, founded: 1920, name: "Club Atl\xE9tico\
+      \ Osasuna", notes: '', real: true, short_name: CA Osasuna, slug: ca-osasunsa}
+  model: teams.team
+  pk: 245
+- fields: {city: 'Monterrey, Mexico', defunct: false, founded: 1945, name: Club de
+      Futbol Monterrey, notes: '', real: true, short_name: CF Monterrey, slug: cf-monterrey}
+  model: teams.team
+  pk: 48
+- fields: {city: Cluj-Napoca, defunct: false, founded: 1907, name: 'CFR Cluj ', notes: '',
+    real: true, short_name: 'CFR Cluj ', slug: cfr-cluj}
+  model: teams.team
+  pk: 580
+- fields: {city: Chiajna, defunct: false, founded: 1957, name: CS Concordia Chiajna,
+    notes: '', real: true, short_name: CS Concordia Chiajna, slug: cs-concordia-chiajna}
+  model: teams.team
+  pk: 595
+- fields: {city: Mioveni, defunct: false, founded: 2000, name: CS Mioveni, notes: '',
+    real: true, short_name: CS Mioveni, slug: cs-mioveni}
+  model: teams.team
+  pk: 594
+- fields: {city: Moscow, defunct: false, founded: 1911, name: PFC CSKA Moscow, notes: '',
+    real: true, short_name: CSKA Moscow, slug: cska-moscow}
+  model: teams.team
+  pk: 389
+- fields: {city: Sibiu, defunct: false, founded: 2007, name: "CSU Voin\u0163a Sibiu",
+    notes: '', real: true, short_name: "CSU Voin\u0163a Sibiu", slug: csu-vointa-sibiu}
+  model: teams.team
+  pk: 590
+- fields: {city: Caen, defunct: false, founded: 1913, name: Stade Malherbe Caen, notes: '',
+    real: true, short_name: Caen, slug: caen}
+  model: teams.team
+  pk: 283
+- fields: {city: Cagliari, defunct: false, founded: 1920, name: Cagliari Calcio, notes: '',
+    real: true, short_name: Cagliari, slug: cagliari}
+  model: teams.team
+  pk: 257
+- fields: {city: '', defunct: true, founded: null, name: CaliManU, notes: '', real: false,
+    short_name: CaliManU, slug: ''}
+  model: teams.team
+  pk: 168
+- fields: {city: '', defunct: false, founded: null, name: Cambodia national team,
+    notes: '', real: true, short_name: Cambodia, slug: cambodia}
+  model: teams.team
+  pk: 776
+- fields: {city: '', defunct: false, founded: null, name: Cameroon national team,
+    notes: '', real: true, short_name: Cameroon, slug: cameroon}
+  model: teams.team
+  pk: 777
+- fields: {city: '', defunct: false, founded: 1885, name: Canada national team, notes: '',
+    real: true, short_name: Canada, slug: canada}
+  model: teams.team
+  pk: 778
+- fields: {city: '', defunct: false, founded: null, name: Cape Verde national team,
+    notes: '', real: true, short_name: Cape Verde, slug: cape-verde}
+  model: teams.team
+  pk: 779
+- fields: {city: Cardiff, defunct: false, founded: 1899, name: Cardiff City Football
+      Club, notes: '', real: true, short_name: Cardiff City, slug: cardiff-city}
+  model: teams.team
+  pk: 506
+- fields: {city: Carlisle, defunct: false, founded: 1904, name: Carlisle United Football
+      Club, notes: '', real: true, short_name: Carlisle United, slug: carlisle-united}
+  model: teams.team
+  pk: 671
+- fields: {city: 'Cary, North Carolina', defunct: false, founded: 2006, name: Carolina
+      RailHawks FC, notes: '', real: true, short_name: Carolina RailHawks, slug: carolina-railhawks}
+  model: teams.team
+  pk: 329
+- fields: {city: '', defunct: false, founded: 1912, name: 'Catalonia national team ',
+    notes: '', real: true, short_name: Catalonia, slug: catalonia-national-team}
+  model: teams.team
+  pk: 972
+- fields: {city: Catania, defunct: false, founded: 1908, name: Calcio Catania, notes: '',
+    real: true, short_name: Catania, slug: catania}
+  model: teams.team
+  pk: 258
+- fields: {city: '', defunct: false, founded: null, name: Cayman Islands national
+      team, notes: '', real: true, short_name: Cayman Islands, slug: cayman-islands}
+  model: teams.team
+  pk: 780
+- fields: {city: "Piatra Neam\u0163", defunct: false, founded: 1919, name: "Fotbal\
+      \ Club Ceahl\u0103ul Piatra Neam\u0163", notes: '', real: true, short_name: "Ceahl\u0103\
+      ul Piatra Neam\u0163", slug: ceahllul-piatra-neamt}
+  model: teams.team
+  pk: 591
+- fields: {city: Fortaleza, defunct: false, founded: 1914, name: "Cear\xE1 Sporting\
+      \ Club", notes: '', real: true, short_name: "Cear\xE1", slug: ceara}
+  model: teams.team
+  pk: 365
+- fields: {city: Celje, defunct: false, founded: 1919, name: NK CM Celje, notes: '',
+    real: true, short_name: Celje, slug: celje}
+  model: teams.team
+  pk: 630
+- fields: {city: Glasgow, defunct: false, founded: 1888, name: Celtic Football Club,
+    notes: '', real: true, short_name: Celtic, slug: celtic}
+  model: teams.team
+  pk: 314
+- fields: {city: '', defunct: false, founded: null, name: Central African Republic
+      national team, notes: '', real: true, short_name: Central African Republic,
+    slug: central-african-republic}
+  model: teams.team
+  pk: 781
+- fields: {city: New South Wales, defunct: false, founded: 2004, name: Central Coast
+      Mariners FC, notes: '', real: true, short_name: Central Coast Mariners, slug: central-coast-mariners}
+  model: teams.team
+  pk: 407
+- fields: {city: Bruges, defunct: false, founded: 1899, name: Cercle Brugge Koninklijke
+      Sportvereniging, notes: '', real: true, short_name: Cercle Brugge, slug: cercle-brugge}
+  model: teams.team
+  pk: 485
+- fields: {city: Osaka, defunct: false, founded: 1957, name: Cerezo Osaka, notes: '',
+    real: true, short_name: Cerezo Osaka, slug: cerezo-osaka}
+  model: teams.team
+  pk: 424
+- fields: {city: Cesena, defunct: false, founded: 1940, name: Associazione Calcio
+      Cesena, notes: '', real: true, short_name: Cesena, slug: cesena}
+  model: teams.team
+  pk: 259
+- fields: {city: '', defunct: false, founded: null, name: Chad national team, notes: '',
+    real: true, short_name: Chad, slug: chad}
+  model: teams.team
+  pk: 782
+- fields: {city: Changchun, defunct: false, founded: 1996, name: Changchun Yatai,
+    notes: '', real: true, short_name: Changchun Yatai, slug: changchun-yatai}
+  model: teams.team
+  pk: 732
+- fields: {city: 'Charleston, South Carolina', defunct: false, founded: 1993, name: Charleston
+      Battery, notes: '', real: true, short_name: Charleston Battery, slug: charleston-battery}
+  model: teams.team
+  pk: 337
+- fields: {city: 'Charlotte, North Carolina', defunct: false, founded: 1991, name: Charlotte
+      Eagles, notes: '', real: true, short_name: Charlotte Eagles, slug: charlotte-eagles}
+  model: teams.team
+  pk: 338
+- fields: {city: Charlton, defunct: false, founded: 1905, name: Charlton Athletic
+      Football Club, notes: '', real: true, short_name: Charlton Athletic, slug: charlton-athletic}
+  model: teams.team
+  pk: 661
+- fields: {city: 'London, England', defunct: false, founded: 1905, name: Chelsea F.C.,
+    notes: '', real: true, short_name: Chelsea, slug: chelsea}
+  model: teams.team
+  pk: 21
+- fields: {city: Chengdu, defunct: false, founded: 1996, name: Chengdu Blades Football
+      Club, notes: '', real: true, short_name: Chengdu Blades, slug: chengdu-blades}
+  model: teams.team
+  pk: 742
+- fields: {city: Chesterfield, defunct: false, founded: 1867, name: Chesterfield Football
+      Club, notes: '', real: true, short_name: Chesterfield, slug: chesterfield}
+  model: teams.team
+  pk: 679
+- fields: {city: Chicago, defunct: false, founded: 1998, name: Chicago Fire S.C.,
+    notes: '', real: true, short_name: Chicago Fire, slug: chicago-fire}
+  model: teams.team
+  pk: 9
+- fields: {city: Verona, defunct: false, founded: 1929, name: Associazione Calcio
+      Chievo Verona, notes: '', real: true, short_name: Chievo, slug: chievo}
+  model: teams.team
+  pk: 260
+- fields: {city: '', defunct: false, founded: null, name: Chile national team, notes: '',
+    real: true, short_name: Chile, slug: chile}
+  model: teams.team
+  pk: 783
+- fields: {city: '', defunct: false, founded: null, name: China national team, notes: '',
+    real: true, short_name: China, slug: china}
+  model: teams.team
+  pk: 784
+- fields: {city: 'Guadalajara, Mexico', defunct: false, founded: 1906, name: Club
+      Deportivo Guadalajara, notes: '', real: true, short_name: Chivas, slug: chivas}
+  model: teams.team
+  pk: 57
+- fields: {city: Los Angeles, defunct: false, founded: 2004, name: Club Deportivo
+      Chivas USA, notes: '', real: true, short_name: Chivas USA, slug: chivas-usa}
+  model: teams.team
+  pk: 1
+- fields: {city: '', defunct: true, founded: null, name: ChrisE, notes: '', real: false,
+    short_name: ChrisE, slug: ''}
+  model: teams.team
+  pk: 141
+- fields: {city: Gwangyang, defunct: false, founded: 1995, name: Chunnam Dragons,
+    notes: '', real: true, short_name: Chunnam Dragons, slug: chunnam-dragons}
+  model: teams.team
+  pk: 715
+- fields: {city: 'Mexico City, Mexico', defunct: false, founded: 1916, name: "Club\
+      \ Am\xE9rica", notes: '', real: true, short_name: "Club Am\xE9rica", slug: america}
+  model: teams.team
+  pk: 55
+- fields: {city: Bruges, defunct: false, founded: 1891, name: Club Brugge Koninklijke
+      Voetbalvereniging, notes: '', real: true, short_name: Club Brugge, slug: club-brugge}
+  model: teams.team
+  pk: 487
+- fields: {city: Colchester, defunct: false, founded: 1937, name: Colchester United
+      Football Club, notes: '', real: true, short_name: Colchester United, slug: colchester-united}
+  model: teams.team
+  pk: 672
+- fields: {city: '', defunct: false, founded: 1938, name: Colombia national team,
+    notes: '', real: true, short_name: Colombia, slug: colombia}
+  model: teams.team
+  pk: 785
+- fields: {city: Denver, defunct: false, founded: 1996, name: Colorado Rapids, notes: '',
+    real: true, short_name: Colorado Rapids, slug: colorado-rapids}
+  model: teams.team
+  pk: 2
+- fields: {city: Columbus, defunct: false, founded: 1994, name: Columbus Crew, notes: '',
+    real: true, short_name: Columbus Crew, slug: columbus-crew}
+  model: teams.team
+  pk: 10
+- fields: {city: 'Santa Fe, Argentina', defunct: false, founded: 1905, name: "Club\
+      \ Atl\xE9tico Col\xF3n", notes: '', real: true, short_name: "Col\xF3n", slug: colon}
+  model: teams.team
+  pk: 74
+- fields: {city: '', defunct: false, founded: null, name: Comoros national team, notes: '',
+    real: true, short_name: Comoros, slug: comoros}
+  model: teams.team
+  pk: 786
+- fields: {city: '', defunct: false, founded: null, name: Cook Islands national team,
+    notes: '', real: true, short_name: Cook Islands, slug: cook-islands}
+  model: teams.team
+  pk: 787
+- fields: {city: "S\xE3o Paulo", defunct: false, founded: 1910, name: Sport Club Corinthians
+      Paulista, notes: '', real: true, short_name: Corinthians, slug: corinthians}
+  model: teams.team
+  pk: 351
+- fields: {city: Curitiba, defunct: false, founded: 1909, name: Coritiba Foot Ball
+      Club, notes: '', real: true, short_name: Coritiba, slug: coritiba}
+  model: teams.team
+  pk: 360
+- fields: {city: '', defunct: false, founded: null, name: Costa Rica national team,
+    notes: '', real: true, short_name: Costa Rica, slug: costa-rica}
+  model: teams.team
+  pk: 788
+- fields: {city: Coventry, defunct: false, founded: 1883, name: Coventry City Football
+      Club, notes: '', real: true, short_name: Coventry City, slug: coventry-city}
+  model: teams.team
+  pk: 522
+- fields: {city: Cowdenbeath, defunct: false, founded: 1881, name: Cowdenbeath Football
+      Club, notes: '', real: true, short_name: Cowdenbeath, slug: cowdenbeath}
+  model: teams.team
+  pk: 703
+- fields: {city: '', defunct: false, founded: null, name: Croatia national team, notes: '',
+    real: true, short_name: Croatia, slug: croatia}
+  model: teams.team
+  pk: 789
+- fields: {city: 'Mexico City, Mexico', defunct: false, founded: 1927, name: 'Club
+      Deportivo, Social, y Cultural Cruz Azul', notes: '', real: true, short_name: Cruz
+      Azul, slug: cruz-azul}
+  model: teams.team
+  pk: 49
+- fields: {city: Belo Horizonte, defunct: false, founded: 1921, name: Cruzeiro Esporte
+      Clube, notes: '', real: true, short_name: Cruzeiro, slug: cruzeiro}
+  model: teams.team
+  pk: 363
+- fields: {city: London, defunct: false, founded: 1905, name: Crystal Palace Football
+      Club, notes: '', real: true, short_name: Crystal Palace, slug: crystal-palace}
+  model: teams.team
+  pk: 505
+- fields: {city: '', defunct: false, founded: null, name: Cuba national team, notes: '',
+    real: true, short_name: Cuba, slug: cuba}
+  model: teams.team
+  pk: 790
+- fields: {city: '', defunct: false, founded: null, name: Cyprus national team, notes: '',
+    real: true, short_name: Cyprus, slug: cyprus}
+  model: teams.team
+  pk: 791
+- fields: {city: '', defunct: false, founded: null, name: Czech Republic national
+      team, notes: '', real: true, short_name: Czech Republic, slug: czech-republic}
+  model: teams.team
+  pk: 792
+- fields: {city: '', defunct: false, founded: null, name: "C\xF4te d'Ivoire national\
+      \ team", notes: '', real: true, short_name: "C\xF4te d'Ivoire", slug: cote-divoire}
+  model: teams.team
+  pk: 793
+- fields: {city: "C\xFAcuta", defunct: false, founded: 1924, name: "Corporaci\xF3\
+      n Nuevo C\xFAcuta Deportivo", notes: '', real: true, short_name: "C\xFAcuta\
+      \ Deportivo", slug: cucuta-deportivo}
+  model: teams.team
+  pk: 378
+- fields: {city: Washington D.C., defunct: false, founded: 1995, name: D.C. United,
+    notes: '', real: true, short_name: D.C. United, slug: dc-united}
+  model: teams.team
+  pk: 11
+- fields: {city: Daegu, defunct: false, founded: 2002, name: Daegu Football Club,
+    notes: '', real: true, short_name: Daegu FC, slug: daegu-fc}
+  model: teams.team
+  pk: 721
+- fields: {city: Daejeon, defunct: false, founded: 1997, name: Daejeon Citizen Football
+      Club, notes: '', real: true, short_name: Daejeon Citizen, slug: daejeon-citizen}
+  model: teams.team
+  pk: 725
+- fields: {city: Dalian, defunct: false, founded: 1983, name: Dalian Shide, notes: '',
+    real: true, short_name: Dalian Shide, slug: dalian-shide}
+  model: teams.team
+  pk: 739
+- fields: {city: 'Bellbrook, Ohio', defunct: false, founded: 2009, name: Dayton Dutch
+      Lions, notes: '', real: true, short_name: Dayton Dutch Lions, slug: dayton-dutch-lions}
+  model: teams.team
+  pk: 342
+- fields: {city: Doetinchem, defunct: false, founded: 1954, name: De Graafschap, notes: '',
+    real: true, short_name: De Graafschap, slug: de-graafschap}
+  model: teams.team
+  pk: 307
+- fields: {city: '', defunct: false, founded: null, name: Dem. Rep. of Congo national
+      team, notes: '', real: true, short_name: Dem. Rep. of Congo, slug: dem-rep-of-congo}
+  model: teams.team
+  pk: 794
+- fields: {city: '', defunct: false, founded: null, name: Denmark national team, notes: '',
+    real: true, short_name: Denmark, slug: denmark}
+  model: teams.team
+  pk: 795
+- fields: {city: Armenia, defunct: false, founded: 1951, name: "Deportes Quind\xED\
+      o", notes: '', real: true, short_name: "Deportes Quind\xEDo", slug: deportes-quindio}
+  model: teams.team
+  pk: 380
+- fields: {city: "Ibagu\xE9", defunct: false, founded: 1954, name: Deportes Tolima,
+    notes: '', real: true, short_name: Deportes Tolima, slug: deportes-tolima}
+  model: teams.team
+  pk: 372
+- fields: {city: Cali, defunct: false, founded: 1908, name: "Asociaci\xF3n Deportivo\
+      \ Cali", notes: '', real: true, short_name: Deportivo Cali, slug: deportivo-cali}
+  model: teams.team
+  pk: 377
+- fields: {city: Pereira, defunct: false, founded: 1944, name: Deportivo Pereira,
+    notes: '', real: true, short_name: Deportivo Pereira, slug: deportivo-pereira}
+  model: teams.team
+  pk: 388
+- fields: {city: Derby, defunct: false, founded: 1884, name: Derby County Football
+      Club, notes: '', real: true, short_name: Derby County, slug: derby-county}
+  model: teams.team
+  pk: 502
+- fields: {city: Dijon, defunct: false, founded: 1998, name: "Dijon Football C\xF4\
+      te d'Or", notes: '', real: true, short_name: Dijon, slug: dijon}
+  model: teams.team
+  pk: 284
+- fields: {city: Minsk, defunct: false, founded: 1927, name: Football Club Dinamo
+      Minsk, notes: '', real: true, short_name: Dinamo Minsk, slug: dinamo-minsk}
+  model: teams.team
+  pk: 637
+- fields: {city: '', defunct: false, founded: null, name: Djibouti national team,
+    notes: '', real: true, short_name: Djibouti, slug: djibouti}
+  model: teams.team
+  pk: 796
+- fields: {city: Stockholm, defunct: false, founded: 1891, name: "Djurg\xE5rdens IF\
+      \ Fotboll", notes: '', real: true, short_name: "Djurg\xE5rden", slug: djurgarden}
+  model: teams.team
+  pk: 621
+- fields: {city: '', defunct: false, founded: null, name: Dominica national team,
+    notes: '', real: true, short_name: Dominica, slug: dominica}
+  model: teams.team
+  pk: 797
+- fields: {city: '', defunct: false, founded: null, name: Dominican Republic national
+      team, notes: '', real: true, short_name: Dominican Republic, slug: dominican-republic}
+  model: teams.team
+  pk: 798
+- fields: {city: Doncaster, defunct: false, founded: 1879, name: Doncaster Rovers
+      Football Club, notes: '', real: true, short_name: Doncaster Rovers, slug: doncaster-rovers}
+  model: teams.team
+  pk: 523
+- fields: {city: Dumbarton, defunct: false, founded: 1872, name: Dumbarton Football
+      Club, notes: '', real: true, short_name: Dumbarton, slug: dumbarton}
+  model: teams.team
+  pk: 706
+- fields: {city: Dundee, defunct: false, founded: 1893, name: Dundee Football Club,
+    notes: '', real: true, short_name: Dundee, slug: dundee}
+  model: teams.team
+  pk: 691
+- fields: {city: Dundee, defunct: false, founded: 1909, name: Dundee United Football
+      Club, notes: '', real: true, short_name: Dundee United, slug: dundee-united}
+  model: teams.team
+  pk: 319
+- fields: {city: Dunfermline, defunct: false, founded: 1885, name: Dunfermline Athletic
+      Football Club, notes: '', real: true, short_name: Dunfermline Athletic, slug: dunfermline-athletic}
+  model: teams.team
+  pk: 316
+- fields: {city: Moscow, defunct: false, founded: 1923, name: Dynamo Moscow, notes: '',
+    real: true, short_name: Dynamo Moscow, slug: dynamo-moscow}
+  model: teams.team
+  pk: 391
+- fields: {city: Methil, defunct: false, founded: 1903, name: East Fife Football Club,
+    notes: '', real: true, short_name: East Fife, slug: east-fife}
+  model: teams.team
+  pk: 710
+- fields: {city: '', defunct: false, founded: null, name: East Timor national team,
+    notes: '', real: true, short_name: East Timor, slug: east-timor}
+  model: teams.team
+  pk: 799
+- fields: {city: '', defunct: false, founded: null, name: Ecuador national team, notes: '',
+    real: true, short_name: Ecuador, slug: ecuador}
+  model: teams.team
+  pk: 800
+- fields: {city: '', defunct: false, founded: 1920, name: Egypt national team, notes: '',
+    real: true, short_name: Egypt, slug: egypt}
+  model: teams.team
+  pk: 801
+- fields: {city: '', defunct: false, founded: null, name: El Salvador national team,
+    notes: '', real: true, short_name: El Salvador, slug: el-salvador}
+  model: teams.team
+  pk: 802
+- fields: {city: '', defunct: true, founded: null, name: Elninho & GIFFENBONE, notes: '',
+    real: false, short_name: Elninho & GIFFENBONE, slug: ''}
+  model: teams.team
+  pk: 197
+- fields: {city: '', defunct: true, founded: null, name: Elninho/Giffenbone, notes: '',
+    real: false, short_name: Elninho/Giffenbone, slug: ''}
+  model: teams.team
+  pk: 111
+- fields: {city: Cottbus, defunct: false, founded: 1966, name: FC Energie Cottbus,
+    notes: '', real: true, short_name: Energie Cottbus, slug: energie-cottbus}
+  model: teams.team
+  pk: 529
+- fields: {city: '', defunct: false, founded: 1872, name: England national team, notes: '',
+    real: true, short_name: England, slug: england}
+  model: teams.team
+  pk: 803
+- fields: {city: Paralimni, defunct: false, founded: 1936, name: Enosis Neon Paralimni
+      FC, notes: '', real: true, short_name: Enosis Neon Paralimni FC, slug: enosis-neon-paralimni-fc}
+  model: teams.team
+  pk: 650
+- fields: {city: "Medell\xEDn", defunct: false, founded: 1989, name: "Envigado F\xFA\
+      tbol Club", notes: '', real: true, short_name: Envigado, slug: envigado}
+  model: teams.team
+  pk: 374
+- fields: {city: '', defunct: false, founded: null, name: Equatorial Guinea national
+      team, notes: '', real: true, short_name: Equatorial Guinea, slug: equatorial-guinea}
+  model: teams.team
+  pk: 804
+- fields: {city: Heraklion, defunct: false, founded: 1929, name: Ergotelis F.C., notes: '',
+    real: true, short_name: Ergotelis, slug: ergotelis}
+  model: teams.team
+  pk: 475
+- fields: {city: '', defunct: false, founded: null, name: Eritrea national team, notes: '',
+    real: true, short_name: Eritrea, slug: eritrea}
+  model: teams.team
+  pk: 805
+- fields: {city: Aradippou, defunct: false, founded: 1958, name: Ermis Aradippou,
+    notes: '', real: true, short_name: Ermis Aradippou, slug: ermis-aradippou}
+  model: teams.team
+  pk: 657
+- fields: {city: Aue, defunct: false, founded: 1946, name: FC Erzgebirge Aue, notes: '',
+    real: true, short_name: Erzgebirge Aue, slug: erzgebirge-aue}
+  model: teams.team
+  pk: 528
+- fields: {city: "Eski\u015Fehir", defunct: false, founded: 1965, name: "Eski\u015F\
+      ehirspor", notes: '', real: true, short_name: "Eski\u015Fehirspor", slug: eskisehirspor}
+  model: teams.team
+  pk: 451
+- fields: {city: '', defunct: false, founded: null, name: Estonia national team, notes: '',
+    real: true, short_name: Estonia, slug: estonia}
+  model: teams.team
+  pk: 806
+- fields: {city: 'Buenos Aires, Argentina', defunct: false, founded: 1905, name: Club
+      Estudiantes de La Plata, notes: '', real: true, short_name: Estudiantes, slug: estudiantes}
+  model: teams.team
+  pk: 61
+- fields: {city: '', defunct: false, founded: null, name: Ethiopia national team,
+    notes: '', real: true, short_name: Ethiopia, slug: ethiopia}
+  model: teams.team
+  pk: 807
+- fields: {city: Achna, defunct: false, founded: 1968, name: Ethnikos Achna FC, notes: '',
+    real: true, short_name: Ethnikos Achna FC, slug: ethnikos-achna-fc}
+  model: teams.team
+  pk: 655
+- fields: {city: 'Liverpool, England', defunct: false, founded: 1878, name: Everton
+      Football Club, notes: '', real: true, short_name: Everton, slug: everton}
+  model: teams.team
+  pk: 27
+- fields: {city: Evian, defunct: false, founded: 2003, name: Evian Thonon Gaillard
+      Football Club, notes: '', real: true, short_name: Evian, slug: evian}
+  model: teams.team
+  pk: 287
+- fields: {city: Rotterdam, defunct: false, founded: 1902, name: SBV Excelsior, notes: '',
+    real: true, short_name: Excelsior, slug: excelsior}
+  model: teams.team
+  pk: 311
+- fields: {city: Exeter, defunct: false, founded: 1904, name: Exeter City Football
+      Club, notes: '', real: true, short_name: Exeter City, slug: exeter-city}
+  model: teams.team
+  pk: 681
+- fields: {city: Copenhagen, defunct: false, founded: 1992, name: "F.C. K\xF8benhavn",
+    notes: '', real: true, short_name: "F.C. K\xF8benhavn", slug: fc-kobenhavn}
+  model: teams.team
+  pk: 596
+- fields: {city: 'Queens, New York', defunct: false, founded: 2009, name: F.C. New
+      York, notes: '', real: true, short_name: F.C. New York, slug: fc-new-yrok}
+  model: teams.team
+  pk: 343
+- fields: {city: Kiev, defunct: false, founded: 2001, name: FC Arsenal Kyiv, notes: '',
+    real: true, short_name: FC Arsenal Kyiv, slug: fc-arsenal-kyiv}
+  model: teams.team
+  pk: 567
+- fields: {city: Augsburg, defunct: false, founded: 1907, name: FC Augsburg, notes: '',
+    real: true, short_name: FC Augsburg, slug: fc-augsburg}
+  model: teams.team
+  pk: 232
+- fields: {city: Borisov, defunct: false, founded: 1973, name: FC BATE Borisov, notes: '',
+    real: true, short_name: FC BATE Borisov, slug: fc-bate-borisov}
+  model: teams.team
+  pk: 634
+- fields: {city: Barcelona, defunct: false, founded: 1899, name: Futbol Club Barcelona,
+    notes: '', real: true, short_name: FC Barcelona, slug: fc-barcelona}
+  model: teams.team
+  pk: 234
+- fields: {city: Basel, defunct: false, founded: 1893, name: Fussball Club Basel 1893,
+    notes: '', real: true, short_name: FC Basel, slug: fc-basel}
+  model: teams.team
+  pk: 542
+- fields: {city: Bobruisk, defunct: false, founded: 1977, name: FC Belshina Bobruisk,
+    notes: '', real: true, short_name: FC Belshina Bobruisk, slug: fc-belshina-bobruisk}
+  model: teams.team
+  pk: 640
+- fields: {city: Odessa, defunct: false, founded: 1936, name: FC Chornomorets Odesa,
+    notes: '', real: true, short_name: FC Chornomorets Odesa, slug: fc-chornomorets-odesa}
+  model: teams.team
+  pk: 575
+- fields: {city: Dallas, defunct: false, founded: 1996, name: Football Club Dallas,
+    notes: '', real: true, short_name: FC Dallas, slug: fc-dallas}
+  model: teams.team
+  pk: 3
+- fields: {city: Brest, defunct: false, founded: 1960, name: FC Dinamo Brest, notes: '',
+    real: true, short_name: FC Dinamo Brest, slug: fc-dinamo-brest}
+  model: teams.team
+  pk: 644
+- fields: {city: Bucharest, defunct: false, founded: 1948, name: "FC Dinamo Bucure\u015F\
+      ti", notes: '', real: true, short_name: "FC Dinamo Bucure\u015Fti", slug: fc-dinamo-bucuresti}
+  model: teams.team
+  pk: 578
+- fields: {city: Mogilev, defunct: false, founded: 1960, name: FC Dnepr Mogilev, notes: '',
+    real: true, short_name: FC Dnepr Mogilev, slug: fc-dnepr-mogilev}
+  model: teams.team
+  pk: 645
+- fields: {city: 'Dnipropetrovsk ', defunct: false, founded: 1918, name: FC Dnipro
+      Dnipropetrovsk, notes: '', real: true, short_name: FC Dnipro Dnipropetrovsk,
+    slug: fc-dnipro-dnipropetrovsk}
+  model: teams.team
+  pk: 570
+- fields: {city: Kiev, defunct: false, founded: 1927, name: FC Dynamo Kyiv, notes: '',
+    real: true, short_name: FC Dynamo Kyiv, slug: fc-dynamo-kyiv}
+  model: teams.team
+  pk: 563
+- fields: {city: 'Edmonton, Alberta', defunct: false, founded: 2010, name: FC Edmonton,
+    notes: '', real: true, short_name: FC Edmonton, slug: fc-edmonton}
+  model: teams.team
+  pk: 330
+- fields: {city: Gomel, defunct: false, founded: 1959, name: FC Gomel, notes: '',
+    real: true, short_name: FC Gomel, slug: fc-gomel}
+  model: teams.team
+  pk: 636
+- fields: {city: Groningen, defunct: false, founded: 1971, name: FC Groningen, notes: '',
+    real: true, short_name: FC Groningen, slug: fc-groningen}
+  model: teams.team
+  pk: 305
+- fields: {city: 'Mariupol ', defunct: false, founded: 1960, name: FC Illichivets
+      Mariupol, notes: '', real: true, short_name: FC Illichivets Mariupol, slug: fc-illichivets-mariupol}
+  model: teams.team
+  pk: 571
+- fields: {city: Ingolstadt, defunct: false, founded: 2004, name: FC Ingolstadt 04,
+    notes: '', real: true, short_name: FC Ingolstadt 04, slug: fc-ingolstadt-04}
+  model: teams.team
+  pk: 537
+- fields: {city: 'Lviv ', defunct: false, founded: 1963, name: FC Karpaty Lviv, notes: '',
+    real: true, short_name: FC Karpaty Lviv, slug: fc-karpaty-lviv}
+  model: teams.team
+  pk: 576
+- fields: {city: Koper, defunct: false, founded: 1955, name: FC Koper, notes: '',
+    real: true, short_name: FC Koper, slug: fc-koper}
+  model: teams.team
+  pk: 633
+- fields: {city: Kryvyi Rih, defunct: false, founded: 1959, name: FC Kryvbas Kryvyi
+      Rih, notes: '', real: true, short_name: FC Kryvbas Kryvyi Rih, slug: fc-kryvbas-kryvyi-rih}
+  model: teams.team
+  pk: 565
+- fields: {city: "K\xF6ln", defunct: false, founded: 1948, name: "1. FC K\xF6ln",
+    notes: '', real: true, short_name: "FC K\xF6ln", slug: fc-koln}
+  model: teams.team
+  pk: 228
+- fields: {city: Luzern, defunct: false, founded: 1901, name: FC Luzern, notes: '',
+    real: true, short_name: FC Luzern, slug: fc-luzern}
+  model: teams.team
+  pk: 547
+- fields: {city: Kharkiv, defunct: false, founded: 1925, name: FC Metalist Kharkiv,
+    notes: '', real: true, short_name: FC Metalist Kharkiv, slug: fc-metalist-kharkiv}
+  model: teams.team
+  pk: 564
+- fields: {city: Donetsk, defunct: false, founded: 1996, name: FC Metalurh Donetsk,
+    notes: '', real: true, short_name: FC Metalurh Donetsk, slug: fc-metalurh-donetsk}
+  model: teams.team
+  pk: 573
+- fields: {city: Herning, defunct: false, founded: 1999, name: FC Midtjylland, notes: '',
+    real: true, short_name: FC Midtjylland, slug: fc-midtjylland}
+  model: teams.team
+  pk: 599
+- fields: {city: Minsk, defunct: false, founded: 2006, name: FC Minsk, notes: '',
+    real: true, short_name: FC Minsk, slug: fc-minsk}
+  model: teams.team
+  pk: 642
+- fields: {city: Novopolotsk, defunct: false, founded: 1963, name: FC Naftan Novopolotsk,
+    notes: '', real: true, short_name: FC Naftan Novopolotsk, slug: fc-naftan-novopolotsk}
+  model: teams.team
+  pk: 639
+- fields: {city: Grodno, defunct: false, founded: 1964, name: FC Neman Grodno, notes: '',
+    real: true, short_name: FC Neman Grodno, slug: fc-neman-grodno}
+  model: teams.team
+  pk: 643
+- fields: {city: Kiev, defunct: false, founded: 1992, name: FC Obolon Kyiv, notes: '',
+    real: true, short_name: FC Obolon Kyiv, slug: fc-obolon-kyiv}
+  model: teams.team
+  pk: 577
+- fields: {city: '', defunct: true, founded: null, name: FC SEAPOO 2026, notes: '',
+    real: false, short_name: FC SEAPOO 2026, slug: ''}
+  model: teams.team
+  pk: 115
+- fields: {city: Seoul, defunct: false, founded: 1983, name: FC Seoul, notes: '',
+    real: true, short_name: FC Seoul, slug: fc-seoul}
+  model: teams.team
+  pk: 713
+- fields: {city: Salihorsk, defunct: false, founded: 1961, name: FC Shakhtsyor Salihorsk,
+    notes: '', real: true, short_name: FC Shakhtsyor Salihorsk, slug: fc-shakhtsyor-salihorsk}
+  model: teams.team
+  pk: 635
+- fields: {city: Sion, defunct: false, founded: 1909, name: FC Sion, notes: '', real: true,
+    short_name: FC Sion, slug: fc-sion}
+  model: teams.team
+  pk: 545
+- fields: {city: 'Tampa Bay, Florida', defunct: false, founded: 2008, name: FC Tampa
+      Bay, notes: '', real: true, short_name: FC Tampa Bay, slug: fc-tampa-bay}
+  model: teams.team
+  pk: 335
+- fields: {city: Thun, defunct: false, founded: 1898, name: FC Thun 1898, notes: '',
+    real: true, short_name: FC Thun, slug: fc-thun}
+  model: teams.team
+  pk: 546
+- fields: {city: Zhodino, defunct: false, founded: 1961, name: FC Torpedo-BelAZ Zhodino,
+    notes: '', real: true, short_name: FC Torpedo-BelAZ Zhodino, slug: fc-torpedo-belaz-zhodino}
+  model: teams.team
+  pk: 638
+- fields: {city: Utrecht, defunct: false, founded: 1970, name: FC Utrecht, notes: '',
+    real: true, short_name: FC Utrecht, slug: fc-utrecht}
+  model: teams.team
+  pk: 303
+- fields: {city: Vaslui, defunct: false, founded: 2002, name: FC Vaslui, notes: '',
+    real: true, short_name: FC Vaslui, slug: fc-vaslui}
+  model: teams.team
+  pk: 587
+- fields: {city: Vitebsk, defunct: false, founded: 1960, name: FC Vitebsk, notes: '',
+    real: true, short_name: FC Vitebsk, slug: fc-vitebsk}
+  model: teams.team
+  pk: 641
+- fields: {city: Lutsk, defunct: false, founded: 1960, name: FC Volyn Lutsk, notes: '',
+    real: true, short_name: FC Volyn Lutsk, slug: fc-volyn-lutsk}
+  model: teams.team
+  pk: 568
+- fields: {city: Poltava, defunct: false, founded: 1955, name: FC Vorskla Poltava,
+    notes: '', real: true, short_name: FC Vorskla Poltava, slug: fc-vorskla-poltava}
+  model: teams.team
+  pk: 569
+- fields: {city: Luhansk, defunct: false, founded: 1923, name: FC Zorya Luhansk, notes: '',
+    real: true, short_name: FC Zorya Luhansk, slug: fc-zorya-luhansk}
+  model: teams.team
+  pk: 572
+- fields: {city: "Z\xFCrich", defunct: false, founded: 1896, name: "Fussballclub Z\xFC\
+      rich", notes: '', real: true, short_name: "FC Z\xFCrich", slug: fc-zurich}
+  model: teams.team
+  pk: 543
+- fields: {city: "T\xE2rgu Mure\u015F", defunct: false, founded: 2004, name: "FCM\
+      \ T\xE2rgu Mure\u015F", notes: '', real: true, short_name: "FCM T\xE2rgu Mure\u015F",
+    slug: fcm-targu-mures}
+  model: teams.team
+  pk: 592
+- fields: {city: "Nordsj\xE6lland", defunct: false, founded: 1991, name: "Football\
+      \ Club Nordsj\xE6lland", notes: '', real: true, short_name: FCN, slug: fcn}
+  model: teams.team
+  pk: 601
+- fields: {city: Frankfurt, defunct: false, founded: 1899, name: FSV Frankfurt, notes: '',
+    real: true, short_name: FSV Frankfurt, slug: fsv-frankfurt}
+  model: teams.team
+  pk: 536
+- fields: {city: Falkirk, defunct: false, founded: 1876, name: Falkirk Football Club,
+    notes: '', real: true, short_name: Falkirk, slug: falkirk}
+  model: teams.team
+  pk: 688
+- fields: {city: '', defunct: false, founded: null, name: Falkland Islands national
+      team, notes: '', real: true, short_name: Falkland Islands, slug: falkland-islands}
+  model: teams.team
+  pk: 808
+- fields: {city: '', defunct: false, founded: null, name: Faroe Islands national team,
+    notes: '', real: true, short_name: Faroe Islands, slug: faroe-islands}
+  model: teams.team
+  pk: 809
+- fields: {city: '', defunct: true, founded: null, name: Father Ted, notes: '', real: false,
+    short_name: Father Ted, slug: ''}
+  model: teams.team
+  pk: 203
+- fields: {city: '', defunct: true, founded: null, name: Father Ted & FIFAray007,
+    notes: '', real: false, short_name: Father Ted & FIFAray007, slug: ''}
+  model: teams.team
+  pk: 205
+- fields: {city: '', defunct: false, founded: null, name: Federated States of Micronesia
+      national team, notes: '', real: true, short_name: Federated States of Micronesia,
+    slug: federated-states-of-micronesia}
+  model: teams.team
+  pk: 810
+- fields: {city: Santa Maria da Feira, defunct: false, founded: 1918, name: Clube
+      Desportivo Feirense, notes: '', real: true, short_name: Feirense, slug: feirense}
+  model: teams.team
+  pk: 445
+- fields: {city: Istanbul, defunct: false, founded: 1907, name: "Fenerbah\xE7e Spor\
+      \ Kul\xFCb\xFC", notes: '', real: true, short_name: "Fenerbah\xE7e", slug: fenerbahce}
+  model: teams.team
+  pk: 457
+- fields: {city: Rotterdam, defunct: false, founded: 1908, name: Feyenoord, notes: '',
+    real: true, short_name: Feyenoord, slug: feyenoord}
+  model: teams.team
+  pk: 298
+- fields: {city: "Florian\xF3polis", defunct: false, founded: 1921, name: Figueirense
+      Futebol Clube, notes: '', real: true, short_name: Figueirense, slug: figueirense}
+  model: teams.team
+  pk: 359
+- fields: {city: '', defunct: false, founded: null, name: Fiji national team, notes: '',
+    real: true, short_name: Fiji, slug: fiji}
+  model: teams.team
+  pk: 811
+- fields: {city: '', defunct: false, founded: null, name: Finland national team, notes: '',
+    real: true, short_name: Finland, slug: finland}
+  model: teams.team
+  pk: 812
+- fields: {city: Florence, defunct: false, founded: 1926, name: ACF Fiorentina, notes: '',
+    real: true, short_name: Fiorentina, slug: fiorentina}
+  model: teams.team
+  pk: 261
+- fields: {city: 'Flamengo bairro, Zona Sul, Rio de Janeiro', defunct: false, founded: 1895,
+    name: Clube de Regatas do Flamengo, notes: '', real: true, short_name: Flamengo,
+    slug: flamengo}
+  model: teams.team
+  pk: 355
+- fields: {city: Rio de Janeiro, defunct: false, founded: 1902, name: Fluminense Football
+      Club, notes: '', real: true, short_name: Fluminense, slug: fluminense}
+  model: teams.team
+  pk: 356
+- fields: {city: Forfar, defunct: false, founded: 1885, name: Forfar Athletic Football
+      Club, notes: '', real: true, short_name: Forfar Athletic, slug: forfar-athletic}
+  model: teams.team
+  pk: 707
+- fields: {city: Fort Lauderdale, defunct: false, founded: 2006, name: Fort Lauderdale
+      Strikers (2011), notes: '', real: true, short_name: Fort Lauderdale Strikers,
+    slug: fort-lauderdale-strikers-2011}
+  model: teams.team
+  pk: 331
+- fields: {city: "D\xFCsseldorf", defunct: false, founded: 1895, name: "Fortuna D\xFC\
+      sseldorf ", notes: '', real: true, short_name: "Fortuna D\xFCsseldorf ", slug: fortuna-dusseldorf}
+  model: teams.team
+  pk: 530
+- fields: {city: '', defunct: false, founded: 1904, name: France national team, notes: '',
+    real: true, short_name: France, slug: france}
+  model: teams.team
+  pk: 813
+- fields: {city: 'London, England', defunct: false, founded: 1879, name: Fulham Football
+      Club, notes: '', real: true, short_name: Fulham, slug: fulham}
+  model: teams.team
+  pk: 31
+- fields: {city: Gothenburg, defunct: false, founded: 1894, name: "G\xF6teborgs Atlet-\
+      \ och Idrottss\xE4llskap", notes: '', real: true, short_name: GAIS, slug: gais}
+  model: teams.team
+  pk: 612
+- fields: {city: '', defunct: false, founded: null, name: Gabon national team, notes: '',
+    real: true, short_name: Gabon, slug: gabon}
+  model: teams.team
+  pk: 814
+- fields: {city: Istanbul, defunct: false, founded: 1905, name: "Galatasaray Spor\
+      \ Kul\xFCb\xFC", notes: '', real: true, short_name: Galatasaray, slug: galatasaray}
+  model: teams.team
+  pk: 458
+- fields: {city: Osaka, defunct: false, founded: 1980, name: Gamba Osaka, notes: '',
+    real: true, short_name: Gamba Osaka, slug: gamba-osaka}
+  model: teams.team
+  pk: 415
+- fields: {city: '', defunct: false, founded: null, name: Gambia national team, notes: '',
+    real: true, short_name: Gambia, slug: gambia}
+  model: teams.team
+  pk: 815
+- fields: {city: Gangneung, defunct: false, founded: 2008, name: Gangwon Football
+      Club, notes: '', real: true, short_name: Gangwon FC, slug: gangwon-fc}
+  model: teams.team
+  pk: 726
+- fields: {city: "Media\u0219", defunct: false, founded: 1945, name: "Club Sportiv\
+      \ Gaz Metan Media\u0219", notes: '', real: true, short_name: "Gaz Metan Media\u0219",
+    slug: gaz-metan-medias}
+  model: teams.team
+  pk: 583
+- fields: {city: Gaziantep, defunct: false, founded: 1969, name: Gaziantepspor, notes: '',
+    real: true, short_name: Gaziantepspor, slug: gaziantepspor}
+  model: teams.team
+  pk: 459
+- fields: {city: "G\xE4vle", defunct: false, founded: 1882, name: Gefle IF, notes: '',
+    real: true, short_name: Gefle IF, slug: gefle-if}
+  model: teams.team
+  pk: 617
+- fields: {city: '', defunct: true, founded: null, name: Geneva & Stillkickin, notes: '',
+    real: false, short_name: Geneva & Stillkickin, slug: ''}
+  model: teams.team
+  pk: 199
+- fields: {city: Genk, defunct: false, founded: 1988, name: Koninklijke Racing Club
+      Genk, notes: '', real: true, short_name: Genk, slug: genk}
+  model: teams.team
+  pk: 489
+- fields: {city: Genoa, defunct: false, founded: 1897, name: Genoa Cricket and Football
+      Club, notes: '', real: true, short_name: Genoa, slug: genoa}
+  model: teams.team
+  pk: 262
+- fields: {city: Ghent, defunct: false, founded: 1864, name: Koninklijke Atletiek
+      Associatie Gent, notes: '', real: true, short_name: Gent, slug: gent}
+  model: teams.team
+  pk: 484
+- fields: {city: Ankara, defunct: false, founded: 1923, name: "Gen\xE7lerbirli\u011F\
+      i Spor Kul\xFCb\xFC", notes: '', real: true, short_name: "Gen\xE7lerbirli\u011F\
+      i", slug: genclerbirligi}
+  model: teams.team
+  pk: 465
+- fields: {city: '', defunct: false, founded: null, name: Georgia national team, notes: '',
+    real: true, short_name: Georgia, slug: georgia}
+  model: teams.team
+  pk: 816
+- fields: {city: '', defunct: false, founded: 1908, name: Germany national team, notes: '',
+    real: true, short_name: Germany, slug: germany}
+  model: teams.team
+  pk: 817
+- fields: {city: '', defunct: true, founded: null, name: Gersman, notes: '', real: false,
+    short_name: Gersman, slug: ''}
+  model: teams.team
+  pk: 149
+- fields: {city: Getafe, defunct: false, founded: 1983, name: "Getafe Club de F\xFA\
+      tbol", notes: '', real: true, short_name: Getafe CF, slug: getafe-cf}
+  model: teams.team
+  pk: 244
+- fields: {city: '', defunct: false, founded: null, name: Ghana national team, notes: '',
+    real: true, short_name: Ghana, slug: ghana}
+  model: teams.team
+  pk: 818
+- fields: {city: '', defunct: false, founded: null, name: Gibraltar national team,
+    notes: '', real: true, short_name: Gibraltar, slug: gibraltar}
+  model: teams.team
+  pk: 819
+- fields: {city: Barcelos, defunct: false, founded: 1924, name: Gil Vicente F.C.,
+    notes: '', real: true, short_name: Gil Vicente, slug: gil-vicente}
+  model: teams.team
+  pk: 440
+- fields: {city: 'Buenos Aires, Argentina', defunct: false, founded: 1887, name: Club
+      de Gimnasia y Esgrima La Plata, notes: '', real: true, short_name: Gimnasia
+      (La Plata), slug: gimnasia-la-plata}
+  model: teams.team
+  pk: 77
+- fields: {city: '', defunct: true, founded: null, name: GoMichigan24, notes: '',
+    real: false, short_name: GoMichigan24, slug: ''}
+  model: teams.team
+  pk: 142
+- fields: {city: 'Godoy Cruz, Argentina', defunct: false, founded: 1921, name: Godoy
+      Cruz Antonio Tomba, notes: '', real: true, short_name: Godoy Cruz, slug: godoy-cruz}
+  model: teams.team
+  pk: 70
+- fields: {city: Goald Coast, defunct: false, founded: 2008, name: Gold Coast United
+      Football Club, notes: '', real: true, short_name: Gold Coast United, slug: gold-coast-united}
+  model: teams.team
+  pk: 408
+- fields: {city: Granada, defunct: false, founded: 1931, name: "Granada Club de F\xFA\
+      tbol", notes: '', real: true, short_name: Granada CF, slug: granada-cf}
+  model: teams.team
+  pk: 251
+- fields: {city: "Z\xFCrich", defunct: false, founded: 1886, name: "Grasshopper Club\
+      \ Z\xFCrich", notes: '', real: true, short_name: Grasshopper, slug: grasshopper}
+  model: teams.team
+  pk: 548
+- fields: {city: '', defunct: false, founded: 1929, name: Greece national team, notes: '',
+    real: true, short_name: Greece, slug: greece}
+  model: teams.team
+  pk: 820
+- fields: {city: '', defunct: false, founded: null, name: Greenland national team,
+    notes: '', real: true, short_name: Greenland, slug: greenland}
+  model: teams.team
+  pk: 821
+- fields: {city: Greenock, defunct: false, founded: 1874, name: Greenock Morton Football
+      Club, notes: '', real: true, short_name: Greenock Morton, slug: greenock-morton}
+  model: teams.team
+  pk: 684
+- fields: {city: '', defunct: false, founded: null, name: Grenada national team, notes: '',
+    real: true, short_name: Grenada, slug: grenada}
+  model: teams.team
+  pk: 822
+- fields: {city: Porto Alegre, defunct: false, founded: 1903, name: "Gr\xEAmio Foot-Ball\
+      \ Porto Alegrense", notes: '', real: true, short_name: "Gr\xEAmio", slug: gremio}
+  model: teams.team
+  pk: 364
+- fields: {city: '', defunct: false, founded: null, name: Guadeloupe national team,
+    notes: '', real: true, short_name: Guadeloupe, slug: guadeloupe}
+  model: teams.team
+  pk: 823
+- fields: {city: '', defunct: false, founded: null, name: Guam national team, notes: '',
+    real: true, short_name: Guam, slug: guam}
+  model: teams.team
+  pk: 824
+- fields: {city: Guangzhou, defunct: false, founded: 1954, name: Guangzhou Evergrande
+      Football Club, notes: '', real: true, short_name: Guangzhou Evergrande, slug: guangzhou-evergrande}
+  model: teams.team
+  pk: 727
+- fields: {city: '', defunct: false, founded: null, name: Guatemala national team,
+    notes: '', real: true, short_name: Guatemala, slug: guatemala}
+  model: teams.team
+  pk: 825
+- fields: {city: '', defunct: false, founded: null, name: Guernsey national team,
+    notes: '', real: true, short_name: Guernsey, slug: guernsey}
+  model: teams.team
+  pk: 826
+- fields: {city: '', defunct: false, founded: null, name: Guinea national team, notes: '',
+    real: true, short_name: Guinea, slug: guinea}
+  model: teams.team
+  pk: 827
+- fields: {city: '', defunct: false, founded: null, name: Guinea-Bissau national team,
+    notes: '', real: true, short_name: Guinea-Bissau, slug: guinea-bissau}
+  model: teams.team
+  pk: 828
+- fields: {city: '', defunct: true, founded: null, name: GunnerBT, notes: '', real: false,
+    short_name: GunnerBT, slug: ''}
+  model: teams.team
+  pk: 154
+- fields: {city: '', defunct: true, founded: null, name: Gunners BT/Short Corner,
+    notes: '', real: false, short_name: Gunners BT/Short Corner, slug: ''}
+  model: teams.team
+  pk: 190
+- fields: {city: '', defunct: true, founded: null, name: GunnersBT, notes: '', real: false,
+    short_name: GunnersBT, slug: ''}
+  model: teams.team
+  pk: 145
+- fields: {city: '', defunct: true, founded: null, name: GunnersBT/Short Corner, notes: '',
+    real: false, short_name: GunnersBT/Short Corner, slug: ''}
+  model: teams.team
+  pk: 175
+- fields: {city: '', defunct: false, founded: null, name: Guyana national team, notes: '',
+    real: true, short_name: Guyana, slug: guyana}
+  model: teams.team
+  pk: 829
+- fields: {city: Gwangju, defunct: false, founded: 2010, name: Gwangju Football Club,
+    notes: '', real: true, short_name: Gwangju FC, slug: gwangju-fc}
+  model: teams.team
+  pk: 724
+- fields: {city: Changwon, defunct: false, founded: 2006, name: Gyeongnam Football
+      Club, notes: '', real: true, short_name: Gyeongnam FC, slug: gyeongnam-fc}
+  model: teams.team
+  pk: 718
+- fields: {city: "Herf\xF8lge", defunct: false, founded: 2009, name: "HB K\xF8ge",
+    notes: '', real: true, short_name: "HB K\xF8ge", slug: hb-koge}
+  model: teams.team
+  pk: 607
+- fields: {city: '', defunct: false, founded: null, name: Haiti national team, notes: '',
+    real: true, short_name: Haiti, slug: haiti}
+  model: teams.team
+  pk: 830
+- fields: {city: Halmstad, defunct: false, founded: 1914, name: Halmstads Bollklubb,
+    notes: '', real: true, short_name: Halmstad, slug: halmstad}
+  model: teams.team
+  pk: 623
+- fields: {city: Hamburg, defunct: false, founded: 1887, name: Hamburger Sport-Verein,
+    notes: '', real: true, short_name: Hamburger SV, slug: hamburger-sv}
+  model: teams.team
+  pk: 233
+- fields: {city: Hamilton, defunct: false, founded: 1874, name: Hamilton Academical
+      Football Club, notes: '', real: true, short_name: Hamilton Academical, slug: hamilton-academical}
+  model: teams.team
+  pk: 683
+- fields: {city: Hangzhou, defunct: false, founded: 1998, name: Hangzhou Nabel Greentown
+      F.C., notes: '', real: true, short_name: Hangzhou Greentown, slug: hangzhou-greentown}
+  model: teams.team
+  pk: 731
+- fields: {city: Hannover, defunct: false, founded: 1896, name: Hannoverscher Sportverein
+      von 1896, notes: '', real: true, short_name: Hannover 96, slug: hannover-96}
+  model: teams.team
+  pk: 223
+- fields: {city: '', defunct: true, founded: null, name: Hararea, notes: '', real: false,
+    short_name: Hararea, slug: ''}
+  model: teams.team
+  pk: 103
+- fields: {city: '', defunct: true, founded: null, name: Harper916, notes: '', real: false,
+    short_name: Harper916, slug: ''}
+  model: teams.team
+  pk: 105
+- fields: {city: '', defunct: true, founded: null, name: Harper916 & Joedub83, notes: '',
+    real: false, short_name: Harper916 & Joedub83, slug: ''}
+  model: teams.team
+  pk: 202
+- fields: {city: 'Harrisburg, Pennsylvania', defunct: false, founded: 2004, name: Harrisburg
+      City Islanders, notes: '', real: true, short_name: Harrisburg City Islanders,
+    slug: harrisburg-city-islanders}
+  model: teams.team
+  pk: 344
+- fields: {city: Hartlepool, defunct: false, founded: 1908, name: Hartlepool United
+      Football Club, notes: '', real: true, short_name: Hartlepool United, slug: hartlepool-united}
+  model: teams.team
+  pk: 665
+- fields: {city: '', defunct: true, founded: null, name: HeadHunter, notes: '', real: false,
+    short_name: HeadHunter, slug: ''}
+  model: teams.team
+  pk: 116
+- fields: {city: Edinburgh, defunct: false, founded: 1874, name: Heart of Midlothian
+      Football Club, notes: '', real: true, short_name: Heart of Midlothian, slug: heart-of-midlothian}
+  model: teams.team
+  pk: 315
+- fields: {city: Heerenveen, defunct: false, founded: 1920, name: Sportclub Heerenveen,
+    notes: '', real: true, short_name: Heerenveen, slug: heerenveen}
+  model: teams.team
+  pk: 309
+- fields: {city: Helsingborg, defunct: false, founded: 1907, name: Helsingborgs IF,
+    notes: '', real: true, short_name: 'Helsingborgs IF ', slug: helsingborgs-if}
+  model: teams.team
+  pk: 608
+- fields: {city: Zhengzhou, defunct: false, founded: 1994, name: Henan Construction,
+    notes: '', real: true, short_name: Henan Construction, slug: henan-construction}
+  model: teams.team
+  pk: 738
+- fields: {city: Almelo, defunct: false, founded: 1903, name: Heracles Almelo, notes: '',
+    real: true, short_name: Heracles, slug: heracles}
+  model: teams.team
+  pk: 304
+- fields: {city: Berlin, defunct: false, founded: 1892, name: Hertha Berliner Sport-Club
+      von 1892, notes: '', real: true, short_name: Hertha BSC, slug: hertha-bsc}
+  model: teams.team
+  pk: 222
+- fields: {city: Leith, defunct: false, founded: 1875, name: Hibernian Football Club,
+    notes: '', real: true, short_name: Hibernian, slug: hibernian}
+  model: teams.team
+  pk: 323
+- fields: {city: '', defunct: false, founded: null, name: Honduras national team,
+    notes: '', real: true, short_name: Honduras, slug: honduras}
+  model: teams.team
+  pk: 831
+- fields: {city: '', defunct: false, founded: null, name: Hong Kong national team,
+    notes: '', real: true, short_name: Hong Kong, slug: hong-kong}
+  model: teams.team
+  pk: 832
+- fields: {city: Houston, defunct: false, founded: 2005, name: Houston Dynamo, notes: '',
+    real: true, short_name: Houston Dynamo, slug: houston-dynamo}
+  model: teams.team
+  pk: 4
+- fields: {city: Huddersfield, defunct: false, founded: 1908, name: Huddersfield Town
+      Football Club, notes: '', real: true, short_name: Huddersfield Town, slug: huddersfield-town}
+  model: teams.team
+  pk: 664
+- fields: {city: 'Kingston upon Hull, England', defunct: false, founded: 1904, name: Hull
+      City Association Football Club, notes: '', real: true, short_name: Hull City,
+    slug: hull-city}
+  model: teams.team
+  pk: 39
+- fields: {city: '', defunct: false, founded: null, name: Hungary national team, notes: '',
+    real: true, short_name: Hungary, slug: hungary}
+  model: teams.team
+  pk: 833
+- fields: {city: 'Buenos Aires, Argentina', defunct: false, founded: 1908, name: "Club\
+      \ Atl\xE9tico Hurac\xE1n", notes: '', real: true, short_name: "Hurac\xE1n",
+    slug: huracan}
+  model: teams.team
+  pk: 67
+- fields: {city: '', defunct: true, founded: null, name: IASocFan, notes: '', real: false,
+    short_name: IASocFan, slug: ''}
+  model: teams.team
+  pk: 148
+- fields: {city: '', defunct: true, founded: null, name: IASocFan/soccrbom2, notes: '',
+    real: false, short_name: IASocFan/soccrbom2, slug: ''}
+  model: teams.team
+  pk: 177
+- fields: {city: '', defunct: true, founded: null, name: IASocFan/soccrbom2 (Midwest
+      Sting), notes: '', real: false, short_name: IASocFan/soccrbom2 (Midwest Sting),
+    slug: ''}
+  model: teams.team
+  pk: 169
+- fields: {city: "Bor\xE5s", defunct: false, founded: 1904, name: IF Elfsborg, notes: '',
+    real: true, short_name: IF Elfsborg, slug: if-elfsborg}
+  model: teams.team
+  pk: 609
+- fields: {city: Gothenburg, defunct: false, founded: 1904, name: "IFK G\xF6teborg",
+    notes: '', real: true, short_name: "IFK G\xF6teborg", slug: ifk-goteborg}
+  model: teams.team
+  pk: 613
+- fields: {city: "Norrk\xF6ping", defunct: false, founded: 1897, name: "IFK Norrk\xF6\
+      ping", notes: '', real: true, short_name: "IFK Norrk\xF6ping", slug: ifk-norrkoping}
+  model: teams.team
+  pk: 619
+- fields: {city: '', defunct: false, founded: null, name: Iceland national team, notes: '',
+    real: true, short_name: Iceland, slug: iceland}
+  model: teams.team
+  pk: 834
+- fields: {city: Incheon, defunct: false, founded: 2003, name: Incheon United Football
+      Club, notes: '', real: true, short_name: Incheon United, slug: incheon-united}
+  model: teams.team
+  pk: 720
+- fields: {city: 'Avellaneda, Argentina', defunct: false, founded: 1905, name: "Club\
+      \ Atl\xE9tico Independiente", notes: '', real: true, short_name: Independiente,
+    slug: independiente}
+  model: teams.team
+  pk: 75
+- fields: {city: "Medell\xEDn", defunct: false, founded: 1913, name: "Corporaci\xF3\
+      n Deportiva Independiente Medell\xEDn", notes: '', real: true, short_name: "Independiente\
+      \ Medell\xEDn", slug: independiente-medellin}
+  model: teams.team
+  pk: 387
+- fields: {city: '', defunct: false, founded: null, name: India national team, notes: '',
+    real: true, short_name: India, slug: india}
+  model: teams.team
+  pk: 835
+- fields: {city: '', defunct: false, founded: null, name: Indonesia national team,
+    notes: '', real: true, short_name: Indonesia, slug: indonesia}
+  model: teams.team
+  pk: 836
+- fields: {city: Porto Alegre, defunct: false, founded: 1909, name: Sport Club Internacional,
+    notes: '', real: true, short_name: Internacional, slug: internacional}
+  model: teams.team
+  pk: 358
+- fields: {city: Milan, defunct: false, founded: 1908, name: Football Club Internazionale
+      Milano, notes: '', real: true, short_name: Internazionale, slug: internazionale}
+  model: teams.team
+  pk: 263
+- fields: {city: Inverness, defunct: false, founded: 1994, name: Inverness Caledonian
+      Thistle Football Club, notes: '', real: true, short_name: Inverness Caledonian
+      Thistle, slug: caledonian-thistle}
+  model: teams.team
+  pk: 321
+- fields: {city: Ipswich, defunct: false, founded: 1878, name: Ipswich Town Football
+      Club, notes: '', real: true, short_name: Ipswich Town, slug: ipswich-town}
+  model: teams.team
+  pk: 513
+- fields: {city: Thessaloniki, defunct: false, founded: 1908, name: Iraklis Thessaloniki
+      F.C., notes: '', real: true, short_name: Iraklis, slug: iraklis}
+  model: teams.team
+  pk: 483
+- fields: {city: '', defunct: false, founded: null, name: Iran national team, notes: '',
+    real: true, short_name: Iran, slug: iran}
+  model: teams.team
+  pk: 837
+- fields: {city: '', defunct: false, founded: null, name: Iraq national team, notes: '',
+    real: true, short_name: Iraq, slug: iraq}
+  model: teams.team
+  pk: 838
+- fields: {city: '', defunct: false, founded: null, name: Ireland national team, notes: '',
+    real: true, short_name: Ireland, slug: ireland}
+  model: teams.team
+  pk: 839
+- fields: {city: "Metap\xE1n, El Salvador", defunct: false, founded: 2000, name: "Asociaci\xF3\
+      n Deportiva Isidro Metap\xE1n", notes: '', real: true, short_name: "Isidro Metap\xE1\
+      n", slug: isidro-metapan}
+  model: teams.team
+  pk: 89
+- fields: {city: '', defunct: false, founded: null, name: Isle of Man national team,
+    notes: '', real: true, short_name: Isle of Man, slug: isle-of-man}
+  model: teams.team
+  pk: 840
+- fields: {city: '', defunct: false, founded: null, name: Israel national team, notes: '',
+    real: true, short_name: Israel, slug: israel}
+  model: teams.team
+  pk: 841
+- fields: {city: "Itag\xFC\xED", defunct: false, founded: 2008, name: "C.D. Itag\xFC\
+      \xED Ditaires", notes: '', real: true, short_name: "Itag\xFC\xED Ditaires ",
+    slug: itagui-ditaires}
+  model: teams.team
+  pk: 381
+- fields: {city: '', defunct: false, founded: 1910, name: Italy national team, notes: '',
+    real: true, short_name: Italy, slug: italy}
+  model: teams.team
+  pk: 842
+- fields: {city: "Tuxtla Guti\xE9rrez, Mexico", defunct: false, founded: 2002, name: Jaguares
+      de Chiapas FC, notes: '', real: true, short_name: Jaguares, slug: jaguares}
+  model: teams.team
+  pk: 43
+- fields: {city: '', defunct: false, founded: null, name: Jamaica national team, notes: '',
+    real: true, short_name: Jamaica, slug: jamaica}
+  model: teams.team
+  pk: 843
+- fields: {city: '', defunct: false, founded: null, name: Japan national team, notes: '',
+    real: true, short_name: Japan, slug: japan}
+  model: teams.team
+  pk: 844
+- fields: {city: Seogwipo, defunct: false, founded: 1982, name: Jeju United Football
+      Club, notes: '', real: true, short_name: Jeju United, slug: jeju-united}
+  model: teams.team
+  pk: 717
+- fields: {city: Jeonju, defunct: false, founded: 1994, name: Jeonbuk Hyundai Motors,
+    notes: '', real: true, short_name: Jeonbuk Hyundai Motors, slug: jeonbuk-hyundai-motors}
+  model: teams.team
+  pk: 711
+- fields: {city: '', defunct: false, founded: null, name: Jersey national team, notes: '',
+    real: true, short_name: Jersey, slug: jersey}
+  model: teams.team
+  pk: 845
+- fields: {city: Nanjing, defunct: false, founded: 1994, name: Jiangsu Sainty Football
+      Club, notes: '', real: true, short_name: Jiangsu Sainty, slug: jiangsu-sainty}
+  model: teams.team
+  pk: 735
+- fields: {city: 'Tunapuna, Trinidad and Tobago', defunct: false, founded: 1996, name: Joe
+      Public Football Club, notes: '', real: true, short_name: Joe Public, slug: joe-public}
+  model: teams.team
+  pk: 82
+- fields: {city: '', defunct: true, founded: null, name: JoeSoccer Fan, notes: '',
+    real: false, short_name: JoeSoccer Fan, slug: ''}
+  model: teams.team
+  pk: 191
+- fields: {city: '', defunct: false, founded: null, name: Jordan national team, notes: '',
+    real: true, short_name: Jordan, slug: jordan}
+  model: teams.team
+  pk: 846
+- fields: {city: Barranquilla, defunct: false, founded: 1924, name: "Corporaci\xF3\
+      n Popular Deportiva Junior", notes: '', real: true, short_name: Junior, slug: junior}
+  model: teams.team
+  pk: 385
+- fields: {city: Turin, defunct: false, founded: 1897, name: Juventus Football Club,
+    notes: '', real: true, short_name: Juventus, slug: juventus}
+  model: teams.team
+  pk: 264
+- fields: {city: Iwata, defunct: false, founded: 1970, name: "J\xFAbilo Iwata", notes: '',
+    real: true, short_name: "J\xFAbilo Iwata", slug: jubilo-iwata}
+  model: teams.team
+  pk: 422
+- fields: {city: '', defunct: true, founded: null, name: KUHN/IA, notes: '', real: false,
+    short_name: KUHN/IA, slug: ''}
+  model: teams.team
+  pk: 107
+- fields: {city: Kaiserslautern, defunct: false, founded: 1900, name: 1. FC Kaiserslautern,
+    notes: '', real: true, short_name: Kaiserslautern, slug: kaiserslautern}
+  model: teams.team
+  pk: 231
+- fields: {city: Kalmar, defunct: false, founded: 1910, name: Kalmar FF, notes: '',
+    real: true, short_name: Kalmar FF, slug: kalmar-ff}
+  model: teams.team
+  pk: 614
+- fields: {city: Kapfenberg, defunct: false, founded: 1919, name: Kapfenberger SV,
+    notes: '', real: true, short_name: Kapfenberger SV, slug: kapfenberger-sv}
+  model: teams.team
+  pk: 561
+- fields: {city: "Karab\xFCk", defunct: false, founded: 1969, name: "Kardemir Demir\
+      \ \xC7elik Karab\xFCkspor", notes: '', real: true, short_name: "Karab\xFCkspor",
+    slug: karabukspor}
+  model: teams.team
+  pk: 461
+- fields: {city: Karlsruhe, defunct: false, founded: 1894, name: Karlsruher SC, notes: '',
+    real: true, short_name: Karlsruher SC, slug: karlsruher-sc}
+  model: teams.team
+  pk: 538
+- fields: {city: Kashima, defunct: false, founded: 1947, name: Kashima Antlers, notes: '',
+    real: true, short_name: Kashima Antlers, slug: kashima-antlers}
+  model: teams.team
+  pk: 419
+- fields: {city: Kashiwa, defunct: false, founded: 1940, name: Kashiwa Reysol, notes: '',
+    real: true, short_name: Kashiwa Reysol, slug: kashiwa-reysol}
+  model: teams.team
+  pk: 417
+- fields: {city: Kavala, defunct: false, founded: 1965, name: Kavala F.C., notes: '',
+    real: true, short_name: Kavala, slug: kavala}
+  model: teams.team
+  pk: 474
+- fields: {city: Kawasaki, defunct: false, founded: 1955, name: Kawasaki Frontale,
+    notes: '', real: true, short_name: Kawasaki Frontale, slug: kawasaki-frontale}
+  model: teams.team
+  pk: 426
+- fields: {city: Kayseri, defunct: false, founded: 1966, name: Kayserispor, notes: '',
+    real: true, short_name: Kayserispor, slug: kayserispor}
+  model: teams.team
+  pk: 462
+- fields: {city: '', defunct: false, founded: null, name: Kazakhstan national team,
+    notes: '', real: true, short_name: Kazakhstan, slug: kazakhstan}
+  model: teams.team
+  pk: 847
+- fields: {city: '', defunct: false, founded: null, name: Kenya national team, notes: '',
+    real: true, short_name: Kenya, slug: kenya}
+  model: teams.team
+  pk: 848
+- fields: {city: Kerkyra, defunct: false, founded: 1968, name: Kerkyra F.C., notes: '',
+    real: true, short_name: Kerkyra, slug: kerkyra}
+  model: teams.team
+  pk: 479
+- fields: {city: '', defunct: true, founded: null, name: Kevin8833, notes: '', real: false,
+    short_name: Kevin8833, slug: ''}
+  model: teams.team
+  pk: 97
+- fields: {city: Kilmarnock, defunct: false, founded: 1869, name: Kilmarnock Football
+      Club, notes: '', real: true, short_name: Kilmarnock, slug: kilmarnock}
+  model: teams.team
+  pk: 318
+- fields: {city: '', defunct: false, founded: null, name: Kiribati national team,
+    notes: '', real: true, short_name: Kiribati, slug: kiribati}
+  model: teams.team
+  pk: 849
+- fields: {city: Kortrijk, defunct: false, founded: 1901, name: Koninklijke Voetbalclub
+      Kortrijk, notes: '', real: true, short_name: Kortrijk, slug: kortrijk}
+  model: teams.team
+  pk: 490
+- fields: {city: Krasnodar, defunct: false, founded: 2007, name: FC Krasnodar, notes: '',
+    real: true, short_name: Krasnodar, slug: krasnodar}
+  model: teams.team
+  pk: 397
+- fields: {city: Samara, defunct: false, founded: 1942, name: FC Krylia Sovetov Samara,
+    notes: '', real: true, short_name: Krylia Sovetov Samara, slug: krylia-sovetov-samara}
+  model: teams.team
+  pk: 404
+- fields: {city: Krasnodar, defunct: false, founded: 1928, name: FC Kuban Krasnodar,
+    notes: '', real: true, short_name: Kuban Krasnodar, slug: kuban-krasnodar}
+  model: teams.team
+  pk: 396
+- fields: {city: '', defunct: true, founded: null, name: Kuhn & IASocFan, notes: '',
+    real: false, short_name: Kuhn & IASocFan, slug: ''}
+  model: teams.team
+  pk: 204
+- fields: {city: '', defunct: false, founded: null, name: Kuwait national team, notes: '',
+    real: true, short_name: Kuwait, slug: kuwait}
+  model: teams.team
+  pk: 850
+- fields: {city: '', defunct: false, founded: null, name: Kyrgyzstan national team,
+    notes: '', real: true, short_name: Kyrgyzstan, slug: kyrgyzstan}
+  model: teams.team
+  pk: 851
+- fields: {city: "Bogot\xE1", defunct: false, founded: 1990, name: Club Deportivo
+      La Equidad Seguros, notes: '', real: true, short_name: La Equidad, slug: la-equidad}
+  model: teams.team
+  pk: 375
+- fields: {city: '', defunct: true, founded: null, name: Landon Donovan, notes: '',
+    real: false, short_name: Landon Donovan, slug: ''}
+  model: teams.team
+  pk: 144
+- fields: {city: 'Buenos Aires, Argentina', defunct: false, founded: 1915, name: "Club\
+      \ Atl\xE9tico Lan\xFAs", notes: '', real: true, short_name: "Lan\xFAs ", slug: lanus}
+  model: teams.team
+  pk: 66
+- fields: {city: '', defunct: false, founded: null, name: Laos national team, notes: '',
+    real: true, short_name: Laos, slug: laos}
+  model: teams.team
+  pk: 852
+- fields: {city: Larissa, defunct: false, founded: 1964, name: Athletic Union of Larissa
+      1964, notes: '', real: true, short_name: Larissa, slug: larissa}
+  model: teams.team
+  pk: 481
+- fields: {city: '', defunct: false, founded: null, name: Latvia national team, notes: '',
+    real: true, short_name: Latvia, slug: latvia}
+  model: teams.team
+  pk: 853
+- fields: {city: Rome, defunct: false, founded: 1900, name: "Societ\xE0 Sportiva Lazio",
+    notes: '', real: true, short_name: Lazio, slug: lazio}
+  model: teams.team
+  pk: 254
+- fields: {city: '', defunct: false, founded: null, name: Lebanon national team, notes: '',
+    real: true, short_name: Lebanon, slug: lebanon}
+  model: teams.team
+  pk: 854
+- fields: {city: Lecce, defunct: false, founded: 1908, name: Unione Sportiva Lecce,
+    notes: '', real: true, short_name: Lecce, slug: lecce}
+  model: teams.team
+  pk: 265
+- fields: {city: Leeds, defunct: false, founded: 1919, name: Leeds United Association
+      Football Club, notes: '', real: true, short_name: Leeds, slug: leeds}
+  model: teams.team
+  pk: 518
+- fields: {city: Leicester, defunct: false, founded: 1884, name: Leicester City Football
+      Club, notes: '', real: true, short_name: Leicester City, slug: leicester-city}
+  model: teams.team
+  pk: 509
+- fields: {city: '', defunct: false, founded: null, name: Lesotho national team, notes: '',
+    real: true, short_name: Lesotho, slug: lesotho}
+  model: teams.team
+  pk: 855
+- fields: {city: Valencia, defunct: false, founded: 1939, name: "Levante Uni\xF3n\
+      \ Deportiva, S.A.D.", notes: '', real: true, short_name: Levante UD, slug: levante-ud}
+  model: teams.team
+  pk: 242
+- fields: {city: Shenyang, defunct: false, founded: 1953, name: Liaoning Whowin Football
+      Club, notes: '', real: true, short_name: Liaoning Whowin, slug: liaoning-whowin}
+  model: teams.team
+  pk: 729
+- fields: {city: '', defunct: false, founded: null, name: Liberia national team, notes: '',
+    real: true, short_name: Liberia, slug: liberia}
+  model: teams.team
+  pk: 856
+- fields: {city: '', defunct: false, founded: null, name: Libya national team, notes: '',
+    real: true, short_name: Libya, slug: libya}
+  model: teams.team
+  pk: 857
+- fields: {city: '', defunct: false, founded: null, name: Liechtenstein national team,
+    notes: '', real: true, short_name: Liechtenstein, slug: liechtenstein}
+  model: teams.team
+  pk: 858
+- fields: {city: Lier, defunct: false, founded: 1906, name: Koninklijke Lierse Sportkring,
+    notes: '', real: true, short_name: Lierse, slug: lierse}
+  model: teams.team
+  pk: 497
+- fields: {city: Lille, defunct: false, founded: 1944, name: "LOSC Lille M\xE9tropole",
+    notes: '', real: true, short_name: Lille, slug: lille}
+  model: teams.team
+  pk: 280
+- fields: {city: "Lillestr\xF8m", defunct: false, founded: 1917, name: "Lillestr\xF8\
+      m Sportsklubb", notes: '', real: true, short_name: "Lillestr\xF8m", slug: lillestrom}
+  model: teams.team
+  pk: 698
+- fields: {city: '', defunct: false, founded: null, name: Lithuania national team,
+    notes: '', real: true, short_name: Lithuania, slug: lithuania}
+  model: teams.team
+  pk: 859
+- fields: {city: 'Liverpool, England', defunct: false, founded: 1892, name: Liverpool
+      Football Club, notes: '', real: true, short_name: Liverpool, slug: liverpool}
+  model: teams.team
+  pk: 26
+- fields: {city: Livingston, defunct: false, founded: 1943, name: Livingston Football
+      Club, notes: '', real: true, short_name: Livingston, slug: livingston}
+  model: teams.team
+  pk: 686
+- fields: {city: '', defunct: true, founded: null, name: Lobolife/Hollaatyaboy, notes: '',
+    real: false, short_name: Lobolife/Hollaatyaboy, slug: ''}
+  model: teams.team
+  pk: 187
+- fields: {city: '', defunct: true, founded: null, name: Lobolife/Hollaatyaboy/KuhnScoot,
+    notes: '', real: false, short_name: Lobolife/Hollaatyaboy/KuhnScoot, slug: ''}
+  model: teams.team
+  pk: 211
+- fields: {city: '', defunct: true, founded: null, name: Lobolife/Kuhnscoot, notes: '',
+    real: false, short_name: Lobolife/Kuhnscoot, slug: ''}
+  model: teams.team
+  pk: 193
+- fields: {city: Lokeren, defunct: false, founded: 1923, name: Koninklijke Sporting
+      Club Lokeren Oost-Vlaanderen, notes: '', real: true, short_name: Lokeren, slug: lokeren}
+  model: teams.team
+  pk: 496
+- fields: {city: Moscow, defunct: false, founded: 1923, name: Lokomotiv Moscow, notes: '',
+    real: true, short_name: Lokomotiv Moscow, slug: lokomotiv-moscow}
+  model: teams.team
+  pk: 392
+- fields: {city: Lorient, defunct: false, founded: 1926, name: Football Club Lorient-Bretagne
+      Sud, notes: '', real: true, short_name: Lorient, slug: lorient}
+  model: teams.team
+  pk: 282
+- fields: {city: Los Angeles, defunct: false, founded: 2010, name: Los Angeles Blues,
+    notes: '', real: true, short_name: Los Angeles Blues, slug: los-angeles-blues}
+  model: teams.team
+  pk: 345
+- fields: {city: Los Angeles, defunct: false, founded: 1996, name: Los Angeles Galaxy,
+    notes: '', real: true, short_name: Los Angeles Galaxy, slug: los-angeles-galaxy}
+  model: teams.team
+  pk: 5
+- fields: {city: '', defunct: true, founded: null, name: Lurking, notes: '', real: false,
+    short_name: Lurking, slug: ''}
+  model: teams.team
+  pk: 156
+- fields: {city: '', defunct: false, founded: null, name: Luxembourg national team,
+    notes: '', real: true, short_name: Luxembourg, slug: luxembourg}
+  model: teams.team
+  pk: 860
+- fields: {city: Lyngby, defunct: false, founded: 1921, name: Lyngby Boldklub, notes: '',
+    real: true, short_name: Lyngby Boldklub, slug: lyngby-boldklub}
+  model: teams.team
+  pk: 606
+- fields: {city: Lyon, defunct: false, founded: 1889, name: Olympique Lyonnais, notes: '',
+    real: true, short_name: Lyon, slug: lyon}
+  model: teams.team
+  pk: 275
+- fields: {city: None, defunct: true, founded: 1996, name: MLS All-Stars, notes: '',
+    real: true, short_name: MLS All-Stars, slug: mls-all-stars}
+  model: teams.team
+  pk: 215
+- fields: {city: '', defunct: true, founded: null, name: MLSNHTOWN, notes: '', real: false,
+    short_name: MLSNHTOWN, slug: ''}
+  model: teams.team
+  pk: 108
+- fields: {city: '', defunct: true, founded: null, name: MLSNHTOWN & Kevin8833, notes: '',
+    real: false, short_name: MLSNHTOWN & Kevin8833, slug: ''}
+  model: teams.team
+  pk: 206
+- fields: {city: '', defunct: true, founded: null, name: MLSNHTOWN and Kevin8833,
+    notes: '', real: false, short_name: MLSNHTOWN and Kevin8833, slug: ''}
+  model: teams.team
+  pk: 201
+- fields: {city: '', defunct: true, founded: null, name: MLSNHTOWN/Elninho, notes: '',
+    real: false, short_name: MLSNHTOWN/Elninho, slug: ''}
+  model: teams.team
+  pk: 151
+- fields: {city: '', defunct: true, founded: null, name: MLSNHTOWN/WKU, notes: '',
+    real: false, short_name: MLSNHTOWN/WKU, slug: ''}
+  model: teams.team
+  pk: 163
+- fields: {city: Duisburg, defunct: false, founded: 1902, name: MSV Duisburg, notes: '',
+    real: true, short_name: MSV Duisburg, slug: msv-duisburg}
+  model: teams.team
+  pk: 531
+- fields: {city: '', defunct: false, founded: null, name: Macau national team, notes: '',
+    real: true, short_name: Macau, slug: macau}
+  model: teams.team
+  pk: 861
+- fields: {city: '', defunct: false, founded: null, name: Madagascar national team,
+    notes: '', real: true, short_name: Madagascar, slug: madagascar}
+  model: teams.team
+  pk: 862
+- fields: {city: '', defunct: false, founded: null, name: Malawi national team, notes: '',
+    real: true, short_name: Malawi, slug: malawi}
+  model: teams.team
+  pk: 863
+- fields: {city: '', defunct: false, founded: null, name: Malaysia national team,
+    notes: '', real: true, short_name: Malaysia, slug: malaysia}
+  model: teams.team
+  pk: 864
+- fields: {city: '', defunct: false, founded: null, name: Maldives national team,
+    notes: '', real: true, short_name: Maldives, slug: maldives}
+  model: teams.team
+  pk: 865
+- fields: {city: '', defunct: false, founded: null, name: Mali national team, notes: '',
+    real: true, short_name: Mali, slug: mali}
+  model: teams.team
+  pk: 866
+- fields: {city: "Malm\xF6", defunct: false, founded: 1910, name: "Malm\xF6 Fotbollf\xF6\
+      rening", notes: '', real: true, short_name: "Malm\xF6 FF", slug: malmo-ff}
+  model: teams.team
+  pk: 615
+- fields: {city: '', defunct: false, founded: null, name: Malta national team, notes: '',
+    real: true, short_name: Malta, slug: malta}
+  model: teams.team
+  pk: 867
+- fields: {city: 'Manchester, England', defunct: false, founded: 1880, name: Manchester
+      City Football Club, notes: '', real: true, short_name: Manchester City, slug: manchester-city}
+  model: teams.team
+  pk: 24
+- fields: {city: 'Manchester, England', defunct: false, founded: 1878, name: Manchester
+      United F.C., notes: '', real: true, short_name: Manchester United, slug: manchester-united}
+  model: teams.team
+  pk: 20
+- fields: {city: Manisa, defunct: false, founded: 1965, name: Manisaspor, notes: '',
+    real: true, short_name: Manisaspor, slug: manisaspor}
+  model: teams.team
+  pk: 453
+- fields: {city: Maribor, defunct: false, founded: 1960, name: Nogometni Klub Maribor,
+    notes: '', real: true, short_name: Maribor, slug: maribor}
+  model: teams.team
+  pk: 624
+- fields: {city: Marseille, defunct: false, founded: 1899, name: Olympique de Marseille,
+    notes: '', real: true, short_name: Marseille, slug: marseille}
+  model: teams.team
+  pk: 289
+- fields: {city: '', defunct: false, founded: null, name: Marshall Islands national
+      team, notes: '', real: true, short_name: Marshall Islands, slug: marshall-islands}
+  model: teams.team
+  pk: 868
+- fields: {city: Funchal, defunct: false, founded: 1910, name: "Club Sport Mar\xED\
+      timo", notes: '', real: true, short_name: "Mar\xEDtimo", slug: maritimo}
+  model: teams.team
+  pk: 442
+- fields: {city: '', defunct: false, founded: null, name: Mauritania national team,
+    notes: '', real: true, short_name: Mauritania, slug: mauritania}
+  model: teams.team
+  pk: 869
+- fields: {city: '', defunct: false, founded: null, name: Mauritius national team,
+    notes: '', real: true, short_name: Mauritius, slug: mauritius}
+  model: teams.team
+  pk: 870
+- fields: {city: '', defunct: true, founded: null, name: Maximum Optimal, notes: '',
+    real: false, short_name: Maximum Optimal, slug: ''}
+  model: teams.team
+  pk: 159
+- fields: {city: '', defunct: true, founded: null, name: Maximum Optimal/burud111,
+    notes: '', real: false, short_name: Maximum Optimal/burud111, slug: ''}
+  model: teams.team
+  pk: 104
+- fields: {city: '', defunct: true, founded: null, name: MaximumOptimal/Beazley17,
+    notes: '', real: false, short_name: MaximumOptimal/Beazley17, slug: ''}
+  model: teams.team
+  pk: 114
+- fields: {city: '', defunct: true, founded: null, name: McNaulty & soccrbom, notes: '',
+    real: false, short_name: McNaulty & soccrbom, slug: ''}
+  model: teams.team
+  pk: 200
+- fields: {city: '', defunct: true, founded: null, name: McNaulty & soccrbom2, notes: '',
+    real: false, short_name: McNaulty & soccrbom2, slug: ''}
+  model: teams.team
+  pk: 207
+- fields: {city: Mechelen, defunct: false, founded: 1904, name: Yellow Red Koninklijke
+      Voetbalclub Mechelen, notes: '', real: true, short_name: Mechelen, slug: mechelen}
+  model: teams.team
+  pk: 486
+- fields: {city: Melbourne, defunct: false, founded: 2008, name: Melbourne Heart FC,
+    notes: '', real: true, short_name: Melbourne Heart, slug: melbourne-heart}
+  model: teams.team
+  pk: 409
+- fields: {city: Melbourne, defunct: false, founded: 2004, name: Melbourne Victory
+      Football Club, notes: '', real: true, short_name: Melbourne Victory, slug: melbourne-victory}
+  model: teams.team
+  pk: 410
+- fields: {city: Mersin, defunct: false, founded: 1925, name: "Mersin \u0130dmanyurdu",
+    notes: '', real: true, short_name: "Mersin \u0130Y", slug: mersin-iy}
+  model: teams.team
+  pk: 452
+- fields: {city: '', defunct: false, founded: 1923, name: Mexico national team, notes: '',
+    real: true, short_name: Mexico, slug: mexico}
+  model: teams.team
+  pk: 871
+- fields: {city: Miami, defunct: true, founded: 1997, name: Miami Fusion F.C., notes: '',
+    real: true, short_name: Miami Fusion, slug: miami-fusion}
+  model: teams.team
+  pk: 18
+- fields: {city: Middlesbrough, defunct: false, founded: 1876, name: Middlesbrough
+      Football Club, notes: '', real: true, short_name: Middlesbrough, slug: middlesbrough}
+  model: teams.team
+  pk: 503
+- fields: {city: "Bogot\xE1", defunct: false, founded: 1946, name: Club Deportivo
+      Los Millonarios, notes: '', real: true, short_name: Millionarios, slug: millionarios}
+  model: teams.team
+  pk: 376
+- fields: {city: London, defunct: false, founded: 1885, name: Millwall Football Club,
+    notes: '', real: true, short_name: Millwall, slug: millwall}
+  model: teams.team
+  pk: 510
+- fields: {city: Milton Keynes, defunct: false, founded: 2004, name: Milton Keynes
+      Dons Football Club, notes: '', real: true, short_name: Milton Keynes Dons, slug: milton-keynes-dons}
+  model: teams.team
+  pk: 662
+- fields: {city: "Mj\xE4llby", defunct: false, founded: 1939, name: "Mj\xE4llby AIF",
+    notes: '', real: true, short_name: "Mj\xE4llby AIF", slug: mjallby-aif}
+  model: teams.team
+  pk: 618
+- fields: {city: Molde, defunct: false, founded: 1911, name: Molde Fotballklubb, notes: '',
+    real: true, short_name: Molde, slug: molde}
+  model: teams.team
+  pk: 693
+- fields: {city: '', defunct: false, founded: null, name: Moldova national team, notes: '',
+    real: true, short_name: Moldova, slug: moldova}
+  model: teams.team
+  pk: 872
+- fields: {city: '', defunct: false, founded: null, name: Monaco national team, notes: '',
+    real: true, short_name: Monaco, slug: monaco}
+  model: teams.team
+  pk: 873
+- fields: {city: '', defunct: false, founded: null, name: Mongolia national team,
+    notes: '', real: true, short_name: Mongolia, slug: mongolia}
+  model: teams.team
+  pk: 874
+- fields: {city: Mons, defunct: false, founded: 1909, name: R.A.E.C. Mons, notes: '',
+    real: true, short_name: Mons, slug: mons}
+  model: teams.team
+  pk: 488
+- fields: {city: "Tend\u014D, Yamagata", defunct: false, founded: 1984, name: Montedio
+      Yamagata, notes: '', real: true, short_name: Montedio Yamagata, slug: montedio-yamagata}
+  model: teams.team
+  pk: 431
+- fields: {city: '', defunct: false, founded: null, name: Montenegro national team,
+    notes: '', real: true, short_name: Montenegro, slug: montenegro}
+  model: teams.team
+  pk: 875
+- fields: {city: Montpellier, defunct: false, founded: 1974, name: "Montpellier H\xE9\
+      rault Sport Club", notes: '', real: true, short_name: Montpellier, slug: montpellier}
+  model: teams.team
+  pk: 274
+- fields: {city: Montreal, defunct: false, founded: 1992, name: Montreal Impact, notes: '',
+    real: true, short_name: Montreal Impact, slug: montreal-impact}
+  model: teams.team
+  pk: 332
+- fields: {city: '', defunct: false, founded: null, name: Montserrat national team,
+    notes: '', real: true, short_name: Montserrat, slug: montserrat}
+  model: teams.team
+  pk: 876
+- fields: {city: 'Morelia, Mexico', defunct: false, founded: 1924, name: "Club Atl\xE9\
+      tico Monarcas Morelia", notes: '', real: true, short_name: Morelia, slug: morelia}
+  model: teams.team
+  pk: 52
+- fields: {city: '', defunct: false, founded: null, name: Morocco national team, notes: '',
+    real: true, short_name: Morocco, slug: morocco}
+  model: teams.team
+  pk: 877
+- fields: {city: Tegucigalpa, defunct: false, founded: 1928, name: Club Deportivo
+      Motagua, notes: '', real: true, short_name: Motagua, slug: motagua}
+  model: teams.team
+  pk: 973
+- fields: {city: Motherwell, defunct: false, founded: 1886, name: Motherwell Football
+      & Athletic Club, notes: '', real: true, short_name: Motherwell, slug: motherwell}
+  model: teams.team
+  pk: 313
+- fields: {city: '', defunct: false, founded: null, name: Mozambique national team,
+    notes: '', real: true, short_name: Mozambique, slug: mozambique}
+  model: teams.team
+  pk: 878
+- fields: {city: 'Guatemala City, Guatemala', defunct: false, founded: 1936, name: Club
+      Social y Deportivo Municipal, notes: '', real: true, short_name: Municipal,
+    slug: municipal}
+  model: teams.team
+  pk: 81
+- fields: {city: 'Murska Sobota ', defunct: false, founded: 2005, name: "Nogometno\
+      \ Dru\u0161tvo Mura 05", notes: '', real: true, short_name: Mura 05, slug: mura-05}
+  model: teams.team
+  pk: 632
+- fields: {city: '', defunct: false, founded: null, name: Myanmar (Burma) national
+      team, notes: '', real: true, short_name: Myanmar (Burma), slug: myanmar-burma}
+  model: teams.team
+  pk: 879
+- fields: {city: "M\xE1laga", defunct: false, founded: 1948, name: "M\xE1laga Club\
+      \ de F\xFAtbol", notes: '', real: true, short_name: "M\xE1laga CF", slug: malaga-cf}
+  model: teams.team
+  pk: 249
+- fields: {city: Breda, defunct: false, founded: 1912, name: NAC Breda, notes: '',
+    real: true, short_name: NAC Breda, slug: nac-breda}
+  model: teams.team
+  pk: 310
+- fields: {city: Nova Gorica, defunct: false, founded: 1947, name: ND Gorica, notes: '',
+    real: true, short_name: ND Gorica, slug: nd-gorica}
+  model: teams.team
+  pk: 626
+- fields: {city: Nijmegen, defunct: false, founded: 1900, name: Nijmegen Eendracht
+      Combinatie, notes: '', real: true, short_name: NEC, slug: nec}
+  model: teams.team
+  pk: 301
+- fields: {city: "NK Dom\u017Eale", defunct: false, founded: 1921, name: "NK Dom\u017E\
+      ale", notes: '', real: true, short_name: "NK Dom\u017Eale", slug: nk-domzale}
+  model: teams.team
+  pk: 627
+- fields: {city: 'Blaine, Minnesota', defunct: false, founded: 2010, name: NSC Minnesota
+      Stars, notes: '', real: true, short_name: NSC Minnesota Stars, slug: nsc-minnesota-stars}
+  model: teams.team
+  pk: 333
+- fields: {city: Funchal, defunct: false, founded: 1910, name: Clube Desportivo Nacional,
+    notes: '', real: true, short_name: Nacional, slug: nacional}
+  model: teams.team
+  pk: 448
+- fields: {city: Lendava, defunct: false, founded: 1903, name: NK Nafta Lendava, notes: '',
+    real: true, short_name: Nafta, slug: nafta}
+  model: teams.team
+  pk: 631
+- fields: {city: Nagoya, defunct: false, founded: 1939, name: Nagoya Grampus, notes: '',
+    real: true, short_name: Nagoya Grampus, slug: nagoya-grampus}
+  model: teams.team
+  pk: 418
+- fields: {city: '', defunct: false, founded: null, name: Namibia national team, notes: '',
+    real: true, short_name: Namibia, slug: namibia}
+  model: teams.team
+  pk: 880
+- fields: {city: Nanchang, defunct: false, founded: 2004, name: Nanchang Hengyuan
+      Football Club, notes: '', real: true, short_name: Nanchang Hengyuan, slug: nanchang-hengyuan}
+  model: teams.team
+  pk: 740
+- fields: {city: Nancy, defunct: false, founded: 1967, name: Association Sportive
+      Nancy-Lorraine, notes: '', real: true, short_name: Nancy, slug: nancy}
+  model: teams.team
+  pk: 292
+- fields: {city: Naples, defunct: false, founded: 1926, name: "Societ\xE0 Sportiva\
+      \ Calcio Napoli", notes: '', real: true, short_name: Napoli, slug: napoli}
+  model: teams.team
+  pk: 266
+- fields: {city: '', defunct: false, founded: null, name: Nauru national team, notes: '',
+    real: true, short_name: Nauru, slug: nauru}
+  model: teams.team
+  pk: 881
+- fields: {city: Famagusta, defunct: false, founded: 1948, name: Nea Salamis Famagusta,
+    notes: '', real: true, short_name: Nea Salamis Famagusta, slug: nea-salamis-famagusta}
+  model: teams.team
+  pk: 658
+- fields: {city: 'Mexico City, Mexico', defunct: false, founded: 1923, name: Club
+      Necaxa, notes: '', real: true, short_name: Necaxa, slug: necaxa}
+  model: teams.team
+  pk: 56
+- fields: {city: '', defunct: false, founded: null, name: Nepal national team, notes: '',
+    real: true, short_name: Nepal, slug: nepal}
+  model: teams.team
+  pk: 882
+- fields: {city: '', defunct: false, founded: 1905, name: Netherlands national team,
+    notes: '', real: true, short_name: Netherlands, slug: netherlands}
+  model: teams.team
+  pk: 883
+- fields: {city: '', defunct: false, founded: null, name: Netherlands Antilles national
+      team, notes: '', real: true, short_name: Netherlands Antilles, slug: netherlands-antilles}
+  model: teams.team
+  pk: 884
+- fields: {city: "Neuch\xE2tel", defunct: false, founded: 1970, name: "Neuch\xE2tel\
+      \ Xamax Football Club", notes: '', real: true, short_name: "Neuch\xE2tel Xamax",
+    slug: neuchatel-xamax}
+  model: teams.team
+  pk: 549
+- fields: {city: Boston, defunct: false, founded: 1995, name: New England Revolution,
+    notes: '', real: true, short_name: New England Revolution, slug: new-england-revolution}
+  model: teams.team
+  pk: 14
+- fields: {city: New York, defunct: false, founded: 1995, name: New York Red Bulls,
+    notes: '', real: true, short_name: New York Red Bulls, slug: new-york-red-bulls}
+  model: teams.team
+  pk: 15
+- fields: {city: '', defunct: false, founded: null, name: New Zealand national team,
+    notes: '', real: true, short_name: New Zealand, slug: new-zealand}
+  model: teams.team
+  pk: 885
+- fields: {city: 'Newcastle, England', defunct: false, founded: 1892, name: Newcastle
+      United Football Club, notes: '', real: true, short_name: Newcastle United, slug: newcastle-united}
+  model: teams.team
+  pk: 40
+- fields: {city: Newcastle, defunct: false, founded: 2000, name: Newcastle United
+      Jets Football Club, notes: '', real: true, short_name: Newcastle United Jets,
+    slug: newcastle-united-jets}
+  model: teams.team
+  pk: 411
+- fields: {city: 'Rosario, Argentina', defunct: false, founded: 1903, name: "Club\
+      \ Atl\xE9tico Newell's Old Boys", notes: '', real: true, short_name: Newell's
+      Old Boys, slug: newells-old-boys}
+  model: teams.team
+  pk: 76
+- fields: {city: '', defunct: false, founded: null, name: Nicaragua national team,
+    notes: '', real: true, short_name: Nicaragua, slug: nicaragua}
+  model: teams.team
+  pk: 886
+- fields: {city: Nice, defunct: false, founded: 1904, name: "Olympique Gymnaste Club\
+      \ Nice C\xF4te d'Azur", notes: '', real: true, short_name: Nice, slug: nice}
+  model: teams.team
+  pk: 290
+- fields: {city: '', defunct: false, founded: null, name: Niger national team, notes: '',
+    real: true, short_name: Niger, slug: niger}
+  model: teams.team
+  pk: 887
+- fields: {city: '', defunct: false, founded: null, name: Nigeria national team, notes: '',
+    real: true, short_name: Nigeria, slug: nigeria}
+  model: teams.team
+  pk: 888
+- fields: {city: '', defunct: false, founded: null, name: Niue national team, notes: '',
+    real: true, short_name: Niue, slug: niue}
+  model: teams.team
+  pk: 889
+- fields: {city: '', defunct: false, founded: null, name: No Country national team,
+    notes: '', real: true, short_name: No Country, slug: no-country}
+  model: teams.team
+  pk: 890
+- fields: {city: No City, defunct: false, founded: 1, name: No Team, notes: '', real: true,
+    short_name: No Team, slug: no-team}
+  model: teams.team
+  pk: 94
+- fields: {city: '', defunct: false, founded: null, name: North Korea national team,
+    notes: '', real: true, short_name: North Korea, slug: north-korea}
+  model: teams.team
+  pk: 891
+- fields: {city: '', defunct: false, founded: null, name: Northern Ireland national
+      team, notes: '', real: true, short_name: Northern Ireland, slug: northern-ireland}
+  model: teams.team
+  pk: 892
+- fields: {city: '', defunct: false, founded: null, name: Northern Mariana Islands
+      national team, notes: '', real: true, short_name: Northern Mariana Islands,
+    slug: northern-mariana-islands}
+  model: teams.team
+  pk: 893
+- fields: {city: '', defunct: false, founded: null, name: Norway national team, notes: '',
+    real: true, short_name: Norway, slug: norway}
+  model: teams.team
+  pk: 894
+- fields: {city: Norwich, defunct: false, founded: 1902, name: Norwich City Football
+      Club, notes: '', real: true, short_name: Norwich City, slug: norwich-city}
+  model: teams.team
+  pk: 325
+- fields: {city: West Bridgford, defunct: false, founded: 1865, name: Nottingham Forest
+      Football Club, notes: '', real: true, short_name: Nottingham Forest, slug: nottingham-forest}
+  model: teams.team
+  pk: 517
+- fields: {city: Nottingham, defunct: false, founded: 1862, name: Notts County Football
+      Club, notes: '', real: true, short_name: Notts County, slug: notts-county}
+  model: teams.team
+  pk: 668
+- fields: {city: Novara, defunct: false, founded: 1908, name: Novara Calcio, notes: '',
+    real: true, short_name: Novara, slug: novara}
+  model: teams.team
+  pk: 267
+- fields: {city: '', defunct: true, founded: null, name: Nutmeg, notes: '', real: false,
+    short_name: Nutmeg, slug: ''}
+  model: teams.team
+  pk: 150
+- fields: {city: Odense, defunct: false, founded: 1887, name: Odense Boldklub, notes: '',
+    real: true, short_name: OB, slug: ob}
+  model: teams.team
+  pk: 600
+- fields: {city: Leuven, defunct: false, founded: 2002, name: Oud-Heverlee Leuven,
+    notes: '', real: true, short_name: OH Leuven, slug: oh-leuven}
+  model: teams.team
+  pk: 493
+- fields: {city: Oldham, defunct: false, founded: 1895, name: Oldham Athletic Association
+      Football Club, notes: '', real: true, short_name: Oldham Athletic, slug: oldham-athletic}
+  model: teams.team
+  pk: 674
+- fields: {city: "Olh\xE3o", defunct: false, founded: 1912, name: Sporting Clube Olhanense,
+    notes: '', real: true, short_name: Olhanense, slug: olhanense}
+  model: teams.team
+  pk: 438
+- fields: {city: Ljubljana, defunct: false, founded: 2005, name: Nogometni Klub Olimpija
+      Ljubljana, notes: '', real: true, short_name: Olimpija, slug: olimpija}
+  model: teams.team
+  pk: 625
+- fields: {city: "Bah\xEDa Blanca, Argentina", defunct: false, founded: 1910, name: Club
+      Olimpo, notes: '', real: true, short_name: Olimpo, slug: olimpo}
+  model: teams.team
+  pk: 69
+- fields: {city: Piraeus, defunct: false, founded: 1925, name: Olympiacos F.C., notes: '',
+    real: true, short_name: Olympiacos, slug: olympiacos}
+  model: teams.team
+  pk: 468
+- fields: {city: Nicosia, defunct: false, founded: 1931, name: Olympiakos Nicosia,
+    notes: '', real: true, short_name: Olympiakos Nicosia, slug: olympiakos-nicosia}
+  model: teams.team
+  pk: 654
+- fields: {city: Volos, defunct: false, founded: 1937, name: Olympiakos Volou Football
+      Club, notes: '', real: true, short_name: Olympiakos Volou, slug: olympiakos-volou}
+  model: teams.team
+  pk: 472
+- fields: {city: '', defunct: false, founded: null, name: Oman national team, notes: '',
+    real: true, short_name: Oman, slug: oman}
+  model: teams.team
+  pk: 895
+- fields: {city: Saitama, defunct: false, founded: 1964, name: Omiya Ardija, notes: '',
+    real: true, short_name: Omiya Ardija, slug: omiya-ardija}
+  model: teams.team
+  pk: 429
+- fields: {city: Nicosia, defunct: false, founded: 1948, name: Athletic Club Omonoia
+      Nicosia, notes: '', real: true, short_name: Omonoia Nicosia, slug: omonoia-nicosia}
+  model: teams.team
+  pk: 647
+- fields: {city: Manizales, defunct: false, founded: 1959, name: "Corporaci\xF3n Deportiva\
+      \ Once Caldas", notes: '', real: true, short_name: Once Caldas, slug: once-caldas}
+  model: teams.team
+  pk: 371
+- fields: {city: Ordu, defunct: false, founded: 1967, name: Orduspor, notes: '', real: true,
+    short_name: Orduspor, slug: orduspor}
+  model: teams.team
+  pk: 463
+- fields: {city: Orlando, defunct: false, founded: 2010, name: Orlando City Soccer
+      Club, notes: '', real: true, short_name: Orlando City, slug: orlando-city}
+  model: teams.team
+  pk: 339
+- fields: {city: "Gala\u021Bi", defunct: false, founded: 1964, name: "Fotbal Club\
+      \ O\u021Belul Gala\u021Bi", notes: '', real: true, short_name: "O\u021Belul\
+      \ Gala\u021Bi", slug: otelul-galati}
+  model: teams.team
+  pk: 589
+- fields: {city: Thessaloniki, defunct: false, founded: 1926, name: "Panthessalon\xED\
+      kios Athlitik\xF3s \xD3milos Konstantinoupolit\xF3n", notes: '', real: true,
+    short_name: PAOK, slug: paok}
+  model: teams.team
+  pk: 471
+- fields: {city: Oleksandria, defunct: false, founded: 1991, name: PFC Oleksandria,
+    notes: '', real: true, short_name: PFC Oleksandria, slug: pfc-oleksandria}
+  model: teams.team
+  pk: 574
+- fields: {city: Eindhoven, defunct: false, founded: 1913, name: Philips Sport Vereniging,
+    notes: '', real: true, short_name: PSV, slug: psv}
+  model: teams.team
+  pk: 296
+- fields: {city: 'Pachuca, Mexico', defunct: false, founded: 1901, name: "Club de\
+      \ F\xFAtbol Pachuca", notes: '', real: true, short_name: Pachuca, slug: pachuca}
+  model: teams.team
+  pk: 59
+- fields: {city: '', defunct: false, founded: null, name: Pakistan national team,
+    notes: '', real: true, short_name: Pakistan, slug: pakistan}
+  model: teams.team
+  pk: 896
+- fields: {city: '', defunct: false, founded: null, name: Palau national team, notes: '',
+    real: true, short_name: Palau, slug: palau}
+  model: teams.team
+  pk: 897
+- fields: {city: Palermo, defunct: false, founded: 1900, name: "Unione Sportiva Citt\xE0\
+      \ di Palermo", notes: '', real: true, short_name: Palermo, slug: palermo}
+  model: teams.team
+  pk: 268
+- fields: {city: '', defunct: false, founded: null, name: Palestine national team,
+    notes: '', real: true, short_name: Palestine, slug: palestine}
+  model: teams.team
+  pk: 898
+- fields: {city: "S\xE3o Paulo", defunct: false, founded: 1914, name: Sociedade Esportiva
+      Palmeiras, notes: '', real: true, short_name: Palmeiras, slug: palmeiras}
+  model: teams.team
+  pk: 357
+- fields: {city: '', defunct: false, founded: null, name: Panama national team, notes: '',
+    real: true, short_name: Panama, slug: panama}
+  model: teams.team
+  pk: 899
+- fields: {city: Athens, defunct: false, founded: 1908, name: Panathinaikos Football
+      Club, notes: '', real: true, short_name: Panathinaikos, slug: panathinaikos}
+  model: teams.team
+  pk: 469
+- fields: {city: "T\xE2rgu Jiu", defunct: false, founded: 1963, name: "Clubul Sportiv\
+      \ Pandurii Lignitul T\xE2rgu Jiu", notes: '', real: true, short_name: "Pandurii\
+      \ T\xE2rgu Jiu", slug: pandurii-targu-jiu}
+  model: teams.team
+  pk: 584
+- fields: {city: Nea Smyrni, defunct: false, founded: 1890, name: Panionios Gymnastikos
+      Syllogos Smyrnis, notes: '', real: true, short_name: Panionios G.S.S., slug: panionios-gss}
+  model: teams.team
+  pk: 477
+- fields: {city: Serres, defunct: false, founded: 1964, name: Panserraikos F.C., notes: '',
+    real: true, short_name: Panserraikos, slug: panserraikos}
+  model: teams.team
+  pk: 482
+- fields: {city: '', defunct: false, founded: null, name: Papua New Guinea national
+      team, notes: '', real: true, short_name: Papua New Guinea, slug: papua-new-guinea}
+  model: teams.team
+  pk: 900
+- fields: {city: '', defunct: false, founded: null, name: Paraguay national team,
+    notes: '', real: true, short_name: Paraguay, slug: paraguay}
+  model: teams.team
+  pk: 901
+- fields: {city: Paris, defunct: false, founded: 1970, name: Paris Saint-Germain Football
+      Club, notes: '', real: true, short_name: Paris Saint-Germain, slug: paris-saint-germain}
+  model: teams.team
+  pk: 276
+- fields: {city: Parma, defunct: false, founded: 1913, name: Parma Football Club,
+    notes: '', real: true, short_name: Parma, slug: parma}
+  model: teams.team
+  pk: 269
+- fields: {city: Glasgow, defunct: false, founded: 1876, name: Partick Thistle Football
+      Club, notes: 'Actually based in Maryhill region of Glasgow, not Partick Thistle.',
+    real: true, short_name: Partick Thistle, slug: partick-thistle}
+  model: teams.team
+  pk: 690
+- fields: {city: "Pa\xE7os de Ferreira", defunct: false, founded: 1950, name: "Futebol\
+      \ Clube Pa\xE7os de Ferreira", notes: '', real: true, short_name: "Pa\xE7os\
+      \ de Ferreira", slug: pacos-de-ferreira}
+  model: teams.team
+  pk: 441
+- fields: {city: Perth, defunct: false, founded: 1996, name: Perth Glory Football
+      Club, notes: '', real: true, short_name: Perth Glory, slug: perth-glory}
+  model: teams.team
+  pk: 412
+- fields: {city: '', defunct: false, founded: null, name: Peru national team, notes: '',
+    real: true, short_name: Peru, slug: peru}
+  model: teams.team
+  pk: 902
+- fields: {city: Peterborough, defunct: false, founded: 1934, name: Peterborough United
+      Football Club, notes: '', real: true, short_name: Peterborough United, slug: peterborough-united}
+  model: teams.team
+  pk: 508
+- fields: {city: "Ploie\u0219ti", defunct: false, founded: 1952, name: "Fotbal Club\
+      \ Petrolul Ploie\u0219ti", notes: '', real: true, short_name: "Petrolul Ploie\u0219\
+      ti", slug: petrolul-ploiesti}
+  model: teams.team
+  pk: 586
+- fields: {city: Philadelphia, defunct: false, founded: 2008, name: Philadelphia Union,
+    notes: '', real: true, short_name: Philadelphia Union, slug: philadelphia-union}
+  model: teams.team
+  pk: 16
+- fields: {city: '', defunct: false, founded: null, name: Philippines national team,
+    notes: '', real: true, short_name: Philippines, slug: philippines}
+  model: teams.team
+  pk: 903
+- fields: {city: '', defunct: false, founded: null, name: Pitcairn Islands national
+      team, notes: '', real: true, short_name: Pitcairn Islands, slug: pitcairn-islands}
+  model: teams.team
+  pk: 904
+- fields: {city: 'Pittsburgh, Pennsylvania', defunct: false, founded: 1999, name: Pittsburgh
+      Riverhounds, notes: '', real: true, short_name: Pittsburgh Riverhounds, slug: pittsburgh-riverhounds}
+  model: teams.team
+  pk: 346
+- fields: {city: Pohang, defunct: false, founded: 1973, name: Pohang Steelers, notes: '',
+    real: true, short_name: Pohang Steelers, slug: pohang-steelers}
+  model: teams.team
+  pk: 712
+- fields: {city: '', defunct: false, founded: null, name: Poland national team, notes: '',
+    real: true, short_name: Poland, slug: poland}
+  model: teams.team
+  pk: 905
+- fields: {city: 'Portland, Oregon', defunct: false, founded: 2009, name: Portland
+      Timbers, notes: '', real: true, short_name: Portland Timbers, slug: portland-timbers}
+  model: teams.team
+  pk: 213
+- fields: {city: Porto, defunct: false, founded: 1893, name: Futebol Clube do Porto,
+    notes: '', real: true, short_name: Porto, slug: porto}
+  model: teams.team
+  pk: 433
+- fields: {city: 'Portsmouth, England', defunct: false, founded: 1898, name: Portsmouth
+      Football Club, notes: '', real: true, short_name: Portsmouth, slug: portsmouth}
+  model: teams.team
+  pk: 38
+- fields: {city: '', defunct: false, founded: 1921, name: Portugal national team,
+    notes: '', real: true, short_name: Portugal, slug: portugal}
+  model: teams.team
+  pk: 906
+- fields: {city: Preston, defunct: false, founded: 1881, name: Preston North End Football
+      Club, notes: '', real: true, short_name: Preston North End, slug: preston-north-end}
+  model: teams.team
+  pk: 666
+- fields: {city: 'Puebla, Mexico', defunct: false, founded: 1904, name: Puebla Futbol
+      Club, notes: '', real: true, short_name: Puebla, slug: puebla}
+  model: teams.team
+  pk: 50
+- fields: {city: '', defunct: false, founded: null, name: Puerto Rico national team,
+    notes: '', real: true, short_name: Puerto Rico, slug: puerto-rico}
+  model: teams.team
+  pk: 907
+- fields: {city: "Bayam\xF3n, Puerto Rico", defunct: false, founded: 2003, name: Puerto
+      Rico Islanders, notes: '', real: true, short_name: Puerto Rico Islanders, slug: puerto-rico-islanders}
+  model: teams.team
+  pk: 85
+- fields: {city: 'Aguada, Puerto Rico', defunct: false, founded: 2007, name: Puerto
+      Rico United, notes: '', real: true, short_name: Puerto Rico United, slug: puerto-rico-united}
+  model: teams.team
+  pk: 348
+- fields: {city: London, defunct: false, founded: 1882, name: Queens Park Rangers
+      Football Club, notes: '', real: true, short_name: QPR, slug: qpr}
+  model: teams.team
+  pk: 326
+- fields: {city: '', defunct: false, founded: null, name: Qatar national team, notes: '',
+    real: true, short_name: Qatar, slug: qatar}
+  model: teams.team
+  pk: 908
+- fields: {city: Qingdao, defunct: false, founded: 1990, name: Qingdao Jonoon Football
+      Club, notes: '', real: true, short_name: Qingdao Jonoon, slug: qingdao-jonoon}
+  model: teams.team
+  pk: 736
+- fields: {city: Dumfries, defunct: false, founded: 1919, name: Queen of the South
+      Football Club, notes: '', real: true, short_name: Queen of the South, slug: queen-of-the-south}
+  model: teams.team
+  pk: 692
+- fields: {city: "Quer\xE9taro, Mexico", defunct: false, founded: 1950, name: "Quer\xE9\
+      taro F\xFAtbol Club", notes: '', real: true, short_name: "Quer\xE9taro", slug: queretaro}
+  model: teams.team
+  pk: 51
+- fields: {city: 'Buenos Aires, Argentina', defunct: false, founded: 1887, name: "Quilmes\
+      \ Atl\xE9tico Club", notes: '', real: true, short_name: Quilmes, slug: quilmes}
+  model: teams.team
+  pk: 78
+- fields: {city: Barcelona, defunct: false, founded: 1900, name: Reial Club Deportiu
+      Espanyol de Barcelona, notes: '', real: true, short_name: RCD Espanyol, slug: rcd-espanyol}
+  model: teams.team
+  pk: 252
+- fields: {city: Mallorca, defunct: false, founded: 1916, name: Real Club Deportivo
+      Mallorca, notes: '', real: true, short_name: RCD Mallorca, slug: rcd-mallorca}
+  model: teams.team
+  pk: 240
+- fields: {city: '', defunct: true, founded: null, name: REVS FAN 1/revolutionfan,
+    notes: '', real: false, short_name: REVS FAN 1/revolutionfan, slug: ''}
+  model: teams.team
+  pk: 182
+- fields: {city: '', defunct: true, founded: null, name: REVS FAN1/revolutionfan,
+    notes: '', real: false, short_name: REVS FAN1/revolutionfan, slug: ''}
+  model: teams.team
+  pk: 178
+- fields: {city: '', defunct: true, founded: null, name: REVS FAN1/revolutionfan (SupahRevs),
+    notes: '', real: false, short_name: REVS FAN1/revolutionfan (SupahRevs), slug: ''}
+  model: teams.team
+  pk: 167
+- fields: {city: Waalwijk, defunct: false, founded: 1940, name: RKC Waalwijk, notes: '',
+    real: true, short_name: RKC Waalwijk, slug: rkc-waalwijk}
+  model: teams.team
+  pk: 300
+- fields: {city: 'Avellaneda, Argentina', defunct: false, founded: 1903, name: Racing
+      Club de Avellaneda, notes: '', real: true, short_name: Racing, slug: racing}
+  model: teams.team
+  pk: 63
+- fields: {city: Santander, defunct: false, founded: 1913, name: 'Real Racing Club
+      de Santander, S.A.D.', notes: '', real: true, short_name: Racing Santander,
+    slug: racing-santander}
+  model: teams.team
+  pk: 248
+- fields: {city: Kirkcaldy, defunct: false, founded: 1883, name: Raith Rovers Football
+      Club, notes: '', real: true, short_name: Raith Rovers, slug: raith-rovers}
+  model: teams.team
+  pk: 685
+- fields: {city: Glasgow, defunct: false, founded: 1872, name: Rangers Football Club,
+    notes: '', real: true, short_name: Rangers, slug: rangers}
+  model: teams.team
+  pk: 312
+- fields: {city: Bucharest, defunct: false, founded: 1923, name: "Fotbal Club Rapid\
+      \ Bucure\u015Fti", notes: '', real: true, short_name: "Rapid Bucure\u015Fti",
+    slug: rapid-bucuresti}
+  model: teams.team
+  pk: 579
+- fields: {city: Vienna, defunct: false, founded: 1899, name: Sportklub Rapid Wien,
+    notes: '', real: true, short_name: Rapid Wien, slug: rapid-wien}
+  model: teams.team
+  pk: 557
+- fields: {city: Madrid, defunct: false, founded: 1924, name: 'Rayo Vallecano de Madrid,
+      S.A.D.', notes: '', real: true, short_name: Rayo Vallecano, slug: rayo-vallecano}
+  model: teams.team
+  pk: 243
+- fields: {city: Reading, defunct: false, founded: 1871, name: Reading Football Club,
+    notes: '', real: true, short_name: Reading, slug: reading}
+  model: teams.team
+  pk: 519
+- fields: {city: Seville, defunct: false, founded: 1907, name: "Real Betis Balompi\xE9\
+      \ S.A.D.", notes: '', real: true, short_name: Real Betis, slug: real-betis}
+  model: teams.team
+  pk: 239
+- fields: {city: Cartagena, defunct: false, founded: 1971, name: Real Cartagena, notes: '',
+    real: true, short_name: Real Cartagena, slug: real-cartagena}
+  model: teams.team
+  pk: 383
+- fields: {city: 'San Pedro Sula, Honduras', defunct: false, founded: 1929, name: "Real\
+      \ Club Deportivo Espa\xF1a", notes: '', real: true, short_name: "Real Espa\xF1\
+      a", slug: real-espana}
+  model: teams.team
+  pk: 93
+- fields: {city: Madrid, defunct: false, founded: 1902, name: "Real Madrid Club de\
+      \ F\xFAtbol", notes: '', real: true, short_name: Real Madrid, slug: real-madrid}
+  model: teams.team
+  pk: 237
+- fields: {city: Salt Lake City, defunct: false, founded: 2004, name: Real Salt Lake,
+    notes: '', real: true, short_name: Real Salt Lake, slug: real-salt-lake}
+  model: teams.team
+  pk: 6
+- fields: {city: "San Sebasti\xE1n", defunct: false, founded: 1909, name: "Real Sociedad\
+      \ de F\xFAtbol, S.A.D.", notes: '', real: true, short_name: Real Sociedad, slug: real-sociedad}
+  model: teams.team
+  pk: 236
+- fields: {city: Zaragoza, defunct: false, founded: 1932, name: 'Real Zaragoza, S.A.D.',
+    notes: '', real: true, short_name: Real Zaragoza, slug: real-zaragoza}
+  model: teams.team
+  pk: 253
+- fields: {city: Salzburg, defunct: false, founded: 1933, name: FC Red Bull Salzburg,
+    notes: '', real: true, short_name: Red Bull Salzburg, slug: red-bull-salzburg}
+  model: teams.team
+  pk: 552
+- fields: {city: Rennes, defunct: false, founded: 1901, name: Stade Rennais Football
+      Club, notes: '', real: true, short_name: Rennes, slug: rennes}
+  model: teams.team
+  pk: 278
+- fields: {city: '', defunct: false, founded: null, name: Republic of China (Taiwan)
+      national team, notes: '', real: true, short_name: Republic of China (Taiwan),
+    slug: republic-of-china-taiwan}
+  model: teams.team
+  pk: 909
+- fields: {city: '', defunct: false, founded: null, name: Republic of Macedonia national
+      team, notes: '', real: true, short_name: Republic of Macedonia, slug: republic-of-macedonia}
+  model: teams.team
+  pk: 910
+- fields: {city: '', defunct: false, founded: null, name: Republic of the Congo national
+      team, notes: '', real: true, short_name: Republic of the Congo, slug: republic-of-the-congo}
+  model: teams.team
+  pk: 911
+- fields: {city: '', defunct: true, founded: null, name: RevPOWA, notes: '', real: false,
+    short_name: RevPOWA, slug: ''}
+  model: teams.team
+  pk: 130
+- fields: {city: '', defunct: true, founded: null, name: RevsFan/revolutionfan, notes: '',
+    real: false, short_name: RevsFan/revolutionfan, slug: ''}
+  model: teams.team
+  pk: 185
+- fields: {city: 'Richmond, Virginia', defunct: false, founded: 1993, name: Richmond
+      Kickers, notes: '', real: true, short_name: Richmond Kickers, slug: richmond-kickers}
+  model: teams.team
+  pk: 340
+- fields: {city: Vila do Conde, defunct: false, founded: 1939, name: Rio Ave Futebol
+      Clube, notes: '', real: true, short_name: Rio Ave, slug: rio-ave}
+  model: teams.team
+  pk: 447
+- fields: {city: 'Buenos Aires, Argentina', defunct: false, founded: 1901, name: "Club\
+      \ Atl\xE9tico River Plate", notes: '', real: true, short_name: River Plate,
+    slug: river-plate}
+  model: teams.team
+  pk: 65
+- fields: {city: 'Old San Juan, Puerto Rico', defunct: false, founded: 2007, name: River
+      Plate Puerto Rico, notes: '', real: true, short_name: River Plate Puerto Rico,
+    slug: river-plate-puerto-rico}
+  model: teams.team
+  pk: 349
+- fields: {city: Rochdale, defunct: false, founded: 1907, name: Rochdale Association
+      Football Club, notes: '', real: true, short_name: Rochdale, slug: rochdale}
+  model: teams.team
+  pk: 680
+- fields: {city: Rochester, defunct: false, founded: 1996, name: Rochester Rhinos,
+    notes: '', real: true, short_name: Rochester Rhinos, slug: rochester-rhinos}
+  model: teams.team
+  pk: 347
+- fields: {city: Kerkrade, defunct: false, founded: 1962, name: Vereniging Roda Juliana
+      Combinatie Kerkrade, notes: '', real: true, short_name: Roda JC, slug: roda-jc}
+  model: teams.team
+  pk: 302
+- fields: {city: Rome, defunct: false, founded: 1927, name: Associazione Sportiva
+      Roma, notes: '', real: true, short_name: Roma, slug: roma}
+  model: teams.team
+  pk: 270
+- fields: {city: '', defunct: false, founded: null, name: Romania national team, notes: '',
+    real: true, short_name: Romania, slug: romania}
+  model: teams.team
+  pk: 912
+- fields: {city: Trondheim, defunct: false, founded: 1917, name: Rosenborg Ballklub,
+    notes: '', real: true, short_name: Rosenborg, slug: rosenborg}
+  model: teams.team
+  pk: 700
+- fields: {city: Dingwall, defunct: false, founded: 1929, name: Ross County Football
+      Club, notes: '', real: true, short_name: Ross County, slug: ross-county}
+  model: teams.team
+  pk: 689
+- fields: {city: Rostov-on-Don, defunct: false, founded: 1930, name: FC Rostov, notes: '',
+    real: true, short_name: Rostov, slug: rostov}
+  model: teams.team
+  pk: 402
+- fields: {city: Oberhausen, defunct: false, founded: 1904, name: "Rot-Wei\xDF Oberhausen",
+    notes: '', real: true, short_name: "Rot-Wei\xDF Oberhausen", slug: rot-weiss-oberhausen}
+  model: teams.team
+  pk: 540
+- fields: {city: Kazan, defunct: false, founded: 1958, name: FC Rubin Kazan, notes: '',
+    real: true, short_name: Rubin Kazan, slug: rubin-kazan}
+  model: teams.team
+  pk: 393
+- fields: {city: Velenje, defunct: false, founded: 1948, name: NK Rudar Velenje, notes: '',
+    real: true, short_name: Rudar, slug: rudar}
+  model: teams.team
+  pk: 629
+- fields: {city: '', defunct: false, founded: null, name: Russia national team, notes: '',
+    real: true, short_name: Russia, slug: russia}
+  model: teams.team
+  pk: 913
+- fields: {city: '', defunct: false, founded: null, name: Rwanda national team, notes: '',
+    real: true, short_name: Rwanda, slug: rwanda}
+  model: teams.team
+  pk: 914
+- fields: {city: Braga, defunct: false, founded: 1921, name: Sporting Clube de Braga,
+    notes: '', real: true, short_name: S.C. Braga, slug: sc-braga}
+  model: teams.team
+  pk: 435
+- fields: {city: Freiburg, defunct: false, founded: 1904, name: Sport-Club Freiburg,
+    notes: '', real: true, short_name: SC Freiburg, slug: sc-freiburg}
+  model: teams.team
+  pk: 229
+- fields: {city: Paderborn, defunct: false, founded: 1907, name: SC Paderborn 07,
+    notes: '', real: true, short_name: SC Paderborn, slug: sc-paderborn}
+  model: teams.team
+  pk: 535
+- fields: {city: Simferopol, defunct: false, founded: 1958, name: SC Tavriya Simferopol,
+    notes: '', real: true, short_name: SC Tavriya Simferopol, slug: sc-tavriya-simferopol}
+  model: teams.team
+  pk: 566
+- fields: {city: Mattersburg, defunct: false, founded: 1922, name: SV Mattersburg,
+    notes: '', real: true, short_name: SV Mattersburg, slug: sv-mattersburg}
+  model: teams.team
+  pk: 560
+- fields: {city: Ried im Innkreis, defunct: false, founded: 1912, name: SV Ried, notes: '',
+    real: true, short_name: SV Ried, slug: sv-ried}
+  model: teams.team
+  pk: 554
+- fields: {city: '', defunct: true, founded: null, name: Sachsen, notes: '', real: false,
+    short_name: Sachsen, slug: ''}
+  model: teams.team
+  pk: 96
+- fields: {city: '', defunct: false, founded: null, name: Saint Helena national team,
+    notes: '', real: true, short_name: Saint Helena, slug: saint-helena}
+  model: teams.team
+  pk: 915
+- fields: {city: '', defunct: false, founded: null, name: Saint Kitts and Nevis national
+      team, notes: '', real: true, short_name: Saint Kitts and Nevis, slug: saint-kitts-and-nevis}
+  model: teams.team
+  pk: 916
+- fields: {city: '', defunct: false, founded: null, name: Saint Lucia national team,
+    notes: '', real: true, short_name: Saint Lucia, slug: saint-lucia}
+  model: teams.team
+  pk: 917
+- fields: {city: '', defunct: false, founded: null, name: Saint Vincent and the Grenadines
+      national team, notes: '', real: true, short_name: Saint Vincent and the Grenadines,
+    slug: saint-vincent-and-the-grenadines}
+  model: teams.team
+  pk: 918
+- fields: {city: "Saint-\xC9tienne", defunct: false, founded: 1919, name: "Association\
+      \ Sportive de Saint-\xC9tienne Loire", notes: '', real: true, short_name: "Saint-\xC9\
+      tienne", slug: saint-etienne}
+  model: teams.team
+  pk: 281
+- fields: {city: '', defunct: false, founded: null, name: Samoa national team, notes: '',
+    real: true, short_name: Samoa, slug: samoa}
+  model: teams.team
+  pk: 919
+- fields: {city: Samsun, defunct: false, founded: 1965, name: Samsunspor, notes: '',
+    real: true, short_name: Samsunspor, slug: samsunspor}
+  model: teams.team
+  pk: 450
+- fields: {city: San Jose, defunct: false, founded: 1995, name: San Jose Earthquakes,
+    notes: '', real: true, short_name: San Jose Earthquakes, slug: san-jose-earthquakes}
+  model: teams.team
+  pk: 7
+- fields: {city: 'Port of Spain, Trinidad and Tobago', defunct: false, founded: 1974,
+    name: San Juan Jabloteh, notes: '', real: true, short_name: 'San Juan Jabloteh ',
+    slug: san-juan-jabloteh}
+  model: teams.team
+  pk: 90
+- fields: {city: 'Buenos Aires, Argentina', defunct: false, founded: 1908, name: San
+      Lorenzo de Almagro, notes: '', real: true, short_name: San Lorenzo, slug: san-lorenzo}
+  model: teams.team
+  pk: 71
+- fields: {city: "San Luis Potos\xED, Mexico", defunct: false, founded: 1957, name: "San\
+      \ Luis F\xFAtbol Club", notes: '', real: true, short_name: San Luis, slug: san-luis}
+  model: teams.team
+  pk: 58
+- fields: {city: '', defunct: false, founded: null, name: San Marino national team,
+    notes: '', real: true, short_name: San Marino, slug: san-marino}
+  model: teams.team
+  pk: 920
+- fields: {city: Hiroshima, defunct: false, founded: 1938, name: Sanfrecce Hiroshima,
+    notes: '', real: true, short_name: Sanfrecce Hiroshima, slug: sanfrecce-hiroshima}
+  model: teams.team
+  pk: 420
+- fields: {city: Sangju, defunct: false, founded: 1984, name: Sangju Sangmu Phoenix
+      Football Club, notes: Founded 2011 as Sangju Sangmu Phoenix, real: true, short_name: Sangju
+      Sangmu Phoenix, slug: sangju-sangmu-phoenix}
+  model: teams.team
+  pk: 723
+- fields: {city: "Bogot\xE1", defunct: false, founded: 1941, name: "Santa Fe Corporaci\xF3\
+      n Deportiva", notes: '', real: true, short_name: Santa Fe, slug: santa-fe}
+  model: teams.team
+  pk: 384
+- fields: {city: "Santos, S\xE3o Paulo", defunct: false, founded: 1912, name: Santos
+      Futebol Clube, notes: '', real: true, short_name: Santos, slug: santos}
+  model: teams.team
+  pk: 362
+- fields: {city: "Torre\xF3n, Coahuila", defunct: false, founded: 1983, name: Club
+      Santos Laguna, notes: '', real: true, short_name: Santos Laguna, slug: santos-laguna}
+  model: teams.team
+  pk: 47
+- fields: {city: "San Jos\xE9, Costa Rica", defunct: false, founded: 1935, name: Deportivo
+      Saprissa S.A.D., notes: '', real: true, short_name: Saprissa, slug: saprissa}
+  model: teams.team
+  pk: 84
+- fields: {city: '', defunct: false, founded: null, name: Saudi Arabia national team,
+    notes: '', real: true, short_name: Saudi Arabia, slug: saudi-arabia}
+  model: teams.team
+  pk: 921
+- fields: {city: '', defunct: true, founded: null, name: ScaryIce, notes: '', real: false,
+    short_name: ScaryIce, slug: ''}
+  model: teams.team
+  pk: 146
+- fields: {city: '', defunct: true, founded: null, name: Scaryice, notes: '', real: false,
+    short_name: Scaryice, slug: ''}
+  model: teams.team
+  pk: 184
+- fields: {city: GelsenKirchen, defunct: false, founded: 1904, name: "Fu\xDFball-Club\
+      \ Gelsenkirchen-Schalke 04", notes: '', real: true, short_name: Schalke 04,
+    slug: schalke-04}
+  model: teams.team
+  pk: 219
+- fields: {city: '', defunct: false, founded: 1872, name: Scotland national team,
+    notes: '', real: true, short_name: Scotland, slug: scotland}
+  model: teams.team
+  pk: 922
+- fields: {city: Scunthorpe, defunct: false, founded: 1899, name: Scunthorpe United
+      Football Club, notes: '', real: true, short_name: Scunthorpe United, slug: scunthorpe-united}
+  model: teams.team
+  pk: 676
+- fields: {city: '', defunct: true, founded: null, name: Sean.../Geneva, notes: '',
+    real: false, short_name: Sean.../Geneva, slug: ''}
+  model: teams.team
+  pk: 161
+- fields: {city: '', defunct: true, founded: null, name: Sean.../Twenty26Six, notes: '',
+    real: false, short_name: Sean.../Twenty26Six, slug: ''}
+  model: teams.team
+  pk: 101
+- fields: {city: '', defunct: true, founded: null, name: Sean/Geneva, notes: '', real: false,
+    short_name: Sean/Geneva, slug: ''}
+  model: teams.team
+  pk: 188
+- fields: {city: '', defunct: true, founded: null, name: Sean_Irish_LAGalaxy/Geneva,
+    notes: '', real: false, short_name: Sean_Irish_LAGalaxy/Geneva, slug: ''}
+  model: teams.team
+  pk: 176
+- fields: {city: '', defunct: true, founded: null, name: Sean_Irish_LAGalaxy/Geneva
+      (L.A. DOUBLE TROUBLE), notes: '', real: false, short_name: Sean_Irish_LAGalaxy/Geneva
+      (L.A. DOUBLE TROUBLE), slug: ''}
+  model: teams.team
+  pk: 170
+- fields: {city: Seattle, defunct: false, founded: 2007, name: Seattle Sounders FC,
+    notes: '', real: true, short_name: Seattle Sounders, slug: seattle-sounders}
+  model: teams.team
+  pk: 8
+- fields: {city: '', defunct: false, founded: null, name: Senegal national team, notes: '',
+    real: true, short_name: Senegal, slug: senegal}
+  model: teams.team
+  pk: 923
+- fields: {city: Seongnam, defunct: false, founded: 1989, name: Seongnam Ilhwa Chunma
+      Football Club, notes: '', real: true, short_name: Seongnam Ilhwa Chunma, slug: seongnam-ilhwa-chunma}
+  model: teams.team
+  pk: 722
+- fields: {city: '', defunct: false, founded: null, name: Serbia national team, notes: '',
+    real: true, short_name: Serbia, slug: serbia}
+  model: teams.team
+  pk: 924
+- fields: {city: Sevilla, defunct: false, founded: 1905, name: "Sevilla F\xFAtbol\
+      \ Club S.A.D.", notes: '', real: true, short_name: Sevilla FC, slug: sevilla-fc}
+  model: teams.team
+  pk: 235
+- fields: {city: 'Juncos, Puerto Rico', defunct: false, founded: 2006, name: Sevilla
+      Puerto Rico, notes: '', real: true, short_name: Sevilla Puerto Rico, slug: sevilla-puerto-rico}
+  model: teams.team
+  pk: 350
+- fields: {city: '', defunct: false, founded: null, name: Seychelles national team,
+    notes: '', real: true, short_name: Seychelles, slug: seychelles}
+  model: teams.team
+  pk: 925
+- fields: {city: Xi'an, defunct: false, founded: 1995, name: Shaanxi Renhe Commercial
+      Chanba FC, notes: '', real: true, short_name: Shaanxi Renhe, slug: shaanxi-renhe}
+  model: teams.team
+  pk: 733
+- fields: {city: Donetsk, defunct: false, founded: 1936, name: 'FC Shakhtar Donetsk ',
+    notes: '', real: true, short_name: 'Shakhtar Donetsk ', slug: shakhtar-donetsk}
+  model: teams.team
+  pk: 562
+- fields: {city: Jinan, defunct: false, founded: 1988, name: Shandong Luneng Taishan
+      F.C., notes: '', real: true, short_name: Shandong Luneng, slug: shandong-luneng}
+  model: teams.team
+  pk: 730
+- fields: {city: Shanghai, defunct: false, founded: 1993, name: Shanghai Shenhua Football
+      Club, notes: '', real: true, short_name: Shanghai Shenhua, slug: shanghai-shenhua}
+  model: teams.team
+  pk: 737
+- fields: {city: Sheffield, defunct: false, founded: 1889, name: Sheffield United
+      Football Club, notes: '', real: true, short_name: Sheffield United, slug: sheffield-united}
+  model: teams.team
+  pk: 660
+- fields: {city: Sheffield, defunct: false, founded: 1867, name: Sheffield Wednesday
+      Football Club, notes: '', real: true, short_name: Sheffield Wednesday, slug: sheffield-wednesday}
+  model: teams.team
+  pk: 667
+- fields: {city: Shenzhen, defunct: false, founded: 1994, name: Shenzhen Ruby Football
+      Club, notes: '', real: true, short_name: Shenzhen Ruby, slug: shenzhen-ruby}
+  model: teams.team
+  pk: 741
+- fields: {city: Shimizu, defunct: false, founded: 1991, name: Shimizu S-Pulse, notes: '',
+    real: true, short_name: Shimizu S-Pulse, slug: shimizu-s-pulse}
+  model: teams.team
+  pk: 423
+- fields: {city: '', defunct: true, founded: null, name: Short Corner, notes: '',
+    real: false, short_name: Short Corner, slug: ''}
+  model: teams.team
+  pk: 100
+- fields: {city: '', defunct: true, founded: null, name: ShortCorner, notes: '', real: false,
+    short_name: ShortCorner, slug: ''}
+  model: teams.team
+  pk: 112
+- fields: {city: Siena, defunct: false, founded: 1904, name: Associazione Calcio Siena,
+    notes: '', real: true, short_name: Siena, slug: siena}
+  model: teams.team
+  pk: 271
+- fields: {city: '', defunct: false, founded: null, name: Sierra Leone national team,
+    notes: '', real: true, short_name: Sierra Leone, slug: sierra-leone}
+  model: teams.team
+  pk: 926
+- fields: {city: Silkeborg, defunct: false, founded: 1917, name: Silkeborg IF, notes: '',
+    real: true, short_name: Silkeborg IF, slug: silkeborg-if}
+  model: teams.team
+  pk: 605
+- fields: {city: '', defunct: false, founded: null, name: Singapore national team,
+    notes: '', real: true, short_name: Singapore, slug: singapore}
+  model: teams.team
+  pk: 927
+- fields: {city: Sint-Truiden, defunct: false, founded: 1924, name: Koninklijke Sint-Truidense
+      Voetbalvereniging, notes: '', real: true, short_name: Sint-Truiden, slug: sint-truiden}
+  model: teams.team
+  pk: 498
+- fields: {city: Sivas, defunct: false, founded: 1967, name: Sivasspor, notes: '',
+    real: true, short_name: Sivasspor, slug: sivasspor}
+  model: teams.team
+  pk: 464
+- fields: {city: Xanthi, defunct: false, founded: 1967, name: Skoda Xanthi F.C., notes: '',
+    real: true, short_name: Skoda Xanthi, slug: skoda-xanthi}
+  model: teams.team
+  pk: 476
+- fields: {city: '', defunct: false, founded: null, name: Slovakia national team,
+    notes: '', real: true, short_name: Slovakia, slug: slovakia}
+  model: teams.team
+  pk: 928
+- fields: {city: '', defunct: false, founded: null, name: Slovenia national team,
+    notes: '', real: true, short_name: Slovenia, slug: slovenia}
+  model: teams.team
+  pk: 929
+- fields: {city: '', defunct: true, founded: null, name: Soccerbom/IASocFan, notes: '',
+    real: false, short_name: Soccerbom/IASocFan, slug: ''}
+  model: teams.team
+  pk: 183
+- fields: {city: '', defunct: true, founded: null, name: Soccrbom2/IASocFan, notes: '',
+    real: false, short_name: Soccrbom2/IASocFan, slug: ''}
+  model: teams.team
+  pk: 192
+- fields: {city: "Montb\xE9liard", defunct: false, founded: 1928, name: "Football\
+      \ Club Sochaux-Montb\xE9liard", notes: '', real: true, short_name: Sochaux,
+    slug: sochaux}
+  model: teams.team
+  pk: 279
+- fields: {city: '', defunct: false, founded: null, name: Solomon Islands national
+      team, notes: '', real: true, short_name: Solomon Islands, slug: solomon-islands}
+  model: teams.team
+  pk: 930
+- fields: {city: '', defunct: false, founded: null, name: Somalia national team, notes: '',
+    real: true, short_name: Somalia, slug: somalia}
+  model: teams.team
+  pk: 931
+- fields: {city: '', defunct: false, founded: null, name: South Africa national team,
+    notes: '', real: true, short_name: South Africa, slug: south-africa}
+  model: teams.team
+  pk: 932
+- fields: {city: '', defunct: false, founded: null, name: South Korea national team,
+    notes: '', real: true, short_name: South Korea, slug: south-korea}
+  model: teams.team
+  pk: 933
+- fields: {city: Southampton, defunct: false, founded: 1885, name: Southampton Football
+      Club, notes: '', real: true, short_name: Southampton, slug: southampton}
+  model: teams.team
+  pk: 501
+- fields: {city: "F\xFCrth", defunct: false, founded: 1903, name: "SpVgg Greuther\
+      \ F\xFCrth", notes: '', real: true, short_name: "SpVgg Greuther F\xFCrth", slug: spvgg-greuther-furth}
+  model: teams.team
+  pk: 527
+- fields: {city: '', defunct: false, founded: 1920, name: Spain national team, notes: '',
+    real: true, short_name: Spain, slug: spain}
+  model: teams.team
+  pk: 934
+- fields: {city: Moscow, defunct: false, founded: 1922, name: FC Spartak Moscow, notes: '',
+    real: true, short_name: Spartak Moscow, slug: spartak-moscow}
+  model: teams.team
+  pk: 395
+- fields: {city: Nalchik, defunct: false, founded: 1935, name: PFC Spartak Nalchik,
+    notes: '', real: true, short_name: Spartak-Nalchik, slug: spartak-nalchik}
+  model: teams.team
+  pk: 403
+- fields: {city: Lisbon, defunct: false, founded: 1906, name: Sporting Clube de Portugal,
+    notes: '', real: true, short_name: Sporting CP, slug: sporting-cp}
+  model: teams.team
+  pk: 439
+- fields: {city: Kansas City, defunct: false, founded: 1995, name: Sporting Kansas
+      City, notes: '', real: true, short_name: Sporting Kansas City, slug: kansas-city}
+  model: teams.team
+  pk: 12
+- fields: {city: "Gij\xF3n", defunct: false, founded: 1905, name: "Real Sporting de\
+      \ Gij\xF3n, S.A.D.", notes: '', real: true, short_name: "Sporting de Gij\xF3\
+      n", slug: sporting-de-gijon}
+  model: teams.team
+  pk: 250
+- fields: {city: Bucharest, defunct: false, founded: 1916, name: "FC Sportul Studen\u0163\
+      esc Bucure\u015Fti ", notes: '', real: true, short_name: "Sportul Studen\u0163\
+      esc", slug: sportul-studentesc}
+  model: teams.team
+  pk: 593
+- fields: {city: '', defunct: false, founded: null, name: Sri Lanka national team,
+    notes: '', real: true, short_name: Sri Lanka, slug: sri-lanka}
+  model: teams.team
+  pk: 935
+- fields: {city: Paisley, defunct: false, founded: 1877, name: St Mirren Football
+      Club, notes: '', real: true, short_name: St Mirren, slug: st-mirren}
+  model: teams.team
+  pk: 317
+- fields: {city: St. Gallen, defunct: false, founded: 1879, name: Football Club St.
+      Gallen 1879, notes: '', real: true, short_name: St. Gallen, slug: st-gallen}
+  model: teams.team
+  pk: 551
+- fields: {city: Perth, defunct: false, founded: 1884, name: St. Johnstone F.C., notes: '',
+    real: true, short_name: St. Johnstone, slug: st-johnstone}
+  model: teams.team
+  pk: 320
+- fields: {city: "B\xE6rum", defunct: false, founded: 1912, name: "Stab\xE6k Fotball",
+    notes: '', real: true, short_name: "Stab\xE6k", slug: stabaek}
+  model: teams.team
+  pk: 697
+- fields: {city: "Li\xE8ge", defunct: false, founded: 1898, name: "Royal Standard\
+      \ de Li\xE8ge", notes: '', real: true, short_name: "Standard Li\xE8ge", slug: standard-liege}
+  model: teams.team
+  pk: 491
+- fields: {city: '', defunct: true, founded: null, name: StarsAndStripesFan/aceterp,
+    notes: '', real: false, short_name: StarsAndStripesFan/aceterp, slug: ''}
+  model: teams.team
+  pk: 162
+- fields: {city: Bucharest, defunct: false, founded: 1947, name: "Fotbal Club Steaua\
+      \ Bucure\u0219ti", notes: '', real: true, short_name: "Steaua Bucure\u0219ti",
+    slug: steaua-bucuresti}
+  model: teams.team
+  pk: 581
+- fields: {city: Stenhousemuir, defunct: false, founded: 1884, name: Stenhousemuir
+      Football Club, notes: '', real: true, short_name: Stenhousemuir, slug: stenhousemuir}
+  model: teams.team
+  pk: 702
+- fields: {city: Stevenage, defunct: false, founded: 1976, name: Stevenage Football
+      Club, notes: '', real: true, short_name: Stevenage, slug: stevenage}
+  model: teams.team
+  pk: 670
+- fields: {city: Albion, defunct: false, founded: 1945, name: Stirling Albion Football
+      Club, notes: '', real: true, short_name: Stirling Albion, slug: stirling-albion}
+  model: teams.team
+  pk: 704
+- fields: {city: '', defunct: true, founded: null, name: Stogey23, notes: '', real: false,
+    short_name: Stogey23, slug: ''}
+  model: teams.team
+  pk: 122
+- fields: {city: 'Stoke-on-Trent, England', defunct: false, founded: 1863, name: Stoke
+      City Football Club, notes: '', real: true, short_name: Stoke City, slug: stoke-city}
+  model: teams.team
+  pk: 30
+- fields: {city: Drammen, defunct: false, founded: 1907, name: "Str\xF8msgodset Idrettsforening",
+    notes: '', real: true, short_name: "Str\xF8msgodset", slug: stromsgodset}
+  model: teams.team
+  pk: 696
+- fields: {city: Graz, defunct: false, founded: 1909, name: SK Sturm Graz, notes: '',
+    real: true, short_name: Sturm Graz, slug: sturm-graz}
+  model: teams.team
+  pk: 556
+- fields: {city: '', defunct: false, founded: null, name: Sudan national team, notes: '',
+    real: true, short_name: Sudan, slug: sudan}
+  model: teams.team
+  pk: 936
+- fields: {city: Sunderland, defunct: false, founded: 1879, name: Sunderland Association
+      Football Club, notes: '', real: true, short_name: Sunderland, slug: sunderland}
+  model: teams.team
+  pk: 32
+- fields: {city: '', defunct: false, founded: null, name: Suriname national team,
+    notes: '', real: true, short_name: Suriname, slug: suriname}
+  model: teams.team
+  pk: 937
+- fields: {city: Suwon, defunct: false, founded: 1995, name: Suwon Samsung Bluewings,
+    notes: '', real: true, short_name: Suwon Samsung Bluewings, slug: suwon-samsung-bluewings}
+  model: teams.team
+  pk: 714
+- fields: {city: Swansea, defunct: false, founded: 1912, name: Swansea City Association
+      Football Club, notes: '', real: true, short_name: Swansea City, slug: swansea-city}
+  model: teams.team
+  pk: 327
+- fields: {city: '', defunct: false, founded: null, name: Swaziland national team,
+    notes: '', real: true, short_name: Swaziland, slug: swaziland}
+  model: teams.team
+  pk: 938
+- fields: {city: '', defunct: false, founded: null, name: Sweden national team, notes: '',
+    real: true, short_name: Sweden, slug: sweden}
+  model: teams.team
+  pk: 939
+- fields: {city: '', defunct: false, founded: null, name: Switzerland national team,
+    notes: '', real: true, short_name: Switzerland, slug: switzerland}
+  model: teams.team
+  pk: 940
+- fields: {city: Sydney, defunct: false, founded: 2004, name: Sydney FC, notes: '',
+    real: true, short_name: Sydney FC, slug: sydney-fc}
+  model: teams.team
+  pk: 413
+- fields: {city: '', defunct: false, founded: null, name: Syria national team, notes: '',
+    real: true, short_name: Syria, slug: syria}
+  model: teams.team
+  pk: 941
+- fields: {city: "S\xF6dert\xE4lje", defunct: false, founded: 1977, name: Syrianska
+      FC, notes: '', real: true, short_name: Syrianska FC, slug: syrianska-fc}
+  model: teams.team
+  pk: 622
+- fields: {city: "S\xE3o Paulo", defunct: false, founded: 1930, name: "S\xE3o Paulo\
+      \ Futebol Clube", notes: '', real: true, short_name: "S\xE3o Paulo", slug: sao-paulo}
+  model: teams.team
+  pk: 352
+- fields: {city: '', defunct: false, founded: null, name: "S\xE3o Tom\xE9 and Pr\xED\
+      ncipe national team", notes: '', real: true, short_name: "S\xE3o Tom\xE9 and\
+      \ Pr\xEDncipe", slug: sao-tome-and-principe}
+  model: teams.team
+  pk: 942
+- fields: {city: Haderslev, defunct: false, founded: 1906, name: "S\xF8nderjyskE",
+    notes: '', real: true, short_name: "S\xF8nderjyskE", slug: sonderjyske}
+  model: teams.team
+  pk: 598
+- fields: {city: '', defunct: false, founded: null, name: Tajikistan national team,
+    notes: '', real: true, short_name: Tajikistan, slug: tajikistan}
+  model: teams.team
+  pk: 943
+- fields: {city: Tampa Bay, defunct: true, founded: 1995, name: Tampa Bay Mutiny,
+    notes: '', real: true, short_name: Tampa Bay Mutiny, slug: tampa-bay-mutiny}
+  model: teams.team
+  pk: 19
+- fields: {city: '', defunct: false, founded: null, name: Tanzania national team,
+    notes: '', real: true, short_name: Tanzania, slug: tanzania}
+  model: teams.team
+  pk: 944
+- fields: {city: 'Guadalajara, Mexico', defunct: false, founded: 1935, name: Club
+      de Futbol Estudiantes, notes: '', real: true, short_name: Tecos, slug: tecos}
+  model: teams.team
+  pk: 46
+- fields: {city: Grozny, defunct: false, founded: 1958, name: FC Terek Grozny, notes: '',
+    real: true, short_name: Terek Grozny, slug: terek-grozny}
+  model: teams.team
+  pk: 398
+- fields: {city: '', defunct: false, founded: null, name: Thailand national team,
+    notes: '', real: true, short_name: Thailand, slug: thailand}
+  model: teams.team
+  pk: 945
+- fields: {city: Tianjin, defunct: false, founded: 1998, name: Tianjin Teda FC, notes: '',
+    real: true, short_name: Tianjin Teda FC, slug: tianjin-teda-fc}
+  model: teams.team
+  pk: 734
+- fields: {city: 'Buenos Aires, Argentina', defunct: false, founded: 1902, name: "Club\
+      \ Atl\xE9tico Tigre", notes: '', real: true, short_name: Tigre, slug: tigre}
+  model: teams.team
+  pk: 80
+- fields: {city: Tijuana, defunct: false, founded: 2007, name: "Club de F\xFAtbol\
+      \ Tijuana Xoloitzcuintles de Caliente", notes: '', real: true, short_name: Tijuana,
+    slug: tijuana}
+  model: teams.team
+  pk: 324
+- fields: {city: '', defunct: false, founded: null, name: Togo national team, notes: '',
+    real: true, short_name: Togo, slug: togo}
+  model: teams.team
+  pk: 946
+- fields: {city: '', defunct: false, founded: null, name: Tokelau national team, notes: '',
+    real: true, short_name: Tokelau, slug: tokelau}
+  model: teams.team
+  pk: 947
+- fields: {city: 'Toluca, Mexico', defunct: false, founded: 1917, name: "Deportivo\
+      \ Toluca F\xFAtbol Club", notes: '', real: true, short_name: Toluca, slug: toluca}
+  model: teams.team
+  pk: 60
+- fields: {city: Tomsk, defunct: false, founded: 1957, name: FC Tom Tomsk, notes: '',
+    real: true, short_name: Tom Tomsk, slug: tom-tomsk}
+  model: teams.team
+  pk: 401
+- fields: {city: '', defunct: false, founded: null, name: Tonga national team, notes: '',
+    real: true, short_name: Tonga, slug: tonga}
+  model: teams.team
+  pk: 948
+- fields: {city: '', defunct: true, founded: null, name: Toolhead, notes: '', real: false,
+    short_name: Toolhead, slug: ''}
+  model: teams.team
+  pk: 121
+- fields: {city: Toronto, defunct: false, founded: 2006, name: Toronto FC, notes: '',
+    real: true, short_name: Toronto FC, slug: toronto-fc}
+  model: teams.team
+  pk: 17
+- fields: {city: 'London, England', defunct: false, founded: 1882, name: Tottenham
+      Hotspur F.C., notes: '', real: true, short_name: Tottenham Hotspur, slug: tottenham-hotspur}
+  model: teams.team
+  pk: 23
+- fields: {city: Toulouse, defunct: false, founded: 1970, name: Toulouse Football
+      Club, notes: '', real: true, short_name: Toulouse, slug: toulouse}
+  model: teams.team
+  pk: 277
+- fields: {city: Trabzon, defunct: false, founded: 1967, name: Trabzonspor, notes: '',
+    real: true, short_name: Trabzonspor, slug: trabzonspor}
+  model: teams.team
+  pk: 454
+- fields: {city: Birkenhead, defunct: false, founded: 1884, name: Tranmere Rovers
+      Football Club, notes: '', real: true, short_name: Tranmere Rovers, slug: tranmere-rovers}
+  model: teams.team
+  pk: 669
+- fields: {city: Trelleborg, defunct: false, founded: 1926, name: Trelleborgs FF,
+    notes: '', real: true, short_name: Trelleborgs FF, slug: trelleborgs-ff}
+  model: teams.team
+  pk: 620
+- fields: {city: Kranj, defunct: false, founded: 1920, name: ND Triglav Kranj, notes: '',
+    real: true, short_name: Triglav, slug: triglav}
+  model: teams.team
+  pk: 628
+- fields: {city: '', defunct: false, founded: null, name: Trinidad and Tobago national
+      team, notes: '', real: true, short_name: Trinidad and Tobago, slug: trinidad-and-tobago}
+  model: teams.team
+  pk: 949
+- fields: {city: "Troms\xF8", defunct: false, founded: 1920, name: "Troms\xF8 Idrettslag",
+    notes: '', real: true, short_name: "Troms\xF8", slug: tromso}
+  model: teams.team
+  pk: 694
+- fields: {city: '', defunct: false, founded: null, name: Tunisia national team, notes: '',
+    real: true, short_name: Tunisia, slug: tunisia}
+  model: teams.team
+  pk: 950
+- fields: {city: '', defunct: false, founded: 1923, name: Turkey national team, notes: '',
+    real: true, short_name: Turkey, slug: turkey}
+  model: teams.team
+  pk: 951
+- fields: {city: '', defunct: false, founded: null, name: Turkmenistan national team,
+    notes: '', real: true, short_name: Turkmenistan, slug: turkmenistan}
+  model: teams.team
+  pk: 952
+- fields: {city: '', defunct: false, founded: null, name: Turks and Caicos Islands
+      national team, notes: '', real: true, short_name: Turks and Caicos Islands,
+    slug: turks-and-caicos-islands}
+  model: teams.team
+  pk: 953
+- fields: {city: '', defunct: false, founded: null, name: Tuvalu national team, notes: '',
+    real: true, short_name: Tuvalu, slug: tuvalu}
+  model: teams.team
+  pk: 954
+- fields: {city: Enschede, defunct: false, founded: 1965, name: FC Twente, notes: '',
+    real: true, short_name: Twente, slug: twente}
+  model: teams.team
+  pk: 294
+- fields: {city: '', defunct: false, founded: null, name: U.S. Virgin Islands national
+      team, notes: '', real: true, short_name: U.S. Virgin Islands, slug: us-virgin-islands}
+  model: teams.team
+  pk: 955
+- fields: {city: "San Nicol\xE1s, Mexico", defunct: false, founded: 1960, name: "Tigres\
+      \ de la Universidad Aut\xF3noma de Nuevo Le\xF3n", notes: '', real: true, short_name: UANL
+      Tigres, slug: uanl}
+  model: teams.team
+  pk: 54
+- fields: {city: 'Mexico City, Mexico', defunct: false, founded: 1954, name: Club
+      Universidad Nacional A.C., notes: '', real: true, short_name: UNAM Pumas, slug: unam}
+  model: teams.team
+  pk: 53
+- fields: {city: Udine, defunct: false, founded: 1896, name: Udinese Calcio, notes: '',
+    real: true, short_name: Udinese, slug: udinese}
+  model: teams.team
+  pk: 272
+- fields: {city: '', defunct: false, founded: null, name: Uganda national team, notes: '',
+    real: true, short_name: Uganda, slug: uganda}
+  model: teams.team
+  pk: 956
+- fields: {city: '', defunct: false, founded: null, name: Ukraine national team, notes: '',
+    real: true, short_name: Ukraine, slug: ukraine}
+  model: teams.team
+  pk: 957
+- fields: {city: Incheon, defunct: false, founded: 1983, name: Ulsan Hyundai Football
+      Club, notes: '', real: true, short_name: Ulsan Hyundai, slug: ulsan-hyundai}
+  model: teams.team
+  pk: 719
+- fields: {city: '', defunct: false, founded: null, name: United Arab Emirates national
+      team, notes: '', real: true, short_name: United Arab Emirates, slug: united-arab-emirates}
+  model: teams.team
+  pk: 958
+- fields: {city: '', defunct: false, founded: null, name: United Kingdom national
+      team, notes: '', real: true, short_name: United Kingdom, slug: united-kingdom}
+  model: teams.team
+  pk: 959
+- fields: {city: '', defunct: false, founded: 1885, name: United States national team,
+    notes: '', real: true, short_name: United States, slug: united-states}
+  model: teams.team
+  pk: 960
+- fields: {city: Cluj, defunct: false, founded: 1919, name: Fotbal Club Universitatea
+      Cluj, notes: '', real: true, short_name: Universitatea Cluj, slug: universitatea-cluj}
+  model: teams.team
+  pk: 582
+- fields: {city: Marinha Grande, defunct: false, founded: 1966, name: "Uni\xE3o Desportiva\
+      \ de Leiria", notes: '', real: true, short_name: "Uni\xE3o de Leiria", slug: uniao-de-leiria}
+  model: teams.team
+  pk: 449
+- fields: {city: Saitama, defunct: false, founded: 1950, name: Urawa Red Diamonds,
+    notes: '', real: true, short_name: Urawa Red Diamonds, slug: urawa-red-diamonds}
+  model: teams.team
+  pk: 428
+- fields: {city: '', defunct: false, founded: 1901, name: Uruguay national team, notes: '',
+    real: true, short_name: Uruguay, slug: uruguay}
+  model: teams.team
+  pk: 961
+- fields: {city: '', defunct: false, founded: null, name: Uzbekistan national team,
+    notes: '', real: true, short_name: Uzbekistan, slug: uzbekistan}
+  model: teams.team
+  pk: 962
+- fields: {city: Venlo, defunct: false, founded: 1903, name: VVV-Venlo, notes: '',
+    real: true, short_name: VVV-Venlo, slug: vvv-venlo}
+  model: teams.team
+  pk: 308
+- fields: {city: Valencia, defunct: false, founded: 1919, name: "Valencia Club de\
+      \ F\xFAtbol", notes: '', real: true, short_name: Valencia CF, slug: valencia-cf}
+  model: teams.team
+  pk: 238
+- fields: {city: Valenciennes, defunct: false, founded: 1913, name: Valenciennes Football
+      Club, notes: '', real: true, short_name: Valenciennes, slug: valenciennes}
+  model: teams.team
+  pk: 293
+- fields: {city: 'Vancouver, British Columbia', defunct: false, founded: 2009, name: Vancouver
+      Whitecaps FC, notes: '', real: true, short_name: Vancouver Whitecaps FC, slug: vancouver-whitecaps}
+  model: teams.team
+  pk: 214
+- fields: {city: '', defunct: false, founded: null, name: Vanuatu national team, notes: '',
+    real: true, short_name: Vanuatu, slug: vanuatu}
+  model: teams.team
+  pk: 963
+- fields: {city: Rio de Janeiro, defunct: false, founded: 1898, name: Club de Regatas
+      Vasco da Gama, notes: '', real: true, short_name: Vasco da Gama, slug: vasco-da-gama}
+  model: teams.team
+  pk: 353
+- fields: {city: '', defunct: false, founded: null, name: Vatican City national team,
+    notes: '', real: true, short_name: Vatican City, slug: vatican-city}
+  model: teams.team
+  pk: 964
+- fields: {city: 'Izumi-ku, Sendai', defunct: false, founded: 1988, name: Vegalta
+      Sendai, notes: '', real: true, short_name: Vegalta Sendai, slug: vegalta-sendal}
+  model: teams.team
+  pk: 421
+- fields: {city: '', defunct: false, founded: null, name: Venezuela national team,
+    notes: '', real: true, short_name: Venezuela, slug: venezuela}
+  model: teams.team
+  pk: 965
+- fields: {city: Kofu, defunct: false, founded: 1965, name: Ventforet Kofu, notes: '',
+    real: true, short_name: Ventforet Kofu, slug: ventforet-kofu}
+  model: teams.team
+  pk: 430
+- fields: {city: Stuttgart, defunct: false, founded: 1893, name: "Verein f\xFCr Bewegungsspiele\
+      \ Stuttgart 1893 e. V.", notes: '', real: true, short_name: VfB Stuttgart, slug: vfb-stuttgart}
+  model: teams.team
+  pk: 224
+- fields: {city: Bochum, defunct: false, founded: 1848, name: "Verein f\xFCr Leibes\xFC\
+      bungen Bochum 1848 Fu\xDFballgemeinschaft", notes: '', real: true, short_name: VfL
+      Bochum, slug: vfl-bochum}
+  model: teams.team
+  pk: 526
+- fields: {city: "Osnabr\xFCck", defunct: false, founded: 1899, name: "VfL Osnabr\xFC\
+      ck", notes: '', real: true, short_name: "VfL Osnabr\xFCck", slug: vfl-osnabruck}
+  model: teams.team
+  pk: 539
+- fields: {city: Wolfsburg, defunct: false, founded: 1945, name: VfL Wolfsburg, notes: '',
+    real: true, short_name: VfL Wolfsburg, slug: vfl-wolfsburg}
+  model: teams.team
+  pk: 230
+- fields: {city: '', defunct: false, founded: null, name: Vietnam national team, notes: '',
+    real: true, short_name: Vietnam, slug: vietnam}
+  model: teams.team
+  pk: 966
+- fields: {city: Vila-real, defunct: false, founded: 1923, name: "Villarreal Club\
+      \ de F\xFAtbol, S.A.D.", notes: '', real: true, short_name: Villareal CF, slug: villareal-cf}
+  model: teams.team
+  pk: 247
+- fields: {city: Kobe, defunct: false, founded: 1966, name: Vissel Kobe, notes: '',
+    real: true, short_name: Vissel Kobe, slug: vissel-kobe}
+  model: teams.team
+  pk: 425
+- fields: {city: Arnhem, defunct: false, founded: 1892, name: Stichting Betaald Voetbal
+      Vitesse, notes: '', real: true, short_name: Vitesse, slug: vitesse}
+  model: teams.team
+  pk: 299
+- fields: {city: "Guimar\xE3es", defunct: false, founded: 1922, name: "Vit\xF3ria\
+      \ Sport Clube", notes: '', real: true, short_name: "Vit\xF3ria de Guimar\xE3\
+      es", slug: vitoria-de-guimaraes}
+  model: teams.team
+  pk: 444
+- fields: {city: "Set\xFAbal", defunct: false, founded: 1910, name: "Vit\xF3ria Futebol\
+      \ Clube", notes: '', real: true, short_name: "Vit\xF3ria de Set\xFAbal", slug: vitoria-de-setubal}
+  model: teams.team
+  pk: 443
+- fields: {city: Nizhny Novgorod, defunct: false, founded: 1963, name: FC Volga Nizhny
+      Novgorod, notes: '', real: true, short_name: Volga Nizhny Novgorod, slug: volga-nizhny-novgorod}
+  model: teams.team
+  pk: 400
+- fields: {city: 'Buenos Aires, Argentina', defunct: false, founded: 1910, name: "Club\
+      \ Atl\xE9tico V\xE9lez S\xE1rsfield", notes: '', real: true, short_name: "V\xE9\
+      lez S\xE1rsfield ", slug: velez-sarsfield}
+  model: teams.team
+  pk: 64
+- fields: {city: 'Marabella, Trinidad and Tobago', defunct: false, founded: 1986,
+    name: W Connection, notes: '', real: true, short_name: W Connection, slug: w-connection}
+  model: teams.team
+  pk: 92
+- fields: {city: '', defunct: true, founded: null, name: WKU Philthy, notes: '', real: false,
+    short_name: WKU Philthy, slug: ''}
+  model: teams.team
+  pk: 109
+- fields: {city: '', defunct: true, founded: null, name: WKU/Donofan_10, notes: '',
+    real: false, short_name: WKU/Donofan_10, slug: ''}
+  model: teams.team
+  pk: 95
+- fields: {city: Innsbruck, defunct: false, founded: 2002, name: FC Wacker Innsbruck,
+    notes: '', real: true, short_name: Wacker Innsbruck, slug: wacker-innsbruck}
+  model: teams.team
+  pk: 558
+- fields: {city: '1876', defunct: false, founded: null, name: Wales national team,
+    notes: '', real: true, short_name: Wales, slug: wales}
+  model: teams.team
+  pk: 967
+- fields: {city: Walsall, defunct: false, founded: 1888, name: Walsall Football Club,
+    notes: '', real: true, short_name: Walsall, slug: walsall}
+  model: teams.team
+  pk: 673
+- fields: {city: Watford, defunct: false, founded: 1881, name: Watford Football Club,
+    notes: '', real: true, short_name: Watford, slug: watford}
+  model: teams.team
+  pk: 521
+- fields: {city: Wellington, defunct: false, founded: 2007, name: Wellington Phoenix
+      Football Club, notes: '', real: true, short_name: Wellington Phoenix, slug: wellington-phoenix}
+  model: teams.team
+  pk: 414
+- fields: {city: Bremen, defunct: false, founded: 1899, name: SV Werder Bremen, notes: '',
+    real: true, short_name: Werder Bremen, slug: werder-bremen}
+  model: teams.team
+  pk: 221
+- fields: {city: 'West Bromwich, England', defunct: false, founded: 1878, name: West
+      Bromwich Albion Football Club, notes: '', real: true, short_name: West Bromwich
+      Albion, slug: west-bromwich-albion}
+  model: teams.team
+  pk: 41
+- fields: {city: 'London, England', defunct: false, founded: 1895, name: West Ham
+      United Football Club, notes: '', real: true, short_name: West Ham, slug: west-ham}
+  model: teams.team
+  pk: 36
+- fields: {city: Westerlo, defunct: false, founded: 1942, name: Koninklijke Voetbal
+      Club Westerlo, notes: '', real: true, short_name: Westerlo, slug: westerlo}
+  model: teams.team
+  pk: 499
+- fields: {city: '', defunct: false, founded: null, name: Western Sahara national
+      team, notes: '', real: true, short_name: Western Sahara, slug: western-sahara}
+  model: teams.team
+  pk: 968
+- fields: {city: Wiener Neustadt, defunct: false, founded: 2008, name: SC Magna Wiener
+      Neustadt, notes: '', real: true, short_name: Wiener Neustadt, slug: wiener-neustadt}
+  model: teams.team
+  pk: 559
+- fields: {city: 'Wigan, England', defunct: false, founded: 1932, name: Wigan Athletic
+      Football Club, notes: '', real: true, short_name: Wigan, slug: wigan}
+  model: teams.team
+  pk: 35
+- fields: {city: Wilmington, defunct: false, founded: 1996, name: Wilmington Hammerheads,
+    notes: '', real: true, short_name: Wilmington Hammerheads, slug: wilmington-hammerheads}
+  model: teams.team
+  pk: 341
+- fields: {city: Wolverhampton, defunct: false, founded: 1877, name: Wolverhampton
+      Wanderers Football Club, notes: '', real: true, short_name: Wolves, slug: wolves}
+  model: teams.team
+  pk: 34
+- fields: {city: High Wycombe, defunct: false, founded: 1887, name: Wycombe Wanderers
+      Football Club, notes: '', real: true, short_name: Wycombe Wanderers, slug: wycombe-wanderers}
+  model: teams.team
+  pk: 678
+- fields: {city: '', defunct: false, founded: null, name: Yemen national team, notes: '',
+    real: true, short_name: Yemen, slug: yemen}
+  model: teams.team
+  pk: 969
+- fields: {city: Yeovil, defunct: false, founded: 1895, name: Yeovil Town Football
+      Club, notes: '', real: true, short_name: Yeovil Town, slug: yeovil-town}
+  model: teams.team
+  pk: 677
+- fields: {city: Yokohama, defunct: false, founded: 1972, name: Yokohama F. Marinos,
+    notes: '', real: true, short_name: Yokohama F. Marinos, slug: yokohama-f-marinos}
+  model: teams.team
+  pk: 416
+- fields: {city: Bern, defunct: false, founded: 1898, name: Berner Sport Club Young
+      Boys 1898, notes: '', real: true, short_name: Young Boys, slug: young-boys}
+  model: teams.team
+  pk: 544
+- fields: {city: '', defunct: false, founded: null, name: Zambia national team, notes: '',
+    real: true, short_name: Zambia, slug: zambia}
+  model: teams.team
+  pk: 970
+- fields: {city: St. Petersburg, defunct: false, founded: 1925, name: Football Club
+      Zenit, notes: '', real: true, short_name: Zenit St. Petersburg, slug: zenit-st-petersburg}
+  model: teams.team
+  pk: 390
+- fields: {city: '', defunct: false, founded: null, name: Zimbabwe national team,
+    notes: '', real: true, short_name: Zimbabwe, slug: zimbabwe}
+  model: teams.team
+  pk: 971
+- fields: {city: Waregem, defunct: false, founded: 2001, name: Sportvereniging Zulte
+      Waregem, notes: '', real: true, short_name: Zulte Waregem, slug: zulte-wergem}
+  model: teams.team
+  pk: 495
+- fields: {city: '', defunct: true, founded: null, name: aceterp/Tavo2311, notes: '',
+    real: false, short_name: aceterp/Tavo2311, slug: ''}
+  model: teams.team
+  pk: 102
+- fields: {city: '', defunct: true, founded: null, name: apoo0onu, notes: '', real: false,
+    short_name: apoo0onu, slug: ''}
+  model: teams.team
+  pk: 131
+- fields: {city: '', defunct: true, founded: null, name: appooOnU, notes: '', real: false,
+    short_name: appooOnU, slug: ''}
+  model: teams.team
+  pk: 127
+- fields: {city: '', defunct: true, founded: null, name: arkadygelman, notes: '',
+    real: false, short_name: arkadygelman, slug: ''}
+  model: teams.team
+  pk: 119
+- fields: {city: '', defunct: true, founded: null, name: babytiger 2001, notes: '',
+    real: false, short_name: babytiger 2001, slug: ''}
+  model: teams.team
+  pk: 181
+- fields: {city: '', defunct: true, founded: null, name: babytiger2001, notes: '',
+    real: false, short_name: babytiger2001, slug: ''}
+  model: teams.team
+  pk: 157
+- fields: {city: '', defunct: true, founded: null, name: babytiger2001 & mrsbabytiger2001,
+    notes: '', real: false, short_name: babytiger2001 & mrsbabytiger2001, slug: ''}
+  model: teams.team
+  pk: 180
+- fields: {city: '', defunct: true, founded: null, name: babytiger2001 & mrsbabytiger2001
+      (Team ZTU), notes: '', real: false, short_name: babytiger2001 & mrsbabytiger2001
+      (Team ZTU), slug: ''}
+  model: teams.team
+  pk: 166
+- fields: {city: '', defunct: true, founded: null, name: babytiger2001/mrsbabytiger2001,
+    notes: '', real: false, short_name: babytiger2001/mrsbabytiger2001, slug: ''}
+  model: teams.team
+  pk: 179
+- fields: {city: '', defunct: true, founded: null, name: bluedaddy19, notes: '', real: false,
+    short_name: bluedaddy19, slug: ''}
+  model: teams.team
+  pk: 123
+- fields: {city: '', defunct: true, founded: null, name: davenport & beazley17, notes: '',
+    real: false, short_name: davenport & beazley17, slug: ''}
+  model: teams.team
+  pk: 208
+- fields: {city: '', defunct: true, founded: null, name: davenport and beazley17,
+    notes: '', real: false, short_name: davenport and beazley17, slug: ''}
+  model: teams.team
+  pk: 196
+- fields: {city: '', defunct: true, founded: null, name: elninho/MLSNHTOWN, notes: '',
+    real: false, short_name: elninho/MLSNHTOWN, slug: ''}
+  model: teams.team
+  pk: 172
+- fields: {city: '', defunct: true, founded: null, name: giffenbone, notes: '', real: false,
+    short_name: giffenbone, slug: ''}
+  model: teams.team
+  pk: 160
+- fields: {city: '', defunct: true, founded: null, name: goatnutsgoal/joesoccerfan,
+    notes: '', real: false, short_name: goatnutsgoal/joesoccerfan, slug: ''}
+  model: teams.team
+  pk: 117
+- fields: {city: '', defunct: true, founded: null, name: gomichigan24, notes: '',
+    real: false, short_name: gomichigan24, slug: ''}
+  model: teams.team
+  pk: 120
+- fields: {city: '', defunct: true, founded: null, name: harper916, notes: '', real: false,
+    short_name: harper916, slug: ''}
+  model: teams.team
+  pk: 158
+- fields: {city: '', defunct: true, founded: null, name: hartbeat, notes: '', real: false,
+    short_name: hartbeat, slug: ''}
+  model: teams.team
+  pk: 118
+- fields: {city: '', defunct: true, founded: null, name: harttbeat, notes: '', real: false,
+    short_name: harttbeat, slug: ''}
+  model: teams.team
+  pk: 135
+- fields: {city: '', defunct: true, founded: null, name: headhunter, notes: '', real: false,
+    short_name: headhunter, slug: ''}
+  model: teams.team
+  pk: 212
+- fields: {city: '', defunct: true, founded: null, name: joesoccerfan, notes: '',
+    real: false, short_name: joesoccerfan, slug: ''}
+  model: teams.team
+  pk: 134
+- fields: {city: '', defunct: true, founded: null, name: joshc & KennyWoo, notes: '',
+    real: false, short_name: joshc & KennyWoo, slug: ''}
+  model: teams.team
+  pk: 209
+- fields: {city: '', defunct: true, founded: null, name: joshc and KennyWoo, notes: '',
+    real: false, short_name: joshc and KennyWoo, slug: ''}
+  model: teams.team
+  pk: 195
+- fields: {city: '', defunct: true, founded: null, name: kuhnscoot/IASocFan, notes: '',
+    real: false, short_name: kuhnscoot/IASocFan, slug: ''}
+  model: teams.team
+  pk: 99
+- fields: {city: '', defunct: true, founded: null, name: lurking, notes: '', real: false,
+    short_name: lurking, slug: ''}
+  model: teams.team
+  pk: 126
+- fields: {city: '', defunct: true, founded: null, name: manutd02, notes: '', real: false,
+    short_name: manutd02, slug: ''}
+  model: teams.team
+  pk: 113
+- fields: {city: '', defunct: true, founded: null, name: numerista/ChrisE, notes: '',
+    real: false, short_name: numerista/ChrisE, slug: ''}
+  model: teams.team
+  pk: 174
+- fields: {city: '', defunct: true, founded: null, name: red&black1, notes: '', real: false,
+    short_name: red&black1, slug: ''}
+  model: teams.team
+  pk: 124
+- fields: {city: '', defunct: true, founded: null, name: red&black1/ChrisE, notes: '',
+    real: false, short_name: red&black1/ChrisE, slug: ''}
+  model: teams.team
+  pk: 140
+- fields: {city: '', defunct: true, founded: null, name: ryebreadraz, notes: '', real: false,
+    short_name: ryebreadraz, slug: ''}
+  model: teams.team
+  pk: 106
+- fields: {city: '', defunct: true, founded: null, name: scaryice, notes: '', real: false,
+    short_name: scaryice, slug: ''}
+  model: teams.team
+  pk: 155
+- fields: {city: '', defunct: true, founded: null, name: scaryice/Nutmeg, notes: '',
+    real: false, short_name: scaryice/Nutmeg, slug: ''}
+  model: teams.team
+  pk: 171
+- fields: {city: '', defunct: true, founded: null, name: short corner/speed ball,
+    notes: '', real: false, short_name: short corner/speed ball, slug: ''}
+  model: teams.team
+  pk: 137
+- fields: {city: '', defunct: true, founded: null, name: short corner/speedball, notes: '',
+    real: false, short_name: short corner/speedball, slug: ''}
+  model: teams.team
+  pk: 139
+- fields: {city: '', defunct: true, founded: null, name: soccerholligan32, notes: '',
+    real: false, short_name: soccerholligan32, slug: ''}
+  model: teams.team
+  pk: 133
+- fields: {city: '', defunct: true, founded: null, name: soccerholligan32/Jasonisimo,
+    notes: '', real: false, short_name: soccerholligan32/Jasonisimo, slug: ''}
+  model: teams.team
+  pk: 125
+- fields: {city: '', defunct: true, founded: null, name: soccerholligan32/short corner/speedball,
+    notes: '', real: false, short_name: soccerholligan32/short corner/speedball, slug: ''}
+  model: teams.team
+  pk: 136
+- fields: {city: '', defunct: true, founded: null, name: suppity/dfb547490, notes: '',
+    real: false, short_name: suppity/dfb547490, slug: ''}
+  model: teams.team
+  pk: 173
+- fields: {city: '', defunct: true, founded: null, name: swedcrip, notes: '', real: false,
+    short_name: swedcrip, slug: ''}
+  model: teams.team
+  pk: 152
+- fields: {city: '', defunct: true, founded: null, name: thacharger, notes: '', real: false,
+    short_name: thacharger, slug: ''}
+  model: teams.team
+  pk: 128
+- fields: {city: "Col\xF3n, Panama", defunct: false, founded: 1994, name: "Club Deportivo\
+      \ \xC1rabe Unido", notes: '', real: true, short_name: "\xC1rabe Unido", slug: arabe-unido}
+  model: teams.team
+  pk: 87
+- fields: {city: "\xD6rebro", defunct: false, founded: 1908, name: "\xD6rebro SK",
+    notes: '', real: true, short_name: "\xD6rebro SK", slug: obebro-sk}
+  model: teams.team
+  pk: 616
+- fields: {city: Istanbul, defunct: false, founded: 1990, name: "\u0130stanbul B\xFC\
+      y\xFCk\u015Fehir Belediyespor", notes: '', real: true, short_name: "\u0130stanbul\
+      \ B.B.", slug: istanbul-bb}
+  model: teams.team
+  pk: 460
