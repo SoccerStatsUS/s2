@@ -41,6 +41,7 @@ def load_fixtures():
 def load_bios():
     for bio in soccer_db.bios.find():
         bio.pop('_id')
+        bio.pop('nationality')
         Bio.objects.create(**bio)
 
 
