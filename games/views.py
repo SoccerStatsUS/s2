@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 
-from soccer.games.models import Game
+from s2.games.models import Game
 
 
 def games_index(request):
