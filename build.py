@@ -10,6 +10,7 @@ from django.db.utils import IntegrityError
 from s2 import settings
 from s2.bios.models import Bio
 from s2.games.models import Game
+from s2.goals.models import Goal
 from s2.teams.models import Team
 
 connection = pymongo.Connection()
@@ -22,7 +23,7 @@ def build():
 
 @transaction.commit_on_success
 def delete():
-    for model in (Bio, Game, Team):
+    for model in (Bio, Game, Team, Goal):
         model.objects.all().delete()
 
 
@@ -64,9 +65,12 @@ def load_goals():
     for goal in soccer_db.goals.find():
         team = Team.objects.find(goal['team'])
         game = Game.objects.find(team=team, date=goal['date'])
+        bio = Bio.objects.find(name=goal['name'])
         goal['team'] = team
         goal['game'] = game
+        goal['player'] = bio
 
+        goal.pop('name')
         goal.pop('_id')
         goal.pop('competition')
         goal.pop('season')
