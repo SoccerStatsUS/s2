@@ -27,6 +27,7 @@ class TeamManager(models.Manager):
         if teams:
             return teams[0]
 
+        print "Creating %s" % name
         team = Team.objects.create(
             name=name, 
             short_name=name, 

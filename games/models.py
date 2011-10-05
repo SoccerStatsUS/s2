@@ -12,7 +12,10 @@ class GameManager(models.Manager):
         try:
             game = Game.objects.get(date=date, home_team=team)
         except:
-            game = Game.objects.get(date=date, away_team=team)
+            try:
+                game = Game.objects.get(date=date, away_team=team)
+            except:
+                game = None
 
         return game
             
