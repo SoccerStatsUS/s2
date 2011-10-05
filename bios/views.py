@@ -1,28 +1,31 @@
+from django.shortcuts import render_to_response, get_object_or_404
+from django.template import RequestContext
+
 from s2.bios.models import Bio
 
 
 
 def person_list_generic(request, person_list):
     context =  {
-        "people": person_list,
+        "bios": person_list,
         }
-    return render_to_response("players/index.html",
+    return render_to_response("bios/list.html",
                               context,
                               context_instance=RequestContext(request)
                               )    
 
 
 def person_index(request):
-    people = Person.objects.all()
+    people = Bio.objects.all()
     return person_list_generic(request, people)
 
 
-def person_detail(request, slug):
-    person = Bio.objects.get(slug=slug)
+def person_detail(request, bio_id):
+    bio = Bio.objects.get(id=bio_id)
     context = {
-        "person": person,
+        "bio": bio
         }
-    return render_to_response("players/detail.html",
+    return render_to_response("bios/detail.html",
                               context,
                               context_instance=RequestContext(request)
                               )   
