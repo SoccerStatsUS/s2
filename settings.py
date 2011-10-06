@@ -102,6 +102,7 @@ INSTALLED_APPS = (
     's2.bios',
     's2.games',
     's2.goals',
+    's2.stats',
     's2.teams',
     'django.contrib.admin',
     'gunicorn',
