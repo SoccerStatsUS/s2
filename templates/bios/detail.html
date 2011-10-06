@@ -10,4 +10,27 @@
   <li>Weight: {{ bio.weight }}</li>
 </ul>
 
+<h3>stats</h3>
+<table>
+  <tr>
+    <th>competition</th>
+    <th>season</th>
+    <th>team</th>
+    <th>games started</th>
+    <th>goals</th>
+    <th>minutes</th>
+  </tr>
+
+  {% for stat in bio.stat_set.all %}
+  <tr>
+    <td>{{ stat.competition }}</td>
+    <td>{{ stat.season }}</td>
+    <td>{{ stat.team }}</td>
+    <td>{{ stat.games_started }}</td>
+    <td>{{ stat.goals }}</td>
+    <td>{{ stat.minutes }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
 {% endblock %}

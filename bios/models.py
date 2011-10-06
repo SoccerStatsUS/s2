@@ -6,14 +6,12 @@ class BioManager(models.Manager):
         """
         Given a team name, determine the actual team.
         """
-
-        try:
-            bio = Bio.objects.get(name=name)
-        except:
-            print "Creating Bio for %s" % name
-            bio = Bio.objects.create(name=name)
-
-        return bio
+        
+        bios = Bio.objects.filter(name=name)
+        if bios:
+            return bios[0]
+        else:
+            return Bio.objects.create(name=name)
 
 
 class Bio(models.Model):
