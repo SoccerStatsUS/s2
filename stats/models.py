@@ -12,7 +12,7 @@ class Stat(models.Model):
     """
 
     player = models.ForeignKey(Bio)
-    team = model.ForeignKey(Team)
+    team = models.ForeignKey(Team)
 
     # Convert these soon.
     # It seems like there should be only one
@@ -20,6 +20,7 @@ class Stat(models.Model):
     competition = models.CharField(max_length=255)
     season = models.CharField(max_length=255)
 
+    minutes = models.IntegerField(null=True, blank=True)
     games_started = models.IntegerField(null=True, blank=True)
     games_played = models.IntegerField(null=True, blank=True)
     goals = models.IntegerField(null=True, blank=True)
@@ -30,3 +31,6 @@ class Stat(models.Model):
     fouls_suffered = models.IntegerField(null=True, blank=True)
     yellow_cards = models.IntegerField(null=True, blank=True)
     red_cards = models.IntegerField(null=True, blank=True)
+
+    class Meta:
+        ordering = ('season', 'competition','games_started')

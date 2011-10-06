@@ -13,6 +13,9 @@ def stats_index(request):
                               context,
                               context_instance=RequestContext(request))
 
+def stats_detail(request):
+    pass
+
 
 # Need to figure out how else to show stats.
 # Probably set up a fancy team page next.
