@@ -58,6 +58,24 @@ class Team(models.Model):
     defuncts = DefunctTeamManager()
     reals = RealTeamManager()
 
+
+    def games(self):
+        """
+        Most recent games for this team.
+        """
+        from s2.games.models import Game
+        return Game.objects.filter(team=self)
+
+
+    def standings(self):
+        """
+        All standings for this team.
+        """
+        from s2.standings.models import Standing
+        return Standing.objects.filter(team=self)
+
+
+
     class Meta:
         ordering = ('short_name',)
 
