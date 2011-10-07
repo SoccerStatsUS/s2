@@ -1,3 +1,4 @@
+import itertools
 import os
 import pymongo
 
@@ -19,6 +20,7 @@ connection = pymongo.Connection()
 soccer_db = connection.soccer
 
 
+
 def build():
     delete()
     load()
@@ -30,7 +32,7 @@ def delete():
 
 
 def load():
-    #load_teams()
+    load_teams()
     load_bios()
     load_games()
     load_goals()
@@ -38,35 +40,20 @@ def load():
     load_lineups()
 
 
-def load_fixtures():
-    # Not working?
-    call_command("loaddata", "' + 'teams.yaml' + '", verbosity=0)
-
-
-def load_teams():
-    print "loading teams"
-    load_goal_teams()
-
-
-def load_bios():
-    print "loading bios"
-    load_mongo_bios()
-    #load_goal_bios()
-
-
-def load_games():
-    print "loading games"
-    load_db_games()
-    #load_goal_games()
-
-
-def load_goals():
-    print "loading goals"
-    load_db_goals()
+# These all just apply some very basic formatting 
+# and apply foreign keys.
 
 
 @transaction.commit_on_success
-def load_mongo_bios():
+def load_teams():
+    print "loading teams"
+    for team in soccer_db.teams.find():
+        team.pop('_id')
+        Team.objects.create(**team)
+
+
+@transaction.commit_on_success
+def load_bios():
     for bio in soccer_db.bios.find():
         if not bio['name']:
             return {}
@@ -80,36 +67,16 @@ def load_mongo_bios():
             if key in bio:
                 bd[key] = bio[key] or None
 
-        try:
-            Bio.objects.create(**bd)
-        except:
-            import pdb; pdb.set_trace()
-            x = 5
+        Bio.objects.create(**bd)
 
 
 @transaction.commit_on_success
-def load_lineups():
-    print "loading lineups"
-    for a in soccer_db.lineups.find():
-        team = Team.objects.find(a['team'])
-        game = Game.objects.find(team=team, date=a['date'])
-        player = Bio.objects.find(a['name'])
-        if game:
-            Appearance.objects.create(**{
-                    'game': game,
-                    'player': player,
-                    'on': a['on'],
-                    'off': a['off'],
-                    })
-        else:
-            print a
-        
+def load_games():
+    print "loading games\n"
 
-@transaction.commit_on_success
-def load_db_games():
     for game in soccer_db.games.find():
-        game['home_team'] = Team.objects.find(game['home_team'])
-        game['away_team'] = Team.objects.find(game['away_team'])
+        game['home_team'] = Team.objects.find(game['home_team'], create=True)
+        game['away_team'] = Team.objects.find(game['away_team'], create=True)
         game.pop('_id')
         # Delete this once year is removed.
         game.pop('year')
@@ -122,59 +89,105 @@ def load_db_games():
             print game
 
 
-# These suck. Get rid of them.
 @transaction.commit_on_success
-def load_goal_teams():
-    s = set()
-    for goal in soccer_db.goals.find():
-        s.add(goal['team'])
-    for e in s:
-        Team.objects.find(name=e)
+def load_goals():
+    print "loading goals\n"
 
-@transaction.commit_on_success
-def load_goal_bios():
-    s = set()
-    for goal in soccer_db.goals.find():
-        s.add(goal['name'])
-    for e in s:
-        Bio.objects.find(e)
-
-@transaction.commit_on_success
-def load_goal_games():
-    s = set()
-    for goal in soccer_db.goals.find():
-        team = Team.objects.find(goal['team'])
-        s.add((team, goal['date']))
-    for team, date in s:
-        Game.objects.find(team=team, date=date)
-
-        
-
-@transaction.commit_on_success
-def load_db_goals():
-
-    # Load this after loading team, game, and bio.
-    for goal in soccer_db.goals.find():
+    def create_goal(goal):
         team = Team.objects.find(goal['team'])
         game = Game.objects.find(team=team, date=goal['date'])
         bio = Bio.objects.find(name=goal['name'])
 
-        try:
-            Goal.objects.create(**{
-                'date': goal['date'],
-                'minute': goal['minute'],
+        if game:
+            try:
+                Goal.objects.create(**{
+                        'date': goal['date'],
+                        'minute': goal['minute'],
+                        'team': team,
+                        'player': bio,
+                        'game': game,
+                        })
+            except:
+                import pdb; pdb.set_trace()
+                x = 5
+        
+
+    # Load this after loading team, game, and bio.
+    for i, goal in enumerate(soccer_db.goals.find()):
+        create_goal(goal)
+        if i % 2000 == 0:
+            print i
+
+
+@transaction.commit_on_success
+def load_lineups():
+    print "loading lineups\n"
+    from django.db import connection
+
+    
+    teams = {}
+    games = {}
+    players = {}
+    
+    def create_appearance(a):
+
+        # Setting find functions to memoize should to the same job.
+        # Don't create all those extra references if not necessary.
+        if a['team'] in teams:
+            team = teams[a['team']]
+        else:
+            team = Team.objects.find(a['team'])
+            teams[a['team']] = team
+
+        t = (team, a['date'])
+        if t in games:
+            game = games[t]
+        else:
+            game = Game.objects.find(team=team, date=a['date'])
+            games[t] = game
+                 
+        if a['name'] in players:
+            player = players[a['name']]
+        else:
+            player = Bio.objects.find(a['name'])
+            players[a['name']] = player
+
+            
+
+        if game:
+            return {
                 'team': team,
-                'player': bio,
                 'game': game,
-                })
-        except:
-            import pdb; pdb.set_trace()
-            x = 5
+                'player': player,
+                'on': a['on'],
+                'off': a['off'],
+                }
+
+
+    l = []
+    for i, a in enumerate(soccer_db.lineups.find()):
+        u = create_appearance(a)
+        if u:
+            l.append(u)
+
+        if i % 5000 == 0:
+            print i
+
+    print "Creating appearances"
+    for e in l:
+        Appearance.objects.create(**e)
+        
+        
+
 
 @transaction.commit_on_success
 def load_stats():
     for stat in soccer_db.stats.find():
-        team = Team.objects.find(stat['team'])
+        try:
+            team = Team.objects.find(stat['team'])
+        except:
+            import pdb; pdb.set_trace()
+            continue
         bio = Bio.objects.find(name=stat['name'])
         
         Stat.objects.create(**{
@@ -194,6 +207,25 @@ def load_stats():
                 'yellow_cards': stat.get('yellow_cards'),
                 'red_cards': stat.get('red_cards'),
                 })
+
+
+# Testing and stuff.
+
+def load_mongo_teams():
+    s = set()
+    for e in soccer_db.games.find():
+        s.add(e['home_team'])
+        s.add(e['away_team'])
+    return sorted(list(s))
+
+
+def get_unloaded_teams():
+    for e in load_mongo_teams():
+        try:
+            Team.objects.find(e)
+        except:
+            print e
+    
 
 
         
