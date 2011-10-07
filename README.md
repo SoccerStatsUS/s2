@@ -1,6 +1,8 @@
 
 # Remove main/
 
+# Goals by minute?
+
 #### Todo
 
 ! Delete Salvadorean league. It's a duplicate!
@@ -50,3 +52,13 @@ This would solve the long-lasting MLS open cup / regular season problem.
 # A start and end. (could be figured programatically)
 
 
+#### Soccermetrics
+
+# Negative binomial distribution matches number of goals scored by a team (?)
+# Some people also us e poisson models though.
+# 
+Difference vs ratio question about scores.
+Is a 3-1 victory more like a 6-2 or a 6-4 victory?
+Determines motivations of teams.
+
+http://www.wagerlines.net/lib/etj.pdf
