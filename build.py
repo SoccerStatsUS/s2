@@ -11,6 +11,7 @@ from s2 import settings
 from s2.bios.models import Bio
 from s2.games.models import Game
 from s2.goals.models import Goal
+from s2.lineups.models import Appearance
 from s2.teams.models import Team
 from s2.stats.models import Stat
 
@@ -34,6 +35,7 @@ def load():
     load_games()
     load_goals()
     load_stats()
+    load_lineups()
 
 
 def load_fixtures():
@@ -66,13 +68,42 @@ def load_goals():
 @transaction.commit_on_success
 def load_mongo_bios():
     for bio in soccer_db.bios.find():
+        if not bio['name']:
+            return {}
+
         bio.pop('_id')
         bio.pop('nationality')
         print "Creating bio for %s" % bio['name']
-        Bio.objects.create(**bio)
+
+        bd = {}
+        for key in 'name', 'height', 'birthdate', 'birthplace', 'height', 'weight':
+            if key in bio:
+                bd[key] = bio[key] or None
+
+        try:
+            Bio.objects.create(**bd)
+        except:
+            import pdb; pdb.set_trace()
+            x = 5
 
 
-
+@transaction.commit_on_success
+def load_lineups():
+    print "loading lineups"
+    for a in soccer_db.lineups.find():
+        team = Team.objects.find(a['team'])
+        game = Game.objects.find(team=team, date=a['date'])
+        player = Bio.objects.find(a['name'])
+        if game:
+            Appearance.objects.create(**{
+                    'game': game,
+                    'player': player,
+                    'on': a['on'],
+                    'off': a['off'],
+                    })
+        else:
+            print a
+        
 
 @transaction.commit_on_success
 def load_db_games():
