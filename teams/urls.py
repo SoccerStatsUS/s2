@@ -1,8 +1,8 @@
 from django.conf.urls.defaults import patterns, url
 
-urlpatterns = patterns('soccer.teams.views', 
+urlpatterns = patterns('s2.teams.views', 
 
-                       url(r'^(?P<slug>[a-zA-Z0-9_.-]+)/$',
+                       url(r'^(?P<team_id>\d+)/$',
                            'team_detail',
                            name='team_detail'),
 

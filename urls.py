@@ -10,6 +10,7 @@ urlpatterns = patterns('',
                        url(r'^bios/', include('s2.bios.urls')),
                        url(r'^games/', include('s2.games.urls')),
                        url(r'^goals/', include('s2.goals.urls')),
+                       url(r'^teams/', include('s2.teams.urls')),
 
                        # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
                        # to INSTALLED_APPS to enable admin documentation:
