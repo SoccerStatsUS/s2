@@ -11,6 +11,13 @@ class Stat(models.Model):
     Could in theory just be a single Game?
     """
 
+    # What do we need from this model?
+    # Team should be optional
+    # Stats should be generated from data.
+    # Stats should be regenerated on Game, Goal, etc. scoring.
+    # Standings should sort of be generated the same way.
+    
+
     player = models.ForeignKey(Bio)
     team = models.ForeignKey(Team)
 
@@ -34,3 +41,4 @@ class Stat(models.Model):
 
     class Meta:
         ordering = ('season', 'competition')
+        #unique_together = ('player', 'team', 'competition', 'season')

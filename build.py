@@ -61,7 +61,8 @@ def load_bios():
             continue
 
         bio.pop('_id')
-        bio.pop('nationality')
+        if 'nationality' in bio:
+            bio.pop('nationality')
         print "Creating bio for %s" % bio['name']
 
 
