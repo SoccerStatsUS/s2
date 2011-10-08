@@ -55,12 +55,15 @@ def load_teams():
 @transaction.commit_on_success
 def load_bios():
     for bio in soccer_db.bios.find():
+
         if not bio['name']:
-            return {}
+            print "NO BIO: %s" % str(bio)
+            continue
 
         bio.pop('_id')
         bio.pop('nationality')
         print "Creating bio for %s" % bio['name']
+
 
         bd = {}
         for key in 'name', 'height', 'birthdate', 'birthplace', 'height', 'weight':
