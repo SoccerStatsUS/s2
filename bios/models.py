@@ -32,7 +32,7 @@ class Bio(models.Model):
     #source = models.CharField(max_length=500)
 
     class Meta:
-        ordering = ('-birthdate',)
+        ordering = ('name',)
         
     def __unicode__(self):
         return self.name
