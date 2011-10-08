@@ -121,7 +121,7 @@ def load_goals():
 
 @transaction.commit_on_success
 def load_lineups():
-    print "loading lineups\n"
+    print "\nloading lineups\n"
     from django.db import connection
 
     
@@ -179,18 +179,28 @@ def load_lineups():
         
         
 
-
 @transaction.commit_on_success
 def load_stats():
-    for stat in soccer_db.stats.find():
-        try:
-            team = Team.objects.find(stat['team'])
-        except:
-            import pdb; pdb.set_trace()
-            continue
+    print "\nCreating stats\n"
+    for i, stat in enumerate(soccer_db.stats.find()):
+        if i % 1000 == 0:
+            print i
+
+        team = Team.objects.find(stat['team'],create=True)
         bio = Bio.objects.find(name=stat['name'])
+
+        # Should be in soccerdata.merge.
+        for k in 'games_started', 'games_played', 'minutes', 'shots', 'shots_on_goal', \
+                'fouls_committed', 'fouls_suffered', 'yellow_cards', 'red_cards':
+            if stat.get(k) == '':
+                stat[k] = None
+
+        for k in 'goals', 'assists':
+            if stat.get(k) == '':
+                stat[k] = 0
         
-        Stat.objects.create(**{
+        try:
+            d = {
                 'player': bio,
                 'team': team,
                 'competition': stat.get('competition'),
@@ -206,8 +216,11 @@ def load_stats():
                 'fouls_suffered': stat.get('fouls_suffered'),
                 'yellow_cards': stat.get('yellow_cards'),
                 'red_cards': stat.get('red_cards'),
-                })
-
+                }
+            Stat.objects.create(**d)
+        except:
+            import pdb; pdb.set_trace()
+            x = 5
 
 # Testing and stuff.
 
