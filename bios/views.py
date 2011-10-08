@@ -20,8 +20,8 @@ def person_index(request):
     return person_list_generic(request, people)
 
 
-def person_detail(request, bio_id):
-    bio = Bio.objects.get(id=bio_id)
+def person_detail(request, slug):
+    bio = Bio.objects.get(slug=slug)
     context = {
         "bio": bio
         }

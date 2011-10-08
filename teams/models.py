@@ -18,6 +18,9 @@ class TeamManager(models.Manager):
         """
         Given a team name, determine the actual team.
         """
+        if name == u'':
+            import pdb; pdb.set_trace()
+
         #from soccer.teams.aliases import mapping
         teams = Team.objects.filter(name=name)
         if teams:
@@ -32,7 +35,7 @@ class TeamManager(models.Manager):
             team = Team.objects.create(
                 name=name, 
                 short_name=name, 
-                slug=slugify(name))
+                )
             return team
         else:
             # Don't want to be creating teams all the time.
@@ -65,11 +68,15 @@ class Team(models.Model):
     reals = RealTeamManager()
 
 
-
-
-
     class Meta:
         ordering = ('short_name',)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.short_name)
+            
+        super(Team, self).save(*args, **kwargs)
+
 
     def fancy_name(self):
         return self.name

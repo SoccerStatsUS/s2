@@ -15,11 +15,11 @@ def team_index(request):
                               )
     
 
-def team_detail(request, team_id):
+def team_detail(request, team_slug):
     """
     Just about the most important view of all.
     """
-    team = get_object_or_404(Team, id=team_id)
+    team = get_object_or_404(Team, slug=team_slug)
 
     context = {
         'team': team,

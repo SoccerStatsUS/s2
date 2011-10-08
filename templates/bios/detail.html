@@ -25,7 +25,7 @@
   <tr>
     <td>{{ stat.competition }}</td>
     <td>{{ stat.season }}</td>
-    <td><a href="{% url team_detail stat.team.id %}">{{ stat.team }}</a></td>
+    <td><a href="{% url team_detail stat.team.slug %}">{{ stat.team }}</a></td>
     <td>{{ stat.games_started }}</td>
     <td>{{ stat.goals }}</td>
     <td>{{ stat.minutes }}</td>
@@ -51,8 +51,8 @@
   <tr>
     <td>{{ goal.game.date }}</td>
     <td>{{ goal.minute }}</td>
-    <td><a href="{% url team_detail goal.team.id %}">{{ goal.team }}</a></td>
-    <td><a href="{% url team_detail goal.opponent.id %}">{{ goal.opponent }}</a></td>
+    <td><a href="{% url team_detail goal.team.slug %}">{{ goal.team }}</a></td>
+    <td><a href="{% url team_detail goal.opponent.slug %}">{{ goal.opponent }}</a></td>
     <td><a href="{% url game_detail goal.game.id %}">{{ goal.game.score }}</a></td>
 
   {% endfor %}
@@ -73,8 +73,8 @@
   {% for appearance in bio.appearance_set.all %}
   <tr>
     <td>{{ appearance.game.date }}</td>
-    <td><a href="{% url team_detail appearance.team.id %}">{{ appearance.team }}</a></td>
-    <td><a href="{% url team_detail appearance.opponent.id %}">{{ appearance.opponent }}</a></td>
+    <td><a href="{% url team_detail appearance.team.slug %}">{{ appearance.team }}</a></td>
+    <td><a href="{% url team_detail appearance.opponent.slug %}">{{ appearance.opponent }}</a></td>
     <td><a href="{% url game_detail appearance.game.id %}">{{ appearance.game.score }}</a></td>
     <td>{{ appearance.on }}
     <td>{{ appearance.off }}

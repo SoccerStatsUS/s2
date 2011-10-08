@@ -5,8 +5,8 @@ urlpatterns = patterns('s2.bios.views',
                            'person_index',
                            name='person_index'),
 
+                       url(r'^(?P<slug>[a-z0-9-]+)',
+                           'person_detail',
+                           name='person_detail'),
 
-                       url(r"^(?P<bio_id>.*)/$",
-                           "person_detail",
-                           name="person_detail"),
 )

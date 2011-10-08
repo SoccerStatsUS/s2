@@ -7,7 +7,7 @@ urlpatterns = patterns('s2.teams.views',
                            name='team_index'),
 
 
-                       url(r'^(?P<team_id>\d+)/$',
+                       url(r'^(?P<team_slug>[a-z0-9-]+)',
                            'team_detail',
                            name='team_detail'),
 

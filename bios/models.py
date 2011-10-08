@@ -1,4 +1,5 @@
 from django.db import models
+from django.template.defaultfilters import slugify
 
 class BioManager(models.Manager):
 
@@ -20,6 +21,8 @@ class Bio(models.Model):
     """
     
     name = models.CharField(max_length=500)
+    slug = models.SlugField(unique=False)
+
     height = models.IntegerField(null=True, blank=True)
     birthdate = models.DateField(null=True, blank=True)
     birthplace = models.CharField(max_length=250, null=True, blank=True)
@@ -29,10 +32,16 @@ class Bio(models.Model):
 
     objects = BioManager()
 
-    #source = models.CharField(max_length=500)
 
     class Meta:
         ordering = ('name',)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+            
+        super(Bio, self).save(*args, **kwargs)
+
         
     def __unicode__(self):
         return self.name

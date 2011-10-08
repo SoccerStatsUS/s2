@@ -22,7 +22,7 @@
   {% for goal in game.goal_set.all %}
   <tr>
     <td>{{ goal.team }}</td>
-    <td><a href="{% url person_detail goal.player.id %}">{{ goal.player }}</a></td>
+    <td><a href="{% url person_detail goal.player.slug %}">{{ goal.player }}</a></td>
     <td>{{ goal.minute }}</td>
     <td></td>
   {% endfor %}
@@ -42,8 +42,8 @@
   {% for appearance in game.appearance_set.all %}
   <tr>
     <td>{{ appearance.game.date }}</td>
-    <td><a href="{% url game_detail appearance.team.id %}">{{ appearance.team }}</a></td>
-    <td><a href="{% url person_detail appearance.player.id %}">{{ appearance.player }}</a></td>
+    <td><a href="{% url team_detail appearance.team.slug %}">{{ appearance.team }}</a></td>
+    <td><a href="{% url person_detail appearance.player.slug %}">{{ appearance.player }}</a></td>
     <td>{{ appearance.on }}</td>
     <td>{{ appearance.off }}</td>
   </tr>

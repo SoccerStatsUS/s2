@@ -190,6 +190,9 @@ def load_stats():
         if i % 1000 == 0:
             print i
 
+        if stat['name'] == '':
+            continue
+
         team = Team.objects.find(stat['team'],create=True)
         bio = Bio.objects.find(name=stat['name'])
 

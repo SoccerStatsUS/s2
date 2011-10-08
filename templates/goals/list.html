@@ -12,8 +12,8 @@
 {% for goal in goals %}
   <tr>
     <td>{{ goal.date }}</td>
-    <td><a href="{% url team_detail goal.team.id %}">{{ goal.team }}</a></td>
-    <td><a href="{% url person_detail goal.player.id %}">{{ goal.player }}</a></td>
+    <td><a href="{% url team_detail goal.team.slug %}">{{ goal.team }}</a></td>
+    <td><a href="{% url person_detail goal.player.slug %}">{{ goal.player }}</a></td>
     <td>{{ goal.minute }}</td>
   </tr>
 {% endfor %}
