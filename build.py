@@ -95,9 +95,9 @@ def load_games():
         game['home_team'] = Team.objects.find(game['home_team'], create=True)
         game['away_team'] = Team.objects.find(game['away_team'], create=True)
         game.pop('_id')
-        # Delete this once year is removed.
-        game.pop('year')
 
+        if 'year' in game:
+            game.pop('year')
 
         # Seem to have multiple Miami Fusion entries?
         try:
@@ -113,7 +113,7 @@ def load_goals():
     def create_goal(goal):
         team = Team.objects.find(goal['team'])
         game = Game.objects.find(team=team, date=goal['date'])
-        bio = Bio.objects.find(name=goal['name'])
+        bio = Bio.objects.find(name=goal['player'])
 
         if game:
             try:
