@@ -167,11 +167,11 @@ def load_lineups():
             game = Game.objects.find(team=team, date=a['date'])
             games[t] = game
                  
-        if a['name'] in players:
-            player = players[a['name']]
+        if a['player'] in players:
+            player = players[a['player']]
         else:
-            player = Bio.objects.find(a['name'])
-            players[a['name']] = player
+            player = Bio.objects.find(a['player'])
+            players[a['player']] = player
 
             
 

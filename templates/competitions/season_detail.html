@@ -8,22 +8,22 @@
 <table>
   <tr>
     <th>team</th>
+    <th>wins</th>
+    <th>draws</th>
+    <th>losses</th>
     <th>points</th>
   </tr>
 
   {% for standing in season.standing_set.all %}
   <tr>
-    <td>>{{ standing.team }}</td>
-    <td>>{{ standing.points }}</td>
+    <td><a href="{% url team_detail standing.team.slug %}">{{ standing.team }}</a></td>
+    <td>{{ standing.wins }}</td>
+    <td>{{ standing.ties }}</td>
+    <td>{{ standing.losses }}</td>
+    <td>{{ standing.points }}</td>
   </tr>
   {% endfor %}
 </table>
-
-<ul>
-{% for game in season.game_set.all %}
-<li>{{ game }}</li>
-{% endfor %}
-</ul>
 
 
 

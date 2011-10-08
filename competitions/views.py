@@ -1,12 +1,12 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 
-from s2.competitionss.models import Competition, Season
+from s2.competitions.models import Competition, Season
 
 
-def competitions_index(request):
+def competition_index(request):
     # Add a paginator.
-    competitions = Competitions.objects.all()
+    competitions = Competition.objects.all()
     context = {
         'competitions': competitions
         }

@@ -17,6 +17,9 @@ class Competition(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        ordering = ("name",)
+
 
 class SeasonManager(models.Manager):
 
@@ -32,4 +35,10 @@ class Season(models.Model):
     competition = models.ForeignKey(Competition)
 
     objects = SeasonManager()
+
+    def __unicode__(self):
+        return "%s: %s" % (self.competition, self.name)
+
+    class Meta:
+        ordering = ("competition", "name")
 

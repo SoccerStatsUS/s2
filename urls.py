@@ -8,6 +8,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
                        url(r'^$', direct_to_template, {'template': 'index.html'}),
                        url(r'^bios/', include('s2.bios.urls')),
+                       url(r'^competitions/', include('s2.competitions.urls')),
                        url(r'^games/', include('s2.games.urls')),
                        url(r'^goals/', include('s2.goals.urls')),
                        url(r'^teams/', include('s2.teams.urls')),
