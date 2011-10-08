@@ -14,3 +14,6 @@ class Appearance(models.Model):
     #off = models.IntegerField()
     on = models.CharField(max_length=255)
     off = models.CharField(max_length=255)
+
+    class Meta:
+        ordering = ('game', )
