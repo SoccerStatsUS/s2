@@ -66,6 +66,8 @@ class Team(models.Model):
 
 
 
+
+
     class Meta:
         ordering = ('short_name',)
 
@@ -80,6 +82,13 @@ class Team(models.Model):
 
     def __unicode__(self):
         return self.short_name
+
+    def roster(self, season=None):
+        from s2.stats.models import Stat
+        from s2.bios.models import Bio
+        player_ids = set([e[0] for e in Stat.objects.filter(team=self).values_list('player')])
+        return Bio.objects.filter(id__in=player_ids)
+
 
     def game_set(self):
         from s2.games.models import Game

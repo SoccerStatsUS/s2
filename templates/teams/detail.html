@@ -7,6 +7,13 @@
   <li>Founded: {{ team.founded }}</li>
 </ul>
 
+<h3>bios</h3>
+<ul>
+  {% for bio in team.roster %}
+  <li><a href="{% url person_detail bio.id %}">{{ bio.name }}</a></li>
+  {% endfor %}
+</ul>
+
 <h3>stats</h3>
 <table>
   <tr>

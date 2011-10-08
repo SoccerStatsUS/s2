@@ -33,4 +33,4 @@ class Stat(models.Model):
     red_cards = models.IntegerField(null=True, blank=True)
 
     class Meta:
-        ordering = ('competition', 'season', 'games_started')
+        ordering = ('season', 'competition')
