@@ -30,4 +30,27 @@
   {% endfor %}
 </table>
 
+<h3>games</h3>
+<table>
+  <tr>
+    <th>competition</th>
+    <th>date</th>
+    <th>home team</th>
+    <th>score</th>
+    <th>away team</th>
+  <tr>
+
+  {% for game in team.game_set.all %}
+  <tr>
+    <td>{{ game.competition }}</td>
+    <td>{{ game.date }}</td>
+    <td><a href="{% url team_detail game.home_team.id %}">{{ game.home_team }}</a></td>
+    <td><a href="{% url game_detail game.id %}">{{ game.score }}</a></td>
+    <td><a href="{% url team_detail game.away_team.id %}">{{ game.away_team }}</a></td>
+  </tr>
+  {% endfor %}
+</table>
+
+
+
 {% endblock %}

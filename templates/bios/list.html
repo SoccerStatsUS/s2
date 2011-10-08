@@ -4,7 +4,7 @@
 
 <ul>
 {% for bio in bios %}
-<li><a href="{% url person_detail bio.id %}">{{ bio }}</a></li>
+<li><a href="{% url person_detail bio.id %}">{{ bio.id }}, {{ bio.name }}</a></li>
 {% endfor %}
 </ul>
 

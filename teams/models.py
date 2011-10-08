@@ -81,4 +81,6 @@ class Team(models.Model):
     def __unicode__(self):
         return self.short_name
 
-
+    def game_set(self):
+        from s2.games.models import Game
+        return Game.objects.filter(models.Q(home_team=self) | models.Q(away_team=self))
