@@ -7,6 +7,37 @@
   <li>Founded: {{ team.founded }}</li>
 </ul>
 
+<h3>standings</h3>
+<table>
+  <tr>
+    <th>Team</th>
+    <th>competition</th>
+    <th>season</th>
+    <th>wins</th>
+    <th>ties</th>
+    <th>losses</th>
+    <th>points</th>
+    <th>goals for</th>
+    <th>goals against</th>
+  </tr>
+
+  {% for standing in team.standing_set.all %}
+  <tr>
+    <td>{{ standing.team }}</td>
+    <td>{{ standing.competition }}</td>
+    <td>{{ standing.season }}</td>
+    <td>{{ standing.wins }}</td>
+    <td>{{ standing.ties }}</td>
+    <td>{{ standing.losses }}</td>
+    <td>{{ standing.points }}</td>
+    <td>{{ standing.goals_for }}</td>
+    <td>{{ standing.goals_against }}</td>
+  </tr>
+
+  {% endfor %}
+
+</table>
+
 <h3>bios</h3>
 <ul>
   {% for bio in team.roster %}

@@ -3,6 +3,8 @@
 
 # Goals by minute?
 
+# Career stats on team detail page.
+
 #### Todo
 
 ! Delete Salvadorean league. It's a duplicate!

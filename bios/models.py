@@ -42,6 +42,8 @@ class Bio(models.Model):
             
         super(Bio, self).save(*args, **kwargs)
 
+
+
         
     def __unicode__(self):
         return self.name

@@ -15,6 +15,7 @@ from s2.goals.models import Goal
 from s2.lineups.models import Appearance
 from s2.teams.models import Team
 from s2.stats.models import Stat
+from s2.standings.models import Standing
 
 connection = pymongo.Connection()
 soccer_db = connection.soccer
@@ -33,11 +34,14 @@ def delete():
 
 def load():
     load_teams()
+    load_standings()
     load_bios()
+
     load_games()
     load_goals()
     load_stats()
     load_lineups()
+
 
 
 # These all just apply some very basic formatting 
@@ -50,6 +54,15 @@ def load_teams():
     for team in soccer_db.teams.find():
         team.pop('_id')
         Team.objects.create(**team)
+
+def load_standings():
+    print "loading standings\n"
+    for standing in soccer_db.standings.find():
+        standing.pop('_id')
+        team_string = standing.pop('name')
+        team = Team.objects.find(team_string, create=True)
+        standing['team'] = team
+        Standing.objects.create(**standing)
 
 
 @transaction.commit_on_success
