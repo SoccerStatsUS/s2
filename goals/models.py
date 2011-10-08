@@ -38,6 +38,12 @@ class Goal(models.Model):
     
     class Meta:
         ordering = ('-date', '-minute', 'team')
+
+    def opponent(self):
+        if self.team == self.game.home_team:
+            return self.game.away_team
+        else:
+            return self.game.home_team
  
 
     def __unicode__(self):

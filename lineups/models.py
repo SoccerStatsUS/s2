@@ -17,3 +17,10 @@ class Appearance(models.Model):
 
     class Meta:
         ordering = ('game', )
+
+
+    def opponent(self):
+        if self.team == self.game.home_team:
+            return self.game.away_team
+        else:
+            return self.game.home_team

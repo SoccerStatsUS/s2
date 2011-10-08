@@ -39,19 +39,22 @@
 
 <table>
   <tr>
-    <th>Game</th>
-    <th>Team</th>
+    <th>Date</th>
     <th>Minute</th>
-    <th>Assists</th>
+    <th>Team</th>
+    <th>Opponent</th>
+    <th>Score</th>
+
   </tr>
 
   {% for goal in bio.goal_set.all %}
   <tr>
-    <td><a href="{% url game_detail goal.game.id %}">{{ goal.game }}</a></td>
-    <td>{{ goal.team }}</td>
-
+    <td>{{ goal.game.date }}</td>
     <td>{{ goal.minute }}</td>
-    <td></td>
+    <td><a href="{% url team_detail goal.team.id %}">{{ goal.team }}</a></td>
+    <td><a href="{% url team_detail goal.opponent.id %}">{{ goal.opponent }}</a></td>
+    <td><a href="{% url game_detail goal.game.id %}">{{ goal.game.score }}</a></td>
+
   {% endfor %}
 </table>
 
@@ -59,20 +62,20 @@
 <h3>appearances</h3>
 <table>
   <tr>
-    <th>competition</th>
-    <th>game</th>
-    <th>team</th>
     <th>date</th>
+    <th>team</th>
+    <th>opponent</th>
+    <th>score</th>
     <th>on</th>
     <th>off</th>
   <tr>
 
   {% for appearance in bio.appearance_set.all %}
   <tr>
-    <td>{{ appearance.game.competition }}</td>
-    <td><a href="{% url game_detail appearance.game.id %}">{{ appearance.game }}</a></td>
-    <td><a href="{% url team_detail appearance.team.id %}">{{ appearance.team }}</a></td>
     <td>{{ appearance.game.date }}</td>
+    <td><a href="{% url team_detail appearance.team.id %}">{{ appearance.team }}</a></td>
+    <td><a href="{% url team_detail appearance.opponent.id %}">{{ appearance.opponent }}</a></td>
+    <td><a href="{% url game_detail appearance.game.id %}">{{ appearance.game.score }}</a></td>
     <td>{{ appearance.on }}
     <td>{{ appearance.off }}
   </tr>
