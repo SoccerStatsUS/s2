@@ -1,6 +1,7 @@
 from django.db import models
 
 from s2.teams.models import Team
+from s2.competitions.models import Competition, Season
 
 class GameManager(models.Manager):
 
@@ -34,8 +35,8 @@ class Game(models.Model):
     away_score = models.IntegerField()
 
     # This should probably be a many-to-many?
-    competition = models.CharField(max_length=255)
-    season = models.CharField(max_length=255)
+    competition = models.ForeignKey(Competition)
+    season = models.ForeignKey(Season)
 
     location = models.CharField(max_length=255)
 

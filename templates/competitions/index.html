@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<ul>
+{% for competition in competitions %}
+<li>{{ competition }}</li>
+{% endfor %}
+</ul>
+
+{% endblock %}

@@ -2,6 +2,7 @@ from django.db import models
 
 from s2.teams.models import Team
 from s2.bios.models import Bio
+from s2.competitions.models import Competition, Season
 
 
 
@@ -21,11 +22,8 @@ class Stat(models.Model):
     player = models.ForeignKey(Bio)
     team = models.ForeignKey(Team)
 
-    # Convert these soon.
-    # It seems like there should be only one
-    # competition field.
-    competition = models.CharField(max_length=255)
-    season = models.CharField(max_length=255)
+    competition = models.ForeignKey(Competition)
+    season = models.ForeignKey(Season)
 
     minutes = models.IntegerField(null=True, blank=True)
     games_started = models.IntegerField(null=True, blank=True)

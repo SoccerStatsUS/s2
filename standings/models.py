@@ -1,13 +1,14 @@
 from django.db import models
 
 from s2.teams.models import Team
+from s2.competitions.models import Competition, Season
 
 
 class Standing(models.Model):
 
     team = models.ForeignKey(Team)
-    competition = models.CharField(max_length=255)
-    season = models.CharField(max_length=255)
+    competition = models.ForeignKey(Competition)
+    season = models.ForeignKey(Season)
 
     wins = models.IntegerField()
     losses = models.IntegerField()

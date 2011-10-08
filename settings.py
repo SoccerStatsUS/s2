@@ -100,6 +100,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     's2.bios',
+    's2.competitions',
     's2.dates',
     's2.games',
     's2.goals',

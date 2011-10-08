@@ -10,6 +10,7 @@ from django.db.utils import IntegrityError
 
 from s2 import settings
 from s2.bios.models import Bio
+from s2.competitions.models import Competition, Season
 from s2.games.models import Game
 from s2.goals.models import Goal
 from s2.lineups.models import Appearance
@@ -60,8 +61,9 @@ def load_standings():
     for standing in soccer_db.standings.find():
         standing.pop('_id')
         team_string = standing.pop('name')
-        team = Team.objects.find(team_string, create=True)
-        standing['team'] = team
+        standing['team'] = Team.objects.find(team_string, create=True)
+        standing['competition'] = Competition.objects.find(standing['competition'])
+        standing['season'] = Season.objects.find(standing['season'], standing['competition'])
         Standing.objects.create(**standing)
 
 
@@ -92,6 +94,8 @@ def load_games():
     print "loading games\n"
 
     for game in soccer_db.games.find():
+        game['competition'] = Competition.objects.find(game['competition'])
+        game['season'] = Season.objects.find(game['season'], game['competition'])
         game['home_team'] = Team.objects.find(game['home_team'], create=True)
         game['away_team'] = Team.objects.find(game['away_team'], create=True)
         game.pop('_id')
@@ -218,13 +222,17 @@ def load_stats():
         for k in 'goals', 'assists':
             if stat.get(k) == '':
                 stat[k] = 0
+
+        competition = Competition.objects.find(stat['competition'])
+        season = Season.objects.find(stat['season'], competition)
+
         
         try:
             d = {
                 'player': bio,
                 'team': team,
-                'competition': stat.get('competition'),
-                'season': stat.get('season'),
+                'competition': competition,
+                'season': season,
                 'games_started': stat.get('games_started'),
                 'games_played': stat.get('games_played'),
                 'minutes': stat.get('minutes'),
