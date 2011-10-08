@@ -22,10 +22,9 @@
   {% for goal in game.goal_set.all %}
   <tr>
     <td>{{ goal.team }}</td>
-    <td>{{ goal.player }}</td>
+    <td><a href="{% url person_detail goal.player.id %}">{{ goal.player }}</a></td>
     <td>{{ goal.minute }}</td>
     <td></td>
-  </tr>
   {% endfor %}
 </table>
 

@@ -33,6 +33,29 @@
   {% endfor %}
 </table>
 
+
+<h3>goals</h3>
+
+
+<table>
+  <tr>
+    <th>Game</th>
+    <th>Team</th>
+    <th>Minute</th>
+    <th>Assists</th>
+  </tr>
+
+  {% for goal in bio.goal_set.all %}
+  <tr>
+    <td><a href="{% url game_detail goal.game.id %}">{{ goal.game }}</a></td>
+    <td>{{ goal.team }}</td>
+
+    <td>{{ goal.minute }}</td>
+    <td></td>
+  {% endfor %}
+</table>
+
+
 <h3>appearances</h3>
 <table>
   <tr>
