@@ -14,7 +14,7 @@ class RealTeamManager(models.Manager):
 
 class TeamManager(models.Manager):
 
-    def find(self, name):
+    def find(self, name, create=False):
         """
         Given a team name, determine the actual team.
         """
@@ -27,12 +27,18 @@ class TeamManager(models.Manager):
         if teams:
             return teams[0]
 
-        print "Creating %s" % name
-        team = Team.objects.create(
-            name=name, 
-            short_name=name, 
-            slug=slugify(name))
-        return team
+        if create:
+            print "Creating %s" % name
+            team = Team.objects.create(
+                name=name, 
+                short_name=name, 
+                slug=slugify(name))
+            return team
+        else:
+            # Don't want to be creating teams all the time.
+            raise
+
+
 
 
 class Team(models.Model):

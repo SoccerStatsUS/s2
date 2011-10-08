@@ -37,7 +37,7 @@ class Goal(models.Model):
     objects = GoalManager()
     
     class Meta:
-        ordering = ('date', 'team', 'minute')
+        ordering = ('date', 'minute', 'team')
  
 
     def __unicode__(self):

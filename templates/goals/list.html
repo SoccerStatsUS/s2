@@ -2,10 +2,21 @@
 
 {% block content %}
 
-<ul>
+<table>>
+  <tr>
+    <th>Date</th>
+    <th>Team</th>
+    <th>Player</th>
+    <th>Minute</th>
+  </tr>
 {% for goal in goals %}
-<li>{{ goal }}</li>
+  <tr>
+    <td>{{ goal.date }}</td>
+    <td><a href="{% url team_detail goal.team.id %}">{{ goal.team }}</a></td>
+    <td><a href="{% url person_detail goal.player.id %}">{{ goal.player }}</a></td>
+    <td>{{ goal.minute }}</td>
+  </tr>
 {% endfor %}
-</ul>
+</table>
 
 {% endblock %}

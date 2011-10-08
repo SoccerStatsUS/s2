@@ -33,5 +33,29 @@
   {% endfor %}
 </table>
 
+<h3>appearances</h3>
+<table>
+  <tr>
+    <th>competition</th>
+    <th>game</th>
+    <th>team</th>
+    <th>date</th>
+    <th>on</th>
+    <th>off</th>
+  <tr>
+
+  {% for appearance in bio.appearance_set.all %}
+  <tr>
+    <td>{{ appearance.game.competition }}</td>
+    <td><a href="{% url game_detail appearance.game.id %}">{{ appearance.game }}</a></td>
+    <td><a href="{% url team_detail appearance.team.id %}">{{ appearance.team }}</a></td>
+    <td>{{ appearance.game.date }}</td>
+    <td>{{ appearance.on }}
+    <td>{{ appearance.off }}
+  </tr>
+  {% endfor %}
+</table>
+
+    
 
 {% endblock %}

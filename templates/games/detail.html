@@ -8,4 +8,47 @@
 
 {{ game }}
 
+
+<h3>Goals</h3>
+
+<table>
+  <tr>
+    <th>Team</th>
+    <th>Player</th>
+    <th>Minute</th>
+    <th>Assists</th>
+  </tr>
+
+  {% for goal in game.goal_set.all %}
+  <tr>
+    <td>{{ goal.team }}</td>
+    <td>{{ goal.player }}</td>
+    <td>{{ goal.minute }}</td>
+    <td></td>
+  </tr>
+  {% endfor %}
+</table>
+
+<h3>Lineups</h3>
+
+<table>
+  <tr>
+    <th>Date</th>
+    <th>Team</th>
+    <th>Player</th>
+    <th>On</th>
+    <th>Off</th>
+  </tr>
+
+  {% for appearance in game.appearance_set.all %}
+  <tr>
+    <td>{{ appearance.game.date }}</td>
+    <td><a href="{% url game_detail appearance.team.id %}">{{ appearance.team }}</a></td>
+    <td><a href="{% url person_detail appearance.player.id %}">{{ appearance.player }}</a></td>
+    <td>{{ appearance.on }}</td>
+    <td>{{ appearance.off }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
 {% endblock %}
