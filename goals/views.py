@@ -9,6 +9,7 @@ def goals_index(request):
     goals = Goal.objects.order_by("-date")[:50]
     context = {
         'goals': goals,
+        'frequency': sorted(Goal.objects.frequency().items()),
         }
     return render_to_response("goals/list.html",
                               context,
