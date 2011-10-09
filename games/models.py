@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.db import models
 
 from s2.teams.models import Team
@@ -19,6 +21,17 @@ class GameManager(models.Manager):
                 game = None
 
         return game
+
+
+    def duplicate_games(self):
+        d = defaultdict(list)
+        for e in self.get_query_set():
+            k1 = (e.home_team, e.date)
+            d[k1].append(e)
+            k2 = (e.away_team, e.date)
+            d[k2].append(e)
+        return sorted([e for e in  d.values() if len(e) > 1])
+
             
 
 class Game(models.Model):

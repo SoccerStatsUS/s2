@@ -5,7 +5,11 @@ urlpatterns = patterns('s2.games.views',
                            'games_index',
                            name='games_index'),
 
-                       url(r'^game/(?P<game_id>\d+)/$',
+                       url(r'^bad$',
+                           'bad_games',
+                           name='bad_games'),
+
+                       url(r'^(?P<game_id>\d+)/$',
                            'game_detail',
                            name='game_detail'),
 

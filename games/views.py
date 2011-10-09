@@ -3,6 +3,30 @@ from django.template import RequestContext
 
 from s2.games.models import Game
 
+def homepage(request):
+    """
+    The site homepage.
+    """
+    games = Game.objects.order_by("-date")[:50]
+    context = {
+        'games': games,
+        }
+    return render_to_response("homepage.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+def bad_games(request):
+    
+    context = {
+        'duplicate_games': Game.objects.duplicate_games(),
+        }
+
+    return render_to_response("games/bad.html",
+                              context,
+                              context_instance=RequestContext(request)
+                              )    
+
+    
 
 def games_index(request):
     # Add a paginator.
