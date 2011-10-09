@@ -1,21 +1,14 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 
-from s2.stats.modesl import Stat
+from s2.stats.models import Stat
 
 
 def stats_index(request):
-    stats = Stat.objects.all()
     context = {
-        'stats': stats,
+        'stats': Stat.career_stats.all(),
         }
     return render_to_response("stats/list.html",
                               context,
                               context_instance=RequestContext(request))
 
-def stats_detail(request):
-    pass
-
-
-# Need to figure out how else to show stats.
-# Probably set up a fancy team page next.

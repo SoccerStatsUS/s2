@@ -5,6 +5,23 @@ from s2.bios.models import Bio
 from s2.competitions.models import Competition, Season
 
 
+class CareerStatsManager(models.Manager):
+
+    def get_query_set(self):
+        return super(CareerStatsManager, self).get_query_set().filter(team=None, season=None)
+
+
+class TeamStatsManager(models.Manager):
+
+    def get_query_set(self):
+        return super(TeamStatsManager, self).get_query_set().filter(season=None).exclude(team=None)
+
+
+class StatsManager(models.Manager):
+
+    def get_query_set(self):
+        return super(StatsManager, self).get_query_set().exclude(team=None, season=None)
+
 
 class Stat(models.Model):
     """
@@ -36,6 +53,11 @@ class Stat(models.Model):
     fouls_suffered = models.IntegerField(null=True, blank=True)
     yellow_cards = models.IntegerField(null=True, blank=True)
     red_cards = models.IntegerField(null=True, blank=True)
+
+    objects = StatsManager()
+    team_stats = TeamStatsManager()
+    career_stats = CareerStatsManager()
+
 
     class Meta:
         ordering = ('season__name', 'competition', 'player')
