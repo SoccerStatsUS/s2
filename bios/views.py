@@ -20,6 +20,19 @@ def person_index(request):
     return person_list_generic(request, people)
 
 
+def bad_bios(request):
+    
+    context = {
+        'duplicate_slugs': Bio.objects.duplicate_slugs(),
+        }
+
+    return render_to_response("bios/bad.html",
+                              context,
+                              context_instance=RequestContext(request)
+                              )    
+                              
+
+
 def person_detail(request, slug):
     bio = Bio.objects.get(slug=slug)
     context = {

@@ -23,9 +23,26 @@
 
   {% for stat in bio.stat_set.all %}
   <tr>
-    <td>{{ stat.competition }}</td>
-    <td>{{ stat.season }}</td>
+    {% if stat.competition %}
+    <td><a href="{% url competition_detail stat.competition.id %}">{{ stat.competition }}</a></td>
+    {% else %}
+    <td></td>
+    {% endif %}
+
+    {% if stat.season %}
+    <td><a href="{% url season_detail stat.season.id %}">{{ stat.season.name }}</a></td>
+    {% else %}
+    <td></td>
+    {% endif %}
+
+    {% if stat.team %}
     <td><a href="{% url team_detail stat.team.slug %}">{{ stat.team }}</a></td>
+    {% else %}
+    <td></td>
+    {% endif %}
+
+
+
     <td>{{ stat.games_started }}</td>
     <td>{{ stat.goals }}</td>
     <td>{{ stat.minutes }}</td>

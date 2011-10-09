@@ -1,18 +1,29 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 
+from collections import defaultdict
+
 class BioManager(models.Manager):
 
     def find(self, name):
         """
         Given a team name, determine the actual team.
         """
+        if name == '':
+            import pdb; pdb.set_trace()
         
         bios = Bio.objects.filter(name=name)
         if bios:
             return bios[0]
         else:
             return Bio.objects.create(name=name)
+
+
+    def duplicate_slugs(self):
+        d = defaultdict(list)
+        for e in self.get_query_set():
+            d[e.slug].append(e.name)
+        return [(k, v) for (k, v) in d.items() if len(v) > 1]
 
 
 class Bio(models.Model):
