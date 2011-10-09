@@ -18,6 +18,8 @@ from s2.teams.models import Team
 from s2.stats.models import Stat
 from s2.standings.models import Standing
 
+from s2 import generate
+
 connection = pymongo.Connection()
 soccer_db = connection.soccer
 
@@ -26,6 +28,7 @@ soccer_db = connection.soccer
 def build():
     delete()
     load()
+    generate()
 
 @transaction.commit_on_success
 def delete():
@@ -45,6 +48,7 @@ def load():
 
 
 
+
 # These all just apply some very basic formatting 
 # and apply foreign keys.
 
@@ -56,6 +60,8 @@ def load_teams():
         team.pop('_id')
         Team.objects.create(**team)
 
+
+@transaction.commit_on_success
 def load_standings():
     print "loading standings\n"
     for standing in soccer_db.standings.find():
@@ -154,6 +160,10 @@ def load_lineups():
 
         # Setting find functions to memoize should to the same job.
         # Don't create all those extra references if not necessary.
+        if not a['player']:
+            print a
+            return None
+
         if a['team'] in teams:
             team = teams[a['team']]
         else:
@@ -266,6 +276,7 @@ def get_unloaded_teams():
             Team.objects.find(e)
         except:
             print e
+
     
 
 
