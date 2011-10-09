@@ -7,9 +7,8 @@ def homepage(request):
     """
     The site homepage.
     """
-    games = Game.objects.order_by("-date")[:50]
     context = {
-        'games': games,
+        'games': Game.objects.all()[:50],
         }
     return render_to_response("homepage.html",
                               context,

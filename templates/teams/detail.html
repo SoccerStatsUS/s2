@@ -11,9 +11,6 @@
   <h4>Website</h4>
 
 
-# Current stats
-
-
 <h3>stats</h3>
 <table>
   <tr>
@@ -26,7 +23,7 @@
     <th>shots</th>
   </tr>
 
-  {% for stat in team.team_stats %}
+  {% for stat in stats %}
   <tr>
     <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
     <td>{{ stat.games_played }}</td>
@@ -69,13 +66,6 @@
   {% endfor %}
 
 </table>
-
-<h3>bios</h3>
-<ul>
-  {% for bio in team.roster %}
-  <li><a href="{% url person_detail bio.slug %}">{{ bio.name }}</a></li>
-  {% endfor %}
-</ul>
 
 <h3>games</h3>
 <table>
