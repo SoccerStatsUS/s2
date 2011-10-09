@@ -18,6 +18,11 @@ class Appearance(models.Model):
     class Meta:
         ordering = ('game', )
 
+    @property
+    def age(self):
+        if self.player.bio.birthdate:
+            return self.date - self.player.bio.birthdate
+
 
     def opponent(self):
         if self.team == self.game.home_team:
