@@ -58,6 +58,9 @@ class Stat(models.Model):
     team_stats = TeamStatsManager()
     career_stats = CareerStatsManager()
 
+    def __unicode__(self):
+        return "%s, %s, %s, %s" % (self.player, self.team, self.competition, self.season)
+
 
     class Meta:
         ordering = ('season__name', 'competition', 'player')

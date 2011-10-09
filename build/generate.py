@@ -13,7 +13,7 @@ def generate():
     Generate stats.
     """
     generate_career_stats()
-    generate_team_stats()
+    #generate_team_stats()
 
 
 @transaction.commit_on_success
@@ -39,6 +39,8 @@ def generate_career_stats():
                     else:
                         d[key] = value
 
+
+
     for stat in stat_dict.values():
         stat.update({
                 'team_id': None,
@@ -46,7 +48,9 @@ def generate_career_stats():
                 'season_id': None,
                 })
         stat.pop('id')
-        Stat.objects.create(**stat)
+        s = Stat.objects.create(**stat)
+        print s
+        print s.id
         
 
 

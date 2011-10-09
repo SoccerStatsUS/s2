@@ -54,6 +54,15 @@ class Bio(models.Model):
         super(Bio, self).save(*args, **kwargs)
 
 
+    def career_stat(self):
+        from s2.stats.models import Stat
+        c = Stat.career_stats.filter(player=self)
+        if c:
+            return c[0]
+        else:
+            return None
+
+
 
         
     def __unicode__(self):

@@ -16,38 +16,44 @@
     <th>competition</th>
     <th>season</th>
     <th>team</th>
-    <th>games started</th>
+    <th>gp</th>
+    <th>gs</th>
+    <th>min</th>
     <th>goals</th>
-    <th>minutes</th>
+    <th>assists</th>
+    <th>shots</th>
   </tr>
 
   {% for stat in bio.stat_set.all %}
   <tr>
-    {% if stat.competition %}
     <td><a href="{% url competition_detail stat.competition.id %}">{{ stat.competition }}</a></td>
-    {% else %}
-    <td></td>
-    {% endif %}
-
-    {% if stat.season %}
     <td><a href="{% url season_detail stat.season.id %}">{{ stat.season.name }}</a></td>
-    {% else %}
-    <td></td>
-    {% endif %}
-
-    {% if stat.team %}
     <td><a href="{% url team_detail stat.team.slug %}">{{ stat.team }}</a></td>
-    {% else %}
-    <td></td>
-    {% endif %}
-
-
-
+    <td>{{ stat.games_played }}</td>
     <td>{{ stat.games_started }}</td>
-    <td>{{ stat.goals }}</td>
     <td>{{ stat.minutes }}</td>
+    <td>{{ stat.goals }}</td>
+    <td>{{ stat.assists }}</td>
+    <td>{{ stat.shots }}</td>
   </tr>
   {% endfor %}
+
+  {% with stat=bio.career_stat %}
+  {% if stat %}
+  <tr>
+    <td>Career</td>
+    <td></td>
+    <td></td>
+    <td>{{ stat.games_played }}</td>
+    <td>{{ stat.games_started }}</td>
+    <td>{{ stat.minutes }}</td>
+    <td>{{ stat.goals }}</td>
+    <td>{{ stat.assists }}</td>
+    <td>{{ stat.shots }}</td>
+  </tr>
+  {% endif %}
+  {% endwith %}
+
 </table>
 
 
@@ -71,8 +77,8 @@
     <td><a href="{% url team_detail goal.team.slug %}">{{ goal.team }}</a></td>
     <td><a href="{% url team_detail goal.opponent.slug %}">{{ goal.opponent }}</a></td>
     <td><a href="{% url game_detail goal.game.id %}">{{ goal.game.score }}</a></td>
-
   {% endfor %}
+  
 </table>
 
 
