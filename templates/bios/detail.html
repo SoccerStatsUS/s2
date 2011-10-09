@@ -24,7 +24,7 @@
     <th>shots</th>
   </tr>
 
-  {% for stat in bio.stat_set.all %}
+  {% for stat in bio.season_stats %}
   <tr>
     <td><a href="{% url competition_detail stat.competition.id %}">{{ stat.competition }}</a></td>
     <td><a href="{% url season_detail stat.season.id %}">{{ stat.season.name }}</a></td>

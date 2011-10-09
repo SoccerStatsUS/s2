@@ -11,6 +11,12 @@ class CareerStatsManager(models.Manager):
         return super(CareerStatsManager, self).get_query_set().filter(team=None, season=None)
 
 
+class CompetitionStatsManager(models.Manager):
+
+    def get_query_set(self):
+        return super(CompetitionStatsManager, self).get_query_set().filter(team=None).exclude(competition=None)
+
+
 class TeamStatsManager(models.Manager):
 
     def get_query_set(self):
@@ -20,7 +26,7 @@ class TeamStatsManager(models.Manager):
 class StatsManager(models.Manager):
 
     def get_query_set(self):
-        return super(StatsManager, self).get_query_set().exclude(team=None, season=None)
+        return super(StatsManager, self).get_query_set().exclude(team=None).exclude(season=None)
 
 
 class Stat(models.Model):
@@ -57,9 +63,11 @@ class Stat(models.Model):
     objects = StatsManager()
     team_stats = TeamStatsManager()
     career_stats = CareerStatsManager()
+    competition_stats = CompetitionStatsManager()
 
     def __unicode__(self):
-        return "%s, %s, %s, %s" % (self.player, self.team, self.competition, self.season)
+        return "stat"
+        #return "%s, %s, %s, %s" % (self.player, self.team, self.competition, self.season)
 
 
     class Meta:

@@ -54,6 +54,10 @@ class Bio(models.Model):
         super(Bio, self).save(*args, **kwargs)
 
 
+    def season_stats(self):
+        return self.stat_set.exclude(team=None).exclude(season=None)
+
+
     def career_stat(self):
         from s2.stats.models import Stat
         c = Stat.career_stats.filter(player=self)
