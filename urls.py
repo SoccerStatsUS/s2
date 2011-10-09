@@ -5,8 +5,10 @@ from django.views.generic.simple import direct_to_template
 
 admin.autodiscover()
 
+
 urlpatterns = patterns('',
-                       url(r'^$', direct_to_template, {'template': 'index.html'}),
+                       #url(r'^$', direct_to_template, {'template': 'index.html'}),
+                       url(r"^$", "s2.games.views.homepage", name="home"),
                        url(r'^bios/', include('s2.bios.urls')),
                        url(r'^competitions/', include('s2.competitions.urls')),
                        url(r'^games/', include('s2.games.urls')),
