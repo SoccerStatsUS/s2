@@ -9,7 +9,11 @@ from s2.stats.models import Stat
 
 
 def generate():
-    generate_stats()
+    """
+    Generate stats.
+    """
+    generate_career_stats()
+    generate_team_stats()
 
 
 @transaction.commit_on_success

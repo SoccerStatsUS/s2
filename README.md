@@ -13,6 +13,7 @@ Also, this will allow geoDjango support.
 
 Some of the main problems with this site:
 
+1. Caching with redis.
 2. Need better testing.
 3. Need much better facilities for managing duplicate (players/leagues/teams/games)
 4. Maybe an alias model that maps a name to a generic foreign key? Unique on the name/gfk combination.
