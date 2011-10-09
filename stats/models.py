@@ -38,6 +38,6 @@ class Stat(models.Model):
     red_cards = models.IntegerField(null=True, blank=True)
 
     class Meta:
-        ordering = ('season__name', 'competition')
+        ordering = ('season__name', 'competition', 'player')
         #unique_together = ('player', 'team', 'competition', 'season')
 

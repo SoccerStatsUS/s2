@@ -111,4 +111,4 @@ class Team(models.Model):
 
     def team_stats(self):
         from stats.models import Stat
-        return Stat.objects.filter(team=self, competition=None, season=None)
+        return Stat.objects.filter(team=self, competition=None, season=None).exclude(minutes=0)

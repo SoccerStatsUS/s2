@@ -5,6 +5,7 @@ from django.db import models
 from s2.teams.models import Team
 from s2.competitions.models import Competition, Season
 
+
 class GameManager(models.Manager):
 
     def find(self, team, date):
@@ -24,6 +25,9 @@ class GameManager(models.Manager):
 
 
     def duplicate_games(self):
+        """
+        Get a list of games where a team plays twice on the same day.
+        """
         d = defaultdict(list)
         for e in self.get_query_set():
             k1 = (e.home_team, e.date)

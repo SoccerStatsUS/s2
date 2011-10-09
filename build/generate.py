@@ -13,7 +13,7 @@ def generate():
 
 
 @transaction.commit_on_success
-def generate_stats():
+def generate_career_stats():
     print "Generating stats"
 
 
@@ -45,12 +45,15 @@ def generate_stats():
         Stat.objects.create(**stat)
         
 
+
+@transaction.commit_on_success
+def generate_team_stats():
+    stat_dict = {}
     print "Generating team stats."
     teams = Team.objects.all()
     for team in teams:
         print "Generating for %s" % team
         stats = Stat.objects.filter(team=team)
-        stat_dict = {}
         for stat in stats.values():
             key = (stat['player_id'], stat['team_id'])
             # This should set team and player appropriately.
@@ -67,6 +70,8 @@ def generate_stats():
                                 d[key] += value
                         else:
                             d[key] = value
+
+
 
     for key, stat in stat_dict.items():
         print key
