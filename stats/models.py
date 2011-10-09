@@ -19,11 +19,11 @@ class Stat(models.Model):
     # Standings should sort of be generated the same way.
     
 
-    player = models.ForeignKey(Bio)
-    team = models.ForeignKey(Team)
+    player = models.ForeignKey(Bio, null=True)
+    team = models.ForeignKey(Team, null=True)
 
-    competition = models.ForeignKey(Competition)
-    season = models.ForeignKey(Season)
+    competition = models.ForeignKey(Competition, null=True)
+    season = models.ForeignKey(Season, null=True)
 
     minutes = models.IntegerField(null=True, blank=True)
     games_started = models.IntegerField(null=True, blank=True)
@@ -38,5 +38,5 @@ class Stat(models.Model):
     red_cards = models.IntegerField(null=True, blank=True)
 
     class Meta:
-        ordering = ('season', 'competition')
+        ordering = ('season__name', 'competition')
         #unique_together = ('player', 'team', 'competition', 'season')

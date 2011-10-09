@@ -2,11 +2,9 @@
 
 {% block content %}
 
-{{ game.date }}
+<h4>{{ game.date }}</h4>
 
-{{ game.score }}
-
-{{ game }}
+<h3>{{ game.home_team  }} {{ game.score }} {{ game.away_team }}</h3>
 
 
 <h3>Goals</h3>
@@ -21,7 +19,7 @@
 
   {% for goal in game.goal_set.all %}
   <tr>
-    <td>{{ goal.team }}</td>
+    <td><a href="{% url team_detail goal.team.slug %}">{{ goal.team }}</a></td>
     <td><a href="{% url person_detail goal.player.slug %}">{{ goal.player }}</a></td>
     <td>{{ goal.minute }}</td>
     <td></td>

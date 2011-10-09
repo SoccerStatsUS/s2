@@ -2,15 +2,20 @@
 
 {% block content %}
 
-<ul>
-  <li>Name: {{ team.name }}</li>
-  <li>Founded: {{ team.founded }}</li>
-</ul>
+  <h2>{{ team.name }}</h2>
+  <h4>est. {{ team.founded }}</h4>
+  <h4>Logo</h4>
+  <h4>Current coach</h4>
+  <h4>Stadium</h4>
+  <h4>Owner</h4>
+  <h4>Website</h4>
+
+
+# Current stats
 
 <h3>standings</h3>
 <table>
   <tr>
-    <th>Team</th>
     <th>competition</th>
     <th>season</th>
     <th>wins</th>
@@ -23,9 +28,8 @@
 
   {% for standing in team.standing_set.all %}
   <tr>
-    <td>{{ standing.team }}</td>
-    <td>{{ standing.competition }}</td>
-    <td>{{ standing.season }}</td>
+    <td><a href="{% url competition_detail standing.competition.id %}">{{ standing.competition }}</a></td>
+    <td><a href="{% url season_detail standing.season.id %}">{{ standing.season.name }}</a></td>
     <td>{{ standing.wins }}</td>
     <td>{{ standing.ties }}</td>
     <td>{{ standing.losses }}</td>

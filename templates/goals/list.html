@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<table>>
+<table>
   <tr>
     <th>Date</th>
     <th>Team</th>
@@ -17,6 +17,19 @@
     <td>{{ goal.minute }}</td>
   </tr>
 {% endfor %}
+</table>
+
+<table>
+  <tr>
+    <th>minute</th>
+    <th>count</th>
+  </tr>
+  {% for minute, count in frequency %}
+  <tr>
+    <td>{{ minute }}</td>
+    <td>{{ count }}</td>
+  </tr>
+  {% endfor %}
 </table>
 
 {% endblock %}

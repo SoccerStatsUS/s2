@@ -1,6 +1,8 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 
+import datetime
+
 
 class DefunctTeamManager(models.Manager):
     def get_query_set(self):
@@ -13,6 +15,11 @@ class RealTeamManager(models.Manager):
 
 
 class TeamManager(models.Manager):
+
+    def recent_games(self, delta=datetime.timedelta(days=100)):
+        since = datetime.date.today() - delta
+        return self.get_query_set().filter(date__gte=since)
+                         
 
     def find(self, name, create=False):
         """

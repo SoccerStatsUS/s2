@@ -5,6 +5,8 @@
 
 <h3>{{ season }}</h3>
 
+<h2>Awards</h3>
+
 <table>
   <tr>
     <th>team</th>
@@ -25,7 +27,44 @@
   {% endfor %}
 </table>
 
+<table>
+  <tr>
+    <th>player</th>
+    <th>team</th>
+    <th>minutes</th>
+    <th>goals</th>
+  </tr>
 
+  {% for stat in season.stat_set.all %}
+  <tr>
+    <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
+    <td><a href="{% url team_detail stat.team.slug %}">{{ stat.team }}</a></td>
+    <td>{{ stat.minutes }}</td>
+    <td>{{ stat.goals }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<table>
+  <tr>
+    <th>date</th>
+    <th>home team</th>
+    <th>score</th>
+    <th>away team</th>
+    <th>location</th>
+  </tr>
+
+
+  {% for game in season.game_set.all %}
+  <tr>
+    <td>{{ game.date }}</td>
+    <td><a href="{% url team_detail game.home_team.slug %}">{{ game.home_team }}</a></td>
+    <td><a href="{% url game_detail game.id %}">{{ game.score }}</a></td>
+    <td><a href="{% url team_detail game.away_team.slug %}">{{ game.away_team }}</a></td>
+    <td>{{ game.location }}</td>
+  </tr>
+  {% endfor %}
+</table>
 
 
 {% endblock %}
