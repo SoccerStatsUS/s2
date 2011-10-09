@@ -107,3 +107,8 @@ class Team(models.Model):
     def game_set(self):
         from s2.games.models import Game
         return Game.objects.filter(models.Q(home_team=self) | models.Q(away_team=self))
+
+
+    def team_stats(self):
+        from stats.models import Stat
+        return Stat.objects.filter(team=self, competition=None, season=None)

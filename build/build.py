@@ -18,7 +18,7 @@ from s2.teams.models import Team
 from s2.stats.models import Stat
 from s2.standings.models import Standing
 
-from s2 import generate
+from generate import generate
 
 connection = pymongo.Connection()
 soccer_db = connection.soccer

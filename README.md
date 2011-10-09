@@ -1,33 +1,21 @@
 
-# Remove main/
-
-# Goals by minute?
-
-# Career stats on team detail page.
-
 #### Todo
 
-! Delete Salvadorean league. It's a duplicate!
-
-Create a team ranking system based on the scores!
+Create a team ranking system based on the scores.
 Soccermetrics!
 
 Need an aliases model.
 
-Start out with World Cup and Champions League! and EPL! and Italy!
-
 Time to migrate to postgresql. SQLite doesn't support unique constraints.
-Also, this will allow geoDjango support!
+Also, this will allow geoDjango support.
 
 #### Bugs
 
 Some of the main problems with this site:
 
-1. Need a stronger scraping infrastructure.
 2. Need better testing.
 3. Need much better facilities for managing duplicate (players/leagues/teams/games)
-
-5. Maybe an alias model that maps a name to a generic foreign key? Unique on the name/gfk combination.
+4. Maybe an alias model that maps a name to a generic foreign key? Unique on the name/gfk combination.
 
 
 #### Stats

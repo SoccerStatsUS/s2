@@ -40,3 +40,4 @@ class Stat(models.Model):
     class Meta:
         ordering = ('season__name', 'competition')
         #unique_together = ('player', 'team', 'competition', 'season')
+
