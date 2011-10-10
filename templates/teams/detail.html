@@ -11,33 +11,6 @@
   <h4>Website</h4>
 
 
-<h3>stats</h3>
-<table>
-  <tr>
-    <th>player</th>
-    <th>gp</th>
-    <th>gs</th>
-    <th>min</th>
-    <th>goals</th>
-    <th>assists</th>
-    <th>shots</th>
-  </tr>
-
-  {% for stat in stats %}
-  <tr>
-    <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
-    <td>{{ stat.games_played }}</td>
-    <td>{{ stat.games_started }}</td>
-    <td>{{ stat.minutes }}</td>
-    <td>{{ stat.goals }}</td>
-    <td>{{ stat.assists }}</td>
-    <td>{{ stat.shots }}</td>
-
-  </tr>
-  {% endfor %}
-</table>
-
-
 <h3>standings</h3>
 <table>
   <tr>
@@ -66,6 +39,36 @@
   {% endfor %}
 
 </table>
+
+
+
+<h3>stats</h3>
+<table>
+  <tr>
+    <th>player</th>
+    <th>gp</th>
+    <th>gs</th>
+    <th>min</th>
+    <th>goals</th>
+    <th>assists</th>
+    <th>shots</th>
+  </tr>
+
+  {% for stat in stats %}
+  <tr>
+    <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
+    <td>{{ stat.games_played }}</td>
+    <td>{{ stat.games_started }}</td>
+    <td>{{ stat.minutes }}</td>
+    <td>{{ stat.goals }}</td>
+    <td>{{ stat.assists }}</td>
+    <td>{{ stat.shots }}</td>
+
+  </tr>
+  {% endfor %}
+</table>
+
+
 
 <h3>games</h3>
 <table>
