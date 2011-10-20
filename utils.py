@@ -1,9 +1,44 @@
 import datetime
 import difflib
 
+from django.db import connection, transaction
+
+
 from s2.bios.models import Bio
 
 # http://wiki.python.org/moin/PythonDecoratorLibrary#Memoize
+
+
+def insert_sql_pg(table, dict_list):
+   # SQLITE does not support multiple row insertion?
+   formatter = lambda l: "(%s)" % ",".join(["'%s'" % unicode(e) for e in l])
+   fields = dict_list[0].keys()
+   make_values = lambda d: "%s" % formatter([d[field] for field in fields])
+   values = [make_values(e) for e in dict_list]
+   value_string = ", ".join([unicode(e) for e in  values])
+   sql = "INSERT INTO %s %s VALUES %s;" % (table, formatter(fields), value_string)
+   cursor = connection.cursor()
+   return cursor.execute(sql)
+
+
+def insert_sql(table, dict_list):
+   if len(dict_list) == 0:
+      return
+   elif len(dict_list) > 1:
+      for d in dict_list:
+         insert_sql(table, [d])
+
+
+   else:
+      formatter = lambda l: "(%s)" % ",".join(["'%s'" % unicode(e) for e in l])
+      fields = dict_list[0].keys()
+      make_values = lambda d: "%s" % formatter([d[field] for field in fields])
+      values = [make_values(e) for e in dict_list]
+      value_string = ", ".join([unicode(e) for e in  values])
+      sql = "INSERT INTO %s %s VALUES %s;" % (table, formatter(fields), value_string)
+      cursor = connection.cursor()
+      return cursor.execute(sql)
+
 
 class memoized(object):
    """
