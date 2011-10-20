@@ -15,6 +15,8 @@ from s2.teams.models import Team
 from s2.stats.models import Stat
 from s2.standings.models import Standing
 
+from s2.utils import insert_sql
+
 
 connection = pymongo.Connection()
 soccer_db = connection.soccer
@@ -29,7 +31,7 @@ def load():
     load_games()
     load_goals()
     load_stats()
-    #load_lineups()
+    load_lineups()
 
 
 # These all just apply some very basic formatting 
@@ -88,6 +90,7 @@ def load_games():
         game['home_team'] = Team.objects.find(game['home_team'], create=True)
         game['away_team'] = Team.objects.find(game['away_team'], create=True)
         game.pop('_id')
+        game.pop('url')
 
         if 'year' in game:
             game.pop('year')
@@ -102,31 +105,100 @@ def load_games():
 @transaction.commit_on_success
 def load_goals():
     print "loading goals\n"
+    # Use a sql insert here also.
+    # Use dicts for team, game, bio.
+    teams = Team.objects.team_dict()
+    games = Game.objects.game_dict()
+    bios = Bio.objects.bio_dict()
+
+
+    l = []
 
     def create_goal(goal):
-        team = Team.objects.find(goal['team'])
-        game = Game.objects.find(team=team, date=goal['date'])
-        bio = Bio.objects.find(name=goal['player'])
+        team = goal['team']
+        if goal['team'] in teams:
+            team_id = teams[team]
+        else:
+            team_id = Team.objects.find(team).id
+            teams[team] = team_id
 
-        if game:
-            try:
-                Goal.objects.create(**{
+        player = goal['player']
+        if player in bios:
+            bio_id = bios[player]
+        else:
+            bio_id = Bio.objects.find(player).id
+            bios[player] = bio_id
+
+        game_key = (team_id, goal['date'])
+        if game_key in games:
+            game_id = games[game_key]
+        else:
+            game_id = None
+
+
+        if game_id:
+                l.append({
                         'date': goal['date'],
                         'minute': goal['minute'],
-                        'team': team,
-                        'player': bio,
-                        'game': game,
+                        'team_id': team_id,
+                        'player_id': bio_id,
+                        'game_id': game_id,
                         })
-            except:
-                import pdb; pdb.set_trace()
-                x = 5
-        
 
-    # Load this after loading team, game, and bio.
-    for i, goal in enumerate(soccer_db.goals.find()):
-        create_goal(goal)
-        if i % 2000 == 0:
+    insert_sql("games_game", l)
+    
+@transaction.commit_on_success
+def load_stats():
+    # need to create stats with sql as well.
+    print "\nCreating stats\n"
+    l = []
+    for i, stat in enumerate(soccer_db.stats.find()):
+        if i % 1000 == 0:
             print i
+
+        if stat['name'] == '':
+            continue
+
+        # Turn these into dict calls with id's.
+        team = Team.objects.find(stat['team'],create=True)
+        bio = Bio.objects.find(name=stat['name'])
+        competition = Competition.objects.find(stat['competition'])
+        season = Season.objects.find(stat['season'], competition)
+
+
+        # Should be in soccerdata.merge.
+        for k in 'games_started', 'games_played', 'minutes', 'shots', 'shots_on_goal', \
+                'fouls_committed', 'fouls_suffered', 'yellow_cards', 'red_cards':
+            if stat.get(k) == '':
+                stat[k] = None
+
+        for k in 'goals', 'assists':
+            if stat.get(k) == '':
+                stat[k] = 0
+
+
+        
+        l.append({
+            'player_id': bio.id,
+            'team_id': team.id,
+            'competition_id': competition.id,
+            'season_id': season.id,
+            'games_started': stat.get('games_started'),
+            'games_played': stat.get('games_played'),
+            'minutes': stat.get('minutes'),
+            'goals': stat.get('goals'),
+            'assists': stat.get('assists'),
+            'shots': stat.get('shots'),
+            'shots_on_goal': stat.get('shots_on_goal'),
+            'fouls_committed': stat.get('fouls_committed'),
+            'fouls_suffered': stat.get('fouls_suffered'),
+            'yellow_cards': stat.get('yellow_cards'),
+            'red_cards': stat.get('red_cards'),
+            })
+
+    print "Creating appearances"
+    insert_sql("stats_stat", l)
+
 
 
 @transaction.commit_on_success
@@ -171,9 +243,9 @@ def load_lineups():
 
         if game:
             return {
-                'team': team,
-                'game': game,
-                'player': player,
+                'team_id': team.id,
+                'game_id': game.id,
+                'player_id': player.id,
                 'on': a['on'],
                 'off': a['off'],
                 }
@@ -189,57 +261,8 @@ def load_lineups():
             print i
 
     print "Creating appearances"
-    for e in l:
-        Appearance.objects.create(**e)
+    insert_sql("lineups_appearance", l)
         
         
 
-@transaction.commit_on_success
-def load_stats():
-    print "\nCreating stats\n"
-    for i, stat in enumerate(soccer_db.stats.find()):
-        if i % 1000 == 0:
-            print i
-
-        if stat['name'] == '':
-            continue
-
-        team = Team.objects.find(stat['team'],create=True)
-        bio = Bio.objects.find(name=stat['name'])
-
-        # Should be in soccerdata.merge.
-        for k in 'games_started', 'games_played', 'minutes', 'shots', 'shots_on_goal', \
-                'fouls_committed', 'fouls_suffered', 'yellow_cards', 'red_cards':
-            if stat.get(k) == '':
-                stat[k] = None
-
-        for k in 'goals', 'assists':
-            if stat.get(k) == '':
-                stat[k] = 0
-
-        competition = Competition.objects.find(stat['competition'])
-        season = Season.objects.find(stat['season'], competition)
-
         
-        try:
-            d = {
-                'player': bio,
-                'team': team,
-                'competition': competition,
-                'season': season,
-                'games_started': stat.get('games_started'),
-                'games_played': stat.get('games_played'),
-                'minutes': stat.get('minutes'),
-                'goals': stat.get('goals'),
-                'assists': stat.get('assists'),
-                'shots': stat.get('shots'),
-                'shots_on_goal': stat.get('shots_on_goal'),
-                'fouls_committed': stat.get('fouls_committed'),
-                'fouls_suffered': stat.get('fouls_suffered'),
-                'yellow_cards': stat.get('yellow_cards'),
-                'red_cards': stat.get('red_cards'),
-                }
-            Stat.objects.create(**d)
-        except:
-            import pdb; pdb.set_trace()
-            x = 5

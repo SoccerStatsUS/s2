@@ -19,6 +19,14 @@ class TeamManager(models.Manager):
     def recent_games(self, delta=datetime.timedelta(days=100)):
         since = datetime.date.today() - delta
         return self.get_query_set().filter(date__gte=since)
+
+    def team_dict(self):
+        d = {}
+        for e in self.get_query_set():
+            d[e.name] = e.id
+            d[e.short_name] = e.id
+        return d
+            
                          
 
     def find(self, name, create=False):
@@ -111,3 +119,7 @@ class Team(models.Model):
     def team_stats(self):
         from stats.models import Stat
         return Stat.objects.filter(team=self, competition=None, season=None).exclude(minutes=0)
+
+
+    def standings_by_date(self):
+        return self.standing_set.order_by("season__name")

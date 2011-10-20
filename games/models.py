@@ -8,6 +8,16 @@ from s2.competitions.models import Competition, Season
 
 class GameManager(models.Manager):
 
+    def game_dict(self):
+        d = {}
+        for e in self.get_query_set():
+            key = (e.home_team.id, e.date)
+            d[key] = e.id
+            key2 = (e.away_team.id, e.date)
+            d[key2] = e.id
+        return d
+
+
     def find(self, team, date):
         """
         Given a team name, determine the actual team.

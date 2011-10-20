@@ -5,6 +5,13 @@ from collections import defaultdict
 
 class BioManager(models.Manager):
 
+    def bio_dict(self):
+        d = {}
+        for e in self.get_query_set():
+            d[e.name] = e.id
+        return d
+
+
     def find(self, name):
         """
         Given a team name, determine the actual team.
