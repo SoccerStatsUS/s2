@@ -2,10 +2,17 @@
 
 {% block content %}
 
-<ul>
+
+<table>
 {% for game in games %}
-<li><a href="{% url game_detail game.id %}">{{ game }}: {{ game.home_score }} - {{ game.away_score }}</a></li>
+<tr>
+  <td><a href="{% url season_detail game.season.id %}">{{ game.season }}</td>
+  <td>{{ game.date }}</td>
+  <td class='align-right'>{{ game.home_team }}</td>
+  <td><a href="{% url game_detail game.id %}">{{ game.home_score }} - {{ game.away_score }}</a></td>
+  <td>{{ game.away_team }}</td>
+</tr>
 {% endfor %}
-</ul>
+</table>
 
 {% endblock %}

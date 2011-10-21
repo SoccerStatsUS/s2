@@ -4,10 +4,13 @@
 
 <h4>{{ game.date }}</h4>
 
-<h3>{{ game.home_team  }} {{ game.score }} {{ game.away_team }}</h3>
+<div id="game_score">
+<span class="team"><a href="{% url team_detail game.home_team.slug %}">{{ game.home_team  }}</a></span>
+<span class="score">{{ game.score }}</span>
+<span class="team"><a href="{% url team_detail game.away_team.slug %}">{{ game.away_team  }}</a></span>
 
-<h4>{{ game.competition }}</h4>
-<h4>{{ game.season }}</h4>
+<h4><a href="{% url competition_detail game.competition.id %}">{{ game.competition }}</a></h4>
+<h4><a href="{% url season_detail game.season.id %}"{{ game.season }}</h4>
 
 
 <H3</H3>

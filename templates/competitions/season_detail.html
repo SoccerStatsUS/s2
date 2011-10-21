@@ -2,30 +2,71 @@
 
 {% block content %}
 
-
+{% if season.previous_season %}<a href="{% url season_detail season.previous_season.id %}">p</a>{% endif %}
 <h3>{{ season }}</h3>
+{% if season.next_season %}<a href="{% url season_detail season.next_season.id %}">n</a>{% endif %}
+
+{% if awards %}
 
 <h2>Awards</h3>
+
+{% endif %}
+
 
 <table>
   <tr>
     <th>team</th>
+    <th>games</th>
     <th>wins</th>
-    <th>draws</th>
+
+    {% if season.first_standing.ties %}
+    <th>ties</th>
+    {% endif %}
+
     <th>losses</th>
+
+    {% if season.first_standing.points %}
     <th>points</th>
+    {% else %}
+    <th>%</th>
+    {% endif %}
+    
+    {% if season.first_standing.goals_for %}
+    <th>goals for</th>
+    <th>goals against</th>
+    {% endif %}
   </tr>
 
   {% for standing in season.standing_set.all %}
   <tr>
-    <td><a href="{% url team_detail standing.team.slug %}">{{ standing.team }}</a></td>
+
+    <td><a href="{% url team_season_detail standing.team.slug standing.season.slug %}">{{ standing.team }}</a></td>
+    <td>{{ standing.games }}</td>
     <td>{{ standing.wins }}</td>
-    <td>{{ standing.ties }}</td>
+
+    {% if season.first_standing.ties %}
+    <td>{{ standing.ties|default_if_none:'' }}</td>
+    {% endif %}
+
     <td>{{ standing.losses }}</td>
+
+    {% if season.first_standing.points %}
     <td>{{ standing.points }}</td>
+    {% else %}
+    <td>{{ standing.win_percentage_100|floatformat }}</td>
+    {% endif %}
+
+    {% if season.first_standing.goals_for %}
+    <td>{{ standing.goals_for }}</td>
+    <td>{{ standing.goals_against }}</td>
+    {% endif %}
+
   </tr>
   {% endfor %}
 </table>
+
+
+{% if stats %}
 
 <table>
   <tr>
@@ -55,6 +96,11 @@
 
 </table>
 
+{% endif %}
+
+
+{% if season.game_set.count %}
+
 <table>
   <tr>
     <th>date</th>
@@ -75,6 +121,8 @@
   </tr>
   {% endfor %}
 </table>
+
+{% endif %}
 
 
 {% endblock %}

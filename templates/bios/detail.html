@@ -2,13 +2,22 @@
 
 {% block content %}
 
-<ul>
-  <li>Name: {{ bio.name }}</li>
-  <li>Birthdate: {{ bio.birthdate }}</li>
-  <li>Birthplace: {{ bio.birthplace }}</li>
-  <li>Height: {{ bio.height }}</li>
-  <li>Weight: {{ bio.weight }}</li>
-</ul>
+<div>No photo</div>
+
+<h3>{{ bio.name }}</h3>
+
+<div>Positions: </div>
+<div>
+  Height: {{ bio.height }}
+  Weight: {{ bio.weight }}
+</div>
+
+<div>
+  Born {{ bio.birthdate }}
+  {% if bio.birthplace %}
+  in {{ bio.birthplace }}
+  {% endif %}
+</div>
 
 <h3>stats</h3>
 <table>
@@ -28,9 +37,9 @@
   <tr>
     <td><a href="{% url competition_detail stat.competition.id %}">{{ stat.competition }}</a></td>
     <td><a href="{% url season_detail stat.season.id %}">{{ stat.season.name }}</a></td>
-    <td><a href="{% url team_detail stat.team.slug %}">{{ stat.team }}</a></td>
-    <td>{{ stat.games_played }}</td>
-    <td>{{ stat.games_started }}</td>
+    <td><a href="{% url team_season_detail stat.team.slug stat.season.slug %}">{{ stat.team }}</a></td>
+    <td>{{ stat.games_played|default_if_none:'' }}</td>
+    <td>{{ stat.games_started|default_if_none:'' }}</td>
     <td>{{ stat.minutes }}</td>
     <td>{{ stat.goals }}</td>
     <td>{{ stat.assists }}</td>
@@ -44,8 +53,8 @@
     <td>Career</td>
     <td></td>
     <td></td>
-    <td>{{ stat.games_played }}</td>
-    <td>{{ stat.games_started }}</td>
+    <td>{{ stat.games_played|default_if_none:'' }}</td>
+    <td>{{ stat.games_started|default_if_none:'' }}</td>
     <td>{{ stat.minutes }}</td>
     <td>{{ stat.goals }}</td>
     <td>{{ stat.assists }}</td>
@@ -56,10 +65,8 @@
 
 </table>
 
-
+{% if bio.goal_set.exists %}
 <h3>goals</h3>
-
-
 <table>
   <tr>
     <th>Date</th>
@@ -78,10 +85,11 @@
     <td><a href="{% url team_detail goal.opponent.slug %}">{{ goal.opponent }}</a></td>
     <td><a href="{% url game_detail goal.game.id %}">{{ goal.game.score }}</a></td>
   {% endfor %}
-  
 </table>
+{% endif %}
 
 
+{% if bio.appearance_set.exists %}
 <h3>appearances</h3>
 <table>
   <tr>
@@ -104,6 +112,7 @@
   </tr>
   {% endfor %}
 </table>
+{% endif %}
 
     
 
