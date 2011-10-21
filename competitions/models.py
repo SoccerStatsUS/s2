@@ -1,4 +1,5 @@
 from django.db import models
+from django.template.defaultfilters import slugify
 
 class CompetitionManager(models.Manager):
 
@@ -10,15 +11,43 @@ class CompetitionManager(models.Manager):
 
 
 class Competition(models.Model):
+
     name = models.CharField(max_length=255)
+    slug = models.SlugField()
 
     objects = CompetitionManager()
+
+    class Meta:
+        ordering = ("name",)
 
     def __unicode__(self):
         return self.name
 
-    class Meta:
-        ordering = ("name",)
+    def abbreviation(self):
+        words = self.name.split(' ')
+        first_letters = [e.strip()[0] for e in words if e.strip()]
+        first_letters = [e for e in first_letters if e != '(']
+        return "".join(first_letters)
+
+
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+            
+        super(Competition, self).save(*args, **kwargs)
+
+
+    def alltime_standings(self):
+        from standings.models import Standing
+        return Standing.objects.filter(competition=self, season=None)
+
+    def first_alltime_standing(self):
+        return self.alltime_standings()[0]
+
+
+
+
 
 
 class SeasonManager(models.Manager):
@@ -32,13 +61,58 @@ class SeasonManager(models.Manager):
 
 class Season(models.Model):
     name = models.CharField(max_length=255)
+    slug = models.SlugField()
+
     competition = models.ForeignKey(Competition)
 
+
     objects = SeasonManager()
+
+
+    class Meta:
+        ordering = ("competition", "name")
+
+
 
     def __unicode__(self):
         return "%s: %s" % (self.competition, self.name)
 
-    class Meta:
-        ordering = ("competition", "name")
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+            
+        super(Season, self).save(*args, **kwargs)
+
+
+
+    def previous_season(self):
+        seasons = Season.objects.filter(competition=self.competition)
+        index = list(seasons).index(self)
+        if index > 0:
+            return seasons[index - 1]
+        else:
+            return None
+
+    def next_season(self):
+        seasons = Season.objects.filter(competition=self.competition)
+        index = list(seasons).index(self)
+        next = index + 1
+        if next < seasons.count():
+            return seasons[next]
+        else:
+            return None
+
+
+    def get_next_name(self):
+        try:
+            name = int(self.name)
+            return unicode(name + 1)
+        except:
+            # Need to do a regular expression?
+            return None
+            
+
+
+    def first_standing(self):
+        return self.standing_set.all()[0]
 
