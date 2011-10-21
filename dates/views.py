@@ -5,6 +5,28 @@ from django.template import RequestContext
 
 from s2.games.models import Game
 
+def year_scoreboard(request, year):
+    # Add a paginator.
+    games = Game.objects.filter(date__year=int(year))
+    context = {
+        'games': games,
+        }
+    return render_to_response("games/list.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+
+def month_scoreboard(request, year, month):
+    # Add a paginator.
+    games = Game.objects.filter(date__year=int(year), date__month=int(month))
+    context = {
+        'games': games,
+        }
+    return render_to_response("games/list.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+
 
 def date_scoreboard(request, year, month, day):
     # Add a paginator.
