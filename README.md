@@ -2,12 +2,22 @@
 #### Todo
 
 Create a team ranking system based on the scores.
-Soccermetrics!
 
-Need an aliases model.
+Need an aliases model?
 
-Time to migrate to postgresql. SQLite doesn't support unique constraints.
-Also, this will allow geoDjango support.
+Migrate to postgresql. SQLite doesn't support unique constraints. Also, this will allow geoDjango support.
+
+
+# Homepage
+
+Homepage should have:
+1. Today's games
+2. Yesterday's scores
+3. Ongoing competitions (MLS, MLS Playoffs, US Open Cup, CONCACAF)
+
+
+Team Detail should have recent scores graph.
+
 
 #### Bugs
 
@@ -15,7 +25,7 @@ Some of the main problems with this site:
 
 0. Provision AWS
 1. Caching with redis.
-2. Need better testing.
+2. Need testing.
 3. Need much better facilities for managing duplicate (players/leagues/teams/games)
 4. Maybe an alias model that maps a name to a generic foreign key? Unique on the name/gfk combination.
 
@@ -25,6 +35,7 @@ Some of the main problems with this site:
 So the unifying idea behind how to keep stats on the site:
 
 Every game is part of several competitions. We save stats for each competition into a stats object. That should be relatively standard. 
+Try to generate stats for everything that doesn't have them.
 
 So a FC Dallas regular season  2011 game would be part of:
 MLS regular season 2011, regularseasoncareer, everythingcareer, FC Dallas regular season 2011, FC Dallas regular season
