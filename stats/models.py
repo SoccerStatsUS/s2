@@ -7,11 +7,15 @@ from s2.competitions.models import Competition, Season
 
 class CareerStatsManager(models.Manager):
 
+    # Stats for an entire career
+
     def get_query_set(self):
         return super(CareerStatsManager, self).get_query_set().filter(team=None, season=None)
 
 
 class CompetitionStatsManager(models.Manager):
+
+    # Stats for a given competition across all competitions
 
     def get_query_set(self):
         return super(CompetitionStatsManager, self).get_query_set().filter(team=None).exclude(competition=None)
@@ -19,11 +23,15 @@ class CompetitionStatsManager(models.Manager):
 
 class TeamStatsManager(models.Manager):
 
+    # Stats for a given team across all season
+
     def get_query_set(self):
         return super(TeamStatsManager, self).get_query_set().filter(season=None).exclude(team=None)
 
 
 class StatsManager(models.Manager):
+
+    # Regular season stats.
 
     def get_query_set(self):
         return super(StatsManager, self).get_query_set().exclude(team=None).exclude(season=None)
