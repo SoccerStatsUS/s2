@@ -2,10 +2,37 @@
 
 {% block content %}
 
-<ul>
-{% for team in teams %}
-<li><a href="{% url team_detail team.slug %}">{{ team }}</a></li>
+<table>
+
+<tr>
+  <th>Team</th>
+  <th>Wins</th>
+  <th>Ties</th>
+  <th>Losses</th>
+  <th>GF</th>
+  <th>GA</th>
+  <th>Seasons</th>
+
+</tr>
+  
+
+{% for standing in standings %}
+<tr>
+  <td><a href="{% url team_detail standing.team.slug %}">{{ standing.team }}</a></td>
+  <td>{{ standing.wins }}</td>
+  <td>{{ standing.ties|default_if_none:'' }}</td>
+  <td>{{ standing.losses }}</td>
+  <td>{{ standing.goals_for|default_if_none:'' }}</td>
+  <td>{{ standing.goals_against|default_if_none:'' }}</td>
+  <td>
+    {% for standing in standing.team.standings_by_date %}
+    <a href="{% url team_season_detail standing.team.slug standing.season.slug %}">x</a>
+    {% endfor %}
+  </td>
+
+</tr>
 {% endfor %}
-</ul>
+
+</table>
 
 {% endblock %}

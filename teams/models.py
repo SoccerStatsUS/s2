@@ -86,6 +86,7 @@ class Team(models.Model):
     class Meta:
         ordering = ('short_name',)
 
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.short_name)
@@ -122,4 +123,9 @@ class Team(models.Model):
 
 
     def standings_by_date(self):
-        return self.standing_set.order_by("season__name")
+        return self.standing_set.exclude(season=None).order_by("season__name")
+
+
+    def alltime_standing(self):
+        from s2.standings.models import Standing
+        return Standing.objects.get(team=self, competition=None, season=None)
