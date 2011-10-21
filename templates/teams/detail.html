@@ -30,7 +30,7 @@
 
   {% for standing in team.standings_by_date %}
   <tr>
-    <td><a href="{% url competition_detail standing.competition.id %}">{{ standing.competition.abbreviation }}</a></td>
+    <td><a href="{% url competition_detail standing.competition.slug %}">{{ standing.competition.abbreviation }}</a></td>
     {% if standing.season %}
     <td><a href="{% url team_season_detail team.slug standing.season.slug %}">{{ standing.season.name }}</a></td>
     {% else %}

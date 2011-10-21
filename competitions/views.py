@@ -15,8 +15,8 @@ def competition_index(request):
                               context_instance=RequestContext(request))
 
 
-def competition_detail(request, competition_id):
-    competition = get_object_or_404(Competition, id=competition_id)
+def competition_detail(request, competition_slug):
+    competition = get_object_or_404(Competition, slug=competition_slug)
     context = {
         'competition': competition,
         'stats': Stat.competition_stats.filter(team=None, competition=competition).order_by("-minutes"),
@@ -28,8 +28,10 @@ def competition_detail(request, competition_id):
 
 
 
-def season_detail(request, season_id):
-    season = get_object_or_404(Season, id=season_id)
+def season_detail(request, competition_slug, season_slug):
+    competition = get_object_or_404(Competition, slug=competition_slug)
+    season = get_object_or_404(Season, competition=competition, slug=season_slug)
+
     context = {
         'season': season,
         'stats': Stat.objects.filter(season=season, competition=season.competition).order_by("-minutes"),

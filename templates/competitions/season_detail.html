@@ -2,9 +2,9 @@
 
 {% block content %}
 
-{% if season.previous_season %}<a href="{% url season_detail season.previous_season.id %}">p</a>{% endif %}
+{% if season.previous_season %}<a href="{% url season_detail season.competition.slug season.previous_season.slug %}">p</a>{% endif %}
 <h3>{{ season }}</h3>
-{% if season.next_season %}<a href="{% url season_detail season.next_season.id %}">n</a>{% endif %}
+{% if season.next_season %}<a href="{% url season_detail season.competition.slug season.next_season.slug %}">n</a>{% endif %}
 
 {% if awards %}
 

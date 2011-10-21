@@ -4,7 +4,7 @@
 
 <ul>
 {% for competition in competitions %}
-<li><a href="{% url competition_detail competition.id %}">{{ competition }}</a></li>
+<li><a href="{% url competition_detail competition.slug %}">{{ competition }}</a></li>
 {% endfor %}
 </ul>
 
