@@ -90,7 +90,8 @@ def load_games():
         game['home_team'] = Team.objects.find(game['home_team'], create=True)
         game['away_team'] = Team.objects.find(game['away_team'], create=True)
         game.pop('_id')
-        game.pop('url')
+        if 'url' in game:
+            game.pop('url')
 
         if 'year' in game:
             game.pop('year')
