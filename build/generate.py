@@ -34,17 +34,19 @@ def generate_stats_generic(qs, make_key, update_dict):
     excluded = ('player_id', 'team_id', 'competition_id', 'season_id')
     for stat in qs.values():
         for k,v  in stat.items():
-            if v == 'None':
+            if v in ('?', 'None', '-'):
                 stat[k] = None
 
         # This determines what is filtered.
         # e.g., create all-time player stats with 
         # make_key = lambda s: s['player']
         key = make_key(stat) 
+        # Create a new entry for this stat type
         if key not in final_dict:
             # This should set all necessary fields.
             final_dict[key] = stat
         else:
+            # 
             d = final_dict[key]
             for key, value in stat.items():
                 if key not in excluded: 
