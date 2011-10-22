@@ -12,3 +12,18 @@ a:visited {
 .align-right {
     text-align: right;
 }
+
+tr {
+    margin: 0;
+    padding: 0;
+}
+
+td {
+    padding: 0 20px;
+    font-size: 1.3em;
+    
+}
+
+.grey {
+    background-color: #ccc;
+}
