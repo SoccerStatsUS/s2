@@ -2,12 +2,14 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 
 from s2.bios.models import Bio
+from s2.stats.models import Stat
 
 
 
 def person_list_generic(request, person_list):
     context =  {
         "bios": person_list,
+        "stats": Stat.career_stats.all()
         }
     return render_to_response("bios/list.html",
                               context,
