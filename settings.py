@@ -116,6 +116,7 @@ INSTALLED_APPS = (
     's2.games',
     's2.goals',
     's2.lineups',
+    's2.positions',
     's2.standings',
     's2.stats',
     's2.teams',
