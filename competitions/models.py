@@ -1,6 +1,10 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 
+
+from s2.bios.models import Bio
+
+
 class CompetitionManager(models.Manager):
 
     def find(self, name):
@@ -103,6 +107,23 @@ class Season(models.Model):
             return None
 
 
+    def players(self):
+        from s2.stats.models import Stat
+        season_stats = Stat.objects.filter(competition=self.competition, season=self)
+        return set([e[0] for e in season_stats.values_list("player_id")])
+
+
+    def players_diff(self, season):
+        ids = self.players() - season.players()
+        return Bio.objects.filter(id__in=ids)
+
+    def players_added(self):
+        return self.players_diff(self.previous_season())
+
+    def players_lost(self):
+        return 
+        
+        
     def get_next_name(self):
         try:
             name = int(self.name)
@@ -110,9 +131,8 @@ class Season(models.Model):
         except:
             # Need to do a regular expression?
             return None
+
             
-
-
     def first_standing(self):
         return self.standing_set.all()[0]
 

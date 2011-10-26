@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 
@@ -17,6 +19,25 @@ def team_index(request):
                               context,
                               context_instance=RequestContext(request)
                               )
+
+def seasons_dashboard(request):
+    season_names = defaultdict(list)
+    for season in Season.objects.all():
+        season_names[season.name].append(season)
+
+    context = {
+        'season_dict': season_names,
+        'seasons': sorted(season_names.keys()),
+        }
+
+    return render_to_response("teams/seasons.html",
+                              context,
+                              context_instance=RequestContext(request)
+                              )
+
+
+    
+    
     
 
 def team_detail(request, team_slug):
@@ -27,7 +48,7 @@ def team_detail(request, team_slug):
 
     context = {
         'team': team,
-        'stats': Stat.team_stats.filter(team=team, competition=None).order_by("-minutes"),
+        'stats': Stat.team_stats.filter(team=team, competition=None),
         }
 
     return render_to_response("teams/detail.html",

@@ -2,10 +2,24 @@
 
 {% block content %}
 
-<ul>
-{% for competition in competitions %}
-<li><a href="{% url competition_detail competition.slug %}">{{ competition }}</a></li>
-{% endfor %}
-</ul>
+<table>
+  <tr>
+    <th>competition</th>
+    <th>teams</th>
+    <th>seasons</th>
+  </tr>
 
+  {% for competition in competitions %}
+  <tr>
+    <td><a href="{% url competition_detail competition.slug %}">{{ competition.name }}</a></td>
+    <td></td>
+    <td>
+      {% for season in competition.season_set.all %}
+      <a href="{% url season_detail competition.slug season.slug %}">x</a>
+      {% endfor %}
+    </td>
+  </tr>
+
+  {% endfor %}
+  
 {% endblock %}

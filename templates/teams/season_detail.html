@@ -3,45 +3,12 @@
 {% block content %}
 
   <h2><a href="{% url team_detail team.slug %}">{{ team.name }}</a></h2>
-  <h2>{{ season.competition }}</h2>
-  <h2>
-    {{ season.name }}
-  </h2>
+  <h2><a href="{% url competition_detail season.competition.slug %}">{{ season.competition }}</a></h2>
+  <h2><a href="{% url season_detail season.competition.slug season.slug %}">{{ season.name }}</a></h2>
 
-
-<table>
-  <tr>
-    <th>season</th>
-    <th>games</th>
-    <th>wins</th>
-    <th>ties</th>
-    <th>losses</th>
-    <th>points</th>
-    <th>win %</th>
-    <th>goals for</th>
-    <th>goals against</th>
-  </tr>
-
-  {% for standing in standings %}
-  <tr>
-    <td><a href="{% url team_season_detail standing.team.slug standing.season.slug %}">{{ standing.team }}</a></td>
-    <td>{{ standing.games }}</td>
-    <td>{{ standing.wins }}</td>
-    <td>{{ standing.ties|default_if_none:'' }}</td>
-    <td>{{ standing.losses }}</td>
-    <td>{{ standing.points|default_if_none:'' }}</td>
-    <td>{{ standing.win_percentage|floatformat:3 }}</td>
-    <td>{{ standing.goals_for|default_if_none:'' }}</td>
-    <td>{{ standing.goals_against|default_if_none:'' }}</td>
-  </tr>
-
-  {% endfor %}
-
-</table>
 
 {% if stats %}
 
-<h3>stats</h3>
 <table>
   <tr>
     <th>player</th>
@@ -69,6 +36,38 @@
 
 {% endif %}
 
+
+
+
+<table>
+  <tr>
+    <th>season</th>
+    <th>games</th>
+    <th>wins</th>
+    <th>ties</th>
+    <th>losses</th>
+    <th>points</th>
+    <th>win %</th>
+    <th>goals for</th>
+    <th>goals against</th>
+  </tr>
+
+  {% for standing in standings %}
+  <tr>
+    <td><a href="{% url team_detail standing.team.slug %}">{{ standing.team }}</a></td>
+    <td>{{ standing.games }}</td>
+    <td>{{ standing.wins }}</td>
+    <td>{{ standing.ties|default_if_none:'' }}</td>
+    <td>{{ standing.losses }}</td>
+    <td>{{ standing.points|default_if_none:'' }}</td>
+    <td>{{ standing.win_percentage|floatformat:3 }}</td>
+    <td>{{ standing.goals_for|default_if_none:'' }}</td>
+    <td>{{ standing.goals_against|default_if_none:'' }}</td>
+  </tr>
+
+  {% endfor %}
+
+</table>
 
 {% if games.exists %}
 

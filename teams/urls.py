@@ -6,6 +6,11 @@ urlpatterns = patterns('s2.teams.views',
                            'team_index',
                            name='team_index'),
 
+                       url(r'^seasons/$',
+                           'seasons_dashboard',
+                           name='seasons_dashboard'),
+
+
                        url(r'^(?P<team_slug>[a-z0-9-]+)/(?P<season_slug>[a-z0-9-]+)',
                            'team_season_detail',
                            name='team_season_detail'),

@@ -52,6 +52,8 @@ class Game(models.Model):
     """
     Represents a completed game.
     """
+    # Redesign this so that we don't have a home team home score situation?
+
     # Should we have a date and a datetime field?
     date = models.DateField()
     

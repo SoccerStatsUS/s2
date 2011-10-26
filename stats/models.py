@@ -10,7 +10,7 @@ class CareerStatsManager(models.Manager):
     # Stats for an entire career
 
     def get_query_set(self):
-        return super(CareerStatsManager, self).get_query_set().filter(team=None, season=None)
+        return super(CareerStatsManager, self).get_query_set().filter(team=None, season=None, competition=None)
 
 
 class CompetitionStatsManager(models.Manager):
@@ -79,6 +79,6 @@ class Stat(models.Model):
 
 
     class Meta:
-        ordering = ('season__name', 'competition', 'player')
+        ordering = ('season__name', 'competition', '-games_played', '-goals')
         #unique_together = ('player', 'team', 'competition', 'season')
 

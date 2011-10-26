@@ -1,9 +1,26 @@
-{% extends "base.html" %}
+1;2c{% extends "base.html" %}
 
 {% block content %}
 
 
-<h3>{{ competition }}</h3>
+<h3><a href="{% url competition_detail competition.slug %}">{{ competition }}</a></h3>
+
+<table>
+  <tr>
+    <th>competition</th>
+    <th>season</th>
+  </tr>
+
+  {% for season in competition.season_set.all %}
+  <tr>
+    <td>{{ competition }}</td>
+    <td><a href="{% url season_detail competition.slug season.slug %}">{{ season.name }}</a></td>
+    </tr>
+  {% endfor %}
+    
+</table>
+
+{% if competition.alltime_standings.exists %}
 
 <h4>All-time standings</h4>
 
@@ -60,8 +77,10 @@
   {% endfor %}
 </table>
 
+{% endif %}
 
 
+{% if stats %}
 
 <h4>All-time stats</h4>
 
@@ -91,15 +110,11 @@
 
 </table>
 
+{% endif %}
 
 
-<h4>Games</h4>
 
-<ul>
-{% for season in competition.season_set.all %}
-<li><a href="{% url season_detail competition.slug season.slug %}">{{ season }}</a></li>
-{% endfor %}
-</ul>
+
 
 
 {% endblock %}

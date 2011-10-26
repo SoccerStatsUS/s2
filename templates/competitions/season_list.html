@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% for season in seasons %}
+<li><a href="{% url season_detail season.competition.slug season.slug %}">{{ season }}</a></li>
+
+{% endfor %}
+
+{% endblock %}
