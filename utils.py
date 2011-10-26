@@ -1,12 +1,28 @@
 import datetime
 import difflib
+import time                                                
 
 from django.db import connection, transaction
 
+# http://wiki.python.org/moin/PythonDecoratorLibrary#Memoize
 
 from s2.bios.models import Bio
 
-# http://wiki.python.org/moin/PythonDecoratorLibrary#Memoize
+
+
+def timer(method):
+
+    def timed(*args, **kw):
+        ts = time.time()
+        result = method(*args, **kw)
+        te = time.time()
+
+        print '%r (%r, %r) %2.2f sec' % \
+              (method.__name__, args, kw, te-ts)
+        return result
+
+    return timed
+
 
 
 def insert_sql_pg(table, dict_list):

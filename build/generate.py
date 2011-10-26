@@ -8,6 +8,7 @@ from s2.teams.models import Team
 from s2.competitions.models import Competition
 from s2.standings.models import Standing
 from s2.stats.models import Stat
+from s2.utils import timer
 
 
 def generate():
@@ -120,8 +121,9 @@ def generate_career_stats():
         'season_id': None,
         }
     generate_stats_generic(Stat.objects.all(), make_key, update)    
-        
 
+        
+@timer
 def generate_team_stats():
     print "generating team stats"
     for team in Team.objects.all():
@@ -131,6 +133,7 @@ def generate_team_stats():
         generate_stats_generic(stats, make_key, update)
 
 
+@timer
 def generate_competition_stats():
     print "generating competition stats"
     for competition in Competition.objects.all():
@@ -140,6 +143,7 @@ def generate_competition_stats():
         generate_stats_generic(stats, make_key, update)
 
 
+@timer
 def generate_competition_standings():
     print "generating competition standings"
     for competition in Competition.objects.all():
@@ -148,6 +152,7 @@ def generate_competition_standings():
         update = {'season_id': None }
         generate_standings_generic(standings, make_key, update)
 
+@timer
 def generate_team_standings():
     print "generating team standings"
     for team in Team.objects.all():
