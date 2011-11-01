@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<ul>
+{% for draft in drafts %}
+<li><a href="{% url draft_detail draft.competition.slug draft.slug %}">{{ draft }}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}

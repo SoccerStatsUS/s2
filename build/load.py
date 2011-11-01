@@ -8,9 +8,11 @@ from django.db.utils import IntegrityError
 
 from s2.bios.models import Bio
 from s2.competitions.models import Competition, Season
+from s2.drafts.models import Draft, Pick
 from s2.games.models import Game
 from s2.goals.models import Goal
 from s2.lineups.models import Appearance
+from s2.positions.models import Position
 from s2.teams.models import Team
 from s2.stats.models import Stat
 from s2.standings.models import Standing
@@ -27,16 +29,68 @@ def load():
     load_teams()
     load_standings()
     load_bios()
+    load_drafts()
+    load_stats()
+    load_positions()
+
+    return
+
+
 
     load_games()
     load_goals()
-    load_stats()
+
     load_lineups()
 
 
 # These all just apply some very basic formatting 
 # and apply foreign keys.
 
+@transaction.commit_on_success
+def load_positions():
+    print "loading positions"
+    for position in soccer_db.positions.find():
+        position.pop('_id')
+        position['team'] = Team.objects.find(position['team'], create=True)
+        position['person'] = Bio.objects.find(position['person'])
+        Position.objects.create(**position)
+
+@transaction.commit_on_success
+def load_drafts():
+    print "loading drafts"
+    drafts = set()
+    draft_dict = {}
+    for pick in soccer_db.drafts.find():
+        t = (pick['competition'], pick['draft'])
+        drafts.add(t)
+
+    for t in drafts:
+        competition, name = t
+        competition = Competition.objects.get(name=competition)
+        d = Draft.objects.create(competition=competition, name=name)
+        draft_dict[t] = d
+        
+
+    for pick in soccer_db.drafts.find():
+        pick['draft'] = draft_dict[(pick['competition'], pick['draft'])]
+        pick['team'] = Team.objects.find(pick['team'], create=True)
+        pick.pop('competition')
+        pick.pop('_id')
+        
+        text = pick['text']
+        if text.lower() == 'pass':
+            player = None
+        elif "SuperDraft" in text:
+            player = None
+        else:
+            player = Bio.objects.find(text)
+        pick['player'] = player
+        Pick.objects.create(**pick)
+        
+
+
+
+        
 
 @transaction.commit_on_success
 def load_teams():
@@ -51,7 +105,10 @@ def load_standings():
     print "loading standings\n"
     for standing in soccer_db.standings.find():
         standing.pop('_id')
-        team_string = standing.pop('name')
+        try:
+            team_string = standing.pop('name')
+        except:
+            import pdb; pdb.set_trace()
         standing['team'] = Team.objects.find(team_string, create=True)
         standing['competition'] = Competition.objects.find(standing['competition'])
         standing['season'] = Season.objects.find(standing['season'], standing['competition'])

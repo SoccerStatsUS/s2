@@ -113,6 +113,7 @@ INSTALLED_APPS = (
     's2.bios',
     's2.competitions',
     's2.dates',
+    's2.drafts',
     's2.games',
     's2.goals',
     's2.lineups',

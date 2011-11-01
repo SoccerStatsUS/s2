@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>{{ draft }}</h3>
+
+<table>
+{% for pick in draft.pick_set.all %}
+<tr>
+  <td>{{ pick.position }}</td>
+  <td>
+    {% if pick.player %}
+    <a href="{% url person_detail pick.player.slug %}">{{ pick.player }}</a>
+    {% else %}
+    {{ pick.text }}
+    {% endif %}
+  </td>
+  <td><a href="{% url team_detail pick.team.slug %}">{{ pick.team }}</a></td>
+</tr>
+
+{% endfor %}
+</table>
+
+{% endblock %}
