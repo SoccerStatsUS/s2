@@ -2,6 +2,16 @@
 
 {% block content %}
 
+<p>Welcome to the site. The goal here is to have comprehensive statistics for all soccer leagues and competitions in the history of the United States, beginning with the <a href="{% url competition_detail 'american-league-of-professional-football' %}">American League of Professional Football</a> of 1894, through <a href="{% url competition_detail 'major-league-soccer' %}">Major League Soccer</a>, the new <a href="{% url competition_detail 'north-american-soccer-league-2011-' %}">NASL</a> and everything in between.
+
+<p>The site is currently under active development, so please keep in mind that none of the information is authoratative, and pages may break at any time.</p>
+
+<p>Some of the more interesting items on the site include the original <a href="{% url competition_detail 'american-soccer-league-1921-1933' %}">American Soccer League</a>, a surprisingly strong American league that existed in the 1920's and 1930's, the <a href="{% url competition_detail 'north-american-soccer-league' %}">NASL</a>, which featured <a href="{% url person_detail 'pele' %}">Pele</a>, <a href="{% url person_detail 'franz-beckenbauer' %}">Franz Beckenbauer</a>, <a href="{% url person_detail 'johan-cruyff' %}">Johan Cruyff</a>, <a href="{% url person_detail 'hugo-sanchez' %}">Hugo Sanchez</a> and many other notable players played in from 1968 to 1984.</p>
+
+<p>Also worth checking out are the <a href="{% url competition_detail 'western-soccer-alliance' %}">Western Soccer Alliance</a> and the <a href="{% url competition_detail 'american-professional-soccer-league' %}">American Professional Soccer League</a>, which cropped up after the demise of the NASL and featured a bunch of future United States national team players like <a href="{% url person_detail 'eric-wynalda' %}">Eric Wynalda</a>, <a href="{% url person_detail 'marcelo-balboa' %}">Marcelo Balboa</a>, and <a href="{% url person_detail 'tab-ramos' %}">Tab Ramos</a>.</p>
+
+<p>Feel free to contact me at chris at socceroutsider.com with any questions, requests or bugs; please (please) definitely contact me if you have any data that you want included on the site.</p>
+
 <ul>
   <li><a href="{% url competition_index %}">competitions</a></li>
   <li><a href="{% url team_index %}">teams</a></li>
