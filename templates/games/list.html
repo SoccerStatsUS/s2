@@ -2,6 +2,37 @@
 
 {% block content %}
 
+<h3>Births</h3>
+<table>
+{% for bio in births %}
+<tr>
+  <td><a href="{% url person_detail bio.slug %}">{{ bio.name }}</a></td>
+  <td>{{ bio.birthdate }}</td>
+</tr>
+{% endfor %}
+</table>
+
+
+<h3>Hires</h3>
+<table>
+{% for position in hires %}
+<tr>
+  <td><a href="{% url person_detail position.person.slug %}">{{ position.person.name }}</a></td>
+  <td>{{ position.start }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<h3>Firings</h3>
+<table>
+{% for position in fires %}
+<tr>
+  <td><a href="{% url person_detail position.person.slug %}">{{ position.person.name }}</a></td>
+  <td>{{ position.end }}</td>
+</tr>
+{% endfor %}
+</table>
+
 
 <table>
 {% for game in games %}
