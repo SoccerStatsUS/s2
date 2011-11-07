@@ -7,6 +7,26 @@ Need an aliases model?
 
 Migrate to postgresql. SQLite doesn't support unique constraints. Also, this will allow geoDjango support.
 
+# Are a stat and a standing the same thing?
+
+Each one can have:
+
+Player, Team, Competition, Season, Nothing attached; presumably we could map goals or games played or whatever to standings.
+
+Games maps directly to games played.
+
+Relationship between goals, goals for?
+
+Stats can obviously not have a player. Team Stats, League Stats, 
+
+goals_for can represent either minutes gf or games played gf, whereas w/l/t represent only games played.
+
+Probably need to think about the game stat (stat for one player for one game, or stat for one game or whatever. Just another kind of stat. Can just apply game to stat also...
+
+
+
+
+
 
 # Homepage
 
