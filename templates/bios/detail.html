@@ -1,27 +1,63 @@
 {% extends "base.html" %}
 
+{% block title %}{{ bio.name }} - {% endblock %}
+
 {% block content %}
 
 {% load datum_or_none %}
 
-<div>No photo</div>
-
 <h3>{{ bio.name }}</h3>
 
+{% if bio.positions %}
 <div>Positions: </div>
-<div>
-  Height: {{ bio.height }}
-  Weight: {{ bio.weight }}
-</div>
+{% endif %}
 
+{% if bio.height or bio.weight %}
 <div>
-  Born {{ bio.birthdate }}
+  {% if bio.height %}Height: {{ bio.height }} cm{% endif %}
+  {% if bio.weight %}Weight: {{ bio.weight }} kg{% endif %}
+</div>
+{% endif %}
+
+{% if bio.birthdate or bio.birthplace %}
+<div>
+  Born 
+  {% if bio.birthdate %}{{ bio.birthdate }}{% endif %}
   {% if bio.birthplace %}
   in {{ bio.birthplace }}
   {% endif %}
 </div>
+{% endif %}
 
-<h3>stats</h3>
+{% if bio.awards.exists %}
+<h4>Awards</h4>
+<table>
+{% for award in bio.awards.all %}
+<tr>
+  <td><a href="{% url award_detail award.award.id %}">{{ award.award.name }}</a></td>
+  <td><a href="{% url season_detail award.season.competition.slug award.season.slug %}">{{ award.season }}</a></td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+
+
+
+{% if bio.position_set.count %}
+<h4>Positions</h4>
+<table>
+{% for position in bio.position_set.all %}
+<tr>
+  <td><a href="{% url team_detail position.team.slug %}">{{ position.team }}</a></td>
+  <td>{{ position.name }}</td>
+  <td>{{ position.start }}</td>
+  <td>{{ position.end }}</td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+
+<h4>Stats</h4>
 <table>
   <tr>
     <th>competition</th>

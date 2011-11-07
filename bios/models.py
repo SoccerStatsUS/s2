@@ -1,7 +1,11 @@
+from django.contrib.contenttypes import generic
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
 
 from collections import defaultdict
+
+
 
 class BioManager(models.Manager):
 
@@ -48,6 +52,9 @@ class Bio(models.Model):
     height = models.IntegerField(null=True, blank=True)
     weight = models.IntegerField(null=True, blank=True)
 
+    awards = generic.GenericRelation('awards.AwardItem')
+
+
     objects = BioManager()
 
 
@@ -80,5 +87,6 @@ class Bio(models.Model):
         return self.name
 
         
-        
+    def get_absolute_url(self):
+        return reverse('person_detail', args=[self.slug])
 

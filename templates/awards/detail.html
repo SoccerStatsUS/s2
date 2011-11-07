@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}{{ award.name }} - {% endblock %}
+
+{% block content %}
+
+<h3>{{ award }}</h3>
+
+
+<ul>
+{% for item in award.awarditem_set.all %}
+<li><a href="{{ item.recipient.get_absolute_url }}">{{ item }}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}

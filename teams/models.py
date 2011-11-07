@@ -1,3 +1,5 @@
+from django.contrib.contenttypes import generic
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
 
@@ -92,6 +94,10 @@ class Team(models.Model):
             self.slug = slugify(self.short_name)
             
         super(Team, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('team_detail', args=[self.slug])
+
 
 
     def fancy_name(self):

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<ul>
+{% for award in awards %}
+<li><a href="{% url award_detail award.id %}">{{ award }}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}

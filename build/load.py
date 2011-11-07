@@ -6,6 +6,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 's2.settings'
 from django.db import transaction
 from django.db.utils import IntegrityError
 
+from s2.awards.models import Award, AwardItem
 from s2.bios.models import Bio
 from s2.competitions.models import Competition, Season
 from s2.drafts.models import Draft, Pick
@@ -29,6 +30,7 @@ def load():
     load_teams()
     load_standings()
     load_bios()
+    load_awards()
     load_drafts()
     load_stats()
     load_positions()
@@ -54,6 +56,57 @@ def load_positions():
         position['team'] = Team.objects.find(position['team'], create=True)
         position['person'] = Bio.objects.find(position['person'])
         Position.objects.create(**position)
+
+
+@transaction.commit_on_success
+def load_awards():
+    print "loading awards"
+    awards = set()
+    award_dict = {}
+
+    for item in soccer_db.awards.find():
+        t = (item['competition'], item['award'])
+        awards.add(t)
+
+    for t in awards:
+        competition, name = t
+
+        # Finding because currently using NCAA awards but don't have ncaa standings.
+        competition = Competition.objects.find(competition)
+        # competition = Competition.objects.get(name=competition)
+        a = Award.objects.create(competition=competition, name=name)
+        award_dict[t] = a
+
+    for item in soccer_db.awards.find():
+        item['award'] = award_dict[(item['competition'], item['award'])]
+        competition = item['award'].competition
+        # NCAA seasons don't exist.
+        item['season'] = Season.objects.find(competition=competition, name=item['season'])
+        #item['season'] = Season.objects.get(competition=competition, name=item['season'])
+
+
+        model_name = item.pop('model')
+        if model_name == 'Bio':
+            model = Bio
+        elif model_name == 'Team':
+            model = Team
+        else:
+            import pdb; pdb.set_trace()
+            raise
+
+        try:
+            item['recipient'] = model.objects.find(item['recipient'])
+        except:
+            print item['recipient']
+            continue
+
+        item.pop('competition')        
+        item.pop('_id')
+
+        AwardItem.objects.create(**item)
+        
+
+
 
 @transaction.commit_on_success
 def load_drafts():

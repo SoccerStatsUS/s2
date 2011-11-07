@@ -2,10 +2,14 @@
 
 {% block content %}
 
+
+{% for slug, names in duplicate_slugs %}
 <ul>
-  {% for slug, names in duplicate_slugs %}
-  <li>{{ names }}</li>
+  {% for name in names %}
+  <li>{{ name }}</li>
   {% endfor %}
 </ul>
+{% endfor %}
+
 
 {% endblock %}
