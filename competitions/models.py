@@ -118,7 +118,9 @@ class Season(models.Model):
         return Bio.objects.filter(id__in=ids)
 
     def players_added(self):
-        return self.players_diff(self.previous_season())
+        if self.previous_season():
+            return self.players_diff(self.previous_season())
+        return []
 
     def players_lost(self):
         return 

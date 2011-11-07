@@ -1,21 +1,25 @@
 from django.db import models
 
-from s2.teams.models import Team
+from s2.bios.models import Bio
 from s2.competitions.models import Competition, Season
-
+from s2.teams.models import Team
 
 class Standing(models.Model):
 
+    player = models.ForeignKey(Bio, null=True)
     team = models.ForeignKey(Team, null=True)
     competition = models.ForeignKey(Competition, null=True)
     season = models.ForeignKey(Season, null=True)
+
     division = models.CharField(max_length=255)
 
     games = models.IntegerField()
     wins = models.IntegerField()
     losses = models.IntegerField()
     ties = models.IntegerField(null=True)
+
     points = models.IntegerField(null=True)
+    position = models.IntegerField(null=True)
 
     goals_for = models.IntegerField(null=True)
     goals_against = models.IntegerField(null=True)

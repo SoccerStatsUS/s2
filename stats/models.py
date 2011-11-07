@@ -2,6 +2,7 @@ from django.db import models
 
 from s2.teams.models import Team
 from s2.bios.models import Bio
+from s2.games.models import Game
 from s2.competitions.models import Competition, Season
 
 
@@ -50,9 +51,10 @@ class Stat(models.Model):
     # Standings should sort of be generated the same way.
     
 
+    # Probablythese should be represented differently.
+    game = models.ForeignKey(Game, null=True)
     player = models.ForeignKey(Bio, null=True)
     team = models.ForeignKey(Team, null=True)
-
     competition = models.ForeignKey(Competition, null=True)
     season = models.ForeignKey(Season, null=True)
 
@@ -67,6 +69,10 @@ class Stat(models.Model):
     fouls_suffered = models.IntegerField(null=True, blank=True)
     yellow_cards = models.IntegerField(null=True, blank=True)
     red_cards = models.IntegerField(null=True, blank=True)
+
+    # By minute if possible, otherwise by game.
+    goals_for = models.IntegerField(null=True, blank=True)
+    goals_against = models.IntegerField(null=True, blank=True)
 
     objects = StatsManager()
     team_stats = TeamStatsManager()
