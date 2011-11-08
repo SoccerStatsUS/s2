@@ -34,14 +34,8 @@ def load():
     load_drafts()
     load_stats()
     load_positions()
-
-    return
-
-
-
     load_games()
     load_goals()
-
     load_lineups()
 
 
@@ -327,14 +321,14 @@ def load_lineups():
 
         # Setting find functions to memoize should to the same job.
         # Don't create all those extra references if not necessary.
-        if not a['player']:
+        if not a['name']:
             print a
             return None
 
         if a['team'] in teams:
             team = teams[a['team']]
         else:
-            team = Team.objects.find(a['team'])
+            team = Team.objects.find(a['team'], create=True)
             teams[a['team']] = team
 
         t = (team, a['date'])
@@ -344,11 +338,11 @@ def load_lineups():
             game = Game.objects.find(team=team, date=a['date'])
             games[t] = game
                  
-        if a['player'] in players:
-            player = players[a['player']]
+        if a['name'] in players:
+            player = players[a['name']]
         else:
-            player = Bio.objects.find(a['player'])
-            players[a['player']] = player
+            player = Bio.objects.find(a['name'])
+            players[a['name']] = player
 
             
 
@@ -370,6 +364,8 @@ def load_lineups():
 
         if i % 5000 == 0:
             print i
+
+    import pdb; pdb.set_trace()
 
     print "Creating appearances"
     insert_sql("lineups_appearance", l)
