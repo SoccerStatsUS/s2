@@ -26,7 +26,7 @@ class Goal(models.Model):
     """
     # Should we have a date and a datetime field?
     date = models.DateField()
-    minute = models.IntegerField()
+    minute = models.IntegerField(null=True)
     team = models.ForeignKey(Team)
     player = models.ForeignKey(Bio)
     game = models.ForeignKey(Game, null=True)
