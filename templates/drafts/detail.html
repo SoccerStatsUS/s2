@@ -5,6 +5,16 @@
 <h3>{{ draft }}</h3>
 
 <table>
+  <tr>
+    <th>#</th>
+    <th>name</th>
+    <th>team</th>
+    <th>gp</th>
+    <th>gs</th>
+    <th>min</th>
+    <th>g</th>
+    <th>a</th>
+  </tr>
 {% for pick in draft.pick_set.all %}
 <tr>
   <td>{{ pick.position }}</td>
@@ -16,6 +26,21 @@
     {% endif %}
   </td>
   <td><a href="{% url team_detail pick.team.slug %}">{{ pick.team }}</a></td>
+  {% if pick.player %}
+  {% with pick.player.career_stat as stat %}
+  <td>{{ stat.games_played|default_if_none:'' }}</td>  
+  <td>{{ stat.games_started|default_if_none:'' }}</td>
+  <td>{{ stat.minutes|default_if_none:'' }}</td> 
+  <td>{{ stat.goals }}</td>
+  <td>{{ stat.assists }}</td>
+  {% endwith %}
+  {% else %}
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  {% endif %}
 </tr>
 
 {% endfor %}

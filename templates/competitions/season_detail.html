@@ -10,6 +10,7 @@
 <h3>{{ season }}</h3>
 {% if season.next_season %}<a href="{% url season_detail season.competition.slug season.next_season.slug %}">n</a>{% endif %}
 
+
 {% if awards %}
 
 <h2>Awards</h3>
@@ -105,6 +106,8 @@
 </table>
 
 {% endif %}
+
+
 
 
 {% if season.game_set.count %}

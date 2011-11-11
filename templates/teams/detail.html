@@ -15,46 +15,41 @@
   <h4>Website</h4>
 {% endcomment %}
 
+
+
+<table>
+{% for award in team.awards.all %}
+<tr>
+  <td><a href="{% url competition_detail award.award.competition.id %}">{{ award.award.competition }}</a></td>
+  <td><a href="{% url award_detail award.award.id %}">{{ award.award.name }}</a></td>
+</tr>
+{% endfor %}
+</table>
+
 <table>
 {% for position in team.position_set.all %}
 <tr>
   <td><a href="{% url person_detail position.person.slug %}">{{ position.person }}</a></td>
   <td>{{ position.name }}</td>
-  <td>{{ position.start }}</td>
-  <td>{{ position.end }}</td>
+  <td>{{ position.start|default_if_none:'' }}</td>
+  <td>{{ position.end|default_if_none:'' }}</td>
 </tr>
 {% endfor %}
 </table>
 
-{% if stats %}
-
 <table>
-  <tr>
-    <th>player</th>
-    <th>gp</th>
-    <th>gs</th>
-    <th>min</th>
-    <th>goals</th>
-    <th>assists</th>
-    <th>shots</th>
-  </tr>
-
-  {% for stat in stats %}
-  <tr>
-    <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
-    <td>{{ stat.games_played|default_if_none:'' }}</td>
-    <td>{{ stat.games_started|default_if_none:'' }}</td>
-    <td>{{ stat.minutes }}</td>
-    <td>{{ stat.goals }}</td>
-    <td>{{ stat.assists }}</td>
-    <td>{{ stat.shots }}</td>
-
-  </tr>
-  {% endfor %}
+{% for pick in team.pick_set.all %}
+<tr>
+  <td>{{ pick.position }}</td>
+  {% if pick.player %}
+  <td><a href="{% url person_detail pick.player.slug %}">{{ pick.player }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+  <td><a href="{% url draft_detail pick.draft.competition.slug pick.draft.slug %}">{{ pick.draft }}</a></td>
+</tr>
+{% endfor %}
 </table>
-
-{% endif %}
-
 
 <table>
   <tr>
@@ -103,6 +98,38 @@
     <td>{{ team.alltime_standing.goals_against|default_if_none:'' }}</td>
 
 </table>
+
+
+{% if stats %}
+
+<table>
+  <tr>
+    <th>player</th>
+    <th>gp</th>
+    <th>gs</th>
+    <th>min</th>
+    <th>goals</th>
+    <th>assists</th>
+    <th>shots</th>
+  </tr>
+
+  {% for stat in stats %}
+  <tr>
+    <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
+    <td>{{ stat.games_played|default_if_none:'' }}</td>
+    <td>{{ stat.games_started|default_if_none:'' }}</td>
+    <td>{{ stat.minutes|default_if_none:'' }}</td>
+    <td>{{ stat.goals|default_if_none:'' }}</td>
+    <td>{{ stat.assists|default_if_none:'' }}</td>
+    <td>{{ stat.shots|default_if_none:'' }}</td>
+
+  </tr>
+  {% endfor %}
+</table>
+
+{% endif %}
+
+
 
 
 

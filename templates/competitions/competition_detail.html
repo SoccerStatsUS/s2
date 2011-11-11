@@ -8,15 +8,27 @@
 <h3><a href="{% url competition_detail competition.slug %}">{{ competition }}</a></h3>
 
 <table>
+{% for award in competition.award_set.all %}
+<tr>
+  <td><a href="{% url award_detail award.id %}">{{ award }}</a></td>
+</tr>
+{% endfor %}
+</table>
+
+
+<table>
   <tr>
     <th>competition</th>
     <th>season</th>
+    <th>champion</th>
   </tr>
 
   {% for season in competition.season_set.all %}
   <tr>
     <td>{{ competition }}</td>
     <td><a href="{% url season_detail competition.slug season.slug %}">{{ season.name }}</a></td>
+    <td>{{ season.champion }}</td>
+    <td>{{ season.mvp.recipient.name }}</td>
     </tr>
   {% endfor %}
     

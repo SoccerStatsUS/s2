@@ -9,11 +9,12 @@
 <span class="score">{{ game.score }}</span>
 <span class="team"><a href="{% url team_detail game.away_team.slug %}">{{ game.away_team  }}</a></span>
 
+
 <h4><a href="{% url competition_detail game.competition.slug %}">{{ game.competition }}</a></h4>
-<h4><a href="{% url season_detail game.competition.slug game.season.slug %}"{{ game.season }}</h4>
+<h4><a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.season }}</a></h4>
 
 
-<H3</H3>
+
 
 <table>
   <tr>
@@ -36,20 +37,24 @@
 
 <table>
   <tr>
-    <th>Date</th>
     <th>Team</th>
     <th>Player</th>
+    <th>Minutes</th>
     <th>On</th>
     <th>Off</th>
+    <th>Goals</th>
+    <th>Assists</th>
   </tr>
 
   {% for appearance in game.appearance_set.all %}
   <tr>
-    <td>{{ appearance.game.date }}</td>
     <td><a href="{% url team_detail appearance.team.slug %}">{{ appearance.team }}</a></td>
     <td><a href="{% url person_detail appearance.player.slug %}">{{ appearance.player }}</a></td>
+    <td>{{ appearance.minutes }}</td>
     <td>{{ appearance.on }}</td>
     <td>{{ appearance.off }}</td>
+    <td>{{ appearance.goals }}</td>
+    <td>{{ appearance.assists }}</td>
   </tr>
   {% endfor %}
 </table>

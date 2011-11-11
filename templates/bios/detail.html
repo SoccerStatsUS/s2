@@ -29,6 +29,7 @@
 </div>
 {% endif %}
 
+
 {% if bio.awards.exists %}
 <h4>Awards</h4>
 <table>
@@ -40,6 +41,17 @@
 {% endfor %}
 </table>
 {% endif %}
+
+<h4>Drafts</h4>
+<table>
+{% for pick in  bio.pick_set.all %}
+<tr>
+  <td>{{ pick.position }}</td>
+  <td><a href="{% url team_detail pick.team.slug %}">{{ pick.team }}</a></td>
+  <td><a href="{% url draft_detail pick.draft.competition.slug pick.draft.slug %}">{{ pick.draft }}</a></td>
+{% endfor %}
+</table>
+
 
 
 
@@ -107,6 +119,7 @@
 <h3>goals</h3>
 <table>
   <tr>
+    <th>Competition</th>
     <th>Date</th>
     <th>Minute</th>
     <th>Team</th>
@@ -117,6 +130,7 @@
 
   {% for goal in bio.goal_set.all %}
   <tr>
+    <td><a href="{% url competition_detail goal.game.competition.slug %}">{{ goal.game.competition.abbreviation }}</a></td>
     <td>{{ goal.game.date }}</td>
     <td>{{ goal.minute }}</td>
     <td><a href="{% url team_detail goal.team.slug %}">{{ goal.team }}</a></td>
