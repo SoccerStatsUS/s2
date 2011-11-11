@@ -84,6 +84,8 @@ class Team(models.Model):
     defuncts = DefunctTeamManager()
     reals = RealTeamManager()
 
+    awards = generic.GenericRelation('awards.AwardItem')
+
 
     class Meta:
         ordering = ('short_name',)
