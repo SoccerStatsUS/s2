@@ -1,5 +1,5 @@
 {% if is_none %}
 <td class="grey"></td>
 {% else %}
-<td>{{ datum }}</td>
+<td>{{ datum|default_if_none:'' }}</td>
 {% endif %}
