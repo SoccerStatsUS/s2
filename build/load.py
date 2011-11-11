@@ -1,3 +1,4 @@
+import datetime
 import os
 import pymongo
 
@@ -205,6 +206,9 @@ def load_games():
             Game.objects.create(**game)
         except IntegrityError:
             print game
+        except ValueError:
+            print game
+            
 
 
 @transaction.commit_on_success
@@ -224,33 +228,39 @@ def load_goals():
         if goal['team'] in teams:
             team_id = teams[team]
         else:
-            team_id = Team.objects.find(team).id
+            team_id = Team.objects.find(team, create=True).id
             teams[team] = team_id
 
-        player = goal['player']
+        player = goal['goal']
         if player in bios:
             bio_id = bios[player]
         else:
             bio_id = Bio.objects.find(player).id
             bios[player] = bio_id
 
-        game_key = (team_id, goal['date'])
+        # Coerce to date to match dict.
+        d = datetime.date(goal['date'].year, goal['date'].month, goal['date'].day)
+        game_key = (team_id, d)
+
         if game_key in games:
             game_id = games[game_key]
         else:
+            print "No game match."
             game_id = None
 
-
         if game_id:
-                l.append({
-                        'date': goal['date'],
-                        'minute': goal['minute'],
-                        'team_id': team_id,
-                        'player_id': bio_id,
-                        'game_id': game_id,
-                        })
+            return {
+                'date': goal['date'],
+                'minute': goal['minute'],
+                'team': Team.objects.get(id=team_id),
+                'player': Bio.objects.get(id=bio_id),
+                'game': Game.objects.get(id=game_id),
+                }
 
-    insert_sql("games_game", l)
+    for goal in soccer_db.goals.find():
+        g = create_goal(goal)
+        if g:
+            Goal.objects.create(**g)
     
 @transaction.commit_on_success
 def load_stats():
@@ -301,7 +311,6 @@ def load_stats():
             'red_cards': stat.get('red_cards'),
             })
 
-    print "Creating appearances"
     insert_sql("stats_stat", l)
 
 
@@ -348,9 +357,9 @@ def load_lineups():
 
         if game:
             return {
-                'team_id': team.id,
-                'game_id': game.id,
-                'player_id': player.id,
+                'team': team,
+                'game': game,
+                'player': player,
                 'on': a['on'],
                 'off': a['off'],
                 }
@@ -365,10 +374,14 @@ def load_lineups():
         if i % 5000 == 0:
             print i
 
-    import pdb; pdb.set_trace()
-
     print "Creating appearances"
-    insert_sql("lineups_appearance", l)
+
+    for e in l:
+        Appearance.objects.create(**e)
+
+
+
+    #insert_sql("lineups_appearance", l)
         
         
 
