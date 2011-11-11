@@ -59,9 +59,11 @@ class Game(models.Model):
     
     home_team = models.ForeignKey(Team, related_name='home_games')
     home_score = models.IntegerField()
+    official_home_score = models.IntegerField(null=True)
 
     away_team = models.ForeignKey(Team, related_name='away_games')
     away_score = models.IntegerField()
+    official_away_score = models.IntegerField(null=True)
 
     # This should probably be a many-to-many?
     competition = models.ForeignKey(Competition)
@@ -88,6 +90,14 @@ class Game(models.Model):
 
     def __unicode__(self):
         return u"%s: %s v %s" % (self.date, self.home_team, self.away_team)
+
+    def opponent(self, team):
+        if team == self.home_team:
+            return self.away_team
+        elif team == self.away_team:
+            return self.home_team
+        else:
+            raise
 
 
 
