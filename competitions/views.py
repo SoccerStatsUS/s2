@@ -19,7 +19,7 @@ def competition_detail(request, competition_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
     context = {
         'competition': competition,
-        'stats': Stat.competition_stats.filter(team=None, competition=competition).order_by('-goals'),
+        'stats': Stat.competition_stats.filter(team=None, competition=competition).order_by('-minutes'),
         }
     return render_to_response("competitions/competition_detail.html",
                               context,

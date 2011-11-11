@@ -53,7 +53,6 @@ class Competition(models.Model):
 
 
 
-
 class SeasonManager(models.Manager):
 
     def find(self, name, competition):
@@ -137,4 +136,22 @@ class Season(models.Model):
             
     def first_standing(self):
         return self.standing_set.all()[0]
+
+
+    def champion(self):
+        from s2.awards.models import AwardItem
+        try:
+            return AwardItem.objects.get(season=self, award__name='Champion')
+        except:
+            return None
+
+    def mvp(self):
+        from s2.awards.models import AwardItem
+        # Need to expand for other names.
+        try:
+            return AwardItem.objects.get(season=self, award__name='MVP')
+        except:
+            return None
+
+
 
