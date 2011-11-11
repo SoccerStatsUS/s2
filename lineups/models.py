@@ -1,6 +1,7 @@
 from django.db import models
 
 from s2.bios.models import Bio
+from s2.goals.models import Goal
 from s2.games.models import Game
 from s2.teams.models import Team
 
@@ -29,3 +30,30 @@ class Appearance(models.Model):
             return self.game.away_team
         else:
             return self.game.home_team
+
+    
+    @property
+    def minutes(self):
+        try:
+            return int(self.off) - int(self.on)
+        except:
+            return None
+
+
+    @property
+    def goals(self):
+        Goal.objects.filter(player=self.player, game=self.game).count()
+
+
+    @property
+    def assists(self):
+        return None
+
+
+    @property
+    def goal_differential(self):
+        team_goals = Goal.objects.filter(game=self.game, team=self.team, minute__gte=self.on, minute__lte=self.off)
+        opponent = self.game.opponent(self.team)
+        opponent_goals = Goal.objects.filter(game=self.game, team=opponent, minute__gte=self.on, minute__lte=self.off)
+        return team_goals - opponent_goals
+        
