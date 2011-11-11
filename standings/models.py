@@ -19,6 +19,8 @@ class Standing(models.Model):
     ties = models.IntegerField(null=True)
 
     points = models.IntegerField(null=True)
+    points_deducted = models.IntegerField(null=True)
+    deduction_reason = models.TextField()
     position = models.IntegerField(null=True)
 
     goals_for = models.IntegerField(null=True)
