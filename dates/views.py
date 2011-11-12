@@ -31,7 +31,7 @@ def month_detail(request, year, month):
     # Add a paginator.
     year, month = int(year), int(month)
     games = Game.objects.filter(date__year=year, date__month=month)
-    births = Bio.objects.filter(birthdate__year=year, birthdate__mont=month).order_by('birthdate')
+    births = Bio.objects.filter(birthdate__year=year, birthdate__month=month).order_by('birthdate')
     hires = Position.objects.filter(start__year=year, start__month=month)
     fires = Position.objects.filter(end__year=year, end__month=month)
 

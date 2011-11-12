@@ -6,11 +6,11 @@ urlpatterns = patterns('s2.dates.views',
                            'year_detail',
                            name='year_detail'),
 
-                       url(r'^(?P<year>\d\d\d\d)/(?P<month>\d\d)$',
+                       url(r'^(?P<year>\d\d\d\d)/(?P<month>\d{1,2})$',
                            'month_detail',
                            name='month_detail'),
 
-                       url(r'^(?P<year>\d\d\d\d)/(?P<month>\d\d)/(?P<day>\d\d)$',
+                       url(r'^(?P<year>\d\d\d\d)/(?P<month>\d{1,2})/(?P<day>\d{1,2})$',
                            'date_detail',
                            name='date_detail'),
 
