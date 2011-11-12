@@ -1,4 +1,18 @@
 
+#### Dependencies
+
+LevelDB
+RabbitMQ
+MongoDB
+
+MongoDB and RabbitMQ have been installed from debs, so add to /etc/apt/sources.list:
+deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen
+deb http://www.rabbitmq.com/debian/ testing main
+
+
+
+
+
 #### Todo
 
 Create a team ranking system based on the scores.
