@@ -11,9 +11,19 @@
 {% if season.next_season %}<a href="{% url season_detail season.competition.slug season.next_season.slug %}">n</a>{% endif %}
 
 
+<table>
+{% for item in  season.awarditem_set.all %}
+<tr>
+  <td>{{ item.award.name }}</td>
+  <td><a href="{{ item.recipient.get_absolute_url }}">{{ item.recipient }}</a></td>
+{% endfor %}
+</table>
+
 {% if awards %}
 
 <h2>Awards</h3>
+
+
 
 {% endif %}
 
@@ -87,6 +97,7 @@
     <th>goals</th>
     <th>assists</th>
     <th>shots</th>
+    <th>age</th>
   </tr>
 
 
@@ -100,6 +111,7 @@
     <td>{{ stat.goals }}</td>
     <td>{{ stat.assists }}</td>
     <td>{{ stat.shots }}</td>
+    <td>{{ stat.age|floatformat }}</td>
   </tr>
   {% endfor %}
 

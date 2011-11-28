@@ -27,7 +27,7 @@
   <tr>
     <td>{{ competition }}</td>
     <td><a href="{% url season_detail competition.slug season.slug %}">{{ season.name }}</a></td>
-    <td>{{ season.champion }}</td>
+    <td><a href="{{ season.champion.recipient.get_absolute_url }}">{{ season.champion.recipient }}</a></td>
     <td>{{ season.mvp.recipient.name }}</td>
     </tr>
   {% endfor %}
@@ -102,12 +102,18 @@
 <table>
   <tr>
     <th>player</th>
+    <th>wins</th>
+    <th>ties</th>
+    <th>losses</th>
+    <th>gf</th>
+    <th>ga</th>
     <th>gp</th>
     <th>gs</th>
     <th>min</th>
     <th>goals</th>
     <th>assists</th>
     <th>shots</th>
+    <th>age</th>
   </tr>
 
   {% for stat in stats %}
@@ -117,12 +123,18 @@
     {% else %}
     <td>{{ stat.player }}</td>
     {% endif %}
+    <td>{{ stat.wins }}</td>
+    <td>{{ stat.ties }}</td>
+    <td>{{ stat.losses }}</td>
+    <td>{{ stat.goals_for }}</td>
+    <td>{{ stat.goals_against }}</td>
     <td>{{ stat.games_played }}</td>
     <td>{{ stat.games_started }}</td>
     <td>{{ stat.minutes }}</td>
     <td>{{ stat.goals }}</td>
     <td>{{ stat.assists }}</td>
     <td>{{ stat.shots }}</td>
+    <td>{{ stat.player.age }}</td>
   </tr>
   {% endfor %}
 

@@ -20,7 +20,8 @@
 <table>
 {% for award in team.awards.all %}
 <tr>
-  <td><a href="{% url competition_detail award.award.competition.id %}">{{ award.award.competition }}</a></td>
+  <td><a href="{% url season_detail award.season.competition.slug award.season.slug %}">{{ award.season.name }}</a></td>
+  <td><a href="{% url competition_detail award.award.competition.slug %}">{{ award.award.competition }}</a></td>
   <td><a href="{% url award_detail award.award.id %}">{{ award.award.name }}</a></td>
 </tr>
 {% endfor %}
@@ -106,6 +107,10 @@
   <tr>
     <th>player</th>
     <th>gp</th>
+    <th>w</th>
+    <th>l</th>
+    <th>t</th>
+    <th>+/-</th>
     <th>gs</th>
     <th>min</th>
     <th>goals</th>
@@ -117,6 +122,10 @@
   <tr>
     <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
     <td>{{ stat.games_played|default_if_none:'' }}</td>
+    <td>{{ stat.wins|default_if_none:'' }}</td>
+    <td>{{ stat.ties|default_if_none:'' }}</td>
+    <td>{{ stat.losses|default_if_none:'' }}</td>
+    <td>{{ stat.plus_minus|default_if_none:'' }}</td>
     <td>{{ stat.games_started|default_if_none:'' }}</td>
     <td>{{ stat.minutes|default_if_none:'' }}</td>
     <td>{{ stat.goals|default_if_none:'' }}</td>

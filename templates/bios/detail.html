@@ -1,10 +1,11 @@
 {% extends "base.html" %}
+{% load datum_or_none %}
 
 {% block title %}{{ bio.name }} - {% endblock %}
 
 {% block content %}
 
-{% load datum_or_none %}
+
 
 <h3>{{ bio.name }}</h3>
 
@@ -22,7 +23,7 @@
 {% if bio.birthdate or bio.birthplace %}
 <div>
   Born 
-  {% if bio.birthdate %}{{ bio.birthdate }}{% endif %}
+  {% if bio.birthdate %}<a href="{% url date_detail bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a>{% endif %}
   {% if bio.birthplace %}
   in {{ bio.birthplace }}
   {% endif %}
@@ -62,8 +63,8 @@
 <tr>
   <td><a href="{% url team_detail position.team.slug %}">{{ position.team }}</a></td>
   <td>{{ position.name }}</td>
-  <td>{{ position.start }}</td>
-  <td>{{ position.end }}</td>
+  {% datum_or_grey position.start %}
+  {% datum_or_grey position.end %}
 </tr>
 {% endfor %}
 </table>
@@ -75,6 +76,13 @@
     <th>competition</th>
     <th>season</th>
     <th>team</th>
+    <th>position</th>
+    <th>w</th>
+    <th>t</th>
+    <th>l</th>
+    <th>%</th>
+    <th>gf</th>
+    <th>ga</th>
     <th>gp</th>
     <th>gs</th>
     <th>min</th>
@@ -88,12 +96,23 @@
     <td><a href="{% url competition_detail stat.competition.slug %}">{{ stat.competition.abbreviation }}</a></td>
     <td><a href="{% url season_detail stat.competition.slug stat.season.slug %}">{{ stat.season.name }}</a></td>
     <td><a href="{% url team_season_detail stat.team.slug stat.season.slug %}">{{ stat.team }}</a></td>
+    {% datum_or_grey stat.position %}
+    <td>{{ stat.wins|default_if_none:'' }}</td>
+    <td>{{ stat.ties|default_if_none:'' }}</td>
+    <td>{{ stat.losses|default_if_none:'' }}</td>
+    {% if stat.games %}
+    <td>{{ stat.win_percentage_100|floatformat }}</td>
+    {% else %}
+    <td></td>
+    {% endif %}
+    <td>{{ stat.goals_for|default_if_none:'' }}</td>
+    <td>{{ stat.goals_against|default_if_none:'' }}</td>
     {% datum_or_grey stat.games_played %}
     {% datum_or_grey stat.games_started %}
-    <td>{{ stat.minutes|default_if_none:'' }}</td>
-    <td>{{ stat.goals|default_if_none:'' }}</td>
-    <td>{{ stat.assists }}</td>
-    <td>{{ stat.shots|default_if_none:'' }}</td>
+    {% datum_or_grey stat.minutes %}
+    {% datum_or_grey stat.goals %}
+    {% datum_or_grey stat.assists %}
+    {% datum_or_grey stat.shots %}
   </tr>
   {% endfor %}
 
@@ -103,6 +122,13 @@
     <td>Career</td>
     <td></td>
     <td></td>
+    <td></td>
+    <td>{{ stat.wins|default_if_none:'' }}</td>
+    <td>{{ stat.ties|default_if_none:'' }}</td>
+    <td>{{ stat.losses|default_if_none:'' }}</td>
+    <td>{{ stat.win_percentage_100|floatformat }}</td>
+    <td>{{ stat.goals_for|default_if_none:'' }}</td>
+    <td>{{ stat.goals_against|default_if_none:'' }}</td>
     <td>{{ stat.games_played|default_if_none:'' }}</td>
     <td>{{ stat.games_started|default_if_none:'' }}</td>
     <td>{{ stat.minutes|default_if_none:'' }}</td>
@@ -145,6 +171,7 @@
 <h3>appearances</h3>
 <table>
   <tr>
+    <th>competition</th>
     <th>date</th>
     <th>team</th>
     <th>opponent</th>
@@ -155,6 +182,7 @@
 
   {% for appearance in bio.appearance_set.all %}
   <tr>
+    <td><a href="{% url competition_detail appearance.game.competition.slug %}">{{ appearance.game.competition.abbreviation }}</a></td>
     <td>{{ appearance.game.date }}</td>
     <td><a href="{% url team_detail appearance.team.slug %}">{{ appearance.team }}</a></td>
     <td><a href="{% url team_detail appearance.opponent.slug %}">{{ appearance.opponent }}</a></td>

@@ -12,6 +12,11 @@
 <table>
   <tr>
     <th>player</th>
+    <th>w</th>
+    <th>t</th>
+    <th>l</th>
+    <th>gf</th>
+    <th>ga</th>
     <th>gp</th>
     <th>gs</th>
     <th>min</th>
@@ -23,6 +28,11 @@
   {% for stat in stats %}
   <tr>
     <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
+    <td>{{ stat.wins|default_if_none:'' }}</td>
+    <td>{{ stat.ties|default_if_none:'' }}</td>
+    <td>{{ stat.losses|default_if_none:'' }}</td>
+    <td>{{ stat.goals_for|default_if_none:'' }}</td>
+    <td>{{ stat.goals_against|default_if_none:'' }}</td>
     <td>{{ stat.games_played }}</td>
     <td>{{ stat.games_started }}</td>
     <td>{{ stat.minutes }}</td>
@@ -79,15 +89,17 @@
     <th>home team</th>
     <th>score</th>
     <th>away team</th>
+    <th>attendance</th>
   <tr>
 
   {% for game in games %}
   <tr>
-    <td>{{ game.competition.abbrebriation }}</td>
-    <td><a href="{% {{ game.date }}</td>
+    <td>{{ game.competition.abbreviation }}</td>
+    <td><a href="">{{ game.date }}</td>
     <td><a href="{% url team_detail game.home_team.slug %}">{{ game.home_team }}</a></td>
     <td><a href="{% url game_detail game.id %}">{{ game.score }}</a></td>
     <td><a href="{% url team_detail game.away_team.slug %}">{{ game.away_team }}</a></td>
+    <td>{{ game.attendance }}</td>
   </tr>
   {% endfor %}
 </table>
