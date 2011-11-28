@@ -90,8 +90,9 @@ def load_awards():
             raise
 
         try:
-            item['recipient'] = model.objects.find(item['recipient'])
+            item['recipient'] = model.objects.find(item['recipient'], create=True)
         except:
+            import pdb; pdb.set_trace()
             print item['recipient']
             continue
 
@@ -109,7 +110,10 @@ def load_drafts():
     drafts = set()
     draft_dict = {}
     for pick in soccer_db.drafts.find():
-        t = (pick['competition'], pick['draft'])
+        try:
+            t = (pick['competition'], pick['draft'])
+        except:
+            import pdb; pdb.set_trace()
         drafts.add(t)
 
     for t in drafts:
@@ -246,6 +250,7 @@ def load_goals():
             game_id = games[game_key]
         else:
             print "No game match."
+            print game_key
             game_id = None
 
         if game_id:
