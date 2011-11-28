@@ -109,7 +109,10 @@ def load_drafts():
     drafts = set()
     draft_dict = {}
     for pick in soccer_db.drafts.find():
-        t = (pick['competition'], pick['draft'])
+        try:
+            t = (pick['competition'], pick['draft'])
+        except:
+            import pdb; pdb.set_trace()
         drafts.add(t)
 
     for t in drafts:
@@ -200,6 +203,9 @@ def load_games():
 
         if 'year' in game:
             game.pop('year')
+
+        if 'source' in game:
+            game.pop('source')
 
         # Seem to have multiple Miami Fusion entries?
         try:
@@ -378,8 +384,6 @@ def load_lineups():
 
     for e in l:
         Appearance.objects.create(**e)
-
-
 
     #insert_sql("lineups_appearance", l)
         
