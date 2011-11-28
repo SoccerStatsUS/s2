@@ -6,10 +6,17 @@ from s2.stats.models import Stat
 
 
 
-def person_list_generic(request, person_list):
+def person_list_generic(request, person_list=None):
+
+    if person_list is None:
+        stats = Stat.career_stats.all()
+    else:
+        stats = Stat.career_stats.filter(player__in=pl)
+
+    stats = stats.order_by("-losses")[:500]
+    
     context =  {
-        "bios": person_list,
-        "stats": Stat.career_stats.all()
+        'stats': stats,
         }
     return render_to_response("bios/list.html",
                               context,
@@ -18,8 +25,7 @@ def person_list_generic(request, person_list):
 
 
 def person_index(request):
-    people = Bio.objects.all()
-    return person_list_generic(request, people)
+    return person_list_generic(request)
 
 
 def bad_bios(request):
@@ -37,6 +43,11 @@ def bad_bios(request):
 
 def person_detail(request, slug):
     bio = Bio.objects.get(slug=slug)
+
+    
+    # Should not be doing this here.
+    bio.calculate_standings()
+    
     context = {
         "bio": bio
         }
