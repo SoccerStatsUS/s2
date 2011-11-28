@@ -60,3 +60,19 @@ class Standing(models.Model):
         pass
 
 
+
+    def round_standings(self, round):
+        games = self.game_set.all()[:(round - 1)]
+        d = defaultdict(int)
+        for game in games:
+            result = game.result(self.team)
+            d[result] += 1
+        return (d['win'], d['tie'], d['loss'])
+
+
+    def round_points(self, round):
+        wins, ties, losses = self.standings(round)
+        return 3 * wins + ties
+
+
+
