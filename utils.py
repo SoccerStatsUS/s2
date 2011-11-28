@@ -27,65 +27,74 @@ def timer(method):
 
 def insert_sql_pg(table, dict_list):
    # SQLITE does not support multiple row insertion?
-   formatter = lambda l: "(%s)" % ",".join(["'%s'" % unicode(e) for e in l])
-   fields = dict_list[0].keys()
-   make_values = lambda d: "%s" % formatter([d[field] for field in fields])
-   values = [make_values(e) for e in dict_list]
-   value_string = ", ".join([unicode(e) for e in  values])
-   sql = "INSERT INTO %s %s VALUES %s;" % (table, formatter(fields), value_string)
-   cursor = connection.cursor()
-   return cursor.execute(sql)
+    
+    formatter = lambda l: "(%s)" % ",".join(["'%s'" % unicode(e) for e in l])
+    fields = dict_list[0].keys()
+    make_values = lambda d: "%s" % formatter([d[field] for field in fields])
+    values = [make_values(e) for e in dict_list]
+    value_string = ", ".join([unicode(e) for e in  values])
+    sql = "INSERT INTO %s %s VALUES %s;" % (table, formatter(fields), value_string)
+    cursor = connection.cursor()
+    return cursor.execute(sql)
 
 
 def insert_sql(table, dict_list):
-   if len(dict_list) == 0:
-      return
-   elif len(dict_list) > 1:
-      for d in dict_list:
-         insert_sql(table, [d])
+    if len(dict_list) == 0:
+        return
+    elif len(dict_list) > 1:
+        for d in dict_list:
+            insert_sql(table, [d])
 
 
-   else:
-      formatter = lambda l: "(%s)" % ",".join(["'%s'" % unicode(e) for e in l])
-      fields = dict_list[0].keys()
-      make_values = lambda d: "%s" % formatter([d[field] for field in fields])
-      values = [make_values(e) for e in dict_list]
-      value_string = ", ".join([unicode(e) for e in  values])
-      sql = "INSERT INTO %s %s VALUES %s;" % (table, formatter(fields), value_string)
-      cursor = connection.cursor()
-      return cursor.execute(sql)
+    else:
+        def formatter(l):
+            l2 = []
+            for e in l:
+                if e == None:
+                    l2.append("NULL")
+                else:
+                    l2.append("'%s'" % unicode(e))
+            return "(%s)" % ",".join(l2)
+            
+        fields = dict_list[0].keys()
+        make_values = lambda d: "%s" % formatter([d[field] for field in fields])
+        values = [make_values(e) for e in dict_list]
+        value_string = ", ".join([unicode(e) for e in  values])
+        sql = "INSERT INTO %s %s VALUES %s;" % (table, formatter(fields), value_string)
+        cursor = connection.cursor()
+        return cursor.execute(sql)
 
 
 class memoized(object):
-   """
-   Decorator that caches a function's return value each time it is called.
-   If called later with the same arguments, the cached value is returned, and
-   not re-evaluated.
-   """
+    """
+    Decorator that caches a function's return value each time it is called.
+    If called later with the same arguments, the cached value is returned, and
+    not re-evaluated.
+    """
 
-   def __init__(self, func):
-      self.func = func
-      self.cache = {}
+    def __init__(self, func):
+        self.func = func
+        self.cache = {}
 
-   def __call__(self, *args):
-      try:
-         return self.cache[args]
-      except KeyError:
-         value = self.func(*args)
-         self.cache[args] = value
-         return value
-      except TypeError:
-         # uncachable -- for instance, passing a list as an argument.
-         # Better to not cache than to blow up entirely.
-         return self.func(*args)
+    def __call__(self, *args):
+        try:
+            return self.cache[args]
+        except KeyError:
+            value = self.func(*args)
+            self.cache[args] = value
+            return value
+        except TypeError:
+            # uncachable -- for instance, passing a list as an argument.
+            # Better to not cache than to blow up entirely.
+            return self.func(*args)
 
-   def __repr__(self):
-      """Return the function's docstring."""
-      return self.func.__doc__
+    def __repr__(self):
+        """Return the function's docstring."""
+        return self.func.__doc__
 
-   def __get__(self, obj, objtype):
-      """Support instance methods."""
-      return functools.partial(self.__call__, obj)
+    def __get__(self, obj, objtype):
+        """Support instance methods."""
+        return functools.partial(self.__call__, obj)
 
 
 
