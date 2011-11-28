@@ -6,7 +6,7 @@ from s2.stats.models import Stat
 
 def stats_index(request):
     context = {
-        'stats': Stat.career_stats.all(),
+        'stats': Stat.career_stats.all()[:100],
         }
     return render_to_response("stats/list.html",
                               context,
