@@ -6,6 +6,7 @@ from s2.teams.models import Team
 from s2.competitions.models import Competition, Season
 
 
+
 class GameManager(models.Manager):
 
     def game_dict(self):
@@ -17,6 +18,9 @@ class GameManager(models.Manager):
             d[key2] = e.id
         return d
 
+    def team_filter(self, team):
+        return Game.objects.filter(models.Q(home_team=team) | models.Q(away_team=team))
+            
 
     def find(self, team, date):
         """
@@ -86,6 +90,110 @@ class Game(models.Model):
 
     def score(self):
         return "%s - %s" % (self.home_score, self.away_score)
+
+
+    # These should hang off of Team, not Game.
+    def previous_games(self, team):
+        assert team in (self.home_team, self.away_team)
+        return Game.objects.team_filter(team).filter(season=self.season).filter(date__lt=self.date).order_by('date')
+
+    def streak(self, team):
+
+        result = self.result(team)
+        s = 1
+
+        games = self.previous_games(team).order_by('-date')
+        for e in games:
+            r = e.result(team)
+            if r != result:
+                return s
+            else:
+                s += 1
+
+        return s
+
+    def series(self):
+        return Game.objects.filter(season=self.season).filter(
+            models.Q(home_team=self.home_team) | models.Q(away_team=self.home_team)).filter(
+            models.Q(home_team=self.away_team) | models.Q(away_team=self.away_team))
+
+        
+
+    def standings(self, team):
+        from collections import defaultdict
+        d = defaultdict(int)
+        for game in self.previous_games(team):
+            d[game.result(team)] += 1
+        d[self.result(team)] += 1
+        return (d['win'], d['tie'], d['loss'])
+
+    def home_standings(self):
+        return self.standings(self.home_team)
+
+    def away_standings(self):
+        return self.standings(self.away_team)
+        
+
+    def streaks(self):
+        return [(self.result(e), self.streak(e)) for  e in (self.home_team, self.away_team)]
+
+
+    def goals_for(self, team):
+        assert team in (self.home_team, self.away_team)
+        
+        if team == self.home_team:
+            score = self.home_score
+        else:
+            score = self.away_score
+
+        return int(score)
+
+
+    def goals_against(self, team):
+        assert team in (self.home_team, self.away_team)
+
+        if team == self.home_team:
+            score = self.away_score
+        else:
+            score = self.home_score
+
+        return int(score)
+
+        
+
+
+    def result(self, team):
+        assert team in (self.home_team, self.away_team)
+        
+        try:
+            home_score = int(self.official_home_score or self.home_score)
+            away_score = int(self.official_away_score or self.away_score)
+        except:
+            return None
+
+        if home_score == away_score:
+            return 'tie'
+        if home_score > away_score:
+            if team == self.home_team:
+                return 'win'
+            else:
+                return 'loss'
+        else:
+            if team == self.home_team:
+                return 'loss'
+            else:
+                return 'win'
+
+
+    def same_day_games(self):
+        return Game.objects.filter(date=self.date).exclude(id=self.id)
+
+
+
+        
+
+        
+        
 
 
     def __unicode__(self):

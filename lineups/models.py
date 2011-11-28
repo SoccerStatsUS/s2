@@ -49,11 +49,26 @@ class Appearance(models.Model):
     def assists(self):
         return None
 
+    @property
+    def result(self):
+        return self.game.result(self.team)
+
+
+    @property
+    def goals_for(self):
+        team_goals = Goal.objects.filter(game=self.game, team=self.team, minute__gte=self.on, minute__lte=self.off).count()
+        return team_goals
+
+    @property
+    def goals_against(self):
+        opponent = self.game.opponent(self.team)
+        opponent_goals = Goal.objects.filter(game=self.game, team=opponent, minute__gte=self.on, minute__lte=self.off).count()
+        return opponent_goals
+
 
     @property
     def goal_differential(self):
-        team_goals = Goal.objects.filter(game=self.game, team=self.team, minute__gte=self.on, minute__lte=self.off)
-        opponent = self.game.opponent(self.team)
-        opponent_goals = Goal.objects.filter(game=self.game, team=opponent, minute__gte=self.on, minute__lte=self.off)
-        return team_goals - opponent_goals
+        return self.goals_for - self.goals_against
+
+
         
