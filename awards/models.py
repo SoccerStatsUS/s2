@@ -27,6 +27,9 @@ class Award(models.Model):
     def __unicode__(self):
         return "%s %s" % (self.competition.name, self.name)
 
+    class Meta:
+        ordering = ('competition', 'name')
+
 
 
 
