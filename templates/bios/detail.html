@@ -22,9 +22,9 @@
 {% if bio.birthdate or bio.birthplace %}
 <div>
   Born 
-  {% if bio.birthdate %}{{ bio.birthdate }}{% endif %}
+  {% if bio.birthdate %}<a href="{% url date_detail bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a>{% endif %}
   {% if bio.birthplace %}
-  in {{ bio.birthplace }}
+  in <a href="{% url place_detail bio.birthplace %}">{{ bio.birthplace }}</a>
   {% endif %}
 </div>
 {% endif %}

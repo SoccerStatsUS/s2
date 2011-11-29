@@ -33,11 +33,11 @@
 {% endfor %}
 </table>
 
-
+<h3>Games</h3>
 <table>
 {% for game in games %}
 <tr>
-  <td><a href="{% url season_detail game.season.competition.slug game.season.slug %}">{{ game.season }}</td>
+  <td><a href="{% url season_detail game.season.competition.slug game.season.slug %}">{{ game.season.competition.abbreviation }}</td>
   <td>{{ game.date }}</td>
   <td class='align-right'>{{ game.home_team }}</td>
   <td><a href="{% url game_detail game.id %}">{{ game.home_score }} - {{ game.away_score }}</a></td>

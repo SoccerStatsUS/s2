@@ -83,7 +83,7 @@
 
   {% for game in games %}
   <tr>
-    <td>{{ game.competition.abbrebriation }}</td>
+    <td><a href="{% url competition_detail game.competition.slug %}">{{ game.competition.abbreviation }}</a></td>
     <td><a href="{% url month_detail game.date.year game.date.month %}">{{ game.date }}</a></td>
     <td><a href="{% url team_detail game.home_team.slug %}">{{ game.home_team }}</a></td>
     <td><a href="{% url game_detail game.id %}">{{ game.score }}</a></td>
