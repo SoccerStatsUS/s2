@@ -16,8 +16,8 @@ urlpatterns = patterns('',
                        url(r'^drafts/', include('s2.drafts.urls')),
                        url(r'^games/', include('s2.games.urls')),
                        url(r'^goals/', include('s2.goals.urls')),
+                       url(r'^places/', include('s2.places.urls')),
                        url(r'^teams/', include('s2.teams.urls')),
-
                        url(r'^stats/', include('s2.stats.urls')),
 
                        # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
