@@ -43,15 +43,20 @@
 </table>
 {% endif %}
 
+
+{% if bio.pick_set.exists %}
+
 <h4>Drafts</h4>
 <table>
-{% for pick in  bio.pick_set.all %}
+{% for pick in bio.pick_set.all %}
 <tr>
   <td>{{ pick.position }}</td>
   <td><a href="{% url team_detail pick.team.slug %}">{{ pick.team }}</a></td>
   <td><a href="{% url draft_detail pick.draft.competition.slug pick.draft.slug %}">{{ pick.draft }}</a></td>
 {% endfor %}
 </table>
+
+{% endif %}
 
 
 
@@ -70,6 +75,8 @@
 </table>
 {% endif %}
 
+{% if bio.season_stats.exists %}
+
 <h4>Stats</h4>
 <table>
   <tr>
@@ -77,18 +84,20 @@
     <th>season</th>
     <th>team</th>
     <th>position</th>
-    <th>w</th>
-    <th>t</th>
-    <th>l</th>
-    <th>%</th>
-    <th>gf</th>
-    <th>ga</th>
+
     <th>gp</th>
     <th>gs</th>
     <th>min</th>
     <th>goals</th>
     <th>assists</th>
     <th>shots</th>
+
+    <th>w</th>
+    <th>t</th>
+    <th>l</th>
+    <th>%</th>
+    <th>gf</th>
+    <th>ga</th>
   </tr>
 
   {% for stat in bio.season_stats %}
@@ -97,6 +106,14 @@
     <td><a href="{% url season_detail stat.competition.slug stat.season.slug %}">{{ stat.season.name }}</a></td>
     <td><a href="{% url team_season_detail stat.team.slug stat.season.slug %}">{{ stat.team }}</a></td>
     {% datum_or_grey stat.position %}
+
+    {% datum_or_grey stat.games_played %}
+    {% datum_or_grey stat.games_started %}
+    {% datum_or_grey stat.minutes %}
+    {% datum_or_grey stat.goals %}
+    {% datum_or_grey stat.assists %}
+    {% datum_or_grey stat.shots %}
+
     <td>{{ stat.wins|default_if_none:'' }}</td>
     <td>{{ stat.ties|default_if_none:'' }}</td>
     <td>{{ stat.losses|default_if_none:'' }}</td>
@@ -107,12 +124,6 @@
     {% endif %}
     <td>{{ stat.goals_for|default_if_none:'' }}</td>
     <td>{{ stat.goals_against|default_if_none:'' }}</td>
-    {% datum_or_grey stat.games_played %}
-    {% datum_or_grey stat.games_started %}
-    {% datum_or_grey stat.minutes %}
-    {% datum_or_grey stat.goals %}
-    {% datum_or_grey stat.assists %}
-    {% datum_or_grey stat.shots %}
   </tr>
   {% endfor %}
 
@@ -123,23 +134,27 @@
     <td></td>
     <td></td>
     <td></td>
-    <td>{{ stat.wins|default_if_none:'' }}</td>
-    <td>{{ stat.ties|default_if_none:'' }}</td>
-    <td>{{ stat.losses|default_if_none:'' }}</td>
-    <td>{{ stat.win_percentage_100|floatformat }}</td>
-    <td>{{ stat.goals_for|default_if_none:'' }}</td>
-    <td>{{ stat.goals_against|default_if_none:'' }}</td>
+
     <td>{{ stat.games_played|default_if_none:'' }}</td>
     <td>{{ stat.games_started|default_if_none:'' }}</td>
     <td>{{ stat.minutes|default_if_none:'' }}</td>
     <td>{{ stat.goals }}</td>
     <td>{{ stat.assists }}</td>
     <td>{{ stat.shots|default_if_none:'' }}</td>
+
+    <td>{{ stat.wins|default_if_none:'' }}</td>
+    <td>{{ stat.ties|default_if_none:'' }}</td>
+    <td>{{ stat.losses|default_if_none:'' }}</td>
+    <td>{{ stat.win_percentage_100|floatformat }}</td>
+    <td>{{ stat.goals_for|default_if_none:'' }}</td>
+    <td>{{ stat.goals_against|default_if_none:'' }}</td>
   </tr>
   {% endif %}
   {% endwith %}
 
 </table>
+
+{% endif %}
 
 {% if bio.goal_set.exists %}
 <h3>goals</h3>

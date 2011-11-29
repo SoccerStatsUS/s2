@@ -27,21 +27,6 @@
 </table>
 
 
-<table>
-{% for item in  season.awarditem_set.all %}
-<tr>
-  <td>{{ item.award.name }}</td>
-  <td><a href="{{ item.recipient.get_absolute_url }}">{{ item.recipient }}</a></td>
-{% endfor %}
-</table>
-
-{% if awards %}
-
-<h2>Awards</h3>
-
-
-
-{% endif %}
 
 
 {% if season.standing_set.exists %}
