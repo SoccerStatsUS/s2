@@ -1,4 +1,30 @@
 
+
+# Deployment instructions.
+1. Add to /etc/hosts, /etc/ssh_config
+2. adduser chris; add chris to /etc/sudoers
+3. Add ssh keys.
+5. apt-get install emacs git-core
+6. clone dotfiles repo
+7. Go through setup.bash
+8. Set up dns
+9. Install mongo, leveldb (leveldb sucks; install from source)
+
+
+Install: 
+
+#### Launch
+
+Time to launch the fucking site.
+
+What do I need to do before releasing it?
+
+0. Build everything.
+1. Migrate to a different server.
+2. add page caching.
+
+
+
 #### Dependencies
 
 LevelDB
@@ -9,9 +35,19 @@ MongoDB and RabbitMQ have been installed from debs, so add to /etc/apt/sources.l
 deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen
 deb http://www.rabbitmq.com/debian/ testing main
 
+####
+
+Relevant standings on the date page.
+Games played the same day on game detail 
+next, previous game buttons
+Coach, ref, attendance, city, stadium on game detail
 
 
 
+
+
+1. create a stable server associated with a different supervisor (or no supervisor.)
+2. use canvas to create some pitch stuff.
 
 #### Todo
 
@@ -38,10 +74,6 @@ goals_for can represent either minutes gf or games played gf, whereas w/l/t repr
 Probably need to think about the game stat (stat for one player for one game, or stat for one game or whatever. Just another kind of stat. Can just apply game to stat also...
 
 
-
-
-
-
 # Homepage
 
 Homepage should have:
@@ -60,19 +92,17 @@ Some of the main problems with this site:
 0. Provision AWS
 1. Caching with redis.
 2. Need testing.
-3. Need much better facilities for managing duplicate (players/leagues/teams/games)
-4. Maybe an alias model that maps a name to a generic foreign key? Unique on the name/gfk combination.
+3. Need to figure out how to distinguish players with the same name.
 
 
 #### Stats
-
-So the unifying idea behind how to keep stats on the site:
 
 Every game is part of several competitions. We save stats for each competition into a stats object. That should be relatively standard. 
 Try to generate stats for everything that doesn't have them.
 
 So a FC Dallas regular season  2011 game would be part of:
 MLS regular season 2011, regularseasoncareer, everythingcareer, FC Dallas regular season 2011, FC Dallas regular season
+National team by competition, nationalteam2011, nationalteamcareer
 
 An FC Dallas playoff game would be part of:
 MLS playofss 2011, playoffscareer, everythingcareer, FC Dallas playoffs 2011, FC Dalals playoffs

@@ -8,6 +8,7 @@ class Award(models.Model):
     
     name = models.CharField(max_length=255)
     competition = models.ForeignKey(Competition, null=True)
+    #date = models.DateField()
 
 
     def is_multi(self):
@@ -27,6 +28,9 @@ class Award(models.Model):
         return "%s %s" % (self.competition.name, self.name)
 
 
+
+
+
 class AwardItem(models.Model):
 
     award = models.ForeignKey(Award)
@@ -41,6 +45,3 @@ class AwardItem(models.Model):
 
     class Meta:
         ordering = ("season",)
-
-
-        

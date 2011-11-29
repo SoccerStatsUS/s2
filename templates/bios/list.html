@@ -6,23 +6,39 @@
 <table>
   <tr>
     <th>player</th>
+    <th>w</th>
+    <th>d</th>
+    <th>l</th>
+    <th>%</th>
+    <th>gf</th>
+    <th>ga</th>
     <th>gp</th>
     <th>min</th>
     <th>goals</th>
   </tr>
 
 {% for stat in stats %}
+
 <tr>
   {% if stat.player.slug %}
   <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
   {% else %}
   <td>{{ stat.player }}</td>
   {% endif %}
+
+  <td>{{ stat.wins|default_if_none:'' }}</td>
+  <td>{{ stat.ties|default_if_none:'' }}</td>
+  <td>{{ stat.losses|default_if_none:'' }}</td>
+  <td>{{ stat.win_percentage_100|floatformat|default_if_none:'' }}</td>
+  <td>{{ stat.goals_for|default_if_none:'' }}</td>
+  <td>{{ stat.goals_against|default_if_none:'' }}</td>
   <td>{{ stat.games_played|default_if_none:'' }}</td>
   <td>{{ stat.minutes|default_if_none:'' }}</td>
   <td>{{ stat.goals|default_if_none:'' }}</td>
+
 </tr>
 {% endfor %}
+
 
 
 {% endblock %}

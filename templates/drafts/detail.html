@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load datum_or_none %}
 
 {% block content %}
 
@@ -9,6 +10,12 @@
     <th>#</th>
     <th>name</th>
     <th>team</th>
+    <th>w</th>
+    <th>t</th>
+    <th>l</th>
+    <th>gf</th>
+    <th>ga</th>
+    <th>+/-</th>
     <th>gp</th>
     <th>gs</th>
     <th>min</th>
@@ -28,6 +35,12 @@
   <td><a href="{% url team_detail pick.team.slug %}">{{ pick.team }}</a></td>
   {% if pick.player %}
   {% with pick.player.career_stat as stat %}
+  <td>{{ stat.wins }}</td>
+  <td>{{ stat.ties }}</td>
+  <td>{{ stat.losses }}</td>
+  <td>{{ stat.goals_for }}</td>
+  <td>{{ stat.goals_against }}</td>
+  <td>{{ stat.plus_minus }}</td>
   <td>{{ stat.games_played|default_if_none:'' }}</td>  
   <td>{{ stat.games_started|default_if_none:'' }}</td>
   <td>{{ stat.minutes|default_if_none:'' }}</td> 

@@ -4,10 +4,12 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 's2.settings'
 
 from django.db import transaction
 
-from s2.teams.models import Team
+from s2.bios.models import Bio
 from s2.competitions.models import Competition
+from s2.lineups.models import Appearance
 from s2.standings.models import Standing
 from s2.stats.models import Stat
+from s2.teams.models import Team
 from s2.utils import timer
 
 
@@ -121,7 +123,50 @@ def generate_career_stats():
         'season_id': None,
         }
     generate_stats_generic(Stat.objects.all(), make_key, update)    
+    #generate_career_plus_minus()
 
+
+def generate_player_standings():
+    for i, b in enumerate(Bio.objects.all()):
+        b.calculate_standings()
+        if i % 1000 == 0:
+            print i
+        
+        
+
+def generate_plus_minus(appearance_qs):
+
+    print "Generating plus_minus"
+    d = defaultdict(int)
+
+    for (i, a) in enumerate(appearance_qs.values()):
+        if i % 1000 == 0:
+            print i
+            
+        try:
+            key = a['player']
+        except:
+            import pdb; pdb.set_trace()
+        try:
+            d[key] += a.goal_differential
+        except:
+            "Cannot get +/- for %s" % a
+    return d
+
+@transaction.commit_on_success
+def generate_career_plus_minus():
+    print "generating career plus minus"
+    plus_minus = generate_plus_minus(Appearance.objects.all())
+    career_stat_dict = Stat.career_stats.to_dict()
+
+    for i, (k, v) in enumerate(plus_minus.items()):
+        if i % 100 == 0:
+            print i
+        s = career_stat_dict[k]
+        s.plus_minus = v
+        s.save()
+        
+        
         
 @timer
 def generate_team_stats():

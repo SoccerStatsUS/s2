@@ -4,6 +4,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 
 from collections import defaultdict
+import datetime
 
 
 
@@ -16,7 +17,7 @@ class BioManager(models.Manager):
         return d
 
 
-    def find(self, name):
+    def find(self, name, create=True):
         """
         Given a team name, determine the actual team.
         """
@@ -54,7 +55,6 @@ class Bio(models.Model):
 
     awards = generic.GenericRelation('awards.AwardItem')
 
-
     objects = BioManager()
 
 
@@ -66,6 +66,17 @@ class Bio(models.Model):
             self.slug = slugify(self.name)
             
         super(Bio, self).save(*args, **kwargs)
+
+
+    def age(self, date=None):
+        if date is None:
+            date = datetime.date.today()
+
+
+        if self.birthdate:
+            return date - self.birthdate
+        else:
+            return None
 
 
     def season_stats(self):
@@ -80,7 +91,9 @@ class Bio(models.Model):
         else:
             return None
 
-
+    def competition_stats(self):
+        from s2.stats.models import Stat
+        return Stat.competition_stats.all()
 
         
     def __unicode__(self):
@@ -89,4 +102,29 @@ class Bio(models.Model):
         
     def get_absolute_url(self):
         return reverse('person_detail', args=[self.slug])
+
+
+    def calculate_standings(self):
+        from s2.stats.models import Stat
+
+        for stat in self.stat_set.all():
+            if stat.wins is None:
+                stat.calculate_standings()
+
+        #for stat in self.competition_stats():
+        #    if stat.wins is None:
+        #        stat.calculate_standings()
+
+        if self.career_stat() and self.career_stat().wins is None:
+            self.career_stat().calculate_standings()
+
+        team_stats = Stat.team_stats.filter(player=self)
+        for stat in team_stats:
+            if stat.wins is None:
+                stat.calculate_standings()
+
+
+
+
+
 

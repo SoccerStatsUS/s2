@@ -21,9 +21,9 @@ tr {
 td {
     padding: 0 20px;
     font-size: 1.3em;
-    
+    border: 1px solid #ddd;
 }
 
 .grey {
-    background-color: #ccc;
+    background-color: #eee;
 }
