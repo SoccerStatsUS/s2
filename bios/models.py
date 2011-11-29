@@ -79,6 +79,14 @@ class Bio(models.Model):
             return None
 
 
+    def age_years(self, date=None):
+        a = self.age(date)
+        if a:
+            return a.days / 365
+        else:
+            return None
+
+
     def season_stats(self):
         return self.stat_set.exclude(team=None).exclude(season=None)
 

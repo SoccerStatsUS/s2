@@ -13,8 +13,6 @@ def person_list_generic(request, person_list=None):
     else:
         stats = Stat.career_stats.filter(player__in=pl)
 
-    stats = stats.order_by("-losses")[:500]
-    
     context =  {
         'stats': stats,
         }
