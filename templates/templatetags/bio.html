@@ -18,6 +18,12 @@
   <td></td>
   {% endif %}
 
+  {% if stat.season %}
+  <td><a href="{% url season_detail stat.competition.slug stat.season.slug %}">{{ stat.season.name }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
   {% datum_or_grey stat.games_played %}
   {% datum_or_grey stat.games_started %}
   {% datum_or_grey stat.minutes %}
