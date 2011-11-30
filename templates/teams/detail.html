@@ -63,56 +63,9 @@
 {% endfor %}
 </table>
 
-
 {% if team.standing_set.exists %}
-<table>
-  <tr>
-    <th>competition</th>
-    <th>season</th>
-    <th>games</th>
-    <th>wins</th>
-    <th>ties</th>
-    <th>losses</th>
-    <th>points</th>
-    <th>win %</th>
-    <th>goals for</th>
-    <th>goals against</th>
-  </tr>
-
-  {% for standing in team.standings_by_date %}
-  <tr>
-    <td><a href="{% url competition_detail standing.competition.slug %}">{{ standing.competition.abbreviation }}</a></td>
-    {% if standing.season %}
-    <td><a href="{% url team_season_detail team.slug standing.season.slug %}">{{ standing.season.name }}</a></td>
-    {% else %}
-    <td></td>
-    {% endif %}
-    <td>{{ standing.games }}</td>
-    <td>{{ standing.wins }}</td>
-    <td>{{ standing.ties|default_if_none:'' }}</td>
-    <td>{{ standing.losses }}</td>
-    <td>{{ standing.points|default_if_none:'' }}</td>
-    <td>{{ standing.win_percentage|floatformat:3 }}</td>
-    <td>{{ standing.goals_for|default_if_none:'' }}</td>
-    <td>{{ standing.goals_against|default_if_none:'' }}</td>
-  </tr>
-
-  {% endfor %}
-
-  <tr>
-    <td>All-time</td>
-    <td></td>
-    <td>{{ team.alltime_standing.games }}</td>
-    <td>{{ team.alltime_standing.wins }}</td>
-    <td>{{ team.alltime_standing.ties|default_if_none:'' }}</td>
-    <td>{{ team.alltime_standing.losses }}</td>
-    <td>
-    <td>{{ team.alltime_standing.win_percentage|floatformat:3 }}</td>
-    <td>{{ team.alltime_standing.goals_for|default_if_none:'' }}</td>
-    <td>{{ team.alltime_standing.goals_against|default_if_none:'' }}</td>
-</table>
+{% include "templatetags/standings.html" with standings=team.standings_by_date %}
 {% endif %}
-
 
 {% if stats %}
 

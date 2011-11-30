@@ -27,74 +27,19 @@
 
 
 
-
 {% if season.standing_set.exists %}
-
-<table>
-  <tr>
-    <th>team</th>
-    <th>games</th>
-    <th>wins</th>
-
-    {% if season.first_standing.ties %}
-    <th>ties</th>
-    {% endif %}
-
-    <th>losses</th>
-
-    {% if season.first_standing.points %}
-    <th>points</th>
-    {% else %}
-    <th>%</th>
-    {% endif %}
-    
-    {% if season.first_standing.goals_for %}
-    <th>goals for</th>
-    <th>goals against</th>
-    {% endif %}
-  </tr>
-
-  {% for standing in season.standing_set.all %}
-  <tr>
-
-    <td><a href="{% url team_season_detail standing.team.slug standing.season.slug %}">{{ standing.team }}</a></td>
-    <td>{{ standing.games }}</td>
-    <td>{{ standing.wins }}</td>
-
-    {% if season.first_standing.ties %}
-    <td>{{ standing.ties|default_if_none:'' }}</td>
-    {% endif %}
-
-    <td>{{ standing.losses }}</td>
-
-    {% if season.first_standing.points %}
-    <td>{{ standing.points }}</td>
-    {% else %}
-    <td>{{ standing.win_percentage_100|floatformat }}</td>
-    {% endif %}
-
-    {% if season.first_standing.goals_for %}
-    <td>{{ standing.goals_for }}</td>
-    <td>{{ standing.goals_against }}</td>
-    {% endif %}
-
-  </tr>
-  {% endfor %}
-</table>
-
+<h4>Standings</h4>
+{% include "templatetags/standings.html" with standings=season.standing_set.all %}
 {% endif %}
 
 
 {% if stats %}
-
 <table>
   {% include "templatetags/bio_header.html" %}
   {% for stat in stats %}
   {% include "templatetags/bio.html" %}
   {% endfor %}
-
 </table>
-
 {% endif %}
 
 

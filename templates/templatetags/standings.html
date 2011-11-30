@@ -1,0 +1,41 @@
+{% load datum_or_none %}
+
+<table>
+  <tr>
+    <th>team</th>
+    <th>competition</th>
+    <th>season</th>
+    <th>games</th>
+    <th>wins</th>
+    <th>ties</th>
+    <th>losses</th>
+    <th>points</th>
+    <th>%</th>
+    <th>goals for</th>
+    <th>goals against</th>
+  </tr>
+
+  {% for standing in standings %}
+  <tr>
+    <td><a href="{% url team_detail standing.team.slug %}">{{ standing.team }}</a></td>
+    <td><a href="{% url competition_detail standing.competition.slug %}">{{ standing.competition.abbreviation }}</a></td>
+
+    {% if standing.season %}
+    <td><a href="{% url season_detail standing.competition.slug standing.season.slug %}">{{ standing.season.name }}</a></td>
+    {% else %}
+    <td></td>
+    {% endif %}
+
+    <td>{{ standing.games }}</td>
+    <td>{{ standing.wins }}</td>
+    <td>{{ standing.ties|default_if_none:'' }}</td>
+    <td>{{ standing.losses }}</td>
+    <td>{{ standing.points }}</td>
+    <td>{{ standing.win_percentage_100|floatformat }}</td>
+    <td>{{ standing.goals_for }}</td>
+    <td>{{ standing.goals_against }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+
