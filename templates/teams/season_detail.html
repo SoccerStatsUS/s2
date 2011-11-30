@@ -10,37 +10,9 @@
 {% if stats %}
 
 <table>
-  <tr>
-    <th>player</th>
-    <th>w</th>
-    <th>t</th>
-    <th>l</th>
-    <th>gf</th>
-    <th>ga</th>
-    <th>gp</th>
-    <th>gs</th>
-    <th>min</th>
-    <th>goals</th>
-    <th>assists</th>
-    <th>shots</th>
-  </tr>
-
+  {% include "templatetags/bio_header.html" %}
   {% for stat in stats %}
-  <tr>
-    <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
-    <td>{{ stat.wins|default_if_none:'' }}</td>
-    <td>{{ stat.ties|default_if_none:'' }}</td>
-    <td>{{ stat.losses|default_if_none:'' }}</td>
-    <td>{{ stat.goals_for|default_if_none:'' }}</td>
-    <td>{{ stat.goals_against|default_if_none:'' }}</td>
-    <td>{{ stat.games_played }}</td>
-    <td>{{ stat.games_started }}</td>
-    <td>{{ stat.minutes }}</td>
-    <td>{{ stat.goals }}</td>
-    <td>{{ stat.assists }}</td>
-    <td>{{ stat.shots }}</td>
-
-  </tr>
+  {% include "templatetags/bio.html" %}
   {% endfor %}
 </table>
 

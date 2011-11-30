@@ -10,29 +10,12 @@
   <tr>
     <th>Season</th>
     <th>Recipient</th>
-    <th>GP</th>
-    <th>Min</th>
-    <th>G</th>
-    <th>A</th>
   </tr>
   
   {% for item in award.awarditem_set.all %}
   <tr>
     <td><a href="{% url season_detail item.season.competition.slug item.season.name %}">{{ item.season.name }}</a></td>
     <td><a href="{{ item.recipient.get_absolute_url }}">{{ item.recipient }}</a></td>
-    {% if item.recipient.career_stat  %}
-    {% with item.recipient.career_stat as cs %}
-    <td>{{ cs.games_played }}</td>
-    <td>{{ cs.minutes }}</td>
-    <td>{{ cs.goals }}</td>
-    <td>{{ cs.assists }}</td>
-    {% endwith %}
-    {% else %}
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    {% endif %}
   </tr>
   {% endfor %}
   
