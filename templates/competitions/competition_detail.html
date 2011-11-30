@@ -42,12 +42,7 @@
 
 {% if stats %}
 <h4>All-time stats</h4>
-<table>
-  {% include "templatetags/bio_header.html" %}
-  {% for stat in stats %}
-  {% include "templatetags/bio.html" %}
-  {% endfor %}
-</table>
+{% include "templatetags/bio.html" %}
 {% endif %}
 
 {% endblock %}

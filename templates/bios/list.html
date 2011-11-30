@@ -2,11 +2,6 @@
 
 {% block content %}
 
-<table>
-  {% include "templatetags/bio_header.html" %}
-  {% for stat in stats %}
-  {% include "templatetags/bio.html" %}
-  {% endfor %}
-</table>
+{% include "templatetags/bio.html" %}
 
 {% endblock %}

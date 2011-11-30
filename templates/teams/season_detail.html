@@ -13,12 +13,7 @@
 
 {% if stats %}
 <h3>Stats</h3>
-<table>
-  {% include "templatetags/bio_header.html" %}
-  {% for stat in stats %}
-  {% include "templatetags/bio.html" %}
-  {% endfor %}
-</table>
+{% include "templatetags/bio.html" %}
 {% endif %}
 
 {% if games.exists %}

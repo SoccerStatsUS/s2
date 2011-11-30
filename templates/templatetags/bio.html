@@ -1,4 +1,21 @@
 {% load datum_or_none %}
+
+<table>
+
+<tr>
+  <th>player</th>
+  <th>team</th>
+  <th>cmp</th>
+  <th>season</th>
+  <th>gs</th>
+  <th>gp</th>
+  <th>min</th>
+  <th>goals</th>
+  <th>assists</th>
+  <th>shots</th>
+</tr>
+
+{% for stat in stats %}
 <tr>
   {% if stat.player.slug %}
   <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
@@ -31,3 +48,5 @@
   {% datum_or_grey stat.assists %}
   {% datum_or_grey stat.shots %}
 </tr>
+{% endfor %}
+</table>

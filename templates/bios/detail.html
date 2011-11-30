@@ -58,8 +58,6 @@
 {% endif %}
 
 
-
-
 {% if bio.position_set.count %}
 <h4>Positions</h4>
 <table>
@@ -74,17 +72,12 @@
 </table>
 {% endif %}
 
+
 {% if bio.season_stats.exists %}
-
 <h4>Stats</h4>
-<table>
-  {% include "templatetags/bio_header.html" %}
-  {% for stat in bio.season_stats %}
-  {% include "templatetags/bio.html" %}
-  {% endfor %}
-</table>
-
+{% include "templatetags/bio.html" with stats=bio.season_stats %}
 {% endif %}
+
 
 {% if bio.goal_set.exists %}
 <h3>goals</h3>
