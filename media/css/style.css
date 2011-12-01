@@ -24,6 +24,29 @@ td {
     border: 1px solid #ddd;
 }
 
+ul {
+    list-style-type: none;
+}
+
 .grey {
     background-color: #eee;
 }
+
+
+#header li {
+    float: left;
+    font-size: 1.4em;
+    padding-right: 45px;
+}
+
+#header li:hover {
+}
+
+#header {
+    clear: both;
+}
+
+.clear {
+    clear: both
+}
+    

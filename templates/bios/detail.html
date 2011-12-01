@@ -8,9 +8,6 @@
 
 <h3>{{ bio.name }}</h3>
 
-{% if bio.positions %}
-<div>Positions: </div>
-{% endif %}
 
 {% if bio.height or bio.weight %}
 <div>
@@ -44,17 +41,8 @@
 
 
 {% if bio.pick_set.exists %}
-
 <h4>Drafts</h4>
-<table>
-{% for pick in bio.pick_set.all %}
-<tr>
-  <td>{{ pick.position }}</td>
-  <td><a href="{% url team_detail pick.team.slug %}">{{ pick.team }}</a></td>
-  <td><a href="{% url draft_detail pick.draft.competition.slug pick.draft.slug %}">{{ pick.draft }}</a></td>
-{% endfor %}
-</table>
-
+{% include "templatetags/draft.html" with picks=bio.pick_set.all %}
 {% endif %}
 
 

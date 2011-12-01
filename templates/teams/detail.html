@@ -40,18 +40,12 @@
 {% endfor %}
 </table>
 
-<h3>Draft picks</h3>
-<table>
-{% for pick in team.pick_set.all %}
-{% if pick.player %}
-<tr>
-  <td>{{ pick.position }}</td>
-  <td><a href="{% url person_detail pick.player.slug %}">{{ pick.player }}</a></td>
-  <td><a href="{% url draft_detail pick.draft.competition.slug pick.draft.slug %}">{{ pick.draft }}</a></td>
-</tr>
+
+{% if team.pick_set.exists %}
+<h4>Drafts picks</h4>
+{% include "templatetags/draft.html" with picks=team.pick_set.all %}
 {% endif %}
-{% endfor %}
-</table>
+
 
 {% if team.standing_set.exists %}
 {% include "templatetags/standings.html" with standings=team.standings_by_date %}
