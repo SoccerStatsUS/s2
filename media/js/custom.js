@@ -1,22 +1,36 @@
 (function() {
   $(document).ready(function() {
-    var drawChart;
-    google.load('visualization', '1.0', {
-      'packages': ['corechart']
-    });
-    google.setOnLoadCallback(drawChart);
-    return drawChart = function() {
-      var chart, data, options;
-      data = new google.visualization.DataTable();
-      data.addColumn('string', 'Topping');
-      data.addColumn('number', 'Slices');
-      data.addRows([['Mushrooms', 3], ['Onions', 1], ['Olives', 1], ['Zucchini', 1], ['Pepperoni', 2]]);
-      options = {
-        title: 'How Much Pizza I Ate Last Night',
-        width: 400,
-        height: 400
+    var createSortLoader, getLineups, getStats;
+    createSortLoader = function(div) {
+      var d;
+      d = $("table", div);
+      return function() {
+        return d.tablesorter();
       };
-      return chart = new google.visualization.PieChart($("#chart_div"));
     };
+    getLineups = function() {
+      var lineups_div, opts, url;
+      lineups_div = $("#lineups");
+      if (lineups_div.length) {
+        opts = $("#lineup_form").serialize();
+        console.log(opts);
+        url = "/lineups/ajax?" + opts;
+        return lineups_div.load(url);
+      }
+    };
+    $("#lineup_form").keyup(getLineups);
+    getLineups();
+    getStats = function() {
+      var opts, stats_div, url;
+      stats_div = $("#stats");
+      if (stats_div.length) {
+        opts = $("#stat_form").serialize();
+        console.log(opts);
+        url = "/stats/ajax?" + opts;
+        return stats_div.load(url);
+      }
+    };
+    $("#stat_form").keyup(getStats);
+    return getStats();
   });
 }).call(this);

@@ -2,17 +2,16 @@ from os.path import join
 import socket
 
 PRODUCTION_SITES = (
-    "reyna",
+    "bert",
 )
 
 
 PROJECT_DIR = "/home/chris/www/s2/",
 
+INTERNAL_IPS = ('127.0.0.1',)
 
-if socket.gethostname() in PRODUCTION_SITES:
-    DEBUG = False
-else:
-    DEBUG = True
+
+DEBUG = True
 
 TEMPLATE_DEBUG = DEBUG
 
@@ -44,8 +43,14 @@ DATABASES = {
     }
 }
 
-# Switch to redis.
-#CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
+
 
 
 # Local time zone for this installation. Choices can be found here:
@@ -94,6 +99,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+
+
 )
 
 ROOT_URLCONF = 's2.urls'
@@ -109,7 +117,10 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'django.contrib.admin',
     'django.contrib.messages',
+    'gunicorn',
+    'debug_toolbar',
     's2.awards',
     's2.bios',
     's2.competitions',
@@ -124,6 +135,16 @@ INSTALLED_APPS = (
     's2.standings',
     's2.stats',
     's2.teams',
-    'django.contrib.admin',
-    'gunicorn',
 )
+
+# Various apps available
+DEBUG_TOOLBAR_PANELS = (
+    'debug_toolbar.panels.version.VersionDebugPanel',
+    'debug_toolbar.panels.timer.TimerDebugPanel',
+    'debug_toolbar.panels.headers.HeaderDebugPanel',
+    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+    'debug_toolbar.panels.sql.SQLDebugPanel',
+    'debug_toolbar.panels.cache.CacheDebugPanel',
+    'debug_toolbar.panels.logger.LoggingPanel',
+)
+

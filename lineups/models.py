@@ -13,6 +13,8 @@ class Appearance(models.Model):
 
     #on = models.IntegerField()
     #off = models.IntegerField()
+    
+    # Default should be integer.
     on = models.CharField(max_length=255)
     off = models.CharField(max_length=255)
 

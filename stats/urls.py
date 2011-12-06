@@ -6,4 +6,9 @@ urlpatterns = patterns('s2.stats.views',
                            'stats_index',
                            name='stats_index'),
 
+                       url(r'^ajax$',
+                           'stats_ajax',
+                           name='stats_ajax'),
+
+
 )

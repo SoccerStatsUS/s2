@@ -1,0 +1,30 @@
+<table>
+  <thead>
+  <tr>
+    <th>player</th>
+    <th>competition</th>
+    <th>date</th>
+    <th>team</th>
+    <th>opponent</th>
+    <th>score</th>
+    <th>on</th>
+    <th>off</th>
+  <tr>
+  </thead>
+
+  <tbody>
+  {% for appearance in appearances %}
+  <tr>
+    <td><a href="{% url person_detail appearance.player.slug %}">{{ appearance.player }}</a></td>
+    <td><a href="{% url competition_detail appearance.game.competition.slug %}">{{ appearance.game.competition.abbreviation }}</a></td>
+    <td>{{ appearance.game.date }}</td>
+    <td><a href="{% url team_detail appearance.team.slug %}">{{ appearance.team }}</a></td>
+    <td><a href="{% url team_detail appearance.opponent.slug %}">{{ appearance.opponent }}</a></td>
+    <td><a href="{% url game_detail appearance.game.id %}">{{ appearance.game.score }}</a></td>
+    <td>{{ appearance.on }}
+    <td>{{ appearance.off }}
+  </tr>
+  {% endfor %}
+  </tbody>
+
+</table>

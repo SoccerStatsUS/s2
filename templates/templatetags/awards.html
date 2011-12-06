@@ -1,0 +1,9 @@
+<table>
+  {% for ai in award_items %}
+  <tr>
+    <td><a href="{% url season_detail ai.season.competition.slug ai.season.slug %}">{{ ai.season.name }}</a></td>
+    <td><a href="{% url competition_detail ai.award.competition.slug %}">{{ ai.award.competition }}</a></td>
+    <td><a href="{% url award_detail ai.award.id %}">{{ ai.award.name }}</a></td>
+  </tr>
+  {% endfor %}
+</table>

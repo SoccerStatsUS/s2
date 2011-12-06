@@ -7,3 +7,5 @@ simplejson==2.0.9
 gunicorn==0.12.0
 psycopg2
 Celery
+python-memcached
+django-debug-toolbar

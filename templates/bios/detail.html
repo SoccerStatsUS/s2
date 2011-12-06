@@ -93,33 +93,11 @@
 {% endif %}
 
 
+
 {% if bio.appearance_set.exists %}
-<h3>appearances</h3>
-<table>
-  <tr>
-    <th>competition</th>
-    <th>date</th>
-    <th>team</th>
-    <th>opponent</th>
-    <th>score</th>
-    <th>on</th>
-    <th>off</th>
-  <tr>
-
-  {% for appearance in bio.appearance_set.all %}
-  <tr>
-    <td><a href="{% url competition_detail appearance.game.competition.slug %}">{{ appearance.game.competition.abbreviation }}</a></td>
-    <td>{{ appearance.game.date }}</td>
-    <td><a href="{% url team_detail appearance.team.slug %}">{{ appearance.team }}</a></td>
-    <td><a href="{% url team_detail appearance.opponent.slug %}">{{ appearance.opponent }}</a></td>
-    <td><a href="{% url game_detail appearance.game.id %}">{{ appearance.game.score }}</a></td>
-    <td>{{ appearance.on }}
-    <td>{{ appearance.off }}
-  </tr>
-  {% endfor %}
-</table>
+<h4>Appearances</h4>
+{% include "templatetags/appearance.html" with appearances=bio.appearance_set.all %}
 {% endif %}
-
     
 
 {% endblock %}

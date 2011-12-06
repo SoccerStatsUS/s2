@@ -3,6 +3,13 @@
 {% block content %}
 
 <h3>stats</h3>
-{% include "templatetags/bio.html" %}
+
+<form id="stat_form">
+{{ form.as_ul }}
+</form>
+
+<div id="stats">
+</div>
+
 
 {% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>lineups</h3>
+
+<form id="lineup_form">
+{{ form.as_ul }}
+</form>
+
+<div id="lineups">
+{% include "templatetags/appearance.html" %}
+</div>
+
+
+{% endblock %}
