@@ -24,6 +24,7 @@ class Goal(models.Model):
     """
     Represents a completed game.
     """
+
     # Should we have a date and a datetime field?
     date = models.DateField()
     minute = models.IntegerField(null=True)

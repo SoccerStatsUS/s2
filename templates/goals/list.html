@@ -2,23 +2,17 @@
 
 {% block content %}
 
-<table>
-  <tr>
-    <th>Date</th>
-    <th>Team</th>
-    <th>Player</th>
-    <th>Minute</th>
-  </tr>
-{% for goal in goals %}
-  <tr>
-    <td>{{ goal.date }}</td>
-    <td><a href="{% url team_detail goal.team.slug %}">{{ goal.team }}</a></td>
-    <td><a href="{% url person_detail goal.player.slug %}">{{ goal.player }}</a></td>
-    <td>{{ goal.minute }}</td>
-  </tr>
-{% endfor %}
-</table>
+<form id="goal_form">
+{{ form.as_ul }}
+</form>
 
+
+{% if goals %}
+{% include "templatetags/goals.html" %}
+{% endif %}
+
+
+{% comment %}
 <table>
   <tr>
     <th>minute</th>
@@ -31,5 +25,6 @@
   </tr>
   {% endfor %}
 </table>
+{% endcomment %}
 
 {% endblock %}
