@@ -2,7 +2,7 @@ import datetime
 import os
 import pymongo
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 's2.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 's2.build_settings'
 
 from django.db import transaction
 from django.db.utils import IntegrityError
