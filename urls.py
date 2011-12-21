@@ -2,6 +2,14 @@ from django.conf.urls.defaults import url, include, patterns
 from django.contrib import admin
 from django.views.generic.simple import direct_to_template
 
+from tastypie.api import Api
+#from myapp.api import EntryResource, UserResource
+
+v1_api = Api(api_name='v1')
+#v1_api.register(UserResource())
+#v1_api.register(EntryResource())
+
+
 
 admin.autodiscover()
 
@@ -9,7 +17,13 @@ admin.autodiscover()
 urlpatterns = patterns('',
                        #url(r'^$', direct_to_template, {'template': 'index.html'}),
                        url(r"^$", "s2.games.views.homepage", name="home"),
+
+                       url(r'^api/', include(v1_api.urls)),
+
                        (r'^about/$', direct_to_template, {'template': 'about.html'}),
+                       (r'^contact/$', direct_to_template, {'template': 'contact.html'}),
+                       (r'^sources/$', direct_to_template, {'template': 'sources.html'}),
+
                        url(r'^awards/', include('s2.awards.urls')),
                        url(r'^bios/', include('s2.bios.urls')),
                        url(r'^c/', include('s2.competitions.urls')),

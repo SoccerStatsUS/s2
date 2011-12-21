@@ -35,18 +35,22 @@
 
 <body>
 
+  <h1><a href="{% url home %}">soccerstats.us</a></h1>
+
   <div id="header">
     <ul>
-      <li class="first"><a href="{% url home %}">soccerstats.us</a></li>
       <li><a href="{% url competition_index %}">competitions</a></li>
       <li><a href="{% url stats_index %}">stats</a></li>
-      <li><a href="{% url lineup_index %}">lineups</a></li>
+      <li><a href="{% url person_index %}">players</a></li>
       <li><a href="{% url team_index %}">teams</a></li>
-      <li><a href="{% url person_index %}">bios</a></li>
+      <li><a href="{% url lineup_index %}">lineups</a></li> {# games? #}
+      {# goals? #}
+      {# managers #}
+
+      <li><a href="{% url place_index %}">places</a></li>
       <li><a href="{% url drafts_index %}">drafts</a></li>
       <li><a href="{% url award_index %}">awards</a></li>
-      <li><a href="{% url place_index %}">places</a></li>
-      <li><a href="{% url lineup_index %}">lineups</a></li>
+
     </ul>
     <div class="clear"></div>
   </div>
@@ -54,6 +58,14 @@
   <div id="content">
   {% block content %}
   {% endblock %}
+  </div>
+
+  <div id="footer">
+    <ul>
+      <li><a href="/about">about</a></li>
+      <li><a href="/contact">contact</a></li>
+      <li><a href="/sources">sources</a></li>
+    </ul>
   </div>
 
 </body>
