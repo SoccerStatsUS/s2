@@ -32,18 +32,24 @@ ul {
     background-color: #eee;
 }
 
+#header {
+    clear: both;
+}
+
 
 #header li {
     float: left;
     font-size: 1.4em;
     padding-right: 45px;
+    padding-top: .8em;
 }
 
 #header li:hover {
 }
 
-#header {
-    clear: both;
+#header li.first {
+    font-size: 2.5em;
+    padding-top: 0px;
 }
 
 .clear {
