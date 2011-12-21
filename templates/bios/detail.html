@@ -68,28 +68,8 @@
 
 
 {% if bio.goal_set.exists %}
-<h3>goals</h3>
-<table>
-  <tr>
-    <th>Competition</th>
-    <th>Date</th>
-    <th>Minute</th>
-    <th>Team</th>
-    <th>Opponent</th>
-    <th>Score</th>
-
-  </tr>
-
-  {% for goal in bio.goal_set.all %}
-  <tr>
-    <td><a href="{% url competition_detail goal.game.competition.slug %}">{{ goal.game.competition.abbreviation }}</a></td>
-    <td>{{ goal.game.date }}</td>
-    <td>{{ goal.minute }}</td>
-    <td><a href="{% url team_detail goal.team.slug %}">{{ goal.team }}</a></td>
-    <td><a href="{% url team_detail goal.opponent.slug %}">{{ goal.opponent }}</a></td>
-    <td><a href="{% url game_detail goal.game.id %}">{{ goal.game.score }}</a></td>
-  {% endfor %}
-</table>
+<h4>Goals</h4>
+{% include "templatetags/goals.html" with stats=bio.goal_set.all %}
 {% endif %}
 
 
