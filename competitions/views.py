@@ -29,6 +29,9 @@ def competition_detail(request, competition_slug):
 
 
 def season_detail(request, competition_slug, season_slug):
+    """
+    Detail for a given season, e.g. Major League Soccer, 1996.
+    """
     competition = get_object_or_404(Competition, slug=competition_slug)
     season = get_object_or_404(Season, competition=competition, slug=season_slug)
 
@@ -42,6 +45,20 @@ def season_detail(request, competition_slug, season_slug):
                               context,
                               context_instance=RequestContext(request))
 
+
+def season_names(request):
+    names = [e[0] for e in Season.objects.values_list('name')]
+    names = sorted(set(names))
+
+    context = {
+        'names': names,
+        }
+    
+    return render_to_response("competitions/season_names.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+    
 
 def season_list(request, season_slug):
     seasons = Season.objects.filter(slug=season_slug)

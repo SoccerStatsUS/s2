@@ -76,6 +76,23 @@ class Season(models.Model):
         ordering = ("competition", "name")
 
 
+    def dates(self):
+        try:
+            year = int(self.name)
+            start = datetime.datetime(year, 1, 1)
+            end = datetime.datetime(year + 1, 12, 31)
+        except ValueError:
+            pass
+
+        try:
+            start_year, end_year = [int(e) for e in self.name.split('-')]
+            pass
+        except:
+            pass
+            
+            
+            
+
 
     def __unicode__(self):
         return "%s: %s" % (self.competition, self.name)

@@ -5,6 +5,12 @@ urlpatterns = patterns('s2.competitions.views',
                            'competition_index',
                            name='competition_index'),
 
+
+                       url(r'^s/names/$',
+                           'season_names',
+                           name='season_names'),
+
+
                        url(r'^s/(?P<season_slug>[a-z0-9-]+)/$',
                            'season_list',
                            name='season_list'),
