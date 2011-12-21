@@ -14,5 +14,9 @@ urlpatterns = patterns('s2.dates.views',
                            'date_detail',
                            name='date_detail'),
 
+                       url(r'^day/(?P<month>\d+)/(?P<day>\d+)$',
+                           'day_detail',
+                           name='day_detail'),
+
 
                        )

@@ -65,16 +65,19 @@ def date_detail(request, year, month, day):
                               context_instance=RequestContext(request))
 
 
-def game_detail(request, game_id):
-    game = get_object_or_404(Game, id=game_id)
+def day_detail(request, month, day):
+    # Add a paginator.
+    month, day = int(month), int(day)
+    games = Game.objects.filter(date__month=month, date__day=day)
+    births = Bio.objects.filter(birthdate__month=month,birthdate__day=day).order_by('birthdate')
+    hires = Position.objects.filter(start__month=month, start__day=day)
+    fires = Position.objects.filter(end__month=month, end__day=day)
     context = {
-        'game': game,
+        'games': games,
+        'births': births,
+        'hires': hires,
+        'fires': fires,
         }
-    return render_to_response("games/detail.html",
+    return render_to_response("games/list.html",
                               context,
                               context_instance=RequestContext(request))
-
-
-
-
-
