@@ -42,7 +42,10 @@ class Standing(models.Model):
 
     def win_percentage(self):
         ties = self.ties or 0
-        return (self.wins + .5 * ties) / self.games
+        if self.games:
+            return (self.wins + .5 * ties) / self.games
+        else:
+            return 0
 
     def win_percentage_100(self):
         return self.win_percentage() * 100
