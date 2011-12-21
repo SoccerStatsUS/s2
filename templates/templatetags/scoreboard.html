@@ -1,0 +1,16 @@
+
+<div id="scoreboard">
+  {% for game in games %}
+  <div>
+    <a href="{% url game_detail game.id %}">
+    <div>
+      {{ game.home_team }} {{ game.home_score }}
+    </div>
+    <div>
+      at {{ game.away_team }} {{ game.away_score }}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+
