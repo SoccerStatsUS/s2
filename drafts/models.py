@@ -11,6 +11,7 @@ class Draft(models.Model):
 
     name = models.CharField(max_length=255)
     slug = models.SlugField()
+    #date = models.DateField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:

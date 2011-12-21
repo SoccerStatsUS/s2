@@ -5,9 +5,20 @@ from django.db import models
 from s2.teams.models import Team
 from s2.competitions.models import Competition, Season
 
+import random
 
 
 class GameManager(models.Manager):
+
+    def on(self, month, day):
+        games = Game.objects.filter(date__month=month, date__day=day)
+        if games:
+            c = games.count()
+            i = random.randint(0, c-1)
+            return games[i]
+        else:
+            return None
+
 
     def game_dict(self):
         d = {}
@@ -130,13 +141,39 @@ class Game(models.Model):
     def home_standings(self):
         return self.standings(self.home_team)
 
+    def home_standings_string(self):
+        wins, ties, losses = self.home_standings()
+        return "%s-%s-%s" % (wins, ties, losses)
+
+
     def away_standings(self):
         return self.standings(self.away_team)
+
+    def away_standings_string(self):
+        wins, ties, losses = self.away_standings()
+        return "%s-%s-%s" % (wins, ties, losses)
+
         
 
     def streaks(self):
         return [(self.result(e), self.streak(e)) for  e in (self.home_team, self.away_team)]
 
+    def streak_string(self, t):
+        d = {
+            'tie': 'ties',
+            'loss': 'losses',
+            'win': 'wins',
+            }
+        stype, count = t
+        if count != 1:
+            stype = d[stype]
+        return "%s %s" % (count, stype)
+
+    def home_streak_string(self):
+        return self.streak_string(self.streaks()[0])
+    
+    def away_streak_string(self):
+        return self.streak_string(self.streaks()[1])
 
     def goals_for(self, team):
         assert team in (self.home_team, self.away_team)

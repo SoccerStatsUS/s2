@@ -6,9 +6,21 @@ from django.template.defaultfilters import slugify
 from collections import defaultdict
 import datetime
 
+import random
 
 
 class BioManager(models.Manager):
+
+    def born_on(self, month, day):
+        b = self.get_query_set().filter(birthdate__month=month, birthdate__day=day)
+        if b:
+            c = b.count()
+            i = random.randint(0, c-1)
+            return b[i]
+        else:
+            return None
+        
+        
 
     def bio_dict(self):
         d = {}

@@ -10,7 +10,8 @@ class PositionManager(models.Manager):
 
     def calculate_standings(self):
         for e in self.get_query_set():
-            e.calculate_standings()
+            print e
+            e.generate_stats()
 
     
 
@@ -47,7 +48,10 @@ class Position(models.Model):
         return games
 
 
-    def calculate_standings(self):
+    def generate_stats(self):
+        """
+        Generate the stats for a given position.
+        """
         from s2.stats.models import Stat
         d = {}
 

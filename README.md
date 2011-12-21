@@ -1,5 +1,23 @@
 
 
+team / league / player timelines would be cool.
+
+
+Season types:
+
+
+Split these further into Federal Park League and Robison Field League of the St. Louis Soccer League
+First Series
+Second Series
+
+Fall
+Fall Playoff
+First Half
+Playoffs
+Second Half
+Spring
+(1928-1929 problem)
+
 # Deployment instructions.
 1. Add to /etc/hosts, /etc/ssh_config
 2. adduser chris; add chris to /etc/sudoers
@@ -19,9 +37,9 @@ Time to launch the fucking site.
 
 What do I need to do before releasing it?
 
-0. Build everything.
-1. Migrate to a different server.
-2. add page caching.
+0. Add celery or some sort of tasks infrastructure. Run build process as a bunch of tasks.
+2. add page caching (where?)
+3. BFS player connections database. Probably not very interesting.
 
 
 

@@ -32,8 +32,17 @@ ul {
     background-color: #eee;
 }
 
+h1 {
+    border-bottom: 10px solid #eee;
+
+}
+
 #header {
     clear: both;
+    padding: 0;
+    margin: 0;
+    border-bottom: 20px solid #eee;
+    padding-bottom: 10px;
 }
 
 
@@ -41,18 +50,71 @@ ul {
     float: left;
     font-size: 1.4em;
     padding-right: 45px;
-    padding-top: .8em;
 }
 
 #header li:hover {
 }
 
 #header li.first {
-    font-size: 2.5em;
-    padding-top: 0px;
 }
 
 .clear {
     clear: both
 }
     
+
+/* homepage */
+
+#blurb {
+    font-size: 2em;
+
+
+}
+
+#blurb a {
+ 
+}
+
+#blurb a:hover {
+    text-decoration: underline;
+}
+
+#history_box {
+    border: 2px solid black;
+    width: 400px;
+    padding: 10px;
+}
+
+#history_box h4 {
+    font-size: 1.5em;
+}
+
+#history_box h5, #history_box p {
+    padding: 0;
+    margin: 0;
+}
+
+/* footer */
+
+#footer {
+    border-top: 10px solid #eee;
+    border-bottom: 20px solid #eee;
+    clear: both;
+    padding: 0;
+    margin: 0;
+    padding-bottom: 30px;
+}
+
+
+
+#footer li {
+    float: left;
+    font-size: 1.1em;
+    padding-right: 45px;
+}
+
+/* Scoreboard */
+
+#scoreboard {
+    border: 2px solid black;
+}

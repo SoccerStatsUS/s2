@@ -1,5 +1,6 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.views.decorators.cache import cache_page
 
 from s2.bios.models import Bio
 from s2.stats.models import Stat
@@ -22,6 +23,7 @@ def person_list_generic(request, person_list=None):
                               )    
 
 
+@cache_page(60 * 60 * 12)
 def person_index(request):
     return person_list_generic(request)
 

@@ -1,14 +1,23 @@
+import datetime
+
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.views.decorators.cache import cache_page
 
+
+from s2.bios.models import Bio
 from s2.games.models import Game
 
+@cache_page(60 * 60 * 12)
 def homepage(request):
     """
     The site homepage.
     """
+    today = datetime.date.today()
     context = {
-        'games': Game.objects.all()[:50],
+        'today': today,
+        'born': Bio.objects.born_on(today.month, today.day),
+        'game': Game.objects.on(today.month, today.day),
         }
     return render_to_response("homepage.html",
                               context,

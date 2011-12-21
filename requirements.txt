@@ -9,3 +9,4 @@ psycopg2
 Celery
 python-memcached
 django-debug-toolbar
+django-tastypie
