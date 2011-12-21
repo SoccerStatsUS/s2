@@ -4,7 +4,7 @@
 <html>
 
 <head>
-  <title>{% block title %}{% endblock %}socceroutsider.com</title>
+  <title>{% block title %}{% endblock %}soccerstats.us</title>
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 
   <link rel="stylesheet" href="{{ MEDIA_URL }}css/style.css" type="text/css" media="screen" >
@@ -37,6 +37,7 @@
 
   <div id="header">
     <ul>
+      <li class="first"><a href="{% url home %}">soccerstats.us</a></li>
       <li><a href="{% url competition_index %}">competitions</a></li>
       <li><a href="{% url stats_index %}">stats</a></li>
       <li><a href="{% url lineup_index %}">lineups</a></li>
