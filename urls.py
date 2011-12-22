@@ -21,8 +21,10 @@ urlpatterns = patterns('',
                        url(r'^api/', include(v1_api.urls)),
 
                        (r'^about/$', direct_to_template, {'template': 'about.html'}),
+                       (r'^api/$', direct_to_template, {'template': 'api.html'}),
                        (r'^contact/$', direct_to_template, {'template': 'contact.html'}),
                        (r'^sources/$', direct_to_template, {'template': 'sources.html'}),
+
 
                        url(r'^awards/', include('s2.awards.urls')),
                        url(r'^bios/', include('s2.bios.urls')),
