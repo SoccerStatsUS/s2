@@ -69,7 +69,7 @@
 
 {% if bio.goal_set.exists %}
 <h4>Goals</h4>
-{% include "templatetags/goals.html" with stats=bio.goal_set.all %}
+{% include "templatetags/goals.html" with goals=bio.goal_set.all %}
 {% endif %}
 
 
