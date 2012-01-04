@@ -1,3 +1,4 @@
+
 <table>
   <thead>
   <tr>
@@ -9,6 +10,7 @@
     <th>score</th>
     <th>on</th>
     <th>off</th>
+    <th>age (days)</th>
   <tr>
   </thead>
 
@@ -21,8 +23,9 @@
     <td><a href="{% url team_detail appearance.team.slug %}">{{ appearance.team }}</a></td>
     <td><a href="{% url team_detail appearance.opponent.slug %}">{{ appearance.opponent }}</a></td>
     <td><a href="{% url game_detail appearance.game.id %}">{{ appearance.game.score }}</a></td>
-    <td>{{ appearance.on }}
-    <td>{{ appearance.off }}
+    <td>{{ appearance.on }}</td>
+    <td>{{ appearance.off }}</td>
+    <td>{{ appearance.age }}</td>
   </tr>
   {% endfor %}
   </tbody>
