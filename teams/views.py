@@ -8,6 +8,8 @@ from s2.teams.models import Team
 from s2.standings.models import Standing
 from s2.stats.models import Stat
 
+from django.views.decorators.cache import cache_page
+
 def team_index(request):
 
     context = {
@@ -79,5 +81,43 @@ def team_season_detail(request, team_slug, season_slug):
                               context,
                               context_instance=RequestContext(request)
                               )
+    
+
+
+@cache_page(60 * 24)
+def teams_ajax(request):
+    PAGE = 0
+    ITEMS_PER_PAGE = 100
+
+    def get_stats(request):
+        stats = Stat.objects.all().order_by("-minutes")
+        if 'team' in request.GET:
+            t = request.GET['team']
+            stats = stats.filter(team__name__icontains=t)
+
+        if 'season' in request.GET:
+            e = request.GET['season']
+            stats = stats.filter(season__name__icontains=e)
+
+        if 'name' in request.GET:
+            e = request.GET['name']
+            stats = stats.filter(player__name__icontains=e)
+
+        if 'competition' in request.GET:
+            e = request.GET['competition']
+            stats = stats.filter(competition__name__icontains=e)
+
+        return stats
+
+    stats = get_stats(request)
+
+    context = {
+        'stats': stats[:1000],
+        }
+
+    return render_to_response("stats/ajax.html",
+                              context,
+                              context_instance=RequestContext(request))
+
     
 

@@ -19,5 +19,10 @@ urlpatterns = patterns('s2.teams.views',
                            'team_detail',
                            name='team_detail'),
 
+                       url(r'^ajax$',
+                           'teams_ajax',
+                           name='teams_ajax'),
+
+
 
 )
