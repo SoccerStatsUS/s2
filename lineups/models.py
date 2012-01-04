@@ -5,6 +5,9 @@ from s2.goals.models import Goal
 from s2.games.models import Game
 from s2.teams.models import Team
 
+from django.db.models.signals import post_save
+
+
 class Appearance(models.Model):
 
     player = models.ForeignKey(Bio)
@@ -18,13 +21,11 @@ class Appearance(models.Model):
     on = models.CharField(max_length=255)
     off = models.CharField(max_length=255)
 
+    age = models.IntegerField(null=True) # Number of days since birth.
+
     class Meta:
         ordering = ('game', )
 
-    @property
-    def age(self):
-        if self.player.bio.birthdate:
-            return self.date - self.player.bio.birthdate
 
 
     def opponent(self):
@@ -73,4 +74,15 @@ class Appearance(models.Model):
         return self.goals_for - self.goals_against
 
 
-        
+    
+def set_appearance_age(sender, instance, created, **kwargs):
+    if not instance.age and instance.player.birthdate:
+        instance.age = (instance.game.date - instance.player.birthdate).days
+        try:
+            instance.save()
+        except:
+            import pdb; pdb.set_trace()
+            x=5
+            
+
+post_save.connect(set_appearance_age, sender=Appearance)

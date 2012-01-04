@@ -10,15 +10,23 @@ def get_appearances(request):
     lineups = Appearance.objects.all()
     if 'team' in request.GET:
         t = request.GET['team']
-        lineups = lineups.filter(team__name__icontains=t)
+        if t:
+            lineups = lineups.filter(team__name__icontains=t)
 
     if 'player' in request.GET:
         e = request.GET['player']
-        lineups = lineups.filter(player__name__icontains=e)
+        if e:
+            lineups = lineups.filter(player__name__icontains=e)
 
     if 'on' in request.GET:
         e = request.GET['on']
-        lineups = lineups.filter(on=e)
+        if e:
+            lineups = lineups.filter(on=e)
+
+    if 'off' in request.GET:
+        e = request.GET['off']
+        if e:
+            lineups = lineups.filter(off=e)
 
     return lineups
 
@@ -36,7 +44,6 @@ def lineup_index(request):
                               context_instance=RequestContext(request))
 
 
-@cache_page(60 * 24)
 def lineup_ajax(request):    
     appearances = get_appearances(request)
     context = {

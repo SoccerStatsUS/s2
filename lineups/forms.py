@@ -7,4 +7,6 @@ class AppearanceForm(forms.Form):
     #date = forms.CharField(max_length=100)
 
     on = forms.CharField(max_length=100)
-    on = forms.CharField(max_length=100)
+    off = forms.CharField(max_length=100)
+
+    age = forms.CharField(max_length=100)
