@@ -8,29 +8,44 @@ $(document).ready( ->
 
 
   getLineups = ->
-    lineups_div = $("#lineups")
-    if lineups_div.length
+    div = $("#lineups")
+    if div.length
+      div.html("Loading...")
       opts = $("#lineup_form").serialize()
-      console.log opts
       url = "/lineups/ajax?#{opts}"
-      lineups_div.load(url)
+      console.log url
+      div.load(url)
 
 
-  $("#lineup_form").keyup getLineups
-  getLineups()
+  $("#submit_button").click getLineups
 
 
 
   getStats = ->
-    stats_div = $("#stats")
-    if stats_div.length
+    div = $("#stats")
+    if div.length
+      div.html("Loading...")
       opts = $("#stat_form").serialize()
       console.log opts
       url = "/stats/ajax?#{opts}"
-      stats_div.load(url)
+      div.load(url)
+    return false
 
-  $("#stat_form").keyup getStats
+  $("#submit_button").click getStats
   getStats()
+
+  getTeams = ->
+    div = $("#teams")
+    if div.length
+      div.html("Loading...")
+      opts = $("#team_form").serialize()
+      console.log opts
+      url = "/teams/ajax?#{opts}"
+      div.load(url)
+    return false
+
+  $("#submit_button").click getTeams
+
 
 
 

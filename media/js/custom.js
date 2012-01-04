@@ -1,6 +1,6 @@
 (function() {
   $(document).ready(function() {
-    var createSortLoader, getLineups, getStats;
+    var createSortLoader, getLineups, getStats, getTeams;
     createSortLoader = function(div) {
       var d;
       d = $("table", div);
@@ -9,28 +9,44 @@
       };
     };
     getLineups = function() {
-      var lineups_div, opts, url;
-      lineups_div = $("#lineups");
-      if (lineups_div.length) {
+      var div, opts, url;
+      div = $("#lineups");
+      if (div.length) {
+        div.html("Loading...");
         opts = $("#lineup_form").serialize();
-        console.log(opts);
         url = "/lineups/ajax?" + opts;
-        return lineups_div.load(url);
+        console.log(url);
+        return div.load(url);
       }
     };
-    $("#lineup_form").keyup(getLineups);
-    getLineups();
+    $("#submit_button").click(getLineups);
     getStats = function() {
-      var opts, stats_div, url;
-      stats_div = $("#stats");
-      if (stats_div.length) {
+      var div, opts, url;
+      div = $("#stats");
+      if (div.length) {
+        div.html("Loading...");
         opts = $("#stat_form").serialize();
         console.log(opts);
         url = "/stats/ajax?" + opts;
-        return stats_div.load(url);
+        div.load(url);
       }
+      return false;
     };
-    $("#stat_form").keyup(getStats);
+    $("#submit_button").click(getStats);
+    getStats();
+    getTeams = function() {
+      var div, opts, url;
+      div = $("#teams");
+      if (div.length) {
+        div.html("Loading...");
+        opts = $("#team_form").serialize();
+        console.log(opts);
+        url = "/teams/ajax?" + opts;
+        div.load(url);
+      }
+      return false;
+    };
+    $("#submit_button").click(getStats);
     return getStats();
   });
 }).call(this);
