@@ -17,8 +17,8 @@ admin.autodiscover()
 urlpatterns = patterns('',
                        #url(r'^$', direct_to_template, {'template': 'index.html'}),
                        url(r"^$", "s2.games.views.homepage", name="home"),
+                       (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': 'http://media.socceroutsider.com/images/favicon.ico'}),
 
-                       url(r'^api/', include(v1_api.urls)),
 
                        (r'^about/$', direct_to_template, {'template': 'about.html'}),
                        (r'^api/$', direct_to_template, {'template': 'api.html'}),
