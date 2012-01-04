@@ -81,8 +81,8 @@ USE_L10N = True
 MEDIA_ROOT = '/home/chris/www/s2/media'
 
 # Make sure to use a trailing slash for these.
-MEDIA_URL = "http://media.soccerstats.us/"
-ADMIN_MEDIA_PREFIX = 'http://media.soccerstats.us/admin/'
+MEDIA_URL = "http://media.socceroutsider.com/"
+ADMIN_MEDIA_PREFIX = 'http://media.socceroutsider.com/admin/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'zvn-9ofy_sj3j55-gs7-p6+5hsuk+q@_8-iz8+-*qobwr7snw!'
