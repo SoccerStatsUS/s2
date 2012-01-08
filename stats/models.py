@@ -15,13 +15,22 @@ class CareerStatsManager(models.Manager):
     # Stats for an entire career
 
     def get_query_set(self):
-        return super(CareerStatsManager, self).get_query_set().filter(team=None, season=None, competition=None)
+        return super(CareerStatsManager, self).get_query_set().filter(team=None, season=None, competition=None, position=None)
 
     def to_dict(self):
         d = {}
         for e in self.get_query_set():
             d[e.player] = e
         return d
+
+
+class PositionStatsManager(models.Manager):
+
+    # Stats for non-players (coaches, owners, etc.)
+    # Primarily WLT, GF, GA
+
+    def get_query_set(self):
+        return super(PositionStatsManager, self).get_query_set().filter(team=None, season=None, competition=None, position=None)
 
 
 class CompetitionStatsManager(models.Manager):
@@ -96,9 +105,13 @@ class Stat(models.Model):
     defense_score = models.FloatField(null=True, blank=True)
 
     objects = StatsManager()
+    
+    position_stats = PositionStatsManager()
+    
     team_stats = TeamStatsManager()
     career_stats = CareerStatsManager()
     competition_stats = CompetitionStatsManager()
+    
 
     def __unicode__(self):
         return "%s, %s, %s, %s" % (self.game, self.player, self.team, self.season)
@@ -220,7 +233,7 @@ class Stat(models.Model):
         return (self.wins + .5 * ties) / self.games
 
     def win_percentage_100(self):
-        if not self.win_percentage():
+        if self.win_percentage() is None:
             return None
         return self.win_percentage() * 100
 

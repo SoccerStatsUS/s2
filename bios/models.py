@@ -132,7 +132,11 @@ class Bio(models.Model):
         All stats for a player that are for a single season.
         (Contrast with career stats)
         """
-        return self.stat_set.exclude(team=None).exclude(season=None)
+        return self.stat_set.exclude(team=None).exclude(season=None).filter(position=None)
+
+
+    def position_stats(self):
+        return self.stat_set.exclude(team=None).exclude(season=None).exclude(position=None)
 
 
     def career_stat(self):
