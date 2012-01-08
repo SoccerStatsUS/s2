@@ -51,6 +51,10 @@ CACHES = {
     }
 }
 
+# Fix this soon.
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = '/home/chris/www/s2/run/messages' # change this to a proper location
+
 
 
 # Local time zone for this installation. Choices can be found here:
@@ -124,6 +128,7 @@ INSTALLED_APPS = (
     's2.awards',
     's2.bios',
     's2.competitions',
+    's2.contact',
     's2.dates',
     's2.drafts',
     's2.games',
