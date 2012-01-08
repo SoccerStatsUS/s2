@@ -6,7 +6,9 @@ from django.db import transaction
 
 from s2.bios.models import Bio
 from s2.competitions.models import Competition
+from s2.games.models import Game
 from s2.lineups.models import Appearance
+from s2.positions.models import Position
 from s2.standings.models import Standing
 from s2.stats.models import Stat
 from s2.teams.models import Team
@@ -17,14 +19,16 @@ def generate():
     """
     Generate stats.
     """
-    # Might want to generate these before inserting them
-    # So we don't have duplicates.
-    # Save them in a tmp file?
+
+    # Needs to be first. 
+    generate_position_standings()
+
     generate_career_stats()
     generate_competition_stats()
     generate_team_stats()
     generate_competition_standings()
     generate_team_standings()
+
 
 
 @transaction.commit_on_success
@@ -70,12 +74,49 @@ def generate_stats_generic(qs, make_key, update_dict):
         Stat.objects.create(**stat)
 
 
+def generate_career_stats():
+    """
+    Generate 
+    """
+    print "generating career stats"
+    make_key = lambda s: s['player_id']
+    update = {
+        'team_id': None,
+        'competition_id': None,
+        'season_id': None,
+        }
+    generate_stats_generic(Stat.objects.all(), make_key, update)    
+    #generate_career_plus_minus()
+        
+@timer
+def generate_team_stats():
+    print "generating team stats"
+    for team in Team.objects.all():
+        stats = Stat.objects.filter(team=team)
+        make_key = lambda s: (s['player_id'], s['team_id'])
+        update = {'competition_id': None, 'season_id': None }
+        generate_stats_generic(stats, make_key, update)
+
+
+@timer
+def generate_competition_stats():
+    print "generating competition stats"
+    for competition in Competition.objects.all():
+        stats = Stat.objects.filter(competition=competition)
+        make_key = lambda s: (s['player_id'], s['competition_id'])
+        update = {'team_id': None, 'season_id': None }
+        generate_stats_generic(stats, make_key, update)
+
+
+
 @transaction.commit_on_success
 def generate_standings_generic(qs, make_key, update_dict):
     """
     Generate team, career, etc. stats.
     Maybe could improve this.
     """
+    # Seems like memory leaks are making this not work for nearly enough stats.
+
     final_dict = {}
     excluded = ('team_id', 'competition_id', 'season_id')
     for standing in qs.values():
@@ -113,25 +154,48 @@ def generate_standings_generic(qs, make_key, update_dict):
         s = Standing.objects.create(**standing)
 
 
-def generate_career_stats():
-    print "generating career stats"
-    make_key = lambda s: s['player_id']
-    # Turn this into a list.
-    update = {
-        'team_id': None,
-        'competition_id': None,
-        'season_id': None,
-        }
-    generate_stats_generic(Stat.objects.all(), make_key, update)    
-    #generate_career_plus_minus()
+
+@timer
+def generate_competition_standings():
+    print "generating competition standings"
+    for competition in Competition.objects.all():
+        standings = Standing.objects.filter(competition=competition).exclude(season=None)
+        make_key = lambda s: (s['team_id'], s['competition_id'])
+        update = {'season_id': None }
+        generate_standings_generic(standings, make_key, update)
+
+@timer
+def generate_team_standings():
+    print "generating team standings"
+    for team in Team.objects.all():
+        standings = Standing.objects.filter(team=team).exclude(season=None)
+        make_key = lambda s: s['team_id']
+        update = {'season_id': None, 'competition_id': None }
+        generate_standings_generic(standings, make_key, update)
 
 
+@timer
+def generate_position_standings():
+    """Generate standings for all positions."""
+    print "Calculating standings."
+    Position.objects.generate_standings()
+
+
+@timer
 def generate_player_standings():
+    """
+    Generate all player standings for all players across all stats.
+    """
+    # This does not work because it's leaking memory like crazy.
+
     for i, b in enumerate(Bio.objects.all()):
         b.calculate_standings()
         if i % 1000 == 0:
             print i
-        
+
+
+
+    
         
 
 def generate_plus_minus(appearance_qs):
@@ -153,6 +217,7 @@ def generate_plus_minus(appearance_qs):
             "Cannot get +/- for %s" % a
     return d
 
+
 @transaction.commit_on_success
 def generate_career_plus_minus():
     print "generating career plus minus"
@@ -166,49 +231,10 @@ def generate_career_plus_minus():
         s.plus_minus = v
         s.save()
         
-        
-        
-@timer
-def generate_team_stats():
-    print "generating team stats"
-    for team in Team.objects.all():
-        stats = Stat.objects.filter(team=team)
-        make_key = lambda s: (s['player_id'], s['team_id'])
-        update = {'competition_id': None, 'season_id': None }
-        generate_stats_generic(stats, make_key, update)
-
-
-@timer
-def generate_competition_stats():
-    print "generating competition stats"
-    for competition in Competition.objects.all():
-        stats = Stat.objects.filter(competition=competition)
-        make_key = lambda s: (s['player_id'], s['competition_id'])
-        update = {'team_id': None, 'season_id': None }
-        generate_stats_generic(stats, make_key, update)
-
-
-@timer
-def generate_competition_standings():
-    print "generating competition standings"
-    for competition in Competition.objects.all():
-        standings = Standing.objects.filter(competition=competition).exclude(season=None)
-        make_key = lambda s: (s['team_id'], s['competition_id'])
-        update = {'season_id': None }
-        generate_standings_generic(standings, make_key, update)
-
-@timer
-def generate_team_standings():
-    print "generating team standings"
-    for team in Team.objects.all():
-        standings = Standing.objects.filter(team=team).exclude(season=None)
-        make_key = lambda s: s['team_id']
-        update = {'season_id': None, 'competition_id': None }
-        generate_standings_generic(standings, make_key, update)
-
-    
     
             
                         
 if __name__ == "__main__":
     generate_team_standings()
+
+

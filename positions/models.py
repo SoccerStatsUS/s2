@@ -8,10 +8,13 @@ from collections import defaultdict
 
 class PositionManager(models.Manager):
 
-    def calculate_standings(self):
+    def generate_standings(self):
+        # Pick a name!! standings or stats!!
         for e in self.get_query_set():
-            print e
-            e.generate_stats()
+            try:
+                e.generate_standings()
+            except:
+                print "failed on %s" % e.id
 
     
 
@@ -48,14 +51,16 @@ class Position(models.Model):
         return games
 
 
-    def generate_stats(self):
+    def generate_standings(self):
         """
         Generate the stats for a given position.
         """
         from s2.stats.models import Stat
-        d = {}
 
+        d = {}
         for game in self.games():
+
+            # Add relevant season data if not set.
             season = game.season
             if season not in d:
                 d[season] = defaultdict(int)
@@ -70,15 +75,16 @@ class Position(models.Model):
                 print "FAIL"
 
         for season, dx in d.items():
+            print dx
             Stat.objects.create(
                 team=self.team,
                 player=self.person,
+                position=self.name,
                 season=season,
                 competition=season.competition,
-                position=self.name,
                 wins=dx['win'],
                 losses=dx['loss'],
-                ties=dx['ties'],
+                ties=dx['tie'],
                 goals_for=dx['goals_for'],
                 goals_against=dx['goals_against'],
                 plus_minus=dx['plus_minus'],
