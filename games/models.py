@@ -11,6 +11,10 @@ import random
 class GameManager(models.Manager):
 
     def on(self, month, day):
+        """
+        Return a random game from a given day.
+        """
+        # Split this into two functions.
         games = Game.objects.filter(date__month=month, date__day=day)
         if games:
             c = games.count()
@@ -21,6 +25,9 @@ class GameManager(models.Manager):
 
 
     def game_dict(self):
+        """
+        Returns a dict mapping a team/date combination to a game id.
+        """
         d = {}
         for e in self.get_query_set():
             key = (e.home_team.id, e.date)
@@ -30,6 +37,9 @@ class GameManager(models.Manager):
         return d
 
     def team_filter(self, team):
+        """
+        Return all games played by a given team.
+        """
         return Game.objects.filter(models.Q(home_team=team) | models.Q(away_team=team))
             
 
@@ -37,6 +47,8 @@ class GameManager(models.Manager):
         """
         Given a team name, determine the actual team.
         """
+        # Still used? 
+        # Should probably do the aliasing in soccerdata
 
         try:
             game = Game.objects.get(date=date, home_team=team)
@@ -60,16 +72,15 @@ class GameManager(models.Manager):
             k2 = (e.away_team, e.date)
             d[k2].append(e)
         return sorted([e for e in  d.values() if len(e) > 1])
-
             
 
 class Game(models.Model):
     """
     Represents a completed game.
     """
-    # Redesign this so that we don't have a home team home score situation?
+    # Redesign this to eliminate home/away.
 
-    # Should we have a date and a datetime field?
+    # Need both a date and a datetime field? Probably.
     date = models.DateField()
     
     home_team = models.ForeignKey(Team, related_name='home_games')
@@ -84,22 +95,24 @@ class Game(models.Model):
     competition = models.ForeignKey(Competition)
     season = models.ForeignKey(Season)
 
+    # Foreign Key
     location = models.CharField(max_length=255)
 
     notes = models.TextField()
 
     attendance = models.IntegerField(null=True, blank=True)
-    referee = models.CharField(max_length=255)
+    referee = models.CharField(max_length=255) # Need linesmen also.
 
     objects = GameManager()
 
 
     class Meta:
-        ordering = ('-date',)
+        ordering = ('date',)
         unique_together = [('home_team', 'date'), ('away_team', 'date')]
 
 
     def score(self):
+        """Returns a score string."""
         return "%s - %s" % (self.home_score, self.away_score)
 
 
@@ -109,6 +122,10 @@ class Game(models.Model):
         return Game.objects.team_filter(team).filter(season=self.season).filter(date__lt=self.date).order_by('date')
 
     def streak(self, team):
+        """
+        Returns a team's results streak, counting this game.
+        e.g. 3 wins in a row.
+        """
 
         result = self.result(team)
         s = 1
@@ -124,6 +141,9 @@ class Game(models.Model):
         return s
 
     def series(self):
+        """
+        Returns the result of the series between two teams in the same season.
+        """
         return Game.objects.filter(season=self.season).filter(
             models.Q(home_team=self.home_team) | models.Q(away_team=self.home_team)).filter(
             models.Q(home_team=self.away_team) | models.Q(away_team=self.away_team))
@@ -131,6 +151,9 @@ class Game(models.Model):
         
 
     def standings(self, team):
+        """
+        Returns a season's standings as of the current game.
+        """
         from collections import defaultdict
         d = defaultdict(int)
         for game in self.previous_games(team):
@@ -141,24 +164,24 @@ class Game(models.Model):
     def home_standings(self):
         return self.standings(self.home_team)
 
+    def away_standings(self):
+        return self.standings(self.away_team)
+
     def home_standings_string(self):
         wins, ties, losses = self.home_standings()
         return "%s-%s-%s" % (wins, ties, losses)
-
-
-    def away_standings(self):
-        return self.standings(self.away_team)
 
     def away_standings_string(self):
         wins, ties, losses = self.away_standings()
         return "%s-%s-%s" % (wins, ties, losses)
 
-        
 
     def streaks(self):
         return [(self.result(e), self.streak(e)) for  e in (self.home_team, self.away_team)]
 
     def streak_string(self, t):
+        """
+        """
         d = {
             'tie': 'ties',
             'loss': 'losses',
@@ -176,6 +199,10 @@ class Game(models.Model):
         return self.streak_string(self.streaks()[1])
 
     def goals_for(self, team):
+        """
+        Goals for a given team in a given game.
+        """
+        # Not a great system.
         assert team in (self.home_team, self.away_team)
         
         if team == self.home_team:
@@ -187,6 +214,8 @@ class Game(models.Model):
 
 
     def goals_against(self, team):
+        """
+        """
         assert team in (self.home_team, self.away_team)
 
         if team == self.home_team:
@@ -196,10 +225,12 @@ class Game(models.Model):
 
         return int(score)
 
-        
-
 
     def result(self, team):
+        """
+        Returns a string indicating the result of a game
+        (win, loss, or tie)
+        """
         assert team in (self.home_team, self.away_team)
         
         try:
@@ -223,26 +254,27 @@ class Game(models.Model):
 
 
     def same_day_games(self):
+        """
+        Returns all games played on the same date (excluding this one).
+        """
         return Game.objects.filter(date=self.date).exclude(id=self.id)
 
 
-
-        
-
-        
-        
-
-
-    def __unicode__(self):
-        return u"%s: %s v %s" % (self.date, self.home_team, self.away_team)
-
     def opponent(self, team):
+        """
+        Given a team, returns the opponent.
+        """
         if team == self.home_team:
             return self.away_team
         elif team == self.away_team:
             return self.home_team
         else:
             raise
+
+        
+    def __unicode__(self):
+        return u"%s: %s v %s" % (self.date, self.home_team, self.away_team)
+
 
 
 

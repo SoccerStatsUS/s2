@@ -12,6 +12,10 @@ import random
 class BioManager(models.Manager):
 
     def born_on(self, month, day):
+        """
+        Returns a random person born on this day.
+        """
+        # Should split into two methods.
         b = self.get_query_set().filter(birthdate__month=month, birthdate__day=day)
         if b:
             c = b.count()
@@ -23,6 +27,9 @@ class BioManager(models.Manager):
         
 
     def bio_dict(self):
+        """
+        Dict mapping names to bio id's.
+        """
         d = {}
         for e in self.get_query_set():
             d[e.name] = e.id
@@ -33,6 +40,7 @@ class BioManager(models.Manager):
         """
         Given a team name, determine the actual team.
         """
+        # Not here?
         if name == '':
             import pdb; pdb.set_trace()
         
@@ -44,6 +52,10 @@ class BioManager(models.Manager):
 
 
     def duplicate_slugs(self):
+        """
+        Returns all bios with duplicate slugs.
+        """
+        # Used to find problem bios.
         d = defaultdict(list)
         for e in self.get_query_set():
             d[e.slug].append(e.name)
@@ -73,7 +85,16 @@ class Bio(models.Model):
     class Meta:
         ordering = ('name',)
 
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('person_detail', args=[self.slug])
+
+
+
     def save(self, *args, **kwargs):
+        # Is this a good idea?
         if not self.slug:
             self.slug = slugify(self.name)
             
@@ -81,9 +102,13 @@ class Bio(models.Model):
 
 
     def age(self, date=None):
+        """
+        Returns a player's age in days from a given day.
+        Default is today.
+        """
+
         if date is None:
             date = datetime.date.today()
-
 
         if self.birthdate:
             return date - self.birthdate
@@ -92,18 +117,28 @@ class Bio(models.Model):
 
 
     def age_years(self, date=None):
+        """
+        Returns a player's age in years (approximately)
+        """
         a = self.age(date)
         if a:
-            return a.days / 365
+            return a.days / 365.25
         else:
             return None
 
 
     def season_stats(self):
+        """
+        All stats for a player that are for a single season.
+        (Contrast with career stats)
+        """
         return self.stat_set.exclude(team=None).exclude(season=None)
 
 
     def career_stat(self):
+        """
+        Summary stats for a player's entire career.
+        """
         from s2.stats.models import Stat
         c = Stat.career_stats.filter(player=self)
         if c:
@@ -112,36 +147,52 @@ class Bio(models.Model):
             return None
 
     def competition_stats(self):
+        """
+        Summary stats for a player in a given competition (e.g. MLS)
+        """
         from s2.stats.models import Stat
         return Stat.competition_stats.all()
 
-        
-    def __unicode__(self):
-        return self.name
-
-        
-    def get_absolute_url(self):
-        return reverse('person_detail', args=[self.slug])
-
 
     def calculate_standings(self):
+        """
+        Generate standings for a given player.
+        
+        """
         from s2.stats.models import Stat
 
+        # Calculate standings for any stat that doesn't have it already.
+        # (season stats only, not summary stats.
         for stat in self.stat_set.all():
             if stat.wins is None:
                 stat.calculate_standings()
 
-        #for stat in self.competition_stats():
-        #    if stat.wins is None:
-        #        stat.calculate_standings()
-
+        # Generate career standings if 1. it exists and 2. hasn't been generated yet.
         if self.career_stat() and self.career_stat().wins is None:
             self.career_stat().calculate_standings()
 
+        # Generate summary team standings.
         team_stats = Stat.team_stats.filter(player=self)
         for stat in team_stats:
             if stat.wins is None:
                 stat.calculate_standings()
+
+
+    def find_data(self):
+        # A utility method to find where a bio is coming from.
+        # Used to kill duplicates.
+
+        l = []
+        for method in dir(self):
+            try:
+                m = getattr(self, method)
+                if 'all' in dir(m) and m.all():
+                    t = (method, m.all())
+                    l.append(t)
+            except:
+                pass
+        return l
+            
 
 
 

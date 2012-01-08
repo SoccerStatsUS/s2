@@ -73,6 +73,9 @@ class Appearance(models.Model):
     def goal_differential(self):
         return self.goals_for - self.goals_against
 
+    def pretty_age(self):
+        return self.age / 365.25
+
 
     
 def set_appearance_age(sender, instance, created, **kwargs):
