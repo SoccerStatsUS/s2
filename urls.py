@@ -15,17 +15,15 @@ admin.autodiscover()
 
 
 urlpatterns = patterns('',
-                       #url(r'^$', direct_to_template, {'template': 'index.html'}),
                        url(r"^$", "s2.games.views.homepage", name="home"),
 
                        (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': 'http://media.socceroutsider.com/images/favicon.ico'}),
 
-
                        (r'^about/$', direct_to_template, {'template': 'about.html'}),
                        (r'^api/$', direct_to_template, {'template': 'api.html'}),
-
                        (r'^sources/$', direct_to_template, {'template': 'sources.html'}),
 
+                       url(r'search/', include('haystack.urls'),
 
                        url(r'^awards/', include('s2.awards.urls')),
                        url(r'^bios/', include('s2.bios.urls')),

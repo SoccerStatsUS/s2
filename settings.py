@@ -125,6 +125,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'gunicorn',
     'debug_toolbar',
+
     's2.awards',
     's2.bios',
     's2.competitions',
@@ -140,6 +141,7 @@ INSTALLED_APPS = (
     's2.standings',
     's2.stats',
     's2.teams',
+    'haystack',
 )
 
 # Various apps available
@@ -152,4 +154,9 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.cache.CacheDebugPanel',
     'debug_toolbar.panels.logger.LoggingPanel',
 )
+
+HAYSTACK_SITECONF = 's2.search_sites'
+HAYSTACK_SEARCH_ENGINE = 'whoosh'
+HAYSTACK_WHOOSH_PATH = '/home/chris/s2/run/search/'
+
 

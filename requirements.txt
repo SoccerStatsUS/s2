@@ -10,3 +10,5 @@ Celery
 python-memcached
 django-debug-toolbar
 django-tastypie
+django-haystack
+Whoosh
