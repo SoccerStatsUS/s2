@@ -25,7 +25,7 @@
     <td><a href="{% url game_detail appearance.game.id %}">{{ appearance.game.score }}</a></td>
     <td>{{ appearance.on }}</td>
     <td>{{ appearance.off }}</td>
-    <td>{{ appearance.age }}</td>
+    <td>{{ appearance.pretty_age|floatformat:"1" }}</td>
   </tr>
   {% endfor %}
   </tbody>

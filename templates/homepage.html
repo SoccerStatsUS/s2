@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h3 id="blurb">American soccer statistics from <a href="{% url year_detail 1921%}">1921</a> to <a href="{% url year_detail 2010 %}">todayish</a></h3>
+<h3 id="blurb">American soccer statistics from <a href="{% url year_detail 1884 %}">1884</a> to <a href="{% url year_detail 2010 %}">todayish</a></h3>
 
 <div id="history_box">
 <h4>On <a href="{% url day_detail today.month today.day %}">{{ today.month }}/{{ today.day }}</a></h4>
@@ -14,6 +14,10 @@
 </div>
 
 <div id="news">
+<h4>Recently Added</h4>
+<ul>
+  <li>1/5/2011 <a href="{% url competition_detail 'lamar-hunt-us-open-cup' %}">US Open Cup</a> scores from 1914 to 2011</li>
+  <li>1/5/2011 <a href="{% url competition_detail 'american-cup' %}">American Cup</a> scores where available</li>
 </div>
 
 {% endblock %}

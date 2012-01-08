@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<p>Want me to add something? Found a bug? Just bored?</p>
+
+<p>Contact me for any reason whatsoever.</p>
+
+<form action="{% url contact_index %}" method="POST">
+{% csrf_token %}
+
+{{ form.as_p }}
+
+<input type="submit" value="send" />
+
+</form>
+
+
+
+
+{% endblock %}

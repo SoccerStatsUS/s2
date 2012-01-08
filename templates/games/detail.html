@@ -30,13 +30,7 @@
     <div><a href="{% url team_detail game.away_team.slug %}">{{ game.away_standings_string  }}</a></div>
   </div>
 
-
-
 </div>
-
-
-
-
 
 
 {% if game.goal_set.exists %}
@@ -73,6 +67,7 @@
     <th>On</th>
     <th>Off</th>
     <th>+/-</th>
+    <th>Age</th>
   </tr>
 
   {% for appearance in game.appearance_set.all %}
@@ -83,7 +78,7 @@
     <td>{{ appearance.on }}</td>
     <td>{{ appearance.off }}</td>
     <td>{{ appearance.goal_differential }}</td>
-    <td>{{ apperance.age }}</td>
+    <td>{{ appearance.pretty_age|floatformat:"1" }}</td>
   </tr>
   {% endfor %}
 </table>
