@@ -34,7 +34,12 @@ ul {
 
 h1 {
     border-bottom: 10px solid #eee;
+}
 
+h1 span.subhead {
+    font-size: .55em;
+    color: #777;
+    margin-left: 15px;
 }
 
 #header {
@@ -118,3 +123,12 @@ h1 {
 #scoreboard {
     border: 2px solid black;
 }
+
+/* Contact */
+
+textarea.contact {
+    height: 100px;
+    width: 500px;
+}
+    
+    
