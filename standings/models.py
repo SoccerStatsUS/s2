@@ -4,6 +4,8 @@ from s2.bios.models import Bio
 from s2.competitions.models import Competition, Season
 from s2.teams.models import Team
 
+
+
 class Standing(models.Model):
 
     player = models.ForeignKey(Bio, null=True)
@@ -30,7 +32,7 @@ class Standing(models.Model):
     shootout_losses = models.IntegerField(null=True)
 
     class Meta:
-        ordering = ('season', 'competition', '-points')
+        ordering = ('season', 'competition', '-points', '-wins', 'team')
 
 
     def triple(self):
