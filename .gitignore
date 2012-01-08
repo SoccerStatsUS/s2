@@ -4,3 +4,4 @@ logs/
 db/
 run/*.pid
 run/*.log
+run/search/
