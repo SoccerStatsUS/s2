@@ -1,0 +1,4 @@
+<h2>{{ object.name }}</h2>
+
+<p>{{ object.short_name }}</p>
+<p>{{ object.founded }}</p>

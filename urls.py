@@ -23,7 +23,7 @@ urlpatterns = patterns('',
                        (r'^api/$', direct_to_template, {'template': 'api.html'}),
                        (r'^sources/$', direct_to_template, {'template': 'sources.html'}),
 
-                       url(r'search/', include('haystack.urls'),
+                       url(r'search/', include('haystack.urls')),
 
                        url(r'^awards/', include('s2.awards.urls')),
                        url(r'^bios/', include('s2.bios.urls')),
@@ -34,6 +34,8 @@ urlpatterns = patterns('',
                        url(r'^games/', include('s2.games.urls')),
                        url(r'^goals/', include('s2.goals.urls')),
                        url(r'^lineups/', include('s2.lineups.urls')),
+                       url(r'^managers/', include('s2.positions.urls')),
+                       
                        url(r'^places/', include('s2.places.urls')),
                        url(r'^teams/', include('s2.teams.urls')),
                        url(r'^standings/', include('s2.standings.urls')),
@@ -43,5 +45,5 @@ urlpatterns = patterns('',
                        # to INSTALLED_APPS to enable admin documentation:
                            (r'^admin/doc/', include('django.contrib.admindocs.urls')),
                        # Uncomment the next line to enable the admin:
-                           (r'^admin/', include(admin.site.urls)),
+                               (r'^admin/', include(admin.site.urls)),
 )

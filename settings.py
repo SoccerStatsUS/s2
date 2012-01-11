@@ -157,6 +157,6 @@ DEBUG_TOOLBAR_PANELS = (
 
 HAYSTACK_SITECONF = 's2.search_sites'
 HAYSTACK_SEARCH_ENGINE = 'whoosh'
-HAYSTACK_WHOOSH_PATH = '/home/chris/s2/run/search/'
+HAYSTACK_WHOOSH_PATH = '/home/chris/www/s2/run/search'
 
 
