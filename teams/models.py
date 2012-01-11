@@ -6,17 +6,10 @@ from django.template.defaultfilters import slugify
 import datetime
 
 
-class DefunctTeamManager(models.Manager):
-    def get_query_set(self):
-        return super(DefunctTeamManager, self).get_query_set().filter(defunct=True, real=True)
-
-
-class RealTeamManager(models.Manager):
-    def get_query_set(self):
-        return super(RealTeamManager, self).get_query_set().filter(real=True)
-
-
-class TeamManager(models.Manager):
+class AbstractTeamManager(models.Manager):
+    """
+    An abstract Team Manager.
+    """
 
     def recent_games(self, delta=datetime.timedelta(days=100)):
         since = datetime.date.today() - delta
@@ -28,15 +21,24 @@ class TeamManager(models.Manager):
             d[e.name] = e.id
             d[e.short_name] = e.id
         return d
-            
-                         
 
+    def duplicate_slugs(self):
+        """
+        Returns all bios with duplicate slugs.
+        """
+        # Used to find problem bios.
+        d = defaultdict(list)
+        for e in self.get_query_set():
+            d[e.slug].append(e.name)
+        return [(k, v) for (k, v) in d.items() if len(v) > 1]
+
+            
     def find(self, name, create=False):
         """
         Given a team name, determine the actual team.
         """
-        if name == u'':
-            import pdb; pdb.set_trace()
+        # This seems to duplicate alias functionality that is implemented in soccerdata.
+        # Also, this looks a lot more time-consuming.
 
         #from soccer.teams.aliases import mapping
         teams = Team.objects.filter(name=name)
@@ -57,6 +59,51 @@ class TeamManager(models.Manager):
         else:
             # Don't want to be creating teams all the time.
             raise
+
+
+class TeamManager(AbstractTeamManager):
+    """
+    Normal Team Manager used for Team.objects.
+    """
+
+
+class DefunctTeamManager(AbstractTeamManager):
+    """
+    Team.defunct - teams that no longer exist.
+    """
+
+    def get_query_set(self):
+        return super(DefunctTeamManager, self).get_query_set().filter(defunct=True, real=True)
+
+
+class ActiveTeamManager(AbstractTeamManager):
+    """
+    Team.active - teams that no longer exist.
+    """
+
+    def get_query_set(self):
+        return super(DefunctTeamManager, self).get_query_set().filter(defunct=False, real=True)
+
+    
+
+
+class RealTeamManager(AbstractTeamManager):
+    """
+    Team.real - teams that are not fictional.
+    """
+
+    def get_query_set(self):
+        return super(RealTeamManager, self).get_query_set().filter(real=True)
+
+
+class UnrealTeamManager(AbstractTeamManager):
+    """
+    Team.unreal - teams that are fictional.
+    """
+
+    def get_query_set(self):
+        return super(RealTeamManager, self).get_query_set().filter(real=True)
+
 
 
 
