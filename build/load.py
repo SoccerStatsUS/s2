@@ -50,7 +50,10 @@ def load_positions():
         position.pop('_id')
         position['team'] = Team.objects.find(position['team'], create=True)
         position['person'] = Bio.objects.find(position['person'])
-        Position.objects.create(**position)
+        try:
+            Position.objects.create(**position)
+        except:
+            import pdb; pdb.set_trace()
 
 
 @transaction.commit_on_success
@@ -107,41 +110,49 @@ def load_awards():
 @transaction.commit_on_success
 def load_drafts():
     print "loading drafts"
+
+
+    # Create a set of all possible drafts.
     drafts = set()
-    draft_dict = {}
     for pick in soccer_db.drafts.find():
-        try:
-            t = (pick['competition'], pick['draft'])
-        except:
-            import pdb; pdb.set_trace()
+        t = (pick.get('competition'), pick['draft'])
         drafts.add(t)
 
+
+    # Map competition, draft name to Draft objects.
+    draft_dict = {}
     for t in drafts:
         competition, name = t
-        competition = Competition.objects.get(name=competition)
+
+        # Let competition be None if necessary.
+        if competition:
+            competition = Competition.objects.get(name=competition)
+
         d = Draft.objects.create(competition=competition, name=name)
         draft_dict[t] = d
-        
 
+    # Create picks
     for pick in soccer_db.drafts.find():
-        pick['draft'] = draft_dict[(pick['competition'], pick['draft'])]
+
+        pick['draft'] = draft_dict[(pick.get('competition'), pick['draft'])]
         pick['team'] = Team.objects.find(pick['team'], create=True)
-        pick.pop('competition')
         pick.pop('_id')
-        
+
+        if 'competition' in pick:
+            pick.pop('competition')
+
+        # Set the player reference.
         text = pick['text']
         if text.lower() == 'pass':
             player = None
-        elif "SuperDraft" in text:
+        elif "SuperDraft" in text: # huh?
             player = None
         else:
             player = Bio.objects.find(text)
         pick['player'] = player
+
         Pick.objects.create(**pick)
         
-
-
-
         
 
 @transaction.commit_on_success
@@ -275,7 +286,8 @@ def load_stats():
     # need to create stats with sql as well.
     print "\nCreating stats\n"
     l = []
-    for i, stat in enumerate(soccer_db.stats.find()):
+    
+    for i, stat in enumerate(soccer_db.stats.find(timeout=False)): # no timeout because this query takes forever.
         if i % 1000 == 0:
             print i
 
@@ -372,7 +384,7 @@ def load_lineups():
                 'off': a['off'],
                 }
 
-
+    # Create the appearance objects.
     l = []
     for i, a in enumerate(soccer_db.lineups.find()):
         u = create_appearance(a)
@@ -382,8 +394,7 @@ def load_lineups():
         if i % 5000 == 0:
             print i
 
-    print "Creating appearances"
-
+    print "Creating appearances" # acutal objects.
     for e in l:
         Appearance.objects.create(**e)
 
