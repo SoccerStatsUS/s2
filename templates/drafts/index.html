@@ -11,7 +11,11 @@
   
   {% for draft in drafts %}
   <tr>
+    {% if draft.competition %}
     <td><a href="{% url competition_detail draft.competition.slug %}">{{ draft.competition }}</a></td>
+    {% else %}
+    <td></td>
+    {% endif %}
     <td>{{ draft.date }}</td>
     <td><a href="{% url draft_detail draft.competition.slug draft.slug %}">{{ draft.name }}</a></td>
   </tr>

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+Hello
+
+{{ drafts }}
+
+<ul>
+{% for draft in drafts %}
+<li>{{ draft }}</li>
+{% endfor %}
+</ul>
+
+{% endblock %}

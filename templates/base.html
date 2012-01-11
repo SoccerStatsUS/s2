@@ -35,7 +35,9 @@
 
 <body>
 
-  <h1><a href="{% url home %}">socceroutsider.com</a> <span class="subhead">American soccer statistics since 1884 (beta)</span></h1>
+  <h1><a href="{% url home %}">socceroutsider.com</a> <span class="subhead">American soccer statistics since 1884 (beta)</span>
+
+  </h1>
 
   <div id="header">
     <ul>
@@ -50,13 +52,22 @@
       <li><a href="{% url place_index %}">places</a></li>
       <li><a href="{% url drafts_index %}">drafts</a></li>
       <li><a href="{% url award_index %}">awards</a></li>
-
     </ul>
+
+      <form method="get" action="/search" id="search_form">
+        <input type="text" name="q" id="id_q" />
+        <input type="submit" value="Search" id="search_input" />
+      </form>
+
+
+
+
     <div class="clear"></div>
   </div>
 
   <div id="content">
   {% block content %}
+
   {% endblock %}
   </div>
 
@@ -67,7 +78,11 @@
       <li><a href="/sources">sources</a></li>
       <li><a href="/api">api</a></li>
     </ul>
+
+
   </div>
+
+
 
 </body>
 
