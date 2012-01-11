@@ -10,6 +10,15 @@ import datetime
 from collections import defaultdict
 
 
+class StatsManager(models.Manager):
+
+    # Regular season stats.
+
+    def get_query_set(self):
+        # This is important.
+        return super(StatsManager, self).get_query_set().exclude(team=None).exclude(season=None)
+
+
 class CareerStatsManager(models.Manager):
 
     # Stats for an entire career
@@ -49,13 +58,6 @@ class TeamStatsManager(models.Manager):
         return super(TeamStatsManager, self).get_query_set().filter(season=None).exclude(team=None)
 
 
-class StatsManager(models.Manager):
-
-    # Regular season stats.
-
-    def get_query_set(self):
-        # This is important.
-        return super(StatsManager, self).get_query_set().exclude(team=None).exclude(season=None)
 
 
 class Stat(models.Model):

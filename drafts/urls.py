@@ -10,4 +10,8 @@ urlpatterns = patterns('s2.drafts.views',
                            'draft_detail',
                            name='draft_detail'),
 
+                       url('^bigboard$',
+                           'big_board',
+                           name='big_board'),
+
 )
