@@ -120,15 +120,15 @@ def load_drafts():
 
 
     # Map competition, draft name to Draft objects.
+    # Would be nice not to create these here.
     draft_dict = {}
     for t in drafts:
         competition, name = t
+        competition = Competition.objects.find(name=competition)
 
-        # Let competition be None if necessary.
-        if competition:
-            competition = Competition.objects.get(name=competition)
+        real = "USMNT" not in name
 
-        d = Draft.objects.create(competition=competition, name=name)
+        d = Draft.objects.create(competition=competition, name=name, real=real)
         draft_dict[t] = d
 
     # Create picks
@@ -283,7 +283,7 @@ def load_goals():
     
 @transaction.commit_on_success
 def load_stats():
-    # need to create stats with sql as well.
+    # This takes way too fucking long.
     print "\nCreating stats\n"
     l = []
     
