@@ -46,7 +46,13 @@
       }
       return false;
     };
-    $("#submit_button").click(getStats);
-    return getStats();
+    $("#submit_button").click(getTeams);
+    return $(".bigboard li").click(function() {
+      var slug;
+      slug = $(this).attr("slug");
+      $(".bigboard li").removeClass("red");
+      $(".bigboard li[name=" + slug + "]").addClass("red");
+      return $("#ajax_box").load("/drafts/x/" + slug);
+    });
   });
 }).call(this);

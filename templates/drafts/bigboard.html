@@ -2,14 +2,23 @@
 
 {% block content %}
 
-Hello
 
-{{ drafts }}
+{% for draft in drafts %}
+<div class="bigboard" >
+
+<h3>{{ draft.name }}</h3>
 
 <ul>
-{% for draft in drafts %}
-<li>{{ draft }}</li>
+{% for pick in draft.pick_set.all %}
+<li slug="{{ pick.player.slug }}">{{ pick.player }} <a href="{% url person_detail pick.player.slug %}">x</a></li>
 {% endfor %}
 </ul>
+
+</div>
+{% endfor %}
+
+<div id="ajax_box"></div>
+
+
 
 {% endblock %}

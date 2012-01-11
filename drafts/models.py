@@ -7,11 +7,13 @@ from s2.competitions.models import Competition, Season
 
 class Draft(models.Model):
 
-    competition = models.ForeignKey(Competition, null=True)
+    competition = models.ForeignKey(Competition)
 
     name = models.CharField(max_length=255)
     slug = models.SlugField()
     #date = models.DateField(null=True, blank=True)
+
+    #real = models.BooleanField()
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -34,4 +36,7 @@ class Pick(models.Model):
     player = models.ForeignKey(Bio, null=True)
     position = models.IntegerField()
     team = models.ForeignKey(Team)
+
+    def __unicode__(self):
+        return "%s %s" % (self.position, self.player)
 

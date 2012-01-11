@@ -1,6 +1,7 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 
+from s2.bios.models import Bio
 from s2.competitions.models import Competition
 from s2.drafts.models import Draft
 
@@ -38,5 +39,14 @@ def big_board(request):
         }
 
     return render_to_response('drafts/bigboard.html',
+                              context,
+                              context_instance=RequestContext(request))
+
+
+def draft_person_ajax(request, slug):
+    context = {
+        'player': Bio.objects.get(slug=slug)
+        }
+    return render_to_response('drafts/ajax.html',
                               context,
                               context_instance=RequestContext(request))

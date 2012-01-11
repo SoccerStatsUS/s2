@@ -5,8 +5,7 @@ $(document).ready( ->
     d = $("table", div)
     () -> d.tablesorter()
 
-
-
+  # Ajax functionality for stats/lineups/team search.
   getLineups = ->
     div = $("#lineups")
     if div.length
@@ -16,10 +15,7 @@ $(document).ready( ->
       console.log url
       div.load(url)
 
-
   $("#submit_button").click getLineups
-
-
 
   getStats = ->
     div = $("#stats")
@@ -46,7 +42,12 @@ $(document).ready( ->
 
   $("#submit_button").click getTeams
 
-
+  # USMNT Big Board functionality.
+  $(".bigboard li").click ->
+    slug = $(this).attr("slug")
+    $(".bigboard li").removeClass("red")
+    $(".bigboard li[name=#{ slug }]").addClass("red")
+    $("#ajax_box").load("/drafts/x/#{ slug }")
 
 
 )

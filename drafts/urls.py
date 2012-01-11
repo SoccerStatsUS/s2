@@ -14,4 +14,9 @@ urlpatterns = patterns('s2.drafts.views',
                            'big_board',
                            name='big_board'),
 
+                       url(r'^x/(?P<slug>[a-z0-9-]+)',
+                           'draft_person_ajax',
+                           name='draft_person_ajax'),
+
+
 )
