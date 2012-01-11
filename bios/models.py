@@ -92,6 +92,13 @@ class Bio(models.Model):
         return reverse('person_detail', args=[self.slug])
 
 
+    def usmnt_draft_picks(self):
+        """
+        Return a list of picks where the player has been selected in the USMNT draft.
+        """
+        return self.pick_set.filter(draft__name__contains='USMNT')
+
+
 
     def save(self, *args, **kwargs):
         # Is this a good idea?
@@ -155,7 +162,14 @@ class Bio(models.Model):
         Summary stats for a player in a given competition (e.g. MLS)
         """
         from s2.stats.models import Stat
-        return Stat.competition_stats.all()
+        return Stat.competition_stats.filter(player=self)
+
+    def team_stats(self):
+        """
+        Summary stats for a player in a given competition (e.g. MLS)
+        """
+        from s2.stats.models import Stat
+        return Stat.team_stats.filter(player=self)
 
 
     def calculate_standings(self):
