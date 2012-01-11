@@ -2,6 +2,8 @@
 
 team / league / player timelines would be cool.
 
+Remove alias functionality on this side.
+
 
 Season types:
 
