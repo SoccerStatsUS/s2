@@ -131,4 +131,15 @@ textarea.contact {
     width: 500px;
 }
     
+
+#search_form {
+    margin-right: 5%;
+}
     
+#search_form #id_q {
+    width: 180px;
+}
+
+#search_form input {
+    height: 15px;
+}
