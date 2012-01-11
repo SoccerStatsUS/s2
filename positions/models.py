@@ -1,4 +1,5 @@
 from django.db import models
+from django.template.defaultfilters import slugify
 
 
 from s2.teams.models import Team
@@ -16,6 +17,10 @@ class PositionManager(models.Manager):
             except:
                 print "failed on %s" % e.id
 
+
+    def distinct_names(self):
+        return sorted(set([(e.name, e.slug) for e in Position.objects.all()]))
+
     
 
 class Position(models.Model):
@@ -23,15 +28,27 @@ class Position(models.Model):
 
     person = models.ForeignKey(Bio)
     team = models.ForeignKey(Team)
+
     name = models.CharField(max_length=255)
 
     start = models.DateField(null=True, blank=True)
     end = models.DateField(null=True, blank=True)
 
+    slug = models.SlugField()
+
     objects = PositionManager()
 
     def __unicode__(self):
         return "%s, %s, %s" % (self.person, self.team, self.name)
+
+    def save(self, *args, **kwargs):
+        # Is this a good idea?
+        if not self.slug:
+            self.slug = slugify(self.name)
+            
+        super(Position, self).save(*args, **kwargs)
+
+
 
     def games(self):
         from s2.games.models import Game
