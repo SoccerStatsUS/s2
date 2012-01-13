@@ -25,8 +25,7 @@ class Goal(models.Model):
     Represents a completed game.
     """
 
-    # Should we have a date and a datetime field?
-    date = models.DateField()
+    date = models.DateField() # This shouldn't be here. Game can tell us the date.
     minute = models.IntegerField(null=True)
     team = models.ForeignKey(Team)
     player = models.ForeignKey(Bio)
@@ -38,7 +37,7 @@ class Goal(models.Model):
     objects = GoalManager()
     
     class Meta:
-        ordering = ('-date', '-minute', 'team')
+        ordering = ('game', '-minute', 'team')
 
     def opponent(self):
         if self.team == self.game.home_team:
@@ -48,7 +47,7 @@ class Goal(models.Model):
  
 
     def __unicode__(self):
-        return u"%s: %s (%s)" % (self.date, self.player, self.minute)
+        return u"%s: %s (%s)" % (self.game.date, self.player, self.minute)
 
 
 
