@@ -14,6 +14,18 @@ class CompetitionManager(models.Manager):
             return Competition.objects.create(name=name)
 
 
+    def as_dict(self):
+        """
+        Dict mapping names to bio id's.
+        """
+        d = {}
+        for e in self.get_query_set():
+            d[e.name] = e.id
+        return d
+
+
+
+
 class Competition(models.Model):
 
     name = models.CharField(max_length=255)
