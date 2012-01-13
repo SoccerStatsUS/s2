@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load datum_or_none %}
 
 {% block content %}
 
@@ -49,7 +50,7 @@
   <tr>
     <td><a href="{% url team_detail goal.team.slug %}">{{ goal.team }}</a></td>
     <td><a href="{% url person_detail goal.player.slug %}">{{ goal.player }}</a></td>
-    <td>{{ goal.minute }}</td>
+    {% datum_or_grey goal.minute %}
     <td></td>
   {% endfor %}
 </table>
@@ -74,10 +75,10 @@
   <tr>
     <td><a href="{% url team_detail appearance.team.slug %}">{{ appearance.team }}</a></td>
     <td><a href="{% url person_detail appearance.player.slug %}">{{ appearance.player }}</a></td>
-    <td>{{ appearance.minutes }}</td>
+    {% datum_or_grey appearance.minutes %}
     <td>{{ appearance.on }}</td>
     <td>{{ appearance.off }}</td>
-    <td>{{ appearance.goal_differential }}</td>
+    {% datum_or_grey appearance.goal_differential %}
     <td>{{ appearance.pretty_age|floatformat:"1" }}</td>
   </tr>
   {% endfor %}

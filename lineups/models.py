@@ -27,7 +27,6 @@ class Appearance(models.Model):
         ordering = ('game', )
 
 
-
     def opponent(self):
         if self.team == self.game.home_team:
             return self.game.away_team
@@ -71,7 +70,10 @@ class Appearance(models.Model):
 
     @property
     def goal_differential(self):
-        return self.goals_for - self.goals_against
+        try:
+            return self.goals_for - self.goals_against
+        except:
+            return None
 
     def pretty_age(self):
         return self.age / 365.25
