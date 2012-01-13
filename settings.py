@@ -11,12 +11,12 @@ PROJECT_DIR = "/home/chris/www/s2/",
 INTERNAL_IPS = ('127.0.0.1',)
 
 
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ("Chris Edgemon", 'chrisedgemon@gmail.com'),
+    ("Chris Edgemon", 'chris@socceroutsider.com'),
 )
 
 MANAGERS = ADMINS
@@ -52,8 +52,13 @@ CACHES = {
 }
 
 # Fix this soon.
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = '/home/chris/www/s2/run/messages' # change this to a proper location
+#EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+#EMAIL_FILE_PATH = '/home/chris/www/s2/run/messages' # change this to a proper location
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'chris@socceroutsider.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
 
 
 
@@ -88,8 +93,6 @@ MEDIA_ROOT = '/home/chris/www/s2/media'
 MEDIA_URL = "http://media.socceroutsider.com/"
 ADMIN_MEDIA_PREFIX = 'http://media.socceroutsider.com/admin/'
 
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = 'zvn-9ofy_sj3j55-gs7-p6+5hsuk+q@_8-iz8+-*qobwr7snw!'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
