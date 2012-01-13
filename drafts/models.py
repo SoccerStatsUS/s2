@@ -13,7 +13,7 @@ class Draft(models.Model):
     slug = models.SlugField()
     #date = models.DateField(null=True, blank=True)
 
-    #real = models.BooleanField()
+    real = models.BooleanField()
 
     def save(self, *args, **kwargs):
         if not self.slug:
