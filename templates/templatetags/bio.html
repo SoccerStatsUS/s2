@@ -8,8 +8,8 @@
     <th>team</th>
     <th>cmp</th>
     <th>season</th>
-    <th>gs</th>
     <th>gp</th>
+    <th>gs</th>
     <th>min</th>
     <th>goals</th>
     <th>assists</th>
@@ -52,8 +52,8 @@
   <td></td>
   {% endif %}
 
-  {% datum_or_grey stat.games_started %}
   {% datum_or_grey stat.games_played %}
+  {% datum_or_grey stat.games_started %}
   {% datum_or_grey stat.minutes %}
   {% datum_or_grey stat.goals %}
   {% datum_or_grey stat.assists %}
