@@ -115,7 +115,10 @@ def load_drafts():
     # Create a set of all possible drafts.
     drafts = set()
     for pick in soccer_db.drafts.find():
-        t = (pick.get('competition'), pick['draft'])
+        try:
+            t = (pick.get('competition'), pick['draft'])
+        except:
+            import pdb; pdb.set_trace()
         drafts.add(t)
 
 
@@ -243,7 +246,7 @@ def load_goals():
 
     def create_goal(goal):
         team = goal['team']
-        if goal['team'] in teams:
+        if team in teams:
             team_id = teams[team]
         else:
             team_id = Team.objects.find(team, create=True).id
@@ -280,12 +283,62 @@ def load_goals():
         g = create_goal(goal)
         if g:
             Goal.objects.create(**g)
+
+
+# Experimental stuff.
+def make_team_getter():
+    teams = Team.objects.team_dict()
+
+    def get_team(team):
+        if team in teams:
+            team_id = teams[team]
+        else:
+            team_id = Team.objects.find(team, create=True).id
+            teams[team] = team_id
+
+        return team_id
+
+    return get_team
+
+def make_bio_getter():
+    bios = Bio.objects.bio_dict()
+
+    def get_bio(name):
+        if name in bios:
+            bio_id = bios[name]
+        else:
+            bio_id = Bio.objects.find(name).id
+            bios[name] = bio_id
+
+        return bio_id
+
+    return get_bio
+
+        
+def make_competition_getter():
+    competitions = Competition.objects.as_dict()
+
+    def get_competition(name):
+        if name in competitions:
+            cid = competitions[name]
+        else:
+            cid = Competition.objects.find(name).id
+            competitions[name] = cid
+
+        return cid
+
+    return get_competition
+
     
 @transaction.commit_on_success
 def load_stats():
     # This takes way too fucking long.
     print "\nCreating stats\n"
     l = []
+
+    team_getter = make_team_getter()
+    bio_getter = make_bio_getter()
+    competition_getter = make_competition_getter()
     
     for i, stat in enumerate(soccer_db.stats.find(timeout=False)): # no timeout because this query takes forever.
         if i % 1000 == 0:
@@ -294,12 +347,15 @@ def load_stats():
         if stat['name'] == '':
             continue
 
+        team_id = team_getter(stat['team'])
+        bio_id = bio_getter(stat['name'])
+        competition_id = competition_getter(stat['competition'])
+        #team = Team.objects.find(stat['team'],create=True)
+        #bio = Bio.objects.find(name=stat['name'])
+        #competition = Competition.objects.find(stat['competition'])
         # Turn these into dict calls with id's.
-        team = Team.objects.find(stat['team'],create=True)
-        bio = Bio.objects.find(name=stat['name'])
-        competition = Competition.objects.find(stat['competition'])
+        competition = Competition.objects.get(id=competition_id)
         season = Season.objects.find(stat['season'], competition)
-
 
         # Should be in soccerdata.merge.
         for k in 'games_started', 'games_played', 'minutes', 'shots', 'shots_on_goal', \
@@ -310,13 +366,11 @@ def load_stats():
         for k in 'goals', 'assists':
             if stat.get(k) == '':
                 stat[k] = 0
-
-
         
         l.append({
-            'player_id': bio.id,
-            'team_id': team.id,
-            'competition_id': competition.id,
+            'player_id': bio_id,
+            'team_id': team_id,
+            'competition_id': competition_id,
             'season_id': season.id,
             'games_started': stat.get('games_started'),
             'games_played': stat.get('games_played'),
@@ -337,18 +391,19 @@ def load_stats():
 
 @transaction.commit_on_success
 def load_lineups():
-    # Need to do this with raw sql.
+    # Need to do this with raw sql and standard dict management functions.
     print "\nloading lineups\n"
     from django.db import connection
 
-    
+
+
     teams = {}
     games = {}
     players = {}
     
     def create_appearance(a):
 
-        # Setting find functions to memoize should to the same job.
+        # Setting find functions to memoize should do the same job.
         # Don't create all those extra references if not necessary.
         if not a['name']:
             print a
