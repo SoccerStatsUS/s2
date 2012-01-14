@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2><a href="{% url team_detail team.slug %}">{{ team.name }}</a></h2>
+<h2><a href="{% url competition_detail season.competition.slug %}">{{ season.competition }}</a></h2>
+<h2><a href="{% url season_detail season.competition.slug season.slug %}">{{ season.name }}</a></h2>
+
+{% if standings %}
+<h3>Standings</h3>
+{% include "templatetags/standings.html" %}
+{% endif %}
+
+{% if stats %}
+<h3>Stats</h3>
+{% include "templatetags/bio.html" %}
+{% endif %}
+
+{% if games.exists %}
+<h3>games</h3>
+{% include "templatetags/games.html" %}
+{% endif %}
+
+
+{% endblock %}
