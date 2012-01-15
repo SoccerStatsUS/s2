@@ -60,24 +60,22 @@ def team_detail(request, team_slug):
     
 
 
-def team_season_detail(request, team_slug, season_slug):
+def team_year_detail(request, team_slug, year):
     """
     Just about the most important view of all.
     """
     team = get_object_or_404(Team, slug=team_slug)
 
-    standing = Standing.objects.get(team=team, season__slug=season_slug)
-    season = standing.season
+    seasons = Season.objects.filter(season__name=year)
 
     context = {
         'team': team,
-        'season': season,
-        'standings': Standing.objects.filter(season=season),
-        'stats': Stat.objects.filter(team=team, season=season),
-        'games': team.game_set().filter(season=season),
+        'standings': Standing.objects.filter(season__in=seasons)
+        'stats': Stat.objects.filter(team=team, season__in=seasons),
+        'games': team.game_set().filter(date__year=year)
         }
 
-    return render_to_response("teams/season_detail.html",
+    return render_to_response("teams/year_detail.html",
                               context,
                               context_instance=RequestContext(request)
                               )

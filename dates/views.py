@@ -22,7 +22,7 @@ def year_detail(request, year):
         'hires': hires,
         'fires': fires,
         }
-    return render_to_response("games/list.html",
+    return render_to_response("dates/list.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -41,7 +41,7 @@ def month_detail(request, year, month):
         'hires': hires,
         'fires': fires,
         }
-    return render_to_response("games/list.html",
+    return render_to_response("dates/list.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -60,7 +60,7 @@ def date_detail(request, year, month, day):
         'hires': hires,
         'fires': fires,
         }
-    return render_to_response("games/list.html",
+    return render_to_response("dates/list.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -78,6 +78,6 @@ def day_detail(request, month, day):
         'hires': hires,
         'fires': fires,
         }
-    return render_to_response("games/list.html",
+    return render_to_response("dates/list.html",
                               context,
                               context_instance=RequestContext(request))
