@@ -3,8 +3,6 @@
 {% block content %}
 
 <h2><a href="{% url team_detail team.slug %}">{{ team.name }}</a></h2>
-<h2><a href="{% url competition_detail season.competition.slug %}">{{ season.competition }}</a></h2>
-<h2><a href="{% url season_detail season.competition.slug season.slug %}">{{ season.name }}</a></h2>
 
 {% if standings %}
 <h3>Standings</h3>
