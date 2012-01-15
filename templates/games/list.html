@@ -2,8 +2,28 @@
 
 {% block content %}
 
+
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+<div tab="games">
+<table>
+{% for game in games %}
+<tr>
+  <td><a href="{% url season_detail game.season.competition.slug game.season.slug %}">{{ game.season.competition.abbreviation }}</td>
+  <td><a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date }}</a></td>
+  <td class="align-right"><a href="{% url team_detail game.home_team.slug %}">{{ game.home_team }}</a></td>
+  <td><a href="{% url game_detail game.id %}">{{ game.home_score }} - {{ game.away_score }}</a></td>
+  <td><a href="{% url team_detail game.away_team.slug %}">{{ game.away_team }}</a></td>
+</tr>
+{% endfor %}
+</table>
+</div>
+
+
 {% if births.exists %}
-<h3>Births</h3>
+<div tab="births">
 <table>
 {% for bio in births %}
 <tr>
@@ -12,10 +32,12 @@
 </tr>
 {% endfor %}
 </table>
+</div>
 {% endif %}
 
+
 {% if hires.exists %}
-<h3>Hirings</h3>
+<div tab="hirings">
 <table>
 {% for position in hires %}
 <tr>
@@ -24,10 +46,12 @@
 </tr>
 {% endfor %}
 </table>
+</div>
 {% endif %}
 
+
 {% if fires.exists %}
-<h3>Firings</h3>
+<div tab="firings">
 <table>
 {% for position in fires %}
 <tr>
@@ -36,19 +60,9 @@
 </tr>
 {% endfor %}
 </table>
+</div>
 {% endif %}
 
-<h3>Games</h3>
-<table>
-{% for game in games %}
-<tr>
-  <td><a href="{% url season_detail game.season.competition.slug game.season.slug %}">{{ game.season.competition.abbreviation }}</td>
-  <td>{{ game.date }}</td>
-  <td class='align-right'>{{ game.home_team }}</td>
-  <td><a href="{% url game_detail game.id %}">{{ game.home_score }} - {{ game.away_score }}</a></td>
-  <td>{{ game.away_team }}</td>
-</tr>
-{% endfor %}
-</table>
+</div>
 
 {% endblock %}

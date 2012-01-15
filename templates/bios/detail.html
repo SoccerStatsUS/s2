@@ -27,8 +27,31 @@
 {% endif %}
 
 
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+
+{% if bio.season_stats.exists %}
+<div tab="stats">
+{% include "templatetags/bio.html" with stats=bio.season_stats %}
+</div>
+{% endif %}
+
+{% if bio.goal_set.exists %}
+<div tab="goals">
+{% include "templatetags/goals.html" with goals=bio.goal_set.all %}
+</div>
+{% endif %}
+
+{% if bio.appearance_set.exists %}
+<div tab="lineups">
+{% include "templatetags/appearance.html" with appearances=bio.appearance_set.all %}
+</div>
+{% endif %}
+
 {% if bio.awards.exists %}
-<h4>Awards</h4>
+<div tab="awards">
 <table>
 {% for award in bio.awards.all %}
 <tr>
@@ -37,17 +60,25 @@
 </tr>
 {% endfor %}
 </table>
+</div>
 {% endif %}
 
 
+{% if bio.position_stats.exists %}
+<div tab="standings">
+{% include "templatetags/positions.html" with stats=bio.position_stats %}
+</div>
+{% endif %}
+
 {% if bio.pick_set.exists %}
-<h4>Drafts</h4>
+<div tab="drafts">
 {% include "templatetags/draft.html" with picks=bio.pick_set.all %}
+</div>
 {% endif %}
 
 
 {% if bio.position_set.count %}
-<h4>Positions</h4>
+<div tab="jobs">
 <table>
 {% for position in bio.position_set.all %}
 <tr>
@@ -58,33 +89,11 @@
 </tr>
 {% endfor %}
 </table>
+</div>
 {% endif %}
 
 
-
-{% if bio.season_stats.exists %}
-<h4>Stats</h4>
-{% include "templatetags/bio.html" with stats=bio.season_stats %}
-{% endif %}
-
-
-{% if bio.position_stats.exists %}
-<h4>Non-playing Stats</h4>
-{% include "templatetags/positions.html" with stats=bio.position_stats %}
-{% endif %}
-
-
-{% if bio.goal_set.exists %}
-<h4>Goals</h4>
-{% include "templatetags/goals.html" with goals=bio.goal_set.all %}
-{% endif %}
-
-
-
-{% if bio.appearance_set.exists %}
-<h4>Appearances</h4>
-{% include "templatetags/appearance.html" with appearances=bio.appearance_set.all %}
-{% endif %}
+</div>
     
 
 {% endblock %}
