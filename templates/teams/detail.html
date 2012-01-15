@@ -7,7 +7,15 @@
 
 <h2>{{ team.name }}</h2>
 
-<h3>Honors</h3>
+
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+
+{% if team.awards.exists %}
+<div tab="honors">
+
 <table>
 {% for award in team.awards.all %}
 <tr>
@@ -17,8 +25,12 @@
 </tr>
 {% endfor %}
 </table>
+</div>
+{% endif %}
 
-<h3>Employees</h3>
+{% if team.position_set.exists %}
+<div tab="employees">
+
 <table>
 {% for position in team.position_set.all %}
 <tr>
@@ -39,25 +51,36 @@
 </tr>
 {% endfor %}
 </table>
+</div>
+{% endif %}
+
 
 
 {% if team.pick_set.exists %}
-<h4>Drafts picks</h4>
+<div tab="draft picks">
 {% include "templatetags/draft.html" with picks=team.pick_set.all %}
+</div>
 {% endif %}
 
 
 {% if team.standing_set.exists %}
+<div tab="standings">
 {% include "templatetags/standings.html" with standings=team.standings_by_date %}
+</div>
 {% endif %}
 
 {% if stats %}
+<div tab="bios">
 {% include "templatetags/bio.html" %}
 {% endif %}
 
 {% if team.game_set.exists %}
-<h3>games</h3>
+<div tab="games">
 {% include "templatetags/games.html" with games=team.game_set.all %}
+</div>
 {% endif %}
 
+</div>
+
 {% endblock %}
+

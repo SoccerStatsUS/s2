@@ -31,9 +31,6 @@ class Award(models.Model):
         ordering = ('competition', 'name')
 
 
-
-
-
 class AwardItem(models.Model):
 
     award = models.ForeignKey(Award)

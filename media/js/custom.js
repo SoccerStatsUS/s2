@@ -1,6 +1,6 @@
 (function() {
   $(document).ready(function() {
-    var createSortLoader, getLineups, getStats, getTeams;
+    var createSortLoader, getLineups, getStats, getTeams, tabs;
     createSortLoader = function(div) {
       var d;
       d = $("table", div);
@@ -47,12 +47,32 @@
       return false;
     };
     $("#submit_button").click(getTeams);
-    return $(".bigboard li").click(function() {
+    $(".bigboard li").click(function() {
       var slug;
       slug = $(this).attr("slug");
       $(".bigboard li").removeClass("red");
       $(".bigboard li[name=" + slug + "]").addClass("red");
       return $("#ajax_box").load("/drafts/x/" + slug);
     });
+    $("#tab_wrapper div").each(function() {
+      var tab, text;
+      tab = $(this).attr("tab");
+      text = "<li>" + tab + "</li>";
+      return $("#tabs").append(text);
+    });
+    $("#tabs li").click(function() {
+      var name;
+      name = $(this).html();
+      $("#tabs li").removeClass("grey");
+      $(this).addClass("grey");
+      $("#tab_wrapper div").each(function() {
+        return $(this).hide();
+      });
+      return $("#tab_wrapper div[tab=" + name + "]").show();
+    });
+    tabs = $("#tabs li");
+    if (tabs.length) {
+      return $(tabs[0]).click();
+    }
   });
 }).call(this);

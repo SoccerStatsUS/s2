@@ -223,3 +223,23 @@ textarea.contact {
 .red {
     background-color: red;
 }
+
+
+/* tabs */
+
+#tabs {
+    margin: 0;
+    padding: 0;
+    padding-bottom: 10px;
+    }
+
+#tabs li {
+    border: 1px solid #ccc;
+    color: blue;
+    display: inline;
+    padding: 3px;
+}
+
+#tabs li.grey {
+    color: #000;
+}

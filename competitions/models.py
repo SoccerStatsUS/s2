@@ -82,7 +82,6 @@ class Season(models.Model):
 
     competition = models.ForeignKey(Competition)
 
-
     objects = SeasonManager()
 
 

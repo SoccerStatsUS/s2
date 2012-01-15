@@ -49,5 +49,25 @@ $(document).ready( ->
     $(".bigboard li[name=#{ slug }]").addClass("red")
     $("#ajax_box").load("/drafts/x/#{ slug }")
 
+  # Want to do this better.
+  $("#tab_wrapper div").each ->
+    tab = $(this).attr("tab")
+    text = "<li>#{ tab }</li>"
+    $("#tabs").append(text);
+
+  $("#tabs li").click ->
+    name = $(this).html()
+    $("#tabs li").removeClass "grey"
+    $(this).addClass "grey"
+
+    $("#tab_wrapper div").each ->
+      $(this).hide()
+    $("#tab_wrapper div[tab=#{ name }]").show()
+
+  tabs = $("#tabs li")
+  if tabs.length
+    $(tabs[0]).click()
+
+
 
 )
