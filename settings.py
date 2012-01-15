@@ -1,6 +1,8 @@
 from os.path import join
 import socket
 
+from secret_settings import *
+
 PRODUCTION_SITES = (
     "bert",
 )
@@ -145,6 +147,7 @@ INSTALLED_APPS = (
     's2.stats',
     's2.teams',
     'haystack',
+    'django_extensions',
 )
 
 # Various apps available
