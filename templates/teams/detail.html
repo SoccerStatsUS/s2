@@ -13,6 +13,25 @@
 <div id="tab_wrapper">
 
 
+{% if team.standing_set.exists %}
+<div tab="standings">
+{% include "templatetags/standings.html" with standings=team.standings_by_date %}
+</div>
+{% endif %}
+
+{% if stats %}
+<div tab="stats">
+{% include "templatetags/bio.html" %}
+</div>
+{% endif %}
+
+{% if team.game_set.exists %}
+<div tab="games">
+{% include "templatetags/games.html" with games=team.game_set.all %}
+</div>
+{% endif %}
+
+
 {% if team.awards.exists %}
 <div tab="honors">
 
@@ -55,30 +74,12 @@
 {% endif %}
 
 
-
 {% if team.pick_set.exists %}
 <div tab="draft picks">
 {% include "templatetags/draft.html" with picks=team.pick_set.all %}
 </div>
 {% endif %}
 
-
-{% if team.standing_set.exists %}
-<div tab="standings">
-{% include "templatetags/standings.html" with standings=team.standings_by_date %}
-</div>
-{% endif %}
-
-{% if stats %}
-<div tab="bios">
-{% include "templatetags/bio.html" %}
-{% endif %}
-
-{% if team.game_set.exists %}
-<div tab="games">
-{% include "templatetags/games.html" with games=team.game_set.all %}
-</div>
-{% endif %}
 
 </div>
 
