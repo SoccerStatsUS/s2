@@ -66,11 +66,11 @@ def team_year_detail(request, team_slug, year):
     """
     team = get_object_or_404(Team, slug=team_slug)
 
-    seasons = Season.objects.filter(season__name=year)
+    seasons = Season.objects.filter(name=year)
 
     context = {
         'team': team,
-        'standings': Standing.objects.filter(season__in=seasons)
+        'standings': Standing.objects.filter(team=team, season__in=seasons),
         'stats': Stat.objects.filter(team=team, season__in=seasons),
         'games': team.game_set().filter(date__year=year)
         }
