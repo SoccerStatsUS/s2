@@ -122,6 +122,11 @@ h1 span.subhead {
 
 #scoreboard {
     border: 2px solid black;
+    width: 30%;
+}
+
+#scoreboard .score {
+    border: 1px solid black;
 }
 
 /* Contact */
@@ -130,7 +135,30 @@ textarea.contact {
     height: 100px;
     width: 500px;
 }
+
+/* Game detail */
+
+#game_score {
+}
     
+#game_score .team_data {
+    border: 1px solid black;
+    float: left;
+}
+
+#game_score .team {
+    font-size: 1.5em;
+}
+
+#game_score .score {
+    font-size: 2em;
+}
+
+.clear_both {
+    clear: both;
+}
+
+/* Search */
 
 #search_form {
     margin-right: 5%;

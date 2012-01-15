@@ -2,6 +2,7 @@
 
 {% block content %}
 
+{% if births.exists %}
 <h3>Births</h3>
 <table>
 {% for bio in births %}
@@ -11,9 +12,10 @@
 </tr>
 {% endfor %}
 </table>
+{% endif %}
 
-
-<h3>Hires</h3>
+{% if hires.exists %}
+<h3>Hirings</h3>
 <table>
 {% for position in hires %}
 <tr>
@@ -22,7 +24,9 @@
 </tr>
 {% endfor %}
 </table>
+{% endif %}
 
+{% if fires.exists %}
 <h3>Firings</h3>
 <table>
 {% for position in fires %}
@@ -32,6 +36,7 @@
 </tr>
 {% endfor %}
 </table>
+{% endif %}
 
 <h3>Games</h3>
 <table>

@@ -11,27 +11,26 @@
 
 <div id="game_score">
 
-  
   <h4><a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date }}</a></h4>
   <h4><a href="{% url competition_detail game.competition.slug %}">{{ game.competition }}</a></h4>
   <h4><a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.season.name }}</a></h4>
 
 
-  <div>
-    <div><a href="{% url team_detail game.home_team.slug %}">{{ game.home_team  }}</a></div>
-    <div>{{ game.home_score }}</div>
-    <div><a href="{% url team_detail game.home_team.slug %}">{{ game.home_streak_string  }}</a></div>
+  <div class="team_data">
+    <div class="team"><a href="{% url team_detail game.home_team.slug %}">{{ game.home_team  }}</a></div>
+    <div class="score">{{ game.home_score }}</div>
     <div><a href="{% url team_detail game.home_team.slug %}">{{ game.home_standings_string  }}</a></div>
   </div>
 
-  <div>
-    <div><a href="{% url team_detail game.away_team.slug %}">{{ game.away_team  }}</a></div>
-    <div>{{ game.away_score }}</div>
-    <div><a href="{% url team_detail game.away_team.slug %}">{{ game.away_streak_string  }}</a></div>
+  <div class="team_data">
+    <div class="team"><a href="{% url team_detail game.away_team.slug %}">{{ game.away_team  }}</a></div>
+    <div class="score">{{ game.away_score }}</div>
     <div><a href="{% url team_detail game.away_team.slug %}">{{ game.away_standings_string  }}</a></div>
   </div>
 
 </div>
+
+<div class="clear_both"></div>
 
 
 {% if game.goal_set.exists %}
