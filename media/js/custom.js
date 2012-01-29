@@ -1,6 +1,7 @@
 (function() {
   $(document).ready(function() {
     var createSortLoader, getLineups, getStats, getTeams, tabs;
+    $("#bio").tablesorter();
     createSortLoader = function(div) {
       var d;
       d = $("table", div);

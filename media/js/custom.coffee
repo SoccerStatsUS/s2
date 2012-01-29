@@ -1,5 +1,8 @@
 $(document).ready( ->
 
+
+  $("#bio").tablesorter()
+
   # Can't get tablesorter to work...
   createSortLoader = (div) ->
     d = $("table", div)
