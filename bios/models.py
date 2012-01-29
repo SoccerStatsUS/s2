@@ -92,6 +92,13 @@ class Bio(models.Model):
         return reverse('person_detail', args=[self.slug])
 
 
+    def team_year_list(self, team, year):
+        year_teams = [(e.season, e.team) for e in self.stat_set.all()]
+        
+                      
+
+
+
     def usmnt_draft_picks(self):
         """
         Return a list of picks where the player has been selected in the USMNT draft.

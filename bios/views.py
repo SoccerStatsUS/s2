@@ -10,7 +10,7 @@ from s2.stats.models import Stat
 def person_list_generic(request, person_list=None):
 
     if person_list is None:
-        stats = Stat.career_stats.all()
+        stats = Stat.career_stats.all()[:1000]
     else:
         stats = Stat.career_stats.filter(player__in=pl)
 
@@ -25,6 +25,7 @@ def person_list_generic(request, person_list=None):
 
 @cache_page(60 * 60 * 12)
 def person_index(request):
+    # Change this to something like: http://www.baseball-reference.com/players/
     return person_list_generic(request)
 
 
