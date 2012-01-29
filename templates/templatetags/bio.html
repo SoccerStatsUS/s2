@@ -1,6 +1,6 @@
 {% load datum_or_none %}
 
-<table>
+<table id="bio">
 
 <thead>
   <tr>
@@ -19,9 +19,12 @@
     <th>w</th>
     <th>t</th>
     <th>l</th>
+    {% endcomment %}
+
     <th>gf</th>
     <th>ga</th>
-    {% endcomment %}
+
+
   </tr>
 </thead>
 
@@ -63,9 +66,11 @@
   {% datum_or_grey stat.wins %}
   {% datum_or_grey stat.ties %}
   {% datum_or_grey stat.losses %}
+  {% endcomment %}
+
   {% datum_or_grey stat.goals_for %}
   {% datum_or_grey stat.goals_against %}
-  {% endcomment %}
+
 </tr>
 {% endfor %}
 </tbody>

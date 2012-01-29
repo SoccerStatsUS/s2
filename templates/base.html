@@ -54,10 +54,12 @@
       <li><a href="{% url award_index %}">awards</a></li>
     </ul>
 
+    {% comment %}
       <form method="get" action="/search" id="search_form">
         <input type="text" name="q" id="id_q" />
         <input type="submit" value="Search" id="search_input" />
       </form>
+      {% endcomment %}
 
 
 

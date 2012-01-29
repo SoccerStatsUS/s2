@@ -4,20 +4,32 @@
 
 <h2><a href="{% url team_detail team.slug %}">{{ team.name }}</a></h2>
 
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+
 {% if standings %}
-<h3>Standings</h3>
+<div tab="standings">
 {% include "templatetags/standings.html" %}
+</div>
 {% endif %}
 
 {% if stats %}
-<h3>Stats</h3>
+<div tab="stats">
 {% include "templatetags/bio.html" %}
+</div>
 {% endif %}
 
 {% if games.exists %}
-<h3>games</h3>
+<div tab="games">
 {% include "templatetags/games.html" %}
+</div>
 {% endif %}
 
+<div tab="misc">
+</div>
+
+</div>
 
 {% endblock %}

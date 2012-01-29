@@ -8,15 +8,20 @@
 
 <h3><a href="{% url competition_detail competition.slug %}">{{ competition }}</a></h3>
 
-<table>
-{% for award in competition.award_set.all %}
-<tr>
-  <td><a href="{% url award_detail award.id %}">{{ award }}</a></td>
-</tr>
-{% endfor %}
-</table>
+
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+{% if competition.alltime_standings.exists %}
+<div tab="standings">
+{% include "templatetags/standings.html" with standings=competition.alltime_standings %}
+</div>
+{% endif %}
 
 
+{% if competition.season_set.exists %}
+<div tab="seasons">
 <table>
   <tr>
     <th>competition</th>
@@ -34,15 +39,29 @@
   {% endfor %}
     
 </table>
-
-{% if competition.alltime_standings.exists %}
-<h4>All-time standings</h4>
-{% include "templatetags/standings.html" with standings=competition.alltime_standings %}
+</div>
 {% endif %}
+
 
 {% if stats %}
-<h4>All-time stats</h4>
+<div tab="stats" >
 {% include "templatetags/bio.html" %}
+</div>
 {% endif %}
+
+{% if competition.award_set.exists %}
+<div tab="awards">
+<table>
+{% for award in competition.award_set.all %}
+<tr>
+  <td><a href="{% url award_detail award.id %}">{{ award }}</a></td>
+</tr>
+{% endfor %}
+</table>
+</div>
+{% endif %}
+
+
+</div>
 
 {% endblock %}

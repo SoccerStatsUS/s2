@@ -3,12 +3,6 @@
 
 {% block content %}
 
-{% if game.same_day_games %}
-<h4>Scoreboard</h4>
-{% include "templatetags/scoreboard.html" with games=game.same_day_games %}
-{% endif %}
-
-
 <div id="game_score">
 
   <h4><a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date }}</a></h4>
@@ -19,13 +13,13 @@
   <div class="team_data">
     <div class="team"><a href="{% url team_detail game.home_team.slug %}">{{ game.home_team  }}</a></div>
     <div class="score">{{ game.home_score }}</div>
-    <div><a href="{% url team_detail game.home_team.slug %}">{{ game.home_standings_string  }}</a></div>
+    <div><a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.home_standings_string  }}</a></div>
   </div>
 
   <div class="team_data">
     <div class="team"><a href="{% url team_detail game.away_team.slug %}">{{ game.away_team  }}</a></div>
     <div class="score">{{ game.away_score }}</div>
-    <div><a href="{% url team_detail game.away_team.slug %}">{{ game.away_standings_string  }}</a></div>
+    <div><a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.away_standings_string  }}</a></div>
   </div>
 
 </div>
@@ -33,9 +27,14 @@
 <div class="clear_both"></div>
 
 
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+
 {% if game.goal_set.exists %}
 
-<h3>Goals</h3>
+<div tab="goals">
 
 <table>
   <tr>
@@ -54,10 +53,12 @@
   {% endfor %}
 </table>
 
+</div>
+
 {% endif %}
 
 {% if game.appearance_set.exists %}
-<h3>Lineups</h3>
+<div tab="lineups">
 
 <table>
   <tr>
@@ -83,12 +84,24 @@
   {% endfor %}
 </table>
 
+</div>
+
 {% endif %}
 
-{% if game.same_day_games %}
-<h4>Series</h4>
+
+{% if game.series.count > 1 %}
+<div tab="series">
 {% include "templatetags/games.html" with games=game.series %}
+</div>
 {% endif %}
+</div>
+
+
+{% if game.same_day_games %}
+<h3>scoreboard</h3>
+{% include "templatetags/scoreboard.html" with games=game.same_day_games %}
+{% endif %}
+
 
 {% endblock %}
 

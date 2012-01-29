@@ -7,6 +7,7 @@
 
 <div id="tab_wrapper">
 
+{% if games %}
 <div tab="games">
 <table>
 {% for game in games %}
@@ -20,6 +21,7 @@
 {% endfor %}
 </table>
 </div>
+{% endif %}
 
 
 {% if births.exists %}
