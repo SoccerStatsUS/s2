@@ -16,7 +16,7 @@ class StatsManager(models.Manager):
 
     def get_query_set(self):
         # This is important.
-        return super(StatsManager, self).get_query_set().exclude(team=None).exclude(season=None)
+        return super(StatsManager, self).get_query_set().exclude(team=None).exclude(season=None).filter(position=None)
 
 
 class CareerStatsManager(models.Manager):
