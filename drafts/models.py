@@ -5,6 +5,12 @@ from s2.teams.models import Team
 from s2.bios.models import Bio
 from s2.competitions.models import Competition, Season
 
+class DraftManager(models.Manager):
+
+    def get_query_set(self):
+        return super(DraftManager, self).get_query_set().filter(real=True)
+
+
 class Draft(models.Model):
 
     competition = models.ForeignKey(Competition)
@@ -14,6 +20,8 @@ class Draft(models.Model):
     #date = models.DateField(null=True, blank=True)
 
     real = models.BooleanField()
+
+    #objects = DraftManager()
 
     def save(self, *args, **kwargs):
         if not self.slug:
