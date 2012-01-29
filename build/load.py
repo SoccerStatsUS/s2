@@ -234,6 +234,8 @@ def load_games():
 
 @transaction.commit_on_success
 def load_goals():
+    # Looks like competition is unnecessary here.
+
     print "loading goals\n"
     # Use a sql insert here also.
     # Use dicts for team, game, bio.
@@ -266,9 +268,8 @@ def load_goals():
         if game_key in games:
             game_id = games[game_key]
         else:
-            print "No game match."
-            print game_key
             game_id = None
+            print "No game match for %s" % goal
 
         if game_id:
             return {
