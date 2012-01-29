@@ -12,10 +12,16 @@ class AbstractTeamManager(models.Manager):
     """
 
     def recent_games(self, delta=datetime.timedelta(days=100)):
+        """
+        Returns a queryset of games played within a given timedelta.
+        """
         since = datetime.date.today() - delta
         return self.get_query_set().filter(date__gte=since)
 
     def team_dict(self):
+        """
+        A dict mapping a team's name and short name to an id.
+        """
         d = {}
         for e in self.get_query_set():
             d[e.name] = e.id
@@ -24,9 +30,9 @@ class AbstractTeamManager(models.Manager):
 
     def duplicate_slugs(self):
         """
-        Returns all bios with duplicate slugs.
+        Returns all teams with duplicate slugs.
         """
-        # Used to find problem bios.
+        # Used to find problem teams.
         d = defaultdict(list)
         for e in self.get_query_set():
             d[e.slug].append(e.name)
@@ -162,9 +168,17 @@ class Team(models.Model):
         return self.short_name
 
     def roster(self, season=None):
+        """
+        Returns a queryset of all players who have played for a team, with an optional season argument.
+        """
         from s2.stats.models import Stat
         from s2.bios.models import Bio
-        player_ids = set([e[0] for e in Stat.objects.filter(team=self).values_list('player')])
+
+        stats = Stat.objects.filter(team=self)
+        if season:
+            stats = stats.filter(season=season)
+
+        player_ids = set([e[0] for e in stats.values_list('player')])
         return Bio.objects.filter(id__in=player_ids)
 
 
@@ -182,5 +196,51 @@ class Team(models.Model):
 
 
     def alltime_standing(self):
+        """
+        The alltime standing for a team.
+        """
+        # cache this?
         from s2.standings.models import Standing
         return Standing.objects.get(team=self, competition=None, season=None)
+
+
+
+    def get_player_year_list(self, year):
+        """
+        Generate a list of lists representing 
+
+        Return something like this:
+        http://www.flipflopflyin.com/flipflopflyball/info-1994expos.html
+        """
+
+        # Get all players for a given year.
+        stats = self.stat_set.filter(season__year=year)
+        players = set()
+        for stat in stats:
+            players.add(stat.player)
+        
+        l = []
+        for player in sorted(players):
+            season_list = player.get_season_list(self)
+            l.append(season_list)
+
+
+        def infill_season_list(lst):
+            # This is wrong.
+            years = set()
+            for year, slug in lst:
+                years.add(year)
+
+            min_year, max_year = min(years), max(years)
+            year_list = range(min_year, max_year+1)
+
+                
+            
+            
+                
+            
+
+
+        return infill_season_list(l)
+            
+

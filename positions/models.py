@@ -92,7 +92,6 @@ class Position(models.Model):
                 print "FAIL"
 
         for season, dx in d.items():
-            print dx
             Stat.objects.create(
                 team=self.team,
                 player=self.person,

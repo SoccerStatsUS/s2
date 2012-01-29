@@ -68,6 +68,8 @@ def team_year_detail(request, team_slug, year):
 
     seasons = Season.objects.filter(name=year)
 
+    player_year_list = team.get_player_year_list(year)
+
     context = {
         'team': team,
         'standings': Standing.objects.filter(team=team, season__in=seasons),
