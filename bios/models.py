@@ -164,6 +164,12 @@ class Bio(models.Model):
         else:
             return None
 
+    def career_stats(self):
+        """
+        Wrapper to make including career_stat in templates easier.
+        """
+        return [self.career_stat()]
+
     def competition_stats(self):
         """
         Summary stats for a player in a given competition (e.g. MLS)
