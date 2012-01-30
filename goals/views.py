@@ -1,8 +1,8 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 
-from s2.goals.models import Goal
-from s2.goals.forms import GoalForm
+from goals.models import Goal
+from goals.forms import GoalForm
 
 
 def goals_index(request):

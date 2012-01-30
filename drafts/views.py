@@ -1,9 +1,9 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 
-from s2.bios.models import Bio
-from s2.competitions.models import Competition
-from s2.drafts.models import Draft
+from bios.models import Bio
+from competitions.models import Competition
+from drafts.models import Draft
 
 def drafts_index(request):
     context = {

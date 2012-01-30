@@ -2,8 +2,8 @@ from collections import defaultdict
 
 from django.db import models
 
-from s2.teams.models import Team
-from s2.competitions.models import Competition, Season
+from teams.models import Team
+from competitions.models import Competition, Season
 
 import random
 

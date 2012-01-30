@@ -171,8 +171,8 @@ class Team(models.Model):
         """
         Returns a queryset of all players who have played for a team, with an optional season argument.
         """
-        from s2.stats.models import Stat
-        from s2.bios.models import Bio
+        from stats.models import Stat
+        from bios.models import Bio
 
         stats = Stat.objects.filter(team=self)
         if season:
@@ -183,7 +183,7 @@ class Team(models.Model):
 
 
     def game_set(self):
-        from s2.games.models import Game
+        from games.models import Game
         return Game.objects.filter(models.Q(home_team=self) | models.Q(away_team=self))
 
     def team_stats(self):
@@ -200,7 +200,7 @@ class Team(models.Model):
         The alltime standing for a team.
         """
         # cache this?
-        from s2.standings.models import Standing
+        from standings.models import Standing
         return Standing.objects.get(team=self, competition=None, season=None)
 
 

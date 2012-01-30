@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns, url
 
-urlpatterns = patterns('s2.awards.views', 
+urlpatterns = patterns('awards.views', 
                        url(r'^$',
                            'award_index',
                            name='award_index'),

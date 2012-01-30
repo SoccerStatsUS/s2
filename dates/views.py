@@ -4,9 +4,9 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 
 
-from s2.bios.models import Bio
-from s2.games.models import Game
-from s2.positions.models import Position
+from bios.models import Bio
+from games.models import Game
+from positions.models import Position
 
 def year_detail(request, year):
     # Add a paginator.

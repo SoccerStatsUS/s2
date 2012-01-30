@@ -6,7 +6,7 @@ from django.db import connection, transaction
 
 # http://wiki.python.org/moin/PythonDecoratorLibrary#Memoize
 
-from s2.bios.models import Bio
+from bios.models import Bio
 
 
 

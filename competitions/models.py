@@ -1,8 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 
-
-from s2.bios.models import Bio
+from bios.models import Bio
 
 
 class CompetitionManager(models.Manager):
@@ -137,7 +136,8 @@ class Season(models.Model):
 
 
     def players(self):
-        from s2.stats.models import Stat
+        from stats.models import Stat
+
         season_stats = Stat.objects.filter(competition=self.competition, season=self)
         return set([e[0] for e in season_stats.values_list("player_id")])
 
@@ -169,14 +169,16 @@ class Season(models.Model):
 
 
     def champion(self):
-        from s2.awards.models import AwardItem
+        from awards.models import AwardItem
+
         try:
             return AwardItem.objects.get(season=self, award__name='Champion')
         except:
             return None
 
     def mvp(self):
-        from s2.awards.models import AwardItem
+        from awards.models import AwardItem
+
         # Need to expand for other names.
         try:
             return AwardItem.objects.get(season=self, award__name='MVP')

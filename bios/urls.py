@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns, url
 
-urlpatterns = patterns('s2.bios.views', 
+urlpatterns = patterns('bios.views', 
                        url(r'^$',
                            'person_index',
                            name='person_index'),

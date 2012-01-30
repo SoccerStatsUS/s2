@@ -2,7 +2,7 @@ from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
-from s2.competitions.models import Competition, Season
+from competitions.models import Competition, Season
 
 class Award(models.Model):
     

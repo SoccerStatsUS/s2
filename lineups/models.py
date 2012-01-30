@@ -1,9 +1,9 @@
 from django.db import models
 
-from s2.bios.models import Bio
-from s2.goals.models import Goal
-from s2.games.models import Game
-from s2.teams.models import Team
+from bios.models import Bio
+from goals.models import Goal
+from games.models import Game
+from teams.models import Team
 
 from django.db.models.signals import post_save
 

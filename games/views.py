@@ -4,9 +4,9 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
+from bios.models import Bio
+from games.models import Game
 
-from s2.bios.models import Bio
-from s2.games.models import Game
 
 @cache_page(60 * 60 * 12)
 def homepage(request):

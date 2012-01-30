@@ -2,24 +2,24 @@ import datetime
 import os
 import pymongo
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 's2.build_settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'build_settings'
 
 from django.db import transaction
 from django.db.utils import IntegrityError
 
-from s2.awards.models import Award, AwardItem
-from s2.bios.models import Bio
-from s2.competitions.models import Competition, Season
-from s2.drafts.models import Draft, Pick
-from s2.games.models import Game
-from s2.goals.models import Goal
-from s2.lineups.models import Appearance
-from s2.positions.models import Position
-from s2.teams.models import Team
-from s2.stats.models import Stat
-from s2.standings.models import Standing
+from awards.models import Award, AwardItem
+from bios.models import Bio
+from competitions.models import Competition, Season
+from drafts.models import Draft, Pick
+from games.models import Game
+from goals.models import Goal
+from lineups.models import Appearance
+from positions.models import Position
+from teams.models import Team
+from stats.models import Stat
+from standings.models import Standing
 
-from s2.utils import insert_sql
+from utils import insert_sql
 
 
 connection = pymongo.Connection()

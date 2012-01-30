@@ -1,12 +1,16 @@
 from django.db import models
 
-from s2.bios.models import Bio
-from s2.competitions.models import Competition, Season
-from s2.teams.models import Team
+from bios.models import Bio
+from competitions.models import Competition, Season
+from teams.models import Team
 
 
 
 class Standing(models.Model):
+    """
+    Represents game summary information.
+    Usually applied to a team, but could also be a person, competition, season, etc.
+    """
 
     player = models.ForeignKey(Bio, null=True)
     team = models.ForeignKey(Team, null=True)

@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns, url
 
-urlpatterns = patterns('s2.places.views', 
+urlpatterns = patterns('places.views', 
 
                        url(r'^$',
                            'place_index',

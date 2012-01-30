@@ -1,9 +1,8 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 
-
-from s2.teams.models import Team
-from s2.bios.models import Bio
+from teams.models import Team
+from bios.models import Bio
 
 from collections import defaultdict
 
@@ -51,7 +50,7 @@ class Position(models.Model):
 
 
     def games(self):
-        from s2.games.models import Game
+        from games.models import Game
 
 
         if self.start is None and self.end is None:
@@ -72,7 +71,7 @@ class Position(models.Model):
         """
         Generate the stats for a given position.
         """
-        from s2.stats.models import Stat
+        from stats.models import Stat
 
         d = {}
         for game in self.games():

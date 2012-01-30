@@ -2,8 +2,8 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
-from s2.competitions.models import Competition, Season
-from s2.stats.models import Stat
+from competitions.models import Competition, Season
+from stats.models import Stat
 
 @cache_page(60 * 60 * 12)
 def competition_index(request):

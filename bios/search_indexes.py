@@ -2,7 +2,8 @@ import datetime
 
 from haystack.indexes import ModelSearchIndex
 from haystack import site
-from s2.bios.models import Bio
+
+from bios.models import Bio
 
 class BioIndex(ModelSearchIndex):
 

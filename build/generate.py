@@ -1,18 +1,19 @@
 from collections import defaultdict
 import os
-os.environ['DJANGO_SETTINGS_MODULE'] = 's2.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 from django.db import transaction
 
-from s2.bios.models import Bio
-from s2.competitions.models import Competition
-from s2.games.models import Game
-from s2.lineups.models import Appearance
-from s2.positions.models import Position
-from s2.standings.models import Standing
-from s2.stats.models import Stat
-from s2.teams.models import Team
-from s2.utils import timer
+from bios.models import Bio
+from competitions.models import Competition
+from games.models import Game
+from lineups.models import Appearance
+from positions.models import Position
+from standings.models import Standing
+from stats.models import Stat
+from teams.models import Team
+
+from utils import timer
 
 
 def generate():

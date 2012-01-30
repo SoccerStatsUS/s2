@@ -1,10 +1,10 @@
 from django.db import models
 
-from s2.bios.models import Bio
-from s2.competitions.models import Competition, Season
-from s2.games.models import Game
-from s2.lineups.models import Appearance
-from s2.teams.models import Team
+from bios.models import Bio
+from competitions.models import Competition, Season
+from games.models import Game
+from lineups.models import Appearance
+from teams.models import Team
 
 import datetime
 from collections import defaultdict

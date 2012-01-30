@@ -2,8 +2,8 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
-from s2.lineups.models import Appearance
-from s2.lineups.forms import AppearanceForm
+from lineups.models import Appearance
+from lineups.forms import AppearanceForm
 
 
 def get_appearances(request):

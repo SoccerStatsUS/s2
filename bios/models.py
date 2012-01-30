@@ -157,7 +157,8 @@ class Bio(models.Model):
         """
         Summary stats for a player's entire career.
         """
-        from s2.stats.models import Stat
+        from stats.models import Stat
+
         c = Stat.career_stats.filter(player=self)
         if c:
             return c[0]
@@ -168,14 +169,16 @@ class Bio(models.Model):
         """
         Summary stats for a player in a given competition (e.g. MLS)
         """
-        from s2.stats.models import Stat
+        from stats.models import Stat
+
         return Stat.competition_stats.filter(player=self)
 
     def team_stats(self):
         """
         Summary stats for a player in a given competition (e.g. MLS)
         """
-        from s2.stats.models import Stat
+        from stats.models import Stat
+
         return Stat.team_stats.filter(player=self)
 
 
@@ -184,7 +187,7 @@ class Bio(models.Model):
         Generate standings for a given player.
         
         """
-        from s2.stats.models import Stat
+        from stats.models import Stat
 
         # Calculate standings for any stat that doesn't have it already.
         # (season stats only, not summary stats.
