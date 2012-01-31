@@ -2,6 +2,14 @@
   $(document).ready(function() {
     var createSortLoader, getLineups, getStats, getTeams, tabs;
     $("#bio").tablesorter();
+    $("#player_chart").tablesorter();
+    $("#competition_index").tablesorter();
+    $("select").change(function() {
+      var url, x;
+      x = $(this).find("option:selected");
+      url = x.attr("ref");
+      return window.location = url;
+    });
     createSortLoader = function(div) {
       var d;
       d = $("table", div);

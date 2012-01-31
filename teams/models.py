@@ -115,6 +115,14 @@ class UnrealTeamManager(AbstractTeamManager):
 
 
 class Team(models.Model):
+    """
+    A collection of players for a competition.
+    """
+    # Squads for, e.g. Champions League, World Cup?
+    # Rolling roster for any team.
+    # retirements.
+
+
     name = models.CharField(max_length=200, unique=True)
 
     # Let's get rid of short name! It's really just another alias.
@@ -182,6 +190,44 @@ class Team(models.Model):
         return Bio.objects.filter(id__in=player_ids)
 
 
+    def year_roster(self, year):
+        """
+        Generate a list of lists representing 
+
+        Return something like this:
+        http://www.flipflopflyin.com/flipflopflyball/info-1994expos.html
+        """
+        from s2.bios.models import Bio
+
+        # Get all players for a given year.
+        stats = self.stat_set.filter(season__name=year)
+        player_ids = set()
+        for stat in stats:
+            player_ids.add(stat.player.id)
+
+        return Bio.objects.filter(id__in=player_ids)
+
+
+    def player_chart(self, year):
+        roster = self.year_roster(year)
+        
+        years = []
+        for player in roster:
+            years_played = player.team_year_dict().keys()
+            years.extend(years_played)
+
+        years = sorted(set(years))
+
+        l = []
+        for e in roster:
+            m = e.team_year_map(self, years)
+            t = (e, m)
+            l.append(t)
+
+        return (years, l)
+
+
+
     def game_set(self):
         from s2.games.models import Game
         return Game.objects.filter(models.Q(home_team=self) | models.Q(away_team=self))
@@ -205,42 +251,7 @@ class Team(models.Model):
 
 
 
-    def get_player_year_list(self, year):
-        """
-        Generate a list of lists representing 
 
-        Return something like this:
-        http://www.flipflopflyin.com/flipflopflyball/info-1994expos.html
-        """
-
-        # Get all players for a given year.
-        stats = self.stat_set.filter(season__year=year)
-        players = set()
-        for stat in stats:
-            players.add(stat.player)
         
-        l = []
-        for player in sorted(players):
-            season_list = player.get_season_list(self)
-            l.append(season_list)
-
-
-        def infill_season_list(lst):
-            # This is wrong.
-            years = set()
-            for year, slug in lst:
-                years.add(year)
-
-            min_year, max_year = min(years), max(years)
-            year_list = range(min_year, max_year+1)
-
-                
-            
-            
-                
-            
-
-
-        return infill_season_list(l)
             
 
