@@ -30,6 +30,8 @@ class Competition(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField()
 
+    #international = models.BooleanField()
+
     objects = CompetitionManager()
 
     class Meta:
@@ -61,6 +63,15 @@ class Competition(models.Model):
 
     def first_alltime_standing(self):
         return self.alltime_standings()[0]
+
+    def first_season(self):
+        return self.season_set.all()[0]
+
+    def last_season(self):
+        seasons = self.season_set.count()
+        index = seasons - 1
+        return self.season_set.all()[index]
+
 
 
 

@@ -13,6 +13,10 @@ a:visited {
     text-align: right;
 }
 
+option {
+    width: 100px;
+}
+
 tr {
     margin: 0;
     padding: 0;

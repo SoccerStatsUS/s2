@@ -92,12 +92,30 @@ class Bio(models.Model):
         return reverse('person_detail', args=[self.slug])
 
 
-    def team_year_list(self, team, year):
-        year_teams = [(e.season, e.team) for e in self.stat_set.all()]
+    def team_year_dict(self):
+        d = defaultdict(set)
+        for e in self.stat_set.all():
+            d[e.season.name].add(e.team)
+
+        return d
+
+
+    def team_year_map(self, team, year_list):
+        d = self.team_year_dict()
+        l = []
         
-                      
-
-
+        # Code three possibilities (player did not player that year,
+        # player played for a different team,
+        # player played for the same team
+        for year in year_list:
+            if year not in d:
+                l.append(0)
+            elif team not in d[year]:
+                l.append(1)
+            else:
+                l.append(2)
+        return l
+        
 
     def usmnt_draft_picks(self):
         """
@@ -164,6 +182,12 @@ class Bio(models.Model):
             return c[0]
         else:
             return None
+
+    def career_stats(self):
+        """
+        Wrapper to make including career_stat in templates easier.
+        """
+        return [self.career_stat()]
 
     def competition_stats(self):
         """

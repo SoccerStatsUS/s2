@@ -23,6 +23,8 @@
 
     <th>gf</th>
     <th>ga</th>
+    <th>+-</th>
+    <th>+-/90</th>
 
 
   </tr>
@@ -70,6 +72,8 @@
 
   {% datum_or_grey stat.goals_for %}
   {% datum_or_grey stat.goals_against %}
+  {% datum_or_grey stat.plus_minus %}
+  <td>{{ stat.plus_minus_per_90|floatformat:"2" }}</td>
 
 </tr>
 {% endfor %}

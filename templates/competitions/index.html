@@ -2,21 +2,28 @@
 
 {% block content %}
 
-<table>
+<table id="competition_index">
   <tr>
     <th>competition</th>
-    <th>teams</th>
+    <th>seasons</th>
+    <th>began</th>
+    <th>last</th>
     <th>seasons</th>
   </tr>
 
   {% for competition in competitions %}
   <tr>
     <td><a href="{% url competition_detail competition.slug %}">{{ competition.name }}</a></td>
-    <td></td>
+    <td>{{ competition.season_set.count }}</td>
+    <td><a href="{% url season_detail competition.slug competition.first_season.slug %}">{{ competition.first_season.name }}</td>
+    <td><a href="{% url season_detail competition.slug competition.last_season.slug %}">{{ competition.last_season.name }}</td>
+
     <td>
+      <select>
       {% for season in competition.season_set.all %}
-      <a href="{% url season_detail competition.slug season.slug %}">x</a>
+      <option ref="{% url season_detail competition.slug season.slug %}">{{ season.name }}</option>
       {% endfor %}
+      </select>
     </td>
   </tr>
   {% endfor %}

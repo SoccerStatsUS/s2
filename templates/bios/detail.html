@@ -34,7 +34,10 @@
 
 {% if bio.season_stats.exists %}
 <div tab="stats">
+<h3>Season</h3>
 {% include "templatetags/bio.html" with stats=bio.season_stats %}
+<h3>Career</h3>
+{% include "templatetags/bio.html" with stats=bio.career_stats %}
 </div>
 {% endif %}
 

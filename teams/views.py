@@ -68,13 +68,15 @@ def team_year_detail(request, team_slug, year):
 
     seasons = Season.objects.filter(name=year)
 
-    player_year_list = team.get_player_year_list(year)
+    chart_years, chart = team.player_chart(year)
 
     context = {
         'team': team,
         'standings': Standing.objects.filter(team=team, season__in=seasons),
         'stats': Stat.objects.filter(team=team, season__in=seasons),
-        'games': team.game_set().filter(date__year=year)
+        'games': team.game_set().filter(date__year=year),
+        'chart': chart,
+        'chart_years': chart_years,
         }
 
     return render_to_response("teams/year_detail.html",

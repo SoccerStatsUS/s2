@@ -2,11 +2,22 @@ $(document).ready( ->
 
 
   $("#bio").tablesorter()
+  $("#player_chart").tablesorter()
+  $("#competition_index").tablesorter()
+
+  $("select").change ->
+    x = $(this).find("option:selected")
+    url = x.attr("ref")
+    window.location = url
+
+
 
   # Can't get tablesorter to work...
   createSortLoader = (div) ->
     d = $("table", div)
     () -> d.tablesorter()
+
+
 
   # Ajax functionality for stats/lineups/team search.
   getLineups = ->

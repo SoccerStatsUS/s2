@@ -128,7 +128,9 @@ class Stat(models.Model):
 
 
     def plus_minus_per_90(self):
-        return 90 * self.plus_minus / float(minutes)
+        if not self.minutes:
+            return 0
+        return 90 * self.plus_minus / float(self.minutes)
 
 
 
