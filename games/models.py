@@ -4,11 +4,21 @@ from django.db import models
 
 from teams.models import Team
 from competitions.models import Competition, Season
+from places.models import Stadium
 
 import random
 
 
 class GameManager(models.Manager):
+
+
+    def games(self):
+        return [e['date'] for e in Game.objects.values("date").distinct()]
+
+    def game_years(self):
+        return sorted(set([e.year for e in Game.objects.games()]))
+
+
 
     def on(self, month, day):
         """
