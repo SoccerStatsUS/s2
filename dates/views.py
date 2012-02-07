@@ -16,11 +16,14 @@ def year_detail(request, year):
     hires = Position.objects.filter(start__year=year)
     fires = Position.objects.filter(end__year=year)
 
+    years = Game.objects.game_years()
+
     context = {
         'games': games,
         'births': births,
         'hires': hires,
         'fires': fires,
+        'years': years,
         }
     return render_to_response("dates/list.html",
                               context,
