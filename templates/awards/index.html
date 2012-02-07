@@ -2,10 +2,25 @@
 
 {% block content %}
 
+{% regroup awards by competition as ac %}
+
 <ul>
-{% for award in awards %}
-<li><a href="{% url award_detail award.id %}">{{ award }}</a></li>
+{% for ax in ac %}
+<li><a href="#{{ ax.grouper.slug }}">{{ ax.grouper }}</a></li>
 {% endfor %}
 </ul>
+
+{% for ax in ac %}
+
+<h3 id="{{ ax.grouper.slug }}"><a href="{% url competition_detail ax.grouper.slug %}">{{ ax.grouper }}</a></h3>
+
+<ul>
+{% for item in ax.list %}
+<li><a href="{% url award_detail item.id %}">{{ item }}</a></li>
+{% endfor %}
+</ul>
+
+{% endfor %}
+
 
 {% endblock %}
