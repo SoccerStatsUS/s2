@@ -3,11 +3,11 @@ from django.conf.urls.defaults import patterns, url
 urlpatterns = patterns('places.views', 
 
                        url(r'^$',
-                           'place_index',
-                           name='place_index'),
+                           'country_index',
+                           name='country_index'),
 
-                       url(r'^(?P<name>.+)/$',
-                           'place_detail',
-                           name='place_detail'),
+                       url(r'^(?P<slug>.+)/$',
+                           'country_detail',
+                           name='country_detail'),
 
 )
