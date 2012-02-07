@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{{ state }}
+
+<ul>
+{% for bio in bios %}
+<li><a href="{% url person_detail bio.slug %}">{{ bio }}</a></li>
+{% endfor %}
+</ul>
+
+
+
+
+{% endblock %}

@@ -3,8 +3,8 @@
 {% block content %}
 
 <ul>
-{% for place in places %}
-<li><a href="{% url place_detail place %}">{{ place }}</a></li>
+{% for country in countries %}
+<li><a href="{% url country_detail country.slug %}">{{ country }}</a></li>
 {% endfor %}
 </ul>
 

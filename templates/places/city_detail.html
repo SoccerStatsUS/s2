@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>{{ city.name }}</h3>
+<h4>{{ city.state.name }}</h4>
+<h4>{{ city.country.name }}</h4>
+
+<ul>
+{% for bio in city.bio_set.all %}
+<li><a href="{% url person_detail bio.slug %}">{{ bio }}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}

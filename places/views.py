@@ -4,7 +4,7 @@ from django.views.decorators.cache import cache_page
 
 from competitions.models import Competition
 from bios.models import Bio
-from places.models import Country, City, Stadium
+from places.models import Country, City, State
 
 
 def country_index(request):
@@ -17,6 +17,16 @@ def country_index(request):
 
 
 
+def state_index(request):
+
+        context = {
+                'states': State.objects.all(),
+                }
+        return render_to_response("places/state_index.html",
+                                  context,
+                                  context_instance=RequestContext(request))
+
+
 
 def country_detail(request, slug):
         country = get_object_or_404(Country, slug=slug)
@@ -27,4 +37,32 @@ def country_detail(request, slug):
         return render_to_response("places/country_detail.html",
                                   context,
                                   context_instance=RequestContext(request))
+
+
+def state_detail(request, sid):
+        state = get_object_or_404(State, id=sid)
+        bios = Bio.objects.filter(birthplace__state=state)
+        
+        context = {
+                'state': state,
+                'bios': bios,
+                }
+        return render_to_response("places/state_detail.html",
+                                  context,
+                                  context_instance=RequestContext(request))
+
+
+
+def city_detail(request, cid):
+        city = get_object_or_404(City, id=cid)
+
+        context = {
+                'city': city,
+                }
+
+        return render_to_response("places/city_detail.html",
+                                  context,
+                                  context_instance=RequestContext(request))
+
+        
 

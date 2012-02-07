@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<ul>
+{% for state in states %}
+<li><a href="{% url state_detail state.id %}">{{ state }}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}
