@@ -8,6 +8,8 @@ import datetime
 
 import random
 
+from places.models import City
+
 
 class BioManager(models.Manager):
 
@@ -72,7 +74,7 @@ class Bio(models.Model):
 
     height = models.IntegerField(null=True, blank=True)
     birthdate = models.DateField(null=True, blank=True)
-    birthplace = models.CharField(max_length=250, null=True, blank=True)
+    birthplace = models.ForeignKey(City, null=True, blank=True)
 
     height = models.IntegerField(null=True, blank=True)
     weight = models.IntegerField(null=True, blank=True)

@@ -4,10 +4,16 @@ import socket
 from secret_settings import *
 from custom_settings import *
 
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
+
 PRODUCTION_SITES = (
     "bert",
 )
 
+
+TEMPLATE_CONTEXT_PROCESSORS += (
+    'bios.context_processors.debug_mode',
+)    
 
 
 

@@ -17,6 +17,8 @@
 
   {% block extrahead %}{% endblock %}
 
+
+  {% if not debug_mode %}
   <script type="text/javascript">
 
     var _gaq = _gaq || [];
@@ -30,6 +32,7 @@
     })();
 
   </script>
+  {% endif %}
 
 </head>
 
@@ -74,6 +77,7 @@
       <li><a href="/sources">sources</a></li>
       <li><a href="/api">api</a></li>
     </ul>
+
 
 
   </div>
