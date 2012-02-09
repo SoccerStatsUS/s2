@@ -21,7 +21,7 @@
   Born 
   {% if bio.birthdate %}<a href="{% url date_detail bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a>{% endif %}
   {% if bio.birthplace %}
-  in <a href="{% url place_detail bio.birthplace %}">{{ bio.birthplace }}</a>
+  in <a href="{% url city_detail bio.birthplace.id %}">{{ bio.birthplace.name }}</a>
   {% endif %}
 </div>
 {% endif %}
