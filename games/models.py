@@ -20,6 +20,21 @@ class GameManager(models.Manager):
 
 
 
+    def with_lineups(self):
+        from lineups.models import Appearance
+        gids = [e[0] for e in set(Appearance.objects.values_list("game"))]
+        return Game.objects.filter(id__in=gids)
+
+
+    def all_blocks(self):
+        l = []
+        for g in Game.objects.with_lineups().exclude(date__year=2007):
+            print g
+            l.extend(g.section_list())
+        return l
+
+
+
     def on(self, month, day):
         """
         Return a random game from a given day.
@@ -119,6 +134,7 @@ class Game(models.Model):
     class Meta:
         ordering = ('date',)
         unique_together = [('home_team', 'date'), ('away_team', 'date')]
+
 
 
     def score(self):
@@ -280,6 +296,98 @@ class Game(models.Model):
             return self.home_team
         else:
             raise
+
+
+    
+    def goal_blocks(self):
+
+        minutes = self.game_sections()
+
+        goal_tuples = self.goal_set.all().values_list("team", "minute")
+        
+        d = defaultdict(int)
+
+        # What if minutes > 90? Will not count the goal.
+        for team, goal_minute in goal_tuples:
+            for m in minutes:
+                start_minute, end_minute = m
+                if start_minute <= goal_minute < end_minute:
+                    key = (m, team)
+                    d[key] += 1
+        return d
+            
+            
+            
+
+    def game_sections(self):
+        # Red cards covered?
+
+        minutes = [int(e[0]) for e in self.appearance_set.all().values_list("on")]
+        minutes = sorted(set(minutes))
+        minutes_pairs = zip(minutes, minutes[1:]) + [(minutes[-1], 90)]
+        return minutes_pairs
+        
+
+    def lineup_blocks(self):
+        lineup_tuples = self.appearance_set.all().values_list("player", "team", "on", "off")
+        sections = self.game_sections()
+
+        d = defaultdict(set)
+
+        for m in sections:
+            start_minute, end_minute = m
+            for pid, tid, on, off in lineup_tuples:
+                on, off = int(on), int(off)
+                if off != 90:
+                    if on <= start_minute and off > start_minute:
+                        t = (tid, pid)
+                        d[m].add(t)
+                else:
+                    if on <= start_minute and off >= start_minute:
+                        t = (tid, pid)
+                        d[m].add(t)
+
+                            
+                    
+
+        return d
+
+    def section_list(self):
+        # The actual section list.
+        goal_blocks = self.goal_blocks()
+        lineup_blocks = self.lineup_blocks()
+
+        l = []
+
+        def make_item(section):
+            start, end = section
+
+            t1goals = goal_blocks.get((section, self.home_team.id), 0)
+            t2goals = goal_blocks.get((section, self.away_team.id), 0)
+
+            lineups = lineup_blocks[section]
+
+            t1lineups = [e[1] for e in lineups if e[0] == self.home_team.id]
+            t2lineups = [e[1] for e in lineups if e[0] == self.away_team.id]
+
+            return [
+                self.id,
+                self.date.ctime(),
+                start,
+                end,
+                self.home_team.id,
+                self.away_team.id,
+                self.home_team.id,
+                t1goals,
+                t2goals,
+                t1lineups,
+                t2lineups,
+                ]
+                
+                
+        return [make_item(section) for section in self.game_sections()]
+        
+                
 
         
     def __unicode__(self):
