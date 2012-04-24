@@ -144,6 +144,7 @@ INSTALLED_APPS = (
     'drafts',
     'games',
     'goals',
+    'graphs',
     'lineups',
     'places',
     'positions',

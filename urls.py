@@ -34,6 +34,7 @@ urlpatterns = patterns('',
                        url(r'^drafts/', include('drafts.urls')),
                        url(r'^games/', include('games.urls')),
                        url(r'^goals/', include('goals.urls')),
+                       url(r'^graphs/', include('graphs.urls')),
                        url(r'^lineups/', include('lineups.urls')),
 
                        
