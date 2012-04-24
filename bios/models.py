@@ -2,6 +2,7 @@ from django.contrib.contenttypes import generic
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.utils.functional import memoize
 
 from collections import defaultdict
 import datetime
@@ -64,6 +65,13 @@ class BioManager(models.Manager):
         return [(k, v) for (k, v) in d.items() if len(v) > 1]
 
 
+
+    def id_to_slug(self, pid):
+        return Bio.objects.get(id=pid).slug
+
+    id_to_slug = memoize(id_to_slug, {}, 2)
+
+
 class Bio(models.Model):
     """
     Player or anybody else bio.
@@ -73,8 +81,14 @@ class Bio(models.Model):
     slug = models.SlugField(unique=False)
 
     height = models.IntegerField(null=True, blank=True)
+
     birthdate = models.DateField(null=True, blank=True)
-    birthplace = models.ForeignKey(City, null=True, blank=True)
+    birthplace = models.ForeignKey(City, null=True, blank=True, related_name="birth_set")
+
+    deathdate = models.DateField(null=True, blank=True)
+    deathplace = models.ForeignKey(City, null=True, blank=True, related_name="death_set")
+
+
 
     height = models.IntegerField(null=True, blank=True)
     weight = models.IntegerField(null=True, blank=True)
