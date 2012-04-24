@@ -26,6 +26,10 @@ class CompetitionManager(models.Manager):
 
 
 class Competition(models.Model):
+    """
+    A generic competition such as MLS Cup Playoffs, US Open Cup, or Friendly
+    """
+    # Should this be called Tournament? Probably not.
 
     name = models.CharField(max_length=255)
     slug = models.SlugField()
@@ -165,7 +169,7 @@ class Season(models.Model):
     def players_lost(self):
         return 
         
-        
+       
     def get_next_name(self):
         try:
             name = int(self.name)
@@ -198,3 +202,15 @@ class Season(models.Model):
 
 
 
+    def data_string(self):
+        s = ''
+        if self.standing_set.exists():
+            s += 'Sg'
+        if self.stat_set.exists():
+            s += 'St'
+        if self.game_set.exists():
+            s += 'Gm'
+        if self.goal_set.exists():
+            s += 'Gl'
+        return s
+            

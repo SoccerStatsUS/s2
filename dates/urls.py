@@ -2,6 +2,10 @@ from django.conf.urls.defaults import patterns, url
 
 urlpatterns = patterns('dates.views', 
 
+                       url('^today$',
+                           'scoreboard_today',
+                           name='scoreboard_today'),
+
                        url(r'^(?P<year>\d+)$',
                            'year_detail',
                            name='year_detail'),

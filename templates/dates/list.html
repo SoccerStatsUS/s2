@@ -2,11 +2,21 @@
 
 {% block content %}
 
+{% if yesterday %}
+<a href="{% url date_detail yesterday.year yesterday.month yesterday.day %}">{{ yesterday }}</a> 
+:
+<a href="{% url date_detail tomorrow.year tomorrow.month tomorrow.day %}">{{ tomorrow }}</a> 
+{% endif %}
+
+
 <ul>
   {% for year in years %}
   <li>{{ year }}</li>
   {% endfor %}
 </ul>
+
+
+
 
 <ul id="tabs"></ul>
 
@@ -19,9 +29,9 @@
 <tr>
   <td><a href="{% url season_detail game.season.competition.slug game.season.slug %}">{{ game.season.competition.abbreviation }}</td>
   <td><a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date }}</a></td>
-  <td class="align-right"><a href="{% url team_detail game.home_team.slug %}">{{ game.home_team }}</a></td>
-  <td><a href="{% url game_detail game.id %}">{{ game.home_score }} - {{ game.away_score }}</a></td>
-  <td><a href="{% url team_detail game.away_team.slug %}">{{ game.away_team }}</a></td>
+  <td class="align-right"><a href="{% url team_detail game.team1.slug %}">{{ game.team1 }}</a></td>
+  <td><a href="{% url game_detail game.id %}">{{ game.team1_score }} - {{ game.team2_score }}</a></td>
+  <td><a href="{% url team_detail game.team2.slug %}">{{ game.team2 }}</a></td>
 </tr>
 {% endfor %}
 </table>

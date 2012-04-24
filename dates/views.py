@@ -62,6 +62,9 @@ def date_detail(request, year, month, day):
         'births': births,
         'hires': hires,
         'fires': fires,
+        'date': d,
+        'yesterday': d - datetime.timedelta(days=1),
+        'tomorrow': d + datetime.timedelta(days=1), 
         }
     return render_to_response("dates/list.html",
                               context,
@@ -84,3 +87,8 @@ def day_detail(request, month, day):
     return render_to_response("dates/list.html",
                               context,
                               context_instance=RequestContext(request))
+
+
+def scoreboard_today(request):
+    t = datetime.date.today()
+    return date_detail(request, t.year, t.month, t.day)

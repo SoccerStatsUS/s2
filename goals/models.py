@@ -40,10 +40,10 @@ class Goal(models.Model):
         ordering = ('game', '-minute', 'team')
 
     def opponent(self):
-        if self.team == self.game.home_team:
-            return self.game.away_team
+        if self.team == self.game.team1:
+            return self.game.team2
         else:
-            return self.game.home_team
+            return self.game.team1
  
 
     def __unicode__(self):

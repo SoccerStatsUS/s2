@@ -9,6 +9,7 @@
     <th>began</th>
     <th>last</th>
     <th>seasons</th>
+    <th>data</th>
   </tr>
 
   {% for competition in competitions %}
@@ -25,6 +26,7 @@
       {% endfor %}
       </select>
     </td>
+    <td>{{ competition.data_string }}</td>
   </tr>
   {% endfor %}
 

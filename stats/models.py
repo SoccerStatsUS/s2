@@ -39,7 +39,7 @@ class PositionStatsManager(models.Manager):
     # Primarily WLT, GF, GA
 
     def get_query_set(self):
-        return super(PositionStatsManager, self).get_query_set().filter(team=None, season=None, competition=None, position=None)
+        return super(PositionStatsManager, self).get_query_set().exclude(position=None)
 
 
 class CompetitionStatsManager(models.Manager):
@@ -208,7 +208,7 @@ class Stat(models.Model):
             return [self.team]
         
         if self.game:
-            return [self.game.home_team, self.game.away_team]
+            return [self.game.team1, self.game.team2]
 
         if self.player:
             appearances = Appearance.objects.filter(player=self.player)

@@ -230,7 +230,7 @@ class Team(models.Model):
 
     def game_set(self):
         from games.models import Game
-        return Game.objects.filter(models.Q(home_team=self) | models.Q(away_team=self))
+        return Game.objects.filter(models.Q(team1=self) | models.Q(team2=self))
 
     def team_stats(self):
         from stats.models import Stat
