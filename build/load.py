@@ -299,19 +299,17 @@ def load_games():
     print "loading games\n"
 
     for game in soccer_db.games.find():
+
         game['competition'] = Competition.objects.find(game['competition'])
         game['season'] = Season.objects.find(game['season'], game['competition'])
-        game['home_team'] = Team.objects.find(game['home_team'], create=True)
-        game['away_team'] = Team.objects.find(game['away_team'], create=True)
+        game['team1'] = Team.objects.find(game['team1'], create=True)
+        game['team2'] = Team.objects.find(game['team2'], create=True)
         game.pop('_id')
-        if 'url' in game:
-            game.pop('url')
 
-        if 'year' in game:
-            game.pop('year')
 
-        if 'source' in game:
-            game.pop('source')
+        for e in 'url', 'home_team', 'year', 'source':
+            if e in game:
+                game.pop(e)
 
         # Seem to have multiple Miami Fusion entries?
         try:
