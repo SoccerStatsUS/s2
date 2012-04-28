@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+{% for slug, names in duplicate_slugs %}
+<ul>
+  {% for name in names %}
+  <li>{{ name }}</li>
+  {% endfor %}
+</ul>
+{% endfor %}
+
+
+{% endblock %}

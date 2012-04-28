@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 
-from s2.standings.models import Standing
+from standings.models import Standing
 
 
 def none_sum(*args):

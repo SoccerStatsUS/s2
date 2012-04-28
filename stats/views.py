@@ -2,8 +2,8 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
-from s2.stats.models import Stat
-from s2.stats.forms import StatForm
+from stats.models import Stat
+from stats.forms import StatForm
 
 
 def stats_index(request):

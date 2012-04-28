@@ -1,5 +1,6 @@
-from s2.teams.models import Team
 from django.contrib import admin
+
+from teams.models import Team
 
 class TeamAdmin(admin.ModelAdmin):
     display_fields = ('short_name', 'slug', 'founded', 'city', )

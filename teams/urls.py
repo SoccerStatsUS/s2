@@ -1,10 +1,15 @@
 from django.conf.urls.defaults import patterns, url
 
-urlpatterns = patterns('s2.teams.views', 
+urlpatterns = patterns('teams.views', 
 
                        url(r'^$',
                            'team_index',
                            name='team_index'),
+
+                       url(r'^bad/$',
+                           'bad_teams',
+                           name='bad_teams'),
+
 
                        url(r'^seasons/$',
                            'seasons_dashboard',

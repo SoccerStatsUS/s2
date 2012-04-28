@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+
+<h4>goals</h4>
+<table>
+  <tr>
+    <th>min</th>
+    <th>#</th>
+  </tr>
+
+  {% for a,b in goal_tuple %}
+  <tr>
+    <td>{{ a }}</td>
+    <td>{{ b }}</td>
+  </tr>
+  {% endfor %}
+
+</table>
+
+
+<h4>lineups</h4>
+<table>
+  <tr>
+    <th>min</th>
+    <th>#</th>
+  </tr>
+
+  {% for a,b in lineup_tuple %}
+  <tr>
+    <td>{{ a }}</td>
+    <td>{{ b }}</td>
+  </tr>
+  {% endfor %}
+
+</table>
+
+{% endblock %}

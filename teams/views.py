@@ -3,10 +3,10 @@ from collections import defaultdict
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 
-from s2.competitions.models import Season
-from s2.teams.models import Team
-from s2.standings.models import Standing
-from s2.stats.models import Stat
+from competitions.models import Season
+from teams.models import Team
+from standings.models import Standing
+from stats.models import Stat
 
 from django.views.decorators.cache import cache_page
 
@@ -123,3 +123,17 @@ def teams_ajax(request):
 
     
 
+
+def bad_teams(request):
+
+
+    
+    context = {
+        'duplicate_slugs': Team.objects.duplicate_slugs(),
+        }
+
+    return render_to_response("teams/bad.html",
+                              context,
+                              context_instance=RequestContext(request)
+                              )    
+                              

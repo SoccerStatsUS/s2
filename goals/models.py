@@ -2,9 +2,9 @@ from collections import defaultdict
 
 from django.db import models
 
-from s2.bios.models import Bio
-from s2.games.models import Game
-from s2.teams.models import Team
+from bios.models import Bio
+from games.models import Game
+from teams.models import Team
 
 
 class GoalManager(models.Manager):
@@ -40,10 +40,10 @@ class Goal(models.Model):
         ordering = ('game', '-minute', 'team')
 
     def opponent(self):
-        if self.team == self.game.home_team:
-            return self.game.away_team
+        if self.team == self.game.team1:
+            return self.game.team2
         else:
-            return self.game.home_team
+            return self.game.team1
  
 
     def __unicode__(self):

@@ -4,8 +4,9 @@
 <html>
 
 <head>
-  <title>socceroutsider.com - {% block title %}American soccer statistics since 1884{% endblock %}</title>
+  <title>{% block title %}American soccer statistics since 1884{% endblock %} - SoccerOutsider.com </title>
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <meta name="Description" content="{% block metadescription %}"Historical and modern Soccer Statistics for all American competitions, teams, and players. Includes stats, results, lineups, awards, drafts, career stats, salary data and more."{% endblock %}"</meta>
 
   <link rel="stylesheet" href="{{ MEDIA_URL }}css/style.css" type="text/css" media="screen" >
 
@@ -17,6 +18,8 @@
 
   {% block extrahead %}{% endblock %}
 
+
+  {% if not debug_mode %}
   <script type="text/javascript">
 
     var _gaq = _gaq || [];
@@ -30,6 +33,7 @@
     })();
 
   </script>
+  {% endif %}
 
 </head>
 
@@ -42,14 +46,10 @@
   <div id="header">
     <ul>
       <li><a href="{% url competition_index %}">competitions</a></li>
-      <li><a href="{% url stats_index %}">stats</a></li>
       <li><a href="{% url person_index %}">players</a></li>
+      <li><a href="{% url scoreboard_today %}">scoreboard</a></li>
+      <li><a href="{% url manager_index %}">coaches</a></li>
       <li><a href="{% url team_index %}">teams</a></li>
-      <li><a href="{% url lineup_index %}">lineups</a></li> {# games? #}
-      {# goals? #}
-      {# managers #}
-
-      <li><a href="{% url place_index %}">places</a></li>
       <li><a href="{% url drafts_index %}">drafts</a></li>
       <li><a href="{% url award_index %}">awards</a></li>
     </ul>
@@ -77,9 +77,11 @@
     <ul>
       <li><a href="/about">about</a></li>
       <li><a href="/contact">contact</a></li>
-      <li><a href="/sources">sources</a></li>
       <li><a href="/api">api</a></li>
+      <li><a href="/sources">sources</a></li>
+      <li><a href="/blog">blog</a></li>
     </ul>
+
 
 
   </div>

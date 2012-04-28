@@ -1,10 +1,10 @@
 from django.db import models
 
-from s2.bios.models import Bio
-from s2.competitions.models import Competition, Season
-from s2.games.models import Game
-from s2.lineups.models import Appearance
-from s2.teams.models import Team
+from bios.models import Bio
+from competitions.models import Competition, Season
+from games.models import Game
+from lineups.models import Appearance
+from teams.models import Team
 
 import datetime
 from collections import defaultdict
@@ -39,7 +39,7 @@ class PositionStatsManager(models.Manager):
     # Primarily WLT, GF, GA
 
     def get_query_set(self):
-        return super(PositionStatsManager, self).get_query_set().filter(team=None, season=None, competition=None, position=None)
+        return super(PositionStatsManager, self).get_query_set().exclude(position=None)
 
 
 class CompetitionStatsManager(models.Manager):
@@ -222,7 +222,7 @@ class Stat(models.Model):
             return [self.team]
         
         if self.game:
-            return [self.game.home_team, self.game.away_team]
+            return [self.game.team1, self.game.team2]
 
         if self.player:
             appearances = Appearance.objects.filter(player=self.player)

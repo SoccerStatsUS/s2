@@ -1,6 +1,8 @@
 {% load datum_or_none %}
 
 <table>
+
+  <thead>
   <tr>
     <th>team</th>
     <th>competition</th>
@@ -14,7 +16,9 @@
     <th>goals for</th>
     <th>goals against</th>
   </tr>
+  </thead>
 
+  <tbody>
   {% for standing in standings %}
   <tr>
     <td><a href="{% url team_detail standing.team.slug %}">{{ standing.team }}</a></td>
@@ -40,6 +44,8 @@
     {% datum_or_grey standing.goals_against %}
   </tr>
   {% endfor %}
+  </tbody>
+
 </table>
 
 

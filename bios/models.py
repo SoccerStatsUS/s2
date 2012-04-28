@@ -2,11 +2,14 @@ from django.contrib.contenttypes import generic
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.utils.functional import memoize
 
 from collections import defaultdict
 import datetime
 
 import random
+
+from places.models import City
 
 
 class BioManager(models.Manager):
@@ -62,6 +65,13 @@ class BioManager(models.Manager):
         return [(k, v) for (k, v) in d.items() if len(v) > 1]
 
 
+
+    def id_to_slug(self, pid):
+        return Bio.objects.get(id=pid).slug
+
+    id_to_slug = memoize(id_to_slug, {}, 2)
+
+
 class Bio(models.Model):
     """
     Player or anybody else bio.
@@ -71,8 +81,14 @@ class Bio(models.Model):
     slug = models.SlugField(unique=False)
 
     height = models.IntegerField(null=True, blank=True)
+
     birthdate = models.DateField(null=True, blank=True)
-    birthplace = models.CharField(max_length=250, null=True, blank=True)
+    birthplace = models.ForeignKey(City, null=True, blank=True, related_name="birth_set")
+
+    deathdate = models.DateField(null=True, blank=True)
+    deathplace = models.ForeignKey(City, null=True, blank=True, related_name="death_set")
+
+
 
     height = models.IntegerField(null=True, blank=True)
     weight = models.IntegerField(null=True, blank=True)
@@ -175,7 +191,8 @@ class Bio(models.Model):
         """
         Summary stats for a player's entire career.
         """
-        from s2.stats.models import Stat
+        from stats.models import Stat
+
         c = Stat.career_stats.filter(player=self)
         if c:
             return c[0]
@@ -192,14 +209,16 @@ class Bio(models.Model):
         """
         Summary stats for a player in a given competition (e.g. MLS)
         """
-        from s2.stats.models import Stat
+        from stats.models import Stat
+
         return Stat.competition_stats.filter(player=self)
 
     def team_stats(self):
         """
         Summary stats for a player in a given competition (e.g. MLS)
         """
-        from s2.stats.models import Stat
+        from stats.models import Stat
+
         return Stat.team_stats.filter(player=self)
 
 
@@ -208,7 +227,7 @@ class Bio(models.Model):
         Generate standings for a given player.
         
         """
-        from s2.stats.models import Stat
+        from stats.models import Stat
 
         # Calculate standings for any stat that doesn't have it already.
         # (season stats only, not summary stats.

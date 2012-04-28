@@ -2,7 +2,7 @@ import datetime
 
 from haystack.indexes import ModelSearchIndex
 from haystack import site
-from s2.teams.models import Team
+from teams.models import Team
 
 class TeamIndex(ModelSearchIndex):
 

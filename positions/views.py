@@ -1,8 +1,8 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 
-from s2.bios.models import Bio
-from s2.positions.models import Position
+from bios.models import Bio
+from positions.models import Position
 
 
 def manager_index(request):

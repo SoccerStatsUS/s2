@@ -4,9 +4,9 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 
 
-from s2.bios.models import Bio
-from s2.games.models import Game
-from s2.positions.models import Position
+from bios.models import Bio
+from games.models import Game
+from positions.models import Position
 
 def year_detail(request, year):
     # Add a paginator.
@@ -16,11 +16,14 @@ def year_detail(request, year):
     hires = Position.objects.filter(start__year=year)
     fires = Position.objects.filter(end__year=year)
 
+    years = Game.objects.game_years()
+
     context = {
         'games': games,
         'births': births,
         'hires': hires,
         'fires': fires,
+        'years': years,
         }
     return render_to_response("dates/list.html",
                               context,
@@ -59,6 +62,9 @@ def date_detail(request, year, month, day):
         'births': births,
         'hires': hires,
         'fires': fires,
+        'date': d,
+        'yesterday': d - datetime.timedelta(days=1),
+        'tomorrow': d + datetime.timedelta(days=1), 
         }
     return render_to_response("dates/list.html",
                               context,
@@ -81,3 +87,8 @@ def day_detail(request, month, day):
     return render_to_response("dates/list.html",
                               context,
                               context_instance=RequestContext(request))
+
+
+def scoreboard_today(request):
+    t = datetime.date.today()
+    return date_detail(request, t.year, t.month, t.day)

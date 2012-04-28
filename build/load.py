@@ -2,24 +2,25 @@ import datetime
 import os
 import pymongo
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 's2.build_settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'build_settings'
 
 from django.db import transaction
 from django.db.utils import IntegrityError
 
-from s2.awards.models import Award, AwardItem
-from s2.bios.models import Bio
-from s2.competitions.models import Competition, Season
-from s2.drafts.models import Draft, Pick
-from s2.games.models import Game
-from s2.goals.models import Goal
-from s2.lineups.models import Appearance
-from s2.positions.models import Position
-from s2.teams.models import Team
-from s2.stats.models import Stat
-from s2.standings.models import Standing
+from awards.models import Award, AwardItem
+from bios.models import Bio
+from competitions.models import Competition, Season
+from drafts.models import Draft, Pick
+from games.models import Game
+from goals.models import Goal
+from lineups.models import Appearance
+from places.models import City
+from positions.models import Position
+from teams.models import Team
+from stats.models import Stat
+from standings.models import Standing
 
-from s2.utils import insert_sql
+from utils import insert_sql
 
 
 connection = pymongo.Connection()
@@ -27,15 +28,105 @@ soccer_db = connection.soccer
 
 
 
+STATES = {
+    'AL': 'Alabama',
+    'AK': 'Alaska',
+    'AZ': 'Arizona',
+    'CA': 'California',
+    'CO': 'Colorado',
+    'CT': 'Connecticut',
+    'FL': 'Florida',
+    'HI': 'Hawaii',
+    'GA': 'Georgia',
+    'IA': 'Iowa',
+    'IL': 'Illinois',
+    'IN': 'Indiana',
+    'KS': 'Kansas',
+    'KY': 'Kentucky',
+    'LA': 'Louisiana',
+    'MA': 'Massachusetts',
+    'MD': 'Maryland',
+    'ME': 'Maine',
+    'MI': 'Michigan',
+    'MN': 'Minnesota',
+    'MO': 'Missouri',
+    'MS': 'Mississippi',
+    'MT': 'Montana',
+    'NC': 'North Carolina',
+    'NE': 'Nebraska',
+    'NH': 'New Hampshire',
+    'NJ': 'New Jersey',
+    'NM': 'New Mexico',
+    'NV': 'Nevada',
+    'NY': 'New York',
+    'ON': 'Ontario',
+    'OR': 'Oregon',
+    'OK': 'Oklahoma',
+    'PA': 'Pennsylvania',
+    'QC': 'Quebec',
+    'OH': 'Ohio',
+    'RI': 'Rhode Island',
+    'SC': 'South Carolina',
+    'SD': 'South Dakota',
+    'TN': 'Tenneessee',
+    'TX': 'Texas',
+    'VA': 'Virginia',
+    'WA': 'Washington',
+    'WI': 'Wisconsin',
+    'WV': 'West Virginia',
+    'WY': 'Wyoming',
+    }
+
+def get_location(s):
+    if not s:
+        return {}
+
+    pieces = [e.strip() for e in s.split(",")]
+
+    # Should only be of the forms Austin, TX, Austin, Texas, or Austin, Texas, United States
+    if len(pieces) < 2 or len(pieces) > 3:
+        import pdb; pdb.set_trace()
+    elif len(pieces) == 2:
+        city = pieces[0]
+
+        if pieces[1] in STATES.keys():
+            state = STATES[pieces[1]]
+            country = 'United States'
+        elif pieces[1] in STATES.values():
+            state = pieces[1]
+            country = 'United States'
+        else:
+            state = None
+            country = pieces[1]
+
+    elif len(pieces) == 3:
+        city, state, country = pieces
+
+    return {
+        'city': city,
+        'state': state,
+        'country': country,
+        }
+
+    
+
+
+
 def load():
     load_teams()
+
+    # Game data
     load_standings()
+    load_games()
+
+    # Person data
     load_bios()
     load_awards()
     load_drafts()
-    load_stats()
     load_positions()
-    load_games()
+
+    # Mixed data
+    load_stats()
     load_goals()
     load_lineups()
 
@@ -161,6 +252,7 @@ def load_drafts():
 @transaction.commit_on_success
 def load_teams():
     print "loading teams"
+    # Teams is currently empty.
     for team in soccer_db.teams.find():
         team.pop('_id')
         Team.objects.create(**team)
@@ -171,10 +263,7 @@ def load_standings():
     print "loading standings\n"
     for standing in soccer_db.standings.find():
         standing.pop('_id')
-        try:
-            team_string = standing.pop('name')
-        except:
-            import pdb; pdb.set_trace()
+        team_string = standing.pop('name')
         standing['team'] = Team.objects.find(team_string, create=True)
         standing['competition'] = Competition.objects.find(standing['competition'])
         standing['season'] = Season.objects.find(standing['season'], standing['competition'])
@@ -189,6 +278,7 @@ def load_bios():
             print "NO BIO: %s" % str(bio)
             continue
 
+        # nationalities should be many-to-many!
         bio.pop('_id')
         if 'nationality' in bio:
             bio.pop('nationality')
@@ -196,7 +286,14 @@ def load_bios():
 
 
         bd = {}
-        for key in 'name', 'height', 'birthdate', 'birthplace', 'height', 'weight':
+        if 'birthplace' in bio:
+            d = get_location(bio['birthplace'])
+            if d:
+                bd['birthplace'] = City.objects.find(d)
+            else:
+                bd['birthplace'] = None
+
+        for key in 'name', 'height', 'birthdate', 'height', 'weight':
             if key in bio:
                 bd[key] = bio[key] or None
 
@@ -205,30 +302,31 @@ def load_bios():
 
 @transaction.commit_on_success
 def load_games():
-    print "loading games\n"
+    print "loading %s games\n" % soccer_db.games.count()
 
     for game in soccer_db.games.find():
+
+
         game['competition'] = Competition.objects.find(game['competition'])
         game['season'] = Season.objects.find(game['season'], game['competition'])
-        game['home_team'] = Team.objects.find(game['home_team'], create=True)
-        game['away_team'] = Team.objects.find(game['away_team'], create=True)
+        game['team1'] = Team.objects.find(game['team1'], create=True)
+        game['team2'] = Team.objects.find(game['team2'], create=True)
         game.pop('_id')
-        if 'url' in game:
-            game.pop('url')
 
-        if 'year' in game:
-            game.pop('year')
 
-        if 'source' in game:
-            game.pop('source')
+        for e in 'url', 'home_team', 'year', 'source':
+            if e in game:
+                game.pop(e)
 
         # Seem to have multiple Miami Fusion entries?
         try:
             Game.objects.create(**game)
-        except IntegrityError:
-            print game
-        except ValueError:
-            print game
+        except:
+            import pdb; pdb.set_trace()
+
+        x = 5
+        # Wait on it.
+
             
 
 

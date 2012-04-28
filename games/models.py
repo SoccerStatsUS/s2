@@ -2,13 +2,42 @@ from collections import defaultdict
 
 from django.db import models
 
-from s2.teams.models import Team
-from s2.competitions.models import Competition, Season
+from bios.models import Bio
+from competitions.models import Competition, Season
+from places.models import Stadium
+from teams.models import Team
 
 import random
 
 
 class GameManager(models.Manager):
+
+
+    def games(self):
+        return [e['date'] for e in Game.objects.values("date").distinct()]
+
+    def game_years(self):
+        return sorted(set([e.year for e in Game.objects.games()]))
+
+
+
+    def with_lineups(self):
+        from lineups.models import Appearance
+        gids = [e[0] for e in set(Appearance.objects.values_list("game"))]
+        return Game.objects.filter(id__in=gids)
+
+
+    def all_blocks(self):
+        """
+        All date blocks for Beineke +/- analysis.
+        """
+        l = []
+        for g in Game.objects.with_lineups().exclude(date__year=2007):
+            print g
+            l.extend(g.section_list())
+        return l
+
+
 
     def on(self, month, day):
         """
@@ -30,9 +59,9 @@ class GameManager(models.Manager):
         """
         d = {}
         for e in self.get_query_set():
-            key = (e.home_team.id, e.date)
+            key = (e.team1.id, e.date)
             d[key] = e.id
-            key2 = (e.away_team.id, e.date)
+            key2 = (e.team2.id, e.date)
             d[key2] = e.id
         return d
 
@@ -40,7 +69,7 @@ class GameManager(models.Manager):
         """
         Return all games played by a given team.
         """
-        return Game.objects.filter(models.Q(home_team=team) | models.Q(away_team=team))
+        return Game.objects.filter(models.Q(team1=team) | models.Q(team2=team))
             
 
     def find(self, team, date):
@@ -51,10 +80,10 @@ class GameManager(models.Manager):
         # Should probably do the aliasing in soccerdata
 
         try:
-            game = Game.objects.get(date=date, home_team=team)
+            game = Game.objects.get(date=date, team1=team)
         except:
             try:
-                game = Game.objects.get(date=date, away_team=team)
+                game = Game.objects.get(date=date, team2=team)
             except:
                 game = None
 
@@ -67,9 +96,9 @@ class GameManager(models.Manager):
         """
         d = defaultdict(list)
         for e in self.get_query_set():
-            k1 = (e.home_team, e.date)
+            k1 = (e.team1, e.date)
             d[k1].append(e)
-            k2 = (e.away_team, e.date)
+            k2 = (e.team2, e.date)
             d[k2].append(e)
         return sorted([e for e in  d.values() if len(e) > 1])
             
@@ -83,13 +112,16 @@ class Game(models.Model):
     # Need both a date and a datetime field? Probably.
     date = models.DateField()
     
-    home_team = models.ForeignKey(Team, related_name='home_games')
-    home_score = models.IntegerField()
+    team1 = models.ForeignKey(Team, related_name='home_games')
+    team1_score = models.IntegerField()
     official_home_score = models.IntegerField(null=True)
 
-    away_team = models.ForeignKey(Team, related_name='away_games')
-    away_score = models.IntegerField()
+    team2 = models.ForeignKey(Team, related_name='away_games')
+    team2_score = models.IntegerField()
     official_away_score = models.IntegerField(null=True)
+
+    # Minigames were played in MLS, APSL, USL, and probably others.
+    minigame = models.BooleanField(default=False)
 
     # This should probably be a many-to-many?
     competition = models.ForeignKey(Competition)
@@ -108,17 +140,18 @@ class Game(models.Model):
 
     class Meta:
         ordering = ('date',)
-        unique_together = [('home_team', 'date'), ('away_team', 'date')]
+        unique_together = [('team1', 'date', 'minigame'), ('team2', 'date', 'minigame')]
+
 
 
     def score(self):
         """Returns a score string."""
-        return "%s - %s" % (self.home_score, self.away_score)
+        return "%s - %s" % (self.team1_score, self.team2_score)
 
 
     # These should hang off of Team, not Game.
     def previous_games(self, team):
-        assert team in (self.home_team, self.away_team)
+        assert team in (self.team1, self.team2)
         return Game.objects.team_filter(team).filter(season=self.season).filter(date__lt=self.date).order_by('date')
 
     def streak(self, team):
@@ -145,8 +178,8 @@ class Game(models.Model):
         Returns the result of the series between two teams in the same season.
         """
         return Game.objects.filter(season=self.season).filter(
-            models.Q(home_team=self.home_team) | models.Q(away_team=self.home_team)).filter(
-            models.Q(home_team=self.away_team) | models.Q(away_team=self.away_team))
+            models.Q(team1=self.team1) | models.Q(team2=self.team1)).filter(
+            models.Q(team1=self.team2) | models.Q(team2=self.team2))
 
         
 
@@ -162,10 +195,10 @@ class Game(models.Model):
         return (d['win'], d['tie'], d['loss'])
 
     def home_standings(self):
-        return self.standings(self.home_team)
+        return self.standings(self.team1)
 
     def away_standings(self):
-        return self.standings(self.away_team)
+        return self.standings(self.team2)
 
     def home_standings_string(self):
         wins, ties, losses = self.home_standings()
@@ -177,7 +210,7 @@ class Game(models.Model):
 
 
     def streaks(self):
-        return [(self.result(e), self.streak(e)) for  e in (self.home_team, self.away_team)]
+        return [(self.result(e), self.streak(e)) for  e in (self.team1, self.team2)]
 
     def streak_string(self, t):
         """
@@ -203,12 +236,12 @@ class Game(models.Model):
         Goals for a given team in a given game.
         """
         # Not a great system.
-        assert team in (self.home_team, self.away_team)
+        assert team in (self.team1, self.team2)
         
-        if team == self.home_team:
-            score = self.home_score
+        if team == self.team1:
+            score = self.team1_score
         else:
-            score = self.away_score
+            score = self.team2_score
 
         return int(score)
 
@@ -216,14 +249,16 @@ class Game(models.Model):
     def goals_against(self, team):
         """
         """
-        assert team in (self.home_team, self.away_team)
+        assert team in (self.team1, self.team2)
 
-        if team == self.home_team:
-            score = self.away_score
+        if team == self.team1:
+            score = self.team2_score
         else:
-            score = self.home_score
+            score = self.team1_score
 
         return int(score)
+
+
 
 
     def result(self, team):
@@ -231,23 +266,23 @@ class Game(models.Model):
         Returns a string indicating the result of a game
         (win, loss, or tie)
         """
-        assert team in (self.home_team, self.away_team)
+        assert team in (self.team1, self.team2)
         
         try:
-            home_score = int(self.official_home_score or self.home_score)
-            away_score = int(self.official_away_score or self.away_score)
+            home_score = int(self.official_home_score or self.team1_score)
+            away_score = int(self.official_away_score or self.team2_score)
         except:
             return None
 
-        if home_score == away_score:
+        if self.team1_score == self.team2_score: 
             return 'tie'
-        if home_score > away_score:
-            if team == self.home_team:
+        if self.team1_score > self.team2_score: 
+            if team == self.team1:
                 return 'win'
             else:
                 return 'loss'
         else:
-            if team == self.home_team:
+            if team == self.team1:
                 return 'loss'
             else:
                 return 'win'
@@ -264,16 +299,116 @@ class Game(models.Model):
         """
         Given a team, returns the opponent.
         """
-        if team == self.home_team:
-            return self.away_team
-        elif team == self.away_team:
-            return self.home_team
+        if team == self.team1:
+            return self.team2
+        elif team == self.team2:
+            return self.team1
         else:
             raise
 
+
+
+
+    # Data export/analysis stuff with Beineke.
+    
+    def game_sections(self):
+        # Red cards covered?
+
+        minutes = [int(e[0]) for e in self.appearance_set.all().values_list("on")]
+        minutes = sorted(set(minutes))
+        minutes_pairs = zip(minutes, minutes[1:]) + [(minutes[-1], 90)]
+        return minutes_pairs
+        
+
+    
+    def goal_blocks(self):
+
+        def add_goal(team, minute):
+            for m in sections:
+                key = (m, team)
+                start_minute, end_minute = m
+                if start_minute <= goal_minute < end_minute:
+                    goal_dict[key] += 1
+                    return
+            
+            # If a goal doesn't match any time period, add it to the last item.
+            # (Presumably the goal was scored in stoppage time)
+            goal_dict[key] += 1
+
+        sections = self.game_sections()
+        goal_tuples = self.goal_set.all().values_list("team", "minute")
+        goal_dict = defaultdict(int)
+        for team, goal_minute in goal_tuples:
+            add_goal(team, goal_minute)
+
+        return goal_dict
+            
+        
+
+    def lineup_blocks(self):
+        lineup_tuples = self.appearance_set.all().values_list("player", "team", "on", "off")
+        sections = self.game_sections()
+        d = defaultdict(set)
+
+        for m in sections:
+            start_minute, end_minute = m
+            for pid, tid, on, off in lineup_tuples:
+                number_part = str(pid).zfill(5)
+                slug_part = Bio.objects.id_to_slug(pid).zfill(44)
+                xid = str("%s:%s" % (number_part, slug_part))
+
+                on, off = int(on), int(off)
+
+                # Handle end of game situations.
+                if off != 90:
+                    if on <= start_minute and off > start_minute:
+                        t = (tid, xid)
+                        d[m].add(t)
+                else:
+                    if on <= start_minute and off >= start_minute:
+                        t = (tid, xid)
+                        d[m].add(t)
+
+        return d
+
+
+    def section_list(self):
+        """
+        All game parts for a given game.
+        """
+        goal_blocks = self.goal_blocks()
+        lineup_blocks = self.lineup_blocks()
+
+        def make_item(section):
+            start, end = section
+
+            t1goals = goal_blocks.get((section, self.team1.id), 0)
+            t2goals = goal_blocks.get((section, self.team2.id), 0)
+
+            lineups = lineup_blocks[section]
+
+            t1lineups = [e[1] for e in lineups if e[0] == self.team1.id]
+            t2lineups = [e[1] for e in lineups if e[0] == self.team2.id]
+
+            return [
+                self.id,
+                self.date.ctime(),
+                start,
+                end,
+                self.team1.id,
+                self.team2.id,
+                self.team1.id,
+                t1goals,
+                t2goals,
+                t1lineups,
+                t2lineups,
+                ]
+                
+        return [make_item(section) for section in self.game_sections()]
+
         
     def __unicode__(self):
-        return u"%s: %s v %s" % (self.date, self.home_team, self.away_team)
+        return u"%s: %s v %s" % (self.date, self.team1, self.team2)
 
 
 

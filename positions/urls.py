@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns, url
 
-urlpatterns = patterns('s2.positions.views', 
+urlpatterns = patterns('positions.views', 
 
                        url(r'^$',
                            'manager_index',

@@ -2,18 +2,23 @@ from os.path import join
 import socket
 
 from secret_settings import *
+from custom_settings import *
+
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 
 PRODUCTION_SITES = (
     "bert",
 )
 
 
-PROJECT_DIR = "/home/chris/www/s2/",
+TEMPLATE_CONTEXT_PROCESSORS += (
+    'bios.context_processors.debug_mode',
+)    
+
+
 
 INTERNAL_IPS = ('127.0.0.1',)
 
-
-DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
 
@@ -37,7 +42,7 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '/home/chris/www/s2/db/soccer.db',                      # Or path to database file if using sqlite3.
+        'NAME': DB_PATH,
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -89,7 +94,7 @@ USE_L10N = True
 
 
 
-MEDIA_ROOT = '/home/chris/www/s2/media'
+MEDIA_ROOT = '%s/media' % PROJECT_DIR
 
 # Make sure to use a trailing slash for these.
 MEDIA_URL = "http://media.socceroutsider.com/"
@@ -113,13 +118,13 @@ MIDDLEWARE_CLASSES = (
 
 )
 
-ROOT_URLCONF = 's2.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
-    "/home/chris/www/s2/templates",
+    "%s/templates" % PROJECT_DIR,
 )
 
-FIXTURE_DIR = "/home/chris/www/s2/fixtures",
+FIXTURE_DIR = "%s/fixtures" % PROJECT_DIR,
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -131,21 +136,23 @@ INSTALLED_APPS = (
     'gunicorn',
     'debug_toolbar',
 
-    's2.awards',
-    's2.bios',
-    's2.competitions',
-    's2.contact',
-    's2.dates',
-    's2.drafts',
-    's2.games',
-    's2.goals',
-    's2.lineups',
-    's2.places',
-    's2.positions',
-    's2.sources',
-    's2.standings',
-    's2.stats',
-    's2.teams',
+    'awards',
+    'bios',
+    'competitions',
+    'contact',
+    'dates',
+    'drafts',
+    'games',
+    'goals',
+    'graphs',
+    'lineups',
+    'places',
+    'positions',
+    'sources',
+    'standings',
+    'stats',
+    'teams',
+
     'haystack',
     'django_extensions',
 )
@@ -161,8 +168,8 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.logger.LoggingPanel',
 )
 
-HAYSTACK_SITECONF = 's2.search_sites'
+HAYSTACK_SITECONF = 'search_sites'
 HAYSTACK_SEARCH_ENGINE = 'whoosh'
-HAYSTACK_WHOOSH_PATH = '/home/chris/www/s2/run/search'
+HAYSTACK_WHOOSH_PATH = '%s/run/search' % PROJECT_DIR
 
 

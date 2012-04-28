@@ -1,23 +1,34 @@
+import os
 import shutil
 
 from load import load
 from generate import generate
 
-from s2.utils import timer
+from utils import timer
+
+from settings import PROJECT_DIR
 
 @timer
 def build():
-    shutil.copy('/home/chris/www/s2/db/soccer.template.db', 
-                '/home/chris/www/s2/db/soccer.build.db')
+    shutil.copy('%s/db/soccer.template.db' % PROJECT_DIR, 
+                '%s/db/soccer.build.db' % PROJECT_DIR)
 
     load()
     generate()
 
-    shutil.copy('/home/chris/www/s2/db/soccer.db', 
-                '/home/chris/www/s2/db/soccer.backup.db')
+    move()
 
-    shutil.copy('/home/chris/www/s2/db/soccer.build.db', 
-                '/home/chris/www/s2/db/soccer.db')
+
+def move():
+
+    p = '%s/db/soccer.db' % PROJECT_DIR
+
+    if os.path.exists(p):
+        shutil.copy(p, 
+                    '%s/db/soccer.backup.db' % PROJECT_DIR)
+
+    shutil.copy('%s/db/soccer.build.db' % PROJECT_DIR, 
+                '%s/db/soccer.db' % PROJECT_DIR)
 
         
 
