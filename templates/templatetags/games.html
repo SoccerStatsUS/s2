@@ -1,3 +1,4 @@
+
 {% load datum_or_none %}
 <table>
   <tr>
@@ -7,6 +8,8 @@
     <th>score</th>
     <th>away team</th>
     <th>location</th>
+    <th>referee</th>
+    <th>attendance</th>
   </tr>
 
   {% for game in games %}
@@ -17,6 +20,8 @@
     <td><a href="{% url game_detail game.id %}">{{ game.score }}</a></td>
     <td><a href="{% url team_detail game.team2.slug %}">{{ game.team2 }}</a></td>
     <td>{{ game.location }}</td>
+    <td>{{ game.referee }}</td>
+  {% datum_or_grey game.attendance %}
   </tr>
   {% endfor %}
 </table>
