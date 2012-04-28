@@ -10,6 +10,7 @@
 <h3><a href="{% url competition_detail competition.slug %}">{{ competition }}</a></h3>
 
 
+
 <ul id="tabs"></ul>
 
 <div id="tab_wrapper">
@@ -28,18 +29,33 @@
     <th>competition</th>
     <th>season</th>
     <th>champion</th>
+    <th>MVP</th>
   </tr>
+
 
   {% for season in competition.season_set.all %}
   <tr>
     <td>{{ competition }}</td>
     <td><a href="{% url season_detail competition.slug season.slug %}">{{ season.name }}</a></td>
     <td><a href="{{ season.champion.recipient.get_absolute_url }}">{{ season.champion.recipient }}</a></td>
-    <td>{{ season.mvp.recipient.name }}</td>
-    </tr>
+    {% with season.mvp.recipient as mvp %}
+    {% if mvp %}
+    <td><a href="{% url person_detail mvp.slug %}">{{ mvp }}</a></td>
+    {% else %}
+    <td></td>
+
+    {% endif %}
+    {% endwith %}
+  </tr>
   {% endfor %}
     
 </table>
+</div>
+{% endif %}
+
+{% if competition.game_set.exists %}
+<div tab="games">
+{% include "templatetags/games.html" with games=competition.game_set.all %}
 </div>
 {% endif %}
 
