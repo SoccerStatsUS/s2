@@ -124,13 +124,27 @@ class Stat(models.Model):
 
 
     def goals_per_90(self):
+        if self.minutes == 0:
+            return 0
         return 90 * self.goals / float(self.minutes)
+
+
+    def assists_per_90(self):
+        if self.minutes == 0:
+            return 0
+        return 90 * self.goals / float(self.minutes)
+
+    def goals_assists_per_90(self):
+        return self.goals_per_90() + self.assists_per_90()
+
 
 
     def plus_minus_per_90(self):
         if not self.minutes:
             return 0
         return 90 * self.plus_minus / float(self.minutes)
+
+
 
 
 
