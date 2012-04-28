@@ -123,3 +123,17 @@ def teams_ajax(request):
 
     
 
+
+def bad_teams(request):
+
+
+    
+    context = {
+        'duplicate_slugs': Team.objects.duplicate_slugs(),
+        }
+
+    return render_to_response("teams/bad.html",
+                              context,
+                              context_instance=RequestContext(request)
+                              )    
+                              

@@ -3,6 +3,9 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
 
+
+from collections import defaultdict
+
 import datetime
 
 

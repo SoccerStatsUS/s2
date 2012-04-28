@@ -22,6 +22,7 @@ urlpatterns = patterns('',
                        (r'^about/$', direct_to_template, {'template': 'about.html'}),
                        (r'^api/$', direct_to_template, {'template': 'api.html'}),
                        (r'^sources/$', direct_to_template, {'template': 'sources.html'}),
+                       (r'^blog/$', direct_to_template, {'template': 'blog.html'}),
 
                        url(r'search/', include('haystack.urls')),
 
