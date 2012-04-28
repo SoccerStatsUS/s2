@@ -296,9 +296,10 @@ def load_bios():
 
 @transaction.commit_on_success
 def load_games():
-    print "loading games\n"
+    print "loading %s games\n" % soccer_db.games.count()
 
     for game in soccer_db.games.find():
+
 
         game['competition'] = Competition.objects.find(game['competition'])
         game['season'] = Season.objects.find(game['season'], game['competition'])
@@ -315,8 +316,10 @@ def load_games():
         try:
             Game.objects.create(**game)
         except IntegrityError:
+            import pdb; pdb.set_trace()
             print game
         except ValueError:
+            import pdb; pdb.set_trace()
             print game
             
 
