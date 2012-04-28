@@ -114,13 +114,19 @@ def get_location(s):
 
 def load():
     load_teams()
+
+    # Game data
     load_standings()
+    load_games()
+
+    # Person data
     load_bios()
     load_awards()
     load_drafts()
-    load_stats()
     load_positions()
-    load_games()
+
+    # Mixed data
+    load_stats()
     load_goals()
     load_lineups()
 
@@ -315,12 +321,12 @@ def load_games():
         # Seem to have multiple Miami Fusion entries?
         try:
             Game.objects.create(**game)
-        except IntegrityError:
+        except:
             import pdb; pdb.set_trace()
-            print game
-        except ValueError:
-            import pdb; pdb.set_trace()
-            print game
+
+        x = 5
+        # Wait on it.
+
             
 
 
