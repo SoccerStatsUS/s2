@@ -120,6 +120,9 @@ class Game(models.Model):
     team2_score = models.IntegerField()
     official_away_score = models.IntegerField(null=True)
 
+    # Minigames were played in MLS, APSL, USL, and probably others.
+    minigame = models.BooleanField(default=False)
+
     # This should probably be a many-to-many?
     competition = models.ForeignKey(Competition)
     season = models.ForeignKey(Season)
@@ -137,7 +140,7 @@ class Game(models.Model):
 
     class Meta:
         ordering = ('date',)
-        unique_together = [('team1', 'date'), ('team2', 'date')]
+        unique_together = [('team1', 'date', 'minigame'), ('team2', 'date', 'minigame')]
 
 
 
