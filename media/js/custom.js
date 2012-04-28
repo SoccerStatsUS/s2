@@ -1,6 +1,6 @@
 (function() {
   $(document).ready(function() {
-    var createSortLoader, getLineups, getStats, getTeams, tabs;
+    var createSortLoader, getLineups, getStats, getTeams, hash, tabs;
     $("#bio").tablesorter();
     $("#player_chart").tablesorter();
     $("#competition_index").tablesorter();
@@ -66,7 +66,7 @@
     $("#tab_wrapper div").each(function() {
       var tab, text;
       tab = $(this).attr("tab");
-      text = "<li>" + tab + "</li>";
+      text = "<a href='\#" + tab + "'><li>" + tab + "</li></a>";
       return $("#tabs").append(text);
     });
     $("#tabs li").click(function() {
@@ -81,7 +81,11 @@
     });
     tabs = $("#tabs li");
     if (tabs.length) {
-      return $(tabs[0]).click();
+      $(tabs[0]).click();
+    }
+    hash = window.location.hash;
+    if (hash) {
+      return $("a[href=" + hash + "] li").click();
     }
   });
 }).call(this);

@@ -1,6 +1,7 @@
 $(document).ready( ->
 
 
+
   $("#bio").tablesorter()
   $("#player_chart").tablesorter()
   $("#competition_index").tablesorter()
@@ -66,7 +67,7 @@ $(document).ready( ->
   # Want to do this better.
   $("#tab_wrapper div").each ->
     tab = $(this).attr("tab")
-    text = "<li>#{ tab }</li>"
+    text = "<a href='\##{ tab }'><li>#{ tab }</li></a>"
     $("#tabs").append(text);
 
   $("#tabs li").click ->
@@ -81,6 +82,12 @@ $(document).ready( ->
   tabs = $("#tabs li")
   if tabs.length
     $(tabs[0]).click()
+
+  # Set the correct tab after back button.
+  hash = window.location.hash
+  if hash
+    $("a[href=#{ hash }] li").click()
+
 
 
 
