@@ -24,6 +24,13 @@ def person_list_generic(request, person_list=None):
 
 
 
+def one_word(request):
+    bios = Bio.objects.exclude(name__contains=' ')
+    return person_list_generic(request, bios)
+    
+
+
+@cache_page(60 * 60 * 12)
 def person_index(request):
     # Change this to something like: http://www.baseball-reference.com/players/
 

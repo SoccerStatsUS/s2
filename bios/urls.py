@@ -12,6 +12,10 @@ urlpatterns = patterns('bios.views',
                        url(r'^bad$',
                            'bad_bios',
                            name='bad_bios'),
+
+                       url(r'^oneword$',
+                           'one_word',
+                           name='one_word'),
                        
 
                        url(r'^(?P<slug>[a-z0-9-]+)',
