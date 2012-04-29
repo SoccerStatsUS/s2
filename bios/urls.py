@@ -9,11 +9,11 @@ urlpatterns = patterns('bios.views',
                            'name_fragment',
                            name='name_fragment'),
 
-                       url(r'^bad$',
+                       url(r'^bad/?$',
                            'bad_bios',
                            name='bad_bios'),
 
-                       url(r'^oneword$',
+                       url(r'^oneword/?$',
                            'one_word',
                            name='one_word'),
                        

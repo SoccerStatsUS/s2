@@ -6,12 +6,12 @@ urlpatterns = patterns('teams.views',
                            'team_index',
                            name='team_index'),
 
-                       url(r'^bad/$',
+                       url(r'^bad/?$',
                            'bad_teams',
                            name='bad_teams'),
 
 
-                       url(r'^seasons/$',
+                       url(r'^seasons/?$',
                            'seasons_dashboard',
                            name='seasons_dashboard'),
 
