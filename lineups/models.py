@@ -24,7 +24,7 @@ class Appearance(models.Model):
     age = models.IntegerField(null=True) # Number of days since birth.
 
     class Meta:
-        ordering = ('game', )
+        ordering = ('game', 'on', '-id' )
 
 
     def opponent(self):

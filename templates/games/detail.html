@@ -62,31 +62,7 @@
 
 {% if game.appearance_set.exists %}
 <div tab="lineups">
-
-<table>
-  <tr>
-    <th>Team</th>
-    <th>Player</th>
-    <th>Minutes</th>
-    <th>On</th>
-    <th>Off</th>
-    <th>+/-</th>
-    <th>Age</th>
-  </tr>
-
-  {% for appearance in game.appearance_set.all %}
-  <tr>
-    <td><a href="{% url team_detail appearance.team.slug %}">{{ appearance.team }}</a></td>
-    <td><a href="{% url person_detail appearance.player.slug %}">{{ appearance.player }}</a></td>
-    {% datum_or_grey appearance.minutes %}
-    <td>{{ appearance.on }}</td>
-    <td>{{ appearance.off }}</td>
-    {% datum_or_grey appearance.goal_differential %}
-    <td>{{ appearance.pretty_age|floatformat:"1" }}</td>
-  </tr>
-  {% endfor %}
-</table>
-
+{% include "templatetags/game_lineup.html"  %}
 </div>
 
 {% endif %}

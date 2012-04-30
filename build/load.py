@@ -306,7 +306,6 @@ def load_games():
 
     for game in soccer_db.games.find():
 
-
         game['competition'] = Competition.objects.find(game['competition'])
         game['season'] = Season.objects.find(game['season'], game['competition'])
         game['team1'] = Team.objects.find(game['team1'], create=True)
@@ -318,14 +317,16 @@ def load_games():
             if e in game:
                 game.pop(e)
 
-        # Seem to have multiple Miami Fusion entries?
+        # There are a bunch of problems with the NASL games, 
+        # And probably ASL as well. Need to spend a couple
+        # of hours repairing those schedules.
+                
         try:
             Game.objects.create(**game)
         except:
-            import pdb; pdb.set_trace()
+            print "Skipping game %s" % game
+            #import pdb; pdb.set_trace()
 
-        x = 5
-        # Wait on it.
 
             
 

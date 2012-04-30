@@ -5,7 +5,7 @@ from django.views.decorators.cache import cache_page
 from competitions.models import Competition, Season
 from stats.models import Stat
 
-@cache_page(60 * 60 * 12)
+#@cache_page(60 * 60 * 12)
 def competition_index(request):
     # Add a paginator.
     competitions = Competition.objects.all()

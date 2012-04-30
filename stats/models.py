@@ -19,6 +19,16 @@ class StatsManager(models.Manager):
         return super(StatsManager, self).get_query_set().exclude(team=None).exclude(season=None).filter(position=None)
 
 
+
+class AllStatsManager(models.Manager):
+
+    # Regular season stats.
+
+    def get_query_set(self):
+        # This is important.
+        return super(AllStatsManager, self).get_query_set()
+
+
 class CareerStatsManager(models.Manager):
 
     # Stats for an entire career
@@ -113,6 +123,8 @@ class Stat(models.Model):
     team_stats = TeamStatsManager()
     career_stats = CareerStatsManager()
     competition_stats = CompetitionStatsManager()
+
+    all_stats = AllStatsManager()
     
 
     def __unicode__(self):
@@ -162,7 +174,7 @@ class Stat(models.Model):
 
 
     class Meta:
-        ordering = ('season__name', 'competition', '-games_played', '-goals')
+        ordering = ('competition', 'season__name', '-games_played', '-goals')
         #unique_together = ('player', 'team', 'competition', 'season')
 
 

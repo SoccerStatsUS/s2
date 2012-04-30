@@ -149,6 +149,19 @@ class Game(models.Model):
         return "%s - %s" % (self.team1_score, self.team2_score)
 
 
+    def team1_lineups(self):
+        return self.appearance_set.filter(team=self.team1)
+
+
+    def team2_lineups(self):
+        return self.appearance_set.filter(team=self.team2)
+
+
+
+    def zipped_lineups(self):
+        return zip(self.team1_lineups(), self.team2_lineups())
+
+
     # These should hang off of Team, not Game.
     def previous_games(self, team):
         assert team in (self.team1, self.team2)

@@ -182,6 +182,10 @@ class Bio(models.Model):
         """
         return self.stat_set.exclude(team=None).exclude(season=None).filter(position=None)
 
+    def season_stats_with_totals(self):
+        from stats.models import Stat
+        return Stat.all_stats.exclude(team=None).exclude(competition=None).filter(player=self)
+
 
     def position_stats(self):
         return self.stat_set.exclude(team=None).exclude(season=None).exclude(position=None)
