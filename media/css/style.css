@@ -17,15 +17,22 @@ option {
     width: 100px;
 }
 
+table {
+    border-collapse:collapse;
+}
+
 tr {
     margin: 0;
     padding: 0;
+
 }
 
-td {
-    padding: 0 20px;
-    font-size: 1.3em;
-    border: 1px solid #ddd;
+td, th {
+    margin: 0;
+    padding: 4px 8px;
+    font-size: 1.2em;
+    border: 2px solid #ddd;
+
 }
 
 ul {
