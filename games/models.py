@@ -143,6 +143,19 @@ class Game(models.Model):
         unique_together = [('team1', 'date', 'minigame'), ('team2', 'date', 'minigame')]
 
 
+    def completeness(self):
+        """Returns how complete a game's data collection is."""
+        if self.appearance_set.exists():
+            return 2
+        elif self.goal_set.exists():
+            return 1
+        else:
+            return 0
+
+
+    def color_code(self):
+        return ['red', 'yellow', 'green'][self.completeness()]
+
 
     def score(self):
         """Returns a score string."""

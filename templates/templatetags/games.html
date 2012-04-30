@@ -1,7 +1,10 @@
 
+
+
 {% load datum_or_none %}
 <table>
   <tr>
+    <th>.</th>
     <th>date</th>
     <th>competition</th>
     <th>home team</th>
@@ -14,6 +17,7 @@
 
   {% for game in games %}
   <tr>
+    <td class="{{ game.color_code }}-bg"></td>
     <td><a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date }}</a></td>
     <td><a href="{% url competition_detail game.competition.slug %}">{{ game.competition.abbreviation }}</a></td>
     <td><a href="{% url team_detail game.team1.slug %}">{{ game.team1 }}</a></td>

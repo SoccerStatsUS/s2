@@ -5,6 +5,18 @@ a {
     text-decoration: none;
 }
 
+.red-bg {
+    background-color: red;
+}
+
+.yellow-bg {
+    background-color: yellow;
+}
+
+.green-bg {
+    background-color: green;
+}
+
 a:visited {
     color: blue;
 }
@@ -30,7 +42,7 @@ tr {
 td, th {
     margin: 0;
     padding: 4px 8px;
-    font-size: 1.2em;
+    font-size: 1em;
     border: 2px solid #ddd;
 
 }
