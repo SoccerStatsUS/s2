@@ -16,7 +16,7 @@ def competition_index(request):
                               context,
                               context_instance=RequestContext(request))
 
-
+@cache_page(60 * 60 * 12)
 def competition_detail(request, competition_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
     context = {
