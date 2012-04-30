@@ -9,6 +9,8 @@ from teams.models import Team
 import datetime
 from collections import defaultdict
 
+from django.core.cache import cache
+
 
 class StatsManager(models.Manager):
 
@@ -129,6 +131,56 @@ class Stat(models.Model):
 
     def __unicode__(self):
         return "%s, %s, %s, %s" % (self.game, self.player, self.team, self.season)
+
+
+    def assistiness(self):
+        # An assist rating based on the number of assists handed out by the league that year, adjusted for team numbers.
+        # Designed to avoid some standard assist baises.
+
+        def season_adjustment_factor():
+
+            def _id(m):
+                if m is None:
+                    return None
+                else:
+                    return m.id
+
+            key = "assistiness:%s:%s" % (_id(self.season), _id(self.competition))
+            
+            i = cache.get(key)
+            if i is None:
+                season_stats = Stat.objects.filter(season=self.season, competition=self.competition)
+                if season_stats.count() == 0:
+                    i = None
+                else:
+                    total_assists = sum([e.assists for e in season_stats if e.assists])
+                    teams = set([e.team for e in season_stats])
+                    team_count_float = float(len(teams))
+                    i = team_count_float / total_assists
+                cache.set(key, i, 24 * 60 * 60)
+            
+            return i
+
+        if self.assists == 0:
+            return 0
+
+        f = season_adjustment_factor()
+        if f is None:
+            return None
+        else:
+            return self.assists * f
+            
+
+
+
+
+
+
+        return (float(self.assists) * len(teams)) / total_assists
+
+
+
+        
 
 
     def shooting_percentage(self):
