@@ -1,0 +1,23 @@
+
+
+<table>
+  <tr>
+    <th>{{ game.team1 }}</th>
+    <th>on</th>
+    <th>min</th>
+    <th>min</th>
+    <th>on</th>
+    <th>{{ game.team2 }}</th>
+  </tr>
+
+  {% for a,b in game.zipped_lineups %}
+  <tr>
+    <td><a href="{% url person_detail a.player.slug %}">{{ a.player }}</a></td>
+    <td>{{ a.on }}</td>
+    <td>{{ a.minutes }}</td>
+    <td>{{ b.minutes }}</td>
+    <td>{{ b.on }}</td>
+    <td><a href="{% url person_detail b.player.slug %}">{{ b.player }}</a></td>
+  </tr>
+  {% endfor %}
+</table>
