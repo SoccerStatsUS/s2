@@ -365,16 +365,6 @@ def load_stats():
         competition = Competition.objects.get(id=competition_id)
         season = Season.objects.find(stat['season'], competition)
 
-        # Should be in soccerdata.merge.
-        for k in 'games_started', 'games_played', 'minutes', 'shots', 'shots_on_goal', \
-                'fouls_committed', 'fouls_suffered', 'yellow_cards', 'red_cards':
-            if stat.get(k) == '':
-                stat[k] = None
-
-        for k in 'goals', 'assists':
-            if stat.get(k) == '':
-                stat[k] = 0
-        
         l.append({
             'player_id': bio_id,
             'team_id': team_id,
