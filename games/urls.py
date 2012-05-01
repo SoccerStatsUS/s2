@@ -5,7 +5,7 @@ urlpatterns = patterns('games.views',
                            'games_index',
                            name='games_index'),
 
-                       url(r'^bad$',
+                       url(r'^bad/$',
                            'bad_games',
                            name='bad_games'),
 

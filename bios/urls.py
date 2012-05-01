@@ -9,7 +9,7 @@ urlpatterns = patterns('bios.views',
                            'name_fragment',
                            name='name_fragment'),
 
-                       url(r'^bad/?$',
+                       url(r'^bad/$',
                            'bad_bios',
                            name='bad_bios'),
 
