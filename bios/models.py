@@ -88,7 +88,7 @@ class Bio(models.Model):
 
     deathdate = models.DateField(null=True, blank=True)
     #deathplace = models.ForeignKey(City, null=True, blank=True, related_name="death_set")
-    birthplace = models.CharField(max_length=200, unique=True)
+    deathplace = models.CharField(max_length=200, unique=True)
 
 
     height = models.IntegerField(null=True, blank=True)
