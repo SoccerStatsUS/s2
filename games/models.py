@@ -147,7 +147,7 @@ class Game(models.Model):
         """Returns how complete a game's data collection is."""
         if self.appearance_set.exists():
             return 2
-        elif self.goal_set.exists():
+        elif self.goal_set.exists() or self.team1_score == self.team2_score == 0:
             return 1
         else:
             return 0
