@@ -134,12 +134,11 @@ class Stat(models.Model):
 
 
     def assistiness(self):
-        # An assist rating based on the number of assists handed out by the league that year, adjusted for team numbers.
-        # Designed to avoid some standard assist baises.
-
         """This measures the proportion of a hypothetical average team's assists a player
         accounted for. e.g. if a player's rating is .3, that means he accounted for 30% of a team's
-        expected assists that year."""
+        expected assists that year. Designed to combat standard assist bias."""
+        # This is way too slow.
+        
 
         def season_adjustment_factor():
             # This should hang off season. And probably be memoized?

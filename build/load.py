@@ -22,93 +22,9 @@ from standings.models import Standing
 
 from utils import insert_sql
 
-
 connection = pymongo.Connection()
 soccer_db = connection.soccer
 
-
-
-STATES = {
-    'AL': 'Alabama',
-    'AK': 'Alaska',
-    'AZ': 'Arizona',
-    'CA': 'California',
-    'CO': 'Colorado',
-    'CT': 'Connecticut',
-    'FL': 'Florida',
-    'HI': 'Hawaii',
-    'GA': 'Georgia',
-    'IA': 'Iowa',
-    'IL': 'Illinois',
-    'IN': 'Indiana',
-    'KS': 'Kansas',
-    'KY': 'Kentucky',
-    'LA': 'Louisiana',
-    'MA': 'Massachusetts',
-    'MD': 'Maryland',
-    'ME': 'Maine',
-    'MI': 'Michigan',
-    'MN': 'Minnesota',
-    'MO': 'Missouri',
-    'MS': 'Mississippi',
-    'MT': 'Montana',
-    'NC': 'North Carolina',
-    'NE': 'Nebraska',
-    'NH': 'New Hampshire',
-    'NJ': 'New Jersey',
-    'NM': 'New Mexico',
-    'NV': 'Nevada',
-    'NY': 'New York',
-    'ON': 'Ontario',
-    'OR': 'Oregon',
-    'OK': 'Oklahoma',
-    'PA': 'Pennsylvania',
-    'QC': 'Quebec',
-    'OH': 'Ohio',
-    'RI': 'Rhode Island',
-    'SC': 'South Carolina',
-    'SD': 'South Dakota',
-    'TN': 'Tenneessee',
-    'TX': 'Texas',
-    'VA': 'Virginia',
-    'WA': 'Washington',
-    'WI': 'Wisconsin',
-    'WV': 'West Virginia',
-    'WY': 'Wyoming',
-    }
-
-def get_location(s):
-    if not s:
-        return {}
-
-    pieces = [e.strip() for e in s.split(",")]
-
-    # Should only be of the forms Austin, TX, Austin, Texas, or Austin, Texas, United States
-    if len(pieces) < 2 or len(pieces) > 3:
-        import pdb; pdb.set_trace()
-    elif len(pieces) == 2:
-        city = pieces[0]
-
-        if pieces[1] in STATES.keys():
-            state = STATES[pieces[1]]
-            country = 'United States'
-        elif pieces[1] in STATES.values():
-            state = pieces[1]
-            country = 'United States'
-        else:
-            state = None
-            country = pieces[1]
-
-    elif len(pieces) == 3:
-        city, state, country = pieces
-
-    return {
-        'city': city,
-        'state': state,
-        'country': country,
-        }
-
-    
 
 
 
@@ -130,9 +46,6 @@ def load():
     load_goals()
     load_lineups()
 
-
-# These all just apply some very basic formatting 
-# and apply foreign keys.
 
 @transaction.commit_on_success
 def load_positions():
@@ -160,19 +73,21 @@ def load_awards():
     for t in awards:
         competition, name = t
 
-        # Finding because currently using NCAA awards but don't have ncaa standings.
+        # Using find because currently using NCAA awards but don't have ncaa standings.
         competition = Competition.objects.find(competition)
-        # competition = Competition.objects.get(name=competition)
         a = Award.objects.create(competition=competition, name=name)
         award_dict[t] = a
 
     for item in soccer_db.awards.find():
+        item.pop('_id')
+
         item['award'] = award_dict[(item['competition'], item['award'])]
         competition = item['award'].competition
-        # NCAA seasons don't exist.
-        item['season'] = Season.objects.find(competition=competition, name=item['season'])
-        #item['season'] = Season.objects.get(competition=competition, name=item['season'])
+        item.pop('competition')        
 
+        # NCAA seasons don't exist.
+        # Would be good to use get otherwise to ensure we have good data.
+        item['season'] = Season.objects.find(competition=competition, name=item['season'])
 
         model_name = item.pop('model')
         if model_name == 'Bio':
@@ -183,19 +98,8 @@ def load_awards():
             import pdb; pdb.set_trace()
             raise
 
-        try:
-            item['recipient'] = model.objects.find(item['recipient'], create=True)
-        except:
-            import pdb; pdb.set_trace()
-            print item['recipient']
-            continue
-
-        item.pop('competition')        
-        item.pop('_id')
-
+        item['recipient'] = model.objects.find(item['recipient'], create=True)
         AwardItem.objects.create(**item)
-        
-
 
 
 @transaction.commit_on_success
@@ -203,13 +107,10 @@ def load_drafts():
     print "loading drafts"
 
 
-    # Create a set of all possible drafts.
+    # Create the set of drafts.
     drafts = set()
     for pick in soccer_db.drafts.find():
-        try:
-            t = (pick.get('competition'), pick['draft'])
-        except:
-            import pdb; pdb.set_trace()
+        t = (pick.get('competition'), pick['draft'])
         drafts.add(t)
 
 
@@ -219,18 +120,16 @@ def load_drafts():
     for t in drafts:
         competition, name = t
         competition = Competition.objects.find(name=competition)
-
-        real = "USMNT" not in name
-
         d = Draft.objects.create(competition=competition, name=name, real=real)
+
         draft_dict[t] = d
 
     # Create picks
     for pick in soccer_db.drafts.find():
+        pick.pop('_id')
 
         pick['draft'] = draft_dict[(pick.get('competition'), pick['draft'])]
         pick['team'] = Team.objects.find(pick['team'], create=True)
-        pick.pop('_id')
 
         if 'competition' in pick:
             pick.pop('competition')
@@ -239,7 +138,9 @@ def load_drafts():
         text = pick['text']
         if text.lower() == 'pass':
             player = None
-        elif "SuperDraft" in text: # huh?
+
+        # Draft picks were "drafted" in the MLS Allocation Draft.
+        elif "SuperDraft" in text:
             player = None
         else:
             player = Bio.objects.find(text)
@@ -252,7 +153,6 @@ def load_drafts():
 @transaction.commit_on_success
 def load_teams():
     print "loading teams"
-    # Teams is currently empty.
     for team in soccer_db.teams.find():
         team.pop('_id')
         Team.objects.create(**team)
@@ -263,8 +163,7 @@ def load_standings():
     print "loading standings\n"
     for standing in soccer_db.standings.find():
         standing.pop('_id')
-        team_string = standing.pop('name')
-        standing['team'] = Team.objects.find(team_string, create=True)
+        standing['team'] = Team.objects.find(standing['team'], create=True)
         standing['competition'] = Competition.objects.find(standing['competition'])
         standing['season'] = Season.objects.find(standing['season'], standing['competition'])
         Standing.objects.create(**standing)
@@ -273,20 +172,25 @@ def load_standings():
 @transaction.commit_on_success
 def load_bios():
     for bio in soccer_db.bios.find():
+        print "Creating bio for %s" % bio['name']
+        bio.pop('_id')
 
         if not bio['name']:
+            import pdb; pdb.set_trace()
             print "NO BIO: %s" % str(bio)
             continue
 
-        # nationalities should be many-to-many!
-        bio.pop('_id')
-        if 'nationality' in bio:
+        # nationality should be many-to-many
+         if 'nationality' in bio:
             bio.pop('nationality')
-        print "Creating bio for %s" % bio['name']
+
 
 
         bd = {}
-        if 'birthplace' in bio:
+
+        # Set birthplace to a city. 
+        # Skipping this for the time being.
+        if False and 'birthplace' in bio:
             d = get_location(bio['birthplace'])
             if d:
                 bd['birthplace'] = City.objects.find(d)
@@ -305,22 +209,20 @@ def load_games():
     print "loading %s games\n" % soccer_db.games.count()
 
     for game in soccer_db.games.find():
+        game.pop('_id')
 
         game['competition'] = Competition.objects.find(game['competition'])
         game['season'] = Season.objects.find(game['season'], game['competition'])
         game['team1'] = Team.objects.find(game['team1'], create=True)
         game['team2'] = Team.objects.find(game['team2'], create=True)
-        game.pop('_id')
-
 
         for e in 'url', 'home_team', 'year', 'source':
             if e in game:
                 game.pop(e)
 
-        # There are a bunch of problems with the NASL games, 
+        # There are lots of problems with the NASL games, 
         # And probably ASL as well. Need to spend a couple
         # of hours repairing those schedules.
-                
         try:
             Game.objects.create(**game)
         except:
@@ -328,14 +230,10 @@ def load_games():
             #import pdb; pdb.set_trace()
 
 
-            
-
-
 @transaction.commit_on_success
 def load_goals():
-    # Looks like competition is unnecessary here.
-
     print "loading goals\n"
+
     # Use a sql insert here also.
     # Use dicts for team, game, bio.
     teams = Team.objects.team_dict()
@@ -387,6 +285,10 @@ def load_goals():
 
 # Experimental stuff.
 def make_team_getter():
+    """
+    Retrieve teams easily.
+    """
+
     teams = Team.objects.team_dict()
 
     def get_team(team):
@@ -401,6 +303,10 @@ def make_team_getter():
     return get_team
 
 def make_bio_getter():
+    """
+    Retrieve bios easily.
+    """
+
     bios = Bio.objects.bio_dict()
 
     def get_bio(name):
@@ -416,6 +322,9 @@ def make_bio_getter():
 
         
 def make_competition_getter():
+    """
+    Retrieve competitions easily.
+    """
     competitions = Competition.objects.as_dict()
 
     def get_competition(name):
@@ -432,27 +341,26 @@ def make_competition_getter():
     
 @transaction.commit_on_success
 def load_stats():
-    # This takes way too fucking long.
+    # Stats takes forever.
+
     print "\nCreating stats\n"
-    l = []
 
     team_getter = make_team_getter()
     bio_getter = make_bio_getter()
     competition_getter = make_competition_getter()
-    
+
+    l = []    
     for i, stat in enumerate(soccer_db.stats.find(timeout=False)): # no timeout because this query takes forever.
         if i % 1000 == 0:
             print i
 
         if stat['name'] == '':
-            continue
+            import pdb; pdb.set_trace()
 
         team_id = team_getter(stat['team'])
         bio_id = bio_getter(stat['name'])
         competition_id = competition_getter(stat['competition'])
-        #team = Team.objects.find(stat['team'],create=True)
-        #bio = Bio.objects.find(name=stat['name'])
-        #competition = Competition.objects.find(stat['competition'])
+
         # Turn these into dict calls with id's.
         competition = Competition.objects.get(id=competition_id)
         season = Season.objects.find(stat['season'], competition)

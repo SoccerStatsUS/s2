@@ -9,7 +9,7 @@ import datetime
 
 import random
 
-from places.models import City
+#from places.models import City
 
 
 class BioManager(models.Manager):
@@ -83,11 +83,12 @@ class Bio(models.Model):
     height = models.IntegerField(null=True, blank=True)
 
     birthdate = models.DateField(null=True, blank=True)
-    birthplace = models.ForeignKey(City, null=True, blank=True, related_name="birth_set")
+    #birthplace = models.ForeignKey(City, null=True, blank=True, related_name="birth_set")
+    birthplace = models.CharField(max_length=200, unique=True)
 
     deathdate = models.DateField(null=True, blank=True)
-    deathplace = models.ForeignKey(City, null=True, blank=True, related_name="death_set")
-
+    #deathplace = models.ForeignKey(City, null=True, blank=True, related_name="death_set")
+    birthplace = models.CharField(max_length=200, unique=True)
 
 
     height = models.IntegerField(null=True, blank=True)
