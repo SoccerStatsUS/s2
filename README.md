@@ -1,12 +1,6 @@
 
 
-team / league / player timelines would be cool.
-
-Remove alias functionality on this side.
-
-
 Season types:
-
 
 Split these further into Federal Park League and Robison Field League of the St. Louis Soccer League
 First Series
@@ -31,20 +25,6 @@ Spring
 9. Install mongo, leveldb (leveldb sucks; install from source)
 
 
-Install: 
-
-#### Launch
-
-Time to launch the fucking site.
-
-What do I need to do before releasing it?
-
-0. Add celery or some sort of tasks infrastructure. Run build process as a bunch of tasks.
-2. add page caching (where?)
-3. BFS player connections database. Probably not very interesting.
-
-
-
 #### Dependencies
 
 LevelDB
@@ -55,29 +35,28 @@ MongoDB and RabbitMQ have been installed from debs, so add to /etc/apt/sources.l
 deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen
 deb http://www.rabbitmq.com/debian/ testing main
 
+* Why am I using LevelDB? 
+Using it for data caching from scraped pages. Redis (?) was having issues with some of the characters I was using. 
+Would be best to make sure everything is utf-8 on the data side anyway.
+
 ####
 
+
+Nice features: 
+* team / league / player timelines
 Relevant standings on the date page.
-Games played the same day on game detail 
-next, previous game buttons
 Coach, ref, attendance, city, stadium on game detail
-
-
-
-
-
-1. create a stable server associated with a different supervisor (or no supervisor.)
-2. use canvas to create some pitch stuff.
+Use canvas to draw fields?
 
 #### Todo
 
 Create a team ranking system based on the scores.
 
-Need an aliases model?
-
 Migrate to postgresql. SQLite doesn't support unique constraints. Also, this will allow geoDjango support.
 
 # Are a stat and a standing the same thing?
+
+Pretend a standing is a managerial statistic. 
 
 Each one can have:
 
@@ -91,7 +70,7 @@ Stats can obviously not have a player. Team Stats, League Stats,
 
 goals_for can represent either minutes gf or games played gf, whereas w/l/t represent only games played.
 
-Probably need to think about the game stat (stat for one player for one game, or stat for one game or whatever. Just another kind of stat. Can just apply game to stat also...
+Probably need to think about the game stat (stat for one player for one game, or stat for one game or whatever. Just another kind of stat. Can just apply game to stat also.
 
 
 # Homepage
@@ -131,13 +110,6 @@ A friendly would be part of:
 friendly, (that's it)
 
 This would solve the long-lasting MLS open cup / regular season problem.
-
-#### Competitions 
-
-# A competition is simply a name.
-# It could have some other information, like country, or format (round-robin, league)
-# A start and end. (could be figured programatically)
-
 
 #### Soccermetrics
 
