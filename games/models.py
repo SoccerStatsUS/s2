@@ -161,7 +161,7 @@ class Game(models.Model):
 
 
     def color_code(self):
-        return ['red', 'yellow', 'green'][self.completeness]
+        return ['red', 'yellow', 'green'][self.get_completeness()]
 
 
     def score(self):

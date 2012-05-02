@@ -83,15 +83,18 @@ def games_ajax(request):
 
         if 'team' in request.GET:
             t = request.GET['team']
-            games = Game.objects.filter(models.Q(team1__name__icontains=t) | models.Q(team2__name__icontains=t))
+            if t:
+                games = Game.objects.filter(models.Q(team1__name__icontains=t) | models.Q(team2__name__icontains=t))
 
         if 'season' in request.GET:
             e = request.GET['season']
-            games = games.filter(season__name__icontains=e)
+            if e:
+                games = games.filter(season__name__icontains=e)
 
         if 'competition' in request.GET:
             e = request.GET['competition']
-            games = games.filter(competition__name__icontains=e)
+            if e:
+                games = games.filter(competition__name__icontains=e)
 
         if 'count' in request.GET:
             ITEMS_PER_PAGE = request.GET['count']
@@ -107,8 +110,7 @@ def games_ajax(request):
     END = START + ITEMS_PER_PAGE
 
     context = {
-        'gamesx': games[START:END],
-        'games': Game.objects.all()[:100]
+        'games': games[START:END],
         }
 
     return render_to_response("tools/ajax/games.html",
@@ -130,25 +132,29 @@ def stats_ajax(request):
         stats = Stat.objects.all().order_by("-minutes")
         if 'team' in request.GET:
             t = request.GET['team']
-            stats = stats.filter(team__name__icontains=t)
+            if t:
+                stats = stats.filter(team__name__icontains=t)
 
         if 'season' in request.GET:
             e = request.GET['season']
-            stats = stats.filter(season__name__icontains=e)
+            if e:
+                stats = stats.filter(season__name__icontains=e)
 
         if 'name' in request.GET:
             e = request.GET['name']
-            stats = stats.filter(player__name__icontains=e)
+            if e:
+                stats = stats.filter(player__name__icontains=e)
 
         if 'competition' in request.GET:
             e = request.GET['competition']
-            stats = stats.filter(competition__name__icontains=e)
+            if e:
+                stats = stats.filter(competition__name__icontains=e)
 
         if 'count' in request.GET:
             ITEMS_PER_PAGE = request.GET['count']
 
-            if 'page' in request.GET:
-                PAGE = request.GET['page']
+        if 'page' in request.GET:
+            PAGE = request.GET['page']
 
         return stats
 
@@ -193,20 +199,23 @@ def lineups_ajax(request):
 
         if 'on_gte' in request.GET:
             e = request.GET['on_gte']
-            appearances = appearances.filter(competition__on__gte=e)
+            if e:
+                appearances = appearances.filter(competition__on__gte=e)
             
         if 'on_lte' in request.GET:
             e = request.GET['on_lte']
-            appearances = appearances.filter(competition__on__lte=e)
-            appearances = appearances.filter(competition__name__icontains=e)
+            if e:
+                appearances = appearances.filter(competition__on__lte=e)
 
         if 'off_gte' in request.GET:
             e = request.GET['off_gte']
-            appearances = appearances.filter(competition__off__gte=e)
+            if e:
+                appearances = appearances.filter(competition__off__gte=e)
             
         if 'off_lte' in request.GET:
             e = request.GET['off_lte']
-            appearances = appearances.filter(competition__off__lte=e)
+            if e:
+                appearances = appearances.filter(competition__off__lte=e)
 
         if 'count' in request.GET:
             ITEMS_PER_PAGE = request.GET['count']
@@ -244,26 +253,30 @@ def goals_ajax(request):
         goals = Goal.objects.all().order_by("game", "-minute")
         if 'team' in request.GET:
             t = request.GET['team']
-            goals = goals.filter(team__name__icontains=t)
+            if t:
+                goals = goals.filter(team__name__icontains=t)
 
         if 'player' in request.GET:
             e = request.GET['player']
-            goals = goals.filter(player__name__icontains=e)
+            if e:
+                goals = goals.filter(player__name__icontains=e)
 
         if 'minute_lte' in request.GET:
             e = request.GET['minute_lte']
-            goals = goals.filter(minute__lte=e)
+            if e:
+                goals = goals.filter(minute__lte=e)
 
         if 'minute_gte' in request.GET:
             e = request.GET['minute_gte']
-            goals = goals.filter(minute__gte=e)
+            if e:
+                goals = goals.filter(minute__gte=e)
 
 
         if 'count' in request.GET:
             ITEMS_PER_PAGE = request.GET['count']
 
-            if 'page' in request.GET:
-                PAGE = request.GET['page']
+        if 'page' in request.GET:
+            PAGE = request.GET['page']
 
         return goals
 

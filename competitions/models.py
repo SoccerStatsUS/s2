@@ -76,11 +76,6 @@ class Competition(models.Model):
         return self.season_set.all()[index]
 
 
-    def game_completeness(self):
-        """Returns how complete a game's data collection is."""
-
-        return 0
-
 
     def game_completeness_color(self):
         return self.color_code(self.game_completeness)
