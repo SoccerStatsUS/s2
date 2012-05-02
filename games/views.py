@@ -1,5 +1,6 @@
 import datetime
 
+from django.db import models
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
@@ -55,6 +56,8 @@ def game_detail(request, game_id):
     return render_to_response("games/detail.html",
                               context,
                               context_instance=RequestContext(request))
+
+
 
 
 

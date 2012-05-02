@@ -181,7 +181,7 @@ def load_bios():
             continue
 
         # nationality should be many-to-many
-         if 'nationality' in bio:
+        if 'nationality' in bio:
             bio.pop('nationality')
 
 
