@@ -215,6 +215,7 @@ def load_games():
         game['season'] = Season.objects.find(game['season'], game['competition'])
         game['team1'] = Team.objects.find(game['team1'], create=True)
         game['team2'] = Team.objects.find(game['team2'], create=True)
+        game['goals'] = game['team1_score'] + game['team2_score']
 
         for e in 'url', 'home_team', 'year', 'source':
             if e in game:

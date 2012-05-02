@@ -21,7 +21,7 @@ class Appearance(models.Model):
     on = models.CharField(max_length=255)
     off = models.CharField(max_length=255)
 
-    age = models.IntegerField(null=True) # Number of days since birth.
+    age = models.FloatField(null=True) # Age in years at the time of game.
 
     class Meta:
         ordering = ('game', 'on', '-id' )
@@ -75,8 +75,8 @@ class Appearance(models.Model):
         except:
             return None
 
-    def pretty_age(self):
-        return self.age / 365.25
+    def get_age(self):
+        return (self.game.date - self.player.birthdate).days / 365.25
 
 
     

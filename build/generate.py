@@ -7,6 +7,7 @@ from django.db import transaction
 from bios.models import Bio
 from competitions.models import Competition
 from games.models import Game
+from goals.models import Goal
 from lineups.models import Appearance
 from positions.models import Position
 from standings.models import Standing
@@ -30,7 +31,38 @@ def generate():
     generate_competition_standings()
     generate_team_standings()
 
+    generate_appearance_ages()
+    generate_game_data_quality()
+    
+@timer
+@transaction.commit_on_success
+def generate_game_data_quality():
+    """
+    Generate game data quality info.
+    """
+    print "Generating game data quality."
 
+    lineup_games = set([e[0] for e in Appearance.objects.values_list("game")])
+    goal_games = set([e[0] for e in Goal.objects.values_list("game")])
+    
+    for e in Game.objects.all():
+        if e.id in lineup_games:
+            e.completeness = 2
+        elif e.id in goal_games:
+            e.completeness = 1
+        elif e.goals == 0:
+            e.completeness = 1
+        else:
+            e.completeness = 0
+        e.save()
+
+@timer
+@transaction.commit_on_success
+def generate_appearance_ages():
+    print "Generating appearance ages."
+    for appearance in Appearance.objects.exclude(player__birthdate=None):
+        age = appearance.get_age()
+        appearance.save()
 
 @transaction.commit_on_success
 def generate_stats_generic(qs, make_key, update_dict):

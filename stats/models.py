@@ -299,8 +299,7 @@ class Stat(models.Model):
             games = games.filter(id__in=game_ids)
 
 
-    def age(self):
-        # Fix this.
+    def get_age(self):
         if self.player.birthdate:
             return (datetime.date.today() - self.player.birthdate).days / 365.0
         return None

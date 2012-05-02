@@ -120,6 +120,8 @@ class Game(models.Model):
     team2_score = models.IntegerField()
     official_away_score = models.IntegerField(null=True)
 
+    goals = models.IntegerField()
+
     # Minigames were played in MLS, APSL, USL, and probably others.
     minigame = models.BooleanField(default=False)
 
@@ -133,7 +135,12 @@ class Game(models.Model):
     notes = models.TextField()
 
     attendance = models.IntegerField(null=True, blank=True)
-    referee = models.CharField(max_length=255) # Need linesmen also.
+
+
+    attendance = models.IntegerField()
+
+    # Need to split this up. Maybe add referee appearances? linesmen also.
+    referee = models.CharField(max_length=255) 
 
     objects = GameManager()
 
@@ -143,7 +150,7 @@ class Game(models.Model):
         unique_together = [('team1', 'date', 'minigame'), ('team2', 'date', 'minigame')]
 
 
-    def completeness(self):
+    def get_completeness(self):
         """Returns how complete a game's data collection is."""
         if self.appearance_set.exists():
             return 2
@@ -154,7 +161,7 @@ class Game(models.Model):
 
 
     def color_code(self):
-        return ['red', 'yellow', 'green'][self.completeness()]
+        return ['red', 'yellow', 'green'][self.completeness]
 
 
     def score(self):
