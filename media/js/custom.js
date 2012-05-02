@@ -1,6 +1,6 @@
 (function() {
   $(document).ready(function() {
-    var createSortLoader, getLineups, getStats, getTeams, hash, tabs;
+    var createSortLoader, getGames, getGoals, getLineups, getStats, hash, makeAjaxGetter, tabs;
     $("#bio").tablesorter();
     $("#player_chart").tablesorter();
     $("#competition_index").tablesorter();
@@ -17,18 +17,45 @@
         return d.tablesorter();
       };
     };
+    makeAjaxGetter = function(form, target, url) {
+      var getAjax;
+      getAjax = function() {
+        var div, opts, u;
+        div = $(target);
+        if (div.length) {
+          div.html("Loading...");
+          opts = $("#lineup_form").serialize();
+          u = "{#url}?" + opts;
+        }
+        console.log(url);
+        return div.load(url);
+      };
+      return $("#submit_button").click(getAjax);
+    };
     getLineups = function() {
       var div, opts, url;
       div = $("#lineups");
       if (div.length) {
         div.html("Loading...");
         opts = $("#lineup_form").serialize();
-        url = "/lineups/ajax?" + opts;
+        url = "/tools/ajax/lineups?" + opts;
+        console.log(url);
+        return div.load(url);
+      }
+    };
+    getLineups = function() {
+      var div, opts, url;
+      div = $("#lineups");
+      if (div.length) {
+        div.html("Loading...");
+        opts = $("#lineup_form").serialize();
+        url = "/tools/ajax/lineups?" + opts;
         console.log(url);
         return div.load(url);
       }
     };
     $("#submit_button").click(getLineups);
+    getLineups();
     getStats = function() {
       var div, opts, url;
       div = $("#stats");
@@ -36,26 +63,41 @@
         div.html("Loading...");
         opts = $("#stat_form").serialize();
         console.log(opts);
-        url = "/stats/ajax?" + opts;
+        url = "/tools/ajax/stats?" + opts;
         div.load(url);
       }
       return false;
     };
     $("#submit_button").click(getStats);
     getStats();
-    getTeams = function() {
+    getGames = function() {
       var div, opts, url;
-      div = $("#teams");
+      div = $("#games");
       if (div.length) {
         div.html("Loading...");
-        opts = $("#team_form").serialize();
+        opts = $("#game_form").serialize();
         console.log(opts);
-        url = "/teams/ajax?" + opts;
+        url = "/tools/ajax/games?" + opts;
         div.load(url);
       }
       return false;
     };
-    $("#submit_button").click(getTeams);
+    $("#submit_button").click(getGames);
+    getGames();
+    getGoals = function() {
+      var div, opts, url;
+      div = $("#goals");
+      if (div.length) {
+        div.html("Loading...");
+        opts = $("#goal_form").serialize();
+        console.log(opts);
+        url = "/tools/ajax/goals?" + opts;
+        div.load(url);
+      }
+      return false;
+    };
+    $("#submit_button").click(getGoals);
+    getGoals();
     $(".bigboard li").click(function() {
       var slug;
       slug = $(this).attr("slug");

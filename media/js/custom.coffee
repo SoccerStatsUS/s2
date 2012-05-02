@@ -20,17 +20,47 @@ $(document).ready( ->
 
 
 
+  makeAjaxGetter = (form, target, url) ->
+    getAjax = ->
+      div = $(target)
+      if div.length
+        div.html("Loading...")
+        opts = $("#lineup_form").serialize()
+        u = "{#url}?#{opts}"
+      console.log url
+      div.load(url)
+
+    $("#submit_button").click getAjax
+    #  getAjax()
+
+
+  #getLineups = makeAjaxGetter("#lineup_form", "#lineups", "/tools/ajax/lineups")
+  #getStats = makeAjaxGetter("#stat_form", "#stats", "/tools/ajax/stats")
+  #getGames = makeAjaxGetter("#game_form", "#games", "/tools/ajax/games")
+  #getGoals = makeAjaxGetter("#goal_form", "#goals", "/tools/ajax/goals")
+
   # Ajax functionality for stats/lineups/team search.
   getLineups = ->
     div = $("#lineups")
     if div.length
       div.html("Loading...")
       opts = $("#lineup_form").serialize()
-      url = "/lineups/ajax?#{opts}"
+      url = "/tools/ajax/lineups?#{opts}"
+      console.log url
+      div.load(url)
+
+  # Ajax functionality for stats/lineups/team search.
+  getLineups = ->
+    div = $("#lineups")
+    if div.length
+      div.html("Loading...")
+      opts = $("#lineup_form").serialize()
+      url = "/tools/ajax/lineups?#{opts}"
       console.log url
       div.load(url)
 
   $("#submit_button").click getLineups
+  getLineups()
 
   getStats = ->
     div = $("#stats")
@@ -38,24 +68,39 @@ $(document).ready( ->
       div.html("Loading...")
       opts = $("#stat_form").serialize()
       console.log opts
-      url = "/stats/ajax?#{opts}"
+      url = "/tools/ajax/stats?#{opts}"
       div.load(url)
     return false
 
   $("#submit_button").click getStats
   getStats()
 
-  getTeams = ->
-    div = $("#teams")
+
+  getGames = ->
+    div = $("#games")
     if div.length
       div.html("Loading...")
-      opts = $("#team_form").serialize()
+      opts = $("#game_form").serialize()
       console.log opts
-      url = "/teams/ajax?#{opts}"
+      url = "/tools/ajax/games?#{opts}"
       div.load(url)
     return false
 
-  $("#submit_button").click getTeams
+  $("#submit_button").click getGames
+  getGames()
+
+  getGoals = ->
+    div = $("#goals")
+    if div.length
+      div.html("Loading...")
+      opts = $("#goal_form").serialize()
+      console.log opts
+      url = "/tools/ajax/goals?#{opts}"
+      div.load(url)
+    return false
+
+  $("#submit_button").click getGoals
+  getGoals()
 
   # USMNT Big Board functionality.
   $(".bigboard li").click ->
