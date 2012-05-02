@@ -14,14 +14,6 @@
 {% endif %}
 
 
-<ul>
-  {% for year in years %}
-  <li>{{ year }}</li>
-  {% endfor %}
-</ul>
-
-
-
 
 <ul id="tabs"></ul>
 
@@ -32,6 +24,7 @@
 <table>
 {% for game in games %}
 <tr>
+  <td class="{{ game.color_code }}-bg"></td>
   <td><a href="{% url season_detail game.season.competition.slug game.season.slug %}">{{ game.season.competition.abbreviation }}</td>
   <td><a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date }}</a></td>
   <td class="align-right"><a href="{% url team_detail game.team1.slug %}">{{ game.team1 }}</a></td>

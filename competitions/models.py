@@ -51,7 +51,6 @@ class Competition(models.Model):
         return "".join(first_letters)
 
 
-
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
@@ -77,6 +76,18 @@ class Competition(models.Model):
         return self.season_set.all()[index]
 
 
+    def game_completeness(self):
+        """Returns how complete a game's data collection is."""
+
+        return 0
+
+
+    def game_completeness_color(self):
+        return self.color_code(self.game_completeness)
+
+
+    def color_code(self, number):
+        return ['red', 'yellow', 'green'][number]
 
 
 
