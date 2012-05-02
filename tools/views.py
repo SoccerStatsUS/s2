@@ -241,22 +241,23 @@ def goals_ajax(request):
     ITEMS_PER_PAGE = 100
 
     def get_goals(request):
-        goals = Goal.objects.all().order_by("-date", "-minute")
+        goals = Goal.objects.all().order_by("game", "-minute")
         if 'team' in request.GET:
             t = request.GET['team']
             goals = goals.filter(team__name__icontains=t)
 
-        if 'season' in request.GET:
-            e = request.GET['season']
-            goals = goals.filter(season__name__icontains=e)
-
-        if 'name' in request.GET:
-            e = request.GET['name']
+        if 'player' in request.GET:
+            e = request.GET['player']
             goals = goals.filter(player__name__icontains=e)
 
-        if 'competition' in request.GET:
-            e = request.GET['competition']
-            goals = goals.filter(competition__name__icontains=e)
+        if 'minute_lte' in request.GET:
+            e = request.GET['minute_lte']
+            goals = goals.filter(minute__lte=e)
+
+        if 'minute_gte' in request.GET:
+            e = request.GET['minute_gte']
+            goals = goals.filter(minute__gte=e)
+
 
         if 'count' in request.GET:
             ITEMS_PER_PAGE = request.GET['count']

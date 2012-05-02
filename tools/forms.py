@@ -21,10 +21,12 @@ class StatSearchForm(forms.Form):
 class GoalSearchForm(forms.Form):
     
     team = forms.CharField(max_length=100)
-    competition = forms.CharField(max_length=100)
+    player = forms.CharField(max_length=100)
     year = forms.IntegerField()
     minute_lte = forms.IntegerField()
     minute_gte = forms.IntegerField()
+    own_goal = forms.BooleanField()
+    penalty = forms.BooleanField()
     
 
 
