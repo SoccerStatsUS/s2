@@ -162,3 +162,103 @@ def stats_ajax(request):
     
 
 
+
+
+
+@cache_page(60 * 24)
+def lineups_ajax(request):
+    PAGE = 0
+    ITEMS_PER_PAGE = 100
+
+    def get_stats(request):
+        stats = Stat.objects.all().order_by("-minutes")
+        if 'team' in request.GET:
+            t = request.GET['team']
+            stats = stats.filter(team__name__icontains=t)
+
+        if 'season' in request.GET:
+            e = request.GET['season']
+            stats = stats.filter(season__name__icontains=e)
+
+        if 'name' in request.GET:
+            e = request.GET['name']
+            stats = stats.filter(player__name__icontains=e)
+
+        if 'competition' in request.GET:
+            e = request.GET['competition']
+            stats = stats.filter(competition__name__icontains=e)
+
+        if 'count' in request.GET:
+            ITEMS_PER_PAGE = request.GET['count']
+
+            if 'page' in request.GET:
+                PAGE = request.GET['page']
+
+        return stats
+
+    stats = get_stats(request)
+
+    START = PAGE * ITEMS_PER_PAGE
+    END = START + ITEMS_PER_PAGE
+
+    context = {
+        'stats': stats[START:END]
+        }
+
+    return render_to_response("stats/ajax.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+    
+
+
+
+
+
+@cache_page(60 * 24)
+def goals_ajax(request):
+    PAGE = 0
+    ITEMS_PER_PAGE = 100
+
+    def get_stats(request):
+        stats = Stat.objects.all().order_by("-minutes")
+        if 'team' in request.GET:
+            t = request.GET['team']
+            stats = stats.filter(team__name__icontains=t)
+
+        if 'season' in request.GET:
+            e = request.GET['season']
+            stats = stats.filter(season__name__icontains=e)
+
+        if 'name' in request.GET:
+            e = request.GET['name']
+            stats = stats.filter(player__name__icontains=e)
+
+        if 'competition' in request.GET:
+            e = request.GET['competition']
+            stats = stats.filter(competition__name__icontains=e)
+
+        if 'count' in request.GET:
+            ITEMS_PER_PAGE = request.GET['count']
+
+            if 'page' in request.GET:
+                PAGE = request.GET['page']
+
+        return stats
+
+    stats = get_stats(request)
+
+    START = PAGE * ITEMS_PER_PAGE
+    END = START + ITEMS_PER_PAGE
+
+    context = {
+        'stats': stats[START:END]
+        }
+
+    return render_to_response("stats/ajax.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+    
+
+

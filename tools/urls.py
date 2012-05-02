@@ -36,6 +36,16 @@ urlpatterns = patterns('tools.views',
                            name='stats_ajax'),
 
 
+                       url(r'^ajax/goals/$',
+                           'goals_ajax',
+                           name='goals_ajax'),
+
+
+                       url(r'^ajax/lineups/$',
+                           'lineups_ajax',
+                           name='lineups_ajax'),
+
+
 
 
 )
