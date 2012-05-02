@@ -4,10 +4,12 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
+from games.models import Game
 from goals.models import Goal
 from lineups.models import Appearance
+from stats.models import Stat
 
-from tools.forms import GameSearchForm, StatSearchForm
+from tools.forms import GameSearchForm, StatSearchForm, GoalSearchForm, LineupSearchForm
 
 
 
@@ -47,7 +49,9 @@ def stat_search(request):
 
 def goal_search(request):
 
-    context = {}
+    context = {
+        'form': GoalSearchForm(),
+        }
 
     return render_to_response("tools/goals.html",
                               context,
@@ -56,7 +60,9 @@ def goal_search(request):
 
 def lineup_search(request):
 
-    context = {}
+    context = {
+        'form': LineupSearchForm(),
+            }
 
     return render_to_response("tools/lineups.html",
                               context,
@@ -105,7 +111,7 @@ def games_ajax(request):
         'games': Game.objects.all()[:100]
         }
 
-    return render_to_response("games/ajax.html",
+    return render_to_response("tools/ajax/games.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -155,14 +161,11 @@ def stats_ajax(request):
         'stats': stats[START:END]
         }
 
-    return render_to_response("stats/ajax.html",
+    return render_to_response("tools/ajax/stats.html",
                               context,
                               context_instance=RequestContext(request))
 
     
-
-
-
 
 
 @cache_page(60 * 24)
@@ -170,23 +173,40 @@ def lineups_ajax(request):
     PAGE = 0
     ITEMS_PER_PAGE = 100
 
-    def get_stats(request):
-        stats = Stat.objects.all().order_by("-minutes")
+    def get_appearances(request):
+        appearances = Appearance.objects.all().order_by("game")
         if 'team' in request.GET:
             t = request.GET['team']
-            stats = stats.filter(team__name__icontains=t)
+            appearances = appearances.filter(team__name__icontains=t)
 
         if 'season' in request.GET:
             e = request.GET['season']
-            stats = stats.filter(season__name__icontains=e)
+            appearances = appearances.filter(season__name__icontains=e)
 
         if 'name' in request.GET:
             e = request.GET['name']
-            stats = stats.filter(player__name__icontains=e)
+            appearances = appearances.filter(player__name__icontains=e)
 
         if 'competition' in request.GET:
             e = request.GET['competition']
-            stats = stats.filter(competition__name__icontains=e)
+            appearances = appearances.filter(competition__name__icontains=e)
+
+        if 'on_gte' in request.GET:
+            e = request.GET['on_gte']
+            appearances = appearances.filter(competition__on__gte=e)
+            
+        if 'on_lte' in request.GET:
+            e = request.GET['on_lte']
+            appearances = appearances.filter(competition__on__lte=e)
+            appearances = appearances.filter(competition__name__icontains=e)
+
+        if 'off_gte' in request.GET:
+            e = request.GET['off_gte']
+            appearances = appearances.filter(competition__off__gte=e)
+            
+        if 'off_lte' in request.GET:
+            e = request.GET['off_lte']
+            appearances = appearances.filter(competition__off__lte=e)
 
         if 'count' in request.GET:
             ITEMS_PER_PAGE = request.GET['count']
@@ -194,18 +214,18 @@ def lineups_ajax(request):
             if 'page' in request.GET:
                 PAGE = request.GET['page']
 
-        return stats
+        return appearances
 
-    stats = get_stats(request)
+    appearances = get_appearances(request)
 
     START = PAGE * ITEMS_PER_PAGE
     END = START + ITEMS_PER_PAGE
 
     context = {
-        'stats': stats[START:END]
+        'appearances': appearances[START:END]
         }
 
-    return render_to_response("stats/ajax.html",
+    return render_to_response("tools/ajax/lineups.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -220,23 +240,23 @@ def goals_ajax(request):
     PAGE = 0
     ITEMS_PER_PAGE = 100
 
-    def get_stats(request):
-        stats = Stat.objects.all().order_by("-minutes")
+    def get_goals(request):
+        goals = Goal.objects.all().order_by("-date", "-minute")
         if 'team' in request.GET:
             t = request.GET['team']
-            stats = stats.filter(team__name__icontains=t)
+            goals = goals.filter(team__name__icontains=t)
 
         if 'season' in request.GET:
             e = request.GET['season']
-            stats = stats.filter(season__name__icontains=e)
+            goals = goals.filter(season__name__icontains=e)
 
         if 'name' in request.GET:
             e = request.GET['name']
-            stats = stats.filter(player__name__icontains=e)
+            goals = goals.filter(player__name__icontains=e)
 
         if 'competition' in request.GET:
             e = request.GET['competition']
-            stats = stats.filter(competition__name__icontains=e)
+            goals = goals.filter(competition__name__icontains=e)
 
         if 'count' in request.GET:
             ITEMS_PER_PAGE = request.GET['count']
@@ -244,18 +264,18 @@ def goals_ajax(request):
             if 'page' in request.GET:
                 PAGE = request.GET['page']
 
-        return stats
+        return goals
 
-    stats = get_stats(request)
+    goals = get_goals(request)
 
     START = PAGE * ITEMS_PER_PAGE
     END = START + ITEMS_PER_PAGE
 
     context = {
-        'stats': stats[START:END]
+        'goals': goals[START:END]
         }
 
-    return render_to_response("stats/ajax.html",
+    return render_to_response("tools/ajax/goals.html",
                               context,
                               context_instance=RequestContext(request))
 

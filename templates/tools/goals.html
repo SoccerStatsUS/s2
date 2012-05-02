@@ -4,6 +4,13 @@
 
 {% block content %}
 
-<p>You want tools? I got tools.</p>
+<form id="goal_form">
+{{ form.as_ul }}
+
+<input type="submit" value="search" id="submit_button" />
+</form>
+
+<div id="goals">
+</div>
 
 {% endblock %}
