@@ -6,7 +6,7 @@ from django.db import transaction
 
 from bios.models import Bio
 from competitions.models import Competition
-from games.models import Game
+from games.models import Game, GameMinute
 from goals.models import Goal
 from lineups.models import Appearance
 from positions.models import Position
@@ -31,8 +31,30 @@ def generate():
     generate_competition_standings()
     generate_team_standings()
 
-    generate_appearance_ages()
     generate_game_data_quality()
+    generate_game_minutes()
+
+
+@timer
+@transaction.commit_on_success
+def generate_game_minutes():
+    """
+    Generate all game minutes that we can.
+    """
+    print "Generating game minutes"
+
+    l = []
+    for i, e in enumerate(Game.objects.all()):
+        if i % 1000 == 0:
+            print "Making scores for %s" % i
+        
+        l.extend(e.game_scores_by_minute())
+
+    for e in l:
+        if i % 10000 == 0:
+            print "Generating for %s" % i
+        GameMinute.objects.create(**e)
+        
     
 @timer
 @transaction.commit_on_success
@@ -55,14 +77,6 @@ def generate_game_data_quality():
         else:
             e.completeness = 0
         e.save()
-
-@timer
-@transaction.commit_on_success
-def generate_appearance_ages():
-    print "Generating appearance ages."
-    for appearance in Appearance.objects.exclude(player__birthdate=None):
-        age = appearance.get_age()
-        appearance.save()
 
 @transaction.commit_on_success
 def generate_stats_generic(qs, make_key, update_dict):

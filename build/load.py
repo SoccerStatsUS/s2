@@ -20,7 +20,7 @@ from teams.models import Team
 from stats.models import Stat
 from standings.models import Standing
 
-from utils import insert_sql
+from utils import insert_sql, timer
 
 connection = pymongo.Connection()
 soccer_db = connection.soccer
@@ -74,20 +74,30 @@ def load_awards():
         competition, name = t
 
         # Using find because currently using NCAA awards but don't have ncaa standings.
-        competition = Competition.objects.find(competition)
+
+        if competition:
+            competition = Competition.objects.find(competition)
+
         a = Award.objects.create(competition=competition, name=name)
         award_dict[t] = a
+
 
     for item in soccer_db.awards.find():
         item.pop('_id')
 
+        # So we can have a season, a year, both, or neither for an award item
         item['award'] = award_dict[(item['competition'], item['award'])]
+
+
         competition = item['award'].competition
         item.pop('competition')        
 
         # NCAA seasons don't exist.
         # Would be good to use get otherwise to ensure we have good data.
-        item['season'] = Season.objects.find(competition=competition, name=item['season'])
+        if competition:
+            item['season'] = Season.objects.find(competition=competition, name=item['season'])
+
+        
 
         model_name = item.pop('model')
         if model_name == 'Bio':
@@ -356,7 +366,8 @@ def load_stats():
             print i
 
         if stat['name'] == '':
-            import pdb; pdb.set_trace()
+            #import pdb; pdb.set_trace()
+            continue
 
         team_id = team_getter(stat['team'])
         bio_id = bio_getter(stat['name'])
@@ -387,7 +398,7 @@ def load_stats():
     insert_sql("stats_stat", l)
 
 
-
+@timer
 @transaction.commit_on_success
 def load_lineups():
     # Need to do this with raw sql and standard dict management functions.
@@ -427,7 +438,15 @@ def load_lineups():
             player = Bio.objects.find(a['name'])
             players[a['name']] = player
 
-            
+
+        if not game:
+            import pdb; pdb.set_trace()
+
+
+        if game.date and player.birthdate:
+            age = (game.date - player.birthdate).days / 365.25
+        else:
+            age = None
 
         if game:
             return {
@@ -436,6 +455,7 @@ def load_lineups():
                 'player': player,
                 'on': a['on'],
                 'off': a['off'],
+                'age': age,
                 }
 
     # Create the appearance objects.
