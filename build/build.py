@@ -16,8 +16,14 @@ def build():
     load()
     generate()
 
+    rebuild_index()
+
     move()
 
+
+def rebuild_index():
+    from django.core.management import call_command
+    call_command('rebuild_index', interactive=False)
 
 def move():
 
