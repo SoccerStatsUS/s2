@@ -19,6 +19,11 @@ class Standing(models.Model):
 
     division = models.CharField(max_length=255)
 
+    # Standing can be a completed standing or just for a given date.
+    # Gonna try to generate standings by date.
+    final = models.BooleanField(default=True)
+    date = models.DateField(null=True)
+
     games = models.IntegerField()
     wins = models.IntegerField()
     losses = models.IntegerField()
