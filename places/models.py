@@ -85,7 +85,22 @@ class City(models.Model):
 
 class Stadium(models.Model):
     name = models.CharField(max_length=255)
-    city = models.ForeignKey(City, null=True, blank=True)
+
+    #city = models.ForeignKey(City, null=True, blank=True)
+
+    address = models.CharField(max_length=255)
+    location = models.CharField(max_length=255)
+
+
+    opened = models.DateField()
+    year_opened = models.IntegerField()
+
+    closed = models.DateField()
+    year_closed = models.IntegerField()
     
+    architect = models.CharField(max_length=255)
+
+
+    cost = models.DecimalField(max_digits=31, decimal_places=2, null=True)
     
     #location = models.PointField()
