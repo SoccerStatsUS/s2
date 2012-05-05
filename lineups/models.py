@@ -2,7 +2,7 @@ from django.db import models
 
 from bios.models import Bio
 from goals.models import Goal
-from games.models import Game
+from games.models import Game, GameMinute
 from teams.models import Team
 
 from django.db.models.signals import post_save
@@ -75,8 +75,6 @@ class Appearance(models.Model):
         except:
             return None
 
-    def get_age(self):
-        return (self.game.date - self.player.birthdate).days / 365.25
 
 
     
@@ -91,3 +89,24 @@ def set_appearance_age(sender, instance, created, **kwargs):
             
 
 post_save.connect(set_appearance_age, sender=Appearance)
+
+
+"""
+It's possible that we're reaching the point where we should denormalize things and create the different redis stuff.
+Keep the regular database as simple as possible and build the abstractions as extensions?
+"""
+
+
+class AppearanceMinute(object):
+    """
+    Reresents a single minute that a player played.
+    What happened during this minute?
+    Any cool events?
+    """
+
+
+    
+    #appearance = models.ForeignKey(Appearance)
+    #gameMinute = models.ForeignKey(GameMinute)
+    #minute = models.IntegerField()
+    
