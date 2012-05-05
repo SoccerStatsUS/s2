@@ -16,11 +16,11 @@ urlpatterns = patterns('teams.views',
                            name='seasons_dashboard'),
 
 
-                       url(r'^(?P<team_slug>[a-z0-9-]+)/(?P<year>\d+)',
+                       url(r'^(?P<team_slug>[a-z0-9-]+)/(?P<year>\d+)/$',
                            'team_year_detail',
                            name='team_year_detail'),
 
-                       url(r'^(?P<team_slug>[a-z0-9-]+)',
+                       url(r'^(?P<team_slug>[a-z0-9-]+)/$',
                            'team_detail',
                            name='team_detail'),
 
