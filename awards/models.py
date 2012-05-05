@@ -32,9 +32,14 @@ class Award(models.Model):
 
 
 class AwardItem(models.Model):
+    """
+    An individual award, like the 1998 MLS MVP.
+    Can be applied either to a season or a year.
+    """
 
     award = models.ForeignKey(Award)
-    season = models.ForeignKey(Season)
+    season = models.ForeignKey(Season, blank=True, null=True)
+    year = models.IntegerField(blank=True, null=True)
 
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
