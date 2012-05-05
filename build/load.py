@@ -128,7 +128,11 @@ def load_drafts():
     # Would be nice not to create these here.
     draft_dict = {}
     for t in drafts:
+
         competition, name = t
+
+        real = True
+
         competition = Competition.objects.find(name=competition)
         d = Draft.objects.create(competition=competition, name=name, real=real)
 
@@ -440,7 +444,9 @@ def load_lineups():
 
 
         if not game:
-            import pdb; pdb.set_trace()
+            print "Cannot create %s" % a
+            return {}
+
 
 
         if game.date and player.birthdate:

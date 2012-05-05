@@ -14,8 +14,7 @@ from standings.models import Standing
 from stats.models import Stat
 from teams.models import Team
 
-from utils import timer
-
+from utils import insert_sql, timer
 
 def generate():
     """
@@ -32,7 +31,7 @@ def generate():
     generate_team_standings()
 
     generate_game_data_quality()
-    generate_game_minutes()
+    #generate_game_minutes()
 
 
 @timer
@@ -44,16 +43,22 @@ def generate_game_minutes():
     print "Generating game minutes"
 
     l = []
+    print "Creating score for %s games" % Game.objects.count()
     for i, e in enumerate(Game.objects.all()):
         if i % 1000 == 0:
             print "Making scores for %s" % i
         
         l.extend(e.game_scores_by_minute())
 
-    for e in l:
-        if i % 10000 == 0:
-            print "Generating for %s" % i
-        GameMinute.objects.create(**e)
+    # Just want to know how long this takes.
+    @timer
+    def insert_game_minutes():
+        print "Generating %s game minutes" % len(l)
+        insert_sql("games_gameminute", l)
+
+    insert_game_minutes()
+        
+
         
     
 @timer
