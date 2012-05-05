@@ -107,9 +107,7 @@ class Game(models.Model):
     """
     Represents a completed game.
     """
-    # Redesign this to eliminate home/away.
-
-    # Need both a date and a datetime field? Probably.
+    # Need both a date and a datetime field? Not sure.
     date = models.DateField()
     
     team1 = models.ForeignKey(Team, related_name='home_games')
@@ -125,19 +123,19 @@ class Game(models.Model):
     # Minigames were played in MLS, APSL, USL, and probably others.
     minigame = models.BooleanField(default=False)
 
+    minutes = models.IntegerField(default=90)
+
     # This should probably be a many-to-many?
     competition = models.ForeignKey(Competition)
     season = models.ForeignKey(Season)
 
     # Foreign Key
+    stadium = models.ForeignKey(Stadium, null=True)
     location = models.CharField(max_length=255)
 
     notes = models.TextField()
 
     attendance = models.IntegerField(null=True, blank=True)
-
-
-    attendance = models.IntegerField()
 
     # Need to split this up. Maybe add referee appearances? linesmen also.
     referee = models.CharField(max_length=255) 
@@ -439,10 +437,85 @@ class Game(models.Model):
                 
         return [make_item(section) for section in self.game_sections()]
 
+
+
+
+
         
     def __unicode__(self):
         return u"%s: %s v %s" % (self.date, self.team1, self.team2)
 
 
+
+
+
+    def game_scores_by_minute(self):
+        """
+        Generate a list of dicts representing game scores by minute.
+        """
+        # How to apply lineups to this?
+        # Can't generate anything without goal minutes.
+        if self.goals and not self.goal_set.exists():
+            pass
+
+        slices = []
+
+        t1_score = t2_score = 0
+        t1_goals = defaultdict(int)
+        t2_goals = defaultdict(int)
+
+
+        # Create goal dicts.
+        for e in self.goal_set.order_by('minute'):
+            if e.team == self.team1:
+                t1_goals[e.minute] += 1
+            elif e.team == self.team2:
+                t2_goals[e.minute] += 1
+            else:
+                import pdb; pdb.set_trace()
+        
+        # Create GameMinute objects.
+        for minute in range(self.minutes):
+
+            t1_score += t2_goals[minute]
+            t2_score += t1_goals[minute]
+            
+
+            slices.append({
+                    'game_id': self.id,
+                    'minute': minute,
+                    'team1_score': t1_score,
+                    'team2_score': t2_score,
+                    })
+
+        return slices
+
+
+
+
+
+
+
+class GameMinute(models.Model):
+    """
+    Represents a single minute in a single game.
+    """
+    # The smallest measurable unit in a game.
+    # Need to bind a lineup and events to this thing as well.
+
+    game = models.ForeignKey(Game)
+    minute = models.IntegerField()
+    team1_score = models.IntegerField()
+    team2_score = models.IntegerField()
+
+
+    def goals(self):
+        return Goal.objects.filter(game=self.game, minute=self.minute)
+
+    def fouls(self):
+        return Foul.objects.filter(game=self.game, minute=self.minute)
+
+
+    
 
 
