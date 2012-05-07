@@ -1,5 +1,3 @@
-xxx
-
 
 {% load datum_or_none %}
 <table>
@@ -24,7 +22,11 @@ xxx
     <td><a href="{% url game_detail game.id %}">{{ game.score }}</a></td>
     <td><a href="{% url team_detail game.team2.slug %}">{{ game.team2 }}</a></td>
     <td>{{ game.location }}</td>
-    <td>{{ game.referee }}</td>
+    {% if game.referee %}
+    <td><a href="{% url person_detail game.referee.slug %}">{{ game.referee }}</a></td>
+    {% else %}
+    <td></td>
+    {% endif %}
   {% datum_or_grey game.attendance %}
   </tr>
   {% endfor %}

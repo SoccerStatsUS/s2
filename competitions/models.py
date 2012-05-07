@@ -95,6 +95,17 @@ class SeasonManager(models.Manager):
         except:
             return Season.objects.create(name=name, competition=competition)
 
+    def as_dict(self):
+        """
+        Dict mapping names to bio id's.
+        """
+        d = {}
+        for e in self.get_query_set():
+            d[(e.name, e.competition.id)] = e.id
+        return d
+
+
+
 
 class Season(models.Model):
     name = models.CharField(max_length=255)

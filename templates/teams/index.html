@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<ul>
+  {% for letter, standingss in name_dict.items %}
+  {% if standings.exists %}
+  <li>
+    <a href="{% url team_name_fragment letter %}">{{ letter }}</a> -
+    {% for standing in standings %}
+    <a href="{% url team_detail standing.team.slug %}">{{ standing }}</a>,
+    {% endfor %}
+  </li>
+  {% endif %}
+  {% endfor %}
+</ul>
+
+
+
+
+
+{% endblock %}

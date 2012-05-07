@@ -6,12 +6,19 @@
 
 <div id="history_box">
 <h4>On <a href="{% url day_detail today.month today.day %}">{{ today.month }}/{{ today.day }}</a></h4>
+
+
+{% if born %}
 <h5>Born</h5>
 <p><a href="{% url person_detail born.slug %}">{{ born }}</a></p>
+{% endif %}
 
 <h5>Game of the day</h5>
 <p><a href="{% url game_detail game.id %}">{{game }}</a></p>
 </div>
+
+
+{% include "templatetags/games.html" %}
 
 
 {% endblock %}
