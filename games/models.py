@@ -137,8 +137,7 @@ class Game(models.Model):
 
     attendance = models.IntegerField(null=True, blank=True)
 
-    # Need to split this up. Maybe add referee appearances? linesmen also.
-    referee = models.CharField(max_length=255) 
+    referee = models.ForeignKey(Bio, null=True, blank=True)
 
     objects = GameManager()
 
