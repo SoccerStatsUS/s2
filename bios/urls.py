@@ -6,8 +6,8 @@ urlpatterns = patterns('bios.views',
                            name='person_index'),
 
                        url(r'^az/(?P<fragment>.+)/$',
-                           'name_fragment',
-                           name='name_fragment'),
+                           'bio_name_fragment',
+                           name='bio_name_fragment'),
 
                        url(r'^bad/$',
                            'bad_bios',

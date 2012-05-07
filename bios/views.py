@@ -32,7 +32,6 @@ def one_word(request):
 
 @cache_page(60 * 60 * 12)
 def person_index(request):
-    # Change this to something like: http://www.baseball-reference.com/players/
 
     letters = 'abcdefghijklmnopqrstuvwxyz'.upper()
 
@@ -52,7 +51,7 @@ def person_index(request):
 
 
 
-def name_fragment(request, fragment):
+def bio_name_fragment(request, fragment):
     return person_list_generic(request,
                                Bio.objects.filter(name__istartswith=fragment))
 
