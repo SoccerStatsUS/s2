@@ -22,6 +22,8 @@ def build():
 
 
 def rebuild_index():
+
+    print "Rebuilding haystack index."
     from django.core.management import call_command
     call_command('rebuild_index', interactive=False)
 

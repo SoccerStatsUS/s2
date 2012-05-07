@@ -37,7 +37,7 @@ def load():
 
     # Person data
     load_bios()
-    load_awards()
+    #load_awards()
     load_drafts()
     load_positions()
 
@@ -66,6 +66,10 @@ def load_awards():
     awards = set()
     award_dict = {}
 
+
+    competition_getter = make_competition_getter()
+    season_getter = make_season_getter()
+
     for item in soccer_db.awards.find():
         t = (item['competition'], item['award'])
         awards.add(t)
@@ -73,10 +77,13 @@ def load_awards():
     for t in awards:
         competition, name = t
 
+        # Should be able to use a competition_getter here?
         # Using find because currently using NCAA awards but don't have ncaa standings.
 
+
+
         if competition:
-            competition = Competition.objects.find(competition)
+            competitoin = Competition.objects.find(competition)
 
         a = Award.objects.create(competition=competition, name=name)
         award_dict[t] = a
@@ -87,17 +94,14 @@ def load_awards():
 
         # So we can have a season, a year, both, or neither for an award item
         item['award'] = award_dict[(item['competition'], item['award'])]
-
-
-        competition = item['award'].competition
         item.pop('competition')        
 
         # NCAA seasons don't exist.
         # Would be good to use get otherwise to ensure we have good data.
         if competition:
-            item['season'] = Season.objects.find(competition=competition, name=item['season'])
-
-        
+            competition_id = item['award'].competition.id
+            item['season'] = season_getter(item['season'], competition_id)
+            item['season'] = Season.objects.get(id=item['season'])
 
         model_name = item.pop('model')
         if model_name == 'Bio':
@@ -116,6 +120,8 @@ def load_awards():
 def load_drafts():
     print "loading drafts"
 
+    competition_getter = make_competition_getter()
+    team_getter = make_team_getter()
 
     # Create the set of drafts.
     drafts = set()
@@ -125,7 +131,7 @@ def load_drafts():
 
 
     # Map competition, draft name to Draft objects.
-    # Would be nice not to create these here.
+    # Would be nice not to create these here.=
     draft_dict = {}
     for t in drafts:
 
@@ -133,17 +139,21 @@ def load_drafts():
 
         real = True
 
-        competition = Competition.objects.find(name=competition)
+        competition_id = competition_getter(competition)
+        competition = Competition.objects.get(id=competition_id)
         d = Draft.objects.create(competition=competition, name=name, real=real)
 
         draft_dict[t] = d
 
     # Create picks
+    picks = []
     for pick in soccer_db.drafts.find():
         pick.pop('_id')
 
-        pick['draft'] = draft_dict[(pick.get('competition'), pick['draft'])]
-        pick['team'] = Team.objects.find(pick['team'], create=True)
+        # draft, text, player, position, team
+        draft = draft_dict[(pick.get('competition'), pick['draft'])]
+
+        team_id = team_getter(pick['team'])
 
         if 'competition' in pick:
             pick.pop('competition')
@@ -151,16 +161,28 @@ def load_drafts():
         # Set the player reference.
         text = pick['text']
         if text.lower() == 'pass':
-            player = None
+            player_id = None
 
         # Draft picks were "drafted" in the MLS Allocation Draft.
         elif "SuperDraft" in text:
-            player = None
+            player_id = None
         else:
-            player = Bio.objects.find(text)
-        pick['player'] = player
+            player_id = Bio.objects.find(text).id
 
-        Pick.objects.create(**pick)
+        picks.append({
+                'draft_id': draft.id,
+                'player_id': player_id,
+                'team_id': team_id,
+                'text': text,
+                'position': pick['position'],
+                })
+
+    for e in picks:
+        try:
+            Pick.objects.create(**e)
+        except:
+            import pdb; pdb.set_trace()
+    #insert_sql("drafts_pick", picks)
         
         
 
@@ -230,8 +252,13 @@ def load_games():
         game['team1'] = Team.objects.find(game['team1'], create=True)
         game['team2'] = Team.objects.find(game['team2'], create=True)
         game['goals'] = game['team1_score'] + game['team2_score']
+        
+        if game['referee']:
+            game['referee'] = Bio.objects.find(game['referee'])
+        else:
+            game['referee'] = None
 
-        for e in 'url', 'home_team', 'year', 'source':
+        for e in 'url', 'home_team', 'year', 'source', 'sources':
             if e in game:
                 game.pop(e)
 
@@ -342,6 +369,7 @@ def make_competition_getter():
     """
     competitions = Competition.objects.as_dict()
 
+
     def get_competition(name):
         if name in competitions:
             cid = competitions[name]
@@ -353,6 +381,28 @@ def make_competition_getter():
 
     return get_competition
 
+
+def make_season_getter():
+    """
+    Retrieve competitions easily.
+    """
+
+    seasons = Season.objects.as_dict()
+
+    def get_season(name, competition_id):
+        key = (name, competition_id)
+        if key in seasons:
+            sid = seasons[key]
+        else:
+            competition = Competition.objects.get(id=competition_id)
+            sid = Season.objects.find(name, competition).id
+            seasons[key] = sid
+
+        return sid
+
+
+    return get_season
+
     
 @transaction.commit_on_success
 def load_stats():
@@ -363,6 +413,7 @@ def load_stats():
     team_getter = make_team_getter()
     bio_getter = make_bio_getter()
     competition_getter = make_competition_getter()
+    season_getter = make_season_getter()
 
     l = []    
     for i, stat in enumerate(soccer_db.stats.find(timeout=False)): # no timeout because this query takes forever.
@@ -373,19 +424,17 @@ def load_stats():
             #import pdb; pdb.set_trace()
             continue
 
+
         team_id = team_getter(stat['team'])
         bio_id = bio_getter(stat['name'])
         competition_id = competition_getter(stat['competition'])
-
-        # Turn these into dict calls with id's.
-        competition = Competition.objects.get(id=competition_id)
-        season = Season.objects.find(stat['season'], competition)
+        season_id = season_getter(stat['season'], competition_id)
 
         l.append({
             'player_id': bio_id,
             'team_id': team_id,
             'competition_id': competition_id,
-            'season_id': season.id,
+            'season_id': season_id,
             'games_started': stat.get('games_started'),
             'games_played': stat.get('games_played'),
             'minutes': stat.get('minutes'),
@@ -416,6 +465,7 @@ def load_lineups():
     players = {}
     
     def create_appearance(a):
+        print "Creating appearance."
 
         # Setting find functions to memoize should do the same job.
         # Don't create all those extra references if not necessary.
@@ -444,6 +494,7 @@ def load_lineups():
 
 
         if not game:
+            #import pdb; pdb.set_trace()
             print "Cannot create %s" % a
             return {}
 

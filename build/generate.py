@@ -67,7 +67,7 @@ def generate_game_data_quality():
     """
     Generate game data quality info.
     """
-    print "Generating game data quality."
+    print "Quality data for all games."
 
     lineup_games = set([e[0] for e in Appearance.objects.values_list("game")])
     goal_games = set([e[0] for e in Goal.objects.values_list("game")])
