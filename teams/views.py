@@ -1,4 +1,4 @@
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
@@ -10,17 +10,53 @@ from stats.models import Stat
 
 from django.views.decorators.cache import cache_page
 
-def team_index(request):
+def team_list_generic(request, team_list=None):
 
-    context = {
-        'teams': Team.objects.all(),
-        'standings': Standing.objects.filter(competition=None).order_by("-wins")
+    if team_list is None:
+        standings = Standing.objects.filter(competition=None).order_by("-wins")[:1000]
+    else:
+        standings = Standing.objects.filter(competition=None, team__in=team_list)
+
+    context =  {
+        'standings': standings,
         }
-
     return render_to_response("teams/list.html",
                               context,
                               context_instance=RequestContext(request)
-                              )
+                              )    
+
+
+def team_index(request):
+    standings = Standing.objects.filter(competition=None).order_by("-wins")
+    return team_list_generic(request, standings)
+
+def team_name_fragment(request, fragment):
+    return team_list_generic(request,
+                               Team.objects.filter(name__istartswith=fragment))
+
+
+
+@cache_page(60 * 60 * 12)
+def team_index_new(request):
+    
+    letters = 'abcdefghijklmnopqrstuvwxyz'.upper()
+
+    name_dict = OrderedDict()
+
+    for letter in letters:
+        standings = Standing.objects.filter(competition=None, team__name__istartswith=letter).order_by('-wins')[:5]
+        stats = Stat.career_stats.filter(player__name__istartswith=letter)[:5]
+        name_dict[letter] = stats
+
+    context = {
+        'name_dict': name_dict
+        }
+
+    return render_to_response("teams/index.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+
 
 def seasons_dashboard(request):
     season_names = defaultdict(list)
