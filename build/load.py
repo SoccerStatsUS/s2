@@ -14,7 +14,7 @@ from drafts.models import Draft, Pick
 from games.models import Game
 from goals.models import Goal
 from lineups.models import Appearance
-from places.models import City
+from places.models import City, Stadium
 from positions.models import Position
 from teams.models import Team
 from stats.models import Stat
@@ -30,6 +30,7 @@ soccer_db = connection.soccer
 
 def load():
     load_teams()
+    load_stadiums()
 
     # Game data
     load_standings()
@@ -45,6 +46,7 @@ def load():
     load_stats()
     load_goals()
     load_lineups()
+
 
 
 @transaction.commit_on_success
@@ -193,6 +195,26 @@ def load_teams():
         team.pop('_id')
         Team.objects.create(**team)
 
+@transaction.commit_on_success
+def load_stadiums():
+    print "loading stadiums"
+    for stadium in soccer_db.stadiums.find():
+        stadium.pop('_id')
+        if 'renovations' in stadium:
+            stadium.pop('renovations')
+        if 'source' in stadium:
+            stadium.pop('source')
+        
+        if stadium['architect']:
+            stadium['architect'] = Bio.objects.find(stadium['architect'])
+
+        try:
+            Stadium.objects.create(**stadium)
+        except:
+            import pdb; pdb.set_trace()
+        x = 5
+
+
 
 @transaction.commit_on_success
 def load_standings():
@@ -247,6 +269,9 @@ def load_games():
     for game in soccer_db.games.find():
         game.pop('_id')
 
+        if game.get('stadium'):
+            game['stadium'] = Stadium.objects.get(name=game['stadium'])
+        
         game['competition'] = Competition.objects.find(game['competition'])
         game['season'] = Season.objects.find(game['season'], game['competition'])
         game['team1'] = Team.objects.find(game['team1'], create=True)
@@ -270,6 +295,8 @@ def load_games():
         except:
             print "Skipping game %s" % game
             #import pdb; pdb.set_trace()
+
+        x = 5
 
 
 @transaction.commit_on_success
@@ -465,7 +492,6 @@ def load_lineups():
     players = {}
     
     def create_appearance(a):
-        print "Creating appearance."
 
         # Setting find functions to memoize should do the same job.
         # Don't create all those extra references if not necessary.

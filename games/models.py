@@ -111,11 +111,13 @@ class Game(models.Model):
     date = models.DateField()
     
     team1 = models.ForeignKey(Team, related_name='home_games')
+    team1_original_name = models.CharField(max_length=255)
+    team2 = models.ForeignKey(Team, related_name='away_games')
+    team2_original_name = models.CharField(max_length=255)
+
     team1_score = models.IntegerField()
     official_home_score = models.IntegerField(null=True)
-
-    team2 = models.ForeignKey(Team, related_name='away_games')
-    team2_score = models.IntegerField()
+    team2_score = models.IntegerField()    
     official_away_score = models.IntegerField(null=True)
 
     goals = models.IntegerField()

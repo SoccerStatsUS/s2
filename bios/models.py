@@ -9,7 +9,7 @@ import datetime
 
 import random
 
-#from places.models import City
+
 
 
 class BioManager(models.Manager):
@@ -230,7 +230,6 @@ class Bio(models.Model):
     def calculate_standings(self):
         """
         Generate standings for a given player.
-        
         """
         from stats.models import Stat
 

@@ -1,6 +1,8 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 
+from bios.models import Bio
+
 
 class CountryManager(models.Manager):
 
@@ -85,22 +87,30 @@ class City(models.Model):
 
 class Stadium(models.Model):
     name = models.CharField(max_length=255)
+    short_name = models.CharField(max_length=255)
 
     #city = models.ForeignKey(City, null=True, blank=True)
 
     address = models.CharField(max_length=255)
     location = models.CharField(max_length=255)
 
+    opened = models.DateField(null=True)
+    year_opened = models.IntegerField(null=True)
 
-    opened = models.DateField()
-    year_opened = models.IntegerField()
-
-    closed = models.DateField()
-    year_closed = models.IntegerField()
+    closed = models.DateField(null=True)
+    year_closed = models.IntegerField(null=True)
     
-    architect = models.CharField(max_length=255)
+    architect = models.ForeignKey(Bio, null=True)
 
+    capacity = models.IntegerField(null=True)
+
+    width = models.CharField(max_length=255)
+    length = models.CharField(max_length=255)
+    measure = models.CharField(max_length=255)
 
     cost = models.DecimalField(max_digits=31, decimal_places=2, null=True)
+    denomination = models.CharField(max_length=255)
+
+    notes = models.CharField(max_length=255)
     
     #location = models.PointField()

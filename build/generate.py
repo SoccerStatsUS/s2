@@ -34,32 +34,6 @@ def generate():
     #generate_game_minutes()
 
 
-@timer
-@transaction.commit_on_success
-def generate_game_minutes():
-    """
-    Generate all game minutes that we can.
-    """
-    print "Generating game minutes"
-
-    l = []
-    print "Creating score for %s games" % Game.objects.count()
-    for i, e in enumerate(Game.objects.all()):
-        if i % 1000 == 0:
-            print "Making scores for %s" % i
-        
-        l.extend(e.game_scores_by_minute())
-
-    # Just want to know how long this takes.
-    @timer
-    def insert_game_minutes():
-        print "Generating %s game minutes" % len(l)
-        insert_sql("games_gameminute", l)
-
-    insert_game_minutes()
-        
-
-        
     
 @timer
 @transaction.commit_on_success
@@ -245,12 +219,10 @@ def generate_player_standings():
         if i % 1000 == 0:
             print i
 
-
-
-    
-        
-
 def generate_plus_minus(appearance_qs):
+    """
+    Generate the +/- for a given queryset.
+    """
 
     print "Generating plus_minus"
     d = defaultdict(int)
@@ -282,11 +254,41 @@ def generate_career_plus_minus():
         s = career_stat_dict[k]
         s.plus_minus = v
         s.save()
+
+
+@timer
+@transaction.commit_on_success
+def generate_game_minutes():
+    """
+    Generate all game minutes that we can.
+    """
+    print "Generating game minutes"
+
+    l = []
+    print "Creating score for %s games" % Game.objects.count()
+    for i, e in enumerate(Game.objects.all()):
+        if i % 1000 == 0:
+            print "Making scores for %s" % i
+        
+        l.extend(e.game_scores_by_minute())
+
+    # Just want to know how long this takes.
+    @timer
+    def insert_game_minutes():
+        print "Generating %s game minutes" % len(l)
+        insert_sql("games_gameminute", l)
+
+    insert_game_minutes()
+        
+
+        
         
     
             
                         
 if __name__ == "__main__":
     generate_team_standings()
+
+
 
 

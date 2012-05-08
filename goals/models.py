@@ -28,6 +28,8 @@ class Goal(models.Model):
     date = models.DateField() # This shouldn't be here. Game can tell us the date.
     minute = models.IntegerField(null=True)
     team = models.ForeignKey(Team)
+    team_original_name = models.CharField(max_length=255)
+    
     player = models.ForeignKey(Bio)
     game = models.ForeignKey(Game, null=True)
 
