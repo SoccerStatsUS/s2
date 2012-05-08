@@ -366,8 +366,6 @@ def load_bios():
         if 'nationality' in bio:
             bio.pop('nationality')
 
-
-
         bd = {}
 
         # Set birthplace to a city. 
@@ -379,7 +377,7 @@ def load_bios():
             else:
                 bd['birthplace'] = None
 
-        for key in 'name', 'height', 'birthdate', 'height', 'weight':
+        for key in 'name', 'height', 'birthdate', 'height', 'weight', 'hall_of_fame':
             if key in bio:
                 bd[key] = bio[key] or None
 
