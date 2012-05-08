@@ -6,6 +6,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'build_settings'
 
 from django.db import transaction
 from django.db.utils import IntegrityError
+from django.template.defaultfilters import slugify
 
 from awards.models import Award, AwardItem
 from bios.models import Bio
@@ -26,6 +27,126 @@ connection = pymongo.Connection()
 soccer_db = connection.soccer
 
 
+# These probably need to be in load_utils or something.
+# This isn't the place.
+def make_team_getter():
+    """
+    Retrieve teams easily.
+    """
+
+    teams = Team.objects.team_dict()
+
+    def get_team(team):
+        if team in teams:
+            team_id = teams[team]
+        else:
+            team_id = Team.objects.find(team, create=True).id
+            teams[team] = team_id
+
+        return team_id
+
+    return get_team
+
+def make_bio_getter():
+    """
+    Retrieve bios easily.
+    """
+
+    bios = Bio.objects.bio_dict()
+
+    def get_bio(name):
+        if name in bios:
+            bio_id = bios[name]
+        else:
+            bio_id = Bio.objects.find(name).id
+            bios[name] = bio_id
+
+        return bio_id
+
+    return get_bio
+
+
+def make_stadium_getter():
+    """
+    Retrieve bios easily.
+    """
+
+    stadiums = Stadium.objects.as_dict()
+
+    def getter(name):
+        if name in stadiums:
+            sid = stadiums[name]
+        else:
+            sid = Stadium.objects.find(name).id
+            stadiums[name] = sid
+        return sid
+
+    return getter
+
+        
+def make_competition_getter():
+    """
+    Retrieve competitions easily.
+    """
+    competitions = Competition.objects.as_dict()
+
+
+    def get_competition(name):
+        if name in competitions:
+            cid = competitions[name]
+        else:
+            cid = Competition.objects.find(name).id
+            competitions[name] = cid
+
+        return cid
+
+    return get_competition
+
+
+def make_season_getter():
+    """
+    Retrieve competitions easily.
+    """
+
+    seasons = Season.objects.as_dict()
+
+    def get_season(name, competition_id):
+        key = (name, competition_id)
+        if key in seasons:
+            sid = seasons[key]
+        else:
+            competition = Competition.objects.get(id=competition_id)
+            sid = Season.objects.find(name, competition).id
+            seasons[key] = sid
+
+        return sid
+
+
+    return get_season
+
+
+
+
+def make_game_getter():
+    """
+    Retrieve competitions easily.
+    """
+
+    game_team_map = Game.objects.game_dict()
+
+    def getter(team_id, dt):
+        # Not doing full game times yet...
+        dx = datetime.date(dt.year, dt.month, dt.day) # Avoid datetime.date/datetime.datetime mismatch.
+        key = (team_id, dx)
+        if key in game_team_map:
+            gid = game_team_map[key]
+        else:
+            print "Failed to find for %s, %s" % (team_id, dx)
+            gid = None
+        
+        return gid
+
+    return getter
 
 
 def load():
@@ -200,6 +321,9 @@ def load_stadiums():
     print "loading stadiums"
     for stadium in soccer_db.stadiums.find():
         stadium.pop('_id')
+        stadium['slug'] = slugify(stadium['name'])
+
+        
         if 'renovations' in stadium:
             stadium.pop('renovations')
         if 'source' in stadium:
@@ -266,16 +390,28 @@ def load_bios():
 def load_games():
     print "loading %s games\n" % soccer_db.games.count()
 
+    stadium_getter = make_stadium_getter()
+    team_getter = make_team_getter()
+    competition_getter = make_competition_getter()    
+
+
     for game in soccer_db.games.find():
         game.pop('_id')
 
         if game.get('stadium'):
-            game['stadium'] = Stadium.objects.get(name=game['stadium'])
+            game['stadium'] = stadium_getter(game['stadium'])
+            game['stadium'] = Stadium.objects.get(id=game['stadium'])
         
-        game['competition'] = Competition.objects.find(game['competition'])
+        game['competition'] = competition_getter(game['competition'])
+        game['competition'] = Competition.objects.get(id=game['competition'])
         game['season'] = Season.objects.find(game['season'], game['competition'])
-        game['team1'] = Team.objects.find(game['team1'], create=True)
-        game['team2'] = Team.objects.find(game['team2'], create=True)
+
+
+
+        game['team1'] = team_getter(game['team1'])
+        game['team1'] = Team.objects.get(id=game['team1'])
+        game['team2'] = team_getter(game['team2'])
+        game['team2'] = Team.objects.get(id=game['team2'])        
         game['goals'] = game['team1_score'] + game['team2_score']
         
         if game['referee']:
@@ -308,11 +444,17 @@ def load_goals():
     teams = Team.objects.team_dict()
     games = Game.objects.game_dict()
     bios = Bio.objects.bio_dict()
+    stadium_getter = make_stadium_getter()
 
 
     l = []
 
     def create_goal(goal):
+        if goal.get('stadium'):
+            goal['stadium'] = stadium_getter(goal['stadium'])
+
+
+        
         team = goal['team']
         if team in teams:
             team_id = teams[team]
@@ -351,84 +493,6 @@ def load_goals():
         if g:
             Goal.objects.create(**g)
 
-
-# Experimental stuff.
-def make_team_getter():
-    """
-    Retrieve teams easily.
-    """
-
-    teams = Team.objects.team_dict()
-
-    def get_team(team):
-        if team in teams:
-            team_id = teams[team]
-        else:
-            team_id = Team.objects.find(team, create=True).id
-            teams[team] = team_id
-
-        return team_id
-
-    return get_team
-
-def make_bio_getter():
-    """
-    Retrieve bios easily.
-    """
-
-    bios = Bio.objects.bio_dict()
-
-    def get_bio(name):
-        if name in bios:
-            bio_id = bios[name]
-        else:
-            bio_id = Bio.objects.find(name).id
-            bios[name] = bio_id
-
-        return bio_id
-
-    return get_bio
-
-        
-def make_competition_getter():
-    """
-    Retrieve competitions easily.
-    """
-    competitions = Competition.objects.as_dict()
-
-
-    def get_competition(name):
-        if name in competitions:
-            cid = competitions[name]
-        else:
-            cid = Competition.objects.find(name).id
-            competitions[name] = cid
-
-        return cid
-
-    return get_competition
-
-
-def make_season_getter():
-    """
-    Retrieve competitions easily.
-    """
-
-    seasons = Season.objects.as_dict()
-
-    def get_season(name, competition_id):
-        key = (name, competition_id)
-        if key in seasons:
-            sid = seasons[key]
-        else:
-            competition = Competition.objects.get(id=competition_id)
-            sid = Season.objects.find(name, competition).id
-            seasons[key] = sid
-
-        return sid
-
-
-    return get_season
 
     
 @transaction.commit_on_success
@@ -486,10 +550,11 @@ def load_lineups():
     from django.db import connection
 
 
+    team_getter = make_team_getter()
+    bio_getter = make_bio_getter()
+    game_getter = make_game_getter()
 
-    teams = {}
     games = {}
-    players = {}
     
     def create_appearance(a):
 
@@ -499,47 +564,31 @@ def load_lineups():
             print a
             return None
 
-        if a['team'] in teams:
-            team = teams[a['team']]
-        else:
-            team = Team.objects.find(a['team'], create=True)
-            teams[a['team']] = team
+        team_id = team_getter(a['team'])
+        player_id = bio_getter(a['name'])
+        game_id = game_getter(team_id, a['date'])
 
-        t = (team, a['date'])
-        if t in games:
-            game = games[t]
-        else:
-            game = Game.objects.find(team=team, date=a['date'])
-            games[t] = game
-                 
-        if a['name'] in players:
-            player = players[a['name']]
-        else:
-            player = Bio.objects.find(a['name'])
-            players[a['name']] = player
-
-
-        if not game:
-            #import pdb; pdb.set_trace()
+        if not game_id:
             print "Cannot create %s" % a
             return {}
 
 
-
+        """
         if game.date and player.birthdate:
             age = (game.date - player.birthdate).days / 365.25
         else:
             age = None
+        """
 
-        if game:
-            return {
-                'team': team,
-                'game': game,
-                'player': player,
-                'on': a['on'],
-                'off': a['off'],
-                'age': age,
-                }
+        return {
+            'team_id': team_id,
+            'game_id': game_id,
+            'player_id': player_id,
+            'on': a['on'],
+            'off': a['off'],
+            'team_original_name': '',
+            #'age': age,
+            }
 
     # Create the appearance objects.
     l = []
@@ -551,12 +600,10 @@ def load_lineups():
         if i % 5000 == 0:
             print i
 
-    print "Creating appearances" # acutal objects.
+    print "Creating appearances"
+
     for e in l:
-        Appearance.objects.create(**e)
-
-    #insert_sql("lineups_appearance", l)
-        
-        
-
-        
+        try:
+            insert_sql("lineups_appearance", [e])
+        except:
+            import pdb; pdb.set_trace()

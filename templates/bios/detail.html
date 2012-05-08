@@ -33,7 +33,6 @@
 
 <div id="tab_wrapper">
 
-
 {% if bio.season_stats.exists %}
 <div tab="stats">
 
@@ -59,6 +58,14 @@
 {% include "templatetags/appearance.html" with appearances=bio.appearance_set.all %}
 </div>
 {% endif %}
+
+{% if bio.games_refereed.all %}
+<div tab="referee">
+{% include "templatetags/games.html" with games=bio.games_refereed.all %}
+</div>
+{% endif %}
+
+
 
 {% if bio.awards.exists %}
 <div tab="awards">

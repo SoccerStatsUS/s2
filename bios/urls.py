@@ -18,7 +18,7 @@ urlpatterns = patterns('bios.views',
                            name='one_word'),
                        
 
-                       url(r'^(?P<slug>[a-z0-9-]+)',
+                       url(r'^(?P<slug>[a-z0-9-]+)/$',
                            'person_detail',
                            name='person_detail'),
 

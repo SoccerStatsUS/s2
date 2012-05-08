@@ -3,14 +3,21 @@
 
 {% block content %}
 
+
 <div id="game_score">
 
   <h4>
     <a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date }}</a>
     -
     <a href="{% url competition_detail game.competition.slug %}">{{ game.competition }}</a>,
-    <a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.season.name }}</a>
+    <a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.season.name }} season</a>
   </h4>
+
+  {% if game.stadium %}
+  <h4><a href="{% url stadium_detail game.stadium.slug %}">{{ game.stadium }}</a></h4>
+  {% else %}
+  <h4>{{ game.location }}</h4>
+  {% endif %}
 
 
   <div class="team_data">
