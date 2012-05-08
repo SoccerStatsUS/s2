@@ -4,7 +4,7 @@ from django.views.decorators.cache import cache_page
 
 from competitions.models import Competition
 from bios.models import Bio
-from places.models import Country, City, State
+from places.models import Country, City, State, Stadium
 
 
 def country_index(request):
@@ -61,6 +61,20 @@ def city_detail(request, cid):
                 }
 
         return render_to_response("places/city_detail.html",
+                                  context,
+                                  context_instance=RequestContext(request))
+
+        
+
+
+def stadium_detail(request, slug):
+        stadium = get_object_or_404(Stadium, slug=slug)
+
+        context = {
+                'stadium': stadium,
+                }
+
+        return render_to_response("places/stadium_detail.html",
                                   context,
                                   context_instance=RequestContext(request))
 

@@ -23,5 +23,9 @@ urlpatterns = patterns('places.views',
                            'city_detail',
                            name='city_detail'),
 
+                       url(r'^stadium/(?P<slug>[a-z0-9-]+)/$',                       
+                           'stadium_detail',
+                           name='stadium_detail'),
+
 
 )

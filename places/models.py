@@ -84,9 +84,39 @@ class City(models.Model):
 
 
 
+class StadiumManager(models.Manager):
+
+    def as_dict(self):
+        """
+        Dict mapping names to stadium id's.
+        """
+        d = {}
+        for e in self.get_query_set():
+            d[e.name] = e.id
+        return d
+
+
+    def find(self, name, create=True):
+        """
+        Given a team name, determine the actual team.
+        """
+        # Not here?
+        if name == '':
+            import pdb; pdb.set_trace()
+        
+        stadiums = Stadium.objects.filter(name=name)
+        if stadiums:
+            return stadiums[0]
+        else:
+            return Stadium.objects.create(name=name)
+
+
+
 
 class Stadium(models.Model):
     name = models.CharField(max_length=255)
+    slug = models.SlugField(unique=False)
+    
     short_name = models.CharField(max_length=255)
 
     #city = models.ForeignKey(City, null=True, blank=True)
@@ -114,3 +144,7 @@ class Stadium(models.Model):
     notes = models.CharField(max_length=255)
     
     #location = models.PointField()
+    objects = StadiumManager()    
+
+    def __unicode__(self):
+        return self.name

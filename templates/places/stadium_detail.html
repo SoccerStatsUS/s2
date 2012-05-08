@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>{{ stadium.name }}</h3>
+<h4>{{ stadium.city }}</h4>
+
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+{% if stadium.game_set.exists %}
+<div tab="games">
+{% include "templatetags/games.html" with games=stadium.game_set.all %}
+</div>
+{% endif %}
+
+  
+{% if stadium.goal_set.exists %}
+<div tab="goals">
+{% include "templatetags/goals.html" with goals=stadium.goal_set.all %}
+</div>
+{% endif %}
+
+{% if stadium.appearance_set.exists %}
+<div tab="lineups">
+{% include "templatetags/appearance.html" with appearances=stadium.appearance_set.all %}
+</div>
+{% endif %}
+
+
+</div>
+
+{% endblock %}
