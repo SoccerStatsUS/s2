@@ -3,13 +3,14 @@
 
 {% block content %}
 
+
 <ul>
-  {% for letter, standingss in name_dict.items %}
+  {% for letter, standings in name_dict.items %}
   {% if standings.exists %}
   <li>
-    <a href="{% url team_name_fragment letter %}">{{ letter }}</a> -
+    <a href="{% url team_name_fragment letter %}">{{ letter }}</a>:
     {% for standing in standings %}
-    <a href="{% url team_detail standing.team.slug %}">{{ standing }}</a>,
+    <a href="{% url team_detail standing.team.slug %}">{{ standing.team }}</a>,
     {% endfor %}
   </li>
   {% endif %}

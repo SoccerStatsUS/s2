@@ -6,10 +6,6 @@ urlpatterns = patterns('teams.views',
                            'team_index',
                            name='team_index'),
 
-                       url(r'^new/$',
-                           'team_index_new',
-                           name='team_index_new'),
-
                        url(r'^az/(?P<fragment>.+)/$',
                            'team_name_fragment',
                            name='team_name_fragment'),

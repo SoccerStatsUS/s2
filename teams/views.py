@@ -10,6 +10,31 @@ from stats.models import Stat
 
 from django.views.decorators.cache import cache_page
 
+
+def team_index_new(request):
+    """
+    Teams shown by letter.
+    """
+    
+    letters = 'abcdefghijklmnopqrstuvwxyz'.upper()
+
+    name_dict = OrderedDict()
+
+    for letter in letters:
+        standings = Standing.objects.filter(competition=None, team__name__istartswith=letter).order_by('-wins')[:5]
+        name_dict[letter] = standings
+
+    context = {
+        'name_dict': name_dict
+        }
+
+    return render_to_response("teams/index.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+
+
+
 def team_list_generic(request, team_list=None):
 
     if team_list is None:
@@ -26,9 +51,6 @@ def team_list_generic(request, team_list=None):
                               )    
 
 
-def team_index(request):
-    standings = Standing.objects.filter(competition=None).order_by("-wins")
-    return team_list_generic(request, standings)
 
 def team_name_fragment(request, fragment):
     return team_list_generic(request,
@@ -36,25 +58,6 @@ def team_name_fragment(request, fragment):
 
 
 
-@cache_page(60 * 60 * 12)
-def team_index_new(request):
-    
-    letters = 'abcdefghijklmnopqrstuvwxyz'.upper()
-
-    name_dict = OrderedDict()
-
-    for letter in letters:
-        standings = Standing.objects.filter(competition=None, team__name__istartswith=letter).order_by('-wins')[:5]
-        stats = Stat.career_stats.filter(player__name__istartswith=letter)[:5]
-        name_dict[letter] = stats
-
-    context = {
-        'name_dict': name_dict
-        }
-
-    return render_to_response("teams/index.html",
-                              context,
-                              context_instance=RequestContext(request))
 
 
 
