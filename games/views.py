@@ -40,6 +40,10 @@ def bad_games(request):
 
 def games_index(request):
     # Add a paginator.
+    # This is probably unnecesary.
+    # Consider turning into a games analysis page.
+    # Home/Away advantage, graphs, etc.
+    
     games = Game.objects.order_by("-date")[:50]
     context = {
         'games': games,

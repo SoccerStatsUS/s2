@@ -377,9 +377,11 @@ def load_bios():
             else:
                 bd['birthplace'] = None
 
-        for key in 'name', 'height', 'birthdate', 'height', 'weight', 'hall_of_fame':
+        for key in 'name', 'height', 'birthdate', 'height', 'weight':
             if key in bio:
                 bd[key] = bio[key] or None
+
+        bd['hall_of_fame'] = bio.get('hall_of_fame', False)
 
         Bio.objects.create(**bd)
 

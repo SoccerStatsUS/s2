@@ -11,7 +11,7 @@ from stats.models import Stat
 from django.views.decorators.cache import cache_page
 
 
-def team_index_new(request):
+def team_index(request):
     """
     Teams shown by letter.
     """
