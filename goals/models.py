@@ -14,10 +14,13 @@ class GoalManager(models.Manager):
         Returns a list of goal counts by minute.
         [{1: 91, 2: 30, ...}]
         """
+        minutes = [e[0] for e in Goal.objects.values_list('minute')]
+        
         d = defaultdict(int)
-        for goal in Goal.objects.all():
-            d[goal.minute] += 1
+        for minute in minutes:
+            d[minute] += 1
         return d
+
         
 
 class Goal(models.Model):

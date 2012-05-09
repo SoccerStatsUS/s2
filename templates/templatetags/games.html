@@ -23,7 +23,11 @@
     <td><a href="{% url team_detail game.team2.slug %}">{{ game.team2_original_name }}</a></td>
 
     {% if game.stadium %}
+    {% if game.stadium.slug %}
     <td><a href="{% url stadium_detail game.stadium.slug %}">{{ game.stadium }}</a></td>
+    {% else %}
+    <td>{{ game.stadium }}</td>
+    {% endif %}
     {% else %}
     <td>{{ game.location }}</td>
     {% endif %}

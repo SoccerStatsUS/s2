@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<p>Total goals: {{ goal_count }}</p>
+
+
+<table>
+
+  <tr>
+    <td>min</td>
+    <td>#</td>
+  </tr>
+
+  {% for minute, goals in goal_minutes %}
+  <tr>
+    <td>{{ minute }}</td>
+    <td>{{ goals }}</td>
+  </tr>
+  {% endfor %}
+
+</table>
+
+{% endblock %}

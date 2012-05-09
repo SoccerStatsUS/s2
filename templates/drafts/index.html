@@ -5,7 +5,6 @@
 <table>
   <tr>
     <th>competition</th>
-    <th>date</th>
     <th>name</th>
   </tr>
   
@@ -16,7 +15,6 @@
     {% else %}
     <td></td>
     {% endif %}
-    <td>{{ draft.date }}</td>
     <td><a href="{% url draft_detail draft.competition.slug draft.slug %}">{{ draft.name }}</a></td>
   </tr>
 {% endfor %}
