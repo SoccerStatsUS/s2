@@ -8,6 +8,9 @@ from places.models import Country, City, State, Stadium
 
 
 def country_index(request):
+        """
+        """
+
         context = {
                 'countries': Country.objects.all(),
                 }
@@ -18,6 +21,8 @@ def country_index(request):
 
 
 def state_index(request):
+        """
+        """
 
         context = {
                 'states': State.objects.all(),
@@ -29,6 +34,9 @@ def state_index(request):
 
 
 def country_detail(request, slug):
+        """
+        """
+
         country = get_object_or_404(Country, slug=slug)
         
         context = {
@@ -40,6 +48,9 @@ def country_detail(request, slug):
 
 
 def state_detail(request, sid):
+        """
+        """
+
         state = get_object_or_404(State, id=sid)
         bios = Bio.objects.filter(birthplace__state=state)
         
@@ -54,6 +65,9 @@ def state_detail(request, sid):
 
 
 def city_detail(request, cid):
+        """
+        """
+
         city = get_object_or_404(City, id=cid)
 
         context = {
@@ -66,8 +80,23 @@ def city_detail(request, cid):
 
         
 
+def stadium_index(request):
+
+        context = {
+                'stadiums': Stadium.objects.all(),
+                }
+
+        return render_to_response("places/stadium_index.html",
+                                  context,
+                                  context_instance=RequestContext(request))
+
+
+
 
 def stadium_detail(request, slug):
+        """
+        """
+
         stadium = get_object_or_404(Stadium, slug=slug)
 
         context = {
