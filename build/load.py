@@ -15,6 +15,7 @@ from drafts.models import Draft, Pick
 from games.models import Game
 from goals.models import Goal
 from lineups.models import Appearance
+from news.models import NewsSource
 from places.models import City, Stadium
 from positions.models import Position
 from teams.models import Team
@@ -150,6 +151,8 @@ def make_game_getter():
 
 
 def load():
+
+    load_news()
     load_teams()
     load_stadiums()
 
@@ -308,6 +311,12 @@ def load_drafts():
     #insert_sql("drafts_pick", picks)
         
         
+@transaction.commit_on_success
+def load_news():
+    print "loading news"
+    for e in soccer_db.news.find():
+        e.pop('_id')
+        NewsSource.objects.create(**e)
 
 @transaction.commit_on_success
 def load_teams():

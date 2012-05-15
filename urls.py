@@ -37,10 +37,11 @@ urlpatterns = patterns('',
                        url(r'^goals/', include('goals.urls')),
                        url(r'^graphs/', include('graphs.urls')),
                        url(r'^lineups/', include('lineups.urls')),
+                       url(r'^news/', include('news.urls')),
                        url(r'^places/', include('places.urls')),
-                       url(r'^teams/', include('teams.urls')),
                        url(r'^standings/', include('standings.urls')),
                        url(r'^stats/', include('stats.urls')),
+                       url(r'^teams/', include('teams.urls')),
                        url(r'^tools/', include('tools.urls')),
 
                        # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
