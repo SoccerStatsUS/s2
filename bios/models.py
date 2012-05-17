@@ -10,8 +10,6 @@ import datetime
 import random
 
 
-
-
 class BioManager(models.Manager):
 
     def born_on(self, month, day):
