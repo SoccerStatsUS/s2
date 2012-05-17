@@ -14,6 +14,7 @@ def year_detail(request, year):
     year = int(year)
     games = Game.objects.filter(date__year=int(year))
     births = Bio.objects.filter(birthdate__year=year).order_by('birthdate')
+    deaths = Bio.objects.filter(deathdate__year=year).order_by('deathdate')
     hires = Position.objects.filter(start__year=year)
     fires = Position.objects.filter(end__year=year)
 
@@ -36,6 +37,7 @@ def month_detail(request, year, month):
     year, month = int(year), int(month)
     games = Game.objects.filter(date__year=year, date__month=month)
     births = Bio.objects.filter(birthdate__year=year, birthdate__month=month).order_by('birthdate')
+    deaths = Bio.objects.filter(deathdate__year=year, deathdate__month=month).order_by('deathdate')
     hires = Position.objects.filter(start__year=year, start__month=month)
     fires = Position.objects.filter(end__year=year, end__month=month)
 
@@ -56,6 +58,7 @@ def date_detail(request, year, month, day):
     d = datetime.date(int(year), int(month), int(day))
     games = Game.objects.filter(date=d)
     births = Bio.objects.filter(birthdate=d).order_by('birthdate')
+    deaths = Bio.objects.filter(deathdate=d).order_by('deathdate')
     hires = Position.objects.filter(start=d)
     fires = Position.objects.filter(end=d)
 
@@ -90,6 +93,7 @@ def day_detail(request, month, day):
     month, day = int(month), int(day)
     games = Game.objects.filter(date__month=month, date__day=day)
     births = Bio.objects.filter(birthdate__month=month,birthdate__day=day).order_by('birthdate')
+    deaths = Bio.objects.filter(deathdate__month=month, deathdate__day=day).order_by('deathdate')
     hires = Position.objects.filter(start__month=month, start__day=day)
     fires = Position.objects.filter(end__month=month, end__day=day)
     context = {
