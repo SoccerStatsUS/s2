@@ -119,10 +119,11 @@ class Stadium(models.Model):
     
     short_name = models.CharField(max_length=255)
 
-    #city = models.ForeignKey(City, null=True, blank=True)
-
     address = models.CharField(max_length=255)
     location = models.CharField(max_length=255)
+
+    #city = models.ForeignKey(City, null=True, blank=True)
+    #location = models.PointField()
 
     opened = models.DateField(null=True)
     year_opened = models.IntegerField(null=True)
@@ -143,12 +144,39 @@ class Stadium(models.Model):
 
     notes = models.CharField(max_length=255)
     
-    #location = models.PointField()
+
     objects = StadiumManager()    
 
     def __unicode__(self):
         return self.name
 
 
+    def open_string(self):
+        if self.opened:
+            return self.opened
+
+        elif self.year_opened:
+            return self.year_opened
+
+        else:
+            return None
+
+
+    def close_string(self):
+        if self.closed:
+            return self.closed
+
+        elif self.year_closed:
+            return self.year_closed
+
+        else:
+            return None
+            
+
+
     class Meta:
         ordering = ('name',)
+
+
+
+    

@@ -3,7 +3,45 @@
 {% block content %}
 
 <h3>{{ stadium.name }}</h3>
-<h4>{{ stadium.city }}</h4>
+
+{% if stadium.address %}
+<h4>{{ stadium.address }}, {{ stadium.location }}</h4>
+{% else %}
+<h4>{{ stadium.location }}</h4>
+{% endif %}
+
+
+{% if stadium.opened %}
+<h4>Opened: <a href="{% url date_detail stadium.opened.year stadium.opened.month stadium.opened.day %}">{{ stadium.opened }}</a></h4>
+{% else %}
+{% if stadium.year_opened %}
+<h4>Opened: <a href="{% url year_detail stadium.year_opened %}">{{ stadium.year_opened }}</a></h4>
+{% endif %}
+{% endif %}
+
+{% if stadium.closed %}
+<h4>Closed: <a href="{% url date_detail stadium.closed.year stadium.closed.month stadium.closed.day %}">{{ stadium.closed }}</a></h4>
+{% else %}
+{% if stadium.year_closed %}
+<h4>Closed: <a href="{% url year_detail stadium.year_closed %}">{{ stadium.year_closed }}</a></h4>
+{% endif %}
+{% endif %}
+
+
+{% if stadium.capacity %}
+<h4>Capacity: {{ stadium.capacity }}</h4>
+{% endif %}
+
+
+{% if stadium.cost %}
+<h4>Cost: ${{ stadium.cost }}</h4>
+{% endif %}
+
+{% if stadium.architect %}
+<h4>Architect: {{ stadium.architect }}</h4>
+{% endif %}
+
+
 
 <ul id="tabs"></ul>
 

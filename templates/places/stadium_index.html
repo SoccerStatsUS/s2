@@ -1,19 +1,49 @@
 {% extends "base.html" %}
+{% load datum_or_none %}
 
 {% block content %}
 
 
-<ul>
+<table id="stadium_list">
+
+<tr>
+  <th></th>
+  <th>Opened</th>
+  <th>Closed</th>
+  <th>Capacity</th>
+  <th>Cost</th>
+  <th>City</th>
+</tr>
 
 {% for stadium in stadiums %}
 
 {% if stadium.slug %}
-<li><a href="{% url stadium_detail stadium.slug %}">{{ stadium }}</a></li>
+<tr>
+  <td><a href="{% url stadium_detail stadium.slug %}">{{ stadium }}</a></td>
+
+  {% if stadium.year_opened %}
+  <td><a href="{% url year_detail stadium.year_opened %}">{{ stadium.year_opened }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
+  {% if stadium.year_closed %}
+  <td><a href="{% url year_detail stadium.year_closed %}">{{ stadium.year_closed }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
+  {% datum_or_grey stadium.capacity %}
+  {% datum_or_grey stadium.cost %}
+  <td>{{ stadium.location }}</td>
+
+</tr>
+
 {% endif %}
 
 {% endfor %}
 
-</ul>
+</table>
 
 
 {% endblock %}
