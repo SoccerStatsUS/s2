@@ -1,10 +1,11 @@
-$(document).ready( ->
+1;2c$(document).ready( ->
 
 
 
   $("#bio").tablesorter()
   $("#player_chart").tablesorter()
   $("#competition_index").tablesorter()
+  $("#stadium_list").tablesorter()
   $(".standings_list").tablesorter()
 
   $("select").change ->
