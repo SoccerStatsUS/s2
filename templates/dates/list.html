@@ -47,11 +47,12 @@
 
 
 {% if hires.exists %}
-<div tab="hirings">
+<div tab="hired">
 <table>
 {% for position in hires %}
 <tr>
   <td><a href="{% url person_detail position.person.slug %}">{{ position.person.name }}</a></td>
+  <td>{{ position.team }}</td>
   <td>{{ position.start }}</td>
 </tr>
 {% endfor %}
@@ -61,11 +62,12 @@
 
 
 {% if fires.exists %}
-<div tab="firings">
+<div tab="fired">
 <table>
 {% for position in fires %}
 <tr>
   <td><a href="{% url person_detail position.person.slug %}">{{ position.person.name }}</a></td>
+  <td>{{ position.team }}</td>
   <td>{{ position.end }}</td>
 </tr>
 {% endfor %}
