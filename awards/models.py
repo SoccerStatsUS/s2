@@ -25,7 +25,10 @@ class Award(models.Model):
 
 
     def __unicode__(self):
-        return "%s %s" % (self.competition.name, self.name)
+        if self.competition:
+            return "%s %s" % (self.competition.name, self.name)
+        else:
+            return "No Competition %s" % self.name
 
     class Meta:
         ordering = ('competition', 'name')

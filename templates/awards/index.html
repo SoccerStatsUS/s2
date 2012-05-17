@@ -6,17 +6,27 @@
 
 <ul>
 {% for ax in ac %}
+
+{% if ax.grouper.slug %}
 <li><a href="#{{ ax.grouper.slug }}">{{ ax.grouper }}</a></li>
+{% else %}
+<li><a href="#no-competition">No Competition</a></li>
+{% endif %}
+
 {% endfor %}
 </ul>
 
 {% for ax in ac %}
 
+{% if ax.grouper.slug %}
 <h3 id="{{ ax.grouper.slug }}"><a href="{% url competition_detail ax.grouper.slug %}">{{ ax.grouper }}</a></h3>
+{% else %}
+<h3 id="no-competition">No Competition</h3>
+{% endif %}
 
 <ul>
 {% for item in ax.list %}
-<li><a href="{% url award_detail item.id %}">{{ item }}</a></li>
+<li><a href="{% url award_detail item.id %}">{{ item.name }}</a></li>
 {% endfor %}
 </ul>
 
