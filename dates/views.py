@@ -2,12 +2,13 @@ import datetime
 
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-
+from django.views.decorators.cache import cache_page
 
 from bios.models import Bio
 from games.models import Game
 from positions.models import Position
 
+@cache_page(60 * 60 * 12)
 def year_detail(request, year):
     # Add a paginator.
     year = int(year)
@@ -29,7 +30,7 @@ def year_detail(request, year):
                               context,
                               context_instance=RequestContext(request))
 
-
+@cache_page(60 * 60 * 12)
 def month_detail(request, year, month):
     # Add a paginator.
     year, month = int(year), int(month)
@@ -49,7 +50,7 @@ def month_detail(request, year, month):
                               context_instance=RequestContext(request))
 
 
-
+@cache_page(60 * 60 * 12)
 def date_detail(request, year, month, day):
     # Add a paginator.
     d = datetime.date(int(year), int(month), int(day))
@@ -57,20 +58,33 @@ def date_detail(request, year, month, day):
     births = Bio.objects.filter(birthdate=d).order_by('birthdate')
     hires = Position.objects.filter(start=d)
     fires = Position.objects.filter(end=d)
+
+    # Get other days.
+    next = previous = None
+
+    previous_game = Game.objects.filter(date__lt=d)
+    if previous_game.exists():
+        previous = previous_game[0].date
+
+    next_game = Game.objects.filter(date__gt=d).order_by('date')
+    if next_game.exists():
+        next = next_game[0].date
+
     context = {
         'games': games,
         'births': births,
         'hires': hires,
         'fires': fires,
         'date': d,
-        'yesterday': d - datetime.timedelta(days=1),
-        'tomorrow': d + datetime.timedelta(days=1), 
+        'yesterday': previous,
+        'tomorrow': next,
         }
     return render_to_response("dates/list.html",
                               context,
                               context_instance=RequestContext(request))
 
 
+@cache_page(60 * 60 * 12)
 def day_detail(request, month, day):
     # Add a paginator.
     month, day = int(month), int(day)
@@ -88,7 +102,11 @@ def day_detail(request, month, day):
                               context,
                               context_instance=RequestContext(request))
 
-
+@cache_page(60 * 60 * 1)
 def scoreboard_today(request):
-    t = datetime.date.today()
+    """
+    Get the most recent game.
+    """
+    g = Game.objects.all()[0] # Most recent game
+    t = g.date
     return date_detail(request, t.year, t.month, t.day)
