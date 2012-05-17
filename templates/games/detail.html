@@ -14,7 +14,13 @@
   </h4>
 
   {% if game.stadium %}
+
+  {% if game.stadium.slug %}
   <h4><a href="{% url stadium_detail game.stadium.slug %}">{{ game.stadium }}</a></h4>
+  {% else %}
+  <h4>{{ game.stadium }}</h4>
+  {% endif %}
+
   {% else %}
   <h4>{{ game.location }}</h4>
   {% endif %}
