@@ -162,7 +162,7 @@ def load():
 
     # Person data
     load_bios()
-    #load_awards()
+    load_awards()
     load_drafts()
     load_positions()
 
@@ -196,25 +196,25 @@ def load_awards():
     competition_getter = make_competition_getter()
     season_getter = make_season_getter()
 
+    # Create the set of all awards.
     for item in soccer_db.awards.find():
         t = (item['competition'], item['award'])
         awards.add(t)
 
+    # Create all awards.
     for t in awards:
         competition, name = t
 
-        # Should be able to use a competition_getter here?
         # Using find because currently using NCAA awards but don't have ncaa standings.
-
-
-
+        # Should be able to switch to competition_getter here.
         if competition:
-            competitoin = Competition.objects.find(competition)
+            competition = Competition.objects.find(competition)
 
         a = Award.objects.create(competition=competition, name=name)
         award_dict[t] = a
 
 
+    # Create awardItems.
     for item in soccer_db.awards.find():
         item.pop('_id')
 
@@ -224,7 +224,7 @@ def load_awards():
 
         # NCAA seasons don't exist.
         # Would be good to use get otherwise to ensure we have good data.
-        if competition:
+        if item['award'].competition:
             competition_id = item['award'].competition.id
             item['season'] = season_getter(item['season'], competition_id)
             item['season'] = Season.objects.get(id=item['season'])
@@ -239,6 +239,7 @@ def load_awards():
             raise
 
         item['recipient'] = model.objects.find(item['recipient'], create=True)
+
         AwardItem.objects.create(**item)
 
 
