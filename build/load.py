@@ -363,7 +363,11 @@ def load_standings():
 @transaction.commit_on_success
 def load_bios():
     for bio in soccer_db.bios.find():
-        print "Creating bio for %s" % bio['name']
+        try:
+            print "Creating bio for %s" % bio['name']
+        except:
+            print "Created bio."
+
         bio.pop('_id')
 
         if not bio['name']:

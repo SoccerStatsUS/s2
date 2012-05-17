@@ -59,7 +59,12 @@ class AbstractTeamManager(models.Manager):
             return teams[0]
 
         if create:
-            print "Creating %s" % name
+
+            try:
+                print "Creating %s" % name
+            except:
+                print "Created a team."
+
             team = Team.objects.create(
                 name=name, 
                 short_name=name, 
