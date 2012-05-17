@@ -432,6 +432,18 @@ def load_games():
         else:
             game['referee'] = None
 
+        if game.get('linesman1'):
+            game['linesman1'] = Bio.objects.find(game['linesman1'])
+        else:
+            game['linesman1'] = None
+
+
+        if game.get('linesman2'):
+            game['linesman2'] = Bio.objects.find(game['linesman2'])
+        else:
+            game['linesman2'] = None
+
+
         for e in 'url', 'home_team', 'year', 'source', 'sources':
             if e in game:
                 game.pop(e)

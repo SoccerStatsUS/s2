@@ -140,6 +140,8 @@ class Game(models.Model):
     attendance = models.IntegerField(null=True, blank=True)
 
     referee = models.ForeignKey(Bio, null=True, blank=True, related_name="games_refereed")
+    linesman1 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman1_games")
+    linesman2 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman2_games")
 
     objects = GameManager()
 

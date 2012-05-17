@@ -70,8 +70,6 @@ class TeamStatsManager(models.Manager):
         return super(TeamStatsManager, self).get_query_set().filter(season=None).exclude(team=None)
 
 
-
-
 class Stat(models.Model):
     """
     A stat for a competition. 
@@ -79,13 +77,10 @@ class Stat(models.Model):
     """
 
     # What do we need from this model?
-    # Team should be optional
-    # Stats should be generated from data.
     # Stats should be regenerated on Game, Goal, etc. scoring.
     # Standings should sort of be generated the same way.
     
 
-    # Probably these should be represented differently.
     game = models.ForeignKey(Game, null=True)
     player = models.ForeignKey(Bio, null=True)
     team = models.ForeignKey(Team, null=True)
