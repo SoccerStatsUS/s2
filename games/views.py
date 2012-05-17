@@ -12,8 +12,23 @@ from games.models import Game
 @cache_page(60 * 60 * 12)
 def homepage(request):
     """
-    The site homepage.
+    The site homepage. Currently badly underperfoming.
     """
+
+    # Homepage fixes.
+    # Shrink the size of the On This Day Box, move lower.
+    # Add Standings.
+    # Add tab for games from different competitions.
+    # Add News
+    # Add detailed links to different parts of the website.
+
+    # What are the cool things you can get on the site?
+    # Player +/-
+    # Manager details
+    # Career stats
+    # Stats across competitions
+    # Breadcrumbs?
+
     today = datetime.date.today()
     context = {
         'today': today,
