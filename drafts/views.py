@@ -1,11 +1,18 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.views.decorators.cache import cache_page
 
 from bios.models import Bio
 from competitions.models import Competition
 from drafts.models import Draft
 
+
+@cache_page(60 * 60 * 12)
 def drafts_index(request):
+    """
+    List all drafts.
+    """
+
     context = {
         'drafts': Draft.objects.all()
         }
@@ -14,7 +21,7 @@ def drafts_index(request):
                               context_instance=RequestContext(request))
 
 
-
+@cache_page(60 * 60 * 12)
 def draft_detail(request, competition_slug, draft_slug):
     """
     Draft detail page. Don't want to use competition since some drafts don't have a competition?
