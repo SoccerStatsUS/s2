@@ -279,15 +279,45 @@ def generate_game_minutes():
         insert_sql("games_gameminute", l)
 
     insert_game_minutes()
-        
 
-        
-        
+
+
+def generate_top_attendances(qs=None):
+    """
+    Generate a rolling list of top attendances.
+    """
+    # Put this in GameManager?
+
+    if qs is None:
+        qs = Game.objects.all()
+
+    qs = qs.order_by('date')
+    
+    max = -1
+
+    gids = []
+
+    for gid, attendance in qs.values_list("id", "attendance"):
+        if gid in (7591, 8202, 8184, 11119, 8671, 3809):
+            continue
+
+        if attendance:
+            if attendance > max:
+                max = attendance
+                gids.append(gid)
+
+    return Game.objects.filter(id__in=gids).order_by('date')
     
             
                         
 if __name__ == "__main__":
-    generate_team_standings()
+    t = generate_top_attendances()
+    for g in t:
+        print g
+        print g.id
+        print g.attendance
+        print
+    #generate_team_standings()
 
 
 
