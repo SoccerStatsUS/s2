@@ -108,6 +108,12 @@ class SeasonManager(models.Manager):
 
 
 class Season(models.Model):
+    """
+    A season of a competition.
+    """
+    # Considering removing the competition dependency and making season refer to a given period of time.
+    # A CompetitionSeason would then refer to a season/competition unit.
+
     name = models.CharField(max_length=255)
     slug = models.SlugField()
 

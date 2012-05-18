@@ -10,6 +10,12 @@ class Award(models.Model):
     competition = models.ForeignKey(Competition, null=True)
     #date = models.DateField()
 
+    # This is used to distinguish awards that are named differently but mean the same thing.
+    # e.g. MVP, Golden ? (whatever the best World Cup player wins.)
+    # Golden boot / top scorer.
+    # Supporters Shield, Champion, etc.
+    type = models.CharField(max_length=255)
+
 
     def is_multi(self):
         """
