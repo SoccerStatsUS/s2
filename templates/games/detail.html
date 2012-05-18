@@ -9,8 +9,8 @@
   <h4>
     <a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date }}</a>
     -
-    <a href="{% url competition_detail game.competition.slug %}">{{ game.competition }}</a>,
-    <a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.season.name }} season</a>
+    <a href="{% url competition_detail game.competition.slug %}">{{ game.competition }}</a>
+    <a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.season.name }}</a>
   </h4>
 
   {% if game.stadium %}
