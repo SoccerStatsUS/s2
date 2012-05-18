@@ -4,6 +4,10 @@ from django.template import RequestContext
 from news.models import NewsSource
 
 def news_index(request):
+    """
+    """
+    # Use djangoproject.com's feed aggregator to build this.
+
     context = {
         'news_sources': NewsSource.objects.all()
         }
@@ -11,3 +15,9 @@ def news_index(request):
                               context,
                               context_instance=RequestContext(request))
 
+
+
+
+
+def feed_detail(request, feed):
+    pass
