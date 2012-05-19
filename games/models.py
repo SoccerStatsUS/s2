@@ -142,6 +142,7 @@ class Game(models.Model):
     referee = models.ForeignKey(Bio, null=True, blank=True, related_name="games_refereed")
     linesman1 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman1_games")
     linesman2 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman2_games")
+    linesman3 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman3_games")
 
     objects = GameManager()
 
