@@ -198,19 +198,19 @@ def load_awards():
 
     # Create the set of all awards.
     for item in soccer_db.awards.find():
-        t = (item['competition'], item['award'])
+        t = (item['competition'], item['award'], item.get('type', ''))
         awards.add(t)
 
     # Create all awards.
     for t in awards:
-        competition, name = t
+        competition, name, award_type = t
 
         # Using find because currently using NCAA awards but don't have ncaa standings.
         # Should be able to switch to competition_getter here.
         if competition:
             competition = Competition.objects.find(competition)
 
-        a = Award.objects.create(competition=competition, name=name)
+        a = Award.objects.create(competition=competition, name=name, type=award_type)
         award_dict[t] = a
 
 
@@ -219,8 +219,11 @@ def load_awards():
         item.pop('_id')
 
         # So we can have a season, a year, both, or neither for an award item
-        item['award'] = award_dict[(item['competition'], item['award'])]
+        item['award'] = award_dict[(item['competition'], item['award'], item.get('type', ''))]
         item.pop('competition')        
+
+        if 'type' in item:
+            item.pop('type')
 
         # NCAA seasons don't exist.
         # Would be good to use get otherwise to ensure we have good data.
