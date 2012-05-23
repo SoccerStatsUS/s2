@@ -73,7 +73,13 @@
 {% for award in bio.awards.all %}
 <tr>
   <td><a href="{% url award_detail award.award.id %}">{{ award.award.name }}</a></td>
+
+  {% if award.season %}
   <td><a href="{% url season_detail award.season.competition.slug award.season.slug %}">{{ award.season }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
 </tr>
 {% endfor %}
 </table>

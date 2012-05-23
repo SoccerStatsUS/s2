@@ -447,6 +447,11 @@ def load_games():
         else:
             game['linesman2'] = None
 
+        if game.get('linesman3'):
+            game['linesman3'] = Bio.objects.find(game['linesman3'])
+        else:
+            game['linesman3'] = None
+
 
         for e in 'url', 'home_team', 'year', 'source', 'sources':
             if e in game:
@@ -459,7 +464,7 @@ def load_games():
             Game.objects.create(**game)
         except:
             print "Skipping game %s" % game
-            #import pdb; pdb.set_trace()
+            import pdb; pdb.set_trace()
 
         x = 5
 
