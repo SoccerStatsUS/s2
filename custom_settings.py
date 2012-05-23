@@ -5,7 +5,7 @@ DEBUG = True
 
 # Make sure to use a trailing slash for MEDIA_URL
 
-if os.path.exists("Users"):
+if os.path.exists("/Users"):
     PROJECT_ROOT = "/Users/chrisedgemon"
     PROJECT_DIRNAME = 's2'
 elif DEBUG:
