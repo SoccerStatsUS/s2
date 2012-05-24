@@ -58,4 +58,4 @@ class AwardItem(models.Model):
         return "%s %s %s" % (self.season, self.award.name, self.recipient)
 
     class Meta:
-        ordering = ("season",)
+        ordering = ("year", 'season')

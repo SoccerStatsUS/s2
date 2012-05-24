@@ -1,4 +1,9 @@
 
+* Get better arrow icons; add to team season pages.
+* Investigate why the NASL has a 1967 season.
+* Figure out what to do with /teams/tampa-bay-mutiny/1998 (eg) and do it well.
+* Remove external jquery link; put jquery in the media files.
+
 
 Season types:
 

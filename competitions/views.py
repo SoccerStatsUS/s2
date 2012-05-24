@@ -22,6 +22,7 @@ def competition_detail(request, competition_slug):
     context = {
         'competition': competition,
         'stats': Stat.competition_stats.filter(team=None, competition=competition).order_by('-games_played')[:25],
+        'games': competition.game_set.all()[:25],
         }
     return render_to_response("competitions/competition_detail.html",
                               context,
@@ -29,7 +30,7 @@ def competition_detail(request, competition_slug):
 
 
 
-
+@cache_page(60 * 60 * 12)
 def season_detail(request, competition_slug, season_slug):
     """
     Detail for a given season, e.g. Major League Soccer, 1996.
@@ -40,8 +41,7 @@ def season_detail(request, competition_slug, season_slug):
 
     context = {
         'season': season,
-        'stats': Stat.objects.filter(season=season, competition=season.competition).order_by("-minutes"),
-        'testing': Stat.competition_stats.filter(player__in=season.players_added(), competition=competition).order_by("-games_played"),
+        'stats': Stat.objects.filter(season=season, competition=season.competition).exists(),
         }
     return render_to_response("competitions/season_detail.html",
                               context,
@@ -49,6 +49,10 @@ def season_detail(request, competition_slug, season_slug):
 
 
 def season_names(request):
+    """
+    Show the set of all distinct season names.
+    """
+    
     names = [e[0] for e in Season.objects.values_list('name')]
     names = sorted(set(names))
 
@@ -63,6 +67,10 @@ def season_names(request):
     
 
 def season_list(request, season_slug):
+    """
+    List all seasons of with a given slug.
+    """
+
     seasons = Season.objects.filter(slug=season_slug)
 
     context = {

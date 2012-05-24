@@ -89,7 +89,8 @@ def team_detail(request, team_slug):
 
     context = {
         'team': team,
-        'stats': Stat.team_stats.filter(team=team, competition=None),
+        'stats': Stat.team_stats.filter(team=team, competition=None).exists(),
+        'games': team.game_set().exists(),
         }
 
     return render_to_response("teams/detail.html",

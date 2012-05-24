@@ -57,12 +57,11 @@
 </div>
 {% endif %}
 
-{% if competition.game_set.exists %}
+{% if games %}
 <div tab="games">
-{% include "templatetags/games.html" with games=competition.game_set.all %}
+{% include "templatetags/games.html" %}
 </div>
 {% endif %}
-
 
 {% if stats %}
 <div tab="stats" >

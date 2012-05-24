@@ -22,13 +22,11 @@
 
 {% if stats %}
 <div tab="stats">
-{% include "templatetags/bio.html" %}
 </div>
 {% endif %}
 
 {% if team.game_set.exists %}
 <div tab="games">
-{% include "templatetags/games.html" with games=team.game_set.all %}
 </div>
 {% endif %}
 
@@ -40,8 +38,8 @@
 {% for award in team.awards.all %}
 <tr>
   <td><a href="{% url season_detail award.season.competition.slug award.season.slug %}">{{ award.season.name }}</a></td>
-  <td><a href="{% url competition_detail award.award.competition.slug %}">{{ award.award.competition }}</a></td>
   <td><a href="{% url award_detail award.award.id %}">{{ award.award.name }}</a></td>
+  <td><a href="{% url competition_detail award.award.competition.slug %}">{{ award.award.competition }}</a></td>
 </tr>
 {% endfor %}
 </table>
@@ -49,7 +47,7 @@
 {% endif %}
 
 {% if team.position_set.exists %}
-<div tab="employees">
+<div tab="staff">
 
 <table>
 {% for position in team.position_set.all %}

@@ -48,3 +48,6 @@ class Pick(models.Model):
     def __unicode__(self):
         return "%s %s" % (self.position, self.player)
 
+    class Meta:
+        ordering = ('draft', 'position',)
+

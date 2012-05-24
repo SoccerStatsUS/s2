@@ -123,7 +123,7 @@ class Season(models.Model):
 
 
     class Meta:
-        ordering = ("competition", "name")
+        ordering = ("name", "competition")
 
 
     def dates(self):
