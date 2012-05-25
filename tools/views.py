@@ -1,5 +1,6 @@
 from collections import Counter
 
+from django.db.models import Q
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
@@ -71,6 +72,60 @@ def lineup_search(request):
 
 
 
+@cache_page(60 * 24)
+def games_ajax_by_id(request):
+    """
+    For internal use.
+    """
+
+    PAGE = 0
+    ITEMS_PER_PAGE = 100
+
+    def get_games(request):
+        games = Game.objects.all().order_by("-date")
+
+        if 'team' in request.GET:
+            t = request.GET['team']
+            if t:
+                games = Game.objects.filter(Q(team1__id=t) | Q(team2__id=t))
+
+        if 'season' in request.GET:
+            e = request.GET['season']
+            if e:
+                games = games.filter(season__id=e)
+
+        if 'competition' in request.GET:
+            e = request.GET['competition']
+            if e:
+                games = games.filter(competition__id=e)
+
+        if 'count' in request.GET:
+            ITEMS_PER_PAGE = request.GET['count']
+
+        if 'page' in request.GET:
+            PAGE = request.GET['page']
+
+        return games
+
+    games = get_games(request)
+
+    if ITEMS_PER_PAGE == 'infinity':
+        games = games
+    else:
+        START = PAGE * ITEMS_PER_PAGE
+        END = START + ITEMS_PER_PAGE
+        games = games[START:END]
+
+    context = {
+        'games': games,
+        }
+
+    return render_to_response("tools/ajax/games.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+
+
 
 
 @cache_page(60 * 24)
@@ -84,7 +139,7 @@ def games_ajax(request):
         if 'team' in request.GET:
             t = request.GET['team']
             if t:
-                games = Game.objects.filter(models.Q(team1__name__icontains=t) | models.Q(team2__name__icontains=t))
+                games = Game.objects.filter(Q(team1__name__icontains=t) | Q(team2__name__icontains=t))
 
         if 'season' in request.GET:
             e = request.GET['season']
@@ -118,6 +173,62 @@ def games_ajax(request):
                               context_instance=RequestContext(request))
 
     
+
+
+
+
+@cache_page(60 * 24)
+def stats_ajax_by_id(request):
+    PAGE = 0
+    ITEMS_PER_PAGE = 100
+
+    def get_stats(request):
+        stats = Stat.objects.all().order_by("-minutes")
+        if 'team' in request.GET:
+            t = request.GET['team']
+            if t:
+                stats = stats.filter(team__id=t)
+
+        if 'season' in request.GET:
+            e = request.GET['season']
+            if e:
+                stats = stats.filter(season__id=e)
+
+        if 'name' in request.GET:
+            e = request.GET['name']
+            if e:
+                stats = stats.filter(player__id=e)
+
+        if 'competition' in request.GET:
+            e = request.GET['competition']
+            if e:
+                stats = stats.filter(competition__id=e)
+
+        if 'count' in request.GET:
+            ITEMS_PER_PAGE = request.GET['count']
+
+        if 'page' in request.GET:
+            PAGE = request.GET['page']
+
+        return stats
+
+    stats = get_stats(request)
+
+    if ITEMS_PER_PAGE == 'infinity':
+        stats = stats
+    else:
+        START = PAGE * ITEMS_PER_PAGE
+        END = START + ITEMS_PER_PAGE
+        stats = stats[START:END]
+
+
+    context = {
+        'stats': stats,
+        }
+
+    return render_to_response("tools/ajax/stats.html",
+                              context,
+                              context_instance=RequestContext(request))
 
 
 
