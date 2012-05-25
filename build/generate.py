@@ -30,10 +30,44 @@ def generate():
     generate_competition_standings()
     generate_team_standings()
 
+    # Generate coaching stats!
+    generate_position_stats()
+
     generate_game_data_quality()
     #generate_game_minutes()
 
 
+def calculate_standings(team, games=None):
+
+    if games is None:
+        games = Game.objects.team_filter(position.team)
+
+    wins = losses = ties = 0
+    for game in games:
+        r = game.result(team)
+
+        if r == 'win':
+            wins += 1
+        elif r == 'loss':
+            losses += 1
+        elif r == 'tie':
+            ties += 1
+
+    return wins, losses, ties
+
+
+@timer
+@transaction.commit_on_success
+def generate_position_stats():
+    for position in Position.objects.all():
+        if position.start and position.end:
+            games = Game.objects.team_filter(position.team).filter(date__gte=position.start, date__lte=position.end)
+            if games.exists():
+                print "Creating result stats for %s games for %s - %s at %s" % (games.count(), position.player, position.name, position.team)
+                position.wins, position.losses, position.ties = calculate_standings(position.team, games)
+                position.save()
+        
+            
     
 @timer
 @transaction.commit_on_success
@@ -261,6 +295,8 @@ def generate_career_plus_minus():
 def generate_game_minutes():
     """
     Generate all game minutes that we can.
+    These are single minute slices of a game.
+    Really intensive cpu use.
     """
     print "Generating game minutes"
 
