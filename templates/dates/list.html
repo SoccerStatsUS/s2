@@ -7,18 +7,14 @@
 
 {% block content %}
 
+
 {% if date %}
-<h3>{{ date }}</h3>
+<h3>
+{% if yesterday %}<a href="{% url date_detail yesterday.year yesterday.month yesterday.day %}">←</a>{% endif %}
+{{ date }}
+{% if tomorrow %}<a href="{% url date_detail tomorrow.year tomorrow.month tomorrow.day %}">→</a>{% endif %}
+</h3>
 {% endif %}
-
-{% if yesterday %}
-<a href="{% url date_detail yesterday.year yesterday.month yesterday.day %}">{{ yesterday }}</a> 
-{% endif %}
-:
-{% if tomorrow %}
-<a href="{% url date_detail tomorrow.year tomorrow.month tomorrow.day %}">{{ tomorrow }}</a> 
-{% endif %}
-
 
 
 <ul id="tabs"></ul>
