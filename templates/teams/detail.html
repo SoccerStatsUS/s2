@@ -4,6 +4,18 @@
 {% block title %}{{ team.name }} Results, Lineups, & Statistics{% endblock %}
 {% block metadescription %}{{ team.name }} soccer stats with results, lineups, awards, all-time stats, managers...{% endblock %}
 
+{% block extrahead %}
+
+<script type="text/javascript">
+  $(document).ready(function (){
+  $("div[tab='games']").load("{% url games_ajax_by_id %}?team={{ team.id }}");
+  $("div[tab='stats']").load("{% url stats_ajax_by_id %}?team={{ team.id }}");
+  });
+</script>
+
+{% endblock %}
+
+
 {% block content %}
 
 <h2>{{ team.name }}</h2>

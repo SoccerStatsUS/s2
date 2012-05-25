@@ -37,6 +37,7 @@ class Standing(models.Model):
     goals_for = models.IntegerField(null=True)
     goals_against = models.IntegerField(null=True)
 
+    # These should probably be pk losses or a more generic term.
     shootout_wins = models.IntegerField(null=True)
     shootout_losses = models.IntegerField(null=True)
 
