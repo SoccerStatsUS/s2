@@ -19,6 +19,14 @@ if DEBUG:
     CACHE_MIDDLEWARE_KEY_PREFIX = "dev:"
     CACHES = {}
 
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'LOCATION': '127.0.0.1:11211',
+            }
+        }
+
 
 PROJECT_DIR = "%s/www/%s" % (PROJECT_ROOT, PROJECT_DIRNAME)
 DB_PATH = "%s/www/%s/db/soccer.db" % (PROJECT_ROOT, PROJECT_DIRNAME)

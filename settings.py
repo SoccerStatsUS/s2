@@ -60,12 +60,7 @@ DATABASES = {
 }
 
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
-    }
-}
+
 
 # Fix this soon.
 #EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
