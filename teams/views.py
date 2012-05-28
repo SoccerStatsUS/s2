@@ -92,6 +92,7 @@ def team_detail(request, team_slug):
         'stats': Stat.team_stats.filter(team=team, competition=None).exists(),
         'games': team.game_set().exists(),
         'head_coaches': team.position_set.filter(name='Head Coach'),
+        'current_staff': team.position_set.filter(end=None),
         }
 
     return render_to_response("teams/detail.html",
