@@ -1,4 +1,5 @@
 from collections import defaultdict
+import datetime
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
@@ -15,6 +16,8 @@ from stats.models import Stat
 from teams.models import Team
 
 from utils import insert_sql, timer
+
+
 
 def generate():
     """
@@ -60,10 +63,18 @@ def calculate_standings(team, games=None):
 @transaction.commit_on_success
 def generate_position_stats():
     for position in Position.objects.all():
-        if position.start and position.end:
-            games = Game.objects.team_filter(position.team).filter(date__gte=position.start, date__lte=position.end)
+        if position.end is None:
+            end = datetime.date.today()
+        else:
+            end = position.end
+
+        if position.start:
+            games = Game.objects.team_filter(position.team).filter(date__gte=position.start, date__lte=end)
             if games.exists():
-                print "Creating result stats for %s games for %s - %s at %s" % (games.count(), position.player, position.name, position.team)
+                try:
+                    print "Creating result stats for %s games for %s - %s at %s" % (games.count(), position.person, position.name, position.team)
+                except:
+                    print "Creating result stats."
                 position.wins, position.losses, position.ties = calculate_standings(position.team, games)
                 position.save()
         

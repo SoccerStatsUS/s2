@@ -464,7 +464,7 @@ def load_games():
             Game.objects.create(**game)
         except:
             print "Skipping game %s" % game
-            import pdb; pdb.set_trace()
+            #import pdb; pdb.set_trace()
 
         x = 5
 
