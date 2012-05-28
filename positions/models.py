@@ -6,6 +6,8 @@ from bios.models import Bio
 
 from collections import defaultdict
 
+import datetime
+
 class PositionManager(models.Manager):
 
     def generate_standings(self):
@@ -56,6 +58,16 @@ class Position(models.Model):
             return (self.wins + .5 * self.ties) / (self.wins + self.ties + self.losses)
         else:
             return None
+
+
+    def length(self):
+        if self.end and self.start:
+            return (self.end - self.start).days
+        elif self.start:
+            return (datetime.date.today() - self.start).days
+        else:
+            return 0
+            
             
 
 
