@@ -84,6 +84,53 @@
 </div>
 {% endif %}
 
+{% if head_coaches %}
+<div tab="coaches">
+
+
+
+<table>
+
+<thead>
+  <tr>
+    <th>name</th>
+    <th>start</th>
+    <th>end</th>
+    <th>wins</th>
+    <th>losses</th>
+    <th>ties</th>
+    <th>%</th>
+  </tr>
+</thead>
+
+{% for position in head_coaches %}
+<tr>
+  <td><a href="{% url person_detail position.person.slug %}">{{ position.person }}</a></td>
+  {% if position.start %}
+  <td><a href="{% url date_detail position.start.year position.start.month position.start.day %}">{{ position.start|date:"m-d-Y" }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
+  {% if position.end %}
+  <td><a href="{% url date_detail position.end.year position.end.month position.end.day %}">{{ position.end|date:"m-d-Y" }}</td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
+  {% datum_or_grey position.wins %}
+  {% datum_or_grey position.ties %}
+  {% datum_or_grey position.losses %}
+  {% datum_or_grey position.win_percentage|floatformat:3 %}
+
+</tr>
+{% endfor %}
+</table>
+</div>
+
+{% endif %}
+
+
 
 {% if team.pick_set.exists %}
 <div tab="draft picks">
