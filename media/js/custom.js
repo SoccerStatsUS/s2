@@ -1,9 +1,11 @@
 (function() {
+
   $(document).ready(function() {
     var createSortLoader, getGames, getGoals, getLineups, getStats, hash, makeAjaxGetter, tabs;
     $("#bio").tablesorter();
     $("#player_chart").tablesorter();
     $("#competition_index").tablesorter();
+    $("#position_index").tablesorter();
     $(".standings_list").tablesorter();
     $("select").change(function() {
       var url, x;
@@ -123,12 +125,9 @@
       return $("#tab_wrapper div[tab=" + name + "]").show();
     });
     tabs = $("#tabs li");
-    if (tabs.length) {
-      $(tabs[0]).click();
-    }
+    if (tabs.length) $(tabs[0]).click();
     hash = window.location.hash;
-    if (hash) {
-      return $("a[href=" + hash + "] li").click();
-    }
+    if (hash) return $("a[href=" + hash + "] li").click();
   });
+
 }).call(this);
