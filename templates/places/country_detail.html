@@ -2,11 +2,15 @@
 
 {% block content %}
 
-{{ name }}
+<h2>{{ country }}</h2>
 
-<ul>
+<h4>{{ country.population }}</h4>
+
+<table>
 {% for bio in bios %}
-<li><a href="{% url person_detail bio.slug %}">{{ bio }}</a></li>
+<tr>
+  <td><a href="{% url person_detail bio.slug %}">{{ bio }}</a></td>
+</tr>
 {% endfor %}
 </ul>
 

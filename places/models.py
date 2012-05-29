@@ -16,7 +16,8 @@ class CountryManager(models.Manager):
 
 class Country(models.Model):
     name = models.CharField(max_length=255)
-    slug = models.SlugField(unique=False)
+    slug = models.SlugField()
+    population = models.IntegerField(null=True)
 
     objects = CountryManager()
 
@@ -32,49 +33,34 @@ class StateManager(models.Manager):
             return State.objects.create(name=state, country=country)
 
 
-        
-
 class State(models.Model):
     name = models.CharField(max_length=255)
+    slug = models.SlugField()
+    abbreviation = models.CharField(max_length=5)
     country = models.ForeignKey(Country, null=True, blank=True)
+    joined = models.DateField(null=True)
 
     objects = StateManager()
 
     def __unicode__(self):
-        return "%s, %s" % (self.name, self.country)
+        return self.name
+        #return "%s, %s" % (self.name, self.country)
 
 
-class CityManager(models.Manager):
+class StatePopulation(models.Model):
 
-    def find(self, d):
-        """
-        Given a city dict, get the City object.
-        """
+    state = models.ForeignKey(State)
+    year = models.IntegerField()
+    population = models.IntegerField(null=True)
 
-        country = Country.objects.find(d['country'])
 
-        if d['state']:
-            state = State.objects.find(d['state'], country)
-        else:
-            state = None
-        
-        cities = City.objects.filter(name=d['city'], state=state, country=country)
 
-        if len(cities) == 0:
-            return City.objects.create(name=d['city'], state=state, country=country)
-        elif len(cities) == 1:
-            return cities[0]
-        else:
-            import pdb; pdb.set_trace()
-            x = 5
-        
 
 class City(models.Model):
     name = models.CharField(max_length=255)
     state = models.ForeignKey(State, null=True, blank=True)
     country = models.ForeignKey(Country, null=True, blank=True)
-
-    objects = CityManager()
+    slug = models.SlugField()
 
     def __unicode_(self):
         if self.state:

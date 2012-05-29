@@ -2,13 +2,32 @@
 
 {% block content %}
 
-{{ state }}
+<h3>{{ state }}</h3>
+<h4>Joined: {{ state.joined }}</h4>
+<h4>Abbreviation {{ state.abbreviation }}</h4>
 
-<ul>
-{% for bio in bios %}
-<li><a href="{% url person_detail bio.slug %}">{{ bio }}</a></li>
+
+<table>
+
+{% for pop in state.population_set %}
+<tr>
+  <td>{{ pop.year }}</td>
+  <td>{{ pop.population }}</td>
+</tr>
 {% endfor %}
-</ul>
+</table>
+
+
+
+<table>
+{% for bio in bios %}
+<tr>
+  <td><a href="{% url person_detail bio.slug %}">{{ bio }}</a></td>
+  <td>{{ bio.birthplace }}</td>
+  <td>{{ bio.birthdate }}</td>
+</tr>
+{% endfor %}
+</table>
 
 
 

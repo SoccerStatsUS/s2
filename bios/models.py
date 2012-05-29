@@ -4,6 +4,8 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils.functional import memoize
 
+
+
 from collections import defaultdict
 import datetime
 
@@ -71,6 +73,9 @@ class BioManager(models.Manager):
 
 
 class Bio(models.Model):
+
+
+
     """
     Player or anybody else bio.
     """
@@ -81,13 +86,10 @@ class Bio(models.Model):
     height = models.IntegerField(null=True, blank=True)
 
     birthdate = models.DateField(null=True, blank=True)
-    #birthplace = models.ForeignKey(City, null=True, blank=True, related_name="birth_set")
-    birthplace = models.CharField(max_length=200)
+    birthplace = models.ForeignKey('places.City', null=True, blank=True, related_name='birth_set')
 
     deathdate = models.DateField(null=True, blank=True)
-    #deathplace = models.ForeignKey(City, null=True, blank=True, related_name="death_set")
-    deathplace = models.CharField(max_length=200)
-
+    deathplace = models.ForeignKey('places.City', null=True, blank=True, related_name='death_set')
 
     height = models.IntegerField(null=True, blank=True)
     weight = models.IntegerField(null=True, blank=True)

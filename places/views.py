@@ -47,12 +47,13 @@ def country_detail(request, slug):
                                   context_instance=RequestContext(request))
 
 
-def state_detail(request, sid):
+def state_detail(request, slug):
         """
         """
 
-        state = get_object_or_404(State, id=sid)
-        bios = Bio.objects.filter(birthplace__state=state)
+        state = get_object_or_404(State, slug=slug)
+        #bios = Bio.objects.filter(birthplace__state=state)
+        bios = []
         
         context = {
                 'state': state,
@@ -64,11 +65,11 @@ def state_detail(request, sid):
 
 
 
-def city_detail(request, cid):
+def city_detail(request, slug):
         """
         """
 
-        city = get_object_or_404(City, id=cid)
+        city = get_object_or_404(City, slug=slug)
 
         context = {
                 'city': city,

@@ -6,30 +6,30 @@ urlpatterns = patterns('places.views',
                            'country_index',
                            name='country_index'),
 
-                       url(r'^state/$',
+                       url(r'^states/$',
                            'state_index',
                            name='state_index'),
 
-                       url(r'^country/(?P<slug>.+)/$',
+                       url(r'^countries/(?P<slug>.+)/$',
                            'country_detail',
                            name='country_detail'),
 
 
-                       url(r'^state/(?P<sid>.+)/$',
+                       url(r'^states/(?P<slug>.+)/$',
                            'state_detail',
                            name='state_detail'),
 
 
-                       url(r'^city/(?P<cid>.+)/$',
+                       url(r'^cities/(?P<slug>.+)/$',
                            'city_detail',
                            name='city_detail'),
 
-                       url(r'^stadium/$',
+                       url(r'^stadiums/$',
                            'stadium_index',
                            name='stadium_index'),
 
 
-                       url(r'^stadium/(?P<slug>[a-z0-9-]+)/$',                       
+                       url(r'^stadiums/(?P<slug>[a-z0-9-]+)/$',                       
                            'stadium_detail',
                            name='stadium_detail'),
 
