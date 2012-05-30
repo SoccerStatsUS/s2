@@ -38,7 +38,7 @@
 {% endif %}
 
 {% if stadium.architect %}
-<h4>Architect: {{ stadium.architect }}</h4>
+<h4>Architect: <a href="{% url person_detail stadium.architect.slug %}">{{ stadium.architect }}</a></h4>
 {% endif %}
 
 

@@ -183,7 +183,8 @@ def stats_ajax_by_id(request):
     ITEMS_PER_PAGE = 100
 
     def get_stats(request):
-        stats = Stat.objects.all().order_by("-minutes")
+        stats = Stat.objects.all()
+
         if 'team' in request.GET:
             t = request.GET['team']
             if t:
@@ -209,6 +210,12 @@ def stats_ajax_by_id(request):
 
         if 'page' in request.GET:
             PAGE = request.GET['page']
+
+        if 'order' in request.GET:
+            order = request.GET(order)
+            stats = stats.order_by(order)
+        else:
+            stats = stats.order_by("-minutes")
 
         return stats
 
@@ -240,7 +247,8 @@ def stats_ajax(request):
     ITEMS_PER_PAGE = 100
 
     def get_stats(request):
-        stats = Stat.objects.all().order_by("-minutes")
+        stats = Stat.objects.all()
+
         if 'team' in request.GET:
             t = request.GET['team']
             if t:
@@ -266,6 +274,13 @@ def stats_ajax(request):
 
         if 'page' in request.GET:
             PAGE = request.GET['page']
+
+        if 'order' in request.GET:
+            order = request.GET(order)
+            stats = stats.order_by(order)
+        else:
+            stats = stats.order_by("-minutes")
+
 
         return stats
 

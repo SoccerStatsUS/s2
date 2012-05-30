@@ -8,7 +8,7 @@
 
 <script type="text/javascript">
   $(document).ready(function (){
-  $("div[tab='stats']").load("{% url stats_ajax_by_id %}?name={{ bio.id }}");
+  $("div[tab='stats']").load("{% url stats_ajax_by_id %}?name={{ bio.id }}?order=season");
   });
 </script>
 
@@ -64,7 +64,7 @@
 {% endif %}
 
 {% if bio.appearance_set.exists %}
-<div tab="gamess">
+<div tab="games">
 {% include "templatetags/appearance.html" with appearances=bio.appearance_set.all %}
 </div>
 {% endif %}

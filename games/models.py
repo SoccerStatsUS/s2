@@ -148,6 +148,7 @@ class Game(models.Model):
     objects = GameManager()
 
 
+
     class Meta:
         ordering = ('-date',)
         unique_together = [('team1', 'date', 'minigame'), ('team2', 'date', 'minigame')]

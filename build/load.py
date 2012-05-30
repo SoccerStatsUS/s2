@@ -60,7 +60,7 @@ def make_city_getter():
             state = State.objects.get(name=c['state'])
 
         if c['country']:
-            country = State.objects.get(name=c['country'])
+            country = Country.objects.get(name=c['country'])
 
         try:
             return City.objects.get(name=c['name'], state=state, country=country)
@@ -94,7 +94,7 @@ def make_city_pre_getter():
 
         
 
-    country_name_set = set([e['name'] for e in soccer_db.countries.find()])
+    country_name_set = set([e['name'].strip() for e in soccer_db.countries.find()])
     state_abbreviation_dict = make_state_abbreviation_dict()
     state_name_dict = make_state_name_dict()
 
@@ -114,7 +114,7 @@ def make_city_pre_getter():
                 state, country = state_name_dict[end]
 
             elif end in country_name_set:
-                country = country
+                country = end
 
         if country or state:
             name = ','.join(pieces[:-1])
@@ -241,10 +241,19 @@ def make_game_getter():
 
 def load():
 
+    # Watch out for contingencies here.
+    # Places depend only on other places.
+    # Bio depends on places.
+    # Stadium depends on places and bios.
+    # Teams depends on (nothing?)
+    # Standings depends on Bio, Team, Competition, and Season
+    # Games depends on Team, Stadium, City, Bio.
+    # etc.
+
+    # Non-game data.
     load_places()
+    load_bios()
     load_stadiums()
-
-
     load_teams()
 
 
@@ -252,11 +261,7 @@ def load():
     load_standings()
     load_games()
 
-    # Person data
-    load_bios()
-
-    return
-
+    # List data
     load_awards()
     load_drafts()
     load_positions()
@@ -266,6 +271,7 @@ def load():
     load_goals()
     load_lineups()
 
+    # Analysis data
     #load_news()
 
 
@@ -282,6 +288,7 @@ def load_places():
 
     for state in soccer_db.states.find():
         state.pop('_id')
+        state['country'] = Country.objects.get(name=state['country'])
         state['slug'] = slugify(state['name'])
         State.objects.create(**state)
 
@@ -294,6 +301,7 @@ def load_places():
 
         if c['state']:
             c['state'] = State.objects.get(name=c['state'])
+
 
         if c['country']:
             c['country'] = Country.objects.get(name=c['country'])
@@ -577,11 +585,9 @@ def load_games():
             game['stadium'] = Stadium.objects.get(id=game['stadium'])
             game['city'] = game['stadium'].city
 
-        if game['location']:
+        if game.get('location'):
             game['city'] = city_getter(game['location'])
 
-
-        
         game['competition'] = competition_getter(game['competition'])
         game['competition'] = Competition.objects.get(id=game['competition'])
         game['season'] = Season.objects.find(game['season'], game['competition'])

@@ -27,6 +27,7 @@ def state_index(request):
 
         context = {
                 'states': State.objects.all(),
+
                 }
         return render_to_response("places/state_index.html",
                                   context,
@@ -39,9 +40,13 @@ def country_detail(request, slug):
         """
 
         country = get_object_or_404(Country, slug=slug)
-        
+        stadiums = Stadium.objects.filter(city__country=country)
+        births = Bio.objects.filter(birthplace__country=country)
+
         context = {
                 'country': country,
+                'births': births,
+                'stadiums': stadiums,
                 }
         return render_to_response("places/country_detail.html",
                                   context,
@@ -53,12 +58,15 @@ def state_detail(request, slug):
         """
 
         state = get_object_or_404(State, slug=slug)
-        #bios = Bio.objects.filter(birthplace__state=state)
-        bios = []
+        births = Bio.objects.filter(birthplace__state=state)
+        stadiums = Stadium.objects.filter(city__state=state)
+        games = Game.objects.exclude(city=None).filter(city__state=state)
         
         context = {
                 'state': state,
-                'bios': bios,
+                'births': births,
+                'stadiums': stadiums,
+                'games': games,
                 }
         return render_to_response("places/state_detail.html",
                                   context,

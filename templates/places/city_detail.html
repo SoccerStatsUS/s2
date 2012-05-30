@@ -1,49 +1,82 @@
 {% extends "base.html" %}
 
+{% load datum_or_none %}
+
 {% block content %}
 
 <h3>{{ city.name }}</h3>
-<h4>{{ city.state.name }}</h4>
+
+{% if city.state %}
+<h4><a href="{% url state_detail city.state.slug %}">{{ city.state.name }}</a></h4>
+{% endif %}
+
+{% if city.country %}
 <h4>{{ city.country.name }}</h4>
+{% endif %}
 
-<ul>
-{% for bio in city.bio_set.all %}
-<li><a href="{% url person_detail bio.slug %}">{{ bio }}</a></li>
-{% endfor %}
-</ul>
+<ul id="tabs"></ul>
 
+<div id="tab_wrapper">
+
+{% if city.stadium_set.exists %}
+<div tab="stadiums">
 <table>
 {% for stadium in city.stadium_set.all %}
 <tr>
   <td><a href="{% url stadium_detail stadium.slug %}">{{ stadium }}</a></td>
-  <td>{{ stadium.opened }}</td>
-  <td>{{ stadium.capacity }}</td>
-  <td>{{ stadium.cost }}</td>
+  {% datum_or_grey stadium.opened %}
+  {% datum_or_grey stadium.capacity %}
+  {% datum_or_grey stadium.cost %}
 </tr>
 {% endfor %}
 </table>
+</div>
+{% endif %}
 
-<h3>Births</h3>
+{% if city.birth_set.exists %}
+<div tab="births">
 
 <table>
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>bdate</th>
+    </tr>
+  </thead>
 {% for bio in city.birth_set.all %}
 <tr>
   <td><a href="{% url person_detail bio.slug %}">{{ bio }}</a></td>
-  <td>{{ bio.birthdate }}</td>
+  {% if bio.birthdate %}
+  <td><a href="{% url date_detail bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
 </tr>
 {% endfor %}
 </table>
+</div>
+{% endif %}
 
-
-
-
-
-<h3>Games</h3>
-<ul>
+{% if games %}
+<div tab="games">
+<table>
 {% for game in games %}
-<li><a href="{% url game_detail game.id %}">{{ game }}</a></li>
+<tr>
+  <td><a href="{% url game_detail game.id %}">{{ game.date }}</a></td>
+  <td><a href="{% url team_detail game.team1.slug %}">{{ game.team1 }}</a></td>
+  <td><a href="{% url game_detail game.id %}">{{ game.score }}</a></td>
+  <td><a href="{% url team_detail game.team2.slug %}">{{ game.team2 }}</a></td>
+  {% if game.stadium %}
+  <td><a href="{% url stadium_detail game.stadium.slug %}">{{ game.stadium }}</a></td>
+  {% else %}
+  <td><a href="{% url city_detail game.city.slug %}">{{ game.city }}</a></td>
+  {% endif %}
 {% endfor %}
-</ul>
+</table>
+</div>
+{% endif %}
+
+</div>
 
 
 {% endblock %}

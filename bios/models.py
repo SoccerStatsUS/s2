@@ -259,13 +259,14 @@ class Bio(models.Model):
 
         l = []
         for method in dir(self):
-            try:
-                m = getattr(self, method)
-                if 'all' in dir(m) and m.all():
-                    t = (method, m.all())
-                    l.append(t)
-            except:
-                pass
+            if not method.startswith('_'):
+                try:
+                    m = getattr(self, method)
+                    if 'all' in dir(m) and m.all():
+                        t = (method, m.all())
+                        l.append(t)
+                except:
+                    pass
         return l
             
 
