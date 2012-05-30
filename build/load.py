@@ -16,7 +16,7 @@ from games.models import Game
 from goals.models import Goal
 from lineups.models import Appearance
 from news.models import NewsSource
-from places.models import City, Stadium
+from places.models import Country, State, City, Stadium
 from positions.models import Position
 from teams.models import Team
 from stats.models import Stat
@@ -47,6 +47,91 @@ def make_team_getter():
         return team_id
 
     return get_team
+
+
+def make_city_getter():
+    cg = make_city_pre_getter()
+    
+    def get_city(s):
+        c = cg(s)
+
+        state = country = None
+        if c['state']:
+            state = State.objects.get(name=c['state'])
+
+        if c['country']:
+            country = State.objects.get(name=c['country'])
+
+        try:
+            return City.objects.get(name=c['name'], state=state, country=country)
+        except:
+            import pdb; pdb.set_trace()
+
+        x= 5 
+
+    return get_city
+
+
+def make_city_pre_getter():
+    """
+    Retrieve teams easily.
+    """
+
+    def make_state_abbreviation_dict():
+        d = {}
+        for e in soccer_db.states.find():
+            d[e['abbreviation']] = (e['name'], e.get('country'))
+
+        return d
+
+
+    def make_state_name_dict():
+        d = {}
+        for e in soccer_db.states.find():
+            d[e['name']] = (e['name'], e.get('country'))
+
+        return d
+
+        
+
+    country_name_set = set([e['name'] for e in soccer_db.countries.find()])
+    state_abbreviation_dict = make_state_abbreviation_dict()
+    state_name_dict = make_state_name_dict()
+
+
+    def get_city(s):
+
+        state = country = None
+
+        if ',' in s:
+            pieces = s.split(',')
+            end = pieces[-1].strip()
+
+            if end in state_abbreviation_dict:
+                state, country = state_abbreviation_dict[end]
+
+            elif end in state_name_dict:
+                state, country = state_name_dict[end]
+
+            elif end in country_name_set:
+                country = country
+
+        if country or state:
+            name = ','.join(pieces[:-1])
+        else:
+            name = s
+
+        return {
+            'name': name,
+            'state': state,
+            'country': country,
+            }
+
+
+    return get_city
+
+
+
 
 def make_bio_getter():
     """
@@ -150,11 +235,18 @@ def make_game_getter():
     return getter
 
 
+
+
+
+
 def load():
 
-    load_news()
-    load_teams()
+    load_places()
     load_stadiums()
+
+
+    load_teams()
+
 
     # Game data
     load_standings()
@@ -162,6 +254,9 @@ def load():
 
     # Person data
     load_bios()
+
+    return
+
     load_awards()
     load_drafts()
     load_positions()
@@ -170,6 +265,55 @@ def load():
     load_stats()
     load_goals()
     load_lineups()
+
+    #load_news()
+
+
+
+
+
+def load_places():
+
+    for country in soccer_db.countries.find():
+        country.pop('_id')
+        country['slug'] = slugify(country['name'])
+        Country.objects.create(**country)
+
+
+    for state in soccer_db.states.find():
+        state.pop('_id')
+        state['slug'] = slugify(state['name'])
+        State.objects.create(**state)
+
+    cg = make_city_pre_getter()
+
+    city_set  = set()
+
+    for city in soccer_db.cities.find():
+        c = cg(city['name'])
+
+        if c['state']:
+            c['state'] = State.objects.get(name=c['state'])
+
+        if c['country']:
+            c['country'] = Country.objects.get(name=c['country'])
+
+        # Create slugs
+        if c['state']:
+            slug = "%s %s" % (c['name'], c['state'].abbreviation)
+
+        elif c['country']:
+            slug = "%s %s" % (c['name'], c['country'])
+
+        else:
+            slug = c['name']
+
+        c['slug'] = slugify(slug)
+
+        city_set.add(tuple(sorted(c.items())))
+
+    for e in city_set:
+        City.objects.create(**dict(e))
 
 
 
@@ -332,9 +476,14 @@ def load_teams():
 @transaction.commit_on_success
 def load_stadiums():
     print "loading stadiums"
+
+    cg = make_city_getter()
+
     for stadium in soccer_db.stadiums.find():
         stadium.pop('_id')
         stadium['slug'] = slugify(stadium['name'])
+
+        stadium['city'] = cg(stadium['location'])
 
         
         if 'renovations' in stadium:
@@ -366,6 +515,8 @@ def load_standings():
 
 @transaction.commit_on_success
 def load_bios():
+    cg = make_city_getter()
+
     for bio in soccer_db.bios.find():
         try:
             print "Creating bio for %s" % bio['name']
@@ -389,14 +540,19 @@ def load_bios():
         # Skipping this for the time being.
         if False and 'birthplace' in bio:
             d = get_location(bio['birthplace'])
-            if d:
-                bd['birthplace'] = City.objects.find(d)
-            else:
-                bd['birthplace'] = None
 
         for key in 'name', 'height', 'birthdate', 'height', 'weight':
             if key in bio:
                 bd[key] = bio[key] or None
+
+        if bio.get('birthplace'):
+            bd['birthplace'] = cg(bio['birthplace'])
+
+        if bio.get('deathplace'):
+            bd['deathplace'] = cg(bio['deathplace'])
+
+
+
 
         bd['hall_of_fame'] = bio.get('hall_of_fame', False)
 
@@ -411,6 +567,7 @@ def load_games():
     team_getter = make_team_getter()
     competition_getter = make_competition_getter()    
 
+    city_getter = make_city_getter()
 
     for game in soccer_db.games.find():
         game.pop('_id')
@@ -418,10 +575,17 @@ def load_games():
         if game.get('stadium'):
             game['stadium'] = stadium_getter(game['stadium'])
             game['stadium'] = Stadium.objects.get(id=game['stadium'])
+            game['city'] = game['stadium'].city
+
+        if game['location']:
+            game['city'] = city_getter(game['location'])
+
+
         
         game['competition'] = competition_getter(game['competition'])
         game['competition'] = Competition.objects.get(id=game['competition'])
         game['season'] = Season.objects.find(game['season'], game['competition'])
+
 
 
 

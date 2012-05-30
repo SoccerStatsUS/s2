@@ -4,6 +4,7 @@ from django.template.defaultfilters import slugify
 from bios.models import Bio
 
 
+
 class CountryManager(models.Manager):
 
     def find(self, s):
@@ -62,11 +63,13 @@ class City(models.Model):
     country = models.ForeignKey(Country, null=True, blank=True)
     slug = models.SlugField()
 
-    def __unicode_(self):
+    def __unicode__(self):
         if self.state:
             return "%s, %s" % (self.name, self.state.name)
-        else:
+        elif self.country:
             return "%s, %s" % (self.name, self.country.name)
+        else:
+            return self.name
 
 
 
@@ -108,7 +111,7 @@ class Stadium(models.Model):
     address = models.CharField(max_length=255)
     location = models.CharField(max_length=255)
 
-    #city = models.ForeignKey(City, null=True, blank=True)
+    city = models.ForeignKey(City, null=True, blank=True)
     #location = models.PointField()
 
     opened = models.DateField(null=True)

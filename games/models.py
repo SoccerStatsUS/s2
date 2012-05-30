@@ -4,7 +4,7 @@ from django.db import models
 
 from bios.models import Bio
 from competitions.models import Competition, Season
-from places.models import Stadium
+from places.models import Stadium, City
 from teams.models import Team
 
 import random
@@ -134,6 +134,7 @@ class Game(models.Model):
     # Foreign Key
     stadium = models.ForeignKey(Stadium, null=True)
     location = models.CharField(max_length=255)
+    city = models.ForeignKey(City, null=True)
 
     notes = models.TextField()
 

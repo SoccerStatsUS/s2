@@ -248,7 +248,7 @@ def generate_team_standings():
 @timer
 def generate_position_standings():
     """Generate standings for all positions."""
-    print "Calculating standings."
+    print "Calculating standings for positions."
     Position.objects.generate_standings()
 
 

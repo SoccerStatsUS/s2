@@ -5,9 +5,9 @@
 <h3>{{ stadium.name }}</h3>
 
 {% if stadium.address %}
-<h4>{{ stadium.address }}, {{ stadium.location }}</h4>
+<h4><a href="{% url city_detail stadium.city.slug %}">{{ stadium.address }}, {{ stadium.city }}</a></h4>
 {% else %}
-<h4>{{ stadium.location }}</h4>
+<h4><a href="{% url city_detail stadium.city.slug %}">{{ stadium.city }}</a></h4>
 {% endif %}
 
 

@@ -12,4 +12,38 @@
 {% endfor %}
 </ul>
 
+<table>
+{% for stadium in city.stadium_set.all %}
+<tr>
+  <td><a href="{% url stadium_detail stadium.slug %}">{{ stadium }}</a></td>
+  <td>{{ stadium.opened }}</td>
+  <td>{{ stadium.capacity }}</td>
+  <td>{{ stadium.cost }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<h3>Births</h3>
+
+<table>
+{% for bio in city.birth_set.all %}
+<tr>
+  <td><a href="{% url person_detail bio.slug %}">{{ bio }}</a></td>
+  <td>{{ bio.birthdate }}</td>
+</tr>
+{% endfor %}
+</table>
+
+
+
+
+
+<h3>Games</h3>
+<ul>
+{% for game in games %}
+<li><a href="{% url game_detail game.id %}">{{ game }}</a></li>
+{% endfor %}
+</ul>
+
+
 {% endblock %}
