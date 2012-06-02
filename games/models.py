@@ -65,11 +65,15 @@ class GameManager(models.Manager):
             d[key2] = e.id
         return d
 
-    def team_filter(self, team):
+    def team_filter(self, team1, team2=None):
         """
         Return all games played by a given team.
         """
-        return Game.objects.filter(models.Q(team1=team) | models.Q(team2=team))
+
+        if team2 is None:
+            return Game.objects.filter(models.Q(team1=team1) | models.Q(team2=team1))
+        else:
+            return Game.objects.filter(models.Q(team1=team1, team2=team2) | models.Q(team2=team1, team1=team2))
             
 
     def find(self, team, date):

@@ -72,7 +72,7 @@ def lineup_search(request):
 
 
 
-@cache_page(60 * 24)
+#@cache_page(60 * 24)
 def games_ajax_by_id(request):
     """
     For internal use.
@@ -184,6 +184,10 @@ def stats_ajax_by_id(request):
 
     def get_stats(request):
         stats = Stat.objects.all()
+        if 'type' in request.GET:
+            t = request.GET.get('type')
+            if t == 'team':
+                stats = Stat.team_stats.all()
 
         if 'team' in request.GET:
             t = request.GET['team']

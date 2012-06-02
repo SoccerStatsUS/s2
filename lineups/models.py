@@ -17,12 +17,11 @@ class Appearance(models.Model):
     
     game = models.ForeignKey(Game)
 
-    #on = models.IntegerField()
-    #off = models.IntegerField()
+    on = models.IntegerField(null=True)
+    off = models.IntegerField(null=True)
     
     # Default should be integer.
-    on = models.CharField(max_length=255)
-    off = models.CharField(max_length=255)
+
 
     age = models.FloatField(null=True) # Age in years at the time of game.
 
