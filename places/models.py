@@ -97,7 +97,8 @@ class StadiumManager(models.Manager):
         if stadiums:
             return stadiums[0]
         else:
-            return Stadium.objects.create(name=name)
+            slug = slugify(name)
+            return Stadium.objects.create(name=name, slug=slug)
 
 
 

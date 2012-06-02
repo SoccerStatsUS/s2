@@ -4,6 +4,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 
 from competitions.models import Season
+from games.models import Game
 from teams.models import Team
 from standings.models import Standing
 from stats.models import Stat
@@ -29,6 +30,19 @@ def team_index(request):
         }
 
     return render_to_response("teams/index.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+
+def team_standings(request):
+
+    standings = Standing.objects.filter(competition=None).order_by('-wins')
+
+    context = {
+        'standings': standings,
+        }
+
+    return render_to_response("teams/standings.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -96,6 +110,25 @@ def team_detail(request, team_slug):
         }
 
     return render_to_response("teams/detail.html",
+                              context,
+                              context_instance=RequestContext(request)
+                              )
+    
+
+def team_versus(request, team1_slug, team2_slug):
+    """
+    Just about the most important view of all.
+    """
+    team1 = get_object_or_404(Team, slug=team1_slug)
+    team2 = get_object_or_404(Team, slug=team2_slug)
+
+    context = {
+        'team1': team1,
+        'team2': team1,
+        'games': Game.objects.team_filter(team1, team2),
+        }
+
+    return render_to_response("teams/versus.html",
                               context,
                               context_instance=RequestContext(request)
                               )

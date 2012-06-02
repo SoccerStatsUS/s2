@@ -22,6 +22,7 @@
     <td><a href="{% url game_detail game.id %}">{{ game.score }}</a></td>
     <td><a href="{% url team_detail game.team2.slug %}">{{ game.team2_original_name }}</a></td>
 
+
     {% if game.stadium %}
     <td><a href="{% url stadium_detail game.stadium.slug %}">{{ game.stadium }}</a></td>
     {% else %}
@@ -31,6 +32,7 @@
     <td></td>
     {% endif %}
     {% endif %}
+
     
     {% if game.referee %}
     <td><a href="{% url person_detail game.referee.slug %}">{{ game.referee }}</a></td>

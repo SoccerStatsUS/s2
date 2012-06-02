@@ -9,7 +9,7 @@
 <script type="text/javascript">
   $(document).ready(function (){
   $("div[tab='games']").load("{% url games_ajax_by_id %}?team={{ team.id }}");
-  $("div[tab='stats']").load("{% url stats_ajax_by_id %}?team={{ team.id }}");
+  $("div[tab='stats']").load("{% url stats_ajax_by_id %}?team={{ team.id }}&type=team");
   });
 </script>
 
