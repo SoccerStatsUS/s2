@@ -17,9 +17,11 @@ class Draft(models.Model):
 
     name = models.CharField(max_length=255)
     slug = models.SlugField()
-    #date = models.DateField(null=True, blank=True)
 
-    real = models.BooleanField()
+    season = models.CharField(max_length=255)
+    
+    start = models.DateField(blank=True, null=True)
+    end = models.DateField(blank=True, null=True)
 
     #objects = DraftManager()
 
@@ -39,15 +41,22 @@ class Draft(models.Model):
 
 class Pick(models.Model):
     draft = models.ForeignKey(Draft)
+    number = models.IntegerField()
+
+    team = models.ForeignKey(Team)
+    former_team = models.ForeignKey(Team, null=True, related_name='former_team_set')
 
     text = models.CharField(max_length=255)
     player = models.ForeignKey(Bio, null=True)
-    position = models.IntegerField()
-    team = models.ForeignKey(Team)
+
+    position = models.CharField(max_length=5)
+
+
+
 
     def __unicode__(self):
-        return "%s %s" % (self.position, self.player)
+        return "%s %s" % (self.number, self.player)
 
     class Meta:
-        ordering = ('draft', 'position',)
+        ordering = ('draft', 'number',)
 

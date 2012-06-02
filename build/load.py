@@ -406,39 +406,28 @@ def load_drafts():
     team_getter = make_team_getter()
 
     # Create the set of drafts.
-    drafts = set()
-    for pick in soccer_db.drafts.find():
-        t = (pick.get('competition'), pick['draft'])
-        drafts.add(t)
 
-
-    # Map competition, draft name to Draft objects.
-    # Would be nice not to create these here.=
-    draft_dict = {}
-    for t in drafts:
-
-        competition, name = t
-
-        real = True
-
-        competition_id = competition_getter(competition)
+    for draft in soccer_db.drafts.find():
+        draft.pop('_id')
+        competition_id = competition_getter(draft['competition'])        
         competition = Competition.objects.get(id=competition_id)
-        d = Draft.objects.create(competition=competition, name=name, real=real)
-
-        draft_dict[t] = d
+        draft['competition'] = competition
+        Draft.objects.create(**draft)
 
     # Create picks
     picks = []
-    for pick in soccer_db.drafts.find():
+    for pick in soccer_db.picks.find():
         pick.pop('_id')
 
         # draft, text, player, position, team
-        draft = draft_dict[(pick.get('competition'), pick['draft'])]
+        draft = Draft.objects.get(name=pick.get('draft'), season=pick.get('season'))
 
         team_id = team_getter(pick['team'])
 
-        if 'competition' in pick:
-            pick.pop('competition')
+        if pick.get('former_team'):
+            former_team_id = team_getter(pick['former_team'])
+        else:
+            former_team_id = None
 
         # Set the player reference.
         text = pick['text']
@@ -448,6 +437,7 @@ def load_drafts():
         # Draft picks were "drafted" in the MLS Allocation Draft.
         elif "SuperDraft" in text:
             player_id = None
+
         else:
             player_id = Bio.objects.find(text).id
 
@@ -456,7 +446,9 @@ def load_drafts():
                 'player_id': player_id,
                 'team_id': team_id,
                 'text': text,
-                'position': pick['position'],
+                'position': pick.get('position') or '',
+                'former_team_id': former_team_id,
+                'number': pick['number'],
                 })
 
     for e in picks:
@@ -464,6 +456,8 @@ def load_drafts():
             Pick.objects.create(**e)
         except:
             import pdb; pdb.set_trace()
+
+    x = 5
     #insert_sql("drafts_pick", picks)
         
         
