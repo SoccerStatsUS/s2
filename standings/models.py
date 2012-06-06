@@ -17,6 +17,8 @@ class Standing(models.Model):
     competition = models.ForeignKey(Competition, null=True)
     season = models.ForeignKey(Season, null=True)
 
+    # Merge these into one.
+    group = models.CharField(max_length=255)
     division = models.CharField(max_length=255)
 
     # Standing can be a completed standing or just for a given date.

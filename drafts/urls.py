@@ -6,7 +6,7 @@ urlpatterns = patterns('drafts.views',
                            'drafts_index',
                            name='drafts_index'),
 
-                       url(r'^(?P<competition_slug>[a-z0-9-]+)/(?P<draft_slug>[a-z0-9-]+)/$',
+                       url(r'^(?P<competition_slug>[a-z0-9-]+)/(?P<draft_slug>[a-z0-9-]+)/(?P<season>[a-z0-9-]+)/$',
                            'draft_detail',
                            name='draft_detail'),
 

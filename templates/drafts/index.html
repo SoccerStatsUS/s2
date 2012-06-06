@@ -27,7 +27,7 @@
 
 <ul>
 {% for item in dx.list %}
-<li><a href="{% url draft_detail dx.grouper.slug item.slug %}">{{ item.name }}</a></li>
+<li><a href="{% url draft_detail dx.grouper.slug item.slug item.season %}">{{ item.name }}</a></li>
 {% endfor %}
 </ul>
 

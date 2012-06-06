@@ -69,17 +69,12 @@
   {% endfor %}
 </table>
 
-</div>
-
-{% endif %}
-
 {% if game.appearance_set.exists %}
-<div tab="lineups">
 {% include "templatetags/game_lineup.html"  %}
-</div>
-
 {% endif %}
 
+{% endif %}
+</div>
 
 {% if game.series.count > 1 %}
 <div tab="series">

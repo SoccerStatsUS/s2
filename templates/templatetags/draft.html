@@ -10,7 +10,7 @@
   {% endif %}
 
   <td><a href="{% url team_detail pick.team.slug %}">{{ pick.team }}</a></td>
-  <td><a href="{% url draft_detail pick.draft.competition.slug pick.draft.slug %}">{{ pick.draft }}</a></td>
+  <td><a href="{% url draft_detail pick.draft.competition.slug pick.draft.slug pick.draft.season %}">{{ pick.draft }}</a></td>
 </tr>
 {% endfor %}
 </table>
