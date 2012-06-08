@@ -274,3 +274,16 @@ textarea.contact {
 #tabs li.grey {
     color: #000;
 }
+
+
+.win {
+    color: green;
+}
+
+.tie {
+    color: grey;
+}
+
+.loss {
+    color: red;
+}

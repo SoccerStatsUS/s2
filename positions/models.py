@@ -6,6 +6,8 @@ from bios.models import Bio
 
 from collections import defaultdict
 
+import datetime
+
 class PositionManager(models.Manager):
 
     def generate_standings(self):
@@ -33,6 +35,10 @@ class Position(models.Model):
     start = models.DateField(null=True, blank=True)
     end = models.DateField(null=True, blank=True)
 
+    wins = models.IntegerField(null=True)
+    losses = models.IntegerField(null=True)
+    ties = models.IntegerField(null=True)
+
     slug = models.SlugField()
 
     objects = PositionManager()
@@ -47,6 +53,22 @@ class Position(models.Model):
             
         super(Position, self).save(*args, **kwargs)
 
+    def win_percentage(self):
+        if self.wins or self.ties or self.losses:
+            return (self.wins + .5 * self.ties) / (self.wins + self.ties + self.losses)
+        else:
+            return None
+
+
+    def length(self):
+        if self.end and self.start:
+            return (self.end - self.start).days
+        elif self.start:
+            return (datetime.date.today() - self.start).days
+        else:
+            return 0
+            
+            
 
 
     def games(self):

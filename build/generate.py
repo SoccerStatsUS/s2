@@ -1,4 +1,5 @@
 from collections import defaultdict
+import datetime
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
@@ -16,6 +17,8 @@ from teams.models import Team
 
 from utils import insert_sql, timer
 
+
+
 def generate():
     """
     Generate stats.
@@ -30,36 +33,52 @@ def generate():
     generate_competition_standings()
     generate_team_standings()
 
-    generate_game_data_quality()
+    # Generate coaching stats!
+    #generate_position_stats()
+
+    #generate_game_data_quality()
     #generate_game_minutes()
+
+
+def calculate_standings(team, games=None):
+
+    if games is None:
+        games = Game.objects.team_filter(position.team)
+
+    wins = losses = ties = 0
+    for game in games:
+        r = game.result(team)
+
+        if r == 'win':
+            wins += 1
+        elif r == 'loss':
+            losses += 1
+        elif r == 'tie':
+            ties += 1
+
+    return wins, losses, ties
 
 
 @timer
 @transaction.commit_on_success
-def generate_game_minutes():
-    """
-    Generate all game minutes that we can.
-    """
-    print "Generating game minutes"
+def generate_position_stats():
+    for position in Position.objects.all():
+        if position.end is None:
+            end = datetime.date.today()
+        else:
+            end = position.end
 
-    l = []
-    print "Creating score for %s games" % Game.objects.count()
-    for i, e in enumerate(Game.objects.all()):
-        if i % 1000 == 0:
-            print "Making scores for %s" % i
+        if position.start:
+            games = Game.objects.team_filter(position.team).filter(date__gte=position.start, date__lte=end)
+            if games.exists():
+                try:
+                    print "Creating result stats for %s games for %s - %s at %s" % (games.count(), position.person, position.name, position.team)
+                except:
+                    print "Creating result stats."
+                position.wins, position.losses, position.ties = calculate_standings(position.team, games)
+                position.save()
         
-        l.extend(e.game_scores_by_minute())
-
-    # Just want to know how long this takes.
-    @timer
-    def insert_game_minutes():
-        print "Generating %s game minutes" % len(l)
-        insert_sql("games_gameminute", l)
-
-    insert_game_minutes()
-        
-
-        
+            
     
 @timer
 @transaction.commit_on_success
@@ -229,7 +248,7 @@ def generate_team_standings():
 @timer
 def generate_position_standings():
     """Generate standings for all positions."""
-    print "Calculating standings."
+    print "Calculating standings for positions."
     Position.objects.generate_standings()
 
 
@@ -245,12 +264,10 @@ def generate_player_standings():
         if i % 1000 == 0:
             print i
 
-
-
-    
-        
-
 def generate_plus_minus(appearance_qs):
+    """
+    Generate the +/- for a given queryset.
+    """
 
     print "Generating plus_minus"
     d = defaultdict(int)
@@ -282,11 +299,73 @@ def generate_career_plus_minus():
         s = career_stat_dict[k]
         s.plus_minus = v
         s.save()
+
+
+@timer
+@transaction.commit_on_success
+def generate_game_minutes():
+    """
+    Generate all game minutes that we can.
+    These are single minute slices of a game.
+    Really intensive cpu use.
+    """
+    print "Generating game minutes"
+
+    l = []
+    print "Creating score for %s games" % Game.objects.count()
+    for i, e in enumerate(Game.objects.all()):
+        if i % 1000 == 0:
+            print "Making scores for %s" % i
         
+        l.extend(e.game_scores_by_minute())
+
+    # Just want to know how long this takes.
+    @timer
+    def insert_game_minutes():
+        print "Generating %s game minutes" % len(l)
+        insert_sql("games_gameminute", l)
+
+    insert_game_minutes()
+
+
+
+def generate_top_attendances(qs=None):
+    """
+    Generate a rolling list of top attendances.
+    """
+    # Put this in GameManager?
+
+    if qs is None:
+        qs = Game.objects.all()
+
+    qs = qs.order_by('date')
+    
+    max = -1
+
+    gids = []
+
+    for gid, attendance in qs.values_list("id", "attendance"):
+        if gid in (7591, 8202, 8184, 11119, 8671, 3809):
+            continue
+
+        if attendance:
+            if attendance > max:
+                max = attendance
+                gids.append(gid)
+
+    return Game.objects.filter(id__in=gids).order_by('date')
     
             
                         
 if __name__ == "__main__":
-    generate_team_standings()
+    t = generate_top_attendances()
+    for g in t:
+        print g
+        print g.id
+        print g.attendance
+        print
+    #generate_team_standings()
+
+
 
 

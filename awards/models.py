@@ -10,6 +10,12 @@ class Award(models.Model):
     competition = models.ForeignKey(Competition, null=True)
     #date = models.DateField()
 
+    # This is used to distinguish awards that are named differently but mean the same thing.
+    # e.g. MVP, Golden ? (whatever the best World Cup player wins.)
+    # Golden boot / top scorer.
+    # Supporters Shield, Champion, etc.
+    type = models.CharField(max_length=255)
+
 
     def is_multi(self):
         """
@@ -25,7 +31,10 @@ class Award(models.Model):
 
 
     def __unicode__(self):
-        return "%s %s" % (self.competition.name, self.name)
+        if self.competition:
+            return "%s %s" % (self.competition.name, self.name)
+        else:
+            return "No Competition %s" % self.name
 
     class Meta:
         ordering = ('competition', 'name')
@@ -49,4 +58,4 @@ class AwardItem(models.Model):
         return "%s %s %s" % (self.season, self.award.name, self.recipient)
 
     class Meta:
-        ordering = ("season",)
+        ordering = ("year", 'season')

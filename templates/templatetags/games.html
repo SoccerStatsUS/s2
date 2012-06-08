@@ -18,10 +18,22 @@
     <td class="{{ game.color_code }}-bg"></td>
     <td><a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date }}</a></td>
     <td><a href="{% url competition_detail game.competition.slug %}">{{ game.competition.abbreviation }}</a></td>
-    <td><a href="{% url team_detail game.team1.slug %}">{{ game.team1 }}</a></td>
+    <td><a href="{% url team_detail game.team1.slug %}">{{ game.team1_original_name }}</a></td>
     <td><a href="{% url game_detail game.id %}">{{ game.score }}</a></td>
-    <td><a href="{% url team_detail game.team2.slug %}">{{ game.team2 }}</a></td>
-    <td>{{ game.location }}</td>
+    <td><a href="{% url team_detail game.team2.slug %}">{{ game.team2_original_name }}</a></td>
+
+
+    {% if game.stadium %}
+    <td><a href="{% url stadium_detail game.stadium.slug %}">{{ game.stadium }}</a></td>
+    {% else %}
+    {% if game.city %}
+    <td><a href="{% url city_detail game.city.slug %}">{{ game.city }}</a></td>
+    {% else %}
+    <td></td>
+    {% endif %}
+    {% endif %}
+
+    
     {% if game.referee %}
     <td><a href="{% url person_detail game.referee.slug %}">{{ game.referee }}</a></td>
     {% else %}

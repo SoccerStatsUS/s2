@@ -1,7 +1,12 @@
+{% load datum_or_none %}
+
 <table>
 {% for pick in picks %}
 <tr>
-  <td>{{ pick.position }}</td>
+
+  <td>{{ pick.number }}</td>
+
+
 
   {% if pick.player %}
   <td><a href="{% url person_detail pick.player.slug %}">{{ pick.player }}</a></td>
@@ -10,7 +15,9 @@
   {% endif %}
 
   <td><a href="{% url team_detail pick.team.slug %}">{{ pick.team }}</a></td>
-  <td><a href="{% url draft_detail pick.draft.competition.slug pick.draft.slug %}">{{ pick.draft }}</a></td>
+  <td><a href="{% url draft_detail pick.draft.competition.slug pick.draft.slug pick.draft.season %}">{{ pick.draft }}</a></td>
+  <td><a href="{% url season_detail pick.draft.competition.slug pick.draft.season %}">{{ pick.draft.season }}</a></td>
+  {% datum_or_grey pick.position %}
 </tr>
 {% endfor %}
 </table>

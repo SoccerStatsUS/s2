@@ -28,7 +28,9 @@
       {% endfor %}
       </select>
     </td>
-    <td>{{ competition.data_string }}</td>
+    <td>{{ competition.game_set.count }}</td>
+    <td>{{ competition.goal_set.count }}</td>
+    <td>{{ competition.appearance_set.count }}</td>
   </tr>
   {% endfor %}
 

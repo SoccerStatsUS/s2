@@ -2,10 +2,28 @@
 
 {% block content %}
 
-<ul>
+
+<table>
+
+<thead>
+  <tr>
+    <th>name</th>
+    <th></th>
+    <th>population</th>
+    <th>joined</th>
+    </tr>
+</thead>
+
+
 {% for state in states %}
-<li><a href="{% url state_detail state.id %}">{{ state }}</a></li>
+<tr>
+  <td><a href="{% url state_detail state.slug %}">{{ state }}</a></td>
+  <td>{{ state.abbreviation }}</td>
+  <td>{{ state.recent_population }}</td>
+  <td>{{ state.joined }}</td>
+</tr>
 {% endfor %}
-</ul>
+
+</table>
 
 {% endblock %}

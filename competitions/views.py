@@ -21,15 +21,40 @@ def competition_detail(request, competition_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
     context = {
         'competition': competition,
-        'stats': Stat.competition_stats.filter(team=None, competition=competition).order_by('-minutes'),
+        'stats': Stat.competition_stats.filter(team=None, competition=competition).order_by('-games_played')[:25],
+        'games': competition.game_set.all()[:25],
         }
     return render_to_response("competitions/competition_detail.html",
                               context,
                               context_instance=RequestContext(request))
 
+@cache_page(60 * 60 * 12)
+def competition_stats(request, competition_slug):
+    competition = get_object_or_404(Competition, slug=competition_slug)
+    context = {
+        'competition': competition,
+        'stats': Stat.competition_stats.filter(team=None, competition=competition).order_by('-games_played'),
+        }
+    return render_to_response("competitions/competition_stats.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+
+@cache_page(60 * 60 * 12)
+def competition_games(request, competition_slug):
+    competition = get_object_or_404(Competition, slug=competition_slug)
+    context = {
+        'competition': competition,
+        'games': competition.game_set.all(),
+
+        }
+    return render_to_response("competitions/competition_games.html",
+                              context,
+                              context_instance=RequestContext(request))
 
 
 
+@cache_page(60 * 60 * 12)
 def season_detail(request, competition_slug, season_slug):
     """
     Detail for a given season, e.g. Major League Soccer, 1996.
@@ -40,15 +65,51 @@ def season_detail(request, competition_slug, season_slug):
 
     context = {
         'season': season,
-        'stats': Stat.objects.filter(season=season, competition=season.competition).order_by("-minutes"),
-        'testing': Stat.competition_stats.filter(player__in=season.players_added(), competition=competition).order_by("-games_played"),
+        'stats': Stat.objects.filter(season=season, competition=season.competition).exists(),
         }
     return render_to_response("competitions/season_detail.html",
                               context,
                               context_instance=RequestContext(request))
 
 
+@cache_page(60 * 60 * 12)
+def season_stats(request, competition_slug, season_slug):
+    competition = get_object_or_404(Competition, slug=competition_slug)
+    season = get_object_or_404(Season, competition=competition, slug=season_slug)
+
+    #'stats': Stat.objects.filter(team=None, season=season).order_by('-games_played'),
+
+    context = {
+        'season': season,
+        'stats': Stat.objects.filter(season=season).order_by('-games_played'),
+        }
+    return render_to_response("competitions/season_stats.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+
+@cache_page(60 * 60 * 12)
+def season_games(request, competition_slug, season_slug):
+    competition = get_object_or_404(Competition, slug=competition_slug)
+    season = get_object_or_404(Season, competition=competition, slug=season_slug)
+
+    context = {
+        'season': season,
+        'games': competition.game_set.filter(season=season)
+
+        }
+    return render_to_response("competitions/season_games.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+
+
+
 def season_names(request):
+    """
+    Show the set of all distinct season names.
+    """
+    
     names = [e[0] for e in Season.objects.values_list('name')]
     names = sorted(set(names))
 
@@ -63,6 +124,10 @@ def season_names(request):
     
 
 def season_list(request, season_slug):
+    """
+    List all seasons of with a given slug.
+    """
+
     seasons = Season.objects.filter(slug=season_slug)
 
     context = {

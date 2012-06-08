@@ -2,10 +2,23 @@
 
 {% block content %}
 
-<ul>
+<table>
+
+<thead>
+  <tr>
+    <th>name</th>
+    <th>population</th>
+    </tr>
+</thead>
+
 {% for country in countries %}
-<li><a href="{% url country_detail country.slug %}">{{ country }}</a></li>
+<tr>
+  <td><a href="{% url country_detail country.slug %}">{{ country }}</a></td>
+  <td>{{ population }}</td>
+</tr>
 {% endfor %}
-</ul>
+
+</table>
+
 
 {% endblock %}

@@ -4,11 +4,50 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 
 from competitions.models import Season
+from games.models import Game
 from teams.models import Team
 from standings.models import Standing
 from stats.models import Stat
 
 from django.views.decorators.cache import cache_page
+
+
+def team_index(request):
+    """
+    Teams shown by letter.
+    """
+    
+    letters = 'abcdefghijklmnopqrstuvwxyz'.upper()
+
+    name_dict = OrderedDict()
+
+    for letter in letters:
+        standings = Standing.objects.filter(competition=None, team__name__istartswith=letter).order_by('-wins')[:5]
+        name_dict[letter] = standings
+
+    context = {
+        'name_dict': name_dict
+        }
+
+    return render_to_response("teams/index.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+
+def team_standings(request):
+
+    standings = Standing.objects.filter(competition=None).order_by('-wins')
+
+    context = {
+        'standings': standings,
+        }
+
+    return render_to_response("teams/standings.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+
+
 
 def team_list_generic(request, team_list=None):
 
@@ -26,9 +65,6 @@ def team_list_generic(request, team_list=None):
                               )    
 
 
-def team_index(request):
-    standings = Standing.objects.filter(competition=None).order_by("-wins")
-    return team_list_generic(request, standings)
 
 def team_name_fragment(request, fragment):
     return team_list_generic(request,
@@ -36,25 +72,6 @@ def team_name_fragment(request, fragment):
 
 
 
-@cache_page(60 * 60 * 12)
-def team_index_new(request):
-    
-    letters = 'abcdefghijklmnopqrstuvwxyz'.upper()
-
-    name_dict = OrderedDict()
-
-    for letter in letters:
-        standings = Standing.objects.filter(competition=None, team__name__istartswith=letter).order_by('-wins')[:5]
-        stats = Stat.career_stats.filter(player__name__istartswith=letter)[:5]
-        name_dict[letter] = stats
-
-    context = {
-        'name_dict': name_dict
-        }
-
-    return render_to_response("teams/index.html",
-                              context,
-                              context_instance=RequestContext(request))
 
 
 
@@ -86,10 +103,32 @@ def team_detail(request, team_slug):
 
     context = {
         'team': team,
-        'stats': Stat.team_stats.filter(team=team, competition=None),
+        'stats': Stat.team_stats.filter(team=team, competition=None).exists(),
+        'games': team.game_set().exists(),
+        'head_coaches': team.position_set.filter(name='Head Coach'),
+        'current_staff': team.position_set.filter(end=None),
         }
 
     return render_to_response("teams/detail.html",
+                              context,
+                              context_instance=RequestContext(request)
+                              )
+    
+
+def team_versus(request, team1_slug, team2_slug):
+    """
+    Just about the most important view of all.
+    """
+    team1 = get_object_or_404(Team, slug=team1_slug)
+    team2 = get_object_or_404(Team, slug=team2_slug)
+
+    context = {
+        'team1': team1,
+        'team2': team1,
+        'games': Game.objects.team_filter(team1, team2),
+        }
+
+    return render_to_response("teams/versus.html",
                               context,
                               context_instance=RequestContext(request)
                               )

@@ -8,12 +8,13 @@
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
   <meta name="Description" content="{% block metadescription %}"Historical and modern Soccer Statistics for all American competitions, teams, and players. Includes stats, results, lineups, awards, drafts, career stats, salary data and more."{% endblock %}"</meta>
 
-  <link rel="stylesheet" href="{{ MEDIA_URL }}css/style.css" type="text/css" media="screen" >
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css" type="text/css" media="screen" >
+  <link rel="stylesheet" href="{{ STATIC_URL }}js/jquery.min.js" type="text/css" media="screen" >
 
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.tablesorter.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tablesorter.min.js"></script>
 
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/custom.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/custom.js"></script>
 
 
   {% block extrahead %}{% endblock %}
@@ -39,31 +40,24 @@
 
 <body>
 
-  <h1><a href="{% url home %}">socceroutsider.com</a> <span class="subhead">21<sup>st</sup> century database, 19<sup>th</sup> century sport</span>
-
-  </h1>
+  <h1><a href="{% url home %}">socceroutsider.com</a> <span class="subhead">The US soccer database (<a href="{% url year_detail 1884 %}">1884</a>-<a href="{% url year_detail 2012 %}">2012</a>)</span></h1>
 
   <div id="header">
     <ul>
       <li><a href="{% url competition_index %}">competitions</a></li>
       <li><a href="{% url person_index %}">players</a></li>
       <li><a href="{% url scoreboard_today %}">scoreboard</a></li>
-      <li><a href="{% url manager_index %}">coaches</a></li>
+      {# <li><a href="{% url manager_index %}">coaches</a></li> #}
       <li><a href="{% url team_index %}">teams</a></li>
       <li><a href="{% url drafts_index %}">drafts</a></li>
       <li><a href="{% url award_index %}">awards</a></li>
       <li><a href="{% url tool_index %}">tools</a></li>
     </ul>
 
-    {% comment %}
       <form method="get" action="/search" id="search_form">
         <input type="text" name="q" id="id_q" />
         <input type="submit" value="Search" id="search_input" />
       </form>
-      {% endcomment %}
-
-
-
 
     <div class="clear"></div>
   </div>

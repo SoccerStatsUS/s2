@@ -4,7 +4,7 @@ from django.db import models
 
 from bios.models import Bio
 from competitions.models import Competition, Season
-from places.models import Stadium
+from places.models import Stadium, City
 from teams.models import Team
 
 import random
@@ -65,11 +65,15 @@ class GameManager(models.Manager):
             d[key2] = e.id
         return d
 
-    def team_filter(self, team):
+    def team_filter(self, team1, team2=None):
         """
         Return all games played by a given team.
         """
-        return Game.objects.filter(models.Q(team1=team) | models.Q(team2=team))
+
+        if team2 is None:
+            return Game.objects.filter(models.Q(team1=team1) | models.Q(team2=team1))
+        else:
+            return Game.objects.filter(models.Q(team1=team1, team2=team2) | models.Q(team2=team1, team1=team2))
             
 
     def find(self, team, date):
@@ -111,11 +115,13 @@ class Game(models.Model):
     date = models.DateField()
     
     team1 = models.ForeignKey(Team, related_name='home_games')
+    team1_original_name = models.CharField(max_length=255)
+    team2 = models.ForeignKey(Team, related_name='away_games')
+    team2_original_name = models.CharField(max_length=255)
+
     team1_score = models.IntegerField()
     official_home_score = models.IntegerField(null=True)
-
-    team2 = models.ForeignKey(Team, related_name='away_games')
-    team2_score = models.IntegerField()
+    team2_score = models.IntegerField()    
     official_away_score = models.IntegerField(null=True)
 
     goals = models.IntegerField()
@@ -132,18 +138,23 @@ class Game(models.Model):
     # Foreign Key
     stadium = models.ForeignKey(Stadium, null=True)
     location = models.CharField(max_length=255)
+    city = models.ForeignKey(City, null=True)
 
     notes = models.TextField()
 
     attendance = models.IntegerField(null=True, blank=True)
 
-    referee = models.ForeignKey(Bio, null=True, blank=True)
+    referee = models.ForeignKey(Bio, null=True, blank=True, related_name="games_refereed")
+    linesman1 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman1_games")
+    linesman2 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman2_games")
+    linesman3 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman3_games")
 
     objects = GameManager()
 
 
+
     class Meta:
-        ordering = ('date',)
+        ordering = ('-date',)
         unique_together = [('team1', 'date', 'minigame'), ('team2', 'date', 'minigame')]
 
 

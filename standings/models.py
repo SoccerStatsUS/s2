@@ -17,6 +17,8 @@ class Standing(models.Model):
     competition = models.ForeignKey(Competition, null=True)
     season = models.ForeignKey(Season, null=True)
 
+    # Merge these into one.
+    group = models.CharField(max_length=255)
     division = models.CharField(max_length=255)
 
     # Standing can be a completed standing or just for a given date.
@@ -37,6 +39,7 @@ class Standing(models.Model):
     goals_for = models.IntegerField(null=True)
     goals_against = models.IntegerField(null=True)
 
+    # These should probably be pk losses or a more generic term.
     shootout_wins = models.IntegerField(null=True)
     shootout_losses = models.IntegerField(null=True)
 

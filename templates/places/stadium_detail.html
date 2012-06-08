@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>{{ stadium.name }}</h3>
+
+{% if stadium.address %}
+<h4><a href="{% url city_detail stadium.city.slug %}">{{ stadium.address }}, {{ stadium.city }}</a></h4>
+{% else %}
+<h4><a href="{% url city_detail stadium.city.slug %}">{{ stadium.city }}</a></h4>
+{% endif %}
+
+
+{% if stadium.opened %}
+<h4>Opened: <a href="{% url date_detail stadium.opened.year stadium.opened.month stadium.opened.day %}">{{ stadium.opened }}</a></h4>
+{% else %}
+{% if stadium.year_opened %}
+<h4>Opened: <a href="{% url year_detail stadium.year_opened %}">{{ stadium.year_opened }}</a></h4>
+{% endif %}
+{% endif %}
+
+{% if stadium.closed %}
+<h4>Closed: <a href="{% url date_detail stadium.closed.year stadium.closed.month stadium.closed.day %}">{{ stadium.closed }}</a></h4>
+{% else %}
+{% if stadium.year_closed %}
+<h4>Closed: <a href="{% url year_detail stadium.year_closed %}">{{ stadium.year_closed }}</a></h4>
+{% endif %}
+{% endif %}
+
+
+{% if stadium.capacity %}
+<h4>Capacity: {{ stadium.capacity }}</h4>
+{% endif %}
+
+
+{% if stadium.cost %}
+<h4>Cost: ${{ stadium.cost }}</h4>
+{% endif %}
+
+{% if stadium.architect %}
+<h4>Architect: <a href="{% url person_detail stadium.architect.slug %}">{{ stadium.architect }}</a></h4>
+{% endif %}
+
+
+
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+{% if stadium.game_set.exists %}
+<div tab="games">
+{% include "templatetags/games.html" with games=stadium.game_set.all %}
+</div>
+{% endif %}
+
+  
+{% if stadium.goal_set.exists %}
+<div tab="goals">
+{% include "templatetags/goals.html" with goals=stadium.goal_set.all %}
+</div>
+{% endif %}
+
+{% if stadium.appearance_set.exists %}
+<div tab="lineups">
+{% include "templatetags/appearance.html" with appearances=stadium.appearance_set.all %}
+</div>
+{% endif %}
+
+
+</div>
+
+{% endblock %}

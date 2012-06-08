@@ -14,7 +14,13 @@
   
   {% for item in award.awarditem_set.all %}
   <tr>
-    <td><a href="{% url season_detail item.season.competition.slug item.season.name %}">{{ item.season.name }}</a></td>
+
+  {% if award.season %}
+  <td><a href="{% url season_detail award.season.competition.slug award.season.slug %}">{{ award.season }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
     <td><a href="{{ item.recipient.get_absolute_url }}">{{ item.recipient }}</a></td>
   </tr>
   {% endfor %}

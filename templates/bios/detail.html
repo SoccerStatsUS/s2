@@ -4,6 +4,16 @@
 {% block title %}{{ bio.name }} Statistics and Information{% endblock %}
 {% block metadescription %}{{ bio.name }} soccer stats with games played, goals scored, bio data, awards...{% endblock %}
 
+{% block extrahead %}
+
+<script type="text/javascript">
+  $(document).ready(function (){
+  $("div[tab='stats']").load("{% url stats_ajax_by_id %}?name={{ bio.id }}?order=season");
+  });
+</script>
+
+{% endblock %}
+
 
 {% block content %}
 
@@ -23,7 +33,7 @@
   Born 
   {% if bio.birthdate %}<a href="{% url date_detail bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a>{% endif %}
   {% if bio.birthplace %}
-  in <a href="{% url city_detail bio.birthplace.id %}">{{ bio.birthplace.name }}</a>
+  in <a href="{% url city_detail bio.birthplace.slug %}">{{ bio.birthplace.name }}</a>
   {% endif %}
 </div>
 {% endif %}
@@ -32,7 +42,6 @@
 <ul id="tabs"></ul>
 
 <div id="tab_wrapper">
-
 
 {% if bio.season_stats.exists %}
 <div tab="stats">
@@ -55,10 +64,18 @@
 {% endif %}
 
 {% if bio.appearance_set.exists %}
-<div tab="lineups">
+<div tab="games">
 {% include "templatetags/appearance.html" with appearances=bio.appearance_set.all %}
 </div>
 {% endif %}
+
+{% if bio.games_refereed.all %}
+<div tab="referee">
+{% include "templatetags/games.html" with games=bio.games_refereed.all %}
+</div>
+{% endif %}
+
+
 
 {% if bio.awards.exists %}
 <div tab="awards">
@@ -66,7 +83,13 @@
 {% for award in bio.awards.all %}
 <tr>
   <td><a href="{% url award_detail award.award.id %}">{{ award.award.name }}</a></td>
+
+  {% if award.season %}
   <td><a href="{% url season_detail award.season.competition.slug award.season.slug %}">{{ award.season }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
 </tr>
 {% endfor %}
 </table>
@@ -90,12 +113,26 @@
 {% if bio.position_set.count %}
 <div tab="coaching">
 <table>
+  <tr>
+    <th>team</th>
+    <th>position</th>
+    <th>start</th>
+    <th>end</th>
+    <th>wins</th>
+    <th>ties</th>
+    <th>losses</th>
+  </tr>
+
 {% for position in bio.position_set.all %}
 <tr>
   <td><a href="{% url team_detail position.team.slug %}">{{ position.team }}</a></td>
   <td>{{ position.name }}</td>
   {% datum_or_grey position.start %}
   {% datum_or_grey position.end %}
+  {% datum_or_grey position.wins %}
+  {% datum_or_grey position.ties %}
+  {% datum_or_grey position.losses %}
+  {% datum_or_grey position.win_percentage|floatformat:3 %}
 </tr>
 {% endfor %}
 </table>

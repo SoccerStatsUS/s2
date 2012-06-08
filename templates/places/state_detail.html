@@ -1,16 +1,88 @@
 {% extends "base.html" %}
 
+{% load datum_or_none %}
+
 {% block content %}
 
-{{ state }}
+<h3>{{ state }}</h3>
+<h4>Joined: {{ state.joined }}</h4>
+<h4>Abbreviation {{ state.abbreviation }}</h4>
 
-<ul>
-{% for bio in bios %}
-<li><a href="{% url person_detail bio.slug %}">{{ bio }}</a></li>
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+
+<table>
+{% for pop in state.population_set %}
+<tr>
+  <td>{{ pop.year }}</td>
+  <td>{{ pop.population }}</td>
+</tr>
 {% endfor %}
-</ul>
+</table>
+
+<div tab="stadiums">
+<table>
+{% for stadium in stadiums %}
+<tr>
+  <td><a href="{% url stadium_detail stadium.slug %}">{{ stadium }}</a></td>
+  {% datum_or_grey stadium.opened %}
+  {% datum_or_grey stadium.capacity %}
+  {% datum_or_grey stadium.cost %}
+</tr>
+{% endfor %}
+</table>
+</div>
+
+
+<div tab="games">
+<table>
+{% for game in games %}
+<tr>
+  <td><a href="{% url game_detail game.id %}">{{ game.date }}</a></td>
+  <td><a href="{% url team_detail game.team1.slug %}">{{ game.team1 }}</a></td>
+  <td><a href="{% url game_detail game.id %}">{{ game.score }}</a></td>
+  <td><a href="{% url team_detail game.team2.slug %}">{{ game.team2 }}</a></td>
+  {% if game.stadium %}
+  <td><a href="{% url stadium_detail game.stadium.slug %}">{{ game.stadium }}</a></td>
+  {% else %}
+  <td><a href="{% url city_detail game.city.slug %}">{{ game.city }}</a></td>
+  {% endif %}
+</tr>
+{% endfor %}
+</table>
+</div>
+
+
+<div tab="births">
+<table>
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>bdate</th>
+      <th>bplace</th>
+    </tr>
+  </thead>
+
+{% for bio in births %}
+<tr>
+  <td><a href="{% url person_detail bio.slug %}">{{ bio }}</a></td>
+  <td><a href="{% url city_detail bio.birthplace.slug %}">{{ bio.birthplace }}</a></td>
+  {% if bio.birthdate %}
+  <td><a href="{% url date_detail bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
+</tr>
+{% endfor %}
+</table>
+
+</div>
 
 
 
+</div>
 
 {% endblock %}

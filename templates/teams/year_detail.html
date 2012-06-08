@@ -9,21 +9,20 @@
 <div id="tab_wrapper">
 
 
+<div tab="results">
 {% if standings %}
-<div tab="standings">
 {% include "templatetags/standings.html" %}
-</div>
 {% endif %}
+
+{% if games.exists %}
+{% include "templatetags/games.html" %}
+{% endif %}
+
+</div>
 
 {% if stats %}
 <div tab="stats">
 {% include "templatetags/bio.html" %}
-</div>
-{% endif %}
-
-{% if games.exists %}
-<div tab="games">
-{% include "templatetags/games.html" %}
 </div>
 {% endif %}
 

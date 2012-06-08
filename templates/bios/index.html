@@ -3,20 +3,22 @@
 
 {% block content %}
 
+
+
 <ul>
   {% for letter, stats in name_dict.items %}
   {% if stats.exists %}
   <li>
-    <a href="{% url bio_name_fragment letter %}">{{ letter }}</a> -
+    <a class="letter_link" href="{% url bio_name_fragment letter %}">{{ letter }}: </a>
     {% for stat in stats %}
-    <a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a>,
+    <a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a>{% if stat.player.hall_of_fame %}+{% endif %},
     {% endfor %}
   </li>
   {% endif %}
   {% endfor %}
 </ul>
 
-
+<p>+ indicates the player is a member of the <a href="">US Soccer Hall of Fame.</a></p>
 
 
 

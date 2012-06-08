@@ -30,6 +30,14 @@ urlpatterns = patterns('tools.views',
                            'games_ajax',
                            name='games_ajax'),
 
+                       url(r'^ajax/gamesid/$',
+                           'games_ajax_by_id',
+                           name='games_ajax_by_id'),
+
+                       url(r'^ajax/statsid/$',
+                           'stats_ajax_by_id',
+                           name='stats_ajax_by_id'),
+
 
                        url(r'^ajax/stats/$',
                            'stats_ajax',

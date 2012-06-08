@@ -30,6 +30,7 @@
     <th>season</th>
     <th>champion</th>
     <th>MVP</th>
+    <th>Golden Boot</th>
   </tr>
 
 
@@ -46,6 +47,9 @@
 
     {% endif %}
     {% endwith %}
+
+    <td></td>
+
   </tr>
   {% endfor %}
     
@@ -53,18 +57,25 @@
 </div>
 {% endif %}
 
-{% if competition.game_set.exists %}
+{% if games %}
 <div tab="games">
-{% include "templatetags/games.html" with games=competition.game_set.all %}
+{% include "templatetags/games.html" %}
 </div>
 {% endif %}
-
 
 {% if stats %}
 <div tab="stats" >
 {% include "templatetags/bio.html" %}
 </div>
 {% endif %}
+
+
+
+<div tab="coaches" >
+Hi.
+</div>
+
+
 
 {% if competition.award_set.exists %}
 <div tab="awards">

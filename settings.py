@@ -10,10 +10,19 @@ PRODUCTION_SITES = (
     "bert",
 )
 
+STATIC_URL = '/static/'
+
 
 TEMPLATE_CONTEXT_PROCESSORS += (
     'bios.context_processors.debug_mode',
 )    
+
+
+STATICFILES_DIRS = (
+    "/Users/chrisedgemon/www/s2/media",
+)
+
+
 
 
 
@@ -51,12 +60,7 @@ DATABASES = {
 }
 
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
-    }
-}
+
 
 # Fix this soon.
 #EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
@@ -93,14 +97,6 @@ USE_I18N = True
 USE_L10N = True
 
 
-
-MEDIA_ROOT = '%s/media' % PROJECT_DIR
-
-# Make sure to use a trailing slash for these.
-MEDIA_URL = "http://media.socceroutsider.com/"
-ADMIN_MEDIA_PREFIX = 'http://media.socceroutsider.com/admin/'
-
-
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -133,6 +129,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.messages',
+    'django.contrib.staticfiles',
     'gunicorn',
     'debug_toolbar',
 
@@ -146,6 +143,7 @@ INSTALLED_APPS = (
     'goals',
     'graphs',
     'lineups',
+    'news',
     'places',
     'positions',
     'sources',

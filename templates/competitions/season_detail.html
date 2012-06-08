@@ -3,13 +3,24 @@
 {% block title %}{{ season.competition.name }} {{ season.name }} Season Summary {% endblock %}
 {% block metadescription %}{{ season.competition.name }} soccer stats with standings, results, lineups, goals, awards...{% endblock %}
 
+{% block extrahead %}
+
+<script type="text/javascript">
+  $(document).ready(function (){
+  $("div[tab='games']").load("{% url games_ajax_by_id %}?season={{ season.id }}");
+  $("div[tab='stats']").load("{% url stats_ajax_by_id %}?season={{ season.id }}");
+  });
+</script>
+
+{% endblock %}
 
 {% block content %}
 
-
-{% if season.previous_season %}<a href="{% url season_detail season.competition.slug season.previous_season.slug %}">p</a>{% endif %}
-<h3>{{ season }}</h3>
-{% if season.next_season %}<a href="{% url season_detail season.competition.slug season.next_season.slug %}">n</a>{% endif %}
+<h3>
+{% if season.previous_season %}<a href="{% url season_detail season.competition.slug season.previous_season.slug %}">←</a>{% endif %}
+{{ season }}
+{% if season.next_season %}<a href="{% url season_detail season.competition.slug season.next_season.slug %}">→</a>{% endif %}
+</h3>
 
 <ul id="tabs"></ul>
 
@@ -24,7 +35,6 @@
 
 {% if stats %}
 <div tab="stats">
-{% include "templatetags/bio.html" %}
 </div>
 {% endif %}
 
@@ -50,7 +60,6 @@
 
 {% if season.game_set.exists %}
 <div tab="games">
-{% include "templatetags/games.html" with games=season.game_set.all %}
 </div>
 {% endif %}
 

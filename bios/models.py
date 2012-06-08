@@ -4,12 +4,12 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils.functional import memoize
 
+
+
 from collections import defaultdict
 import datetime
 
 import random
-
-#from places.models import City
 
 
 class BioManager(models.Manager):
@@ -73,6 +73,9 @@ class BioManager(models.Manager):
 
 
 class Bio(models.Model):
+
+
+
     """
     Player or anybody else bio.
     """
@@ -83,18 +86,18 @@ class Bio(models.Model):
     height = models.IntegerField(null=True, blank=True)
 
     birthdate = models.DateField(null=True, blank=True)
-    #birthplace = models.ForeignKey(City, null=True, blank=True, related_name="birth_set")
-    birthplace = models.CharField(max_length=200)
+    birthplace = models.ForeignKey('places.City', null=True, blank=True, related_name='birth_set')
 
     deathdate = models.DateField(null=True, blank=True)
-    #deathplace = models.ForeignKey(City, null=True, blank=True, related_name="death_set")
-    deathplace = models.CharField(max_length=200)
-
+    deathplace = models.ForeignKey('places.City', null=True, blank=True, related_name='death_set')
 
     height = models.IntegerField(null=True, blank=True)
     weight = models.IntegerField(null=True, blank=True)
 
     awards = generic.GenericRelation('awards.AwardItem')
+
+    # This doesn't need to be here, but is for filtering / convenience purposes.
+    hall_of_fame = models.BooleanField() # Whether or not a player is in the hall of fame.
 
     objects = BioManager()
 
@@ -230,7 +233,6 @@ class Bio(models.Model):
     def calculate_standings(self):
         """
         Generate standings for a given player.
-        
         """
         from stats.models import Stat
 
@@ -257,13 +259,14 @@ class Bio(models.Model):
 
         l = []
         for method in dir(self):
-            try:
-                m = getattr(self, method)
-                if 'all' in dir(m) and m.all():
-                    t = (method, m.all())
-                    l.append(t)
-            except:
-                pass
+            if not method.startswith('_'):
+                try:
+                    m = getattr(self, method)
+                    if 'all' in dir(m) and m.all():
+                        t = (method, m.all())
+                        l.append(t)
+                except:
+                    pass
         return l
             
 

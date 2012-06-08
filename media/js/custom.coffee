@@ -1,4 +1,4 @@
-1;2c$(document).ready( ->
+$(document).ready( ->
 
 
 
@@ -6,6 +6,7 @@
   $("#player_chart").tablesorter()
   $("#competition_index").tablesorter()
   $("#stadium_list").tablesorter()
+  $("#position_index").tablesorter()
   $(".standings_list").tablesorter()
 
   $("select").change ->

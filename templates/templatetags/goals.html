@@ -25,7 +25,7 @@
     <td>{{ goal.minute }}</td>
     <td><a href="{% url team_detail goal.team.slug %}">{{ goal.team }}</a></td>
     <td><a href="{% url team_detail goal.opponent.slug %}">{{ goal.opponent }}</a></td>
-    <td><a href="{% url game_detail goal.game.id %}">{{ goal.game.score }}</a></td>
+    <td class="{{ goal.result }}"><a href="{% url game_detail goal.game.id %}">{{ goal.game.score }}</a></td>
   {% endfor %}
   </tbody>
 </table>

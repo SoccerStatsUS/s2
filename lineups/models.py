@@ -11,15 +11,17 @@ from django.db.models.signals import post_save
 class Appearance(models.Model):
 
     player = models.ForeignKey(Bio)
+
     team = models.ForeignKey(Team)
+    team_original_name = models.CharField(max_length=255)
+    
     game = models.ForeignKey(Game)
 
-    #on = models.IntegerField()
-    #off = models.IntegerField()
+    on = models.IntegerField(null=True)
+    off = models.IntegerField(null=True)
     
     # Default should be integer.
-    on = models.CharField(max_length=255)
-    off = models.CharField(max_length=255)
+
 
     age = models.FloatField(null=True) # Age in years at the time of game.
 

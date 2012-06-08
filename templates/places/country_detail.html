@@ -1,16 +1,38 @@
 {% extends "base.html" %}
 
+{% load datum_or_none %}
+
 {% block content %}
 
-{{ name }}
+<h2>{{ country }}</h2>
 
-<ul>
-{% for bio in bios %}
-<li><a href="{% url person_detail bio.slug %}">{{ bio }}</a></li>
+<h4>{{ country.population }}</h4>
+
+<table>
+{% for stadium in stadiums %}
+<tr>
+  <td><a href="{% url stadium_detail stadium.slug %}">{{ stadium }}</a></td>
+  {% datum_or_grey stadium.opened %}
+  {% datum_or_grey stadium.capacity %}
+  {% datum_or_grey stadium.cost %}
+</tr>
 {% endfor %}
-</ul>
+</table>
 
+<h3>Births</h3>
 
-
+<table>
+{% for bio in births %}
+<tr>
+  <td><a href="{% url person_detail bio.slug %}">{{ bio }}</a></td>
+  <td><a href="{% url city_detail bio.birthplace.slug %}">{{ bio.birthplace }}</a></td>
+  {% if bio.birthdate %}
+  <td><a href="{% url date_detail bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+</tr>
+{% endfor %}
+</table>
 
 {% endblock %}

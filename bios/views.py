@@ -38,7 +38,7 @@ def person_index(request):
     name_dict = OrderedDict()
 
     for letter in letters:
-        stats = Stat.career_stats.filter(player__name__istartswith=letter)[:5]
+        stats = Stat.career_stats.filter(player__name__istartswith=letter).order_by('-player__hall_of_fame', '-games_played')[:5]
         name_dict[letter] = stats
 
     context = {
@@ -58,8 +58,6 @@ def bio_name_fragment(request, fragment):
 
 def bad_bios(request):
 
-
-    
     context = {
         'duplicate_slugs': Bio.objects.duplicate_slugs(),
         }

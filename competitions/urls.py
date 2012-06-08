@@ -20,9 +20,28 @@ urlpatterns = patterns('competitions.views',
                            'competition_detail',
                            name='competition_detail'),
 
+                       url(r'^(?P<competition_slug>[a-z0-9-]+)/stats/$',
+                           'competition_stats',
+                           name='competition_stats'),
+
+                       url(r'^(?P<competition_slug>[a-z0-9-]+)/stats/$',
+                           'competition_games',
+                           name='competition_games'),
+
+
+
+
                        url(r'^(?P<competition_slug>[a-z0-9-]+)/(?P<season_slug>[a-z0-9-]+)/$',
                            'season_detail',
                            name='season_detail'),
+
+                       url(r'^(?P<competition_slug>[a-z0-9-]+)/(?P<season_slug>[a-z0-9-]+)/stats/$',
+                           'season_stats',
+                           name='season_stats'),
+
+                       url(r'^(?P<competition_slug>[a-z0-9-]+)/(?P<season_slug>[a-z0-9-]+)/games/$',
+                           'season_games',
+                           name='season_games'),
 
 
                        )
