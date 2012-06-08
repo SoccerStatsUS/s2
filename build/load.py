@@ -283,6 +283,8 @@ def load_places():
     for country in soccer_db.countries.find():
         country.pop('_id')
         country['slug'] = slugify(country['name'])
+        country['confederation'] = country['confederation'] or ''
+        country['subconfederation'] = country['subconfederation'] or ''
         Country.objects.create(**country)
 
 

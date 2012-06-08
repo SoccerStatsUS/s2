@@ -18,7 +18,12 @@ class CountryManager(models.Manager):
 class Country(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField()
-    population = models.IntegerField(null=True)
+
+    #population = models.IntegerField(null=True)
+    code = models.CharField(max_length=15)
+
+    confederation = models.CharField(max_length=15)
+    subconfederation = models.CharField(max_length=15)
 
     objects = CountryManager()
 

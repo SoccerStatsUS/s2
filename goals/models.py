@@ -49,6 +49,12 @@ class Goal(models.Model):
             return self.game.team2
         else:
             return self.game.team1
+
+
+    def result(self):
+        return self.game.result(self.team)
+
+
  
 
     def __unicode__(self):

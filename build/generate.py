@@ -34,9 +34,9 @@ def generate():
     generate_team_standings()
 
     # Generate coaching stats!
-    generate_position_stats()
+    #generate_position_stats()
 
-    generate_game_data_quality()
+    #generate_game_data_quality()
     #generate_game_minutes()
 
 
