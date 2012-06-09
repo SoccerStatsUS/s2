@@ -216,7 +216,7 @@ def stats_ajax_by_id(request):
             PAGE = request.GET['page']
 
         if 'order' in request.GET:
-            order = request.GET(order)
+            order = request.GET['order']
             stats = stats.order_by(order)
         else:
             stats = stats.order_by("-minutes")
@@ -280,7 +280,7 @@ def stats_ajax(request):
             PAGE = request.GET['page']
 
         if 'order' in request.GET:
-            order = request.GET(order)
+            order = request.GET['order']
             stats = stats.order_by(order)
         else:
             stats = stats.order_by("-minutes")

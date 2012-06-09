@@ -47,7 +47,11 @@
 <tr>
   <td><a href="{% url person_detail bio.slug %}">{{ bio.name }}</a></td>
   <td><a href="{% url date_detail bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a></td>
+  {% if bio.birthplace.slug %}
   <td><a href="{% url city_detail bio.birthplace.slug %}">{{ bio.birthplace }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
 </tr>
 {% endfor %}
 </table>

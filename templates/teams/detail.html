@@ -82,7 +82,6 @@
 <div tab="coaches">
 
 
-
 <table>
 
 <thead>
@@ -93,7 +92,11 @@
     <th>wins</th>
     <th>losses</th>
     <th>ties</th>
+    
+    {% comment %}
     <th>%</th>
+    {% endcomment %}
+
   </tr>
 </thead>
 
@@ -115,7 +118,11 @@
   {% datum_or_grey position.wins %}
   {% datum_or_grey position.ties %}
   {% datum_or_grey position.losses %}
+
+
+  {% comment %}
   {% datum_or_grey position.win_percentage|floatformat:3 %}
+  {% endcomment %}
 
 </tr>
 {% endfor %}
