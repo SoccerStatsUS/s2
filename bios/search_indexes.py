@@ -8,7 +8,7 @@ from bios.models import Bio
 class BioIndex(ModelSearchIndex):
 
     class Meta:
-        fields = ['name', 'birthplace']
+        fields = ['name', 'birthplace', 'slug']
 
 site.register(Bio, BioIndex)
     
