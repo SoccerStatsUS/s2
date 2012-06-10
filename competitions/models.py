@@ -32,7 +32,13 @@ class Competition(models.Model):
     # Should this be called Tournament? Probably not.
 
     name = models.CharField(max_length=255)
+    abbreviation = models.CharField(max_length=7)
+    
     slug = models.SlugField()
+
+    ctype = models.CharField(max_length=255)
+    scope = models.CharField(max_length=255)
+    area = models.CharField(max_length=255)
 
     #international = models.BooleanField()
 
@@ -44,7 +50,7 @@ class Competition(models.Model):
     def __unicode__(self):
         return self.name
 
-    def abbreviation(self):
+    def make_abbreviation(self):
         words = self.name.split(' ')
         first_letters = [e.strip()[0] for e in words if e.strip()]
         first_letters = [e for e in first_letters if e not in '-()']
@@ -54,8 +60,9 @@ class Competition(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-            
-            
+
+        if not self.abbreviation:
+            self.abbreviation = self.make_abbreviation()
             
         super(Competition, self).save(*args, **kwargs)
 

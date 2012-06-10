@@ -5,35 +5,41 @@
 
     <form method="get" action=".">
         <table>
+
             {{ form.as_table }}
+
             <tr>
                 <td>&nbsp;</td>
-                <td>
-                    <input type="submit" value="Search">
-                </td>
+                <td><input type="submit" value="Search"></td>
             </tr>
+
         </table>
 
         {% if query %}
-            <h3>Results</h3>
+        <h3>Results</h3>
 
-            {% for result in page.object_list %}
-                <p>
-                    <a href="{{ result.object.get_absolute_url }}">{{ result.object }}</a>
-                </p>
-            {% empty %}
-                <p>No results found.</p>
-            {% endfor %}
+        <table>
+          {% for result in page.object_list %}
+          
+          <tr>
+            <td><a href="{{ result.object.get_absolute_url }}">{{ result.object }}</a></td>
+            <td>{{ result.model_name }}</td>
+          </tr>
+          {% empty %}
+          <li>No results found.</li>
+          {% endfor %}
+        </table>
 
-            {% if page.has_previous or page.has_next %}
-                <div>
-                    {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
-                    |
-                    {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
-                </div>
-            {% endif %}
+        {% if page.has_previous or page.has_next %}
+        <div>
+          {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
+          |
+          {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
+        </div>
+        {% endif %}
+
         {% else %}
-            {# Show some example queries to run, maybe query syntax, something else? #}
+        {# Show some example queries to run, maybe query syntax, something else? #}
         {% endif %}
     </form>
 {% endblock %}
