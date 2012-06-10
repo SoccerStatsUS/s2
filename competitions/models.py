@@ -75,13 +75,19 @@ class Competition(models.Model):
         return self.alltime_standings()[0]
 
     def first_season(self):
-        return self.season_set.all()[0]
+
+        if self.season_set.exists():
+            return self.season_set.all()[0]
+        else:
+            return None
 
     def last_season(self):
         seasons = self.season_set.count()
-        index = seasons - 1
-        return self.season_set.all()[index]
-
+        if seasons:
+            index = seasons - 1
+            return self.season_set.all()[index]
+        else:
+            return None
 
 
     def game_completeness_color(self):
