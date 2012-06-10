@@ -14,11 +14,11 @@ def build():
                 '%s/db/soccer.build.db' % PROJECT_DIR)
 
     load()
-    generate()
 
-    rebuild_index()
+    #generate()
 
-    move()
+    #rebuild_index()
+    #move()
 
 
 def rebuild_index():

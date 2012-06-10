@@ -254,14 +254,17 @@ def load():
     load_places()
     load_bios()
     load_stadiums()
+
+    # Simple sport data
+    load_competitions()
     load_teams()
 
-
-    # Game data
+    # Complex game data
     load_standings()
     load_games()
 
     # List data
+    # Put this before standings/games?
     load_awards()
     load_drafts()
     load_positions()
@@ -476,6 +479,14 @@ def load_teams():
     for team in soccer_db.teams.find():
         team.pop('_id')
         Team.objects.create(**team)
+
+@transaction.commit_on_success
+def load_competitions():
+    print "loading teams"
+    for c in soccer_db.competitions.find():
+        c.pop('_id')
+        Competition.objects.create(**c)
+
 
 @transaction.commit_on_success
 def load_stadiums():
