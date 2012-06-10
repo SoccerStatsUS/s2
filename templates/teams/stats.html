@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load datum_or_none %}
+
+{% block title %}{{ team.name }} All-time Stats {% endblock %}
+{% block metadescription %}{{ team.name }} soccer stats with standings, results, lineups, awards, all-time stats...{% endblock %}
+
+{% block content %}
+
+
+<h3><a href="{% url team_detail team.slug %}">{{ team }}</a></h3>
+
+
+{% if stats %}
+{% include "templatetags/bio.html" %}
+{% endif %}
+
+
+{% endblock %}
