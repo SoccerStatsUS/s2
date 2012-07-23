@@ -3,20 +3,26 @@
 {% block content %}
 
 <table id="competition_index">
+  <thead>
   <tr>
     <th>competition</th>
+    <th>type</th>
+    <th>scope</th>
+    <th>area</th>
     <th>seasons</th>
     <th>began</th>
     <th>last</th>
     <th>seasons</th>
     <th>gms</th>
-    <th>gls</th>
-    <th>lnps</th>
   </tr>
+  </thead>
 
   {% for competition in competitions %}
   <tr>
     <td><a href="{% url competition_detail competition.slug %}">{{ competition.name }}</a></td>
+    <td>{{ competition.ctype }}</td>
+    <td>{{ competition.scope }}</td>
+    <td>{{ competition.area }}</td>
     <td>{{ competition.season_set.count }}</td>
     {% if competition.first_season %}
     <td><a href="{% url season_detail competition.slug competition.first_season.slug %}">{{ competition.first_season.name }}</td>
@@ -38,8 +44,6 @@
       </select>
     </td>
     <td>{{ competition.game_set.count }}</td>
-    <td>{{ competition.goal_set.count }}</td>
-    <td>{{ competition.appearance_set.count }}</td>
   </tr>
   {% endfor %}
 
