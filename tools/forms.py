@@ -9,6 +9,7 @@ class GameSearchForm(forms.Form):
     referee = forms.CharField(max_length=100)
     attendance_min = forms.IntegerField()
     atendance_max = forms.IntegerField()
+    source = forms.CharField(max_length=100)
 
 
 class StatSearchForm(forms.Form):

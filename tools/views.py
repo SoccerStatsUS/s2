@@ -99,11 +99,17 @@ def games_ajax_by_id(request):
             if e:
                 games = games.filter(competition__id=e)
 
+        if 'source' in request.GET:
+            e = request.GET['source']
+            if e:
+                games = games.filter(Q(source__name__icontains=e) | Q(source__url__icontains=e))
+
         if 'count' in request.GET:
             ITEMS_PER_PAGE = request.GET['count']
 
         if 'page' in request.GET:
             PAGE = request.GET['page']
+
 
         return games
 

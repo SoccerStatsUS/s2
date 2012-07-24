@@ -26,6 +26,7 @@
   {% endif %}
 
 
+
   <div class="team_data">
     <div class="team"><a href="{% url team_detail game.team1.slug %}">{{ game.team1  }}</a></div>
     <div class="score">{{ game.team1_score }}</div>
@@ -75,6 +76,23 @@
 
 {% endif %}
 </div>
+
+{% if game.source %}
+  
+<h4>
+  <a href="{% url source_detail game.source.id %}">{{ game.source }}</a>
+
+  {% if game.source_url %}
+  <em><a href="{{ game.source_url }}">(external link)</a></em>
+  {% else %}
+  {% if game.source.base_url %}
+  <em><a href="{{ game.source.base_url }}">(external link)</a></em>
+  {% endif %}
+  {% endif %}
+</h4>
+    
+{% endif %}
+
 
 {% if game.series.count > 1 %}
 <div tab="series">

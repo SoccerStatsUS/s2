@@ -4,6 +4,7 @@ from bios.models import Bio
 from competitions.models import Competition, Season
 from games.models import Game
 from lineups.models import Appearance
+from sources.models import Source
 from teams.models import Team
 
 import datetime
@@ -79,13 +80,14 @@ class Stat(models.Model):
     # What do we need from this model?
     # Stats should be regenerated on Game, Goal, etc. scoring.
     # Standings should sort of be generated the same way.
-    
 
     game = models.ForeignKey(Game, null=True)
     player = models.ForeignKey(Bio, null=True)
     team = models.ForeignKey(Team, null=True)
     competition = models.ForeignKey(Competition, null=True)
     season = models.ForeignKey(Season, null=True)
+
+    source = models.ForeignKey(Source, null=True)
 
     position = models.CharField(max_length=255, null=True)
 

@@ -5,6 +5,7 @@ from django.db import models
 from bios.models import Bio
 from competitions.models import Competition, Season
 from places.models import Stadium, City
+from sources.models import Source
 from teams.models import Team
 
 import random
@@ -148,6 +149,9 @@ class Game(models.Model):
     linesman1 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman1_games")
     linesman2 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman2_games")
     linesman3 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman3_games")
+
+    source = models.ForeignKey(Source, null=True)
+    source_url = models.CharField(max_length=255)
 
     objects = GameManager()
 

@@ -18,14 +18,18 @@ from lineups.models import Appearance
 from news.models import NewsSource
 from places.models import Country, State, City, Stadium
 from positions.models import Position
-from teams.models import Team
+from sources.models import Source
 from stats.models import Stat
 from standings.models import Standing
+from teams.models import Team
 
 from utils import insert_sql, timer
 
 connection = pymongo.Connection()
 soccer_db = connection.soccer
+
+
+
 
 
 # These probably need to be in load_utils or something.
@@ -47,6 +51,33 @@ def make_team_getter():
         return team_id
 
     return get_team
+
+
+def make_source_getter():
+    """
+    Retrieve sources efficiently
+    """
+
+    sources = Source.objects.source_dict()
+
+    def get_source(source):
+
+        if source.startswith('http'):
+            for base, source_id in sources.items():
+                if source.startswith(base):
+                    return source_id
+
+        elif source in sources:
+            source_id = sources[source]
+        
+        else:
+            source = Source.objects.create(name=source)
+            sources[source] = source.id
+
+        return source_id
+
+    return get_source
+
 
 
 def make_city_getter():
@@ -251,6 +282,7 @@ def load():
     # etc.
 
     # Non-game data.
+    load_sources()
     load_places()
     load_bios()
     load_stadiums()
@@ -279,6 +311,10 @@ def load():
 
 
 
+def load_sources():
+    for source in soccer_db.sources.find():
+        source.pop('_id')
+        Source.objects.create(**source)
 
 
 def load_places():
@@ -581,6 +617,7 @@ def load_games():
     stadium_getter = make_stadium_getter()
     team_getter = make_team_getter()
     competition_getter = make_competition_getter()    
+    source_getter = make_source_getter()
 
     city_getter = make_city_getter()
 
@@ -598,9 +635,6 @@ def load_games():
         game['competition'] = competition_getter(game['competition'])
         game['competition'] = Competition.objects.get(id=game['competition'])
         game['season'] = Season.objects.find(game['season'], game['competition'])
-
-
-
 
         game['team1'] = team_getter(game['team1'])
         game['team1'] = Team.objects.get(id=game['team1'])
@@ -630,7 +664,18 @@ def load_games():
             game['linesman3'] = None
 
 
-        for e in 'url', 'home_team', 'year', 'source', 'sources':
+        if game.get('sources'):
+            game['source'] = game['sources'][0]
+
+        if game.get('source'):
+            if game.get('source').startswith('http'):
+                game['source_url'] = game.get('source')
+
+            game['source_id'] = source_getter(game['source'])
+            game.pop('source')
+
+
+        for e in 'url', 'home_team', 'year', 'sources':
             if e in game:
                 game.pop(e)
 
@@ -716,6 +761,7 @@ def load_stats():
     bio_getter = make_bio_getter()
     competition_getter = make_competition_getter()
     season_getter = make_season_getter()
+    source_getter = make_source_getter()
 
     l = []    
     for i, stat in enumerate(soccer_db.stats.find(timeout=False)): # no timeout because this query takes forever.
@@ -731,6 +777,12 @@ def load_stats():
         bio_id = bio_getter(stat['name'])
         competition_id = competition_getter(stat['competition'])
         season_id = season_getter(stat['season'], competition_id)
+
+        if stat.get('source'):
+            source_id = source_getter(stat['source'])
+        else:
+            source_id = None
+
 
         l.append({
             'player_id': bio_id,
@@ -748,6 +800,7 @@ def load_stats():
             'fouls_suffered': stat.get('fouls_suffered'),
             'yellow_cards': stat.get('yellow_cards'),
             'red_cards': stat.get('red_cards'),
+            'source_id': source_id,
             })
 
     insert_sql("stats_stat", l)

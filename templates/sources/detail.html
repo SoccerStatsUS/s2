@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>{{ source }}</h4>
+<h4>{{ source.author }}</h4>
+<h4>{{ source.base_url }}</h4>
+
+<h4>Games: {{source.game_set.count }}</h4>
+<h4>Stats: {{ source.stat_set.count }}</h4>
+
+
+{% endblock %}

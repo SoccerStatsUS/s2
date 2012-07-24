@@ -21,10 +21,13 @@ urlpatterns = patterns('',
 
                        (r'^about/$', direct_to_template, {'template': 'about.html'}),
                        (r'^api/$', direct_to_template, {'template': 'api.html'}),
-                       (r'^sources/$', direct_to_template, {'template': 'sources.html'}),
+                       #(r'^sources/$', direct_to_template, {'template': 'sources.html'}),
+
                        (r'^blog/$', direct_to_template, {'template': 'blog.html'}),
 
                        url(r'search/', include('haystack.urls')),
+
+
 
                        url(r'^awards/', include('awards.urls')),
                        url(r'^bios/', include('bios.urls')),
@@ -39,6 +42,7 @@ urlpatterns = patterns('',
                        url(r'^news/', include('news.urls')),
                        url(r'^positions/', include('positions.urls')),
                        url(r'^places/', include('places.urls')),
+                       url(r'^sources/', include('sources.urls')),
                        url(r'^standings/', include('standings.urls')),
                        url(r'^stats/', include('stats.urls')),
                        url(r'^teams/', include('teams.urls')),
