@@ -304,6 +304,9 @@ class Game(models.Model):
         return int(score)
 
 
+    def margin(self, team):
+        return self.goals_for(team) - self.goals_against(team)
+
 
 
     def result(self, team):
