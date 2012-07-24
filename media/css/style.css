@@ -141,6 +141,14 @@ h1 span.subhead {
     padding-right: 45px;
 }
 
+
+/* Letter index pages */
+
+.letter_link {
+    font-size: 1.5em;
+}
+
+
 /* Scoreboard */
 
 #scoreboard {

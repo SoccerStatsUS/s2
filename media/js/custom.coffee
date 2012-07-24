@@ -5,6 +5,7 @@ $(document).ready( ->
   $("#bio").tablesorter()
   $("#player_chart").tablesorter()
   $("#competition_index").tablesorter()
+  $("#stadium_list").tablesorter()
   $("#position_index").tablesorter()
   $(".standings_list").tablesorter()
 
