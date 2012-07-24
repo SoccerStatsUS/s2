@@ -3,9 +3,6 @@
 {% block content %}
 
 
-<p>The goal of socceroutsider.com is to create a free and complete resource for anyone interested in US soccer. </p>
-<p>That effort currently focuses on compiling, organizing, and clearly presenting American soccer statistics and data from the very beginnings of the sport in the United States to the present day.</p>
-<p>We hope to help people better understand the rich and fascinating history of the most international sport in the context of the world's most international country.</p>
 
 
 <div>
@@ -40,9 +37,9 @@
 
 {% comment %}
 <h4>News</h4>
-{% comment %}
+{% endcomment %}
 
-
+<p>socceroutsider.com aims to create a free and complete statistical resource covering all US soccer history.</p>
 
 
 <h4><a href="{% url competition_index %}">Competitions</a></h4>
@@ -62,12 +59,14 @@
 <a href="{% url draft_detail 'major-league-soccer' 'superdraft' '2011' %}">1996 MLS Superdraft</a>...
 </p>
 
+{% comment %}
+
 <h4><a href="{% url tool_index %}">Tools</a></h4>
 <a href="{% url game_search %}">Game search</a>,
 <a href="{% url stat_search %}">Game search</a>...
 </p>
 
-{% comment %}
+
 <p>
 <a href="{% url award_index %}">Awards</a>:
 </p>
