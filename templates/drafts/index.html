@@ -25,11 +25,20 @@
 <h3 id="no-competition">No Competition</h3>
 {% endif %}
 
-<ul>
+<table>
+  <thead>
+    <tr>
+      <th>season</th>
+      <th>name</th>
+    </tr>
+  </thead>
 {% for item in dx.list %}
-<li><a href="{% url draft_detail dx.grouper.slug item.slug item.season %}">{{ item.name }}</a></li>
+  <tr>
+    <td>{{ item.season }}</td>
+    <td><a href="{% url draft_detail dx.grouper.slug item.slug item.season %}">{{ item.name }}</a></td>
+  </tr>
 {% endfor %}
-</ul>
+</table>
 
 {% endfor %}
 
