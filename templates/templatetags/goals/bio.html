@@ -1,0 +1,24 @@
+<table>
+  <thead>
+  <tr>
+    <th>cmp</th>
+    <th>Date</th>
+    <th>Score</th>
+    <th>Opponent</th>
+    <th>Minute</th>
+
+
+  </tr>
+  </thead>
+
+  <tbody>
+  {% for goal in goals %}
+  <tr>
+    <td><a href="{% url competition_detail goal.game.competition.slug %}">{{ goal.game.competition.abbreviation }}</a></td>
+    <td><a href="{% url date_detail goal.game.date.year goal.game.date.month goal.game.date.day %}">{{ goal.game.date }}</a></td>
+    <td class="{{ goal.result }}"><a href="{% url game_detail goal.game.id %}">{{ goal.game.score }}</a></td>
+    <td><a href="{% url team_detail goal.opponent.slug %}">{{ goal.opponent }}</a></td>
+    <td>{{ goal.minute }}</td>
+  {% endfor %}
+  </tbody>
+</table>
