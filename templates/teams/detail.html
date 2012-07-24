@@ -38,6 +38,7 @@
 {% endif %}
 
 {% if team.game_set.exists %}
+<a href="">All games</a>
 <div tab="games">
 </div>
 {% endif %}
@@ -116,13 +117,9 @@
   {% endif %}
 
   {% datum_or_grey position.wins %}
-  {% datum_or_grey position.ties %}
   {% datum_or_grey position.losses %}
-
-
-  {% comment %}
+  {% datum_or_grey position.ties %}
   {% datum_or_grey position.win_percentage|floatformat:3 %}
-  {% endcomment %}
 
 </tr>
 {% endfor %}

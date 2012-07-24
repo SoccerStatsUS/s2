@@ -115,6 +115,42 @@ def team_detail(request, team_slug):
                               )
     
 
+def team_stats(request, team_slug):
+    """
+    Just about the most important view of all.
+    """
+    team = get_object_or_404(Team, slug=team_slug)
+
+    context = {
+        'team': team,
+        'stats': Stat.team_stats.filter(team=team, competition=None),
+        }
+
+    return render_to_response("teams/stats.html",
+                              context,
+                              context_instance=RequestContext(request)
+                              )
+    
+
+
+def team_games(request, team_slug):
+    """
+    Just about the most important view of all.
+    """
+    team = get_object_or_404(Team, slug=team_slug)
+
+    context = {
+        'team': team,
+        'games': team.game_set(),
+        }
+
+    return render_to_response("teams/games.html",
+                              context,
+                              context_instance=RequestContext(request)
+                              )
+    
+
+
 def team_versus(request, team1_slug, team2_slug):
     """
     Just about the most important view of all.

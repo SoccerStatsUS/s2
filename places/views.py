@@ -82,7 +82,7 @@ def city_detail(request, slug):
 
         context = {
                 'city': city,
-                'games': Game.objects.filter(stadium__city=city),
+                'games': Game.objects.filter(city=city),
                 }
 
         return render_to_response("places/city_detail.html",

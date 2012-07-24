@@ -2,21 +2,29 @@
 
 {% block content %}
 
-<p><a href="{% url day_detail today.month today.day %}">{{ today.month }}/{{ today.day }}</a> in history</p>
+
+<p>The goal of socceroutsider.com is to create a free and complete resource for anyone interested in US soccer. That effort currently focuses on compiling, organizing, and clearly presenting American soccer statistics and data from the very beginnings of the sport in the United States to the present day. We hope to help people better understand the rich and fascinating history of the most international sport in the context of the world's most international country.</p>
+
+
+<div>
+<h3><a href="{% url day_detail today.month today.day %}">Today in American soccer history</a></h3>
 
 
 {% if born %}
 <p>Born today: <a href="{% url person_detail born.slug %}">{{ born }}</a></p>
 {% endif %}
 
-<h4>Recent Results</h4>
+
+
+</div>
+
+<h4>Recent Results (updated intermittently)</h4>
 {% include "templatetags/games_small.html" %}
 
+{% comment %}
 <h4>Upcoming</h4>
 
 <h4>Standings</h4>
-
-{{ standings }}
 
 
 <ul id="tabs"></ul>
@@ -25,16 +33,18 @@
 <div tab="NASL">NASL</div>
 <div tab="USL-Pro">USL Pro</div>
 <div tab="Open Cup">Open Cup</div>
+{% endcomment %}
 
 
-
+{% comment %}
 <h4>News</h4>
+{% comment %}
 
 
 
 
+<h4><a href="{% url competition_index %}">Competitions</a></h4>
 <p>
-<a href="{% url competition_index %}">Competitions</a>:
 <a href="{% url competition_detail 'major-league-soccer' %}">MLS</a>,
 <a href="{% url competition_detail 'us-open-cup' %}">US Open Cup</a>,
 <a href="{% url competition_detail 'friendly' %}">Friendly</a>,
@@ -42,15 +52,15 @@
 <a href="{% url competition_detail 'north-american-soccer-league-2011' %}">NASL (2011-)</a>...
 </p>
 
+<h4><a href="{% url drafts_index %}">Drafts</a></h4>
 <p>
-<a href="{% url drafts_index %}">Drafts</a>:
+
 <a href="{% url draft_detail 'major-league-soccer' 'inaugural-draft' '1996' %}">1996 MLS Inaugural Draft</a>,
 <a href="{% url draft_detail 'major-league-soccer' 'allocation-draft' '2002' %}">2002 MLS Allocation Draft</a>,
 <a href="{% url draft_detail 'major-league-soccer' 'superdraft' '2011' %}">1996 MLS Superdraft</a>...
 </p>
 
-<p>
-<a href="{% url tool_index %}">Tools</a>
+<h4><a href="{% url tool_index %}">Tools</a></h4>
 <a href="{% url game_search %}">Game search</a>,
 <a href="{% url stat_search %}">Game search</a>...
 </p>

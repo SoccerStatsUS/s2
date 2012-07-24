@@ -17,7 +17,11 @@ else:
 
 if DEBUG:
     CACHE_MIDDLEWARE_KEY_PREFIX = "dev:"
-    CACHES = {}
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+            }
+}
 
 else:
     CACHES = {

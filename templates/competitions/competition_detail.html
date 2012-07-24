@@ -10,6 +10,14 @@
 <h3><a href="{% url competition_detail competition.slug %}">{{ competition }}</a></h3>
 
 
+<h4>{{ competition.abbreviation }}</h4>
+
+<h4>{{ competition.ctype }}</h4>
+
+<h4>{{ competition.scope }}</h4>
+
+<h4>{{ competition.area }}</h4>
+
 
 <ul id="tabs"></ul>
 
@@ -71,9 +79,11 @@
 
 
 
-<div tab="coaches" >
-Hi.
+{% if team.position_set.count %}
+<div tab="coaching">
+{% include "templatetags/coach.html" with positions=team.position_set.all %}
 </div>
+{% endif %}
 
 
 

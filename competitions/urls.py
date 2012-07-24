@@ -24,7 +24,7 @@ urlpatterns = patterns('competitions.views',
                            'competition_stats',
                            name='competition_stats'),
 
-                       url(r'^(?P<competition_slug>[a-z0-9-]+)/stats/$',
+                       url(r'^(?P<competition_slug>[a-z0-9-]+)/games/$',
                            'competition_games',
                            name='competition_games'),
 

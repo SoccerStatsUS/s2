@@ -24,8 +24,10 @@ def generate():
     Generate stats.
     """
 
-    # Needs to be first. 
-    generate_position_standings()
+    # Need to choose one.
+    # Generate coaching stats!
+    #generate_position_standings()
+    generate_position_stats()
 
     generate_career_stats()
     generate_competition_stats()
@@ -33,10 +35,8 @@ def generate():
     generate_competition_standings()
     generate_team_standings()
 
-    # Generate coaching stats!
-    #generate_position_stats()
 
-    #generate_game_data_quality()
+    generate_game_data_quality()
     #generate_game_minutes()
 
 
@@ -58,26 +58,6 @@ def calculate_standings(team, games=None):
 
     return wins, losses, ties
 
-
-@timer
-@transaction.commit_on_success
-def generate_position_stats():
-    for position in Position.objects.all():
-        if position.end is None:
-            end = datetime.date.today()
-        else:
-            end = position.end
-
-        if position.start:
-            games = Game.objects.team_filter(position.team).filter(date__gte=position.start, date__lte=end)
-            if games.exists():
-                try:
-                    print "Creating result stats for %s games for %s - %s at %s" % (games.count(), position.person, position.name, position.team)
-                except:
-                    print "Creating result stats."
-                position.wins, position.losses, position.ties = calculate_standings(position.team, games)
-                position.save()
-        
             
     
 @timer
@@ -145,6 +125,7 @@ def generate_stats_generic(qs, make_key, update_dict):
         Stat.objects.create(**stat)
 
 
+@timer
 def generate_career_stats():
     """
     Generate 
@@ -253,6 +234,28 @@ def generate_position_standings():
 
 
 @timer
+@transaction.commit_on_success
+def generate_position_stats():
+    for position in Position.objects.all():
+        if position.end is None:
+            end = datetime.date.today()
+        else:
+            end = position.end
+
+        if position.start:
+            games = Game.objects.team_filter(position.team).filter(date__gte=position.start, date__lte=end)
+            if games.exists():
+                try:
+                    print "Creating result stats for %s games for %s - %s at %s" % (games.count(), position.person, position.name, position.team)
+                except:
+                    print "Creating result stats."
+                position.wins, position.losses, position.ties = calculate_standings(position.team, games)
+                position.save()
+        
+
+
+
+@timer
 def generate_player_standings():
     """
     Generate all player standings for all players across all stats.
@@ -358,6 +361,8 @@ def generate_top_attendances(qs=None):
             
                         
 if __name__ == "__main__":
+    generate()
+    """
     t = generate_top_attendances()
     for g in t:
         print g
@@ -365,6 +370,7 @@ if __name__ == "__main__":
         print g.attendance
         print
     #generate_team_standings()
+    """
 
 
 
