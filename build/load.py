@@ -67,14 +67,18 @@ def make_source_getter():
                 if source.startswith(base):
                     return source_id
 
-        elif source in sources:
-            source_id = sources[source]
-        
-        else:
-            source = Source.objects.create(name=source)
-            sources[source] = source.id
+            # fallback
+            s = Source.objects.create(name=source)
+            sources[source] = s.id
+            return s.id
 
-        return source_id
+        elif source in sources:
+            return sources[source]
+
+        else:
+            s = Source.objects.create(name=source)
+            sources[s] = source.id
+            return s.id
 
     return get_source
 
@@ -518,7 +522,7 @@ def load_teams():
 
 @transaction.commit_on_success
 def load_competitions():
-    print "loading teams"
+    print "loading competitions"
     for c in soccer_db.competitions.find():
         c.pop('_id')
         Competition.objects.create(**c)
@@ -665,13 +669,17 @@ def load_games():
 
 
         if game.get('sources'):
-            game['source'] = game['sources'][0]
+            game['source'] = game['sources'][-1]
 
         if game.get('source'):
             if game.get('source').startswith('http'):
                 game['source_url'] = game.get('source')
 
-            game['source_id'] = source_getter(game['source'])
+            try:
+                game['source_id'] = source_getter(game['source'])
+            except:
+                import pdb; pdb.set_trace()
+
             game.pop('source')
 
 
@@ -780,6 +788,7 @@ def load_stats():
 
         if stat.get('source'):
             source_id = source_getter(stat['source'])
+
         else:
             source_id = None
 

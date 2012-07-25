@@ -236,7 +236,7 @@ def generate_position_standings():
 @timer
 @transaction.commit_on_success
 def generate_position_stats():
-    for position in Position.objects.all():
+    for position in Position.objects.order_by('person'):
         if position.end is None:
             end = datetime.date.today()
         else:
