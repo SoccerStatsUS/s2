@@ -2,11 +2,25 @@
 
 {% block content %}
 
-<h4>{{ source }}</h4>
-<h4>{{ source.author }}</h4>
-<h4>{{ source.base_url }}</h4>
+{% if source.base_url %}
+<h3><a href="{{ source.base_url }}">{{ source }}</a></h3>
+{% else %}
+<h3>{{ source }}</h3>
+{% endif %}
 
-<h4>Games: {{source.game_set.count }}</h4>
+{% if source.author %}
+<h4>Author: {{ source.author }}</h4>
+{% endif %}
+
+
+<h4>Games</h4>
+
+<ul>
+{% for game in source.game_set.all|slice:"50" %}
+<li><a href="{% url game_detail game.id %}">{{ game }}</a></li>
+{% endfor %}
+</ul>
+
 <h4>Stats: {{ source.stat_set.count }}</h4>
 
 
