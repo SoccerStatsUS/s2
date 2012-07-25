@@ -76,7 +76,7 @@ def person_detail(request, slug):
     bio.calculate_standings()
     
     context = {
-        "bio": bio
+        "bio": bio,
         }
     return render_to_response("bios/detail.html",
                               context,
