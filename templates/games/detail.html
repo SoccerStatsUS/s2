@@ -70,11 +70,14 @@
   {% endfor %}
 </table>
 
+</div>
+
+{% endif %}
+
 {% if game.appearance_set.exists %}
 {% include "templatetags/game_lineup.html"  %}
 {% endif %}
 
-{% endif %}
 </div>
 
 {% if game.source %}
