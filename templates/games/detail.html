@@ -70,11 +70,14 @@
   {% endfor %}
 </table>
 
+</div>
+
+{% endif %}
+
 {% if game.appearance_set.exists %}
 {% include "templatetags/game_lineup.html"  %}
 {% endif %}
 
-{% endif %}
 </div>
 
 {% if game.source %}
@@ -99,13 +102,15 @@
 {% include "templatetags/games.html" with games=game.series %}
 </div>
 {% endif %}
-</div>
 
+</div>
 
 {% if game.same_day_games %}
 <h3>scoreboard</h3>
 {% include "templatetags/scoreboard.html" with games=game.same_day_games %}
 {% endif %}
+
+
 
 
 {% endblock %}

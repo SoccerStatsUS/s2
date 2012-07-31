@@ -3,8 +3,10 @@
 
 {% block content %}
 
+<h4>{{ draft }} - {{ draft.season }}</h4>
+
 {% if draft.pick_set.exists %}
-<h4>Drafts picks</h4>
+<h4>picks</h4>
 {% include "templatetags/draft.html" with picks=draft.pick_set.all %}
 {% endif %}
 

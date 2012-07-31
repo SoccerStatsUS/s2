@@ -45,18 +45,31 @@
 
 {% if bio.season_stats.exists %}
 <div tab="stats">
+
+{% regroup bio.season_stats_with_totals by competition as stats_by_competition %}
+{% for item in stats_by_competition %}
+<h3>{{ item.grouper }}</h3>
+{% include "templatetags/stats/bio.html" with stats=item.list %}
+{% endfor %}
+
+<h3>Career</h3>
+{% include "templatetags/stats/bio.html" with stats=bio.career_stats %}
+</div>
+{% endif %}
+
+
 </div>
 {% endif %}
 
 {% if bio.goal_set.exists %}
 <div tab="goals">
-{% include "templatetags/goals.html" with goals=bio.goal_set.all %}
+{% include "templatetags/goals/bio.html" with goals=bio.goal_set.all %}
 </div>
 {% endif %}
 
 {% if bio.appearance_set.exists %}
 <div tab="games">
-{% include "templatetags/appearance.html" with appearances=bio.appearance_set.all %}
+{% include "templatetags/appearances/bio.html" with appearances=bio.appearance_set.all %}
 </div>
 {% endif %}
 

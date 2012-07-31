@@ -1,7 +1,7 @@
 
 import os
 
-DEBUG = True
+DEBUG = False
 
 # Make sure to use a trailing slash for MEDIA_URL
 

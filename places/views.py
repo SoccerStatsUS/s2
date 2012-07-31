@@ -41,7 +41,7 @@ def country_detail(request, slug):
 
         country = get_object_or_404(Country, slug=slug)
         stadiums = Stadium.objects.filter(city__country=country)
-        births = Bio.objects.filter(birthplace__country=country)
+        births = Bio.objects.filter(birthplace__country=country).order_by('birthdate')
 
         context = {
                 'country': country,
