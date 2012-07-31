@@ -73,7 +73,7 @@ def person_detail(request, slug):
     bio = get_object_or_404(Bio, slug=slug)
     
     # Should not be doing this here.
-    bio.calculate_standings()
+    #bio.calculate_standings()
     
     context = {
         "bio": bio
