@@ -1,6 +1,9 @@
 {% load datum_or_none %}
 
+
+
 <table id="bio">
+
 
 <thead>
   <tr>
@@ -32,6 +35,7 @@
 
 <tbody>
 {% for stat in stats %}
+
 <tr>
 
   {% if stat.team %}
@@ -72,6 +76,7 @@
   <td>{{ stat.goals_assists_per_90|floatformat:"2" }}</td>
 
 </tr>
+
 {% endfor %}
 </tbody>
 

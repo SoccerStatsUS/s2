@@ -7,7 +7,9 @@
 {% if stadium.address %}
 <h4><a href="{% url city_detail stadium.city.slug %}">{{ stadium.address }}, {{ stadium.city }}</a></h4>
 {% else %}
+{% if stadium.city %}
 <h4><a href="{% url city_detail stadium.city.slug %}">{{ stadium.city }}</a></h4>
+{% endif %}
 {% endif %}
 
 
