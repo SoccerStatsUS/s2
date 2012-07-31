@@ -77,7 +77,7 @@ def make_source_getter():
 
         else:
             s = Source.objects.create(name=source)
-            sources[s] = source.id
+            sources[s] = s.id
             return s.id
 
     return get_source

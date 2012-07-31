@@ -1,5 +1,6 @@
 import datetime
 
+from django.db.models import Count
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 
@@ -8,7 +9,7 @@ from sources.models import Source
 
 def source_index(request):
 
-    sources = Source.objects.all()
+    sources = Source.objects.annotate(games=Count('game')).order_by('-games')
     context = {
         'sources': sources,
         }
