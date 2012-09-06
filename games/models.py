@@ -113,22 +113,28 @@ class Game(models.Model):
     Represents a completed game.
     """
     # Need both a date and a datetime field? Not sure.
-    date = models.DateField()
+    date = models.DateField(null=True)
     
     team1 = models.ForeignKey(Team, related_name='home_games')
     team1_original_name = models.CharField(max_length=255)
     team2 = models.ForeignKey(Team, related_name='away_games')
     team2_original_name = models.CharField(max_length=255)
 
-    team1_score = models.IntegerField()
+    team1_score = models.IntegerField(null=True)
     official_home_score = models.IntegerField(null=True)
-    team2_score = models.IntegerField()    
+    team2_score = models.IntegerField(null=True)    
     official_away_score = models.IntegerField(null=True)
+
+    team1_result = models.CharField(max_length=5)
+    team2_result = models.CharField(max_length=5)
 
     goals = models.IntegerField()
 
     # Minigames were played in MLS, APSL, USL, and probably others.
     minigame = models.BooleanField(default=False)
+
+    # Was the game forfeited?
+    forfeit = models.BooleanField(default=False)
 
     minutes = models.IntegerField(default=90)
 
@@ -159,7 +165,9 @@ class Game(models.Model):
 
     class Meta:
         ordering = ('-date',)
-        unique_together = [('team1', 'date', 'minigame'), ('team2', 'date', 'minigame')]
+
+        # This no longer seems to be true.
+        # unique_together = [('team1', 'date', 'minigame'), ('team2', 'date', 'minigame')]
 
 
     def get_completeness(self):
@@ -179,6 +187,23 @@ class Game(models.Model):
     def score(self):
         """Returns a score string."""
         return "%s - %s" % (self.team1_score, self.team2_score)
+
+    def score_or_result(self):
+        """Returns a score string."""
+        return "%s - %s" % (self.team1_score_or_result, self.team2_score_or_result)
+
+    @property
+    def team1_score_or_result(self):
+        if self.team1_score:
+            return self.team1_score
+        return self.team1_result.capitalize()
+
+    @property
+    def team2_score_or_result(self):
+        if self.team2_score:
+            return self.team2_score
+        return self.team1_result.capitalize()
+
 
 
     def team1_lineups(self):
