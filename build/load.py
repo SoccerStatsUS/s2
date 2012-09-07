@@ -644,7 +644,7 @@ def load_games():
         game['team1'] = Team.objects.get(id=game['team1'])
         game['team2'] = team_getter(game['team2'])
         game['team2'] = Team.objects.get(id=game['team2'])        
-        game['goals'] = game['team1_score'] + game['team2_score']
+        game['goals'] = (game['team1_score'] or 0) + (game['team2_score'] or 0)
         
         if game['referee']:
             game['referee'] = Bio.objects.find(game['referee'])
@@ -694,7 +694,7 @@ def load_games():
             Game.objects.create(**game)
         except:
             print "Skipping game %s" % game
-            #import pdb; pdb.set_trace()
+            import pdb; pdb.set_trace()
 
         x = 5
 
