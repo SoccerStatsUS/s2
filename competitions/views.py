@@ -1,3 +1,4 @@
+from django.db.models import Sum
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
@@ -62,10 +63,18 @@ def season_detail(request, competition_slug, season_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
     season = get_object_or_404(Season, competition=competition, slug=season_slug)
 
+    stats = Stat.objects.filter(season=season, competition=season.competition)
+
+    # Aggregate returns None given a None value.
+    mstats = stats.exclude(minutes=None)
+    total_minutes = mstats.aggregate(Sum('minutes'))['minutes__sum']
+    known_minutes = mstats.exclude(player__birthdate=None).aggregate(Sum('minutes'))['minutes__sum']
 
     context = {
         'season': season,
-        'stats': Stat.objects.filter(season=season, competition=season.competition).exists(),
+        'stats': stats.exists(),
+        'total_minutes': total_minutes,
+        'known_minutes': known_minutes,
         }
     return render_to_response("competitions/season_detail.html",
                               context,
