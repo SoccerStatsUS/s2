@@ -15,7 +15,8 @@ class GameManager(models.Manager):
 
 
     def games(self):
-        return [e['date'] for e in Game.objects.values("date").distinct()]
+        l = [e['date'] for e in Game.objects.values("date").distinct()]
+        return [e for e in l if e is not None]
 
     def game_years(self):
         return sorted(set([e.year for e in Game.objects.games()]))
@@ -194,15 +195,15 @@ class Game(models.Model):
 
     @property
     def team1_score_or_result(self):
-        if self.team1_score:
+        if self.team1_score is not None:
             return self.team1_score
         return self.team1_result.capitalize()
 
     @property
     def team2_score_or_result(self):
-        if self.team2_score:
+        if self.team2_score is not None:
             return self.team2_score
-        return self.team1_result.capitalize()
+        return self.team2_result.capitalize()
 
 
 
@@ -222,7 +223,10 @@ class Game(models.Model):
     # These should hang off of Team, not Game.
     def previous_games(self, team):
         assert team in (self.team1, self.team2)
-        return Game.objects.team_filter(team).filter(season=self.season).filter(date__lt=self.date).order_by('date')
+        if self.date:
+            return Game.objects.team_filter(team).filter(season=self.season).filter(date__lt=self.date).order_by('date')
+        else:
+            return []
 
     def streak(self, team):
         """

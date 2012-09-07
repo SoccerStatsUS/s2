@@ -7,7 +7,11 @@
 <div id="game_score">
 
   <h4>
+    {% if game.date %}
     <a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date }}</a>
+    {% else %}
+    Date Unknown
+    {% endif %}
     -
     <a href="{% url competition_detail game.competition.slug %}">{{ game.competition }}</a>
     <a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.season.name }}</a>
