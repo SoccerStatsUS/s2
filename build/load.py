@@ -628,7 +628,7 @@ def load_games():
 
     city_getter = make_city_getter()
 
-    for game in soccer_db.games.find():
+    for game in soccer_db.games.find().sort('date', 1):
         game.pop('_id')
 
         if game.get('stadium'):

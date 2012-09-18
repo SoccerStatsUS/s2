@@ -82,3 +82,8 @@ def person_detail(request, slug):
                               context,
                               context_instance=RequestContext(request)
                               )   
+
+
+
+
+
