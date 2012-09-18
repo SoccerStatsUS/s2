@@ -158,7 +158,7 @@ class Season(models.Model):
 
 
     def __unicode__(self):
-        return "%s: %s" % (self.competition, self.name)
+        return u"%s: %s" % (self.competition, self.name)
 
     def save(self, *args, **kwargs):
         if not self.slug:

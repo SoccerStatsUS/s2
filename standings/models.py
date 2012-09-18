@@ -51,7 +51,7 @@ class Standing(models.Model):
         return "%s-%s-%s" % (self.wins, self.ties, self.losses)
 
     def __unicode__(self):
-        return "%s %s, %s: %s" % (self.team, self.competition, self.season, self.triple())
+        return u"%s %s, %s: %s" % (self.team, self.competition, self.season, self.triple())
 
 
     def win_percentage(self):
