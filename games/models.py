@@ -215,6 +215,11 @@ class Game(models.Model):
         return self.appearance_set.filter(team=self.team2)
 
 
+    def lineup_numbers(self):
+        """A convenience method for making sure game lineups are good."""
+        return "%s:%s" % (self.team1_lineups.count(), self.team2_lineups.count())
+
+
 
     def zipped_lineups(self):
         return zip(self.team1_lineups(), self.team2_lineups())

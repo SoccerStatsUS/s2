@@ -11,6 +11,7 @@
     <th>location</th>
     <th>referee</th>
     <th>attendance</th>
+    <th></th>
   </tr>
 
   {% for game in games %}
@@ -53,6 +54,7 @@
     <td></td>
     {% endif %}
   {% datum_or_grey game.attendance %}
+    <td>{{ game.lineup_numbers }}</td>
   </tr>
   {% endfor %}
 </table>
