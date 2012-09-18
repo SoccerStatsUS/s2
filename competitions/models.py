@@ -36,9 +36,12 @@ class Competition(models.Model):
     
     slug = models.SlugField()
 
-    ctype = models.CharField(max_length=255)
+    ctype = models.CharField(max_length=255) # Competition type - cup, league, etc.
     scope = models.CharField(max_length=255)
     area = models.CharField(max_length=255)
+    
+    # Association rules, Boston game, indoor, etc.
+    code = models.CharField(max_length=255)
 
     #international = models.BooleanField()
 
