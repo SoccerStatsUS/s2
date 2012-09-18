@@ -24,6 +24,10 @@
     <th>+-/90</th>
     <th>ga/90</th>
 
+    <th>birthdate</th>
+    <th>age</th>
+    <th>birthplace</th>
+
 
   </tr>
 </thead>
@@ -55,6 +59,20 @@
   {% datum_or_grey stat.plus_minus %}
   <td>{{ stat.plus_minus_per_90|floatformat:"2" }}</td>
   <td>{{ stat.goals_assists_per_90|floatformat:"2" }}</td>
+
+  {% if stat.player.birthdate %}
+  <td><a href="{% url date_detail stat.player.birthdate.year stat.player.birthdate.month stat.player.birthdate.day %}">{{ stat.player.birthdate }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+  {% datum_or_grey stat.player.age_years|floatformat:"2" %}
+  {% if stat.player.birthplace %}
+  <td><a href="{% url city_detail stat.player.birthplace.slug %}">{{ stat.player.birthplace }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
+
 
 </tr>
 {% endfor %}
