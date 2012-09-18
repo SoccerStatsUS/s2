@@ -77,7 +77,7 @@ def make_source_getter():
 
         else:
             s = Source.objects.create(name=source)
-            sources[s] = s.id
+            sources[source] = s.id
             return s.id
 
     return get_source
@@ -299,11 +299,14 @@ def load():
     load_standings()
     load_games()
 
+
     # List data
     # Put this before standings/games?
     load_awards()
     load_drafts()
     load_positions()
+
+
 
     # Mixed data
     load_stats()
@@ -672,8 +675,11 @@ def load_games():
             game['source'] = game['sources'][-1]
 
         if game.get('source'):
-            if game.get('source').startswith('http'):
-                game['source_url'] = game.get('source')
+            try:
+                if game.get('source').startswith('http'):
+                    game['source_url'] = game.get('source')
+            except:
+                import pdb; pdb.set_trace()
 
             try:
                 game['source_id'] = source_getter(game['source'])
