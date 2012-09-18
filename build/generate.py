@@ -128,8 +128,10 @@ def generate_stats_generic(qs, make_key, update_dict):
 @timer
 def generate_career_stats():
     """
-    Generate 
+    Generate career stats for all players,
+    generate from individual stat objects.
     """
+    # Need to exclude indoor stats from career stats.
     print "generating career stats"
     make_key = lambda s: s['player_id']
     update = {

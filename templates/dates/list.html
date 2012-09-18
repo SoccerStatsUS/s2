@@ -9,11 +9,11 @@
 
 
 {% if date %}
-<h3>
+<div id="date_nav">
 {% if yesterday %}<a href="{% url date_detail yesterday.year yesterday.month yesterday.day %}">←</a>{% endif %}
-{{ date }}
+<div id="specific_date">{{ date }}</div>
 {% if tomorrow %}<a href="{% url date_detail tomorrow.year tomorrow.month tomorrow.day %}">→</a>{% endif %}
-</h3>
+</div>
 {% endif %}
 
 

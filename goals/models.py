@@ -62,5 +62,12 @@ class Goal(models.Model):
 
 
 
+class Assist(models.Model):
+    
+    goal = models.ForeignKey(Goal)
+    player = models.ForeignKey(Bio)
 
+    # Primary assist (1), secondary assist (2), ad infinitum.
+    # Goals and assists could be represented with the same object.
+    order = models.IntegerField()
 

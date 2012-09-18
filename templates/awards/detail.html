@@ -7,16 +7,20 @@
 <h3>{{ award }}</h3>
 
 <table>
+
+  {% if has_competition %}
+  
   <tr>
     <th>Season</th>
     <th>Recipient</th>
   </tr>
-  
-  {% for item in award.awarditem_set.all %}
+
+
+  {% for item in awarditems %}
   <tr>
 
-  {% if award.season %}
-  <td><a href="{% url season_detail award.season.competition.slug award.season.slug %}">{{ award.season }}</a></td>
+  {% if item.season %}
+  <td><a href="{% url season_detail item.season.competition.slug item.season.slug %}">{{ item.season.name }}</a></td>
   {% else %}
   <td></td>
   {% endif %}
@@ -24,6 +28,23 @@
     <td><a href="{{ item.recipient.get_absolute_url }}">{{ item.recipient }}</a></td>
   </tr>
   {% endfor %}
+  
+  {% else %}
+
+  <tr>
+    <th>Recipient</th>
+  </tr>
+
+
+  {% for recipient in recipients %}
+  <tr>
+    <td><a href="{{ recipient.get_absolute_url }}">{{ recipient }}</a></td>
+  </tr>
+  {% endfor %}
+
+  {% endif %}
+
+
   
 </table>
 

@@ -77,7 +77,7 @@ def make_source_getter():
 
         else:
             s = Source.objects.create(name=source)
-            sources[s] = s.id
+            sources[source] = s.id
             return s.id
 
     return get_source
@@ -299,11 +299,14 @@ def load():
     load_standings()
     load_games()
 
+
     # List data
     # Put this before standings/games?
     load_awards()
     load_drafts()
     load_positions()
+
+
 
     # Mixed data
     load_stats()
@@ -625,7 +628,7 @@ def load_games():
 
     city_getter = make_city_getter()
 
-    for game in soccer_db.games.find():
+    for game in soccer_db.games.find().sort('date', 1):
         game.pop('_id')
 
         if game.get('stadium'):
@@ -644,7 +647,7 @@ def load_games():
         game['team1'] = Team.objects.get(id=game['team1'])
         game['team2'] = team_getter(game['team2'])
         game['team2'] = Team.objects.get(id=game['team2'])        
-        game['goals'] = game['team1_score'] + game['team2_score']
+        game['goals'] = (game['team1_score'] or 0) + (game['team2_score'] or 0)
         
         if game['referee']:
             game['referee'] = Bio.objects.find(game['referee'])
@@ -672,8 +675,11 @@ def load_games():
             game['source'] = game['sources'][-1]
 
         if game.get('source'):
-            if game.get('source').startswith('http'):
-                game['source_url'] = game.get('source')
+            try:
+                if game.get('source').startswith('http'):
+                    game['source_url'] = game.get('source')
+            except:
+                import pdb; pdb.set_trace()
 
             try:
                 game['source_id'] = source_getter(game['source'])
@@ -694,7 +700,7 @@ def load_games():
             Game.objects.create(**game)
         except:
             print "Skipping game %s" % game
-            #import pdb; pdb.set_trace()
+            import pdb; pdb.set_trace()
 
         x = 5
 

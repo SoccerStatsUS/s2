@@ -7,7 +7,11 @@
 <div id="game_score">
 
   <h4>
+    {% if game.date %}
     <a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date }}</a>
+    {% else %}
+    Date Unknown
+    {% endif %}
     -
     <a href="{% url competition_detail game.competition.slug %}">{{ game.competition }}</a>
     <a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.season.name }}</a>
@@ -29,13 +33,13 @@
 
   <div class="team_data">
     <div class="team"><a href="{% url team_detail game.team1.slug %}">{{ game.team1  }}</a></div>
-    <div class="score">{{ game.team1_score }}</div>
+    <div class="score">{{ game.team1_score_or_result }}</div>
     <div><a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.home_standings_string  }}</a></div>
   </div>
 
   <div class="team_data">
     <div class="team"><a href="{% url team_detail game.team2.slug %}">{{ game.team2  }}</a></div>
-    <div class="score">{{ game.team2_score }}</div>
+    <div class="score">{{ game.team2_score_or_result }}</div>
     <div><a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.away_standings_string  }}</a></div>
   </div>
 
@@ -93,6 +97,10 @@
   {% endif %}
   {% endif %}
 </h4>
+
+{% else %}
+
+<p>No Source</p>
     
 {% endif %}
 

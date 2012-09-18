@@ -17,7 +17,7 @@ class StatSearchForm(forms.Form):
     name = forms.CharField(max_length=100)
     team = forms.CharField(max_length=100)
     competition = forms.CharField(max_length=100)
-    year = forms.IntegerField()
+    season = forms.IntegerField()
 
 
 class GoalSearchForm(forms.Form):

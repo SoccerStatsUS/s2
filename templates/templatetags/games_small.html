@@ -6,7 +6,7 @@
   <tr>
     <td><a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date }}</a></td>
     <td><a href="{% url team_detail game.team1.slug %}">{{ game.team1_original_name }}</a></td>
-    <td><a href="{% url game_detail game.id %}">{{ game.score }}</a></td>
+    <td><a href="{% url game_detail game.id %}">{{ game.score_or_result }}</a></td>
     <td><a href="{% url team_detail game.team2.slug %}">{{ game.team2_original_name }}</a></td>
 
   {% endfor %}
