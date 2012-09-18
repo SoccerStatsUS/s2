@@ -185,6 +185,9 @@ class Game(models.Model):
         return ['red', 'yellow', 'green'][self.get_completeness()]
 
 
+    
+
+
     def score(self):
         """Returns a score string."""
         return "%s - %s" % (self.team1_score, self.team2_score)
@@ -211,13 +214,36 @@ class Game(models.Model):
         return self.appearance_set.filter(team=self.team1)
 
 
+
+    def team1_starters(self):
+        return self.team1_lineups().filter(on=0)
+
+
+    def team2_starters(self):
+        return self.team2_lineups().filter(on=0)
+
+    def lineup_quality(self):
+        ts1 = self.team1_starters().count()
+        ts2 = self.team2_starters().count()
+        if ts1 and ts2 == 11:
+            return 2
+        elif ts1 > 0 or ts2 > 0:
+            return 1
+        else:
+            return 0
+
+    def color_code_starters(self):
+        # Merge this and color_code
+        return ['red', 'yellow', 'green'][self.lineup_quality()]
+
+
     def team2_lineups(self):
         return self.appearance_set.filter(team=self.team2)
 
 
-    def lineup_numbers(self):
+    def starter_numbers(self):
         """A convenience method for making sure game lineups are good."""
-        return "%s:%s" % (self.team1_lineups.count(), self.team2_lineups.count())
+        return "%s:%s" % (self.team1_starters().count(), self.team2_starters().count())
 
 
 

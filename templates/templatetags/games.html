@@ -53,8 +53,8 @@
     {% else %}
     <td></td>
     {% endif %}
-  {% datum_or_grey game.attendance %}
-    <td>{{ game.lineup_numbers }}</td>
+    {% datum_or_grey game.attendance %}
+    <td class="{{ game.color_code_starters }}-bg">{{ game.starter_numbers }}</td>
   </tr>
   {% endfor %}
 </table>
