@@ -36,7 +36,7 @@ def generate():
     generate_team_standings()
 
 
-    generate_game_data_quality()
+    #generate_game_data_quality()
     #generate_game_minutes()
 
 
@@ -68,19 +68,40 @@ def generate_game_data_quality():
     """
     print "Quality data for all games."
 
+    # Realized that this wasn't actually doing anything.
+    # (i.e. has never really worked; was not being used.)
+
     lineup_games = set([e[0] for e in Appearance.objects.values_list("game")])
     goal_games = set([e[0] for e in Goal.objects.values_list("game")])
+
+    print "Starter data."
+    from collections import Counter
+    global_starters = Appearance.objects.filter(on=0)
+
+    # Should really make this smarter - actually save the numbers.
+    starter_map = Counter([e[0] for e in global_starters.values_list('game')])
+    #starter_map = Counter([e[0] for e in global_starters.values_list('game', 'team')])
+
     
     for e in Game.objects.all():
         if e.id in lineup_games:
-            e.completeness = 2
+            e.detail_level = 2
         elif e.id in goal_games:
-            e.completeness = 1
+            e.detail_level = 1
         elif e.goals == 0:
-            e.completeness = 1
+            e.detail_level = 1
         else:
-            e.completeness = 0
+            e.detail_level = 0
+
+        starters = starter_map.get(e.id, 0)
+        if starters == 22:
+            e.lineup_quality = 3
+        elif starters == 11:
+            e.lineup_quality = 
+
         e.save()
+
+    
 
 @transaction.commit_on_success
 def generate_stats_generic(qs, make_key, update_dict):

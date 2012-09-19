@@ -157,6 +157,21 @@ class Game(models.Model):
     linesman2 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman2_games")
     linesman3 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman3_games")
 
+    # Detail level of stats.
+    # 0 - score only
+    # 1 - goals scored and score only
+    # 2 - lineups, red cards, etc.
+    # 3 - extra data
+    detail_level = models.IntegerField(null=True, blank=True)
+
+    # Quality of lineup
+    # 0 - no lineups
+    # 2 - lineups with logic problems
+    # 3 - plausibly complete lineups
+    # ? - verified lineup?
+    lineup_quality = models.IntegerField(null=True, blank=True)
+
+
     source = models.ForeignKey(Source, null=True)
     source_url = models.CharField(max_length=255)
 
