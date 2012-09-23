@@ -97,7 +97,11 @@ def generate_game_data_quality():
         if starters == 22:
             e.lineup_quality = 3
         elif starters == 11:
-            e.lineup_quality = 
+            e.lineup_quality = 2
+        elif starts == 0:
+            e.lineup_quality = 0
+        else:
+            e.lineup_quality = 1
 
         e.save()
 

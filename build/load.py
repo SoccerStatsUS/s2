@@ -575,7 +575,22 @@ def load_standings():
 def load_bios():
     cg = make_city_getter()
 
+
+    fields = [('lineups', 'name'), ('goals', 'goal'), ('stats', 'name'), ('awards', 'recipient'), ('picks', 'text')]
+    names = set()
+    for coll, key in fields:
+        names.update([e[key] for e in soccer_db[coll].find()])
+
+        
+    
+
     for bio in soccer_db.bios.find():
+
+        if bio['name'] not in names:
+            #print "Skipping %s" % bio['name']
+            continue
+
+
         try:
             print "Creating bio for %s" % bio['name']
         except:
