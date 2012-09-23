@@ -27,11 +27,36 @@
 <div id="tab_wrapper">
 
 
-{% if season.standing_set.exists %}
-<div tab="standings">
+<div tab="summary">
 {% include "templatetags/standings.html" with standings=season.standing_set.all %}
+
+<table>
+<th><td>Goal leaders</td></th>
+
+{% for stat in goal_leaders %}
+
+<tr>
+  <td>{{ stat.goals }}</td>
+  <td>{{ stat.player }}</td>
+</tr>
+{% endfor %}
+
+<h3>Goals per game: {{ season.goals_per_game|floatformat }}</h3>
+</table>
+
+
+
+<table>
+{% for stat in game_leaders %}
+<tr>
+  <td>{{ stat.games_played }}</td>
+  <td>{{ stat.player }}</td>
+</tr>
+{% endfor %}
+</table>
 </div>
-{% endif %}
+
+
 
 {% if stats %}
 <div tab="stats">

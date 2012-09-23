@@ -70,6 +70,7 @@ class Competition(models.Model):
         super(Competition, self).save(*args, **kwargs)
 
 
+
     def alltime_standings(self):
         from standings.models import Standing
         return Standing.objects.filter(competition=self, season=None)
@@ -157,11 +158,12 @@ class Season(models.Model):
             pass
             
             
+
             
 
 
     def __unicode__(self):
-        return u"%s: %s" % (self.competition, self.name)
+        return u"%s %s" % (self.name, self.competition)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -169,6 +171,16 @@ class Season(models.Model):
             
         super(Season, self).save(*args, **kwargs)
 
+
+
+    def goals_per_game(self): 
+        if not self.standing_set.exists():
+            return None
+        else:
+            data = self.standing_set.values_list('goals_for', 'games')
+            goals = sum([e[0] for e in data])
+            games = sum([e[1] for e in data])
+            return float(goals) / games
 
 
     def previous_season(self):
