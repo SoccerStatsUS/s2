@@ -1,7 +1,10 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 
+from collections import defaultdict
+
 from bios.models import Bio
+
 
 
 class CompetitionManager(models.Manager):
@@ -138,6 +141,10 @@ class Season(models.Model):
 
     objects = SeasonManager()
 
+    minutes = models.IntegerField(null=True, blank=True)
+    minutes_with_age = models.IntegerField(null=True, blank=True)
+    age_minutes = models.FloatField(null=True, blank=True)
+
 
     class Meta:
         ordering = ("name", "competition")
@@ -156,11 +163,16 @@ class Season(models.Model):
             pass
         except:
             pass
-            
-            
 
-            
 
+    def age_minutes_proportion(self):
+        if self.minutes:
+            return float(self.minutes_with_age) / self.minutes
+
+    def average_age(self):
+        if self.age_minutes:
+            return self.age_minutes / self.minutes_with_age
+            
 
     def __unicode__(self):
         return u"%s %s" % (self.name, self.competition)

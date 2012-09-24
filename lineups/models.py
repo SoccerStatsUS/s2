@@ -22,8 +22,8 @@ class Appearance(models.Model):
     
     # Default should be integer.
 
-
     age = models.FloatField(null=True) # Age in years at the time of game.
+    minutes = models.IntegerField(null=True)
 
     class Meta:
         ordering = ('game', 'on', '-id' )
@@ -35,13 +35,14 @@ class Appearance(models.Model):
         else:
             return self.game.team1
 
-    
+    """
     @property
     def minutes(self):
         try:
             return int(self.off) - int(self.on)
         except:
             return None
+            """
 
 
     @property

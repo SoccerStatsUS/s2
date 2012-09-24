@@ -187,6 +187,8 @@ def make_bio_getter():
     return get_bio
 
 
+
+
 def make_stadium_getter():
     """
     Retrieve bios easily.
@@ -268,7 +270,6 @@ def make_game_getter():
         return gid
 
     return getter
-
 
 
 
@@ -848,6 +849,8 @@ def load_lineups():
     bio_getter = make_bio_getter()
     game_getter = make_game_getter()
 
+    birthdate_dict = dict(Bio.objects.exclude(birthdate=None).values_list("id", "birthdate"))
+
     games = {}
     
     def create_appearance(a):
@@ -866,13 +869,19 @@ def load_lineups():
             print "Cannot create %s" % a
             return {}
 
-
-        """
-        if game.date and player.birthdate:
-            age = (game.date - player.birthdate).days / 365.25
+        bd = birthdate_dict.get(player_id)
+        if a['date'] and bd:
+            # Coerce bd from datetime.date to datetime.time
+            bdt = datetime.datetime.combine(bd, datetime.time())
+            age = (a['date'] - bdt).days / 365.25
         else:
             age = None
-        """
+
+        if a['on'] and a['off']:
+            minutes = a['off'] - a['on']
+        else:
+            minutes = None
+
 
         return {
             'team_id': team_id,
@@ -881,7 +890,8 @@ def load_lineups():
             'on': a['on'],
             'off': a['off'],
             'team_original_name': '',
-            #'age': age,
+            'age': age,
+            'minutes': minutes,
             }
 
     # Create the appearance objects.

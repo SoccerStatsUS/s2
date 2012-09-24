@@ -39,6 +39,8 @@
     <th>champion</th>
     <th>MVP</th>
     <th>Golden Boot</th>
+    <th>Average age</th>
+    <th>Ages known %</th>
   </tr>
 
 
@@ -47,16 +49,19 @@
     <td>{{ competition }}</td>
     <td><a href="{% url season_detail competition.slug season.slug %}">{{ season.name }}</a></td>
     <td><a href="{{ season.champion.recipient.get_absolute_url }}">{{ season.champion.recipient }}</a></td>
+
     {% with season.mvp.recipient as mvp %}
     {% if mvp %}
     <td><a href="{% url person_detail mvp.slug %}">{{ mvp }}</a></td>
     {% else %}
     <td></td>
-
     {% endif %}
     {% endwith %}
 
+
     <td></td>
+    <td>{{ season.average_age|floatformat }}</td>
+    <td>{{ season.age_minutes_proportion|floatformat:"3" }}</td>
 
   </tr>
   {% endfor %}

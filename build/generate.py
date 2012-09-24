@@ -6,7 +6,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from django.db import transaction
 
 from bios.models import Bio
-from competitions.models import Competition
+from competitions.models import Competition, Season
 from games.models import Game, GameMinute
 from goals.models import Goal
 from lineups.models import Appearance
@@ -34,10 +34,73 @@ def generate():
     generate_team_stats()
     generate_competition_standings()
     generate_team_standings()
+    generate_season_data()
+
 
 
     #generate_game_data_quality()
     #generate_game_minutes()
+
+@timer
+@transaction.commit_on_success
+def generate_season_data():
+    # Generate season data including average age, nationality data (somehow)
+    print "Generating seasno data."
+
+    minutes_dict = defaultdict(int)
+    minutes_with_age_dict = defaultdict(int)
+    age_minutes_dict = defaultdict(int)
+
+    for season, minutes, age in Appearance.objects.values_list('game__season', 'minutes', 'age'):
+        if minutes:
+            minutes_dict[season] += minutes
+            if age:
+                minutes_with_age_dict[season] += minutes
+                am = minutes * age
+                age_minutes_dict[season] += am
+        
+    for sid, minutes in minutes_dict.items():
+        minutes_with_age = minutes_with_age_dict[sid]
+        age_minutes = age_minutes_dict[sid]
+
+        print 'Setting season %s' % sid        
+        s = Season.objects.get(id=sid)
+        s.minutes = minutes
+        s.minutes_with_age = minutes_with_age
+        s.age_minutes = age_minutes
+        s.save()
+
+    
+    """
+
+        from lineups.models import Appearance
+        appearances = Appearance.objects.filter(game__season=self)
+        if not appearances.exists():
+            return {}
+        else:
+            minutes_with_age = 0
+            age_minutes = 0
+            age_bucket_minutes = defaultdict(int)
+            nationality_minutes = defaultdict(int)
+            
+            for appearance in appearances:
+                if appearance.age:
+                    minutes_with_age += appearance.minutes
+                    age_minutes += appearance.age * appearance.minutes
+                    age_bucket_minutes[int(appearance.age)] += appearance.minutes
+
+                bp = appearance.player.birthplace
+                if bp and bp.country:
+                    nationality_minutes[bp.country] += appearance.minutes
+
+            return {
+                'minutes_with_age': minutes_with_age,
+                'age_minutes': age_minutes,
+                'age_bucket_minutes': age_bucket_minutes,
+                'nationality_minutes': nationality_minutes,
+                }
+
+             """
 
 
 def calculate_standings(team, games=None):
@@ -237,6 +300,9 @@ def generate_standings_generic(qs, make_key, update_dict):
 @timer
 def generate_competition_standings():
     print "generating competition standings"
+    """
+    Generate all-time standings for each competition.
+    """
     for competition in Competition.objects.all():
         standings = Standing.objects.filter(competition=competition).exclude(season=None)
         make_key = lambda s: (s['team_id'], s['competition_id'])
