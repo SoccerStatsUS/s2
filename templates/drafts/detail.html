@@ -7,7 +7,57 @@
 
 {% if draft.pick_set.exists %}
 <h4>picks</h4>
-{% include "templatetags/draft.html" with picks=draft.pick_set.all %}
+
+
+{% load datum_or_none %}
+
+<table>
+<tr>
+  <th>#</th>
+  <th>name</th>
+  <th>pos.</th>
+  <th>team</th>
+  <th>gp</th>
+  <th>minutes</th>
+  <th>goals</th>
+  <th>age</th>
+  <th>birthplace</th>
+<tr>
+
+
+
+{% for pick in draft.pick_set.all %}
+{% with cs=pick.player.career_stat %}
+<tr>
+
+  <td>{{ pick.number }}</td>
+
+
+
+  {% if pick.player %}
+  <td><a href="{% url person_detail pick.player.slug %}">{{ pick.player }}</a></td>
+  {% else %}
+  <td>PASS</td>
+  {% endif %}
+  {% datum_or_grey pick.position %}
+  <td><a href="{% url team_detail pick.team.slug %}">{{ pick.team }}</a></td>
+
+  {% datum_or_grey cs.games_played %}
+  {% datum_or_grey cs.minutes %}
+  {% datum_or_grey cs.goals %}
+  <td>{{ pick.player.age_years|floatformat }}</td>
+
+  {% if pick.player.birthplace %}
+  <td><a href="{% url city_detail pick.player.birthplace.slug %}">{{ pick.player.birthplace }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
+</tr>
+{% endwith %}
+{% endfor %}
+</table>
+
 {% endif %}
 
 {% endblock %}

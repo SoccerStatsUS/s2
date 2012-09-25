@@ -140,7 +140,7 @@
 
 {% if team.pick_set.exists %}
 <div tab="draft picks">
-{% include "templatetags/draft.html" with picks=team.pick_set.all %}
+{% include "templatetags/draft_small.html" with picks=team.pick_set.all %}
 </div>
 {% endif %}
 

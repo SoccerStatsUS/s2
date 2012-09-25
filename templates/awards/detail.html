@@ -33,13 +33,24 @@
 
   <tr>
     <th>Recipient</th>
+    <th>gp</th>
+    <th>goals</th>
+    <th>age</th>
+    <th>birthplace</th>
   </tr>
 
 
   {% for recipient in recipients %}
+  {% with cs=recipient.career_stat %}
   <tr>
     <td><a href="{{ recipient.get_absolute_url }}">{{ recipient }}</a></td>
+    <td>{{ cs.games_played }}</td>
+    <td>{{ cs.goals }}</td>
+    <td>{{ recipient.age_years|floatformat }}</td>
+    <td>{{ recipient.birthplace }}</td>
+
   </tr>
+  {% endwith %}
   {% endfor %}
 
   {% endif %}

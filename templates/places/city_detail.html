@@ -21,10 +21,21 @@
 {% if city.stadium_set.exists %}
 <div tab="stadiums">
 <table>
+<tr>
+  <th>name</th>
+  <th>opened</th>
+  <th>capacity</th>
+  <th>cost</th>
+</tr>
 {% for stadium in city.stadium_set.all %}
 <tr>
   <td><a href="{% url stadium_detail stadium.slug %}">{{ stadium }}</a></td>
-  {% datum_or_grey stadium.opened %}
+  {% if stadium.opened %}
+  <td><a href="{% url date_detail stadium.opened.year stadium.opened.month stadium.opened.day %}">{{ stadium.opened }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+  
   {% datum_or_grey stadium.capacity %}
   {% datum_or_grey stadium.cost %}
 </tr>
@@ -34,27 +45,7 @@
 {% endif %}
 
 {% if city.birth_set.exists %}
-<div tab="births">
-
-<table>
-  <thead>
-    <tr>
-      <th>name</th>
-      <th>bdate</th>
-    </tr>
-  </thead>
-{% for bio in city.birth_set.all %}
-<tr>
-  <td><a href="{% url person_detail bio.slug %}">{{ bio }}</a></td>
-  {% if bio.birthdate %}
-  <td><a href="{% url date_detail bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a></td>
-  {% else %}
-  <td></td>
-  {% endif %}
-</tr>
-{% endfor %}
-</table>
-</div>
+{% include "templatetags/born.html" %} 
 {% endif %}
 
 {% if games %}

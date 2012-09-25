@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load datum_or_none %}
 
 {% block content %}
 
@@ -30,12 +31,14 @@
     <tr>
       <th>season</th>
       <th>name</th>
+      <th>date</th>
     </tr>
   </thead>
 {% for item in dx.list %}
   <tr>
     <td>{{ item.season }}</td>
     <td><a href="{% url draft_detail dx.grouper.slug item.slug item.season %}">{{ item.name }}</a></td>
+    {% datum_or_grey item.start %}
   </tr>
 {% endfor %}
 </table>
