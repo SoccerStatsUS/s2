@@ -16,6 +16,11 @@ urlpatterns = patterns('competitions.views',
                            name='season_list'),
 
 
+                       url(r'^level/(?P<level_slug>[a-z0-9-]+)/$',
+                           'level_detail',
+                           name='level_detail'),
+
+
                        url(r'^(?P<competition_slug>[a-z0-9-]+)/$',
                            'competition_detail',
                            name='competition_detail'),

@@ -2,10 +2,23 @@
 
 {% block content %}
 
+<form method="GET" action=".">
+
+{% csrf_token %}
+
+{{ form.as_table }}
+
+<input type="submit" value="send" />
+
+</form>
+
 <table id="competition_index">
   <thead>
   <tr>
     <th>competition</th>
+    <th>code</th>
+    <th>international</th>
+    <th>level</th>
     <th>type</th>
     <th>scope</th>
     <th>area</th>
@@ -20,6 +33,9 @@
   {% for competition in competitions %}
   <tr>
     <td><a href="{% url competition_detail competition.slug %}">{{ competition.name }}</a></td>
+    <td>{{ competition.code }}</td>
+    <td>{{ competition.international }}</td>
+    <td>{{ competition.level }}</td>
     <td>{{ competition.ctype }}</td>
     <td>{{ competition.scope }}</td>
     <td>{{ competition.area }}</td>

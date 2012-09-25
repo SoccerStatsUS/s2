@@ -4,18 +4,54 @@ from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
 from competitions.models import Competition, Season
+from competitions.forms import CompetitionForm
 from stats.models import Stat
 
 #@cache_page(60 * 60 * 12)
 def competition_index(request):
-    # Add a paginator.
+
+    competitions = Competition.objects.exclude(ctype='')
     competitions = Competition.objects.all()
+    
+    ctype = None
+
+    if request.method == 'GET':
+        form = CompetitionForm(request.GET)
+
+        if form.is_valid():
+            competitions = Competition.objects.all()
+
+            level = form.cleaned_data['level']
+            if level:
+                competitions = competitions.filter(level=level)
+
+            ctype = form.cleaned_data['ctype']
+            if ctype:
+                competitions = competitions.filter(ctype=ctype)
+
+        else:
+            form = CompetitionForm()
+    
+    else:
+        form = CompetitionForm()
+            
+    competitions = Competition.objects.all()
+    # Add a paginator.
+
     context = {
         'competitions': competitions,
+        'form': form,
+        'ctype': ctype,
+        #'valid': form.is_valid(),
+        #'errors': form.errors,
+
         }
     return render_to_response("competitions/index.html",
                               context,
                               context_instance=RequestContext(request))
+
+
+
 
 @cache_page(60 * 60 * 12)
 def competition_detail(request, competition_slug):
@@ -84,6 +120,34 @@ def season_detail(request, competition_slug, season_slug):
     return render_to_response("competitions/season_detail.html",
                               context,
                               context_instance=RequestContext(request))
+
+
+
+@cache_page(60 * 60 * 12)
+def level_detail(request, level_slug):
+    from games.models import Game
+    from standings.models import Standing
+
+    stats = Stat.competition_stats.filter(team=None, competition__level=level_slug)
+
+    goal_leaders = stats.order_by('-goals')
+    game_leaders = stats.order_by('-games_played')
+
+
+
+
+    context = {
+        'level': level_slug,
+        'stats': stats[:30],
+        'games': Game.objects.filter(competition__level=level_slug)[:25],
+        'standings': Standing.objects.filter(competition__level=level_slug)[:30],
+        'goal_leaders': goal_leaders[:10],
+        'game_leaders': game_leaders[:10],
+        }
+    return render_to_response("competitions/level_detail.html",
+                              context,
+                              context_instance=RequestContext(request))
+
 
 
 @cache_page(60 * 60 * 12)

@@ -39,7 +39,10 @@ class Competition(models.Model):
     
     slug = models.SlugField()
 
+    international = models.BooleanField(default=False)
     ctype = models.CharField(max_length=255) # Competition type - cup, league, etc.
+    code = models.CharField(max_length=255) # Code: soccer, indoor, Boston game, etc.
+    level = models.IntegerField(null=True, blank=True) # 1st Divison, 2nd Vision, etc.
     scope = models.CharField(max_length=255)
     area = models.CharField(max_length=255)
     
@@ -148,6 +151,15 @@ class Season(models.Model):
 
     class Meta:
         ordering = ("name", "competition")
+
+
+    def golden_boot(self):
+        goalscorers = self.stat_set.order_by('-goals', '-assists')
+        if goalscorers.exists():
+            return goalscorers[0].player
+        else:
+            return None
+                      
 
 
     def dates(self):

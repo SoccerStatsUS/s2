@@ -28,7 +28,13 @@
 
 
 <div tab="summary">
-{% include "templatetags/standings.html" with standings=season.standing_set.all %}
+{% include "templatetags/compact_standings.html" with standings=season.standing_set.all %}
+
+<h3>Champion: </h3>
+<h3>Golden Boot: </h3>
+<h3>Goals per game: {{ season.goals_per_game|floatformat }}</h3>
+<h3>Average age: {{ season.average_age|floatformat:"2" }}</h3>
+
 
 <table>
 <th><td>Goal leaders</td></th>
@@ -37,24 +43,35 @@
 
 <tr>
   <td>{{ stat.goals }}</td>
-  <td>{{ stat.player }}</td>
+  <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
 </tr>
 {% endfor %}
 
-<h3>Goals per game: {{ season.goals_per_game|floatformat }}</h3>
+
+
+
 </table>
 
 
 
 <table>
+<th><td>Game leaders</td></th>
 {% for stat in game_leaders %}
 <tr>
   <td>{{ stat.games_played }}</td>
-  <td>{{ stat.player }}</td>
+  <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
 </tr>
 {% endfor %}
 </table>
 </div>
+
+
+
+{% if season.standing_set.exists %}
+<div tab="standings">
+{% include "templatetags/standings.html" with standings=season.standing_set.all %}
+</div>
+{% endif %}
 
 
 
