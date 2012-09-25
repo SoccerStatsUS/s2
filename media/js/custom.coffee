@@ -9,10 +9,11 @@ $(document).ready( ->
   $("#position_index").tablesorter()
   $(".standings_list").tablesorter()
 
-  $("select").change ->
-    x = $(this).find("option:selected")
-    url = x.attr("ref")
-    window.location = url
+  # Competition page button selection activity
+  #$("select").change ->
+  #  x = $(this).find("option:selected")
+  #  url = x.attr("ref")
+  #  window.location = url
 
 
 

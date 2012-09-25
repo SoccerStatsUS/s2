@@ -8,12 +8,6 @@
     $("#stadium_list").tablesorter();
     $("#position_index").tablesorter();
     $(".standings_list").tablesorter();
-    $("select").change(function() {
-      var url, x;
-      x = $(this).find("option:selected");
-      url = x.attr("ref");
-      return window.location = url;
-    });
     createSortLoader = function(div) {
       var d;
       d = $("table", div);
