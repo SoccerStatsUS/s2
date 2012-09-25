@@ -529,7 +529,11 @@ def load_competitions():
     print "loading competitions"
     for c in soccer_db.competitions.find():
         c.pop('_id')
-        Competition.objects.create(**c)
+        try:
+            Competition.objects.create(**c)
+        except:
+            import pdb; pdb.set_trace()
+            x =5 
 
 
 @transaction.commit_on_success
@@ -877,8 +881,12 @@ def load_lineups():
         else:
             age = None
 
-        if a['on'] and a['off']:
-            minutes = a['off'] - a['on']
+        if a['on'] is not None and a['off'] is not None:
+            try:
+                minutes = int(a['off']) - int(a['on'])
+            except:
+                print "Fail on %s" % str(a)
+                minutes = None
         else:
             minutes = None
 
