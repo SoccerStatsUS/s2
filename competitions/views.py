@@ -1,4 +1,5 @@
 from django.db.models import Sum
+from django.http import Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
@@ -10,8 +11,8 @@ from stats.models import Stat
 #@cache_page(60 * 60 * 12)
 def competition_index(request):
 
-    competitions = Competition.objects.exclude(ctype='')
-    competitions = Competition.objects.all()
+    competitions = Competition.objects.filter(level=1).filter(code='soccer')
+
     
     ctype = None
 
@@ -29,19 +30,34 @@ def competition_index(request):
             if ctype:
                 competitions = competitions.filter(ctype=ctype)
 
+            area = form.cleaned_data['area']
+            if area:
+                competitions = competitions.filter(area=area)
+
+            code = form.cleaned_data['code']
+            if code:
+                competitions = competitions.filter(code=code)
+
+
+            #international = form.cleaned_data['international']
+            #if international is not None:
+            #    competitions = competitions.filter(international=international)
+
         else:
+            raise
             form = CompetitionForm()
     
     else:
+        raise
         form = CompetitionForm()
             
-    competitions = Competition.objects.all()
     # Add a paginator.
 
     context = {
         'competitions': competitions,
         'form': form,
         'ctype': ctype,
+        #'itype': itype,
         #'valid': form.is_valid(),
         #'errors': form.errors,
 

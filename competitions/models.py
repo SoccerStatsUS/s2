@@ -141,6 +141,7 @@ class Season(models.Model):
     slug = models.SlugField()
 
     competition = models.ForeignKey(Competition)
+    competition_original_name = models.CharField(max_length=255)
 
     objects = SeasonManager()
 

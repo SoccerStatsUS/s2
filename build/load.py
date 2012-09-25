@@ -389,6 +389,7 @@ def load_positions():
 
 @transaction.commit_on_success
 def load_awards():
+    print
     print "loading awards"
     awards = set()
     award_dict = {}
@@ -416,7 +417,7 @@ def load_awards():
 
 
     # Create awardItems.
-    for item in soccer_db.awards.find():
+    for item in soccer_db.awards.find().sort('recipient', 1):
         item.pop('_id')
 
         # So we can have a season, a year, both, or neither for an award item
@@ -456,7 +457,7 @@ def load_drafts():
 
     # Create the set of drafts.
 
-    for draft in soccer_db.drafts.find():
+    for draft in soccer_db.drafts.find().sort('team', 1):
         draft.pop('_id')
         competition_id = competition_getter(draft['competition'])        
         competition = Competition.objects.get(id=competition_id)
@@ -568,7 +569,7 @@ def load_stadiums():
 @transaction.commit_on_success
 def load_standings():
     print "loading standings\n"
-    for standing in soccer_db.standings.find():
+    for standing in soccer_db.standings.find().sort('team', 1):
         standing.pop('_id')
         standing['team'] = Team.objects.find(standing['team'], create=True)
         standing['competition'] = Competition.objects.find(standing['competition'])
@@ -589,7 +590,7 @@ def load_bios():
         
     
 
-    for bio in soccer_db.bios.find():
+    for bio in soccer_db.bios.find().sort('name', 1):
 
         if bio['name'] not in names:
             #print "Skipping %s" % bio['name']
