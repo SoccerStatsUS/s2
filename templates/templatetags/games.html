@@ -2,40 +2,49 @@
 {% load datum_or_none %}
 <table>
   <tr>
-    <th></th>
+
     <th>date</th>
-    <th>competition</th>
-    <th>home team</th>
+    <th title="competition">cmp</th>
+    <th>team1</th>
     <th>score</th>
-    <th>away team</th>
+    <th></th>
+    <th>team2</th>
     <th>location</th>
     <th>referee</th>
     <th>attendance</th>
+    <th></th>
     <th></th>
   </tr>
 
   {% for game in games %}
   <tr>
-    <td class="{{ game.color_code }}-bg"></td>
+
     {% if game.date %}
     <td><a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date }}</a></td>
     {% else %}
     <td></td>
     {% endif %}
     <td><a href="{% url competition_detail game.competition.slug %}">{{ game.competition.abbreviation }}</a></td>
+
+    {% if game.winner == game.team1 %}
+    <td><a href="{% url team_detail game.team1.slug %}"><strong>{{ game.team1_original_name }}</strong></a></td>
+    {% else %}
     <td><a href="{% url team_detail game.team1.slug %}">{{ game.team1_original_name }}</a></td>
+    {% endif %}
+
     <td><a href="{% url game_detail game.id %}">{{ game.score_or_result }}</a></td>
+    <td></td>
+
+    {% if game.winner == game.team2 %}
+    <td><a href="{% url team_detail game.team2.slug %}"><strong>{{ game.team2_original_name }}</strong></a></td>
+    {% else %}
     <td><a href="{% url team_detail game.team2.slug %}">{{ game.team2_original_name }}</a></td>
+    {% endif %}
 
 
     {% if game.stadium %}
     <td>
-      <a href="{% url stadium_detail game.stadium.slug %}">{{ game.stadium }}</a> 
-      {% if game.city.slug %}
-      <a href="{% url city_detail game.city.slug %}">[c]</a>
-      {% else %}
-      [c]
-      {% endif %}
+      <a href="{% url stadium_detail game.stadium.slug %}"><strong>{{ game.stadium }}</strong></a>{% if game.city.slug %}<a href="{% url city_detail game.city.slug %}">, {{ game.city.name }}</a>{% endif %}
     </td>
 
 
@@ -54,6 +63,7 @@
     <td></td>
     {% endif %}
     {% datum_or_grey game.attendance %}
+    <td class="{{ game.color_code }}-bg"></td>
     <td class="{{ game.color_code_starters }}-bg">{{ game.starter_numbers }}</td>
   </tr>
   {% endfor %}

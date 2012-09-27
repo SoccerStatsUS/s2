@@ -1,0 +1,10 @@
+
+
+<table>
+{% for stadium in stadiums %}
+<tr>
+  <td><a href="{% url stadium_detail stadium.slug %}">{{ stadium.name }}</td>
+  <td>{{ stadium.capacity }}</td>
+</tr>
+{% endfor %}
+</table>

@@ -186,6 +186,18 @@ class Game(models.Model):
         # unique_together = [('team1', 'date', 'minigame'), ('team2', 'date', 'minigame')]
 
 
+    
+    def winner(self):
+        # Need to hook this in more intelligently with team1_result
+
+        if self.team1_score > self.team2_score:
+            return self.team1
+        elif self.team1_score == self.team2_score:
+            return None
+        else:
+            return self.team2
+
+
     def get_completeness(self):
         """Returns how complete a game's data collection is."""
         if self.appearance_set.exists():
@@ -198,6 +210,14 @@ class Game(models.Model):
 
     def color_code(self):
         return ['red', 'yellow', 'green'][self.get_completeness()]
+
+
+    def color_code_result(self):
+        return {
+            'win': 'green',
+            'tie': 'yellow',
+            'loss': 'red',
+            }[self.result()]
 
 
     
@@ -409,6 +429,7 @@ class Game(models.Model):
                 return 'loss'
             else:
                 return 'win'
+
 
 
     def same_day_games(self):
