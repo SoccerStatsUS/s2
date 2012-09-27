@@ -70,7 +70,7 @@ class City(models.Model):
 
     def __unicode__(self):
         if self.state:
-            return "%s, %s" % (self.name, self.state.name)
+            return "%s, %s" % (self.name, self.state.abbreviation)
         elif self.country:
             return "%s, %s" % (self.name, self.country.name)
         else:
@@ -155,6 +155,12 @@ class Stadium(models.Model):
 
         else:
             return None
+
+
+    def goal_count(self):
+        scores = self.game_set.values_list('team1_score', 'team2_score')
+        game_score_totals = [sum([a or 0, b or 0]) for (a, b) in scores]
+        return sum(game_score_totals)
 
 
     def close_string(self):

@@ -26,6 +26,8 @@
   <th>opened</th>
   <th>capacity</th>
   <th>cost</th>
+  <th>games</th>
+  <th>goals</th>
 </tr>
 {% for stadium in city.stadium_set.all %}
 <tr>
@@ -38,6 +40,8 @@
   
   {% datum_or_grey stadium.capacity %}
   {% datum_or_grey stadium.cost %}
+  <td>{{ stadium.game_set.count }}</td>
+  <td>{{ stadium.goal_count }}</td>
 </tr>
 {% endfor %}
 </table>
@@ -50,20 +54,7 @@
 
 {% if games %}
 <div tab="games">
-<table>
-{% for game in games %}
-<tr>
-  <td><a href="{% url game_detail game.id %}">{{ game.date }}</a></td>
-  <td><a href="{% url team_detail game.team1.slug %}">{{ game.team1 }}</a></td>
-  <td><a href="{% url game_detail game.id %}">{{ game.score }}</a></td>
-  <td><a href="{% url team_detail game.team2.slug %}">{{ game.team2 }}</a></td>
-  {% if game.stadium %}
-  <td><a href="{% url stadium_detail game.stadium.slug %}">{{ game.stadium }}</a></td>
-  {% else %}
-  <td><a href="{% url city_detail game.city.slug %}">{{ game.city }}</a></td>
-  {% endif %}
-{% endfor %}
-</table>
+{% include "templatetags/games.html" %}
 </div>
 {% endif %}
 
