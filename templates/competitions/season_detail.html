@@ -16,6 +16,8 @@
 
 {% block content %}
 
+
+
 <h3>
 {% if season.previous_season %}<a href="{% url season_detail season.competition.slug season.previous_season.slug %}">←</a>{% endif %}
 {{ season }}
@@ -34,6 +36,17 @@
 <h3>Golden Boot: </h3>
 <h3>Goals per game: {{ season.goals_per_game|floatformat }}</h3>
 <h3>Average age: {{ season.average_age|floatformat:"2" }}</h3>
+
+<h3>Nation List</h3>
+<table>
+{% for nation, count in nation_list %}
+<tr>
+  <td><a href="{% url country_detail nation.slug %}">{{ nation }}</a></td>
+  <td>{{ count }}</td>
+</tr>
+
+{% endfor %}
+</table>
 
 
 <table>
@@ -63,6 +76,10 @@
 </tr>
 {% endfor %}
 </table>
+
+
+
+
 </div>
 
 

@@ -4,9 +4,13 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
+from bios.models import Bio
 from competitions.models import Competition, Season
 from competitions.forms import CompetitionForm
+from places.models import Country
 from stats.models import Stat
+
+from collections import Counter
 
 #@cache_page(60 * 60 * 12)
 def competition_index(request):
@@ -117,6 +121,19 @@ def season_detail(request, competition_slug, season_slug):
 
     stats = Stat.objects.filter(season=season, competition=season.competition)
 
+    bios = Bio.objects.filter(id__in=stats.values_list('player'))
+    nationality_count_dict = Counter(bios.exclude(birthplace__country=None).values_list('birthplace__country'))
+
+
+    # Create dict from id to Country object.
+    nations = Country.objects.filter(id__in=[e[0] for e in nationality_count_dict.keys()])
+    nation_id_dict = dict([(e.id, e) for e in nations])
+
+    ordered_nationality_tuple = sorted(nationality_count_dict.items(), key=lambda x: -x[1]) # [(199,), 665),
+    nation_list = [(nation_id_dict[a], b) for ((a,), b) in ordered_nationality_tuple if a is not None]
+
+                               
+
     # Aggregate returns None given a None value.
     mstats = stats.exclude(minutes=None)
     total_minutes = mstats.aggregate(Sum('minutes'))['minutes__sum']
@@ -132,6 +149,7 @@ def season_detail(request, competition_slug, season_slug):
         'known_minutes': known_minutes,
         'goal_leaders': goal_leaders[:10],
         'game_leaders': game_leaders[:10],
+        'nation_list': nation_list,
         }
     return render_to_response("competitions/season_detail.html",
                               context,
