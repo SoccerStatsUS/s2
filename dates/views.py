@@ -6,7 +6,9 @@ from django.views.decorators.cache import cache_page
 
 from bios.models import Bio
 from games.models import Game
+from places.models import City, Stadium
 from positions.models import Position
+
 
 @cache_page(60 * 60 * 12)
 def year_detail(request, year):
@@ -20,12 +22,37 @@ def year_detail(request, year):
 
     years = Game.objects.game_years()
 
+    stadium_ids = set([e[0] for e in games.exclude(stadium=None).values_list('stadium')])
+    stadiums = Stadium.objects.filter(id__in=stadium_ids)
+
+    previous_game = Game.objects.filter(date__lt=datetime.date(year, 1, 1))
+    if previous_game.exists():
+        previous_date = previous_game[0].date
+        previous_date_tuple = (previous_date.year, '', '')
+    else:
+        previou_date_tuple = None
+
+    next_game = Game.objects.filter(date__gt=datetime.date(year, 12, 31)).order_by('date')
+    if next_game.exists():
+        next_date = next_game[0].date
+        next_date_tuple = (next_date.year, '', '')
+    else:
+        next_date_tuple = None
+
+
+
+
     context = {
         'games': games,
         'births': births,
         'hires': hires,
         'fires': fires,
         'years': years,
+        'stadiums': stadiums[:20],
+        'date': str(year),
+        'previous_date': previous_date_tuple,
+        'next_date': next_date_tuple,
+
         }
     return render_to_response("dates/list.html",
                               context,
@@ -34,6 +61,10 @@ def year_detail(request, year):
 @cache_page(60 * 60 * 12)
 def month_detail(request, year, month):
     # Add a paginator.
+
+    if month == '':
+        return year_detail(request, year)
+
     year, month = int(year), int(month)
     games = Game.objects.filter(date__year=year, date__month=month)
     births = Bio.objects.filter(birthdate__year=year, birthdate__month=month).order_by('birthdate')
@@ -41,11 +72,30 @@ def month_detail(request, year, month):
     hires = Position.objects.filter(start__year=year, start__month=month)
     fires = Position.objects.filter(end__year=year, end__month=month)
 
+    stadium_ids = set([e[0] for e in games.exclude(stadium=None).values_list('stadium')])
+    stadiums = Stadium.objects.filter(id__in=stadium_ids)
+
+    previous_game = Game.objects.filter(date__lt=datetime.date(year, month, 1))
+    if previous_game.exists():
+        previous_date = previous_game[0].date
+        previous_date_tuple = (previous_date.year, previous_date.month, '')
+
+    next_game = Game.objects.filter(date__gte=datetime.date(year, month + 1, 1)).order_by('date')
+    if next_game.exists():
+        next_date = next_game[0].date
+        next_date_tuple = (next_date.year, next_date.month, '')
+
+
+
     context = {
         'games': games,
         'births': births,
         'hires': hires,
         'fires': fires,
+        'stadiums': stadiums[:20],
+        'date': '%s/%s' % (month, year),
+        'previous_date': previous_date_tuple,
+        'next_date': next_date_tuple,
         }
     return render_to_response("dates/list.html",
                               context,
@@ -55,6 +105,10 @@ def month_detail(request, year, month):
 @cache_page(60 * 60 * 12)
 def date_detail(request, year, month, day):
     # Add a paginator.
+
+    if day == '':
+        return month_detail(request, year, month)
+
     d = datetime.date(int(year), int(month), int(day))
     games = Game.objects.filter(date=d)
     births = Bio.objects.filter(birthdate=d).order_by('birthdate')
@@ -62,25 +116,32 @@ def date_detail(request, year, month, day):
     hires = Position.objects.filter(start=d)
     fires = Position.objects.filter(end=d)
 
+    stadium_ids = set([e[0] for e in games.exclude(stadium=None).values_list('stadium')])
+    stadiums = Stadium.objects.filter(id__in=stadium_ids)
+
+
     # Get other days.
-    next = previous = None
+    next_date = previous_date = None
 
     previous_game = Game.objects.filter(date__lt=d)
     if previous_game.exists():
-        previous = previous_game[0].date
+        previous_date = previous_game[0].date
+        previous_date_tuple = (previous_date.year, previous_date.month, previous_date.day)
 
     next_game = Game.objects.filter(date__gt=d).order_by('date')
     if next_game.exists():
-        next = next_game[0].date
+        next_date = next_game[0].date
+        next_date_tuple = (next_date.year, next_date.month, next_date.day)
 
     context = {
         'games': games,
         'births': births,
         'hires': hires,
         'fires': fires,
-        'date': d,
-        'yesterday': previous,
-        'tomorrow': next,
+        'date': '%s/%s/%s' % (d.month, d.day, d.year),
+        'previous_date': previous_date_tuple,
+        'next_date': next_date_tuple,
+        'stadiums': stadiums[:20],
         }
     return render_to_response("dates/list.html",
                               context,
