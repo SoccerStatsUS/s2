@@ -43,15 +43,6 @@ $(document).ready( ->
   #getGames = makeAjaxGetter("#game_form", "#games", "/tools/ajax/games")
   #getGoals = makeAjaxGetter("#goal_form", "#goals", "/tools/ajax/goals")
 
-  # Ajax functionality for stats/lineups/team search.
-  getLineups = ->
-    div = $("#lineups")
-    if div.length
-      div.html("Loading...")
-      opts = $("#lineup_form").serialize()
-      url = "/tools/ajax/lineups?#{opts}"
-      console.log url
-      div.load(url)
 
   # Ajax functionality for stats/lineups/team search.
   getLineups = ->
@@ -131,13 +122,6 @@ $(document).ready( ->
   tabs = $("#tabs li")
   if tabs.length
     $(tabs[0]).click()
-
-  # Set the correct tab after back button.
-  hash = window.location.hash
-  if hash
-    $("a[href=#{ hash }] li").click()
-
-
 
 
 )
