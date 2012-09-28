@@ -1,5 +1,6 @@
 import datetime
 
+from django.db.models import Max, Min, Count, Sum, Avg
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
@@ -11,8 +12,29 @@ from positions.models import Position
 
 
 @cache_page(60 * 60 * 12)
+def dates_index(request):
+
+    # All games.
+    games = Game.objects.all()
+    min_date = games.aggregate(Min('date'))['date__min']
+    max_date = games.aggregate(Max('date'))['date__max']
+
+    years = range(min_date.year, max_date.year + 1)
+
+    context = {
+        'years': years,
+        }
+
+    return render_to_response("dates/index.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+
+@cache_page(60 * 60 * 12)
 def year_detail(request, year):
-    # Add a paginator.
+    """
+    Summarize the events of the year.
+    """
     year = int(year)
     games = Game.objects.filter(date__year=int(year))
     births = Bio.objects.filter(birthdate__year=year).order_by('birthdate')
@@ -25,22 +47,20 @@ def year_detail(request, year):
     stadium_ids = set([e[0] for e in games.exclude(stadium=None).values_list('stadium')])
     stadiums = Stadium.objects.filter(id__in=stadium_ids)
 
+    previous_date_tuple = None
     previous_game = Game.objects.filter(date__lt=datetime.date(year, 1, 1))
+
     if previous_game.exists():
         previous_date = previous_game[0].date
         previous_date_tuple = (previous_date.year, '', '')
-    else:
-        previou_date_tuple = None
 
+
+    next_date_tuple = None
     next_game = Game.objects.filter(date__gt=datetime.date(year, 12, 31)).order_by('date')
+
     if next_game.exists():
         next_date = next_game[0].date
         next_date_tuple = (next_date.year, '', '')
-    else:
-        next_date_tuple = None
-
-
-
 
     context = {
         'games': games,
@@ -60,7 +80,9 @@ def year_detail(request, year):
 
 @cache_page(60 * 60 * 12)
 def month_detail(request, year, month):
-    # Add a paginator.
+    """
+    Summarize the events of the month.
+    """
 
     if month == '':
         return year_detail(request, year)
@@ -104,7 +126,10 @@ def month_detail(request, year, month):
 
 @cache_page(60 * 60 * 12)
 def date_detail(request, year, month, day):
-    # Add a paginator.
+    """
+    Summarize the events of the day.
+    """
+
 
     if day == '':
         return month_detail(request, year, month)
@@ -150,7 +175,10 @@ def date_detail(request, year, month, day):
 
 @cache_page(60 * 60 * 12)
 def day_detail(request, month, day):
-    # Add a paginator.
+    """
+    This day in history.
+    """
+
     month, day = int(month), int(day)
     games = Game.objects.filter(date__month=month, date__day=day)
     births = Bio.objects.filter(birthdate__month=month,birthdate__day=day).order_by('birthdate')
@@ -170,7 +198,7 @@ def day_detail(request, month, day):
 @cache_page(60 * 60 * 1)
 def scoreboard_today(request):
     """
-    Get the most recent game.
+    The scoreboard for the most recent day with games.
     """
     g = Game.objects.all()[0] # Most recent game
     t = g.date
