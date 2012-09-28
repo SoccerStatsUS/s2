@@ -1,12 +1,12 @@
-from django.db.models import Sum
+from django.db.models import Sum, Avg
 from django.http import Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
 from bios.models import Bio
-from competitions.models import Competition, Season
 from competitions.forms import CompetitionForm
+from competitions.models import Competition, Season
 from places.models import Country
 from stats.models import Stat
 
@@ -132,7 +132,10 @@ def season_detail(request, competition_slug, season_slug):
     ordered_nationality_tuple = sorted(nationality_count_dict.items(), key=lambda x: -x[1]) # [(199,), 665),
     nation_list = [(nation_id_dict[a], b) for ((a,), b) in ordered_nationality_tuple if a is not None]
 
-                               
+    # Compute average attendance.
+    games = season.game_set.exclude(attendance=None)
+    attendance_game_count = games.count()
+    average_attendance = games.aggregate(Avg('attendance'))['attendance__avg']
 
     # Aggregate returns None given a None value.
     mstats = stats.exclude(minutes=None)
@@ -150,6 +153,8 @@ def season_detail(request, competition_slug, season_slug):
         'goal_leaders': goal_leaders[:10],
         'game_leaders': game_leaders[:10],
         'nation_list': nation_list,
+        'average_attendance': average_attendance,
+        'attendance_game_count': attendance_game_count,
         }
     return render_to_response("competitions/season_detail.html",
                               context,

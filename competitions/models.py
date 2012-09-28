@@ -7,6 +7,7 @@ from bios.models import Bio
 
 
 
+
 class CompetitionManager(models.Manager):
 
     def find(self, name):
@@ -160,6 +161,48 @@ class Season(models.Model):
             return goalscorers[0].player
         else:
             return None
+
+
+
+    def nationality_stats(self):
+
+        stats = Stat.objects.filter(season=season, competition=season.competition).exclude(player__birthplace__country=None)
+
+        minutes_dict = defaultdict(int)
+        goals_dict = defaultdict(int)
+
+        nationality_set = set()
+        
+
+        for nat, pid, goals, minutes in stats.values_list('player__birthplace__country', 'player', 'goals', 'minutes'):
+            nationality_set.add((pid, nat))
+            minutes_dict[nat] += minutes or 0
+            minutes_dict[goals] += goals or 0
+
+        nation_count = Counter([e[1] for e in nationality_set])
+
+        l = []
+
+        
+
+            
+
+
+
+        bios = Bio.objects.filter(id__in=stats.values_list('player'))
+        nationality_count_dict = Counter(bios.exclude(birthplace__country=None).values_list('birthplace__country'))
+        
+        # Create dict from id to Country object.
+        nations = Country.objects.filter(id__in=[e[0] for e in nationality_count_dict.keys()])
+        nation_id_dict = dict([(e.id, e) for e in nations])
+
+        
+
+        ordered_nationality_tuple = sorted(nationality_count_dict.items(), key=lambda x: -x[1]) # [(199,), 665),
+        nation_list = [(nation_id_dict[a], b) for ((a,), b) in ordered_nationality_tuple if a is not None]
+
+        
+
                       
 
 
@@ -195,6 +238,11 @@ class Season(models.Model):
             self.slug = slugify(self.name)
             
         super(Season, self).save(*args, **kwargs)
+
+
+    def goals(self):
+        from goals.models import Goal
+        return Goal.objects.filter(game__season=self)
 
 
 
@@ -263,7 +311,7 @@ class Season(models.Model):
         from awards.models import AwardItem
 
         try:
-            return AwardItem.objects.get(season=self, award__name='Champion')
+            return AwardItem.objects.get(season=self, award__type='champion')
         except:
             return None
 
