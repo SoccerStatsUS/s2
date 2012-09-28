@@ -1,3 +1,4 @@
+from django.db.models import Avg
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
@@ -110,8 +111,16 @@ def stadium_detail(request, slug):
 
         stadium = get_object_or_404(Stadium, slug=slug)
 
+        # Compute average attendance.
+        games = stadium.game_set.exclude(attendance=None)
+        attendance_game_count = games.count()
+        average_attendance = games.aggregate(Avg('attendance'))['attendance__avg']
+
+
         context = {
                 'stadium': stadium,
+                'average_attendance': average_attendance,
+                'attendance_game_count': attendance_game_count,
                 }
 
         return render_to_response("places/stadium_detail.html",

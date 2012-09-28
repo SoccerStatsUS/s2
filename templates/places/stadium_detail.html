@@ -4,6 +4,8 @@
 
 <h3>{{ stadium.name }}</h3>
 
+<h3>Average attendance: {{ average_attendance|floatformat }} ({{ attendance_game_count }} games)</h3>
+
 {% if stadium.address %}
 <h4><a href="{% url city_detail stadium.city.slug %}">{{ stadium.address }}, {{ stadium.city }}</a></h4>
 {% else %}

@@ -6,15 +6,17 @@
 
 <table id="stadium_list">
 
-<tr>
-  <th></th>
-  <th>Opened</th>
-  <th>Closed</th>
-  <th>Capacity</th>
-  <th>Cost</th>
-  <th>City</th>
-</tr>
-
+  <thead>
+    <tr>
+      <th></th>
+      <th>Opened</th>
+      <th>Closed</th>
+      <th>Capacity</th>
+      <th>Cost</th>
+      <th>City</th>
+      <th>Games</th>
+    </tr>
+  </thead>
 {% for stadium in stadiums %}
 
 {% if stadium.slug %}
@@ -36,6 +38,7 @@
   {% datum_or_grey stadium.capacity %}
   {% datum_or_grey stadium.cost %}
   <td>{{ stadium.location }}</td>
+  <td>{{ stadium.game_set.count }}</td>
 
 </tr>
 
