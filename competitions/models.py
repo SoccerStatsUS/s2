@@ -5,6 +5,120 @@ from collections import defaultdict
 
 from bios.models import Bio
 
+import datetime
+
+
+
+
+def nationality_stats(stats):
+    from collections import Counter
+    from places.models import Country
+
+    # In the process of Creating a more generic state/country/confederation key part.
+    # Need to creat Confederation...
+    
+
+    
+    stats = stats.exclude(player__birthplace__country=None)
+    
+    minutes_dict = defaultdict(int)
+    gp_dict = defaultdict(int)
+    
+    nationality_set = set()
+
+    for nat, pid, gp, minutes in stats.values_list('player__birthplace__country', 'player', 'games_played', 'minutes'):
+        nationality_set.add((pid, nat))
+        minutes_dict[nat] += minutes or 0
+        gp_dict[nat] += gp or 0
+
+    nation_count = Counter([e[1] for e in nationality_set])
+
+    total_count = sum(nation_count.values())
+    total_minutes = sum(minutes_dict.values())
+    total_gp = sum(gp_dict.values())
+
+
+    l = []
+
+    nationality_ids = set([e[1] for e in nationality_set])        
+
+    nx = Country.objects.filter(id__in=nationality_ids)
+    nation_dict = dict([(e.id, e) for e in nx])
+
+    for n in nationality_ids:
+        nation = nation_dict[n]
+        uniques = nation_count[n]
+
+        minutes = minutes_dict[n]
+
+        gp = gp_dict[n]
+        gp_percentage = 100 * gp / float(total_gp)
+        l.append((nation, uniques, gp, gp_percentage, minutes))
+
+    l = sorted(l, key=lambda e: -e[2])
+    return {
+        'total_minutes': total_minutes,
+        'total_gp': total_gp,
+        'total_count': total_count,
+        'stat_list': l,
+        }
+            
+
+def confederation_stats(stats):
+    from collections import Counter
+
+    # In the process of Creating a more generic state/country/confederation key part.
+    # Need to creat Confederation...
+    
+    stats = stats.exclude(player__birthplace__country=None)
+    
+    minutes_dict = defaultdict(int)
+    gp_dict = defaultdict(int)
+    
+    nationality_set = set()
+
+    for nat, pid, gp, minutes in stats.values_list('player__birthplace__country__confederation', 'player', 'games_played', 'minutes'):
+        nationality_set.add((pid, nat))
+        minutes_dict[nat] += minutes or 0
+        gp_dict[nat] += gp or 0
+
+
+    nation_count = Counter([e[1] for e in nationality_set])
+
+    total_count = sum(nation_count.values())
+    total_minutes = sum(minutes_dict.values())
+    total_gp = sum(gp_dict.values())
+
+    l = []
+
+    confederations = set([e[1] for e in nationality_set])        
+
+    #nx = Country.objects.filter(id__in=nationality_ids)
+    #nation_dict = dict([(e.id, e) for e in nx])
+
+    for n in confederations:
+        #nation = nation_dict[n]
+        uniques = nation_count[n]
+        unique_percentage = 100 * uniques / float(total_count)
+
+
+        minutes = minutes_dict[n]
+
+        gp = gp_dict[n]
+        gp_percentage = 100 * gp / float(total_gp)
+        l.append((n, uniques, gp, gp_percentage, minutes))
+
+    l = sorted(l, key=lambda e: -e[2])
+
+    return {
+        'total_minutes': total_minutes,
+        'total_gp': total_gp,
+        'total_count': total_count,
+        'stat_list': l,
+        }
+            
+
+
 
 
 
@@ -108,6 +222,17 @@ class Competition(models.Model):
     def color_code(self, number):
         return ['red', 'yellow', 'green'][number]
 
+    def nationality_stats(self):
+        from stats.models import Stat
+        stats = Stat.competition_stats.filter(competition=self)
+        return nationality_stats(stats)
+
+    def confederation_stats(self):
+        from stats.models import Stat
+        stats = Stat.competition_stats.filter(competition=self)
+        return confederation_stats(stats)
+
+
 
 
 
@@ -163,47 +288,28 @@ class Season(models.Model):
             return None
 
 
+    def average_date(self):
+        if self.game_set.exclude(date=None).exists():
+            dates = self.game_set.exclude(date=None).values_list('date')
+            datetimes = [datetime.datetime(e.year, e.month, e.day) for [e] in dates]
+            ordinal_datetimes = [e.toordinal() for e in datetimes]
+            average_ordinal = sum(ordinal_datetimes) / float(len(ordinal_datetimes))
+            return datetime.datetime.fromordinal(int(average_ordinal))
+        return None
+
+
+        
 
     def nationality_stats(self):
+        stats = self.stat_set
+        # Stat.objects.filter(season=self, competition=self.competition).
+        return nationality_stats(stats)
 
-        stats = Stat.objects.filter(season=season, competition=season.competition).exclude(player__birthplace__country=None)
+    def confederation_stats(self):
+        stats = self.stat_set
+        # Stat.objects.filter(season=self, competition=self.competition).
+        return confederation_stats(stats)
 
-        minutes_dict = defaultdict(int)
-        goals_dict = defaultdict(int)
-
-        nationality_set = set()
-        
-
-        for nat, pid, goals, minutes in stats.values_list('player__birthplace__country', 'player', 'goals', 'minutes'):
-            nationality_set.add((pid, nat))
-            minutes_dict[nat] += minutes or 0
-            minutes_dict[goals] += goals or 0
-
-        nation_count = Counter([e[1] for e in nationality_set])
-
-        l = []
-
-        
-
-            
-
-
-
-        bios = Bio.objects.filter(id__in=stats.values_list('player'))
-        nationality_count_dict = Counter(bios.exclude(birthplace__country=None).values_list('birthplace__country'))
-        
-        # Create dict from id to Country object.
-        nations = Country.objects.filter(id__in=[e[0] for e in nationality_count_dict.keys()])
-        nation_id_dict = dict([(e.id, e) for e in nations])
-
-        
-
-        ordered_nationality_tuple = sorted(nationality_count_dict.items(), key=lambda x: -x[1]) # [(199,), 665),
-        nation_list = [(nation_id_dict[a], b) for ((a,), b) in ordered_nationality_tuple if a is not None]
-
-        
-
-                      
 
 
     def dates(self):
