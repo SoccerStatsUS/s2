@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<p>Games: {{ game_count }}</p>
+
+<p>Attendance: {{ total_attendance }} - {{ average_attendance }} per game.</p>
+
+
+<table>
+{% for result, count in results %}
+<tr>
+  <td>{{ result.0 }}-{{ result.1 }}</td>
+  <td>{{ count }}</td>
+</tr>
+{% endfor %}
+</table>
+
+
+<table>
+{% for year, count in years %}
+<tr>
+  <td>{{ year }}</td>
+  <td>{{ count }}</td>
+</tr>
+{% endfor %}
+</table>
+
+
+<table>
+{% for year, count in attendance_years %}
+<tr>
+  <td>{{ year }}</td>
+  <td>{{ count }}</td>
+</tr>
+{% endfor %}
+</table>
+
+
+<table>
+{% for year, count in game_years %}
+<tr>
+  <td>{{ year }}</td>
+  <td>{{ count }}</td>
+</tr>
+{% endfor %}
+</table>
+
+
+<table>
+{% for month, count in months %}
+<tr>
+  <td>{{ month }}</td>
+  <td>{{ count }}</td>
+</tr>
+{% endfor %}
+</table>
+
+
+{% endblock %}

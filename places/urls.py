@@ -19,6 +19,10 @@ urlpatterns = patterns('places.views',
                            'state_detail',
                            name='state_detail'),
 
+                       url(r'^cities/$',
+                           'city_index',
+                           name='city_index'),
+
 
                        url(r'^cities/(?P<slug>.+)/$',
                            'city_detail',

@@ -9,6 +9,8 @@ from bios.models import Bio
 from games.models import Game
 from standings.models import Standing
 
+from collections import defaultdict
+
 
 @cache_page(60 * 60 * 12)
 def homepage(request):
@@ -61,11 +63,53 @@ def games_index(request):
     # Consider turning into a games analysis page.
     # Home/Away advantage, graphs, etc.
     
-    games = Game.objects.order_by("-date")[:50]
+    games = Game.objects.order_by("-date")
+
+    game_count = games.count()
+
+    attendance_game_count = 0
+    total_attendance = 0
+
+    year_dict = defaultdict(int)
+    month_dict = defaultdict(int)
+    team_dict = defaultdict(int)
+    result_dict = defaultdict(int)
+
+    game_year_dict = defaultdict(int)
+    attendance_year_dict = defaultdict(int)
+
+    
+    for date, t1, t2, t1s, t2s, stadium, city, attendance in games.values_list('date', 'team1', 'team2', 'team1_score', 'team2_score', 'stadium', 'city', 'attendance'):
+        total_attendance += attendance or 0
+        attendance_year_dict[date.year] += attendance or 0
+        if attendance is not None:
+            attendance_game_count += 1
+
+        year_dict[date.year] += 1
+        game_year_dict[date.year] += 1
+
+        month_dict[date.month] += 1
+        team_dict[t1] += 1
+        team_dict[t2] += 1
+        result = tuple(sorted([t1s, t2s]))
+        result_dict[result] += 1
+
+
     context = {
         'games': games,
+        'game_count': game_count,
+        'total_attendance': total_attendance,
+        'average_attendance': total_attendance / float(attendance_game_count),
+        'teams': sorted(team_dict.items(), key=lambda t: -t[1]),
+        'results': sorted(result_dict.items(), key=lambda t: t[0]),
+        'years': sorted(year_dict.items(), key=lambda t: t[0]),
+        'months': sorted(month_dict.items(), key=lambda t: t[0]),
+        'game_years': sorted(game_year_dict.items(), key=lambda t: t[0]),
+        'attendance_years': sorted(attendance_year_dict.items(), key=lambda t: t[0]),
+        
+
         }
-    return render_to_response("games/list.html",
+    return render_to_response("games/index.html",
                               context,
                               context_instance=RequestContext(request))
 

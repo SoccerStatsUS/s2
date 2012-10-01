@@ -35,6 +35,37 @@ def state_index(request):
                                   context_instance=RequestContext(request))
 
 
+def city_index(request):
+
+        context = {
+                'cities': City.objects.all(),
+                }
+
+        return render_to_response("places/city_index.html",
+                                  context,
+                                  context_instance=RequestContext(request))
+
+
+
+        
+
+def stadium_index(request):
+
+        context = {
+                'stadiums': Stadium.objects.all(),
+                }
+
+        return render_to_response("places/stadium_index.html",
+                                  context,
+                                  context_instance=RequestContext(request))
+
+
+
+
+
+
+
+
 
 def country_detail(request, slug):
         """
@@ -89,20 +120,6 @@ def city_detail(request, slug):
         return render_to_response("places/city_detail.html",
                                   context,
                                   context_instance=RequestContext(request))
-
-        
-
-def stadium_index(request):
-
-        context = {
-                'stadiums': Stadium.objects.all(),
-                }
-
-        return render_to_response("places/stadium_index.html",
-                                  context,
-                                  context_instance=RequestContext(request))
-
-
 
 
 def stadium_detail(request, slug):

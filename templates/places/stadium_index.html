@@ -9,6 +9,7 @@
   <thead>
     <tr>
       <th></th>
+      <th>location</th>
       <th>Opened</th>
       <th>Closed</th>
       <th>Capacity</th>
@@ -22,6 +23,13 @@
 {% if stadium.slug %}
 <tr>
   <td><a href="{% url stadium_detail stadium.slug %}">{{ stadium }}</a></td>
+  
+  {% if stadium.city.slug %}
+  <td><a href="{% url city_detail stadium.city.slug %}">{{ stadium.city }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
 
   {% if stadium.year_opened %}
   <td><a href="{% url year_detail stadium.year_opened %}">{{ stadium.year_opened }}</a></td>

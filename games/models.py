@@ -145,8 +145,8 @@ class Game(models.Model):
 
     # Foreign Key
     stadium = models.ForeignKey(Stadium, null=True)
-    location = models.CharField(max_length=255)
     city = models.ForeignKey(City, null=True)
+    location = models.CharField(max_length=255)
 
     notes = models.TextField()
 
