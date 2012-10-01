@@ -1,0 +1,11 @@
+
+<table>
+{% for game in games %}
+<tr>
+  <td><a href="{% url game_detail game.id %}">{{ game.date }}</a></td>
+
+  {% include "templatetags/result_fragment.html" %}
+  <td>{{ game.attendance }}</td>
+</tr>
+{% endfor %}
+</table>

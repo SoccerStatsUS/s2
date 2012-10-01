@@ -18,9 +18,11 @@
 
 {% if competition.alltime_standings.exists %}
 <div tab="standings">
-{% include "templatetags/slim_standings.html" with standings=competition.alltime_standings %}
+{% include "templatetags/slim_standings.html" with standings=big_winners %}
 </div>
 {% endif %}
+
+
 
 
 {% if competition.season_set.exists %}
@@ -70,7 +72,17 @@
   {% endfor %}
     
 </table>
+
+<h3>Top attendances</h3>
+{% include "templatetags/top_attendance.html" with games=top_attendance_games %}
+
+<h3>Bottom attendances</h3>
+{% include "templatetags/top_attendance.html" with games=worst_attendance_games %}
+
+
 </div>
+
+
 {% endif %}
 
 {% if games %}
