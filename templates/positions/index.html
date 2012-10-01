@@ -3,7 +3,6 @@
 
 {% block content %}
 
-{{ positions }}
 
 <table id="position_index" >
 
@@ -25,9 +24,9 @@
 
 {% for position in positions %}
 <tr>
-  <td>{{ position.person }}</td>
-  <td><a href="">{{ position.name|truncatechars:32 }}</a></td>
-  <td>{{ position.team }}</td>
+  <td><a href="{% url person_detail position.person.slug %}">{{ position.person }}</a></td>
+  <td><a>{{ position.name|truncatechars:32 }}</a></td>
+  <td><a href="{% url team_detail position.team.slug %}">{{ position.team }}</a></td>
   {% datum_or_grey position.start %}
   {% datum_or_grey position.end %}
   <td>{{ position.length }}</td>

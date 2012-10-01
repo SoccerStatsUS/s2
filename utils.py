@@ -102,7 +102,7 @@ class memoized(object):
 # Run this as a cron job and store in a database?
 # Takes a while.
 
-def get_similar_names(score=.9):
+def get_similar_names(score=.85):
 
     l = []
 
@@ -113,7 +113,7 @@ def get_similar_names(score=.9):
             score = difflib.SequenceMatcher(None, name, e).ratio()
             t = (name, e, score)
             #l.append(t)
-            if score > .8:
+            if score > score:
                 print datetime.datetime.now()
                 print t
 

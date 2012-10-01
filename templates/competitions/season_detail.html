@@ -32,7 +32,6 @@
 <div tab="summary">
 {% include "templatetags/compact_standings.html" with standings=season.standing_set.all %}
 
-<h3>Champion: </h3>
 <h3>Golden Boot: </h3>
 <h3>Goals per game: {{ season.goals_per_game|floatformat }}</h3>
 <h3>Average age: {{ season.average_age|floatformat:"2" }}</h3>
@@ -139,7 +138,11 @@
 
 <div tab="graphs">
 
-{{ known_minutes }} / {{ total_minutes }}
+{% include "templatetags/nationality.html" with nstat=season.confederation_stats %}
+
+{% include "templatetags/nationality.html" with nstat=season.nationality_stats %}
+
+{{ known_minutes }} known minutes of {{ total_minutes }} total minutes
 </div>
 
 

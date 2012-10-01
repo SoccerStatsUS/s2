@@ -15,7 +15,7 @@ from collections import Counter
 #@cache_page(60 * 60 * 12)
 def competition_index(request):
 
-    competitions = Competition.objects.filter(level=1).filter(code='soccer')
+
 
     
     ctype = None
@@ -42,6 +42,10 @@ def competition_index(request):
             if code:
                 competitions = competitions.filter(code=code)
 
+            # No changes have been made; use standard competition filter.
+            # is_valid() method isn't working because all fields are optional.
+            if competitions.count() == Competition.objects.count():
+                competitions = Competition.objects.filter(level=1).filter(code='soccer')
 
             #international = form.cleaned_data['international']
             #if international is not None:

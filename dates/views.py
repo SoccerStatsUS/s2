@@ -47,17 +47,14 @@ def year_detail(request, year):
     stadium_ids = set([e[0] for e in games.exclude(stadium=None).values_list('stadium')])
     stadiums = Stadium.objects.filter(id__in=stadium_ids)
 
-    previous_date_tuple = None
-    previous_game = Game.objects.filter(date__lt=datetime.date(year, 1, 1))
+    next_date_tuple = previous_date_tuple = None
 
+    previous_game = Game.objects.filter(date__lt=datetime.date(year, 1, 1))
     if previous_game.exists():
         previous_date = previous_game[0].date
         previous_date_tuple = (previous_date.year, '', '')
 
-
-    next_date_tuple = None
     next_game = Game.objects.filter(date__gt=datetime.date(year, 12, 31)).order_by('date')
-
     if next_game.exists():
         next_date = next_game[0].date
         next_date_tuple = (next_date.year, '', '')
@@ -96,6 +93,8 @@ def month_detail(request, year, month):
 
     stadium_ids = set([e[0] for e in games.exclude(stadium=None).values_list('stadium')])
     stadiums = Stadium.objects.filter(id__in=stadium_ids)
+
+    next_date_tuple = previous_date_tuple = None
 
     previous_game = Game.objects.filter(date__lt=datetime.date(year, month, 1))
     if previous_game.exists():
@@ -145,8 +144,7 @@ def date_detail(request, year, month, day):
     stadiums = Stadium.objects.filter(id__in=stadium_ids)
 
 
-    # Get other days.
-    next_date = previous_date = None
+    next_date_tuple = previous_date_tuple = None
 
     previous_game = Game.objects.filter(date__lt=d)
     if previous_game.exists():

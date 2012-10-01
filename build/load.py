@@ -30,8 +30,6 @@ soccer_db = connection.soccer
 
 
 
-
-
 # These probably need to be in load_utils or something.
 # This isn't the place.
 def make_team_getter():
@@ -740,8 +738,6 @@ def load_goals():
         if goal.get('stadium'):
             goal['stadium'] = stadium_getter(goal['stadium'])
 
-
-        
         team = goal['team']
         if team in teams:
             team_id = teams[team]
