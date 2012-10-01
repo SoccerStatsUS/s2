@@ -42,9 +42,16 @@
   {% datum_or_grey pick.position %}
   <td><a href="{% url team_detail pick.team.slug %}">{{ pick.team }}</a></td>
 
+  {% if cs %}
   {% datum_or_grey cs.games_played %}
   {% datum_or_grey cs.minutes %}
   {% datum_or_grey cs.goals %}
+  {% else %}
+  <td></td>
+  <td></td>
+  <td></td>
+  {% endif %}
+
   <td>{{ pick.player.age_years|floatformat }}</td>
 
   {% if pick.player.birthplace %}

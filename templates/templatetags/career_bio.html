@@ -65,7 +65,13 @@
   {% else %}
   <td></td>
   {% endif %}
-  {% datum_or_grey stat.player.age_years|floatformat:"2" %}
+
+  {% if stat.player.age_years %}
+  <td>{{ stat.player.age_years|floatformat:"2" }}</td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
   {% if stat.player.birthplace %}
   <td><a href="{% url city_detail stat.player.birthplace.slug %}">{{ stat.player.birthplace }}</a></td>
   {% else %}
