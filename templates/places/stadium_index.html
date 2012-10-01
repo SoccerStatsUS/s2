@@ -6,20 +6,30 @@
 
 <table id="stadium_list">
 
-<tr>
-  <th></th>
-  <th>Opened</th>
-  <th>Closed</th>
-  <th>Capacity</th>
-  <th>Cost</th>
-  <th>City</th>
-</tr>
-
+  <thead>
+    <tr>
+      <th></th>
+      <th>location</th>
+      <th>Opened</th>
+      <th>Closed</th>
+      <th>Capacity</th>
+      <th>Cost</th>
+      <th>City</th>
+      <th>Games</th>
+    </tr>
+  </thead>
 {% for stadium in stadiums %}
 
 {% if stadium.slug %}
 <tr>
   <td><a href="{% url stadium_detail stadium.slug %}">{{ stadium }}</a></td>
+  
+  {% if stadium.city.slug %}
+  <td><a href="{% url city_detail stadium.city.slug %}">{{ stadium.city }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
 
   {% if stadium.year_opened %}
   <td><a href="{% url year_detail stadium.year_opened %}">{{ stadium.year_opened }}</a></td>
@@ -36,6 +46,7 @@
   {% datum_or_grey stadium.capacity %}
   {% datum_or_grey stadium.cost %}
   <td>{{ stadium.location }}</td>
+  <td>{{ stadium.game_set.count }}</td>
 
 </tr>
 

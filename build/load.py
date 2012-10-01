@@ -30,8 +30,6 @@ soccer_db = connection.soccer
 
 
 
-
-
 # These probably need to be in load_utils or something.
 # This isn't the place.
 def make_team_getter():
@@ -83,6 +81,8 @@ def make_source_getter():
     return get_source
 
 
+# This is way too complex.
+# I'm taking a break.
 
 def make_city_getter():
     cg = make_city_pre_getter()
@@ -582,14 +582,13 @@ def load_bios():
     cg = make_city_getter()
 
 
+    # Find which names are used so we can only load these bios.
     fields = [('lineups', 'name'), ('goals', 'goal'), ('stats', 'name'), ('awards', 'recipient'), ('picks', 'text')]
     names = set()
     for coll, key in fields:
         names.update([e[key] for e in soccer_db[coll].find()])
 
-        
-    
-
+    # Load bios.
     for bio in soccer_db.bios.find().sort('name', 1):
 
         if bio['name'] not in names:
@@ -614,11 +613,6 @@ def load_bios():
             bio.pop('nationality')
 
         bd = {}
-
-        # Set birthplace to a city. 
-        # Skipping this for the time being.
-        if False and 'birthplace' in bio:
-            d = get_location(bio['birthplace'])
 
         for key in 'name', 'height', 'birthdate', 'height', 'weight':
             if key in bio:
@@ -744,8 +738,6 @@ def load_goals():
         if goal.get('stadium'):
             goal['stadium'] = stadium_getter(goal['stadium'])
 
-
-        
         team = goal['team']
         if team in teams:
             team_id = teams[team]

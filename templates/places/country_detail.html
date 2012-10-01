@@ -8,6 +8,12 @@
 
 <h4>{{ country.population }}</h4>
 
+
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+<div tab="stadiums">
 <table>
 {% for stadium in stadiums %}
 <tr>
@@ -18,11 +24,30 @@
 </tr>
 {% endfor %}
 </table>
+</div>
 
-<h3>Births</h3>
+{% if country.games.exists %}
+<div tab="games">
+{% include "templatetags/games.html" with games=country.games.all %}
+</div>
+{% endif %}
+
+<div tab="people">
 
 <table>
+
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>birthplace</th>
+      <th>birthdate</th>
+      <th>gp</th>
+      <th>g</th>
+    </tr>
+  </thead>
+
 {% for bio in births %}
+{% with cs=bio.career_stat %}
 <tr>
   <td><a href="{% url person_detail bio.slug %}">{{ bio }}</a></td>
   <td><a href="{% url city_detail bio.birthplace.slug %}">{{ bio.birthplace }}</a></td>
@@ -31,8 +56,14 @@
   {% else %}
   <td></td>
   {% endif %}
+  <td>{{ cs.games_played }}</td>
+  <td>{{ cs.goals }}</td>
+
 </tr>
+{% endwith %}
 {% endfor %}
 </table>
+
+</div>
 
 {% endblock %}

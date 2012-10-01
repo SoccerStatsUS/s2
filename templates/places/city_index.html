@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load datum_or_none %}
+
+{% block content %}
+
+
+<table id="stadium_list">
+
+  <thead>
+    <tr>
+      <th>City</th>
+      <th>State</th>
+      <th>Country</th>
+      <th>Games</th>
+    </tr>
+  </thead>
+{% for city in cities %}
+
+<tr>
+  {% if city.slug %}
+  <td><a href="{% url city_detail city.slug %}">{{ city.name }}</a></td>
+  {% else %}
+  <td>{{ city.naem }}</td>
+  {% endif %}
+
+  {% if city.state %}
+  <td><a href="{% url state_detail city.state.slug %}">{{ city.state }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+  {% if city.country %}
+  <td><a href="{% url country_detail city.country.slug %}">{{ city.country }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+  <td>{{ city.game_set.count }}</td>
+
+</tr>
+
+
+{% endfor %}
+
+</table>
+
+
+{% endblock %}

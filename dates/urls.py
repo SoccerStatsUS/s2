@@ -2,6 +2,11 @@ from django.conf.urls.defaults import patterns, url
 
 urlpatterns = patterns('dates.views', 
 
+                       url(r'^$',
+                           'dates_index',
+                           name='dates_index'),
+
+
                        url('^today/$',
                            'scoreboard_today',
                            name='scoreboard_today'),

@@ -7,16 +7,9 @@
 {% block content %}
 
 
-<h3><a href="{% url competition_detail competition.slug %}">{{ competition }}</a></h3>
+<h3><a href="{% url competition_detail competition.slug %}">{{ competition }}</a></h4>
+<h4>Level {{ competition.level }}, {{ competition.area }}</h4> 
 
-
-<h4>{{ competition.abbreviation }}</h4>
-
-<h4>{{ competition.ctype }}</h4>
-
-<h4>{{ competition.scope }}</h4>
-
-<h4>{{ competition.area }}</h4>
 
 
 <ul id="tabs"></ul>
@@ -25,7 +18,7 @@
 
 {% if competition.alltime_standings.exists %}
 <div tab="standings">
-{% include "templatetags/standings.html" with standings=competition.alltime_standings %}
+{% include "templatetags/slim_standings.html" with standings=competition.alltime_standings %}
 </div>
 {% endif %}
 
@@ -41,6 +34,9 @@
     <th>Golden Boot</th>
     <th>Average age</th>
     <th>Ages known %</th>
+    <th>games</th>
+    <th>goals</th>
+    <th>stats</th>
   </tr>
 
 
@@ -66,6 +62,9 @@
 
     <td>{{ season.average_age|floatformat }}</td>
     <td>{{ season.age_minutes_proportion|floatformat:"3" }}</td>
+    <td>{{ season.game_set.count }}</td>
+    <td>{{ season.goals.count }}</td>
+    <td>{{ season.stat_set.count }}</td>
 
   </tr>
   {% endfor %}
@@ -101,6 +100,14 @@
 </table>
 </div>
 {% endif %}
+
+
+<div tab="graphs">
+{% include "templatetags/nationality.html" with nstat=competition.confederation_stats %}
+
+{% include "templatetags/nationality.html" with nstat=competition.nationality_stats %}
+</div>
+
 
 
 </div>

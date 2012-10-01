@@ -1,4 +1,5 @@
 from django.db import models
+
 from django.template.defaultfilters import slugify
 
 from bios.models import Bio
@@ -29,6 +30,11 @@ class Country(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def games(self):
+        from games.models import Game
+        return Game.objects.filter(city__country=self)
+
 
 class StateManager(models.Manager):
 

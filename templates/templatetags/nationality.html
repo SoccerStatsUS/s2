@@ -1,0 +1,26 @@
+
+<table>
+  <thead>
+    <tr>
+      <td></td>
+      <td>#</td>
+      <td>gp</td>
+      <td>%</td>
+      <td>minutes</td>
+    </tr>
+</thead>
+
+{% for nation, uniques, gp, gp_percentage, minutes in nstat.stat_list %}
+<tr>
+  <td>{{ nation }}</td>
+
+  <td>{{ uniques }}</td>
+  <td>{{ gp }}</td>
+  <td>{{ gp_percentage|floatformat }}</td>
+  <td>{{ minutes }}</td>
+</tr>
+
+{% endfor %}
+
+
+</table>

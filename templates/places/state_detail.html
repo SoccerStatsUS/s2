@@ -7,6 +7,9 @@
 <h3>{{ state }}</h3>
 <h4>Joined: {{ state.joined }}</h4>
 <h4>Abbreviation {{ state.abbreviation }}</h4>
+{% if state.country %}
+<h4>Country: <a href="{% url country_detail state.country.slug %}">{{ state.country }}</a></h4>
+{% endif %}
 
 <ul id="tabs"></ul>
 
@@ -37,21 +40,7 @@
 
 
 <div tab="games">
-<table>
-{% for game in games %}
-<tr>
-  <td><a href="{% url game_detail game.id %}">{{ game.date }}</a></td>
-  <td><a href="{% url team_detail game.team1.slug %}">{{ game.team1 }}</a></td>
-  <td><a href="{% url game_detail game.id %}">{{ game.score }}</a></td>
-  <td><a href="{% url team_detail game.team2.slug %}">{{ game.team2 }}</a></td>
-  {% if game.stadium %}
-  <td><a href="{% url stadium_detail game.stadium.slug %}">{{ game.stadium }}</a></td>
-  {% else %}
-  <td><a href="{% url city_detail game.city.slug %}">{{ game.city }}</a></td>
-  {% endif %}
-</tr>
-{% endfor %}
-</table>
+{% include "templatetags/games.html" %}
 </div>
 
 

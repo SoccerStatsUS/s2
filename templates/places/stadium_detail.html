@@ -4,6 +4,16 @@
 
 <h3>{{ stadium.name }}</h3>
 
+
+
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+
+<div tab="summary">
+<h3>Average attendance: {{ average_attendance|floatformat }} ({{ attendance_game_count }} games)</h3>
+
 {% if stadium.address %}
 <h4><a href="{% url city_detail stadium.city.slug %}">{{ stadium.address }}, {{ stadium.city }}</a></h4>
 {% else %}
@@ -42,12 +52,7 @@
 {% if stadium.architect %}
 <h4>Architect: <a href="{% url person_detail stadium.architect.slug %}">{{ stadium.architect }}</a></h4>
 {% endif %}
-
-
-
-<ul id="tabs"></ul>
-
-<div id="tab_wrapper">
+</div>
 
 {% if stadium.game_set.exists %}
 <div tab="games">

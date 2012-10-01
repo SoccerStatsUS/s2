@@ -297,8 +297,32 @@ class Stat(models.Model):
 
 
     def get_age(self):
+        # Handle cases '2002' and '2002-2003'
+
+        #import pdb; pdb.set_trace()
+
+        if self.season.average_date():
+            dt = self.season.average_date()
+            d = datetime.date(dt.year, dt.month, dt.day)
+
+        else:
+            if '-' in self.season.name:
+                try:
+                    first, second = [int(e) for e in self.season.name.split('-')]
+                    d = datetime.date(second, 1, 1)
+                except:
+                    return None
+
+            else:
+                try:
+                    year = int(self.season.name)
+                    d = datetime.date(year, 7, 1)
+                except:
+                    return None
+
+
         if self.player.birthdate:
-            return (datetime.date.today() - self.player.birthdate).days / 365.0
+            return (d - self.player.birthdate).days / 365.0
         return None
         
         

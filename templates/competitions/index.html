@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load datum_or_none %}
+
 {% block content %}
 
 <form method="GET" action=".">
@@ -35,7 +37,7 @@
     <td><a href="{% url competition_detail competition.slug %}">{{ competition.name }}</a></td>
     <td>{{ competition.code }}</td>
     <td>{{ competition.international }}</td>
-    <td>{{ competition.level }}</td>
+    {% datum_or_grey competition.level %}
     <td>{{ competition.ctype }}</td>
     <td>{{ competition.scope }}</td>
     <td>{{ competition.area }}</td>

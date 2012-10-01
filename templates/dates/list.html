@@ -22,16 +22,18 @@
 <div id="tab_wrapper">
 
 
-<div tab="summary">
-{% include "templatetags/stadiums.html" %}
-</div>
-
 
 {% if games %}
 <div tab="games">
 {% include "templatetags/games.html" %}
 </div>
 {% endif %}
+
+
+<div tab="summary">
+{% include "templatetags/stadiums.html" %}
+</div>
+
 
 
 {% if births.exists %}
