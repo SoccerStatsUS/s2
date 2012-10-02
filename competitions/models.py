@@ -52,7 +52,11 @@ def nationality_stats(stats):
         minutes = minutes_dict[n]
 
         gp = gp_dict[n]
-        gp_percentage = 100 * gp / float(total_gp)
+        if total_gp:
+            gp_percentage = 100 * gp / float(total_gp)
+        else:
+            gp_percentage = None
+
         l.append((nation, uniques, gp, gp_percentage, minutes))
 
     l = sorted(l, key=lambda e: -e[2])
