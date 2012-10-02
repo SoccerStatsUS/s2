@@ -73,11 +73,15 @@
     
 </table>
 
+{% if top_attendance_games %}
 <h3>Top attendances</h3>
 {% include "templatetags/top_attendance.html" with games=top_attendance_games %}
+{% endif %}
 
+{% if bottom_attendance_games %}
 <h3>Bottom attendances</h3>
 {% include "templatetags/top_attendance.html" with games=worst_attendance_games %}
+{% endif %}
 
 
 </div>

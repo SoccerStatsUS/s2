@@ -24,6 +24,7 @@
 {% if season.next_season %}<a href="{% url season_detail season.competition.slug season.next_season.slug %}">→</a>{% endif %}
 </h3>
 
+
 <ul id="tabs"></ul>
 
 <div id="tab_wrapper">
@@ -37,16 +38,13 @@
 <h3>Average age: {{ season.average_age|floatformat:"2" }}</h3>
 <h3>Average attendance: {{ average_attendance|floatformat }} ( {{ attenance_games_count }} games)</h3>
 
-<h3>Nation List</h3>
-<table>
-{% for nation, count in nation_list %}
-<tr>
-  <td><a href="{% url country_detail nation.slug %}">{{ nation }}</a></td>
-  <td>{{ count }}</td>
-</tr>
+<h3>Top attendances</h3>
+{% include "templatetags/top_attendance.html" with games=top_attendance_games %}
 
-{% endfor %}
-</table>
+<h3>Bottom attendances</h3>
+{% include "templatetags/top_attendance.html" with games=worst_attendance_games %}
+
+
 
 
 <table>
@@ -56,7 +54,12 @@
 
 <tr>
   <td>{{ stat.goals }}</td>
+  {% if stat.player.slug %}
   <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
+  {% else %}
+  <td>{{ stat.player }}</td>
+  {% endif %}
+    
 </tr>
 {% endfor %}
 
@@ -68,11 +71,16 @@
 
 
 <table>
+
 <th><td>Game leaders</td></th>
 {% for stat in game_leaders %}
 <tr>
   <td>{{ stat.games_played }}</td>
+  {% if stat.player.slug %}
   <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
+  {% else %}
+  <td>{{ stat.player }}</td>
+  {% endif %}
 </tr>
 {% endfor %}
 </table>
@@ -128,7 +136,11 @@
 <table>
 {% for stat in testing %}
 <tr>
+  {% if stat.player.slug %}
   <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
+  {% else %}
+  <td>{{ stat.player }}</td>
+  {% endif %}
 </tr>
 {% endfor %}
 </table>
