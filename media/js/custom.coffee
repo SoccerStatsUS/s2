@@ -7,6 +7,7 @@ $(document).ready( ->
   $("#competition_index").tablesorter()
   $("#stadium_list").tablesorter()
   $("#position_index").tablesorter()
+  $("#money_index").tablesorter()
   $(".standings_list").tablesorter()
 
   # Competition page button selection activity

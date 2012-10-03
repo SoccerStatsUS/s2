@@ -1,12 +1,13 @@
 (function() {
 
   $(document).ready(function() {
-    var createSortLoader, getGames, getGoals, getLineups, getStats, hash, makeAjaxGetter, tabs;
+    var createSortLoader, getGames, getGoals, getLineups, getStats, makeAjaxGetter, tabs;
     $("#bio").tablesorter();
     $("#player_chart").tablesorter();
     $("#competition_index").tablesorter();
     $("#stadium_list").tablesorter();
     $("#position_index").tablesorter();
+    $("#money_index").tablesorter();
     $(".standings_list").tablesorter();
     createSortLoader = function(div) {
       var d;
@@ -29,17 +30,6 @@
         return div.load(url);
       };
       return $("#submit_button").click(getAjax);
-    };
-    getLineups = function() {
-      var div, opts, url;
-      div = $("#lineups");
-      if (div.length) {
-        div.html("Loading...");
-        opts = $("#lineup_form").serialize();
-        url = "/tools/ajax/lineups?" + opts;
-        console.log(url);
-        return div.load(url);
-      }
     };
     getLineups = function() {
       var div, opts, url;
@@ -120,9 +110,7 @@
       return $("#tab_wrapper div[tab=" + name + "]").show();
     });
     tabs = $("#tabs li");
-    if (tabs.length) $(tabs[0]).click();
-    hash = window.location.hash;
-    if (hash) return $("a[href=" + hash + "] li").click();
+    if (tabs.length) return $(tabs[0]).click();
   });
 
 }).call(this);
