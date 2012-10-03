@@ -7,10 +7,11 @@
       <td>gp</td>
       <td>%</td>
       <td>minutes</td>
+      {#<td>gp/#</td>#}
     </tr>
 </thead>
 
-{% for nation, uniques, gp, gp_percentage, minutes in nstat.stat_list %}
+{% for nation, uniques, gp, gp_percentage, minutes, gp_per_person in nstat.stat_list %}
 <tr>
   <td>{{ nation }}</td>
 
@@ -18,6 +19,7 @@
   <td>{{ gp }}</td>
   <td>{{ gp_percentage|floatformat }}</td>
   <td>{{ minutes }}</td>
+  {#<td>{{ gp_per_person|floatformat:1 }}</td>#}
 </tr>
 
 {% endfor %}

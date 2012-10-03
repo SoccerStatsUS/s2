@@ -54,10 +54,14 @@ def nationality_stats(stats):
         gp = gp_dict[n]
         if total_gp:
             gp_percentage = 100 * gp / float(total_gp)
+            gp_per_person = gp / float(uniques)
         else:
             gp_percentage = None
+            gp_per_person = None
 
-        l.append((nation, uniques, gp, gp_percentage, minutes))
+
+
+        l.append((nation, uniques, gp, gp_percentage, minutes, gp_per_person))
 
     l = sorted(l, key=lambda e: -e[2])
     return {
@@ -93,6 +97,8 @@ def confederation_stats(stats):
     total_minutes = sum(minutes_dict.values())
     total_gp = sum(gp_dict.values())
 
+
+
     l = []
 
     confederations = set([e[1] for e in nationality_set])        
@@ -109,8 +115,17 @@ def confederation_stats(stats):
         minutes = minutes_dict[n]
 
         gp = gp_dict[n]
-        gp_percentage = 100 * gp / float(total_gp)
-        l.append((n, uniques, gp, gp_percentage, minutes))
+
+        gp = gp_dict[n]
+        if total_gp:
+            gp_percentage = 100 * gp / float(total_gp)
+            gp_per_person = gp / float(uniques)
+        else:
+            gp_percentage = None
+            gp_per_person = None
+
+
+        l.append((n, uniques, gp, gp_percentage, minutes, gp_per_person))
 
     l = sorted(l, key=lambda e: -e[2])
 

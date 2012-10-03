@@ -125,6 +125,7 @@ def season_detail(request, competition_slug, season_slug):
     """
     Detail for a given season, e.g. Major League Soccer, 1996.
     """
+
     competition = get_object_or_404(Competition, slug=competition_slug)
     season = get_object_or_404(Season, competition=competition, slug=season_slug)
 
