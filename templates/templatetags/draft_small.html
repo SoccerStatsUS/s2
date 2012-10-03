@@ -1,5 +1,6 @@
 {% load datum_or_none %}
 
+
 <table>
 <tr>
   <th>#</th>
@@ -12,12 +13,11 @@
 <tr>
 
 
+
 {% for pick in picks %}
 {% with cs=pick.player.career_stat %}
 
   <td>{{ pick.number }}</td>
-
-
 
   {% if pick.player %}
   <td><a href="{% url person_detail pick.player.slug %}">{{ pick.player }}</a></td>
@@ -27,9 +27,21 @@
   {% datum_or_grey pick.position %}
 
   <td><a href="{% url season_detail pick.draft.competition.slug pick.draft.season %}">{{ pick.draft.season }}</a></td>
+
+  {% if cs %}
+
   {% datum_or_grey cs.games_played %}
   {% datum_or_grey cs.minutes %}
   {% datum_or_grey cs.goals %}
+
+  {% else %}
+
+  <td></td>
+  <td></td>
+  <td></td>
+
+  {% endif %}
+
 
 
 </tr>
