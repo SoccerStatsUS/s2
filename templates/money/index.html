@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load datum_or_none %}
+
+{% block content %}
+
+<table id="money_index">
+
+<thead>
+<tr>
+  <th>person</th>
+  <th>season</th>
+  <th>amount</th>
+</tr>
+</thead>
+
+{% for salary in salaries %}
+<tr>
+  <td><a href="{% url person_detail salary.person.slug %}">{{ salary.person }}</a></td>
+  <td>{{ salary.season }}</td>
+  <td>${{ salary.amount }}</td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

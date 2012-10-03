@@ -180,6 +180,7 @@ INSTALLED_APPS = (
     'goals',
     'graphs',
     'lineups',
+    'money',
     'news',
     'places',
     'positions',
