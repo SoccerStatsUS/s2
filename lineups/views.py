@@ -40,7 +40,8 @@ def lineup_index(request):
     # Just show interesting stuff.
     appearances = get_appearances(request.GET)
 
-    for appearance in appearances.values_list(':
+    for appearance in appearances.values_list(''):
+        pass
 
 
     context = {

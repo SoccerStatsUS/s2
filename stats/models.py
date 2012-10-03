@@ -300,6 +300,9 @@ class Stat(models.Model):
         # Handle cases '2002' and '2002-2003'
 
         #import pdb; pdb.set_trace()
+        
+        if self.season is None:
+            return None
 
         if self.season.average_date():
             dt = self.season.average_date()
