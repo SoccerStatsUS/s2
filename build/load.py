@@ -15,6 +15,7 @@ from drafts.models import Draft, Pick
 from games.models import Game
 from goals.models import Goal
 from lineups.models import Appearance
+from money.models import Salary
 from news.models import NewsSource
 from places.models import Country, State, City, Stadium
 from positions.models import Position
@@ -176,6 +177,8 @@ def make_bio_getter():
     bios = Bio.objects.bio_dict()
 
     def get_bio(name):
+        name = name.strip()
+
         if name in bios:
             bio_id = bios[name]
         else:
@@ -197,6 +200,8 @@ def make_stadium_getter():
     stadiums = Stadium.objects.as_dict()
 
     def getter(name):
+        name = name.strip()
+
         if name in stadiums:
             sid = stadiums[name]
         else:
@@ -289,7 +294,10 @@ def load():
     # Non-game data.
     load_sources()
     load_places()
+
     load_bios()
+    load_salaries()
+
     load_stadiums()
 
     # Simple sport data
@@ -630,6 +638,22 @@ def load_bios():
         bd['hall_of_fame'] = bio.get('hall_of_fame', False)
 
         Bio.objects.create(**bd)
+
+@transaction.commit_on_success
+def load_salaries():
+    bg = make_bio_getter()
+
+    for e in soccer_db.salaries.find():
+        e.pop('_id')
+        
+        bio = bg(e['name'])
+        b = Bio.objects.get(id=bio)
+        Salary.objects.create(
+            person=b,
+            amount=e['base'],
+            season=e['year'].strip()
+            )
+                 
 
 
 @transaction.commit_on_success

@@ -60,7 +60,7 @@ class BioManager(models.Manager):
         d = defaultdict(list)
         for e in self.get_query_set():
             d[e.slug].append(e.name)
-        return [(k, v) for (k, v) in d.items() if len(v) > 1]
+        return [k for (k, v) in d.items() if len(v) > 1]
 
 
 
