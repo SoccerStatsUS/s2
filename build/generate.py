@@ -177,7 +177,7 @@ def generate_stats_generic(qs, make_key, update_dict):
     Maybe could improve this.
     """
     final_dict = {}
-    excluded = ('player_id', 'team_id', 'competition_id', 'season_id')
+    excluded = ('player_id', 'team_id', 'competition_id', 'season_id', 'source_id')
     for stat in qs.values():
         for k,v  in stat.items():
             if v in ('?', 'None', '-'):
@@ -260,12 +260,11 @@ def generate_standings_generic(qs, make_key, update_dict):
     # Seems like memory leaks are making this not work for nearly enough stats.
 
     final_dict = {}
-    excluded = ('team_id', 'competition_id', 'season_id')
+    excluded = ('player_id', 'team_id', 'competition_id', 'season_id', 'division', 'group')
     for standing in qs.values():
         # This determines what is filtered.
         # e.g., create all-time player stats with 
         # make_key = lambda s: s['player']
-
 
         for k,v  in standing.items():
             if v == 'None':
