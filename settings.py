@@ -11,6 +11,7 @@ from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 #### Put this part anywhere else?
 # Make sure to use a trailing slash for MEDIA_URL
 
+# Locate project folder.
 if os.path.exists("/Users"):
     PROJECT_ROOT = "/Users/chrisedgemon"
     PROJECT_DIRNAME = 's2'
@@ -21,14 +22,21 @@ else:
     PROJECT_ROOT = "/home/chris"
     PROJECT_DIRNAME = 's2'
 
+
+PROJECT_DIR = "%s/www/%s" % (PROJECT_ROOT, PROJECT_DIRNAME)
+DB_PATH = "%s/www/%s/db/soccer.db" % (PROJECT_ROOT, PROJECT_DIRNAME)
+#### Put this part anywhere else?
+
+
+
+# Cache instructions.
 if DEBUG:
     CACHE_MIDDLEWARE_KEY_PREFIX = "dev:"
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
             }
-}
-
+        }
 else:
     CACHES = {
         'default': {
@@ -36,12 +44,6 @@ else:
             'LOCATION': '127.0.0.1:11211',
             }
         }
-
-
-PROJECT_DIR = "%s/www/%s" % (PROJECT_ROOT, PROJECT_DIRNAME)
-DB_PATH = "%s/www/%s/db/soccer.db" % (PROJECT_ROOT, PROJECT_DIRNAME)
-#### Put this part anywhere else?
-
 
 PRODUCTION_SITES = (
     "bert",
@@ -76,15 +78,19 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'django_db',                      # Or path to database file if using sqlite3.
-        'USER': 'django',                      # Not used with sqlite3.
-        'PASSWORD': 'dolly',                  # Not used with sqlite3.
+        #'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'soccerstats',                      # Or path to database file if using sqlite3.
+        'USER': 'soccerstats',                      # Not used with sqlite3.
+        'PASSWORD': 'ymctas',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
 
+# Change the location of the build database in build_settings.py
+
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
@@ -95,7 +101,7 @@ DATABASES = {
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
-
+"""
 
 
 
@@ -167,9 +173,9 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     'gunicorn',
     'debug_toolbar',
-
     'awards',
     'bios',
     'competitions',
