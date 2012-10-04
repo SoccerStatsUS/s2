@@ -39,7 +39,7 @@ class Position(models.Model):
     losses = models.IntegerField(null=True)
     ties = models.IntegerField(null=True)
 
-    slug = models.SlugField()
+    slug = models.SlugField(max_length=100)
 
     objects = PositionManager()
 
