@@ -84,8 +84,11 @@ def make_source_getter():
 
 # This is way too complex.
 # I'm taking a break.
-
 def make_city_getter():
+    """
+    
+    """
+
     cg = make_city_pre_getter()
     
     def get_city(s):
@@ -97,23 +100,26 @@ def make_city_getter():
 
         if c['country']:
             country = Country.objects.get(name=c['country'])
+        
 
-        try:
-            return City.objects.get(name=c['name'], state=state, country=country)
-        except:
-            import pdb; pdb.set_trace()
-
-        x= 5 
+        return City.objects.get(name=c['name'], state=state, country=country)
 
     return get_city
 
 
 def make_city_pre_getter():
     """
-    Retrieve teams easily.
+    Dissasseble a location string into city, state, and country pieces.
+    City, state, and country are all optional, although country should (always?) 
+    exist.
+    e.g. Dallas, Texas -> {'name': 'Dallas', 'state': 'Texas', 'country': 'United States' }
+    Cape Verde -> {'name': '', 'city': '', 'country': 'United States',
     """
+    # Would like to add neighborhood to this.
+    # Should this be part of normalize instead of here? Possibly.
 
     def make_state_abbreviation_dict():
+        # Map abbreviation to state name, state country.
         d = {}
         for e in soccer_db.states.find():
             d[e['abbreviation']] = (e['name'], e.get('country'))
@@ -135,7 +141,7 @@ def make_city_pre_getter():
     state_name_dict = make_state_name_dict()
 
 
-    def get_city(s):
+    def get_dict(s):
 
         state = country = None
 
@@ -157,6 +163,7 @@ def make_city_pre_getter():
         else:
             name = s
 
+        # Change name to city.
         return {
             'name': name,
             'state': state,
@@ -164,7 +171,7 @@ def make_city_pre_getter():
             }
 
 
-    return get_city
+    return get_dict
 
 
 
@@ -291,6 +298,9 @@ def load():
     # Games depends on Team, Stadium, City, Bio.
     # etc.
 
+    # Georgraphical data.
+    load_geo()
+
     # Non-game data.
     load_sources()
     load_places()
@@ -304,18 +314,17 @@ def load():
     load_competitions()
     load_teams()
 
-    # Complex game data
-    load_standings()
-    load_games()
 
+    load_standings()
 
     # List data
-    # Put this before standings/games?
+    # Put this before standings?
     load_awards()
     load_drafts()
     load_positions()
 
-
+    # Complex game data
+    load_games()
 
     # Mixed data
     load_stats()
@@ -324,6 +333,39 @@ def load():
 
     # Analysis data
     #load_news()
+
+
+
+def load_geo():
+    import os
+    from django.contrib.gis.utils import LayerMapping
+    from places.models import WorldBorder
+    world_mapping = {
+        'fips' : 'FIPS',
+        'iso2' : 'ISO2',
+        'iso3' : 'ISO3',
+        'un' : 'UN',
+        'name' : 'NAME',
+        'area' : 'AREA',
+        'pop2005' : 'POP2005',
+        'region' : 'REGION',
+        'subregion' : 'SUBREGION',
+        'lon' : 'LON',
+        'lat' : 'LAT',
+        'mpoly' : 'MULTIPOLYGON',
+        }
+
+    world_shp = '/home/chris/www/soccerdata/data/places/world/TM_WORLD_BORDERS-0.3.shp'
+
+    lm = LayerMapping(WorldBorder, world_shp, world_mapping, transform=False, encoding='iso-8859-1')
+    lm.save(strict=True, verbose=True)
+
+
+def run(verbose=True):
+    lm = LayerMapping(WorldBorder, world_shp, world_mapping,
+                      transform=False, encoding='iso-8859-1')
+
+    lm.save(strict=True, verbose=verbose)    
 
 
 
@@ -389,10 +431,11 @@ def load_positions():
         position.pop('_id')
         position['team'] = Team.objects.find(position['team'], create=True)
         position['person'] = Bio.objects.find(position['person'])
-        try:
-            Position.objects.create(**position)
-        except:
-            import pdb; pdb.set_trace()
+        #try:
+        Position.objects.create(**position)
+        #except:
+        #    import pdb; pdb.set_trace()
+        #    x = 5
 
 
 @transaction.commit_on_success
@@ -510,12 +553,9 @@ def load_drafts():
                 })
 
     for e in picks:
-        try:
-            Pick.objects.create(**e)
-        except:
-            import pdb; pdb.set_trace()
+        print e
+        Pick.objects.create(**e)
 
-    x = 5
     #insert_sql("drafts_pick", picks)
         
         
@@ -773,6 +813,7 @@ def load_goals():
         if player in bios:
             bio_id = bios[player]
         else:
+            print player
             bio_id = Bio.objects.find(player).id
             bios[player] = bio_id
 
@@ -835,23 +876,32 @@ def load_stats():
         else:
             source_id = None
 
+        def c2i(key):
+            # Coerce an integer
+            if stat.get(key):
+                if type(stat[key]) != int:
+                    import pdb; pdb.set_trace()
+                return stat[key]
+
+            else:
+                return None
 
         l.append({
             'player_id': bio_id,
             'team_id': team_id,
             'competition_id': competition_id,
             'season_id': season_id,
-            'games_started': stat.get('games_started'),
-            'games_played': stat.get('games_played'),
-            'minutes': stat.get('minutes'),
-            'goals': stat.get('goals'),
-            'assists': stat.get('assists'),
-            'shots': stat.get('shots'),
-            'shots_on_goal': stat.get('shots_on_goal'),
-            'fouls_committed': stat.get('fouls_committed'),
-            'fouls_suffered': stat.get('fouls_suffered'),
-            'yellow_cards': stat.get('yellow_cards'),
-            'red_cards': stat.get('red_cards'),
+            'games_started': c2i('games_started'),
+            'games_played': c2i('games_played'),
+            'minutes': c2i('minutes'),
+            'goals': c2i('goals'),
+            'assists': c2i('assists'),
+            'shots': c2i('shots'),
+            'shots_on_goal': c2i('shots_on_goal'),
+            'fouls_committed': c2i('fouls_committed'),
+            'fouls_suffered': c2i('fouls_suffered'),
+            'yellow_cards': c2i('yellow_cards'),
+            'red_cards': c2i('red_cards'),
             'source_id': source_id,
             })
 
