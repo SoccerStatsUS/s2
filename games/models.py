@@ -11,6 +11,15 @@ from teams.models import Team
 import random
 
 
+def pad_list(l, length):
+    # Return a list of length length.
+    if len(l) >= length:
+        return l
+    else:
+        diff = length - len(l)
+        return l + [None] * diff
+
+
 class GameManager(models.Manager):
 
 
@@ -283,7 +292,15 @@ class Game(models.Model):
 
 
     def zipped_lineups(self):
-        return zip(self.team1_lineups(), self.team2_lineups())
+        # FIX THIS; TRUNACATING TEAM LINEUPS
+        t1l, t2l = self.team1_lineups(), self.team2_lineups()
+        t1c, t2c = t1l.count(), t2l.count()
+        if t1c == t2c:
+            return zip(t1l, t2l)
+        else:
+            m = max(t1c, t2c)
+            l1, l2 = pad_list(list(t1l), m), pad_list(list(t2l), m)
+            return zip(l1, l2)
 
 
     # These should hang off of Team, not Game.

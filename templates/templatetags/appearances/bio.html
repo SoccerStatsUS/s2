@@ -4,6 +4,7 @@
   <tr>
     <th>cmp</th>
     <th>date</th>
+    <th>team</th>
     <th>score</th>
     <th>opponent</th>
     <th>on</th>
@@ -17,6 +18,7 @@
   <tr>
     <td><a href="{% url competition_detail appearance.game.competition.slug %}">{{ appearance.game.competition.abbreviation }}</a></td>
     <td><a href="{% url date_detail appearance.game.date.year appearance.game.date.month appearance.game.date.day %}">{{ appearance.game.date }}</a></td>
+    <td><a href="{% url team_detail appearance.team.slug %}">{{ appearance.team }}</a></td>
     <td><a href="{% url game_detail appearance.game.id %}">{{ appearance.game.score }}</a></td>
     <td><a href="{% url team_detail appearance.opponent.slug %}">{{ appearance.opponent }}</a></td>
     <td>{{ appearance.on }}</td>

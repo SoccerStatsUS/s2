@@ -37,7 +37,7 @@ def homepage(request):
         'today': today,
         'born': Bio.objects.born_on(today.month, today.day),
         'game': Game.objects.on(today.month, today.day),
-        'games': Game.objects.order_by('-date')[:10],
+        'games': Game.objects.exclude(date=None).order_by('-date')[:10],
         'standings': Standing.objects.filter(season__competition__slug='major-league-soccer').count(), 
         }
     return render_to_response("homepage.html",
