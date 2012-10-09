@@ -1,7 +1,7 @@
 from collections import defaultdict
 import datetime
 import os
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'build_settings'
 
 from django.db import transaction
 

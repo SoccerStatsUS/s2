@@ -299,7 +299,7 @@ def load():
     # etc.
 
     # Georgraphical data.
-    load_geo()
+    #load_geo()
 
     # Non-game data.
     load_sources()
@@ -553,7 +553,6 @@ def load_drafts():
                 })
 
     for e in picks:
-        print e
         Pick.objects.create(**e)
 
     #insert_sql("drafts_pick", picks)

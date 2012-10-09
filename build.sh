@@ -1,18 +1,16 @@
 
+export PGPASSWORD=ymctas
+
+# Need separate script for moving to prod?
 source ~/.virtualenvs/sdev/bin/activate
 
-
-
-# Need to check that this exists first.
-#cp db/soccer.db db/backup.soccer.db
-#cp db/soccer.build.db db/soccer.db
-#sudo su postgres
-#exit
-
-dropdb soccerstats
-createdb -T template_postgis soccerstats --owner=soccerstats
-python manage.py syncdb --no
+dropdb soccerstats_build
+createdb -T template_postgis soccerstats_build --owner=soccerstats
+python manage.py syncdb --no --settings=build_settings
 python build/
 python build/generate.py
-python manage.py rebuild_index --noinput
+python manage.py rebuild_index --noinput --settings=build_settings
 
+dropdb soccerstats_backup
+psql -U soccerstats -d soccerstats_build -c "ALTER DATABASE soccerstats RENAME TO soccerstats_backup"
+psql -U soccerstats -d soccerstats_backup -c "ALTER DATABASE soccerstats_build RENAME TO soccerstats"
