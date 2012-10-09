@@ -22,4 +22,9 @@ urlpatterns = patterns('bios.views',
                            'person_detail',
                            name='person_detail'),
 
+                       url(r'^ajax/stats/$',
+                           'bio_detail_stats',
+                           name='bio_detail_stats'),
+
+
 )

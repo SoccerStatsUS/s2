@@ -8,7 +8,7 @@
 
 <script type="text/javascript">
   $(document).ready(function (){
-  $("div[tab='stats']").load("{% url stats_ajax_by_id %}?name={{ bio.id }}&order=season");
+  $("div[tab='stats']").load("{% url bio_detail_stats %}?playerid={{ bio.id }}");
   });
 </script>
 

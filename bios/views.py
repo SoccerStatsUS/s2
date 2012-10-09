@@ -87,3 +87,29 @@ def person_detail(request, slug):
 
 
 
+
+
+
+@cache_page(60 * 24)
+def bio_detail_stats(request):
+
+    player_id = request.GET.get('playerid')
+    
+    bio = Bio.objects.get(id=player_id)
+
+    competition_stats = bio.competition_stats()
+    domestic_competition_stats = competition_stats.filter(competition__international=False).order_by('-games_played')
+
+    league_stats = Stat.objects.filter(player__id=player_id).filter(competition__ctype='League').order_by('season')
+
+    
+    context = {
+        'league_stats': league_stats,
+        'domestic_competition_stats': domestic_competition_stats,
+        'career_stats': bio.career_stats(),
+        }
+
+    return render_to_response("bios/detail_stats.html",
+                              context,
+                              context_instance=RequestContext(request))
+
