@@ -304,7 +304,7 @@ class Stat(models.Model):
         if self.season is None:
             return None
 
-        if self.season.average_date():
+        if self.season and self.season.average_date():
             dt = self.season.average_date()
             d = datetime.date(dt.year, dt.month, dt.day)
 
