@@ -85,7 +85,7 @@ def competition_detail(request, competition_slug):
         'competition': competition,
         'stats': Stat.competition_stats.filter(team=None, competition=competition).order_by('-games_played')[:25],
         'games': games[:25],
-        'top_attendance_games': games.order_by('-attendance')[:20],
+        'top_attendance_games': games.exclude(attendance=None).order_by('-attendance')[:20],
         'worst_attendance_games': games.exclude(attendance=None).order_by('attendance')[:20],
         'big_winners': competition.alltime_standings().order_by('-wins')[:20],
         
