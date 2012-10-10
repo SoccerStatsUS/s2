@@ -131,12 +131,16 @@ class Game(models.Model):
     team2_original_name = models.CharField(max_length=255)
 
     team1_score = models.IntegerField(null=True)
-    official_home_score = models.IntegerField(null=True)
+    official_team1_score = models.IntegerField(null=True)
     team2_score = models.IntegerField(null=True)    
-    official_away_score = models.IntegerField(null=True)
+    official_team2_score = models.IntegerField(null=True)
 
     team1_result = models.CharField(max_length=5)
     team2_result = models.CharField(max_length=5)
+
+    # Ambiguous game results.
+    result_unknown = models.BooleanField(default=False)
+    played = models.BooleanField(default=True)
 
     goals = models.IntegerField()
 
@@ -227,9 +231,6 @@ class Game(models.Model):
             'tie': 'yellow',
             'loss': 'red',
             }[self.result()]
-
-
-    
 
 
     def score(self):
