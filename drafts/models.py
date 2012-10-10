@@ -36,7 +36,7 @@ class Draft(models.Model):
         return "%s %s" % (self.competition, self.name)
 
     class Meta:
-        ordering = ('season', 'competition', 'name', )
+        ordering = ('competition', 'season', 'name', )
 
 
 class Pick(models.Model):
