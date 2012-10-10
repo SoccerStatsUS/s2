@@ -300,7 +300,7 @@ class Season(models.Model):
 
 
     def golden_boot(self):
-        goalscorers = self.stat_set.order_by('-goals', '-assists')
+        goalscorers = self.stat_set.exclude(goals=None).order_by('-goals', '-assists')
         if goalscorers.exists():
             return goalscorers[0].player
         else:

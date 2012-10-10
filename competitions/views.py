@@ -152,8 +152,8 @@ def season_detail(request, competition_slug, season_slug):
     total_minutes = mstats.aggregate(Sum('minutes'))['minutes__sum']
     known_minutes = mstats.exclude(player__birthdate=None).aggregate(Sum('minutes'))['minutes__sum']
 
-    goal_leaders = stats.order_by('-goals')
-    game_leaders = stats.order_by('-games_played')
+    goal_leaders = stats.exclude(goals=None).order_by('-goals')
+    game_leaders = stats.exclude(games_played=None).order_by('-games_played')
 
     context = {
         'season': season,
