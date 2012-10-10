@@ -10,7 +10,8 @@
   <li>
     <a class="letter_link" href="{% url team_name_fragment letter %}">{{ letter }}: </a>
     {% for standing in standings %}
-    <a href="{% url team_detail standing.team.slug %}">{{ standing.team }}</a>,
+    <a href="{% url team_detail standing.team.slug %}">{{ standing.team }}</a>{% if forloop.last %}...{% else %},{% endif %}
+
     {% endfor %}
   </li>
   {% endif %}
