@@ -198,6 +198,6 @@ def scoreboard_today(request):
     """
     The scoreboard for the most recent day with games.
     """
-    g = Game.objects.all()[0] # Most recent game
+    g = Game.objects.exclude(date=None)[0] # Most recent game
     t = g.date
     return date_detail(request, t.year, t.month, t.day)
