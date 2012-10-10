@@ -31,3 +31,12 @@ class Salary(models.Model):
     season = models.CharField(max_length=255)
     #start = models.DateField(blank=True, null=True)
     #end = models.DateField(blank=True, null=True)
+
+
+    def __unicode__(self):
+        return "%s: %s (%s)" % (self.person, self.amount, self.season)
+
+    
+    class Meta:
+        ordering = ('season', )
+

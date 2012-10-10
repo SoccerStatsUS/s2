@@ -114,9 +114,17 @@
 {% if bio.position_set.count %}
 <div tab="coaching">
 {% include "templatetags/coach.html" with positions=bio.position_set.all %}
-
 </div>
 {% endif %}
+
+
+
+{% if bio.salary_set.count %}
+<div tab="salaries">
+{% include "templatetags/salaries.html" with salaries=bio.salary_set.all %}
+</div>
+{% endif %}
+
 
 
 </div>

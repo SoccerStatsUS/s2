@@ -85,11 +85,6 @@ def person_detail(request, slug):
 
 
 
-
-
-
-
-
 @cache_page(60 * 24)
 def bio_detail_stats(request):
 
