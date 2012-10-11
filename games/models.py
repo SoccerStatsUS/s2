@@ -270,7 +270,7 @@ class Game(models.Model):
     def lineup_quality(self):
         ts1 = self.team1_starters().count()
         ts2 = self.team2_starters().count()
-        if ts1 and ts2 == 11:
+        if ts1 == 11 and ts2 == 11:
             return 2
         elif ts1 > 0 or ts2 > 0:
             return 1
