@@ -74,7 +74,12 @@
   {% datum_or_grey stat.assists %}
   {% datum_or_grey stat.shots %}
 
-  {% datum_or_grey stat.get_age|floatformat:2 %}
+  {% if stat.get_age %}
+  <td>{{ stat.get_age|floatformat }}</td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
   {% if stat.player.birthplace %}
   <td><a href="{% url city_detail stat.player.birthplace.slug %}">{{ stat.player.birthplace }}</a></td>
   {% else %}
