@@ -125,9 +125,9 @@ class Game(models.Model):
     # Need both a date and a datetime field? Not sure.
     date = models.DateField(null=True)
     
-    team1 = models.ForeignKey(Team, related_name='home_games')
+    team1 = models.ForeignKey(Team, related_name='t1_games')
     team1_original_name = models.CharField(max_length=255)
-    team2 = models.ForeignKey(Team, related_name='away_games')
+    team2 = models.ForeignKey(Team, related_name='t2_games')
     team2_original_name = models.CharField(max_length=255)
 
     team1_score = models.IntegerField(null=True)
@@ -156,7 +156,10 @@ class Game(models.Model):
     competition = models.ForeignKey(Competition)
     season = models.ForeignKey(Season)
 
-    # Foreign Key
+
+    home_team = models.ForeignKey(Team, null=True, related_name='home_games')
+    neutral = models.BooleanField(default=False)
+
     stadium = models.ForeignKey(Stadium, null=True)
     city = models.ForeignKey(City, null=True)
     location = models.CharField(max_length=255)
@@ -186,7 +189,7 @@ class Game(models.Model):
 
 
     source = models.ForeignKey(Source, null=True)
-    source_url = models.CharField(max_length=255)
+    source_url = models.CharField(max_length=511)
 
     objects = GameManager()
 
@@ -261,11 +264,11 @@ class Game(models.Model):
 
 
     def team1_starters(self):
-        return self.team1_lineups().filter(on=0)
+        return self.team1_lineups().filter(on=0).exclude(off=0)
 
 
     def team2_starters(self):
-        return self.team2_lineups().filter(on=0)
+        return self.team2_lineups().filter(on=0).exclude(off=0)
 
     def lineup_quality(self):
         ts1 = self.team1_starters().count()
@@ -454,7 +457,10 @@ class Game(models.Model):
         """
         Returns all games played on the same date (excluding this one).
         """
-        return Game.objects.filter(date=self.date).exclude(id=self.id)
+        if self.date:
+            return Game.objects.filter(date=self.date).exclude(id=self.id)
+        else:
+            return []
 
 
     def opponent(self, team):
