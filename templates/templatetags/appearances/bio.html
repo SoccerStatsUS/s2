@@ -23,7 +23,7 @@
     <td><a href="{% url team_detail appearance.opponent.slug %}">{{ appearance.opponent }}</a></td>
     <td>{{ appearance.on }}</td>
     <td>{{ appearance.off }}</td>
-    <td>{{ appearance.pretty_age|floatformat:"1" }}</td>
+    <td>{{ appearance.age|floatformat:"1" }}</td>
   </tr>
   {% endfor %}
   </tbody>
