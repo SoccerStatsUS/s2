@@ -15,18 +15,29 @@
     {% if a.player %}
     <td><a href="{% url person_detail a.player.slug %}">{{ a.player }}</a></td>
     {% else %}
-    <td></td>
+    <td class="grey"></td>
     {% endif %}
 
+    {% if a %}
     {% datum_or_grey a.on %}
     {% datum_or_grey a.minutes %}
+    {% else %}
+    <td class="grey"></td>
+    <td class="grey"></td>
+    {% endif %}
+
+    {% if b %}
     {% datum_or_grey b.minutes %}
     {% datum_or_grey b.on %}
+    {% else %}
+    <td class="grey"></td>
+    <td class="grey"></td>
+    {% endif %}
 
     {% if b.player %}
     <td><a href="{% url person_detail b.player.slug %}">{{ b.player }}</a></td>
     {% else %}
-    <td></td>
+    <td class="grey"></td>
     {% endif %}
 
   </tr>
