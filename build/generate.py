@@ -7,6 +7,7 @@ from django.db import transaction
 
 from bios.models import Bio
 from competitions.models import Competition, Season
+from drafts.models import Draft, Pick
 from games.models import Game, GameMinute
 from goals.models import Goal
 from lineups.models import Appearance
@@ -27,6 +28,9 @@ def generate():
     # Need to choose one.
     # Generate coaching stats!
     #generate_position_standings()
+
+    set_draft_picks()
+
     generate_position_stats()
 
     generate_career_stats()
@@ -40,6 +44,20 @@ def generate():
 
     #generate_game_data_quality()
     #generate_game_minutes()
+
+
+def set_draft_picks():
+
+    # Not bothering parsing since this has only happened one time.
+    d = Draft.objects.get(competition__slug='major-league-soccer', name='SuperDraft', season='2002')
+    picks = Pick.objects.filter(text__contains='SuperDraft')
+    for pick in picks:
+        number = int(pick.text.lower().split('pick')[0].strip().replace('#', ''))
+        target = Pick.objects.get(draft=d, number=number)
+        pick.pick = target
+        pick.save()
+        
+
 
 @timer
 @transaction.commit_on_success

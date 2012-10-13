@@ -520,8 +520,9 @@ def load_drafts():
     for pick in soccer_db.picks.find():
         pick.pop('_id')
 
+
         # draft, text, player, position, team
-        draft = Draft.objects.get(name=pick.get('draft'), season=pick.get('season'))
+        draft = Draft.objects.get(name=pick.get('draft'), season=pick.get('season'), competition__name=pick.get('competition'))
 
         team_id = team_getter(pick['team'])
 
@@ -532,13 +533,12 @@ def load_drafts():
 
         # Set the player reference.
         text = pick['text']
-        if text.lower() == 'pass':
-            player_id = None
 
-        # Draft picks were "drafted" in the MLS Allocation Draft.
-        elif "SuperDraft" in text:
+        # Draft picks were "drafted" in the MLS Allocation and Dispersal drafts.
+        if "SuperDraft" in text:
             player_id = None
-
+        elif text.lower() == 'pass':
+            player_id = None
         else:
             player_id = Bio.objects.find(text).id
 
@@ -771,6 +771,11 @@ def load_games():
             if e in game:
                 game.pop(e)
 
+
+        #import datetime
+        #if game['date'] == datetime.datetime(1870, 11, 5, 0, 0):
+        #    import pdb; pdb.set_trace()
+
         # There are lots of problems with the NASL games, 
         # And probably ASL as well. Need to spend a couple
         # of hours repairing those schedules.
@@ -779,8 +784,7 @@ def load_games():
         except:
             print "Skipping game %s" % game
             import pdb; pdb.set_trace()
-
-        x = 5
+            x = 5
 
 
 @transaction.commit_on_success
