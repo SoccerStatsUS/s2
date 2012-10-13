@@ -76,11 +76,18 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+
+if DEBUG == True:
+    db_name = 'soccerstats_dev'
+else:
+    db_name = 'soccerstats'
+
+
 DATABASES = {
     'default': {
         #'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'soccerstats',                      # Or path to database file if using sqlite3.
+        'NAME': db_name,                      # Or path to database file if using sqlite3.
         'USER': 'soccerstats',                      # Not used with sqlite3.
         'PASSWORD': 'ymctas',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.

@@ -12,5 +12,5 @@ python build/generate.py
 python manage.py rebuild_index --noinput --settings=build_settings
 
 dropdb soccerstats_backup
-psql -U soccerstats -d soccerstats_build -c "ALTER DATABASE soccerstats RENAME TO soccerstats_backup"
-psql -U soccerstats -d soccerstats_backup -c "ALTER DATABASE soccerstats_build RENAME TO soccerstats"
+psql -U soccerstats -d soccerstats_build -c "ALTER DATABASE soccerstats_dev RENAME TO soccerstats_backup"
+psql -U soccerstats -d soccerstats_backup -c "ALTER DATABASE soccerstats_build RENAME TO soccerstats_dev"
