@@ -4,8 +4,8 @@
   {% for game in games %}
   <div class="score">
     <a href="{% url game_detail game.id %}">
-    <div>{{ game.team1 }} {{ game.team1_score_or_result }}</div>
-    <div>{{ game.team2 }} {{ game.team2_score_or_result }}</div>
+    <div>{{ game.team1_original_name }} {{ game.team1_score_or_result }}</div>
+    <div>{{ game.team2_original_name }} {{ game.team2_score_or_result }}</div>
   </div>
   {% endfor %}
 </div>
