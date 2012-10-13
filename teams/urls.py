@@ -39,6 +39,10 @@ urlpatterns = patterns('teams.views',
                            'team_stats',
                            name='team_stats'),
 
+                       url(r'^(?P<team_slug>[a-z0-9-]+)/picks/$',
+                           'team_picks',
+                           name='team_picks'),
+
                        url(r'^(?P<team_slug>[a-z0-9-]+)/games/$',
                            'team_games',
                            name='team_games'),
