@@ -31,13 +31,18 @@
 
   <td>{{ pick.number }}</td>
 
+  {% if pick.pick %}
+  <td><a href="{% url draft_detail pick.pick.draft.competition.slug pick.pick.draft.slug pick.pick.draft.season %}">{{ pick.text }}</a> (<a href="{% url person_detail pick.pick.player.slug %}">{{ pick.pick.player }}</a>)</td>
 
-
+  {% else %}
   {% if pick.player %}
   <td><a href="{% url person_detail pick.player.slug %}">{{ pick.player }}</a></td>
   {% else %}
   <td>PASS</td>
   {% endif %}
+
+  {% endif %}
+
   {% datum_or_grey pick.position %}
   <td><a href="{% url team_detail pick.team.slug %}">{{ pick.team }}</a></td>
 
