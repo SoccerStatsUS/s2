@@ -5,17 +5,13 @@ a {
     text-decoration: none;
 }
 
-.red-bg {
-    background-color: red;
-}
-
-.yellow-bg {
-    background-color: yellow;
-}
-
-.green-bg {
-    background-color: #57E674;
-}
+.red-bg {    background-color: red;}
+.yellow-bg {  background-color: yellow;}
+.green-bg {    background-color: #57E674;}
+.orange-bg {    background-color: #fcc200;}
+.blue-bg { background-color: #0026ff;}
+.light-blue-bg { background-color: #b5c0ff;}
+.light-grey-bg { background-color: #d9d9d9;}
 
 a:visited {
     color: blue;

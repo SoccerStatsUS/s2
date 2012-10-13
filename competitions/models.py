@@ -1,3 +1,4 @@
+from django.db.models import Sum, Avg
 from django.db import models
 from django.template.defaultfilters import slugify
 
@@ -200,6 +201,21 @@ class Competition(models.Model):
         return "".join(first_letters)
 
 
+    def color_code(self):
+        if self.ctype == 'Cup':
+            return 'orange'
+        elif self.ctype == 'League':
+            if self.level == 1:
+                return 'blue'
+            else:
+                return 'light-blue'
+        elif self.name == 'Friendly':
+            return 'light-grey'
+        else:
+            return ''
+        
+
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
@@ -233,13 +249,6 @@ class Competition(models.Model):
         else:
             return None
 
-
-    def game_completeness_color(self):
-        return self.color_code(self.game_completeness)
-
-
-    def color_code(self, number):
-        return ['red', 'yellow', 'green'][number]
 
     def nationality_stats(self):
         from stats.models import Stat
@@ -297,6 +306,16 @@ class Season(models.Model):
 
     class Meta:
         ordering = ("name", "competition")
+
+
+    def total_attendance(self):
+        games = self.game_set.exclude(attendance=None)
+        return games.aggregate(Sum('attendance'))['attendance__sum']
+        
+    def average_attendance(self):
+        games = self.game_set.exclude(attendance=None)
+        return games.aggregate(Avg('attendance'))['attendance__avg']
+        
 
 
     def golden_boot(self):
@@ -368,7 +387,6 @@ class Season(models.Model):
     def goals(self):
         from goals.models import Goal
         return Goal.objects.filter(game__season=self)
-
 
 
     def goals_per_game(self): 
