@@ -5,6 +5,7 @@
 
     <th>date</th>
     <th title="competition">cmp</th>
+    <th></th>
     <th>team1</th>
     <th>score</th>
     <th></th>
@@ -25,6 +26,7 @@
     <td></td>
     {% endif %}
     <td><a href="{% url competition_detail game.competition.slug %}">{{ game.competition.abbreviation }}</a></td>
+    <td class="{{ game.competition.color_code }}-bg"></td>
 
     {% if game.winner == game.team1 %}
     <td><a href="{% url team_detail game.team1.slug %}"><strong>{{ game.team1_original_name }}</strong></a></td>
@@ -43,9 +45,8 @@
 
 
     {% if game.stadium %}
-    <td>
-      <a href="{% url stadium_detail game.stadium.slug %}"><strong>{{ game.stadium }}</strong></a>{% if game.city.slug %}<a href="{% url city_detail game.city.slug %}">, {{ game.city.name }}</a>{% endif %}
-    </td>
+    <td><a href="{% url stadium_detail game.stadium.slug %}"><strong>{{ game.stadium }}</strong></a></td>
+    {# {% if game.city.slug %}<a href="{% url city_detail game.city.slug %}">, {{ game.city.name }}</a>{% endif %} #}
 
 
     {% else %}

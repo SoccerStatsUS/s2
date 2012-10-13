@@ -10,10 +10,12 @@ class Currency(models.Model):
     name = models.CharField(max_length=255)
 
 
+
 class ExchangeValue(models.Model):
-    currency1 = models.ForeignKey(Currency)
-    currency2 = models.ForeignKey(Currency)
-    proportion = models.DecimalField()
+    from_currency = models.ForeignKey(Currency, related_name='from_rate')
+    to_currency = models.ForeignKey(Currency, related_name='to_rate')
+    proportion = models.FloatField()
+
     
 
 class SalaryManager(models.Manager):
@@ -24,8 +26,17 @@ class SalaryManager(models.Manager):
 class Salary(models.Model):
 
     person = models.ForeignKey(Bio)
-    amount = models.DecimalField()
+    amount = models.DecimalField(max_digits=15, decimal_places=2, null=False)
 
-    season = models.ForeignKey(Season, null=True)
-    start = models.DateField(blank=True, null=True)
-    end = models.DateField(blank=True, null=True)
+    season = models.CharField(max_length=255)
+    #start = models.DateField(blank=True, null=True)
+    #end = models.DateField(blank=True, null=True)
+
+
+    def __unicode__(self):
+        return "%s: %s (%s)" % (self.person, self.amount, self.season)
+
+    
+    class Meta:
+        ordering = ('season', )
+

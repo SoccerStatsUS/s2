@@ -143,7 +143,7 @@ class Team(models.Model):
     # No way, it's useful when you want to display a better name.
     # Let's just be clear that it's very optional.
     short_name = models.CharField(max_length=200, unique=True)
-    slug = models.SlugField(unique=False)
+    slug = models.SlugField(max_length=100, unique=False)
     founded = models.IntegerField(null=True, blank=True)
 
     # Not sure if we want this here.

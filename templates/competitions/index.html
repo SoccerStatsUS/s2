@@ -24,7 +24,7 @@
     <th>type</th>
     <th>scope</th>
     <th>area</th>
-    <th>seasons</th>
+    {#<th>seasons</th>#}
     <th>began</th>
     <th>last</th>
     <th>seasons</th>
@@ -54,6 +54,7 @@
     <td></td>
     {% endif %}
 
+    {% comment %}
     <td>
       <select>
       {% for season in competition.season_set.all %}
@@ -61,6 +62,8 @@
       {% endfor %}
       </select>
     </td>
+    {% endcomment %}
+
     <td>{{ competition.game_set.count }}</td>
   </tr>
   {% endfor %}

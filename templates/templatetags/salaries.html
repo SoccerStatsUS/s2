@@ -1,0 +1,9 @@
+<table>
+  {% for salary in salaries %}
+  <tr>
+    <td>{{ salary.person }}</td>
+    <td>{{ salary.season }}</td>
+    <td>${{ salary.amount }}</td>
+  </tr>
+  {% endfor %}
+</table>

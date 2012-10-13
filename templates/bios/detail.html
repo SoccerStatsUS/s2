@@ -8,7 +8,7 @@
 
 <script type="text/javascript">
   $(document).ready(function (){
-  $("div[tab='stats']").load("{% url stats_ajax_by_id %}?name={{ bio.id }}&order=season");
+  $("div[tab='stats']").load("{% url bio_detail_stats %}?playerid={{ bio.id }}");
   });
 </script>
 
@@ -114,9 +114,17 @@
 {% if bio.position_set.count %}
 <div tab="coaching">
 {% include "templatetags/coach.html" with positions=bio.position_set.all %}
-
 </div>
 {% endif %}
+
+
+
+{% if bio.salary_set.count %}
+<div tab="salaries">
+{% include "templatetags/salaries.html" with salaries=bio.salary_set.all %}
+</div>
+{% endif %}
+
 
 
 </div>

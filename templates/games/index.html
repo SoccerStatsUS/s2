@@ -6,7 +6,7 @@
 
 <p>Attendance: {{ total_attendance }} - {{ average_attendance }} per game.</p>
 
-
+<h3>Result counts</h3>
 <table>
 {% for result, count in results %}
 <tr>
@@ -17,16 +17,7 @@
 </table>
 
 
-<table>
-{% for year, count in years %}
-<tr>
-  <td>{{ year }}</td>
-  <td>{{ count }}</td>
-</tr>
-{% endfor %}
-</table>
-
-
+<h3>Attendance by year</h3>
 <table>
 {% for year, count in attendance_years %}
 <tr>
@@ -36,7 +27,7 @@
 {% endfor %}
 </table>
 
-
+<h3>Games by year</h3>
 <table>
 {% for year, count in game_years %}
 <tr>
@@ -46,7 +37,7 @@
 {% endfor %}
 </table>
 
-
+<h3>Games by month</h3>
 <table>
 {% for month, count in months %}
 <tr>
@@ -55,6 +46,9 @@
 </tr>
 {% endfor %}
 </table>
+
+
+{% include "templatetags/top_attendance.html" %}
 
 
 {% endblock %}

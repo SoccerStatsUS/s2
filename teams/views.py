@@ -101,12 +101,24 @@ def team_detail(request, team_slug):
     """
     team = get_object_or_404(Team, slug=team_slug)
 
+    stats = Stat.team_stats.filter(team=team, competition=None)
+
+    goal_leaders = stats.exclude(goals=None).order_by('-goals')
+    game_leaders = stats.exclude(games_played=None).order_by('-games_played')
+
+    competition_standings = Standing.objects.filter(team=team, season=None)
+    recent_picks = team.pick_set.exclude(player=None).order_by('-draft__season', 'number')[:10]
+
     context = {
         'team': team,
-        'stats': Stat.team_stats.filter(team=team, competition=None).exists(),
+        'stats': stats,
+        'goal_leaders': goal_leaders[:10],
+        'game_leaders': game_leaders[:10],
         'games': team.game_set().exists(),
+        'competition_standings': competition_standings,
         'head_coaches': team.position_set.filter(name='Head Coach'),
         'current_staff': team.position_set.filter(end=None),
+        'recent_picks': recent_picks,
         }
 
     return render_to_response("teams/detail.html",
@@ -127,6 +139,30 @@ def team_stats(request, team_slug):
         }
 
     return render_to_response("teams/stats.html",
+                              context,
+                              context_instance=RequestContext(request)
+                              )
+
+
+
+def team_picks(request, team_slug):
+    """
+    Just about the most important view of all.
+    """
+    team = get_object_or_404(Team, slug=team_slug)
+
+    picks = team.pick_set.all()
+
+    player_ids = [e[0] for e in picks.exclude(player=None).values_list('player')]
+    team_stats = Stat.team_stats.filter(team=team, player__in=player_ids)
+    career_stats = Stat.career_stats.filter(team=team, player__in=player_ids)
+
+    context = {
+        'team': team,
+        'picks': picks,
+        }
+
+    return render_to_response("teams/picks.html",
                               context,
                               context_instance=RequestContext(request)
                               )

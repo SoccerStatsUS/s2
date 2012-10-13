@@ -32,13 +32,13 @@
 
 
   <div class="team_data">
-    <div class="team"><a href="{% url team_detail game.team1.slug %}">{{ game.team1  }}</a></div>
+    <div class="team"><a href="{% url team_detail game.team1.slug %}">{{ game.team1_original_name  }}</a></div>
     <div class="score">{{ game.team1_score_or_result }}</div>
     <div><a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.home_standings_string  }}</a></div>
   </div>
 
   <div class="team_data">
-    <div class="team"><a href="{% url team_detail game.team2.slug %}">{{ game.team2  }}</a></div>
+    <div class="team"><a href="{% url team_detail game.team2.slug %}">{{ game.team2_original_name  }}</a></div>
     <div class="score">{{ game.team2_score_or_result }}</div>
     <div><a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.away_standings_string  }}</a></div>
   </div>
@@ -62,7 +62,7 @@
     <th>Team</th>
     <th>Player</th>
     <th>Minute</th>
-    <th>Assists</th>
+    {# <th>Assists</th> #}
   </tr>
 
   {% for goal in game.goal_set.all %}
@@ -70,7 +70,7 @@
     <td><a href="{% url team_detail goal.team.slug %}">{{ goal.team }}</a></td>
     <td><a href="{% url person_detail goal.player.slug %}">{{ goal.player }}</a></td>
     {% datum_or_grey goal.minute %}
-    <td></td>
+    {# <td></td> #}
   {% endfor %}
 </table>
 
@@ -99,14 +99,13 @@
 </h4>
 
 {% else %}
-
 <p>No Source</p>
-    
 {% endif %}
 
 
 {% if game.series.count > 1 %}
 <div tab="series">
+<h3>Series</h3>
 {% include "templatetags/games.html" with games=game.series %}
 </div>
 {% endif %}
@@ -114,7 +113,7 @@
 </div>
 
 {% if game.same_day_games %}
-<h3>scoreboard</h3>
+<h3>Scoreboard</h3>
 {% include "templatetags/scoreboard.html" with games=game.same_day_games %}
 {% endif %}
 

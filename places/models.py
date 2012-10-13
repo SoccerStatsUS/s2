@@ -1,8 +1,41 @@
-from django.db import models
+from django.contrib.gis.db import models
 
 from django.template.defaultfilters import slugify
 
 from bios.models import Bio
+
+"""
+class Place(models.Model):
+    country = models.ForeignKey(Country, null=True, blank=True)
+    country = models.ForeignKey(Country, null=True, blank=True)
+    country = models.ForeignKey(Country, null=True, blank=True)
+"""    
+
+
+class WorldBorder(models.Model):
+    # Regular Django fields corresponding to the attributes in the
+    # world borders shapefile.
+    name = models.CharField(max_length=50)
+    area = models.IntegerField()
+    pop2005 = models.IntegerField('Population 2005')
+    fips = models.CharField('FIPS Code', max_length=2)
+    iso2 = models.CharField('2 Digit ISO', max_length=2)
+    iso3 = models.CharField('3 Digit ISO', max_length=3)
+    un = models.IntegerField('United Nations Code')
+    region = models.IntegerField('Region Code')
+    subregion = models.IntegerField('Sub-Region Code')
+    lon = models.FloatField()
+    lat = models.FloatField()
+
+    # GeoDjango-specific: a geometry field (MultiPolygonField), and
+    # overriding the default manager with a GeoManager instance.
+    mpoly = models.MultiPolygonField()
+    objects = models.GeoManager()
+
+    # Returns the string representation of the model.
+    def __unicode__(self):
+        return self.name
+
 
 
 
@@ -72,7 +105,10 @@ class City(models.Model):
     name = models.CharField(max_length=255)
     state = models.ForeignKey(State, null=True, blank=True)
     country = models.ForeignKey(Country, null=True, blank=True)
-    slug = models.SlugField()
+    slug = models.SlugField(max_length=100)
+
+    #geometry = models.PointField(srid=4326)
+
 
     def __unicode__(self):
         if self.state:
@@ -116,7 +152,7 @@ class StadiumManager(models.Manager):
 
 class Stadium(models.Model):
     name = models.CharField(max_length=255)
-    slug = models.SlugField(unique=False)
+    slug = models.SlugField(unique=False, max_length=100)
     
     short_name = models.CharField(max_length=255)
 

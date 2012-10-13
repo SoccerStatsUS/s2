@@ -1,4 +1,4 @@
-
+{% load datum_or_none %}
 
 <table>
   <tr>
@@ -12,12 +12,23 @@
 
   {% for a,b in game.zipped_lineups %}
   <tr>
+    {% if a.player %}
     <td><a href="{% url person_detail a.player.slug %}">{{ a.player }}</a></td>
-    <td>{{ a.on }}</td>
-    <td>{{ a.minutes }}</td>
-    <td>{{ b.minutes }}</td>
-    <td>{{ b.on }}</td>
+    {% else %}
+    <td></td>
+    {% endif %}
+
+    {% datum_or_grey a.on %}
+    {% datum_or_grey a.minutes %}
+    {% datum_or_grey b.minutes %}
+    {% datum_or_grey b.on %}
+
+    {% if b.player %}
     <td><a href="{% url person_detail b.player.slug %}">{{ b.player }}</a></td>
+    {% else %}
+    <td></td>
+    {% endif %}
+
   </tr>
   {% endfor %}
 </table>

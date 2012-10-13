@@ -11,6 +11,15 @@ from teams.models import Team
 import random
 
 
+def pad_list(l, length):
+    # Return a list of length length.
+    if len(l) >= length:
+        return l
+    else:
+        diff = length - len(l)
+        return l + [None] * diff
+
+
 class GameManager(models.Manager):
 
 
@@ -116,18 +125,22 @@ class Game(models.Model):
     # Need both a date and a datetime field? Not sure.
     date = models.DateField(null=True)
     
-    team1 = models.ForeignKey(Team, related_name='home_games')
+    team1 = models.ForeignKey(Team, related_name='t1_games')
     team1_original_name = models.CharField(max_length=255)
-    team2 = models.ForeignKey(Team, related_name='away_games')
+    team2 = models.ForeignKey(Team, related_name='t2_games')
     team2_original_name = models.CharField(max_length=255)
 
     team1_score = models.IntegerField(null=True)
-    official_home_score = models.IntegerField(null=True)
+    official_team1_score = models.IntegerField(null=True)
     team2_score = models.IntegerField(null=True)    
-    official_away_score = models.IntegerField(null=True)
+    official_team2_score = models.IntegerField(null=True)
 
     team1_result = models.CharField(max_length=5)
     team2_result = models.CharField(max_length=5)
+
+    # Ambiguous game results.
+    result_unknown = models.BooleanField(default=False)
+    played = models.BooleanField(default=True)
 
     goals = models.IntegerField()
 
@@ -143,7 +156,10 @@ class Game(models.Model):
     competition = models.ForeignKey(Competition)
     season = models.ForeignKey(Season)
 
-    # Foreign Key
+
+    home_team = models.ForeignKey(Team, null=True, related_name='home_games')
+    neutral = models.BooleanField(default=False)
+
     stadium = models.ForeignKey(Stadium, null=True)
     city = models.ForeignKey(City, null=True)
     location = models.CharField(max_length=255)
@@ -173,7 +189,7 @@ class Game(models.Model):
 
 
     source = models.ForeignKey(Source, null=True)
-    source_url = models.CharField(max_length=255)
+    source_url = models.CharField(max_length=511)
 
     objects = GameManager()
 
@@ -220,9 +236,6 @@ class Game(models.Model):
             }[self.result()]
 
 
-    
-
-
     def score(self):
         """Returns a score string."""
         return "%s - %s" % (self.team1_score, self.team2_score)
@@ -251,16 +264,16 @@ class Game(models.Model):
 
 
     def team1_starters(self):
-        return self.team1_lineups().filter(on=0)
+        return self.team1_lineups().filter(on=0).exclude(off=0)
 
 
     def team2_starters(self):
-        return self.team2_lineups().filter(on=0)
+        return self.team2_lineups().filter(on=0).exclude(off=0)
 
     def lineup_quality(self):
         ts1 = self.team1_starters().count()
         ts2 = self.team2_starters().count()
-        if ts1 and ts2 == 11:
+        if ts1 == 11 and ts2 == 11:
             return 2
         elif ts1 > 0 or ts2 > 0:
             return 1
@@ -283,7 +296,15 @@ class Game(models.Model):
 
 
     def zipped_lineups(self):
-        return zip(self.team1_lineups(), self.team2_lineups())
+        # FIX THIS; TRUNACATING TEAM LINEUPS
+        t1l, t2l = self.team1_lineups(), self.team2_lineups()
+        t1c, t2c = t1l.count(), t2l.count()
+        if t1c == t2c:
+            return zip(t1l, t2l)
+        else:
+            m = max(t1c, t2c)
+            l1, l2 = pad_list(list(t1l), m), pad_list(list(t2l), m)
+            return zip(l1, l2)
 
 
     # These should hang off of Team, not Game.
@@ -436,7 +457,10 @@ class Game(models.Model):
         """
         Returns all games played on the same date (excluding this one).
         """
-        return Game.objects.filter(date=self.date).exclude(id=self.id)
+        if self.date:
+            return Game.objects.filter(date=self.date).exclude(id=self.id)
+        else:
+            return []
 
 
     def opponent(self, team):

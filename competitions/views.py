@@ -80,10 +80,15 @@ def competition_index(request):
 @cache_page(60 * 60 * 12)
 def competition_detail(request, competition_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
+    games = competition.game_set.all()
     context = {
         'competition': competition,
         'stats': Stat.competition_stats.filter(team=None, competition=competition).order_by('-games_played')[:25],
-        'games': competition.game_set.all()[:25],
+        'games': games[:25],
+        'top_attendance_games': games.exclude(attendance=None).order_by('-attendance')[:20],
+        'worst_attendance_games': games.exclude(attendance=None).order_by('attendance')[:20],
+        'big_winners': competition.alltime_standings().order_by('-wins')[:20],
+        
         }
     return render_to_response("competitions/competition_detail.html",
                               context,
@@ -120,6 +125,7 @@ def season_detail(request, competition_slug, season_slug):
     """
     Detail for a given season, e.g. Major League Soccer, 1996.
     """
+
     competition = get_object_or_404(Competition, slug=competition_slug)
     season = get_object_or_404(Season, competition=competition, slug=season_slug)
 
@@ -146,8 +152,8 @@ def season_detail(request, competition_slug, season_slug):
     total_minutes = mstats.aggregate(Sum('minutes'))['minutes__sum']
     known_minutes = mstats.exclude(player__birthdate=None).aggregate(Sum('minutes'))['minutes__sum']
 
-    goal_leaders = stats.order_by('-goals')
-    game_leaders = stats.order_by('-games_played')
+    goal_leaders = stats.exclude(goals=None).order_by('-goals')
+    game_leaders = stats.exclude(games_played=None).order_by('-games_played')
 
     context = {
         'season': season,

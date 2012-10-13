@@ -5,26 +5,28 @@ from django.views.decorators.cache import cache_page
 from lineups.models import Appearance
 from lineups.forms import AppearanceForm
 
+from collections import defaultdict
 
-def get_appearances(request):
+
+def get_appearances(GET):
     lineups = Appearance.objects.all()
-    if 'team' in request.GET:
-        t = request.GET['team']
+    if 'team' in GET:
+        t = GET['team']
         if t:
             lineups = lineups.filter(team__name__icontains=t)
 
-    if 'player' in request.GET:
-        e = request.GET['player']
+    if 'player' in GET:
+        e = GET['player']
         if e:
             lineups = lineups.filter(player__name__icontains=e)
 
-    if 'on' in request.GET:
-        e = request.GET['on']
+    if 'on' in GET:
+        e = GET['on']
         if e:
             lineups = lineups.filter(on=e)
 
-    if 'off' in request.GET:
-        e = request.GET['off']
+    if 'off' in GET:
+        e = GET['off']
         if e:
             lineups = lineups.filter(off=e)
 
@@ -34,7 +36,14 @@ def get_appearances(request):
 
 
 def lineup_index(request):
-    appearances = get_appearances(request)
+    # No reason to set this up a a form.
+    # Just show interesting stuff.
+    appearances = get_appearances(request.GET)
+
+    for appearance in appearances.values_list(''):
+        pass
+
+
     context = {
         'appearances': appearances[:1000],
         'form': AppearanceForm(),
@@ -45,7 +54,7 @@ def lineup_index(request):
 
 
 def lineup_ajax(request):    
-    appearances = get_appearances(request)
+    appearances = get_appearances(request.GET)
     context = {
         'appearances': appearances[:1000],
         }

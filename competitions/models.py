@@ -1,3 +1,4 @@
+from django.db.models import Sum, Avg
 from django.db import models
 from django.template.defaultfilters import slugify
 
@@ -52,8 +53,16 @@ def nationality_stats(stats):
         minutes = minutes_dict[n]
 
         gp = gp_dict[n]
-        gp_percentage = 100 * gp / float(total_gp)
-        l.append((nation, uniques, gp, gp_percentage, minutes))
+        if total_gp:
+            gp_percentage = 100 * gp / float(total_gp)
+            gp_per_person = gp / float(uniques)
+        else:
+            gp_percentage = None
+            gp_per_person = None
+
+
+
+        l.append((nation, uniques, gp, gp_percentage, minutes, gp_per_person))
 
     l = sorted(l, key=lambda e: -e[2])
     return {
@@ -89,6 +98,8 @@ def confederation_stats(stats):
     total_minutes = sum(minutes_dict.values())
     total_gp = sum(gp_dict.values())
 
+
+
     l = []
 
     confederations = set([e[1] for e in nationality_set])        
@@ -105,8 +116,17 @@ def confederation_stats(stats):
         minutes = minutes_dict[n]
 
         gp = gp_dict[n]
-        gp_percentage = 100 * gp / float(total_gp)
-        l.append((n, uniques, gp, gp_percentage, minutes))
+
+        gp = gp_dict[n]
+        if total_gp:
+            gp_percentage = 100 * gp / float(total_gp)
+            gp_per_person = gp / float(uniques)
+        else:
+            gp_percentage = None
+            gp_per_person = None
+
+
+        l.append((n, uniques, gp, gp_percentage, minutes, gp_per_person))
 
     l = sorted(l, key=lambda e: -e[2])
 
@@ -181,6 +201,21 @@ class Competition(models.Model):
         return "".join(first_letters)
 
 
+    def color_code(self):
+        if self.ctype == 'Cup':
+            return 'orange'
+        elif self.ctype == 'League':
+            if self.level == 1:
+                return 'blue'
+            else:
+                return 'light-blue'
+        elif self.name == 'Friendly':
+            return 'light-grey'
+        else:
+            return ''
+        
+
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
@@ -214,13 +249,6 @@ class Competition(models.Model):
         else:
             return None
 
-
-    def game_completeness_color(self):
-        return self.color_code(self.game_completeness)
-
-
-    def color_code(self, number):
-        return ['red', 'yellow', 'green'][number]
 
     def nationality_stats(self):
         from stats.models import Stat
@@ -280,8 +308,18 @@ class Season(models.Model):
         ordering = ("name", "competition")
 
 
+    def total_attendance(self):
+        games = self.game_set.exclude(attendance=None)
+        return games.aggregate(Sum('attendance'))['attendance__sum']
+        
+    def average_attendance(self):
+        games = self.game_set.exclude(attendance=None)
+        return games.aggregate(Avg('attendance'))['attendance__avg']
+        
+
+
     def golden_boot(self):
-        goalscorers = self.stat_set.order_by('-goals', '-assists')
+        goalscorers = self.stat_set.exclude(goals=None).order_by('-goals', '-assists')
         if goalscorers.exists():
             return goalscorers[0].player
         else:
@@ -349,7 +387,6 @@ class Season(models.Model):
     def goals(self):
         from goals.models import Goal
         return Goal.objects.filter(game__season=self)
-
 
 
     def goals_per_game(self): 

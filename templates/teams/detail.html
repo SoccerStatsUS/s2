@@ -25,34 +25,38 @@
 
 <div id="tab_wrapper">
 
+<div tab="summary">
 
-{% if team.standing_set.exists %}
-<div tab="standings">
-{% include "templatetags/standings.html" with standings=team.standings_by_date %}
-</div>
-{% endif %}
+<h3>Competition standings</h3>
 
-{% if stats %}
-<div tab="stats">
-</div>
-{% endif %}
+<table>
 
-{% if team.game_set.exists %}
+<tr>
+  <th>cmp</th>
+  <th>W</th>
+  <th>T</th>
+  <th>L</th>
+  <th>win %</th>
+</tr>
 
-<div tab="games">
-
-</div>
-
-{% comment %}
-<a href="">All games</a>
-{% endcomment %}
-
-{% endif %}
+{% for standing in competition_standings %}
+<tr>
+  {% if standing.competition == None %}
+  <td>All-time</td>
+  {% else %}
+  <td><a href="{% url competition_detail standing.competition.slug %}">{{ standing.competition }}</a></td>
+  {% endif %}
+  <td>{{ standing.wins }}</td>
+  <td>{{ standing.ties }}</td>
+  <td>{{ standing.losses }}</td>
+  <td>{{ standing.win_percentage_100|floatformat }}%</td>
+</tr>
+{% endfor %}
+</table>
 
 
 {% if team.awards.exists %}
-<div tab="honors">
-
+<h3>Honors</h3>
 <table>
 {% for award in team.awards.all %}
 <tr>
@@ -62,33 +66,47 @@
 </tr>
 {% endfor %}
 </table>
-</div>
 {% endif %}
 
-{% if current_staff %}
-<div tab="staff">
 
+<h3>Goal leaders</h3>
 <table>
-{% for position in current_staff %}
+{% for e in goal_leaders %}
 <tr>
-  <td><a href="{% url person_detail position.person.slug %}">{{ position.person }}</a></td>
-  <td>{{ position.name }}</td>
-  {% if position.start %}
-  <td><a href="{% url date_detail position.start.year position.start.month position.start.day %}">{{ position.start|default_if_none:'' }}</a></td>
-  {% else %}
-  <td></td>
-  {% endif %}
-
+  <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
+  <td>{{ e.goals }}</td>
 </tr>
 {% endfor %}
 </table>
-</div>
-{% endif %}
+
+
+<h3>Game leaders</h3>
+<table>
+{% for e in game_leaders %}
+<tr>
+  <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
+  <td>{{ e.games_played }}</td>
+</tr>
+{% endfor %}
+</table>
+
+
+
+<h3>Draft picks</h3> 
+<table>
+{% for e in recent_picks %}
+<tr>
+  <td>{{ e.draft.season }}</td>
+  <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
+</tr>
+{% endfor %}
+</table>
+<p>(<a href="{% url team_picks team.slug %}">complete</a>)</p>
+
+
 
 {% if head_coaches %}
-<div tab="coaches">
-
-
+<h3>Coaches</h3>
 <table>
 
 <thead>
@@ -132,8 +150,56 @@
 </tr>
 {% endfor %}
 </table>
+
+{% endif %}
+
+
 </div>
 
+
+
+{% if team.standing_set.exists %}
+<div tab="standings">
+{% include "templatetags/standings.html" with standings=team.standings_by_date %}
+</div>
+{% endif %}
+
+{% if stats %}
+<div tab="stats">
+</div>
+{% endif %}
+
+{% if team.game_set.exists %}
+
+<div tab="games">
+
+</div>
+
+{% comment %}
+<a href="">All games</a>
+{% endcomment %}
+
+{% endif %}
+
+
+{% if current_staff %}
+<div tab="staff">
+
+<table>
+{% for position in current_staff %}
+<tr>
+  <td><a href="{% url person_detail position.person.slug %}">{{ position.person }}</a></td>
+  <td>{{ position.name }}</td>
+  {% if position.start %}
+  <td><a href="{% url date_detail position.start.year position.start.month position.start.day %}">{{ position.start|default_if_none:'' }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
+</tr>
+{% endfor %}
+</table>
+</div>
 {% endif %}
 
 

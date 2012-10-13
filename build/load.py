@@ -15,6 +15,7 @@ from drafts.models import Draft, Pick
 from games.models import Game
 from goals.models import Goal
 from lineups.models import Appearance
+from money.models import Salary
 from news.models import NewsSource
 from places.models import Country, State, City, Stadium
 from positions.models import Position
@@ -83,8 +84,11 @@ def make_source_getter():
 
 # This is way too complex.
 # I'm taking a break.
-
 def make_city_getter():
+    """
+    
+    """
+
     cg = make_city_pre_getter()
     
     def get_city(s):
@@ -96,23 +100,26 @@ def make_city_getter():
 
         if c['country']:
             country = Country.objects.get(name=c['country'])
+        
 
-        try:
-            return City.objects.get(name=c['name'], state=state, country=country)
-        except:
-            import pdb; pdb.set_trace()
-
-        x= 5 
+        return City.objects.get(name=c['name'], state=state, country=country)
 
     return get_city
 
 
 def make_city_pre_getter():
     """
-    Retrieve teams easily.
+    Dissasseble a location string into city, state, and country pieces.
+    City, state, and country are all optional, although country should (always?) 
+    exist.
+    e.g. Dallas, Texas -> {'name': 'Dallas', 'state': 'Texas', 'country': 'United States' }
+    Cape Verde -> {'name': '', 'city': '', 'country': 'United States',
     """
+    # Would like to add neighborhood to this.
+    # Should this be part of normalize instead of here? Possibly.
 
     def make_state_abbreviation_dict():
+        # Map abbreviation to state name, state country.
         d = {}
         for e in soccer_db.states.find():
             d[e['abbreviation']] = (e['name'], e.get('country'))
@@ -134,7 +141,7 @@ def make_city_pre_getter():
     state_name_dict = make_state_name_dict()
 
 
-    def get_city(s):
+    def get_dict(s):
 
         state = country = None
 
@@ -156,6 +163,7 @@ def make_city_pre_getter():
         else:
             name = s
 
+        # Change name to city.
         return {
             'name': name,
             'state': state,
@@ -163,7 +171,7 @@ def make_city_pre_getter():
             }
 
 
-    return get_city
+    return get_dict
 
 
 
@@ -176,6 +184,8 @@ def make_bio_getter():
     bios = Bio.objects.bio_dict()
 
     def get_bio(name):
+        name = name.strip()
+
         if name in bios:
             bio_id = bios[name]
         else:
@@ -197,6 +207,8 @@ def make_stadium_getter():
     stadiums = Stadium.objects.as_dict()
 
     def getter(name):
+        name = name.strip()
+
         if name in stadiums:
             sid = stadiums[name]
         else:
@@ -286,28 +298,33 @@ def load():
     # Games depends on Team, Stadium, City, Bio.
     # etc.
 
+    # Georgraphical data.
+    #load_geo()
+
     # Non-game data.
     load_sources()
     load_places()
+
     load_bios()
+    load_salaries()
+
     load_stadiums()
 
     # Simple sport data
     load_competitions()
     load_teams()
 
-    # Complex game data
-    load_standings()
-    load_games()
 
+    load_standings()
 
     # List data
-    # Put this before standings/games?
+    # Put this before standings?
     load_awards()
     load_drafts()
     load_positions()
 
-
+    # Complex game data
+    load_games()
 
     # Mixed data
     load_stats()
@@ -316,6 +333,39 @@ def load():
 
     # Analysis data
     #load_news()
+
+
+
+def load_geo():
+    import os
+    from django.contrib.gis.utils import LayerMapping
+    from places.models import WorldBorder
+    world_mapping = {
+        'fips' : 'FIPS',
+        'iso2' : 'ISO2',
+        'iso3' : 'ISO3',
+        'un' : 'UN',
+        'name' : 'NAME',
+        'area' : 'AREA',
+        'pop2005' : 'POP2005',
+        'region' : 'REGION',
+        'subregion' : 'SUBREGION',
+        'lon' : 'LON',
+        'lat' : 'LAT',
+        'mpoly' : 'MULTIPOLYGON',
+        }
+
+    world_shp = '/home/chris/www/soccerdata/data/places/world/TM_WORLD_BORDERS-0.3.shp'
+
+    lm = LayerMapping(WorldBorder, world_shp, world_mapping, transform=False, encoding='iso-8859-1')
+    lm.save(strict=True, verbose=True)
+
+
+def run(verbose=True):
+    lm = LayerMapping(WorldBorder, world_shp, world_mapping,
+                      transform=False, encoding='iso-8859-1')
+
+    lm.save(strict=True, verbose=verbose)    
 
 
 
@@ -381,10 +431,11 @@ def load_positions():
         position.pop('_id')
         position['team'] = Team.objects.find(position['team'], create=True)
         position['person'] = Bio.objects.find(position['person'])
-        try:
-            Position.objects.create(**position)
-        except:
-            import pdb; pdb.set_trace()
+        #try:
+        Position.objects.create(**position)
+        #except:
+        #    import pdb; pdb.set_trace()
+        #    x = 5
 
 
 @transaction.commit_on_success
@@ -469,8 +520,9 @@ def load_drafts():
     for pick in soccer_db.picks.find():
         pick.pop('_id')
 
+
         # draft, text, player, position, team
-        draft = Draft.objects.get(name=pick.get('draft'), season=pick.get('season'))
+        draft = Draft.objects.get(name=pick.get('draft'), season=pick.get('season'), competition__name=pick.get('competition'))
 
         team_id = team_getter(pick['team'])
 
@@ -481,13 +533,12 @@ def load_drafts():
 
         # Set the player reference.
         text = pick['text']
-        if text.lower() == 'pass':
-            player_id = None
 
-        # Draft picks were "drafted" in the MLS Allocation Draft.
-        elif "SuperDraft" in text:
+        # Draft picks were "drafted" in the MLS Allocation and Dispersal drafts.
+        if "SuperDraft" in text:
             player_id = None
-
+        elif text.lower() == 'pass':
+            player_id = None
         else:
             player_id = Bio.objects.find(text).id
 
@@ -502,12 +553,8 @@ def load_drafts():
                 })
 
     for e in picks:
-        try:
-            Pick.objects.create(**e)
-        except:
-            import pdb; pdb.set_trace()
+        Pick.objects.create(**e)
 
-    x = 5
     #insert_sql("drafts_pick", picks)
         
         
@@ -631,6 +678,22 @@ def load_bios():
 
         Bio.objects.create(**bd)
 
+@transaction.commit_on_success
+def load_salaries():
+    bg = make_bio_getter()
+
+    for e in soccer_db.salaries.find():
+        e.pop('_id')
+        
+        bio = bg(e['name'])
+        b = Bio.objects.get(id=bio)
+        Salary.objects.create(
+            person=b,
+            amount=e['base'],
+            season=e['year'].strip()
+            )
+                 
+
 
 @transaction.commit_on_success
 def load_games():
@@ -708,6 +771,11 @@ def load_games():
             if e in game:
                 game.pop(e)
 
+
+        #import datetime
+        #if game['date'] == datetime.datetime(1870, 11, 5, 0, 0):
+        #    import pdb; pdb.set_trace()
+
         # There are lots of problems with the NASL games, 
         # And probably ASL as well. Need to spend a couple
         # of hours repairing those schedules.
@@ -716,8 +784,7 @@ def load_games():
         except:
             print "Skipping game %s" % game
             import pdb; pdb.set_trace()
-
-        x = 5
+            x = 5
 
 
 @transaction.commit_on_success
@@ -749,6 +816,7 @@ def load_goals():
         if player in bios:
             bio_id = bios[player]
         else:
+            print player
             bio_id = Bio.objects.find(player).id
             bios[player] = bio_id
 
@@ -811,23 +879,32 @@ def load_stats():
         else:
             source_id = None
 
+        def c2i(key):
+            # Coerce an integer
+            if stat.get(key):
+                if type(stat[key]) != int:
+                    import pdb; pdb.set_trace()
+                return stat[key]
+
+            else:
+                return None
 
         l.append({
             'player_id': bio_id,
             'team_id': team_id,
             'competition_id': competition_id,
             'season_id': season_id,
-            'games_started': stat.get('games_started'),
-            'games_played': stat.get('games_played'),
-            'minutes': stat.get('minutes'),
-            'goals': stat.get('goals'),
-            'assists': stat.get('assists'),
-            'shots': stat.get('shots'),
-            'shots_on_goal': stat.get('shots_on_goal'),
-            'fouls_committed': stat.get('fouls_committed'),
-            'fouls_suffered': stat.get('fouls_suffered'),
-            'yellow_cards': stat.get('yellow_cards'),
-            'red_cards': stat.get('red_cards'),
+            'games_started': c2i('games_started'),
+            'games_played': c2i('games_played'),
+            'minutes': c2i('minutes'),
+            'goals': c2i('goals'),
+            'assists': c2i('assists'),
+            'shots': c2i('shots'),
+            'shots_on_goal': c2i('shots_on_goal'),
+            'fouls_committed': c2i('fouls_committed'),
+            'fouls_suffered': c2i('fouls_suffered'),
+            'yellow_cards': c2i('yellow_cards'),
+            'red_cards': c2i('red_cards'),
             'source_id': source_id,
             })
 

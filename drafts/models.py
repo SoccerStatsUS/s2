@@ -36,7 +36,7 @@ class Draft(models.Model):
         return "%s %s" % (self.competition, self.name)
 
     class Meta:
-        ordering = ('season', 'competition', 'name', )
+        ordering = ('competition', 'season', 'start', 'name', )
 
 
 class Pick(models.Model):
@@ -49,9 +49,21 @@ class Pick(models.Model):
     text = models.CharField(max_length=255)
     player = models.ForeignKey(Bio, null=True)
 
+    pick = models.ForeignKey('self', null=True, related_name='drafted_pick_set')
+
     position = models.CharField(max_length=5)
 
+    blank = models.BooleanField(default=False)
 
+
+    def get_player(self):
+        if self.player:
+            return self.player
+        else:
+            if self.pick:
+                return self.pick.get_player()
+            else:
+                return None
 
 
     def __unicode__(self):

@@ -1,12 +1,13 @@
 from collections import defaultdict
 import datetime
 import os
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'build_settings'
 
 from django.db import transaction
 
 from bios.models import Bio
 from competitions.models import Competition, Season
+from drafts.models import Draft, Pick
 from games.models import Game, GameMinute
 from goals.models import Goal
 from lineups.models import Appearance
@@ -27,6 +28,9 @@ def generate():
     # Need to choose one.
     # Generate coaching stats!
     #generate_position_standings()
+
+    set_draft_picks()
+
     generate_position_stats()
 
     generate_career_stats()
@@ -40,6 +44,20 @@ def generate():
 
     #generate_game_data_quality()
     #generate_game_minutes()
+
+
+def set_draft_picks():
+
+    # Not bothering parsing since this has only happened one time.
+    d = Draft.objects.get(competition__slug='major-league-soccer', name='SuperDraft', season='2002')
+    picks = Pick.objects.filter(text__contains='SuperDraft')
+    for pick in picks:
+        number = int(pick.text.lower().split('pick')[0].strip().replace('#', ''))
+        target = Pick.objects.get(draft=d, number=number)
+        pick.pick = target
+        pick.save()
+        
+
 
 @timer
 @transaction.commit_on_success
@@ -177,7 +195,7 @@ def generate_stats_generic(qs, make_key, update_dict):
     Maybe could improve this.
     """
     final_dict = {}
-    excluded = ('player_id', 'team_id', 'competition_id', 'season_id')
+    excluded = ('player_id', 'team_id', 'competition_id', 'season_id', 'source_id')
     for stat in qs.values():
         for k,v  in stat.items():
             if v in ('?', 'None', '-'):
@@ -260,12 +278,11 @@ def generate_standings_generic(qs, make_key, update_dict):
     # Seems like memory leaks are making this not work for nearly enough stats.
 
     final_dict = {}
-    excluded = ('team_id', 'competition_id', 'season_id')
+    excluded = ('player_id', 'team_id', 'competition_id', 'season_id', 'division', 'group')
     for standing in qs.values():
         # This determines what is filtered.
         # e.g., create all-time player stats with 
         # make_key = lambda s: s['player']
-
 
         for k,v  in standing.items():
             if v == 'None':
