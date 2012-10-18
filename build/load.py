@@ -101,7 +101,6 @@ def make_city_getter():
         if c['country']:
             country = Country.objects.get(name=c['country'])
         
-
         return City.objects.get(name=c['name'], state=state, country=country)
 
     return get_city
@@ -779,6 +778,7 @@ def load_games():
         # There are lots of problems with the NASL games, 
         # And probably ASL as well. Need to spend a couple
         # of hours repairing those schedules.
+
         try:
             Game.objects.create(**game)
         except:
@@ -816,9 +816,12 @@ def load_goals():
         if player in bios:
             bio_id = bios[player]
         else:
-            print player
-            bio_id = Bio.objects.find(player).id
-            bios[player] = bio_id
+            if player == None:
+                bio_id = None
+            else:
+                print player
+                bio_id = Bio.objects.find(player).id
+                bios[player] = bio_id
 
         # Coerce to date to match dict.
         d = datetime.date(goal['date'].year, goal['date'].month, goal['date'].day)
@@ -831,11 +834,19 @@ def load_goals():
             print "No game match for %s" % goal
 
         if game_id:
+            if bio_id:
+                player = Bio.objects.get(id=bio_id)
+            else:
+                player = None
+
             return {
                 'date': goal['date'],
                 'minute': goal['minute'],
                 'team': Team.objects.get(id=team_id),
-                'player': Bio.objects.get(id=bio_id),
+                'player': player,
+                'own_goal': goal.get('own_goal', False),
+                'penalty': goal.get('penalty', False),
+                'own_goal_player': goal.get('own_goal_player'),
                 'game': Game.objects.get(id=game_id),
                 }
 
