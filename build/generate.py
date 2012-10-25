@@ -31,7 +31,7 @@ def generate():
 
     set_draft_picks()
 
-    generate_position_stats()
+
 
     generate_career_stats()
     generate_competition_stats()
@@ -40,6 +40,7 @@ def generate():
     generate_team_standings()
     generate_season_data()
 
+    #generate_position_stats()
 
 
     #generate_game_data_quality()
@@ -122,6 +123,7 @@ def generate_season_data():
 
 
 def calculate_standings(team, games=None):
+    # Do this with a dict, not a game object.
 
     if games is None:
         games = Game.objects.team_filter(position.team)
@@ -245,7 +247,7 @@ def generate_career_stats():
         'competition_id': None,
         'season_id': None,
         }
-    generate_stats_generic(Stat.objects.all(), make_key, update)    
+    generate_stats_generic(Stat.objects.filter(competition__code='soccer'), make_key, update)    
     #generate_career_plus_minus()
         
 @timer
@@ -343,10 +345,14 @@ def generate_position_standings():
     Position.objects.generate_standings()
 
 
+
+
+
 @timer
 @transaction.commit_on_success
 def generate_position_stats():
-    # Generate 
+    # Generate stats for non-players. Coaches, Owners, etc.
+    # Need to start by initializing a list of all games.
 
     for position in Position.objects.order_by('person'):
         if position.end is None:

@@ -813,15 +813,25 @@ def load_goals():
             teams[team] = team_id
 
         player = goal['goal']
-        if player in bios:
+
+        if player is None:
+            bio_id = None
+        elif player in bios:
             bio_id = bios[player]
         else:
-            if player == None:
-                bio_id = None
-            else:
-                print player
-                bio_id = Bio.objects.find(player).id
-                bios[player] = bio_id
+            print player
+            bio_id = Bio.objects.find(player).id
+            bios[player] = bio_id
+
+        ogplayer = goal.get('own_goal_player')
+        if ogplayer is None:
+            ogbio_id = None
+        elif ogplayer in bios:
+            ogbio_id = bios[ogplayer]
+        else:
+            print ogplayer
+            ogbio_id = Bio.objects.find(ogplayer).id
+            bios[ogplayer] = ogbio_id
 
         # Coerce to date to match dict.
         d = datetime.date(goal['date'].year, goal['date'].month, goal['date'].day)
@@ -839,6 +849,12 @@ def load_goals():
             else:
                 player = None
 
+            if ogbio_id:
+                ogplayer = Bio.objects.get(id=ogbio_id)
+            else:
+                ogplayer = None
+                
+
             return {
                 'date': goal['date'],
                 'minute': goal['minute'],
@@ -846,7 +862,7 @@ def load_goals():
                 'player': player,
                 'own_goal': goal.get('own_goal', False),
                 'penalty': goal.get('penalty', False),
-                'own_goal_player': goal.get('own_goal_player'),
+                'own_goal_player': ogplayer,
                 'game': Game.objects.get(id=game_id),
                 }
 
