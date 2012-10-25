@@ -10,7 +10,7 @@
 
 {{ form.as_table }}
 
-<input type="submit" value="send" />
+<input type="submit" value="submit" />
 
 </form>
 
@@ -33,6 +33,8 @@
   </thead>
 
   {% for competition in competitions %}
+
+  {% if competition.season_set.exists %}
   <tr>
     <td><a href="{% url competition_detail competition.slug %}">{{ competition.name }}</a></td>
     <td>{{ competition.code }}</td>
@@ -65,7 +67,9 @@
     {% endcomment %}
 
     <td>{{ competition.game_set.count }}</td>
+
   </tr>
+  {% endif %}
   {% endfor %}
 
 </table>

@@ -5,8 +5,36 @@
 
 
 
-<div>
+<h4>Recent Results</h4>
+{% include "templatetags/games_small.html" %}
+
+
 <h3><a href="{% url day_detail today.month today.day %}">Today in American soccer history</a></h3>
+
+
+<h4>Game leaders</h4>
+<table>
+
+  {% for e in game_leaders %}
+  <tr>
+    <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
+    <td>{{ e.games_played }}</td>
+  </tr>
+  {% endfor %}
+
+</table>
+
+<h4>Goal leaders</h4>
+<table>
+
+  {% for e in goal_leaders %}
+  <tr>
+    <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
+    <td>{{ e.goals }}</td>
+  </tr>
+  {% endfor %}
+
+</table>
 
 
 {% if born %}
@@ -14,71 +42,7 @@
 {% endif %}
 
 
-
-</div>
-
-<h4>Recent Results</h4>
-{% include "templatetags/games_small.html" %}
-
-{% comment %}
-<h4>Upcoming</h4>
-
-<h4>Standings</h4>
-
-
-<ul id="tabs"></ul>
-
-<div tab="MLS">MLS</div>
-<div tab="NASL">NASL</div>
-<div tab="USL-Pro">USL Pro</div>
-<div tab="Open Cup">Open Cup</div>
-{% endcomment %}
-
-
-{% comment %}
-<h4>News</h4>
-{% endcomment %}
-
 <p>soccerstats.us aims to create a free and complete statistical resource covering all US soccer history.</p>
-
-
-<h4><a href="{% url competition_index %}">Competitions</a></h4>
-<p>
-<a href="{% url competition_detail 'major-league-soccer' %}">MLS</a>,
-<a href="{% url competition_detail 'us-open-cup' %}">US Open Cup</a>,
-<a href="{% url competition_detail 'friendly' %}">Friendly</a>,
-<a href="{% url competition_detail 'north-american-soccer-league' %}">NASL (1967-1984)</a>,
-<a href="{% url competition_detail 'north-american-soccer-league-2011' %}">NASL (2011-)</a>...
-</p>
-
-<h4><a href="{% url drafts_index %}">Drafts</a></h4>
-<p>
-
-<a href="{% url draft_detail 'major-league-soccer' 'inaugural-draft' '1996' %}">1996 MLS Inaugural Draft</a>,
-<a href="{% url draft_detail 'major-league-soccer' 'allocation-draft' '2002' %}">2002 MLS Allocation Draft</a>,
-<a href="{% url draft_detail 'major-league-soccer' 'superdraft' '2011' %}">1996 MLS Superdraft</a>...
-</p>
-
-{% comment %}
-
-<h4><a href="{% url tool_index %}">Tools</a></h4>
-<a href="{% url game_search %}">Game search</a>,
-<a href="{% url stat_search %}">Game search</a>...
-</p>
-
-
-<p>
-<a href="{% url award_index %}">Awards</a>:
-</p>
-
-<p>
-<a href="/sources">Sources:</a>
-<a href="http://homepages.sover.net/~spectrum/">American Soccer History Archives</a>,
-<a href="http://thecup.us">TheCup.us</a>,
-<a href="http://nasljerseys.net">NaslJerseys.net</a>...
-</p>
-
-{% endcomment %}
 
 
 {% endblock %}

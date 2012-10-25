@@ -47,7 +47,7 @@
   <td><a href="{% url competition_detail standing.competition.slug %}">{{ standing.competition }}</a></td>
   {% endif %}
   <td>{{ standing.wins }}</td>
-  <td>{{ standing.ties }}</td>
+  {% datum_or_grey standing.ties %}
   <td>{{ standing.losses }}</td>
   <td>{{ standing.win_percentage_100|floatformat }}%</td>
 </tr>
@@ -68,7 +68,7 @@
 </table>
 {% endif %}
 
-
+{% if goal_leaders %}
 <h3>Goal leaders</h3>
 <table>
 {% for e in goal_leaders %}
@@ -78,8 +78,9 @@
 </tr>
 {% endfor %}
 </table>
+{% endif %}
 
-
+{% if game_leaders %}
 <h3>Game leaders</h3>
 <table>
 {% for e in game_leaders %}
@@ -89,9 +90,10 @@
 </tr>
 {% endfor %}
 </table>
+{% endif %}
 
 
-
+{% if recent_picks %}
 <h3>Draft picks</h3> 
 <table>
 {% for e in recent_picks %}
@@ -102,7 +104,7 @@
 {% endfor %}
 </table>
 <p>(<a href="{% url team_picks team.slug %}">complete</a>)</p>
-
+{% endif %}
 
 
 {% if head_coaches %}
