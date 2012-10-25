@@ -1,4 +1,7 @@
 from collections import defaultdict
+import datetime
+import random
+
 
 from django.db import models
 
@@ -8,7 +11,6 @@ from places.models import Stadium, City
 from sources.models import Source
 from teams.models import Team
 
-import random
 
 
 def pad_list(l, length):
@@ -242,7 +244,16 @@ class Game(models.Model):
 
     def score_or_result(self):
         """Returns a score string."""
-        return "%s - %s" % (self.team1_score_or_result, self.team2_score_or_result)
+        if self.date > datetime.date.today():
+            return 'np'
+
+        if self.result_unknown:
+            return '?'
+
+        elif self.team1_result == self.team2_result == '':
+            return 'np'
+        else:
+            return "%s - %s" % (self.team1_score_or_result, self.team2_score_or_result)
 
     @property
     def team1_score_or_result(self):

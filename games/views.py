@@ -8,6 +8,7 @@ from django.views.decorators.cache import cache_page
 from bios.models import Bio
 from games.models import Game
 from standings.models import Standing
+from stats.models import Stat
 
 from collections import defaultdict
 
@@ -33,12 +34,18 @@ def homepage(request):
     # Breadcrumbs?
 
     today = datetime.date.today()
+
+    game_leaders = Stat.career_stats.exclude(games_played=None).order_by('-games_played')[:10]
+    goal_leaders = Stat.career_stats.exclude(goals=None).order_by('-goals')[:10]
+
     context = {
         'today': today,
         'born': Bio.objects.born_on(today.month, today.day),
         'game': Game.objects.on(today.month, today.day),
         'games': Game.objects.exclude(date=None).order_by('-date')[:10],
         'standings': Standing.objects.filter(season__competition__slug='major-league-soccer').count(), 
+        'game_leaders': game_leaders,
+        'goal_leaders': goal_leaders
         }
     return render_to_response("homepage.html",
                               context,
