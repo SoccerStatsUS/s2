@@ -222,7 +222,7 @@ def season_games(request, competition_slug, season_slug):
 
     context = {
         'season': season,
-        'games': competition.game_set.filter(season=season)
+        'games': competition.game_set.filter(season=season).order_by('date'),
 
         }
     return render_to_response("competitions/season_games.html",
