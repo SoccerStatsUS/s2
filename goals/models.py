@@ -33,11 +33,14 @@ class Goal(models.Model):
     team = models.ForeignKey(Team)
     team_original_name = models.CharField(max_length=255)
     
-    player = models.ForeignKey(Bio)
+    player = models.ForeignKey(Bio, null=True)
+    own_goal_player = models.ForeignKey(Bio, null=True, related_name='own_goal_set')
+
     game = models.ForeignKey(Game, null=True)
 
     penalty = models.BooleanField(default=False)
     own_goal = models.BooleanField(default=False)
+
 
     objects = GoalManager()
     
