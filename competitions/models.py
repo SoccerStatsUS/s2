@@ -170,7 +170,7 @@ class Competition(models.Model):
     # Should this be called Tournament? Probably not.
 
     name = models.CharField(max_length=255)
-    abbreviation = models.CharField(max_length=7)
+    abbreviation = models.CharField(max_length=15)
     
     slug = models.SlugField()
 

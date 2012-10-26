@@ -19,6 +19,10 @@ class Appearance(models.Model):
 
     on = models.IntegerField(null=True)
     off = models.IntegerField(null=True)
+
+    result = models.CharField(max_length=5)
+    goals_for = models.IntegerField(null=True)
+    goals_against = models.IntegerField(null=True)
     
     # Default should be integer.
 
@@ -27,6 +31,7 @@ class Appearance(models.Model):
 
     class Meta:
         ordering = ('game', 'on', '-id' )
+        pass
 
 
     def opponent(self):

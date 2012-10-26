@@ -997,6 +997,9 @@ def load_lineups():
             'team_original_name': '',
             'age': age,
             'minutes': minutes,
+            'goals_for': a['goals_for'],
+            'goals_against': a['goals_against'],
+            'result': a['result'],
             }
 
     # Create the appearance objects.

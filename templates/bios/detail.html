@@ -38,10 +38,68 @@
 </div>
 {% endif %}
 
+<h4>Awards</h4>
+{% if bio.awards.exists %}
+<div tab="awards">
+<table>
+{% for award in bio.awards.all %}
+<tr>
 
-<ul id="tabs"></ul>
+  {% if award.season %}
+  <td><a href="{% url season_detail award.season.competition.slug award.season.slug %}">{{ award.season.name }}</a></td>
+  <td><a href="{% url competition_detail award.season.competition.slug %}">{{ award.season.competition }}</a></td>
+  {% else %}
+  <td></td>
+  <td></td>
+  {% endif %}
 
-<div id="tab_wrapper">
+  <td><a href="{% url award_detail award.award.id %}">{{ award.award.name }}</a></td>
+
+
+</tr>
+{% endfor %}
+</table>
+</div>
+{% endif %}
+
+<h4>Drafts</h4>
+{% if bio.pick_set.exists %}
+<table>
+{% for pick in bio.pick_set.all %}
+<tr>
+  <td>{{ pick.number }}</td>
+  <td><a href="{% url team_detail pick.team.slug %}">{{ pick.team }}</a></td>
+  <td><a href="{% url draft_detail pick.draft.competition.slug pick.draft.slug pick.draft.season %}">{{ pick.draft }}</a></td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+
+
+<h3>Recent Games</h3>
+{% if bio.appearance_set.exists %}
+<div tab="games">
+{% include "templatetags/appearances/bio.html" with appearances=recent_appearances %}
+</div>
+{% endif %}
+
+
+
+<h4>Salaries</h4>
+{% if bio.salary_set.count %}
+<div tab="salaries">
+<table>
+  {% for salary in bio.salary_set.all %}
+  <tr>
+    <td>{{ salary.season }}</td>
+    <td>${{ salary.amount }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+</div>
+{% endif %}
+
 
 {% if bio.season_stats.exists %}
 <div tab="stats">
@@ -64,11 +122,6 @@
 </div>
 {% endif %}
 
-{% if bio.appearance_set.exists %}
-<div tab="games">
-{% include "templatetags/appearances/bio.html" with appearances=bio.appearance_set.all %}
-</div>
-{% endif %}
 
 {% if bio.games_refereed.all %}
 <div tab="referee">
@@ -77,24 +130,6 @@
 {% endif %}
 
 
-{% if bio.awards.exists %}
-<div tab="awards">
-<table>
-{% for award in bio.awards.all %}
-<tr>
-  <td><a href="{% url award_detail award.award.id %}">{{ award.award.name }}</a></td>
-
-  {% if award.season %}
-  <td><a href="{% url season_detail award.season.competition.slug award.season.slug %}">{{ award.season }}</a></td>
-  {% else %}
-  <td></td>
-  {% endif %}
-
-</tr>
-{% endfor %}
-</table>
-</div>
-{% endif %}
 
 
 
@@ -104,11 +139,7 @@
 </div>
 {% endif %}
 
-{% if bio.pick_set.exists %}
-<div tab="drafts">
-{% include "templatetags/draft.html" with picks=bio.pick_set.all %}
-</div>
-{% endif %}
+
 
 
 {% if bio.position_set.count %}
@@ -118,16 +149,5 @@
 {% endif %}
 
 
-
-{% if bio.salary_set.count %}
-<div tab="salaries">
-{% include "templatetags/salaries.html" with salaries=bio.salary_set.all %}
-</div>
-{% endif %}
-
-
-
-</div>
-    
 
 {% endblock %}

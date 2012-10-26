@@ -22,6 +22,15 @@ urlpatterns = patterns('bios.views',
                            'person_detail',
                            name='person_detail'),
 
+                       url(r'^(?P<slug>[a-z0-9-]+)/goals/$',
+                           'person_detail_goals',
+                           name='person_detail_goals'),
+
+                       url(r'^(?P<slug>[a-z0-9-]+)/games/$',
+                           'person_detail_games',
+                           name='person_detail_games'),
+
+
                        url(r'^ajax/stats/$',
                            'bio_detail_stats',
                            name='bio_detail_stats'),

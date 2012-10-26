@@ -102,7 +102,8 @@ class Bio(models.Model):
 
 
     class Meta:
-        ordering = ('name',)
+        pass
+        #ordering = ('name',)
 
     def __unicode__(self):
         return self.name
