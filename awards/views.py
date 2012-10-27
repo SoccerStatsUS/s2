@@ -34,7 +34,7 @@ def award_detail(request, award_id):
     # Consider denormalizing data and cacheing.
     awarditems = award.awarditem_set.all()
     if not has_competition:
-        bio_ids = [e[0] for e in awarditems.values_list('id')]
+        bio_ids = [e[0] for e in awarditems.values_list('object_id')]
         recipients = Bio.objects.filter(id__in=bio_ids)
     else:
         recipients = None
