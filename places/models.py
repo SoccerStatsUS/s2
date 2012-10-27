@@ -68,6 +68,10 @@ class Country(models.Model):
         from games.models import Game
         return Game.objects.filter(city__country=self)
 
+    class Meta:
+        ordering = ('name',)
+
+
 
 class StateManager(models.Manager):
 
@@ -90,6 +94,10 @@ class State(models.Model):
     def __unicode__(self):
         return self.name
         #return "%s, %s" % (self.name, self.country)
+
+    class Meta:
+        ordering = ('name',)
+
 
 
 class StatePopulation(models.Model):
@@ -117,6 +125,10 @@ class City(models.Model):
             return "%s, %s" % (self.name, self.country.name)
         else:
             return self.name
+
+    class Meta:
+        ordering = ('name',)
+
 
 
 

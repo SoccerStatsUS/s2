@@ -155,6 +155,8 @@ def season_detail(request, competition_slug, season_slug):
     goal_leaders = stats.exclude(goals=None).order_by('-goals')
     game_leaders = stats.exclude(games_played=None).order_by('-games_played')
 
+
+
     context = {
         'season': season,
         'stats': stats.exists(),
@@ -165,6 +167,9 @@ def season_detail(request, competition_slug, season_slug):
         'nation_list': nation_list,
         'average_attendance': average_attendance,
         'attendance_game_count': attendance_game_count,
+        'top_attendance_games': games.exclude(attendance=None).order_by('-attendance')[:20],
+        'worst_attendance_games': games.exclude(attendance=None).order_by('attendance')[:20],
+
         }
     return render_to_response("competitions/season_detail.html",
                               context,

@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load datum_or_none %}
 
 {% block title %}{{ bio.name }} Statistics and Information{% endblock %}
 {% block metadescription %}{{ bio.name }} soccer stats with games played, goals scored, bio data, awards...{% endblock %}
@@ -38,8 +37,9 @@
 </div>
 {% endif %}
 
-<h4>Awards</h4>
+
 {% if bio.awards.exists %}
+<h4>Awards</h4>
 <div tab="awards">
 <table>
 {% for award in bio.awards.all %}
@@ -49,8 +49,8 @@
   <td><a href="{% url season_detail award.season.competition.slug award.season.slug %}">{{ award.season.name }}</a></td>
   <td><a href="{% url competition_detail award.season.competition.slug %}">{{ award.season.competition }}</a></td>
   {% else %}
-  <td></td>
-  <td></td>
+  <td class="grey"></td>
+  <td class="grey"></td>
   {% endif %}
 
   <td><a href="{% url award_detail award.award.id %}">{{ award.award.name }}</a></td>
@@ -62,8 +62,9 @@
 </div>
 {% endif %}
 
-<h4>Drafts</h4>
+
 {% if bio.pick_set.exists %}
+<h4>Drafts</h4>
 <table>
 {% for pick in bio.pick_set.all %}
 <tr>
@@ -76,8 +77,9 @@
 {% endif %}
 
 
-<h3>Recent Games</h3>
+
 {% if bio.appearance_set.exists %}
+<h3>Recent Games</h3>
 <div tab="games">
 {% include "templatetags/appearances/bio.html" with appearances=recent_appearances %}
 </div>
@@ -85,8 +87,9 @@
 
 
 
-<h4>Salaries</h4>
+
 {% if bio.salary_set.count %}
+<h4>Salaries</h4>
 <div tab="salaries">
 <table>
   {% for salary in bio.salary_set.all %}
@@ -124,6 +127,7 @@
 
 
 {% if bio.games_refereed.all %}
+<h3>Games Refereed</h3>
 <div tab="referee">
 {% include "templatetags/games.html" with games=bio.games_refereed.all %}
 </div>

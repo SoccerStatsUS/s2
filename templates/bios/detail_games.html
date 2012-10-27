@@ -2,6 +2,8 @@
 
 {% block content %}
 
+<h3>{{ bio }}</h3>
+
 <form method="GET" action=".">
 
 {% csrf_token %}
@@ -11,7 +13,6 @@
 <input type="submit" value="submit" />
 
 </form>
-
 
 {% include "templatetags/appearances/bio.html" with appearances=appearances %}
 

@@ -15,7 +15,7 @@
 
     {% if game.stadium %}
     <td>
-      <a href="{% url stadium_detail game.stadium.slug %}"><strong>{{ game.stadium }}</strong></a>{% if game.city.slug %}<a href="{% url city_detail game.city.slug %}">, {{ game.city.name }}</a>{% endif %}
+      <a href="{% url stadium_detail game.stadium.slug %}"><strong>{{ game.stadium }}</strong></a>
     </td>
 
 

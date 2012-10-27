@@ -1,3 +1,5 @@
+{% load datum_or_none %}
+
 <table>
   <thead>
   <tr>
@@ -18,7 +20,7 @@
     <td><a href="{% url date_detail goal.game.date.year goal.game.date.month goal.game.date.day %}">{{ goal.game.date }}</a></td>
     <td class="{{ goal.result }}"><a href="{% url game_detail goal.game.id %}">{{ goal.game.score }}</a></td>
     <td><a href="{% url team_detail goal.opponent.slug %}">{{ goal.opponent }}</a></td>
-    <td>{{ goal.minute }}</td>
+    {% datum_or_grey goal.minute %}
   {% endfor %}
   </tbody>
 </table>

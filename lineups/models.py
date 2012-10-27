@@ -13,7 +13,7 @@ class Appearance(models.Model):
     player = models.ForeignKey(Bio)
 
     team = models.ForeignKey(Team)
-    team_original_name = models.CharField(max_length=255)
+    #team_original_name = models.CharField(max_length=255)
     
     game = models.ForeignKey(Game)
 
@@ -34,11 +34,25 @@ class Appearance(models.Model):
         pass
 
 
+
+
     def opponent(self):
         if self.team == self.game.team1:
             return self.game.team2
         else:
             return self.game.team1
+
+    def team_original_name(self):
+        if self.team == self.game.team1:
+            return self.game.team1_original_name
+        else:
+            return self.game.team2_original_name
+
+    def opponent_original_name(self):
+        if self.team == self.game.team1:
+            return self.game.team2_original_name
+        else:
+            return self.game.team1_original_name
 
     """
     @property
@@ -59,21 +73,29 @@ class Appearance(models.Model):
     def assists(self):
         return None
 
-    @property
-    def result(self):
-        return self.game.result(self.team)
+    #@property
+    #def result(self):
+    #    return self.game.result(self.team)
 
+    def score_or_result(self):
+        if self.team == self.game.team1:
+            return self.game.score_or_result()
+        else:
+            return self.game.reverse_score_or_result()
 
+    """
     @property
     def goals_for(self):
         team_goals = Goal.objects.filter(game=self.game, team=self.team, minute__gte=self.on, minute__lte=self.off).count()
         return team_goals
+
 
     @property
     def goals_against(self):
         opponent = self.game.opponent(self.team)
         opponent_goals = Goal.objects.filter(game=self.game, team=opponent, minute__gte=self.on, minute__lte=self.off).count()
         return opponent_goals
+    """
 
 
     @property

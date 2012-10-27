@@ -132,11 +132,11 @@ def calculate_standings(team, games=None):
     for game in games:
         r = game.result(team)
 
-        if r == 'win':
+        if r == 'w':
             wins += 1
-        elif r == 'loss':
+        elif r == 'l':
             losses += 1
-        elif r == 'tie':
+        elif r == 't':
             ties += 1
 
     return wins, losses, ties

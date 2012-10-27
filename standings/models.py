@@ -84,7 +84,7 @@ class Standing(models.Model):
         for game in games:
             result = game.result(self.team)
             d[result] += 1
-        return (d['win'], d['tie'], d['loss'])
+        return (d['w'], d['t'], d['l'])
 
 
     def round_points(self, round):

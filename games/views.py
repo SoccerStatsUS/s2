@@ -38,11 +38,12 @@ def homepage(request):
     game_leaders = Stat.career_stats.exclude(games_played=None).order_by('-games_played')[:10]
     goal_leaders = Stat.career_stats.exclude(goals=None).order_by('-goals')[:10]
 
+    recent_games = Game.objects.exclude(date=None).filter(date__lt=today).order_by('-date')[:10]
+
     context = {
         'today': today,
         'born': Bio.objects.born_on(today.month, today.day),
-        'game': Game.objects.on(today.month, today.day),
-        'games': Game.objects.exclude(date=None).order_by('-date')[:10],
+        'games': recent_games,
         'standings': Standing.objects.filter(season__competition__slug='major-league-soccer').count(), 
         'game_leaders': game_leaders,
         'goal_leaders': goal_leaders

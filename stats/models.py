@@ -266,9 +266,9 @@ class Stat(models.Model):
             except:
                 print "FAIL"
 
-        self.wins = d['win']
-        self.losses = d['loss']
-        self.ties = d['tie']
+        self.wins = d['w']
+        self.losses = d['l']
+        self.ties = d['t']
         self.goals_for = d['goals_for']
         self.goals_against = d['goals_against']
         self.plus_minus = self.goals_for - self.goals_against

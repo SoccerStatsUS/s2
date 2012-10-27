@@ -242,7 +242,7 @@ class Game(models.Model):
         """Returns a score string."""
         return "%s - %s" % (self.team1_score, self.team2_score)
 
-    def score_or_result(self):
+    def score_or_result_generic(self, func):
         """Returns a score string."""
         if self.date > datetime.date.today():
             return 'np'
@@ -253,7 +253,24 @@ class Game(models.Model):
         elif self.team1_result == self.team2_result == '':
             return 'np'
         else:
+            return func()
+
+
+    def result_string(self):
             return "%s - %s" % (self.team1_score_or_result, self.team2_score_or_result)
+
+    def score_or_result(self):
+        return self.score_or_result_generic(self.result_string)
+
+    def reverse_result_string(self):
+            return "%s - %s" % (self.team2_score_or_result, self.team1_score_or_result)
+
+    def reverse_score_or_result(self):
+        return self.score_or_result_generic(self.reverse_result_string)
+
+
+
+
 
     @property
     def team1_score_or_result(self):
@@ -450,17 +467,17 @@ class Game(models.Model):
             return None
 
         if self.team1_score == self.team2_score: 
-            return 'tie'
+            return 't'
         if self.team1_score > self.team2_score: 
             if team == self.team1:
-                return 'win'
+                return 'w'
             else:
-                return 'loss'
+                return 'l'
         else:
             if team == self.team1:
-                return 'loss'
+                return 'l'
             else:
-                return 'win'
+                return 'w'
 
 
 

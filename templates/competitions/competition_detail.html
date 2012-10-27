@@ -16,14 +16,6 @@
 
 <div id="tab_wrapper">
 
-{% if competition.alltime_standings.exists %}
-<div tab="standings">
-{% include "templatetags/slim_standings.html" with standings=big_winners %}
-</div>
-{% endif %}
-
-
-
 
 {% if competition.season_set.exists %}
 <div tab="seasons">
@@ -78,16 +70,21 @@
 {% include "templatetags/top_attendance.html" with games=top_attendance_games %}
 {% endif %}
 
-{% if bottom_attendance_games %}
+{% if worst_attendance_games %}
 <h3>Bottom attendances</h3>
 {% include "templatetags/top_attendance.html" with games=worst_attendance_games %}
 {% endif %}
-
-
 </div>
-
-
 {% endif %}
+
+
+
+{% if competition.alltime_standings.exists %}
+<div tab="standings">
+{% include "templatetags/slim_standings.html" with standings=big_winners %}
+</div>
+{% endif %}
+
 
 {% if games %}
 <div tab="games">
@@ -95,15 +92,12 @@
 </div>
 {% endif %}
 
+
 {% if stats %}
 <div tab="stats" >
 {% include "templatetags/career_bio.html" %}
 </div>
 {% endif %}
-
-
-
-
 
 {% if competition.award_set.exists %}
 <div tab="awards">

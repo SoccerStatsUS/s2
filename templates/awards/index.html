@@ -2,6 +2,34 @@
 
 {% block content %}
 
+
+<table>
+  <thead>
+    <tr>
+      <th>competition</th>
+      <th>award</th>
+      <th>type</th>
+    </tr>
+  </thead>
+
+{% for award in awards %}
+  <tr>
+    {% if award.competition %}
+    <td><a href="{% url competition_detail award.competition.slug %}">{{ award.competition }}</a></td>
+    {% else %}
+    <td class="grey"></td>
+    {% endif %}
+
+    <td><a href="{% url award_detail award.id %}">{{ award.name }}</a></td>
+    <td>{{ award.type }}</td>
+  </tr>
+{% endfor %}
+</table>
+
+
+
+
+{% comment %}
 {% regroup awards by competition as ac %}
 
 <ul>
@@ -31,6 +59,6 @@
 </ul>
 
 {% endfor %}
-
+{% endcomment %}
 
 {% endblock %}

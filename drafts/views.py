@@ -13,8 +13,10 @@ def drafts_index(request):
     List all drafts.
     """
 
+    drafts = Draft.objects.order_by('season', 'start')
+
     context = {
-        'drafts': Draft.objects.all()
+        'drafts': drafts,
         }
     return render_to_response("drafts/index.html",
                               context,

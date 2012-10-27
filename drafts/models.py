@@ -33,7 +33,7 @@ class Draft(models.Model):
 
 
     def __unicode__(self):
-        return "%s %s" % (self.competition, self.name)
+        return "%s %s %s" % (self.season, self.competition, self.name)
 
     class Meta:
         ordering = ('competition', 'season', 'start', 'name', )

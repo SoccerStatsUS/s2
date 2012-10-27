@@ -25,6 +25,7 @@ def person_list_generic(request, person_list=None):
                               context_instance=RequestContext(request)
                               )    
 
+
 class AppearanceStanding(object):
     # Use this to generate a standing for a given set of appearances.
     def __init__(self, appearances):
@@ -35,7 +36,6 @@ class AppearanceStanding(object):
         c = Counter(results)
         self.wins, self.ties, self.losses = c['w'], c['t'], c['l']
         
-
 
 def one_word(request):
     bios = Bio.objects.exclude(name__contains=' ')
@@ -97,25 +97,30 @@ def person_detail(request, slug):
 
 def person_detail_games(request, slug):
     bio = get_object_or_404(Bio, slug=slug)
+    appearances = bio.appearance_set.all()
     
-    if request.method == 'POST':
-        form = BioAppearanceForm(bio, request.POST)
+    if request.method == 'GET':
+        form = BioAppearanceForm(bio, request.GET)
         if form.is_valid():
             if form.cleaned_data['result']:
-                games = games.filter(result=form.cleaned_data['result'])
+                appearances = appearances.filter(result=form.cleaned_data['result'])
 
             if form.cleaned_data['team']:
-                games = games.filter(team=form.cleaned_data['team'])
+                appearances = appearances.filter(team=form.cleaned_data['team'])
 
             if form.cleaned_data['competition']:
-                games = games.filter(game__competition=form.cleaned_data['competition'])
+                appearances = appearances.filter(game__competition=form.cleaned_data['competition'])
+
+            if form.cleaned_data['starter']:
+                appearances = appearances.filter(on=0)
+
 
     else:
-        form = BioAppearanceForm(bio, request.POST)
+        form = BioAppearanceForm(bio)
     
     context = {
         'form': form,
-        'appearances': bio.appearance_set.all(),
+        'appearances': appearances,
         }
     return render_to_response("bios/detail_games.html",
                               context,

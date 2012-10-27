@@ -3,6 +3,32 @@
 
 {% block content %}
 
+
+<table>
+  <thead>
+    <tr>
+      <th>season</th>
+      <th>competition</th>
+      <th>name</th>
+      <th>date</th>
+    </tr>
+  </thead>
+{% for draft in drafts %}
+  <tr>
+    <td>{{ draft.season }}</td>
+    <td><a href="{% url competition_detail draft.competition.slug %}">{{ draft.competition }}</a></td>
+    <td><a href="{% url draft_detail draft.competition.slug draft.slug draft.season %}">{{ draft.name }}</a></td>
+
+    {% if draft.start %}
+    <td><a href="{% url date_detail draft.start.year draft.start.month draft.start.day %}">{{ draft.start }}</a></td>
+    {% else %}
+    <td class="grey"></td>
+    {% endif %}
+  </tr>
+{% endfor %}
+</table>
+
+{% comment %}
 {% regroup drafts by competition as dc %}
 
 <ul>
@@ -44,6 +70,6 @@
 </table>
 
 {% endfor %}
-
+{% endcomment %}
 
 {% endblock %}

@@ -987,6 +987,8 @@ def load_lineups():
         else:
             minutes = None
 
+        result = a.get('result') or ''
+
 
         return {
             'team_id': team_id,
@@ -994,12 +996,12 @@ def load_lineups():
             'player_id': player_id,
             'on': a['on'],
             'off': a['off'],
-            'team_original_name': '',
+            #'team_original_name': '',
             'age': age,
             'minutes': minutes,
             'goals_for': a['goals_for'],
             'goals_against': a['goals_against'],
-            'result': a['result'],
+            'result': result,
             }
 
     # Create the appearance objects.

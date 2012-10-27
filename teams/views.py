@@ -1,15 +1,19 @@
 from collections import defaultdict, OrderedDict
 
+from django.db.models import Q
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.views.decorators.cache import cache_page
 
 from competitions.models import Season
 from games.models import Game
+from teams.forms import TeamGameForm, TeamStatForm
 from teams.models import Team
 from standings.models import Standing
 from stats.models import Stat
 
-from django.views.decorators.cache import cache_page
+
+
 
 
 def team_index(request):
@@ -133,9 +137,26 @@ def team_stats(request, team_slug):
     """
     team = get_object_or_404(Team, slug=team_slug)
 
+    stats = Stat.team_stats.filter(team=team, competition=None)
+
+    if request.method == 'GET':
+        form = TeamStatForm(team, request.GET)
+
+        if form.is_valid():
+            """
+            if form.cleaned_data['birthplace']:
+                stats = stats.filter(player__birthplace=form.cleaned_data['birthplace'])
+                """
+            if form.cleaned_data['birth_state']:
+                stats = stats.filter(player__birthplace__state=form.cleaned_data['birth_state'])
+
+    else:
+        form = TeamStatForm(team)
+
     context = {
+        'form': form,
         'team': team,
-        'stats': Stat.team_stats.filter(team=team, competition=None),
+        'stats': stats,
         }
 
     return render_to_response("teams/stats.html",
@@ -168,16 +189,44 @@ def team_picks(request, team_slug):
                               )
     
 
-
+@cache_page(60 * 24)
 def team_games(request, team_slug):
     """
     Just about the most important view of all.
     """
     team = get_object_or_404(Team, slug=team_slug)
 
+    if request.method == 'GET':
+        form = TeamGameForm(team, request.GET)
+
+        if form.is_valid():
+
+            if form.cleaned_data['opponent']:
+                games = Game.objects.team_filter(team, form.cleaned_data['opponent'])
+            else:
+                games = Game.objects.team_filter(team)
+
+            if form.cleaned_data['competition']:
+                games = games.filter(competition=form.cleaned_data['competition'])
+
+            if form.cleaned_data['stadium']:
+                games = games.filter(stadium=form.cleaned_data['stadium'])
+
+            r = form.cleaned_data['result']
+            if r:
+                if r == 't':
+                    games = games.filter(team1_result='t')
+                else:
+                    games = games.filter(Q(team1=team, team1_result=r) | Q(team2=team, team2_result=r))
+
+    else:
+        form = TeamGameForm(bio)
+
+
     context = {
         'team': team,
-        'games': team.game_set(),
+        'form': form,
+        'games': games,
         }
 
     return render_to_response("teams/games.html",
