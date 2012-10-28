@@ -52,14 +52,19 @@
   {% datum_or_grey stat.wins %}
   {% datum_or_grey stat.ties %}
   {% datum_or_grey stat.losses %}
-  {% endcomment %}
+
 
   {% datum_or_grey stat.goals_for %}
   {% datum_or_grey stat.goals_against %}
   {% datum_or_grey stat.plus_minus %}
+  {% endcomment %}
+
+  {% comment %}
   <td>{{ stat.plus_minus_per_90|floatformat:"2" }}</td>
   <td>{{ stat.goals_assists_per_90|floatformat:"2" }}</td>
+  {% endcomment %}
 
+  {% comment %}
   {% if stat.player.birthdate %}
   <td><a href="{% url date_detail stat.player.birthdate.year stat.player.birthdate.month stat.player.birthdate.day %}">{{ stat.player.birthdate }}</a></td>
   {% else %}
@@ -77,7 +82,7 @@
   {% else %}
   <td></td>
   {% endif %}
-
+  {% endcomment %}
 
 
 </tr>

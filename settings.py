@@ -207,6 +207,15 @@ INSTALLED_APPS = (
     'django_extensions',
 )
 
+
+def show_toolbar(request):
+    return True
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': show_toolbar,
+    # Rest of config
+}
+
 # Various apps available
 DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.version.VersionDebugPanel',

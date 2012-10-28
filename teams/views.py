@@ -1,4 +1,5 @@
 from collections import defaultdict, OrderedDict
+import datetime
 
 from django.db.models import Q
 from django.shortcuts import render_to_response, get_object_or_404
@@ -105,6 +106,8 @@ def team_detail(request, team_slug):
     """
     team = get_object_or_404(Team, slug=team_slug)
 
+    today = datetime.date.today()
+
     stats = Stat.team_stats.filter(team=team, competition=None)
 
     goal_leaders = stats.exclude(goals=None).order_by('-goals')
@@ -113,12 +116,14 @@ def team_detail(request, team_slug):
     competition_standings = Standing.objects.filter(team=team, season=None)
     recent_picks = team.pick_set.exclude(player=None).order_by('-draft__season', 'number')[:10]
 
+    recent_games = team.game_set().filter(date__lt=today).order_by('-date').select_related()[:10]
+
     context = {
         'team': team,
         'stats': stats,
         'goal_leaders': goal_leaders[:10],
         'game_leaders': game_leaders[:10],
-        'games': team.game_set().exists(),
+        'recent_games': recent_games,
         'competition_standings': competition_standings,
         'head_coaches': team.position_set.filter(name='Head Coach'),
         'current_staff': team.position_set.filter(end=None),
@@ -156,7 +161,7 @@ def team_stats(request, team_slug):
     context = {
         'form': form,
         'team': team,
-        'stats': stats,
+        'stats': stats, #.select_related(),
         }
 
     return render_to_response("teams/stats.html",
@@ -175,12 +180,12 @@ def team_picks(request, team_slug):
     picks = team.pick_set.all()
 
     player_ids = [e[0] for e in picks.exclude(player=None).values_list('player')]
-    team_stats = Stat.team_stats.filter(team=team, player__in=player_ids)
-    career_stats = Stat.career_stats.filter(team=team, player__in=player_ids)
+    #team_stats = Stat.team_stats.filter(team=team, player__in=player_ids)
+    #career_stats = Stat.career_stats.filter(team=team, player__in=player_ids)
 
     context = {
         'team': team,
-        'picks': picks,
+        'picks': picks.select_related(),
         }
 
     return render_to_response("teams/picks.html",
@@ -226,7 +231,7 @@ def team_games(request, team_slug):
     context = {
         'team': team,
         'form': form,
-        'games': games,
+        'games': games.select_related(),
         }
 
     return render_to_response("teams/games.html",

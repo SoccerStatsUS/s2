@@ -46,7 +46,7 @@ def year_detail(request, year):
 
     stadium_ids = set([e[0] for e in games.exclude(stadium=None).values_list('stadium')])
     stadiums = Stadium.objects.filter(id__in=stadium_ids)
-
+    
     next_date_tuple = previous_date_tuple = None
 
     previous_game = Game.objects.filter(date__lt=datetime.date(year, 1, 1))
@@ -60,12 +60,12 @@ def year_detail(request, year):
         next_date_tuple = (next_date.year, '', '')
 
     context = {
-        'games': games,
-        'births': births,
-        'hires': hires,
-        'fires': fires,
+        'games': games.select_related(),
+        'births': births.select_related(),
+        'hires': hires.select_related(),
+        'fires': fires.select_related(),
         'years': years,
-        'stadiums': stadiums[:20],
+        'stadiums': stadiums,
         'date': str(year),
         'previous_date': previous_date_tuple,
         'next_date': next_date_tuple,
@@ -109,7 +109,7 @@ def month_detail(request, year, month):
 
 
     context = {
-        'games': games,
+        'games': games.select_related(),
         'births': births,
         'hires': hires,
         'fires': fires,
@@ -157,7 +157,7 @@ def date_detail(request, year, month, day):
         next_date_tuple = (next_date.year, next_date.month, next_date.day)
 
     context = {
-        'games': games,
+        'games': games.select_related(),
         'births': births,
         'hires': hires,
         'fires': fires,
@@ -184,7 +184,7 @@ def day_detail(request, month, day):
     hires = Position.objects.filter(start__month=month, start__day=day)
     fires = Position.objects.filter(end__month=month, end__day=day)
     context = {
-        'games': games,
+        'games': games.select_related(),
         'births': births,
         'hires': hires,
         'fires': fires,

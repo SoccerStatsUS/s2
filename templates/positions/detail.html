@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load datum_or_none %}
+
+{% block content %}
+
+
+
+<table id="position_index" >
+
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>job</th>
+      <th>team</th>
+      <th>start</th>
+      <th>end</th>
+      <th>length</th>
+      <th>wins</th>
+      <th>losses</th>
+      <th>ties</th>
+      <th>win %</th>
+    </tr>
+  </thead>
+
+
+{% for position in positions %}
+<tr>
+  <td><a href="{% url person_detail position.person.slug %}">{{ position.person }}</a></td>
+  <td><a>{{ position.name|truncatechars:32 }}</a></td>
+  <td><a href="{% url team_detail position.team.slug %}">{{ position.team }}</a></td>
+  {% include "templatetags/date_fragment.html" with date=position.start %}
+  {% include "templatetags/date_fragment.html" with date=position.end %}
+  <td>{{ position.length }}</td>
+  {% datum_or_grey position.wins %}
+  {% datum_or_grey position.ties %}
+  {% datum_or_grey position.losses %}
+  {% with wp=position.win_percentage|floatformat:3 %}
+  {% datum_or_grey wp %}
+  {% endwith %}
+
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

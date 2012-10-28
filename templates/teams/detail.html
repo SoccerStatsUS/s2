@@ -8,8 +8,6 @@
 
 <script type="text/javascript">
   $(document).ready(function (){
-  $("div[tab='games']").load("{% url games_ajax_by_id %}?team={{ team.id }}");
-  $("div[tab='stats']").load("{% url stats_ajax_by_id %}?team={{ team.id }}&type=team");
   });
 </script>
 
@@ -39,6 +37,7 @@
   <th>win %</th>
 </tr>
 
+
 {% for standing in competition_standings %}
 <tr>
   {% if standing.competition == None %}
@@ -53,6 +52,14 @@
 </tr>
 {% endfor %}
 </table>
+
+
+
+{% if recent_games %}
+<h3>Recent games (<a href="{% url team_games team.slug %}">All {{ team }} games</a>)</h3> 
+{% include "templatetags/top_attendance.html" with games=recent_games %}
+{% endif %}
+
 
 
 {% if team.awards.exists %}
@@ -70,6 +77,7 @@
 
 {% if goal_leaders %}
 <h3>Goal leaders</h3>
+<p><a href="{% url team_stats team.slug %}">(All-time {{ team }} stats )</a></p>
 <table>
 {% for e in goal_leaders %}
 <tr>
@@ -94,104 +102,30 @@
 
 
 {% if recent_picks %}
-<h3>Draft picks</h3> 
+<h3>Recent draft picks</h3> 
+<p>(<a href="{% url team_picks team.slug %}">complete {{ team }} picks</a>)</p>
 <table>
 {% for e in recent_picks %}
 <tr>
   <td>{{ e.draft.season }}</td>
+  <td>{{ e.number }}</td>
+  <td><a href="{% url draft_detail e.draft.competition.slug e.draft.slug e.draft.season %}">{{ e.draft.name }}</a></td>
+
   <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
 </tr>
 {% endfor %}
 </table>
-<p>(<a href="{% url team_picks team.slug %}">complete</a>)</p>
-{% endif %}
-
-
-{% if head_coaches %}
-<h3>Coaches</h3>
-<table>
-
-<thead>
-  <tr>
-    <th>name</th>
-    <th>start</th>
-    <th>end</th>
-    <th>wins</th>
-    <th>losses</th>
-    <th>ties</th>
-    
-    {% comment %}
-    <th>%</th>
-    {% endcomment %}
-
-  </tr>
-</thead>
-
-{% for position in head_coaches %}
-<tr>
-  <td><a href="{% url person_detail position.person.slug %}">{{ position.person }}</a></td>
-  {% if position.start %}
-  <td><a href="{% url date_detail position.start.year position.start.month position.start.day %}">{{ position.start|date:"m-d-Y" }}</a></td>
-  {% else %}
-  <td></td>
-  {% endif %}
-
-  {% if position.end %}
-  <td><a href="{% url date_detail position.end.year position.end.month position.end.day %}">{{ position.end|date:"m-d-Y" }}</td>
-  {% else %}
-  <td></td>
-  {% endif %}
-
-  {% datum_or_grey position.wins %}
-  {% datum_or_grey position.losses %}
-  {% datum_or_grey position.ties %}
-  {% with wp=position.win_percentage|floatformat:3 %}
-  {% datum_or_grey wp %}
-  {% endwith %}
-
-</tr>
-{% endfor %}
-</table>
-
-{% endif %}
-
-
-</div>
-
-
-
-{% if team.standing_set.exists %}
-<div tab="standings">
-{% include "templatetags/standings.html" with standings=team.standings_by_date %}
-</div>
-{% endif %}
-
-{% if stats %}
-<div tab="stats">
-</div>
-{% endif %}
-
-{% if team.game_set.exists %}
-
-<div tab="games">
-
-</div>
-
-{% comment %}
-<a href="">All games</a>
-{% endcomment %}
 
 {% endif %}
 
 
 {% if current_staff %}
-<div tab="staff">
-
+<h3>Staff</h3>
 <table>
 {% for position in current_staff %}
 <tr>
   <td><a href="{% url person_detail position.person.slug %}">{{ position.person }}</a></td>
-  <td>{{ position.name }}</td>
+  <td>{{ position.name|truncatechars:20 }}</td>
   {% if position.start %}
   <td><a href="{% url date_detail position.start.year position.start.month position.start.day %}">{{ position.start|default_if_none:'' }}</a></td>
   {% else %}
@@ -201,15 +135,6 @@
 </tr>
 {% endfor %}
 </table>
-</div>
-{% endif %}
-
-
-
-{% if team.pick_set.exists %}
-<div tab="draft picks">
-{% include "templatetags/draft_small.html" with picks=team.pick_set.all %}
-</div>
 {% endif %}
 
 

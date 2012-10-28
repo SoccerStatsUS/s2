@@ -18,16 +18,14 @@ def index(request):
                               )
 
 
-def position_detail(request, name):
-    # Fuck this.
-
-    bio = get_object_or_404(Bio, id=pid)
+def position_detail(request, slug):
     
-    # Should not be doing this here.
+    positions = Position.objects.filter(slug=slug)
+
     context = {
-        "bio": bio
+        'positions': positions.select_related(),
         }
-    return render_to_response("bios/detail.html",
+    return render_to_response("positions/detail.html",
                               context,
                               context_instance=RequestContext(request)
                               )   

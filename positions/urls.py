@@ -6,7 +6,9 @@ urlpatterns = patterns('positions.views',
                            'index',
                            name='index'),
 
-
+                       url(r'^(?P<slug>[a-z0-9-]+)/$',
+                           'position_detail',
+                           name='position_detail'),
 
                        url(r'^managers/$',
                            'manager_index',

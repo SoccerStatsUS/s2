@@ -88,8 +88,9 @@
 <tr>
   <td><a href="{% url person_detail position.person.slug %}">{{ position.person.name }}</a></td>
   <td><a href="{% url team_detail position.team.slug %}">{{ position.team }}</a></td>
-  <td>{{ position.name }}</td>
+  <td><a href="{% url position_detail position.slug %}">{{ position.name }}</a></td>
   <td>{{ position.start }}</td>
+  <td>{{ position.end }}</td>
 </tr>
 {% endfor %}
 </table>
@@ -104,7 +105,8 @@
 <tr>
   <td><a href="{% url person_detail position.person.slug %}">{{ position.person.name }}</a></td>
   <td><a href="{% url team_detail position.team.slug %}">{{ position.team }}</a></td>
-  <td>{{ position.name }}</td>
+  <td><a href="{% url position_detail position.slug %}">{{ position.name }}</a></td>
+  <td>{{ position.start }}</td>
   <td>{{ position.end }}</td>
 </tr>
 {% endfor %}

@@ -26,6 +26,7 @@
     <td></td>
     {% endif %}
     <td><a href="{% url competition_detail game.competition.slug %}">{{ game.competition.abbreviation }}</a></td>
+
     <td class="{{ game.competition.color_code }}-bg"></td>
 
     {% if game.winner == game.team1 %}
@@ -43,12 +44,9 @@
     <td><a href="{% url team_detail game.team2.slug %}">{{ game.team2_original_name }}</a></td>
     {% endif %}
 
-
     {% if game.stadium %}
     <td><a href="{% url stadium_detail game.stadium.slug %}"><strong>{{ game.stadium }}</strong></a></td>
     {# {% if game.city.slug %}<a href="{% url city_detail game.city.slug %}">, {{ game.city.name }}</a>{% endif %} #}
-
-
     {% else %}
     {% if game.city %}
     <td><a href="{% url city_detail game.city.slug %}">{{ game.city }}</a></td>
@@ -57,15 +55,18 @@
     {% endif %}
     {% endif %}
 
-    
     {% if game.referee %}
     <td><a href="{% url person_detail game.referee.slug %}">{{ game.referee }}</a></td>
     {% else %}
     <td></td>
     {% endif %}
     {% datum_or_grey game.attendance %}
+
+    {% comment %}
     <td class="{{ game.color_code }}-bg"></td>
     <td class="{{ game.color_code_starters }}-bg">{{ game.starter_numbers }}</td>
+    {% endcomment %}
+
   </tr>
   {% endfor %}
 </table>
