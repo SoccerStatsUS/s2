@@ -16,7 +16,7 @@ from stats.models import Stat
 
 
 
-
+@cache_page(60 * 60 * 12)
 def team_index(request):
     """
     Teams shown by letter.
@@ -54,15 +54,16 @@ def team_standings(request):
 
 
 
-def team_list_generic(request, team_list=None):
+def team_list_generic(request, team_list=None, standing_type=None):
 
     if team_list is None:
         standings = Standing.objects.filter(competition=None).order_by("-wins")[:1000]
     else:
-        standings = Standing.objects.filter(competition=None, team__in=team_list)
+        standings = Standing.objects.filter(competition=None, team__in=team_list).order_by('-wins')
 
     context =  {
-        'standings': standings,
+        'standings': standings.select_related(),
+        'standing_type': standing_type,
         }
     return render_to_response("teams/list.html",
                               context,
@@ -70,10 +71,11 @@ def team_list_generic(request, team_list=None):
                               )    
 
 
-
+@cache_page(60 * 60 * 12)
 def team_name_fragment(request, fragment):
     return team_list_generic(request,
-                               Team.objects.filter(name__istartswith=fragment))
+                             Team.objects.filter(name__istartswith=fragment),
+                             'alltime')
 
 
 
