@@ -9,6 +9,21 @@ from teams.models import Team
 
 class GoalManager(models.Manager):
 
+    def unique_dict(self):
+        d = {}
+        for e in self.get_query_set():
+            player_id = own_goal_player_id = None
+            if e.player:
+                player_id = e.player.id
+
+            if e.own_goal_player:
+                own_goal_player_id = e.own_goal_player.id
+
+            key = (e.team.id, player_id, own_goal_player_id, e.minute, e.date)
+            d[key] = e.id
+        return d
+
+
     def frequency(self):
         """
         Returns a list of goal counts by minute.
