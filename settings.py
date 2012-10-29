@@ -209,7 +209,8 @@ INSTALLED_APPS = (
 
 
 def show_toolbar(request):
-    return True
+    return DEBUG
+
 
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': show_toolbar,
