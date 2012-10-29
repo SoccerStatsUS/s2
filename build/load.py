@@ -834,8 +834,8 @@ def load_games():
 def load_goals():
     print "\nloading goals\n"
 
-    # Use a sql insert here also.
-    # Use dicts for team, game, bio.
+
+    # These should be getters, not managed in the function.
     teams = Team.objects.team_dict()
     games = Game.objects.game_dict()
     bios = Bio.objects.bio_dict()
@@ -865,7 +865,7 @@ def load_goals():
             print player
             bio_id = Bio.objects.find(player).id
             bios[player] = bio_id
-
+        
         ogplayer = goal.get('own_goal_player')
         if ogplayer is None:
             ogbio_id = None
@@ -887,6 +887,7 @@ def load_goals():
             print "No game match for %s" % goal
 
         if game_id:
+            """
             if bio_id:
                 player = Bio.objects.get(id=bio_id)
             else:
@@ -896,23 +897,33 @@ def load_goals():
                 ogplayer = Bio.objects.get(id=ogbio_id)
             else:
                 ogplayer = None
+                """
                 
 
             return {
                 'date': goal['date'],
                 'minute': goal['minute'],
-                'team': Team.objects.get(id=team_id),
-                'player': player,
+                'team_id': team_id, #Team.objects.get(id=team_id),
+                'team_original_name': '',
+
+                'player_id': bio_id, #player,
+                'own_goal_player_id': ogbio_id,
+
+                'game_id': game_id, #Game.objects.get(id=game_id),
+
                 'own_goal': goal.get('own_goal', False),
                 'penalty': goal.get('penalty', False),
-                'own_goal_player': ogplayer,
-                'game': Game.objects.get(id=game_id),
                 }
 
+    goals = []
     for goal in soccer_db.goals.find():
         g = create_goal(goal)
         if g:
-            Goal.objects.create(**g)
+            goals.append(g)
+            #Goal.objects.create(**g)
+
+    insert_sql('goals_goal', goals)
+
 
 
 @timer
