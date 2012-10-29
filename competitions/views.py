@@ -12,12 +12,9 @@ from stats.models import Stat
 
 from collections import Counter
 
-#@cache_page(60 * 60 * 12)
+@cache_page(60 * 60 * 12)
 def competition_index(request):
 
-
-
-    
     ctype = None
 
     if request.method == 'GET':
@@ -62,7 +59,7 @@ def competition_index(request):
     # Add a paginator.
 
     context = {
-        'competitions': competitions,
+        'competitions': competitions.select_related(),
         'form': form,
         'ctype': ctype,
         #'itype': itype,

@@ -270,6 +270,8 @@ class SeasonManager(models.Manager):
         try:
             return Season.objects.get(name=name, competition=competition)
         except:
+            if type(competition) in (int, str, unicode):
+                competition = Competition.objects.get(id=competition)
             return Season.objects.create(name=name, competition=competition)
 
     def as_dict(self):
