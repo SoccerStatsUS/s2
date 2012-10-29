@@ -9,9 +9,8 @@ from sources.models import Source
 
 def source_index(request):
 
-    sources = Source.objects.annotate(games=Count('game')).order_by('-games')
     context = {
-        'sources': sources,
+        'sources': Source.objects.order_by('-games', '-stats', 'name')
         }
     return render_to_response("sources/index.html",
                               context,

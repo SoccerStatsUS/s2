@@ -27,6 +27,9 @@ class Source(models.Model):
     author = models.CharField(max_length=1023)
     base_url = models.CharField(max_length=1023) 
 
+    games = models.IntegerField()
+    stats = models.IntegerField()
+
     objects = SourceManager()
 
 
@@ -36,4 +39,8 @@ class Source(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+# Need to make this a many-to-many
+#class SourceGame(models.Model):
 

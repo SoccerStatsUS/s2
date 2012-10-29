@@ -4,6 +4,7 @@ import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'build_settings'
 
 from django.db import transaction
+from django.db.models import Count
 
 from bios.models import Bio
 from competitions.models import Competition, Season
@@ -12,6 +13,7 @@ from games.models import Game, GameMinute
 from goals.models import Goal
 from lineups.models import Appearance
 from positions.models import Position
+from sources.models import Source
 from standings.models import Standing
 from stats.models import Stat
 from teams.models import Team
@@ -31,6 +33,7 @@ def generate():
 
     set_draft_picks()
 
+    generate_source_data()
 
 
     generate_career_stats()
@@ -57,6 +60,16 @@ def set_draft_picks():
         target = Pick.objects.get(draft=d, number=number)
         pick.pick = target
         pick.save()
+
+@timer
+def generate_source_data():
+    print "Generating source data."
+    sources = Source.objects.annotate(game_count=Count('game'), stat_count=Count('stat'))
+    for source in sources:
+        source.games = source.game_count
+        source.stats = source.stat_count
+        source.save()
+    
         
 
 
