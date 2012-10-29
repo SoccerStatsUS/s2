@@ -27,8 +27,9 @@ class Source(models.Model):
     author = models.CharField(max_length=1023)
     base_url = models.CharField(max_length=1023) 
 
-    games = models.IntegerField()
-    stats = models.IntegerField()
+    # Secondary data.
+    games = models.IntegerField(null=True)
+    stats = models.IntegerField(null=True)
 
     objects = SourceManager()
 
