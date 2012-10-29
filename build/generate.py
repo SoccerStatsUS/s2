@@ -19,7 +19,7 @@ from teams.models import Team
 from utils import insert_sql, timer
 
 
-
+@timer
 def generate():
     """
     Generate stats.
@@ -64,7 +64,7 @@ def set_draft_picks():
 @transaction.commit_on_success
 def generate_season_data():
     # Generate season data including average age, nationality data (somehow)
-    print "Generating seasno data."
+    print "Generating season data."
 
     minutes_dict = defaultdict(int)
     minutes_with_age_dict = defaultdict(int)
@@ -196,6 +196,8 @@ def generate_stats_generic(qs, make_key, update_dict):
     Generate team, career, etc. stats.
     Maybe could improve this.
     """
+
+    #print "Merging stats."
     final_dict = {}
     excluded = ('player_id', 'team_id', 'competition_id', 'season_id', 'source_id')
     for stat in qs.values():
@@ -230,7 +232,9 @@ def generate_stats_generic(qs, make_key, update_dict):
     for key, stat in final_dict.items():
         stat.pop('id')
         stat.update(update_dict)
-        Stat.objects.create(**stat)
+
+    insert_sql("stats_stat", final_dict.values())
+        #Stat.objects.create(**stat)
 
 
 @timer
