@@ -284,6 +284,29 @@ def make_game_getter():
 
 
 
+def make_goal_getter():
+    """
+    Retrieve competitions easily.
+    """
+
+    goal_map = Goal.objects.unique_dict()
+
+    def getter(team_id, player_id, minute, dt):
+        own_goal_player_id = None
+        dx = datetime.date(dt.year, dt.month, dt.day) # Avoid datetime.date/datetime.datetime mismatch.
+        key = (team_id, player_id, own_goal_player_id, minute, dx)
+        if key in goal_map:
+            gid = goal_map[key]
+        else:
+            print "Failed to find for %s, %s" % (team_id, dx)
+            gid = None
+        
+        return gid
+
+    return getter
+
+
+
 
 
 def load():
@@ -328,6 +351,7 @@ def load():
     # Mixed data
     load_stats()
     load_goals()
+    load_assists()
     load_lineups()
 
     # Analysis data
@@ -371,7 +395,7 @@ def run(verbose=True):
 def load_sources():
     for source in soccer_db.sources.find():
         source.pop('_id')
-        source['games'] = source['stats'] = 0
+        #source['games'] = source['stats'] = 0
         Source.objects.create(**source)
 
 
@@ -838,95 +862,108 @@ def load_games():
 def load_goals():
     print "\nloading goals\n"
 
-
-    # These should be getters, not managed in the function.
-    teams = Team.objects.team_dict()
-    games = Game.objects.game_dict()
-    bios = Bio.objects.bio_dict()
-    stadium_getter = make_stadium_getter()
-
+    team_getter = make_team_getter()
+    bio_getter = make_bio_getter()
+    game_getter = make_game_getter()
 
     l = []
 
     def create_goal(goal):
-        if goal.get('stadium'):
-            goal['stadium'] = stadium_getter(goal['stadium'])
 
-        team = goal['team']
-        if team in teams:
-            team_id = teams[team]
-        else:
-            team_id = Team.objects.find(team, create=True).id
-            teams[team] = team_id
+        team_id = team_getter(goal['team'])
+        bio_id = ogbio_id = None
 
-        player = goal['goal']
+        if goal['goal']:
+            bio_id = bio_getter(goal['goal'])
 
-        if player is None:
-            bio_id = None
-        elif player in bios:
-            bio_id = bios[player]
-        else:
-            print player
-            bio_id = Bio.objects.find(player).id
-            bios[player] = bio_id
-        
-        ogplayer = goal.get('own_goal_player')
-        if ogplayer is None:
-            ogbio_id = None
-        elif ogplayer in bios:
-            ogbio_id = bios[ogplayer]
-        else:
-            print ogplayer
-            ogbio_id = Bio.objects.find(ogplayer).id
-            bios[ogplayer] = ogbio_id
+        if goal.get('own_goal_player'):
+            ogbio_id = bio_getter(goal['own_goal_player'])
 
         # Coerce to date to match dict.
         d = datetime.date(goal['date'].year, goal['date'].month, goal['date'].day)
-        game_key = (team_id, d)
-
-        if game_key in games:
-            game_id = games[game_key]
+        game_id = game_getter(team_id, d)
+        if not game_id:
+            print "Cannot create %s" % goal
+            return {}
         else:
-            game_id = None
-            print "No game match for %s" % goal
-
-        if game_id:
-            """
-            if bio_id:
-                player = Bio.objects.get(id=bio_id)
-            else:
-                player = None
-
-            if ogbio_id:
-                ogplayer = Bio.objects.get(id=ogbio_id)
-            else:
-                ogplayer = None
-                """
-                
-
             return {
                 'date': goal['date'],
                 'minute': goal['minute'],
-                'team_id': team_id, #Team.objects.get(id=team_id),
+                'team_id': team_id, 
                 'team_original_name': '',
 
                 'player_id': bio_id, #player,
                 'own_goal_player_id': ogbio_id,
 
-                'game_id': game_id, #Game.objects.get(id=game_id),
+                'game_id': game_id, 
 
                 'own_goal': goal.get('own_goal', False),
                 'penalty': goal.get('penalty', False),
                 }
 
+                                
+
     goals = []
-    for goal in soccer_db.goals.find():
+
+    for i, goal in enumerate(soccer_db.goals.find()):
+        if i % 5000 == 0:
+            print i
+
         g = create_goal(goal)
         if g:
             goals.append(g)
-            #Goal.objects.create(**g)
 
     insert_sql('goals_goal', goals)
+        
+@timer
+@transaction.commit_on_success
+def load_assists():
+    print "\nloading assists\n"
+
+    team_getter = make_team_getter()
+    bio_getter = make_bio_getter()
+    game_getter = make_game_getter()
+    goal_getter = make_goal_getter()
+
+    def create_assists(goal):
+        if not goal['assists']:
+            return []
+
+        if goal['assists'] == ['']:
+            return []
+
+        team_id = team_getter(goal['team'])
+        bio_id = ogbio_id = None
+
+        if goal['goal']:
+            bio_id = bio_getter(goal['goal'])
+
+        d = datetime.date(goal['date'].year, goal['date'].month, goal['date'].day)
+
+        goal_id = goal_getter(team_id, bio_id, goal['minute'], d)
+        if not goal_id:
+            print "Cannot create assists for %s" % goal
+            return []
+
+        for assister in goal['assists']:
+            assist_ids = [bio_getter(e) for e in goal['assists']]
+            for i, assist_id in enumerate(assist_ids, start=1):
+                if assist_id:
+                    assists.append({
+                        'player_id': assist_id,
+                        'goal_id': goal_id,
+                        'order': i,
+                        })
+
+    assists = []
+
+    for i, goal in enumerate(soccer_db.goals.find()):
+        if i % 5000 == 0:
+            print i
+        create_assists(goal)
+
+    insert_sql('goals_assist', assists)
+
 
 
 
@@ -945,7 +982,7 @@ def load_stats():
 
     l = []    
     for i, stat in enumerate(soccer_db.stats.find(timeout=False)): # no timeout because this query takes forever.
-        if i % 1000 == 0:
+        if i % 5000 == 0:
             print i
 
         if stat['name'] == '':
@@ -1074,8 +1111,11 @@ def load_lineups():
 
     print "Creating appearances"
 
+    insert_sql('lineups_appearance', l)
+    """
     for e in l:
         try:
             insert_sql("lineups_appearance", [e])
         except:
             import pdb; pdb.set_trace()
+            """
