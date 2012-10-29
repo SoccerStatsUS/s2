@@ -371,6 +371,7 @@ def run(verbose=True):
 def load_sources():
     for source in soccer_db.sources.find():
         source.pop('_id')
+        source['games'] = source['stats'] = 0
         Source.objects.create(**source)
 
 
@@ -422,10 +423,10 @@ def load_places():
         City.objects.create(**dict(e))
 
 
-
+@timer
 @transaction.commit_on_success
 def load_positions():
-    print "loading positions"
+    print "\nloading positions\n"
     for position in soccer_db.positions.find():
         position.pop('_id')
         position['team'] = Team.objects.find(position['team'], create=True)
@@ -764,9 +765,12 @@ def load_games():
         result_unknown = game.get('result_unknown') or False
         played = game.get('played') or True
         forfeit = game.get('forfeit') or False
-        minigame = game['minigame'] or False
+        minigame = game.get('minigame') or False
 
         minutes = game.get('minutes') or 90
+
+        neutral = game.get('neutral') or False
+        attendance = game.get('attendance')
 
         # There are lots of problems with the NASL games, 
         # And probably ASL as well. Need to spend a couple
@@ -799,13 +803,13 @@ def load_games():
                 'season_id': season_id,
 
                 'home_team_id': home_team_id,
-                'neutral': game['neutral'],
+                'neutral': neutral,
 
                 'stadium_id': stadium_id,
                 'city_id': city_id,
                 'location': game.get('location', ''),
                 'notes': '',
-                'attendance': game['attendance'],
+                'attendance': attendance,
                 
                 'referee_id': referee_id,
                 'linesman1_id': linesman1_id,
