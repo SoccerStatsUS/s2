@@ -28,69 +28,22 @@ def timer(method):
 def insert_sql(table, dict_list):
     """
     Insert a list of dicts representing values into a table.
-    (As fast as possible?)
     """
-
-    def formatter(l):
-        # Properly format items?
-        l2 = []
-        for e in l:
-            if e == None:
-                l2.append("NULL")
-            else:
-                l2.append("'%s'" % unicode(e))
-                #l2.append('"%s"' % unicode(e))
-        return "(%s)" % ",".join(l2)
 
     if not dict_list:
         return
 
-
+    # Names of fields
     fields = dict_list[0].keys()
-    field_string = "(%s)" % ", ".join(['"%s"' % e for e in fields])
+    field_string = "%s" % ", ".join(['"%s"' % e for e in fields])
 
-    make_values = lambda d: "%s" % formatter([d[field] for field in fields])
-    values = [make_values(e) for e in dict_list]
-    value_string = ", ".join([unicode(e) for e in  values])
+    # Placeholders for values.
+    values = [e.values() for e in dict_list]
+    value_string = ', '.join(['%s'] * len(values[0]))
 
-    sql = "INSERT INTO %s %s VALUES %s;" % (table, field_string, value_string)
     cursor = connection.cursor()
-    return cursor.execute(sql)
-
-
-def insert_sql_sqlite(table, dict_list):
-   # SQLITE does not support multiple row insertion?
-
-    if len(dict_list) == 0:
-        return
-    elif len(dict_list) > 1:
-        for d in dict_list:
-            insert_sql(table, [d])
-
-
-    else:
-        def formatter(l):
-            # Properly format items?
-            l2 = []
-            for e in l:
-                if e == None:
-                    l2.append("NULL")
-                else:
-                    l2.append("'%s'" % unicode(e))
-                    #l2.append('"%s"' % unicode(e))
-            return "(%s)" % ",".join(l2)
-            
-        fields = dict_list[0].keys()
-        #field_string = formatter(fields) # Not working?
-        field_string = "(%s)" % ", ".join(['"%s"' % e for e in fields])
-
-        make_values = lambda d: "%s" % formatter([d[field] for field in fields])
-        values = [make_values(e) for e in dict_list]
-        value_string = ", ".join([unicode(e) for e in  values])
-
-        sql = "INSERT INTO %s %s VALUES %s;" % (table, field_string, value_string)
-        cursor = connection.cursor()
-        return cursor.execute(sql)
+    command = "INSERT INTO %s (%s) VALUES (%s);" % (table, field_string, value_string)
+    cursor.executemany(command, values)
 
 
 class memoized(object):
