@@ -54,7 +54,6 @@
 
   <td><a href="{% url award_detail award.award.id %}">{{ award.award.name }}</a></td>
 
-
 </tr>
 {% endfor %}
 </table>
@@ -75,17 +74,12 @@
 </table>
 {% endif %}
 
-
-
 {% if bio.appearance_set.exists %}
 <h3>Recent Games</h3>
 <div tab="games">
 {% include "templatetags/appearances/bio.html" with appearances=recent_appearances %}
 </div>
 {% endif %}
-
-
-
 
 {% if bio.salary_set.count %}
 <h4>Salaries</h4>
@@ -103,7 +97,7 @@
 {% endif %}
 
 
-{% if bio.season_stats.exists %}
+{% if career_stats %}
 <div tab="stats">
 {% include "bios/detail_stats.html" with games=bio.games_refereed.all %}
 </div>
@@ -111,23 +105,18 @@
 
 
 {% if bio.games_refereed.all %}
-<h3>Games Refereed</h3>
+<h4>Games Refereed</h4>
 <div tab="referee">
 {% include "templatetags/games.html" with games=bio.games_refereed.all %}
 </div>
 {% endif %}
 
-
-
-
-
 {% if bio.position_stats.exists %}
 <div tab="standings">
+<h4>Positions</h4>
 {% include "templatetags/positions.html" with stats=bio.position_stats %}
 </div>
 {% endif %}
-
-
 
 
 {% if bio.position_set.count %}
@@ -135,7 +124,5 @@
 {% include "templatetags/coach.html" with positions=bio.position_set.all %}
 </div>
 {% endif %}
-
-
 
 {% endblock %}

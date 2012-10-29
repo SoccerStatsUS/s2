@@ -5,9 +5,7 @@
 <thead>
   <tr>
     <th>player</th>
-    <th>team</th>
     <th>cmp</th>
-    <th>season</th>
     <th>gp</th>
     <th>gs</th>
     <th>min</th>
@@ -22,8 +20,6 @@
     <th>w</th>
     <th>t</th>
     <th>l</th>
-
-
 
     <th>gf</th>
     <th>ga</th>
@@ -44,20 +40,9 @@
   <td></td>
   {% endif %}
 
-  {% if stat.team %}
-  <td><a href="{% url team_detail stat.team.slug %}">{{ stat.team }}</a></td>
-  {% else %}
-  <td></td>
-  {% endif %}
 
   {% if stat.competition %}
   <td><a href="{% url competition_detail stat.competition.slug %}">{{ stat.competition.abbreviation }}</a></td>
-  {% else %}
-  <td></td>
-  {% endif %}
-
-  {% if stat.season %}
-  <td><a href="{% url season_detail stat.competition.slug stat.season.slug %}">{{ stat.season.name }}</a></td>
   {% else %}
   <td></td>
   {% endif %}
@@ -85,7 +70,6 @@
   {% datum_or_grey stat.wins %}
   {% datum_or_grey stat.ties %}
   {% datum_or_grey stat.losses %}
-
 
   {% datum_or_grey stat.goals_for %}
   {% datum_or_grey stat.goals_against %}
