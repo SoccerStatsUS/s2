@@ -75,8 +75,9 @@
 {% endif %}
 
 {% if bio.appearance_set.exists %}
-<h3>Recent Games</h3>
 <div tab="games">
+<h3>Recent Games</h3>
+<p><a href="{% url person_detail_games bio.slug %}">(Complete game list)</a><p>
 {% include "templatetags/appearances/bio.html" with appearances=recent_appearances %}
 </div>
 {% endif %}
