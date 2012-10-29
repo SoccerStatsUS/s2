@@ -127,7 +127,7 @@ class Stat(models.Model):
     
 
     def __unicode__(self):
-        return "%s, %s, %s, %s" % (self.game, self.player, self.team, self.season)
+        return u"%s, %s, %s, %s" % (self.game, self.player, self.team, self.season)
 
 
     def assistiness(self):
