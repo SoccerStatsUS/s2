@@ -30,7 +30,7 @@ urlpatterns = patterns('',
                        (r'^api/$', direct_to_template, {'template': 'api.html'}),
                        #(r'^sources/$', direct_to_template, {'template': 'sources.html'}),
 
-                       (r'^blog/$', direct_to_template, {'template': 'blog.html'}),
+                       #(r'^blog/$', direct_to_template, {'template': 'blog.html'}),
 
                        url(r'search/', 
                            SearchView(load_all=False, searchqueryset=sqs),
