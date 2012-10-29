@@ -143,21 +143,20 @@ class Game(models.Model):
     # Ambiguous game results.
     result_unknown = models.BooleanField(default=False)
     played = models.BooleanField(default=True)
+    # Was the game forfeited?
+    forfeit = models.BooleanField(default=False)
 
+    # Goals scored in the game.
     goals = models.IntegerField()
 
     # Minigames were played in MLS, APSL, USL, and probably others.
     minigame = models.BooleanField(default=False)
-
-    # Was the game forfeited?
-    forfeit = models.BooleanField(default=False)
 
     minutes = models.IntegerField(default=90)
 
     # This should probably be a many-to-many?
     competition = models.ForeignKey(Competition)
     season = models.ForeignKey(Season)
-
 
     home_team = models.ForeignKey(Team, null=True, related_name='home_games')
     neutral = models.BooleanField(default=False)
