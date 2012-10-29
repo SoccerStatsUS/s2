@@ -18,7 +18,7 @@ def person_list_generic(request, person_list=None):
         stats = Stat.career_stats.filter(player__in=person_list)
 
     context =  {
-        'stats': stats,
+        'stats': stats.select_related(),
         }
     return render_to_response("bios/list.html",
                               context,
@@ -47,12 +47,11 @@ def one_word(request):
 def person_index(request):
 
     letters = 'abcdefghijklmnopqrstuvwxyz'.upper()
+    stats = Stat.career_stats.order_by('-player__hall_of_fame', '-games_played').select_related()
 
     name_dict = OrderedDict()
-
     for letter in letters:
-        stats = Stat.career_stats.filter(player__name__istartswith=letter).order_by('-player__hall_of_fame', '-games_played')[:5]
-        name_dict[letter] = stats
+        name_dict[letter] = stats.filter(player__name__istartswith=letter)[:5]
 
     context = {
         'name_dict': name_dict
@@ -63,7 +62,7 @@ def person_index(request):
                               context_instance=RequestContext(request))
 
 
-
+@cache_page(60 * 60 * 12)
 def bio_name_fragment(request, fragment):
     return person_list_generic(request,
                                Bio.objects.filter(name__istartswith=fragment))

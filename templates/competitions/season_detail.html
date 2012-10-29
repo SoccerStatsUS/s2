@@ -7,8 +7,6 @@
 
 <script type="text/javascript">
   $(document).ready(function (){
-  $("div[tab='games']").load("{% url games_ajax_by_id %}?season={{ season.id }}");
-  $("div[tab='stats']").load("{% url stats_ajax_by_id %}?season={{ season.id }}");
   });
 </script>
 
@@ -59,7 +57,6 @@
   {% endif %}
 
 </table>
-
 
 <table>
 
@@ -147,11 +144,6 @@
 
 
 
-{% if stats %}
-<div tab="stats">
-</div>
-{% endif %}
-
 
 {% if season.awarditem_set.exists %}
 <div tab="awards">
@@ -172,11 +164,6 @@
 {% endif %}
 
 
-{% if season.game_set.exists %}
-<div tab="games">
-</div>
-{% endif %}
-
 {% comment %}
 {% if testing %}
 <div tab="added">
@@ -195,6 +182,7 @@
 {% endif %}
 {% endcomment %}
 
+{% comment %}
 <div tab="graphs">
 
 {% include "templatetags/nationality.html" with nstat=season.confederation_stats %}
@@ -203,6 +191,7 @@
 
 {{ known_minutes }} known minutes of {{ total_minutes }} total minutes
 </div>
+{% endcomment %}
 
 
 </div>

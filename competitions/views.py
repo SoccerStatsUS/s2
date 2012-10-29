@@ -81,7 +81,7 @@ def competition_detail(request, competition_slug):
     context = {
         'competition': competition,
         'stats': Stat.competition_stats.filter(team=None, competition=competition).order_by('-games_played')[:25],
-        'games': games[:25],
+        'games': games.select_related()[:25],
         'top_attendance_games': games.exclude(attendance=None).order_by('-attendance')[:20],
         'worst_attendance_games': games.exclude(attendance=None).order_by('attendance')[:20],
         'big_winners': competition.alltime_standings().order_by('-wins')[:20],
@@ -133,35 +133,38 @@ def season_detail(request, competition_slug, season_slug):
 
 
     # Create dict from id to Country object.
-    nations = Country.objects.filter(id__in=[e[0] for e in nationality_count_dict.keys()])
-    nation_id_dict = dict([(e.id, e) for e in nations])
+    #nations = Country.objects.filter(id__in=[e[0] for e in nationality_count_dict.keys()])
+    #nation_id_dict = dict([(e.id, e) for e in nations])
 
-    ordered_nationality_tuple = sorted(nationality_count_dict.items(), key=lambda x: -x[1]) # [(199,), 665),
-    nation_list = [(nation_id_dict[a], b) for ((a,), b) in ordered_nationality_tuple if a is not None]
+    #ordered_nationality_tuple = sorted(nationality_count_dict.items(), key=lambda x: -x[1]) # [(199,), 665),
+    #nation_list = [(nation_id_dict[a], b) for ((a,), b) in ordered_nationality_tuple if a is not None]
 
     # Compute average attendance.
     games = season.game_set.exclude(attendance=None)
     attendance_game_count = games.count()
     average_attendance = games.aggregate(Avg('attendance'))['attendance__avg']
 
+    """
     # Aggregate returns None given a None value.
     mstats = stats.exclude(minutes=None)
     total_minutes = mstats.aggregate(Sum('minutes'))['minutes__sum']
     known_minutes = mstats.exclude(player__birthdate=None).aggregate(Sum('minutes'))['minutes__sum']
+    """
 
     goal_leaders = stats.exclude(goals=None).order_by('-goals')
     game_leaders = stats.exclude(games_played=None).order_by('-games_played')
 
 
 
+
     context = {
         'season': season,
         'stats': stats.exists(),
-        'total_minutes': total_minutes,
-        'known_minutes': known_minutes,
+        #'total_minutes': total_minutes,
+        #'known_minutes': known_minutes,
         'goal_leaders': goal_leaders[:10],
         'game_leaders': game_leaders[:10],
-        'nation_list': nation_list,
+        #'nation_list': nation_list,
         'average_attendance': average_attendance,
         'attendance_game_count': attendance_game_count,
         'top_attendance_games': games.exclude(attendance=None).order_by('-attendance')[:20],

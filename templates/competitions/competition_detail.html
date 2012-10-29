@@ -28,9 +28,12 @@
     <th>Golden Boot</th>
     <th>Average age</th>
     <th>Ages known %</th>
+    
+    {% comment %}
     <th>games</th>
     <th>goals</th>
     <th>stats</th>
+    {% endcomment %}
   </tr>
 
 
@@ -56,9 +59,12 @@
 
     <td>{{ season.average_age|floatformat }}</td>
     <td>{{ season.age_minutes_proportion|floatformat:"3" }}</td>
+
+
     <td>{{ season.game_set.count }}</td>
     <td>{{ season.goals.count }}</td>
     <td>{{ season.stat_set.count }}</td>
+    {% endcomment %}
 
   </tr>
   {% endfor %}
@@ -112,13 +118,16 @@
 {% endif %}
 
 
+
 <div tab="graphs">
+
+
+
 {% include "templatetags/nationality.html" with nstat=competition.confederation_stats %}
 
 {% include "templatetags/nationality.html" with nstat=competition.nationality_stats %}
+
 </div>
-
-
 
 </div>
 
