@@ -184,7 +184,8 @@ class Bio(models.Model):
         All stats for a player that are for a single season.
         (Contrast with career stats)
         """
-        return self.stat_set.exclude(team=None).exclude(season=None).filter(position=None)
+        from stats.models import SeasonStat
+        return SeasonStat.objects.filter(player=self)
 
 
     #def domestic_season_stats(self):
@@ -196,19 +197,18 @@ class Bio(models.Model):
 
 
     def position_stats(self):
-        return self.stat_set.exclude(team=None).exclude(season=None).exclude(position=None)
+        return []
 
 
     def career_stat(self):
         """
         Summary stats for a player's entire career.
         """
-        from stats.models import Stat
+        from stats.models import CareerStat
 
-        c = Stat.career_stats.filter(player=self)
-        if c:
-            return c[0]
-        else:
+        try:
+            return CareerStat.objects.get(player=self)
+        except:
             return None
 
     def career_stats(self):
@@ -221,17 +221,17 @@ class Bio(models.Model):
         """
         Summary stats for a player in a given competition (e.g. MLS)
         """
-        from stats.models import Stat
+        from stats.models import CompetitionStat
 
-        return Stat.competition_stats.filter(player=self)
+        return CompetitionStat.objects.filter(player=self)
 
     def team_stats(self):
         """
         Summary stats for a player in a given competition (e.g. MLS)
         """
-        from stats.models import Stat
+        from stats.models import TeamStat
 
-        return Stat.team_stats.filter(player=self)
+        return TeamStat.objects.filter(player=self)
 
 
     def calculate_standings(self):
@@ -251,7 +251,7 @@ class Bio(models.Model):
             self.career_stat().calculate_standings()
 
         # Generate summary team standings.
-        team_stats = Stat.team_stats.filter(player=self)
+        team_stats = TeamStat.objects.filter(player=self)
         for stat in team_stats:
             if stat.wins is None:
                 stat.calculate_standings()

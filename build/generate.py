@@ -204,7 +204,7 @@ def generate_game_data_quality():
     
 
 @transaction.commit_on_success
-def generate_stats_generic(qs, make_key, update_dict):
+def generate_stats_generic(table, qs, make_key, update_dict):
     """
     Generate team, career, etc. stats.
     Maybe could improve this.
@@ -212,11 +212,19 @@ def generate_stats_generic(qs, make_key, update_dict):
 
     #print "Merging stats."
     final_dict = {}
+
+    # Don't try to add these items.
     excluded = ('player_id', 'team_id', 'competition_id', 'season_id', 'source_id')
+
+
     for stat in qs.values():
+
+        # Set unaddable values to none.
         for k,v  in stat.items():
             if v in ('?', 'None', '-'):
                 stat[k] = None
+
+
 
         # This determines what is filtered.
         # e.g., create all-time player stats with 
@@ -244,9 +252,15 @@ def generate_stats_generic(qs, make_key, update_dict):
 
     for key, stat in final_dict.items():
         stat.pop('id')
-        stat.update(update_dict)
+        for e in update_dict.keys():
+            if e in stat:
+                stat.pop(e)
+        
+        # update_dict seems unnecessary at this point. Those values aren't in the given stat.
+        #stat.update(update_dict)
 
-    insert_sql("stats_stat", final_dict.values())
+    insert_sql(table, final_dict.values())
+    #insert_sql("stats_stat", final_dict.values())
         #Stat.objects.create(**stat)
 
 
@@ -264,7 +278,7 @@ def generate_career_stats():
         'competition_id': None,
         'season_id': None,
         }
-    generate_stats_generic(Stat.objects.filter(competition__code='soccer'), make_key, update)    
+    generate_stats_generic("stats_careerstat", Stat.objects.filter(competition__code='soccer'), make_key, update)    
     #generate_career_plus_minus()
         
 @timer
@@ -274,7 +288,7 @@ def generate_team_stats():
         stats = Stat.objects.filter(team=team)
         make_key = lambda s: (s['player_id'], s['team_id'])
         update = {'competition_id': None, 'season_id': None }
-        generate_stats_generic(stats, make_key, update)
+        generate_stats_generic('stats_teamstat', stats, make_key, update)
 
 
 @timer
@@ -284,7 +298,7 @@ def generate_competition_stats():
         stats = Stat.objects.filter(competition=competition)
         make_key = lambda s: (s['player_id'], s['competition_id'])
         update = {'team_id': None, 'season_id': None }
-        generate_stats_generic(stats, make_key, update)
+        generate_stats_generic('stats_competitionstat', stats, make_key, update)
 
 
 

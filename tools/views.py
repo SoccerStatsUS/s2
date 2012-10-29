@@ -8,7 +8,7 @@ from django.views.decorators.cache import cache_page
 from games.models import Game
 from goals.models import Goal
 from lineups.models import Appearance
-from stats.models import Stat
+from stats.models import Stat, TeamStat
 
 from tools.forms import GameSearchForm, StatSearchForm, GoalSearchForm, LineupSearchForm
 
@@ -193,7 +193,7 @@ def stats_ajax_by_id(request):
         if 'type' in request.GET:
             t = request.GET.get('type')
             if t == 'team':
-                stats = Stat.team_stats.all()
+                stats = TeamStat.objects.all()
 
         if 'team' in request.GET:
             t = request.GET['team']

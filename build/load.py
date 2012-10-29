@@ -913,6 +913,8 @@ def load_goals():
         if g:
             goals.append(g)
 
+    print i
+
     insert_sql('goals_goal', goals)
         
 @timer
@@ -961,6 +963,8 @@ def load_assists():
         if i % 5000 == 0:
             print i
         create_assists(goal)
+
+    print i
 
     insert_sql('goals_assist', assists)
 
@@ -1029,6 +1033,8 @@ def load_stats():
             'red_cards': c2i('red_cards'),
             'source_id': source_id,
             })
+
+    print i
 
     insert_sql("stats_stat", l)
 
@@ -1109,13 +1115,8 @@ def load_lineups():
         if i % 5000 == 0:
             print i
 
+    print i
+
     print "Creating appearances"
 
     insert_sql('lineups_appearance', l)
-    """
-    for e in l:
-        try:
-            insert_sql("lineups_appearance", [e])
-        except:
-            import pdb; pdb.set_trace()
-            """

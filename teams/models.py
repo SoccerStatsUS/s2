@@ -247,8 +247,8 @@ class Team(models.Model):
         return Game.objects.filter(models.Q(team1=self) | models.Q(team2=self))
 
     def team_stats(self):
-        from stats.models import Stat
-        return Stat.objects.filter(team=self, competition=None, season=None).exclude(minutes=0)
+        from stats.models import TeamStat
+        return Stat.objects.filter(team=self).exclude(minutes=0)
 
 
     def standings_by_date(self):

@@ -11,7 +11,7 @@ from games.models import Game
 from teams.forms import TeamGameForm, TeamStatForm
 from teams.models import Team
 from standings.models import Standing
-from stats.models import Stat
+from stats.models import Stat, TeamStat
 
 
 
@@ -110,7 +110,7 @@ def team_detail(request, team_slug):
 
     today = datetime.date.today()
 
-    stats = Stat.team_stats.filter(team=team, competition=None)
+    stats = TeamStat.objects.filter(team=team)
 
     goal_leaders = stats.exclude(goals=None).order_by('-goals')
     game_leaders = stats.exclude(games_played=None).order_by('-games_played')
@@ -144,7 +144,7 @@ def team_stats(request, team_slug):
     """
     team = get_object_or_404(Team, slug=team_slug)
 
-    stats = Stat.team_stats.filter(team=team, competition=None)
+    stats = TeamStat.objects.filter(team=team)
 
     if request.method == 'GET':
         form = TeamStatForm(team, request.GET)

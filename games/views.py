@@ -8,7 +8,7 @@ from django.views.decorators.cache import cache_page
 from bios.models import Bio
 from games.models import Game
 from standings.models import Standing
-from stats.models import Stat
+from stats.models import Stat, CareerStat
 
 from collections import defaultdict
 
@@ -35,8 +35,8 @@ def homepage(request):
 
     today = datetime.date.today()
 
-    game_leaders = Stat.career_stats.exclude(games_played=None).order_by('-games_played')[:10]
-    goal_leaders = Stat.career_stats.exclude(goals=None).order_by('-goals')[:10]
+    game_leaders = CareerStat.objects.exclude(games_played=None).order_by('-games_played')[:10]
+    goal_leaders = CareerStat.objects.exclude(goals=None).order_by('-goals')[:10]
 
     recent_games = Game.objects.exclude(date=None).filter(date__lt=today).order_by('-date')[:10]
 

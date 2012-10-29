@@ -6,16 +6,16 @@ from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
 from bios.models import Bio
-from stats.models import Stat
+from stats.models import Stat, CareerStat
 
 from bios.forms import BioAppearanceForm
 
 def person_list_generic(request, person_list=None):
 
     if person_list is None:
-        stats = Stat.career_stats.all()[:1000]
+        stats = CareerStat.objects.all()[:1000]
     else:
-        stats = Stat.career_stats.filter(player__in=person_list)
+        stats = CareerStat.objects.filter(player__in=person_list)
 
     context =  {
         'stats': stats.select_related(),
@@ -47,7 +47,7 @@ def one_word(request):
 def person_index(request):
 
     letters = 'abcdefghijklmnopqrstuvwxyz'.upper()
-    stats = Stat.career_stats.order_by('-player__hall_of_fame', '-games_played').select_related()
+    stats = CareerStat.objects.order_by('-player__hall_of_fame', '-games_played').select_related()
 
     name_dict = OrderedDict()
     for letter in letters:

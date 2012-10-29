@@ -4,7 +4,7 @@ from bios.models import Bio
 from competitions.models import Competition
 from games.models import Game
 from places.models import Stadium, City, State, Country
-from stats.models import Stat
+from stats.models import TeamStat
 from teams.models import Team
 
 COMPETITIONS = []
@@ -23,7 +23,7 @@ class TeamStatForm(forms.Form):
     def __init__(self, team, *args, **kwargs):
         super(TeamStatForm, self).__init__(*args, **kwargs)
 
-        team_stats = Stat.team_stats.filter(team=team, competition=None)
+        team_stats = TeamStat.objects.filter(team=team)
         bio_ids = [e[0] for e in team_stats.values_list('player__id')]
         bios = Bio.objects.filter(id__in=bio_ids)
 

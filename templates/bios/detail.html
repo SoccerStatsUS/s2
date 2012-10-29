@@ -105,7 +105,7 @@
 
 {% if bio.season_stats.exists %}
 <div tab="stats">
-{% include "templatetags/detail_stats.html" with games=bio.games_refereed.all %}
+{% include "bios/detail_stats.html" with games=bio.games_refereed.all %}
 </div>
 {% endif %}
 

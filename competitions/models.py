@@ -251,13 +251,13 @@ class Competition(models.Model):
 
 
     def nationality_stats(self):
-        from stats.models import Stat
-        stats = Stat.competition_stats.filter(competition=self)
+        from stats.models import CompetitionStat
+        stats = CompetitionStat.objects.filter(competition=self)
         return nationality_stats(stats)
 
     def confederation_stats(self):
-        from stats.models import Stat
-        stats = Stat.competition_stats.filter(competition=self)
+        from stats.models import CompetitionStat
+        stats = CompetitionStat.objects.filter(competition=self)
         return confederation_stats(stats)
 
 
@@ -420,9 +420,9 @@ class Season(models.Model):
 
 
     def players(self):
-        from stats.models import Stat
+        from stats.models import SeasonStat
 
-        season_stats = Stat.objects.filter(competition=self.competition, season=self)
+        season_stats = SeasonStat.objects.filter(competition=self.competition, season=self)
         return set([e[0] for e in season_stats.values_list("player_id")])
 
 
