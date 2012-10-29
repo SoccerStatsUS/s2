@@ -437,10 +437,11 @@ def load_positions():
         #    x = 5
 
 
+@timer
 @transaction.commit_on_success
 def load_awards():
     print
-    print "loading awards"
+    print "\nloading awards\n"
     awards = set()
     award_dict = {}
 
@@ -497,10 +498,10 @@ def load_awards():
 
         AwardItem.objects.create(**item)
 
-
+@timer
 @transaction.commit_on_success
 def load_drafts():
-    print "loading drafts"
+    print "\nloading drafts\n"
 
     competition_getter = make_competition_getter()
     team_getter = make_team_getter()
@@ -564,6 +565,7 @@ def load_news():
         e.pop('_id')
         NewsSource.objects.create(**e)
 
+@timer
 @transaction.commit_on_success
 def load_teams():
     print "loading teams"
@@ -611,7 +613,7 @@ def load_stadiums():
         x = 5
 
 
-
+@timer
 @transaction.commit_on_success
 def load_standings():
     print "loading standings\n"
@@ -622,7 +624,7 @@ def load_standings():
         standing['season'] = Season.objects.find(standing['season'], standing['competition'])
         Standing.objects.create(**standing)
 
-
+@timer
 @transaction.commit_on_success
 def load_bios():
     cg = make_city_getter()
@@ -670,12 +672,10 @@ def load_bios():
         if bio.get('deathplace'):
             bd['deathplace'] = cg(bio['deathplace'])
 
-
-
-
         bd['hall_of_fame'] = bio.get('hall_of_fame', False)
 
         Bio.objects.create(**bd)
+
 
 @transaction.commit_on_success
 def load_salaries():
@@ -693,103 +693,146 @@ def load_salaries():
             )
                  
 
-
+@timer
 @transaction.commit_on_success
 def load_games():
-    print "loading %s games\n" % soccer_db.games.count()
+    print "\nloading %s games\n" % soccer_db.games.count()
 
     stadium_getter = make_stadium_getter()
     team_getter = make_team_getter()
     competition_getter = make_competition_getter()    
     source_getter = make_source_getter()
+    bio_getter = make_bio_getter()
 
     city_getter = make_city_getter()
 
+    games = []
+
     for game in soccer_db.games.find().sort('date', 1):
-        game.pop('_id')
 
+        stadium_id = city_id = None
         if game.get('stadium'):
-            game['stadium'] = stadium_getter(game['stadium'])
-            game['stadium'] = Stadium.objects.get(id=game['stadium'])
-            game['city'] = game['stadium'].city
+            stadium_id = stadium_getter(game['stadium'])
+            city_id = Stadium.objects.get(id=stadium_id).id
 
-        if game.get('location'):
-            game['city'] = city_getter(game['location'])
+        elif game.get('city'):
+            city_id = city_getter(game['city']).id
 
-        game['competition'] = competition_getter(game['competition'])
-        game['competition'] = Competition.objects.get(id=game['competition'])
-        game['season'] = Season.objects.find(game['season'], game['competition'])
+        elif game.get('location'):
+            city_id = city_getter(game['location']).id
 
-        game['team1'] = team_getter(game['team1'])
-        game['team1'] = Team.objects.get(id=game['team1'])
-        game['team2'] = team_getter(game['team2'])
-        game['team2'] = Team.objects.get(id=game['team2'])        
-        game['goals'] = (game['team1_score'] or 0) + (game['team2_score'] or 0)
-        
+        competition_id = competition_getter(game['competition'])
+        #game['competition'] = Competition.objects.get(id=game['competition'])
+        season_id = Season.objects.find(game['season'], competition_id).id
+
+        team1_id = team_getter(game['team1'])
+        team2_id = team_getter(game['team2'])
+
+        home_team_id = None
+        if game.get('home_team'):
+            home_team_id = team_getter(game['home_team'])
+
+        goals = (game['team1_score'] or 0) + (game['team2_score'] or 0)
+
+        referee_id = linesman1_id = linesman2_id = linesman3_id = None
         if game['referee']:
-            game['referee'] = Bio.objects.find(game['referee'])
-        else:
-            game['referee'] = None
+            referee = bio_getter(game['referee'])
 
         if game.get('linesman1'):
-            game['linesman1'] = Bio.objects.find(game['linesman1'])
-        else:
-            game['linesman1'] = None
-
+            linesman1 = bio_getter(game['linesman1'])
 
         if game.get('linesman2'):
-            game['linesman2'] = Bio.objects.find(game['linesman2'])
-        else:
-            game['linesman2'] = None
+            linesman2 = bio_getter(game['linesman2'])
 
         if game.get('linesman3'):
-            game['linesman3'] = Bio.objects.find(game['linesman3'])
-        else:
-            game['linesman3'] = None
+            linesman3 = bio_getter(game['linesman3'])
 
-
+        source = None
+        source_url = ''
         if game.get('sources'):
-            game['source'] = game['sources'][-1]
+            source = game['sources'][-1]
+        elif game.get('source'):
+            source = game['source']
 
-        if game.get('source'):
-            try:
-                if game.get('source').startswith('http'):
-                    game['source_url'] = game.get('source')
-            except:
-                import pdb; pdb.set_trace()
+        if source and source.startswith('http'):
+            source_url = source
 
-            try:
-                game['source_id'] = source_getter(game['source'])
-            except:
-                import pdb; pdb.set_trace()
+        source_id = None
+        if source:
+            source_id = source_getter(source)
 
-            game.pop('source')
+        result_unknown = game.get('result_unknown') or False
+        played = game.get('played') or True
+        forfeit = game.get('forfeit') or False
+        minigame = game['minigame'] or False
 
-
-        for e in 'url', 'home_team', 'year', 'sources':
-            if e in game:
-                game.pop(e)
-
-
-        #import datetime
-        #if game['date'] == datetime.datetime(1870, 11, 5, 0, 0):
-        #    import pdb; pdb.set_trace()
+        minutes = game.get('minutes') or 90
 
         # There are lots of problems with the NASL games, 
         # And probably ASL as well. Need to spend a couple
         # of hours repairing those schedules.
 
+        games.append({
+                'date': game['date'],
+                'team1_id': team1_id,
+                'team1_original_name': game['team1_original_name'],
+                'team2_id': team2_id,
+                'team2_original_name': game['team2_original_name'],
+
+                'team1_score': game['team1_score'],
+                'official_team1_score': game.get('official_team1_score'),
+                'team2_score': game['team2_score'],
+                'official_team2_score': game.get('official_team2_score'),
+
+                'team1_result': game['team1_result'],
+                'team2_result': game['team2_result'],
+
+                'result_unknown': result_unknown,
+                'played': played,
+                'forfeit': forfeit,
+
+                'goals': goals,
+                'minigame': minigame,
+
+                'minutes': minutes,
+                'competition_id': competition_id,
+                'season_id': season_id,
+
+                'home_team_id': home_team_id,
+                'neutral': game['neutral'],
+
+                'stadium_id': stadium_id,
+                'city_id': city_id,
+                'location': game.get('location', ''),
+                'notes': '',
+                'attendance': game['attendance'],
+                
+                'referee_id': referee_id,
+                'linesman1_id': linesman1_id,
+                'linesman2_id': linesman2_id,
+                'linesman3_id': linesman3_id,
+
+                'source_id': source_id,
+                'source_url': source_url,
+                })
+
+                
+
+
+        """
         try:
             Game.objects.create(**game)
         except:
             print "Skipping game %s" % game
             import pdb; pdb.set_trace()
             x = 5
+        """
+    insert_sql("games_game", games)
 
-
+@timer
 @transaction.commit_on_success
 def load_goals():
-    print "loading goals\n"
+    print "\nloading goals\n"
 
     # Use a sql insert here also.
     # Use dicts for team, game, bio.
@@ -872,12 +915,12 @@ def load_goals():
             Goal.objects.create(**g)
 
 
-    
+@timer
 @transaction.commit_on_success
 def load_stats():
     # Stats takes forever.
 
-    print "\nCreating stats\n"
+    print "\nloading stats\n"
 
     team_getter = make_team_getter()
     bio_getter = make_bio_getter()
