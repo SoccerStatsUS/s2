@@ -10,7 +10,8 @@ Celery
 python-memcached
 django-debug-toolbar
 django-tastypie
-django-haystack
+django-haystack==1.2.7
 Whoosh
+pysolr
 
 -e git://github.com/django-extensions/django-extensions.git#egg=django-extensions
