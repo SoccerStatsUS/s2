@@ -84,10 +84,22 @@ def bad_bios(request):
 def person_detail(request, slug):
     bio = get_object_or_404(Bio, slug=slug)
     
+    competition_stats = bio.competition_stats()
+    domestic_competition_stats = competition_stats.filter(competition__international=False).order_by('-games_played')
+    team_stats = bio.team_stats().order_by('-games_played')
+    league_stats = Stat.objects.filter(player=bio).filter(competition__ctype='League').order_by('season')
+    
     context = {
         "bio": bio,
         'recent_appearances': bio.appearance_set.all()[:10],
+
+        'league_stats': league_stats,
+        'domestic_competition_stats': domestic_competition_stats,
+        'career_stats': bio.career_stats(),
+        'team_stats': team_stats,
         }
+
+
     return render_to_response("bios/detail.html",
                               context,
                               context_instance=RequestContext(request)
@@ -138,28 +150,16 @@ def person_detail_goals(request, slug):
                               )   
 
 
+def person_detail_stats(request, slug):
+    bio = get_object_or_404(Bio, slug=slug)
 
-
-@cache_page(60 * 24)
-def bio_detail_stats(request):
-
-    player_id = request.GET.get('playerid')
-    
-    bio = Bio.objects.get(id=player_id)
-
-    competition_stats = bio.competition_stats()
-    domestic_competition_stats = competition_stats.filter(competition__international=False).order_by('-games_played')
-
-    league_stats = Stat.objects.filter(player__id=player_id).filter(competition__ctype='League').order_by('season')
-
-    
     context = {
-        'league_stats': league_stats,
-        'domestic_competition_stats': domestic_competition_stats,
-        'career_stats': bio.career_stats(),
+        "stats": bio.goal_set.all(),
         }
-
     return render_to_response("bios/detail_stats.html",
                               context,
-                              context_instance=RequestContext(request))
+                              context_instance=RequestContext(request)
+                              )   
+
+
 

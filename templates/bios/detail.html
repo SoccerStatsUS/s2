@@ -7,7 +7,6 @@
 
 <script type="text/javascript">
   $(document).ready(function (){
-  $("div[tab='stats']").load("{% url bio_detail_stats %}?playerid={{ bio.id }}");
   });
 </script>
 
@@ -106,22 +105,7 @@
 
 {% if bio.season_stats.exists %}
 <div tab="stats">
-
-{% regroup bio.season_stats_with_totals by competition as stats_by_competition %}
-{% for item in stats_by_competition %}
-<h3>{{ item.grouper }}</h3>
-{% include "templatetags/stats/bio.html" with stats=item.list %}
-{% endfor %}
-
-<h3>Career</h3>
-{% include "templatetags/stats/bio.html" with stats=bio.career_stats %}
-
-</div>
-{% endif %}
-
-{% if bio.goal_set.exists %}
-<div tab="goals">
-{% include "templatetags/goals/bio.html" with goals=bio.goal_set.all %}
+{% include "templatetags/detail_stats.html" with games=bio.games_refereed.all %}
 </div>
 {% endif %}
 

@@ -31,9 +31,10 @@ urlpatterns = patterns('bios.views',
                            name='person_detail_games'),
 
 
-                       url(r'^ajax/stats/$',
-                           'bio_detail_stats',
-                           name='bio_detail_stats'),
+
+                       url(r'^(?P<slug>[a-z0-9-]+)/stats/$',
+                           'person_detail_stats',
+                           name='person_detail_stats'),
 
 
 )
