@@ -60,7 +60,7 @@ class TeamGameForm(forms.Form):
         gt1 = games.order_by('team1__id').distinct('team1__id')
         gt2 = games.order_by('team2__id').distinct('team2__id')
         tids = [e[0] for e in gt1.values_list('team1')] + [e[0] for e in gt2.values_list('team2')]
-        teams = Team.objects.filter(id__in=tids)
+        teams = Team.objects.filter(id__in=tids).exclude(id=team.id)
         self.fields['opponent'] = forms.ModelChoiceField(queryset=teams, required=False)
 
     result = forms.ChoiceField(choices=RESULTS, required=False)

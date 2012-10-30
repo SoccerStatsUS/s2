@@ -115,7 +115,7 @@ def team_detail(request, team_slug):
     goal_leaders = stats.exclude(goals=None).order_by('-goals')
     game_leaders = stats.exclude(games_played=None).order_by('-games_played')
 
-    competition_standings = Standing.objects.filter(team=team, season=None)
+    competition_standings = Standing.objects.filter(team=team, season=None).order_by('-wins')
     recent_picks = team.pick_set.exclude(player=None).order_by('-draft__season', 'number')[:10]
 
     recent_games = team.game_set().filter(date__lt=today).order_by('-date').select_related()[:10]
