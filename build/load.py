@@ -529,6 +529,8 @@ def load_drafts():
     print "\nloading drafts\n"
 
     competition_getter = make_competition_getter()
+    season_getter = make_season_getter()
+
     team_getter = make_team_getter()
 
     # Create the set of drafts.
@@ -536,18 +538,28 @@ def load_drafts():
     for draft in soccer_db.drafts.find().sort('team', 1):
         draft.pop('_id')
         competition_id = competition_getter(draft['competition'])        
-        competition = Competition.objects.get(id=competition_id)
-        draft['competition'] = competition
-        Draft.objects.create(**draft)
+        season_id = season_getter(draft['season'], competition_id)
+        #competition = Competition.objects.get(id=competition_id)
+        draft['competition_id'] = competition_id
+
+        Draft.objects.create(**{
+                'name': draft['name'],
+                'season_id': season_id,
+                'competition_id': competition_id,
+                'start': draft.get('start'),
+                'end': draft.get('end'),
+                })
+                
+        #Draft.objects.create(**draft)
 
     # Create picks
     picks = []
     for pick in soccer_db.picks.find():
-        pick.pop('_id')
-
 
         # draft, text, player, position, team
-        draft = Draft.objects.get(name=pick.get('draft'), season=pick.get('season'), competition__name=pick.get('competition'))
+        competition_id = competition_getter(pick.get('competition'))
+        season_id = season_getter(pick.get('season'), competition_id)
+        draft = Draft.objects.get(name=pick.get('draft'), competition_id=competition_id, season_id=season_id)
 
         team_id = team_getter(pick['team'])
 
@@ -575,12 +587,14 @@ def load_drafts():
                 'position': pick.get('position') or '',
                 'former_team_id': former_team_id,
                 'number': pick['number'],
+
                 })
 
-    for e in picks:
-        Pick.objects.create(**e)
 
-    #insert_sql("drafts_pick", picks)
+    #for e in picks:
+    #    Pick.objects.create(**e)
+
+    insert_sql("drafts_pick", picks)
         
         
 @transaction.commit_on_success
@@ -658,6 +672,8 @@ def load_bios():
     # Find which names are used so we can only load these bios.
     fields = [('lineups', 'name'), ('goals', 'goal'), ('stats', 'name'), ('awards', 'recipient'), ('picks', 'text')]
     names = set()
+
+    # Add names to names field where they have been used.
     for coll, key in fields:
         names.update([e[key] for e in soccer_db[coll].find()])
 

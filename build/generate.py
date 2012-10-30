@@ -1,4 +1,4 @@
-from collections import defaultdict
+from collections import defaultdict, Counter
 import datetime
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'build_settings'
@@ -15,9 +15,8 @@ from lineups.models import Appearance
 from positions.models import Position
 from sources.models import Source
 from standings.models import Standing
-from stats.models import Stat
+from stats.models import Stat, CareerStat
 from teams.models import Team
-
 from utils import insert_sql, timer
 
 
@@ -30,11 +29,13 @@ def generate():
     # Need to choose one.
     # Generate coaching stats!
     #generate_position_standings()
+    #generate_position_stats()
+
+    generate_game_data_quality()
 
     set_draft_picks()
 
     generate_source_data()
-
 
     generate_career_stats()
     generate_competition_stats()
@@ -43,17 +44,47 @@ def generate():
     generate_team_standings()
     generate_season_data()
 
-    #generate_position_stats()
+    generate_player_standings()
 
-
-    #generate_game_data_quality()
     #generate_game_minutes()
+
+
+
+@timer
+@transaction.commit_on_success
+def generate_player_standings():
+    results = Game.objects.values_list('id', 'team1', 'team1_result', 'team2', 'team2_result')
+    result_map = {}
+    for gid, t1, t1r, t2, t2r in results:
+        result_map[(gid, t1)] = t1r
+        result_map[(gid, t2)] = t2r
+
+    players = set()
+    standings = defaultdict(int)
+    appearances = Appearance.objects.values_list('game', 'team', 'player')
+    for game, team, player in appearances:
+        result = result_map[(game, team)]
+        standings[(player, result)] += 1
+        players.add(player)
+
+    for pid in players:
+        w, l, t = standings[(pid, 'w')], standings[(pid, 'l')], standings[(pid, 't')]
+        if w or l or t:
+            try:
+                c = CareerStat.objects.get(player=pid)
+            except:
+                continue
+            c.wins, c.losses, c.ties = w, l, t
+            c.save()
+        
+        
+        
 
 
 def set_draft_picks():
 
     # Not bothering parsing since this has only happened one time.
-    d = Draft.objects.get(competition__slug='major-league-soccer', name='SuperDraft', season='2002')
+    d = Draft.objects.get(competition__slug='major-league-soccer', name='SuperDraft', season__name='2002')
     picks = Pick.objects.filter(text__contains='SuperDraft')
     for pick in picks:
         number = int(pick.text.lower().split('pick')[0].strip().replace('#', ''))
@@ -164,43 +195,16 @@ def generate_game_data_quality():
     """
     print "Quality data for all games."
 
-    # Realized that this wasn't actually doing anything.
-    # (i.e. has never really worked; was not being used.)
 
-    lineup_games = set([e[0] for e in Appearance.objects.values_list("game")])
-    goal_games = set([e[0] for e in Goal.objects.values_list("game")])
+    global_starters = Appearance.objects.filter(on=0).exclude(off=0)
 
-    print "Starter data."
-    from collections import Counter
-    global_starters = Appearance.objects.filter(on=0)
-
-    # Should really make this smarter - actually save the numbers.
     starter_map = Counter([e[0] for e in global_starters.values_list('game')])
-    #starter_map = Counter([e[0] for e in global_starters.values_list('game', 'team')])
+    goal_map = Counter([e[0] for e in Goal.objects.values_list('game')])
 
-    
-    for e in Game.objects.all():
-        if e.id in lineup_games:
-            e.detail_level = 2
-        elif e.id in goal_games:
-            e.detail_level = 1
-        elif e.goals == 0:
-            e.detail_level = 1
-        else:
-            e.detail_level = 0
-
-        starters = starter_map.get(e.id, 0)
-        if starters == 22:
-            e.lineup_quality = 3
-        elif starters == 11:
-            e.lineup_quality = 2
-        elif starts == 0:
-            e.lineup_quality = 0
-        else:
-            e.lineup_quality = 1
-
-        e.save()
-
+    for game in Game.objects.all():
+        game.starter_count = starter_map.get(game.id, 0)
+        game.goal_count = goal_map.get(game.id, 0)
+        game.save()
     
 
 @transaction.commit_on_success
@@ -403,18 +407,6 @@ def generate_position_stats():
         
 
 
-
-@timer
-def generate_player_standings():
-    """
-    Generate all player standings for all players across all stats.
-    """
-    # This does not work because it's leaking memory like crazy.
-
-    for i, b in enumerate(Bio.objects.all()):
-        b.calculate_standings()
-        if i % 1000 == 0:
-            print i
 
 def generate_plus_minus(appearance_qs):
     """

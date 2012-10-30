@@ -14,12 +14,12 @@ class DraftManager(models.Manager):
 class Draft(models.Model):
 
     competition = models.ForeignKey(Competition)
+    season = models.ForeignKey(Season)
+    #season = models.CharField(max_length=255)
 
     name = models.CharField(max_length=255)
     slug = models.SlugField()
 
-    season = models.CharField(max_length=255)
-    
     start = models.DateField(blank=True, null=True)
     end = models.DateField(blank=True, null=True)
 
@@ -52,8 +52,6 @@ class Pick(models.Model):
     pick = models.ForeignKey('self', null=True, related_name='drafted_pick_set')
 
     position = models.CharField(max_length=5)
-
-    blank = models.BooleanField(default=False)
 
 
     def get_player(self):
