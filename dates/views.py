@@ -176,8 +176,13 @@ def day_detail(request, month, day):
     """
     This day in history.
     """
-
     month, day = int(month), int(day)
+
+    d = datetime.date(2012, month, day)
+    next_day = d + datetime.timedelta(days=1)
+    previous_day = d - datetime.timedelta(days=1)
+    day_string = "%s/%s" % (month, day)
+
     games = Game.objects.filter(date__month=month, date__day=day)
     births = Bio.objects.filter(birthdate__month=month,birthdate__day=day).order_by('birthdate')
     deaths = Bio.objects.filter(deathdate__month=month, deathdate__day=day).order_by('deathdate')
@@ -188,6 +193,11 @@ def day_detail(request, month, day):
         'births': births,
         'hires': hires,
         'fires': fires,
+
+        'day_string': day_string,
+        'next_day': next_day,
+        'previous_day': previous_day,
+
         }
     return render_to_response("dates/list.html",
                               context,
