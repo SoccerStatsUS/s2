@@ -125,6 +125,12 @@ class Game(models.Model):
     Represents a completed game.
     """
     # Need both a date and a datetime field? Not sure.
+
+    # Secondary data.
+    starter_count = models.IntegerField(null=True, blank=True)
+    goal_count = models.IntegerField(null=True, blank=True)
+
+
     date = models.DateField(null=True)
     
     team1 = models.ForeignKey(Team, related_name='t1_games')
@@ -174,23 +180,10 @@ class Game(models.Model):
     linesman2 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman2_games")
     linesman3 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman3_games")
 
-    # Detail level of stats.
-    # 0 - score only
-    # 1 - goals scored and score only
-    # 2 - lineups, red cards, etc.
-    # 3 - extra data
-    detail_level = models.IntegerField(null=True, blank=True)
-
-    # Quality of lineup
-    # 0 - no lineups
-    # 2 - lineups with logic problems
-    # 3 - plausibly complete lineups
-    # ? - verified lineup?
-    lineup_quality = models.IntegerField(null=True, blank=True)
-
-
     source = models.ForeignKey(Source, null=True)
     source_url = models.CharField(max_length=511)
+
+
 
     objects = GameManager()
 
@@ -217,12 +210,11 @@ class Game(models.Model):
 
     def get_completeness(self):
         """Returns how complete a game's data collection is."""
-        if self.appearance_set.exists():
+        if self.starter_count == 22:
             return 2
-        elif self.goal_set.exists() or self.team1_score == self.team2_score == 0:
-            return 1
-        else:
+        elif self.starter_count == 0 and self.goal_count == 0:
             return 0
+        return 1
 
 
     def color_code(self):
@@ -235,6 +227,11 @@ class Game(models.Model):
             'tie': 'yellow',
             'loss': 'red',
             }[self.result()]
+
+    def color_code_starters(self):
+        # Merge this and color_code
+        return ['red', 'yellow', 'green'][self.lineup_quality()]
+
 
 
     def score(self):
@@ -268,9 +265,6 @@ class Game(models.Model):
         return self.score_or_result_generic(self.reverse_result_string)
 
 
-
-
-
     @property
     def team1_score_or_result(self):
         if self.team1_score is not None:
@@ -284,11 +278,11 @@ class Game(models.Model):
         return self.team2_result.capitalize()
 
 
-
     def team1_lineups(self):
         return self.appearance_set.filter(team=self.team1)
 
-
+    def team2_lineups(self):
+        return self.appearance_set.filter(team=self.team2)
 
     def team1_starters(self):
         return self.team1_lineups().filter(on=0).exclude(off=0)
@@ -298,27 +292,19 @@ class Game(models.Model):
         return self.team2_lineups().filter(on=0).exclude(off=0)
 
     def lineup_quality(self):
-        ts1 = self.team1_starters().count()
-        ts2 = self.team2_starters().count()
-        if ts1 == 11 and ts2 == 11:
+        if self.starter_count == 22:
             return 2
-        elif ts1 > 0 or ts2 > 0:
+        elif self.starter_count > 0:
             return 1
-        else:
-            return 0
-
-    def color_code_starters(self):
-        # Merge this and color_code
-        return ['red', 'yellow', 'green'][self.lineup_quality()]
+        return 0
 
 
-    def team2_lineups(self):
-        return self.appearance_set.filter(team=self.team2)
+
 
 
     def starter_numbers(self):
         """A convenience method for making sure game lineups are good."""
-        return "%s:%s" % (self.team1_starters().count(), self.team2_starters().count())
+        return "%s:%s" % (self.team1_starter_count, self.team2_starter_count)
 
 
 

@@ -14,10 +14,9 @@
     <th>referee</th>
     <th>attendance</th>
 
-    {% comment %}
+
     <th></th>
-    <th></th>
-    {% endcomment %}
+
 
   </tr>
 
@@ -66,10 +65,9 @@
     {% endif %}
     {% datum_or_grey game.attendance %}
 
-    {% comment %}
-    <td class="{{ game.color_code }}-bg"></td>
-    <td class="{{ game.color_code_starters }}-bg">{{ game.starter_numbers }}</td>
-    {% endcomment %}
+
+    <td class="{{ game.color_code }}-bg">{{ game.goal_count }}, {{ game.starter_count }}</td>
+
 
   </tr>
   {% endfor %}
