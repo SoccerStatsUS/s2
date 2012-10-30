@@ -8,13 +8,14 @@
 
 {{ form.as_p }}
 
+{% comment %}
+<p>{{ form.email }}</p>
+<p>{{ form.message }}</p>
+{% endcomment %}
+
 <input type="submit" value="send" />
 
 </form>
-
-<p>(You can also email me at chris at soccerstats.us)</p>
-
-
 
 
 {% endblock %}
