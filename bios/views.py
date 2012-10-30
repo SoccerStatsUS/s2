@@ -84,8 +84,7 @@ def bad_bios(request):
 def person_detail(request, slug):
     bio = get_object_or_404(Bio, slug=slug)
     
-    competition_stats = bio.competition_stats()
-    domestic_competition_stats = competition_stats.filter(competition__international=False).order_by('-games_played')
+    competition_stats = bio.competition_stats().order_by('-games_played')
     team_stats = bio.team_stats().order_by('-games_played')
     league_stats = Stat.objects.filter(player=bio).filter(competition__ctype='League').order_by('season')
     
@@ -94,7 +93,7 @@ def person_detail(request, slug):
         'recent_appearances': bio.appearance_set.all()[:10],
 
         'league_stats': league_stats,
-        'domestic_competition_stats': domestic_competition_stats,
+        'competition_stats': competition_stats,
         'career_stats': bio.career_stats(),
         'team_stats': team_stats,
         }
