@@ -84,7 +84,7 @@ def competition_detail(request, competition_slug):
         'games': games.select_related()[:25],
         'top_attendance_games': games.exclude(attendance=None).order_by('-attendance')[:20],
         'worst_attendance_games': games.exclude(attendance=None).order_by('attendance')[:20],
-        'big_winners': competition.alltime_standings().order_by('-wins')[:20],
+        'big_winners': competition.alltime_standings().order_by('-wins')[:50],
         
         }
     return render_to_response("competitions/competition_detail.html",
@@ -211,7 +211,7 @@ def season_stats(request, competition_slug, season_slug):
     season = get_object_or_404(Season, competition=competition, slug=season_slug)
 
     #stats = Stat.objects.filter(team=None, season=season).order_by('-games_played')
-    stats = Stat.objects.filter(season=season).order_by('-games_played')
+    stats = Stat.objects.filter(season=season).order_by('-games_played').exclude(games_played=None)
 
     context = {
         'season': season,
