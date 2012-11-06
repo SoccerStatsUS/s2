@@ -79,7 +79,7 @@ class Bio(models.Model):
     """
     
     name = models.CharField(max_length=500)
-    slug = models.SlugField(unique=False)
+    slug = models.SlugField(max_length=200, unique=False)
 
     height = models.IntegerField(null=True, blank=True)
 

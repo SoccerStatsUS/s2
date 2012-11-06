@@ -10,6 +10,38 @@ from stats.models import Stat, CareerStat
 
 from bios.forms import BioAppearanceForm
 
+
+
+class AppearanceStat(object):
+    def __init__(self, appearances):
+        from goals.models import Goal, Assist
+
+        self.player = appearances[0].player
+
+        self.goals_for = appearances.exclude(goals_for=None).aggregate(Sum('goals_for'))['goals_for__sum']
+        self.goals_against = appearances.exclude(goals_against=None).aggregate(Sum('goals_against'))['goals_against__sum']
+        results = [e[0] for e in appearances.filter(result__in='wlt').values_list('result')]
+        c = Counter(results)
+        self.wins, self.ties, self.losses = c['w'], c['t'], c['l']
+        self.games = appearances.count()
+
+        if self.games:
+            self.win_percentage_100 =  (self.wins + .5 * self.ties) / self.games
+        else:
+            self.win_percentage_100 = 0
+
+        game_ids = appearances.values_list('game')
+
+        self.games_played = len(game_ids)
+        self.games_started = appearances.filter(on=0).count()
+
+        self.minutes = appearances.exclude(minutes=None).aggregate(Sum('minutes'))['minutes__sum']
+        self.goals = Goal.objects.filter(player=self.player, game__id__in=game_ids).count()
+        self.assists = Assist.objects.filter(player=self.player, goal__game__id__in=game_ids).count()
+
+
+
+
 def person_list_generic(request, person_list=None):
 
     if person_list is None:
@@ -25,16 +57,6 @@ def person_list_generic(request, person_list=None):
                               context_instance=RequestContext(request)
                               )    
 
-
-class AppearanceStanding(object):
-    # Use this to generate a standing for a given set of appearances.
-    def __init__(self, appearances):
-        self.appearances = appearances
-        self.goals_for = appearances.exclude(goals_for=None).aggregate(Sum('goals_for'))['goals_for__sum']
-        self.goals_against = appearances.exclude(goals_against=None).aggregate(Sum('goals_for'))['goals_against__sum']
-        results = [e[0] for e in appearances.filter(result__in='wlt').values_list('result')]
-        c = Counter(results)
-        self.wins, self.ties, self.losses = c['w'], c['t'], c['l']
         
 
 def one_word(request):
@@ -127,10 +149,12 @@ def person_detail_games(request, slug):
 
     else:
         form = BioAppearanceForm(bio)
+
     
     context = {
         'form': form,
         'appearances': appearances,
+        'stat': AppearanceStat(appearances),
         }
     return render_to_response("bios/detail_games.html",
                               context,
