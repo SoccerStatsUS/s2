@@ -107,7 +107,7 @@
 <tr>
   <td>{{ e.draft.season }}</td>
   <td>{{ e.number }}</td>
-  <td><a href="{% url draft_detail e.draft.competition.slug e.draft.slug e.draft.season %}">{{ e.draft.name }}</a></td>
+  <td><a href="{% url draft_detail e.draft.competition.slug e.draft.slug e.draft.season.name %}">{{ e.draft.name }}</a></td>
 
   <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
 </tr>
