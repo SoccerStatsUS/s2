@@ -245,7 +245,7 @@ class Game(models.Model):
 
     def score_or_result_generic(self, func):
         """Returns a score string."""
-        if self.date > datetime.date.today():
+        if self.date is not None and self.date > datetime.date.today():
             return 'np'
 
         if self.result_unknown:
