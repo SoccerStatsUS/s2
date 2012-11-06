@@ -159,6 +159,7 @@ def season_detail(request, competition_slug, season_slug):
 
     context = {
         'season': season,
+        'standings': season.standing_set.filter(date=None),
         'stats': stats.exists(),
         #'total_minutes': total_minutes,
         #'known_minutes': known_minutes,
@@ -209,11 +210,13 @@ def season_stats(request, competition_slug, season_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
     season = get_object_or_404(Season, competition=competition, slug=season_slug)
 
-    #'stats': Stat.objects.filter(team=None, season=season).order_by('-games_played'),
+    #stats = Stat.objects.filter(team=None, season=season).order_by('-games_played')
+    stats = Stat.objects.filter(season=season).order_by('-games_played')
 
     context = {
         'season': season,
-        'stats': SeasonStat.objects.filter(season=season).order_by('-games_played'),
+        #'stats': SeasonStat.objects.filter(season=season).order_by('-games_played'),
+        'stats': stats,
         }
     return render_to_response("competitions/season_stats.html",
                               context,

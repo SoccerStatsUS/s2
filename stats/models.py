@@ -100,6 +100,23 @@ class AbstractStat(models.Model):
 
 
 
+    def partnerships(self, competition, season):
+        stats = Stat.objects.filter(competition=competition, season=season)
+        teams = set([e[0] for e in stats.values_list('team')])
+
+        l = []
+        for team_id in teams:
+            team = Team.objects.get(id=team_id)
+            tstats = stats.filter(team=team_id).exclude(goals=None).order_by('-goals')
+            pair = tstats[:2]
+            goals = tstats[0].goals + tstats[1].goals
+            t = (goals, competition, season, team, tstats[0].player, tstats[1].player)
+            l.append(t)
+        return l
+            
+
+
+
 class CareerStat(AbstractStat):
     # Should rename player person?
     player = models.ForeignKey(Bio)

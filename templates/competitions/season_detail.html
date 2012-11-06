@@ -29,7 +29,7 @@
 
 
 <div tab="summary">
-{% include "templatetags/compact_standings.html" with standings=season.standing_set.all %}
+{% include "templatetags/compact_standings.html" %}
 
 
 <table>
@@ -138,7 +138,7 @@
 
 {% if season.standing_set.exists %}
 <div tab="standings">
-{% include "templatetags/standings.html" with standings=season.standing_set.all %}
+{% include "templatetags/standings.html" %}
 </div>
 {% endif %}
 

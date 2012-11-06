@@ -29,6 +29,7 @@ def draft_detail(request, competition_slug, draft_slug, season):
     Draft detail page. Don't want to use competition since some drafts don't have a competition?
     """
     competition = get_object_or_404(Competition, slug=competition_slug)
+    season = get_object_or_404(Season, competition=competition, name=season)
     draft = get_object_or_404(Draft, season=season, slug=draft_slug, competition=competition)
 
     context = {

@@ -13,6 +13,7 @@ class Appearance(models.Model):
     player = models.ForeignKey(Bio)
 
     team = models.ForeignKey(Team)
+    #opponent = models.ForeignKey(Team)
     #team_original_name = models.CharField(max_length=255)
     
     game = models.ForeignKey(Game)

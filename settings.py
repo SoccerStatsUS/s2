@@ -209,6 +209,7 @@ INSTALLED_APPS = (
 
 
 def show_toolbar(request):
+    return False
     return DEBUG
 
 
