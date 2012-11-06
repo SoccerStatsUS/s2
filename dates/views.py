@@ -9,6 +9,7 @@ from bios.models import Bio
 from games.models import Game
 from places.models import City, Stadium
 from positions.models import Position
+from standings.models import Standing
 
 
 @cache_page(60 * 60 * 12)
@@ -143,6 +144,8 @@ def date_detail(request, year, month, day):
     stadium_ids = set([e[0] for e in games.exclude(stadium=None).values_list('stadium')])
     stadiums = Stadium.objects.filter(id__in=stadium_ids)
 
+    standings = Standing.objects.filter(date=d)
+
 
     next_date_tuple = previous_date_tuple = None
 
@@ -165,6 +168,7 @@ def date_detail(request, year, month, day):
         'previous_date': previous_date_tuple,
         'next_date': next_date_tuple,
         'stadiums': stadiums[:20],
+        'standings': standings,
         }
     return render_to_response("dates/list.html",
                               context,
