@@ -130,7 +130,6 @@ class Game(models.Model):
     starter_count = models.IntegerField(null=True, blank=True)
     goal_count = models.IntegerField(null=True, blank=True)
 
-
     date = models.DateField(null=True)
     
     team1 = models.ForeignKey(Team, related_name='t1_games')
@@ -228,9 +227,15 @@ class Game(models.Model):
             'loss': 'red',
             }[self.result()]
 
-    def color_code_starters(self):
+    def lineup_color_code(self):
         # Merge this and color_code
         return ['red', 'yellow', 'green'][self.lineup_quality()]
+
+    def goal_color_code(self):
+        # Merge this and color_code
+        return ['red', 'yellow', 'green'][self.goal_quality()]
+
+
 
 
 
@@ -299,7 +304,18 @@ class Game(models.Model):
         return 0
 
 
+    def goal_quality(self):
 
+        if self.team1_score is None or self.team2_score is None:
+            return 0
+
+        score_goals = self.team1_score + self.team2_score
+        if self.goal_count == score_goals:
+            return 2
+        elif self.goal_count > 0:
+            return 1
+        else:
+            return 0
 
 
     def starter_numbers(self):
