@@ -316,7 +316,11 @@ def generate_standings_generic(qs, make_key, update_dict):
 
     final_dict = {}
     excluded = ('player_id', 'team_id', 'competition_id', 'season_id', 'division', 'group')
-    for standing in qs.values():
+    
+    # Don't include rolling standings.
+    final_qs = qs.filter(date=None)
+
+    for standing in final_qs.values():
         # This determines what is filtered.
         # e.g., create all-time player stats with 
         # make_key = lambda s: s['player']

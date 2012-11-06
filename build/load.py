@@ -656,6 +656,8 @@ def load_stadiums():
 @transaction.commit_on_success
 def load_standings():
     print "loading standings\n"
+    # Low-hanging fruit. Please speed this up soon.
+
     for standing in soccer_db.standings.find().sort('team', 1):
         standing.pop('_id')
         standing['team'] = Team.objects.find(standing['team'], create=True)
@@ -777,16 +779,16 @@ def load_games():
 
         referee_id = linesman1_id = linesman2_id = linesman3_id = None
         if game['referee']:
-            referee = bio_getter(game['referee'])
+            referee_id = bio_getter(game['referee'])
 
         if game.get('linesman1'):
-            linesman1 = bio_getter(game['linesman1'])
+            linesman1_id = bio_getter(game['linesman1'])
 
         if game.get('linesman2'):
-            linesman2 = bio_getter(game['linesman2'])
+            linesman2_id = bio_getter(game['linesman2'])
 
         if game.get('linesman3'):
-            linesman3 = bio_getter(game['linesman3'])
+            linesman3_id = bio_getter(game['linesman3'])
 
         source = None
         source_url = ''
@@ -895,6 +897,11 @@ def load_goals():
         if goal.get('own_goal_player'):
             ogbio_id = bio_getter(goal['own_goal_player'])
 
+
+        # Tough to apply a goal without a date...
+        if not goal['date']:
+            return {}
+
         # Coerce to date to match dict.
         d = datetime.date(goal['date'].year, goal['date'].month, goal['date'].day)
         game_id = game_getter(team_id, d)
@@ -921,6 +928,7 @@ def load_goals():
 
     goals = []
 
+    i = 0
     for i, goal in enumerate(soccer_db.goals.find()):
         if i % 5000 == 0:
             print i
@@ -929,6 +937,7 @@ def load_goals():
         if g:
             goals.append(g)
 
+    
     print i
 
     insert_sql('goals_goal', goals)
@@ -975,6 +984,7 @@ def load_assists():
 
     assists = []
 
+    i = 0
     for i, goal in enumerate(soccer_db.goals.find()):
         if i % 5000 == 0:
             print i
