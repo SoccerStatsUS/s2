@@ -156,11 +156,18 @@ h1 span.subhead {
     border: 1px solid black;
 }
 
-/* Contact */
+/* Contact form */
 
-textarea.contact {
-    height: 100px;
-    width: 500px;
+label {
+    width: 200px;
+}
+
+input#id_email {
+    width: 400px;
+}
+
+textarea#id_message {
+    width: 400px;
 }
 
 /* Game detail */
