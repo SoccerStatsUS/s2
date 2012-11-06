@@ -1,7 +1,8 @@
-from collections import defaultdict, OrderedDict
+from collections import defaultdict, OrderedDict, Counter
 import datetime
 
-from django.db.models import Q
+
+from django.db.models import Q, Sum
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
@@ -12,6 +13,39 @@ from teams.forms import TeamGameForm, TeamStatForm
 from teams.models import Team
 from standings.models import Standing
 from stats.models import Stat, TeamStat
+
+
+class TempGameStanding(object):
+    # Use this to generate a standing for a given set of games
+    def __init__(self, games, team):
+        self.games = games.count()
+        self.team = team
+
+        t1_games = games.filter(team1=team)
+        t2_games = games.filter(team2=team)
+
+        goals_for = goals_against = 0
+        if t1_games.exists():
+            goals_for += t1_games.aggregate(Sum('team1_score'))['team1_score__sum']
+            goals_against += t1_games.aggregate(Sum('team2_score'))['team2_score__sum']
+
+        if t2_games.exists():
+            goals_for +=  t2_games.aggregate(Sum('team2_score'))['team2_score__sum'] 
+            goals_against +=  t2_games.aggregate(Sum('team1_score'))['team1_score__sum'] 
+        
+        self.goals_for = goals_for
+        self.goals_against = goals_against
+        t1_results = [e[0] for e in games.filter(team1=team, team1_result__in='wlt').values_list('team1_result')]
+        t2_results = [e[0] for e in games.filter(team2=team, team2_result__in='wlt').values_list('team2_result')]
+        results = t1_results + t2_results
+        c = Counter(results)
+        self.wins, self.ties, self.losses = c['w'], c['t'], c['l']
+
+        if self.games:
+            self.win_percentage_100 = 100 * (self.wins + .5 * self.ties) / self.games
+        else:
+            self.win_percentage_100 = 0
+
 
 
 
@@ -230,10 +264,15 @@ def team_games(request, team_slug):
         form = TeamGameForm(bio)
 
 
+    games = games.select_related()
+    standings = [TempGameStanding(games, team)]
+
+
     context = {
         'team': team,
         'form': form,
-        'games': games.select_related(),
+        'games': games,
+        'standings': standings,
         }
 
     return render_to_response("teams/games.html",
