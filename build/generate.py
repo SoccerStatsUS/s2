@@ -53,6 +53,8 @@ def generate():
 @timer
 @transaction.commit_on_success
 def generate_player_standings():
+    # merge this with plus/minus.
+
     results = Game.objects.values_list('id', 'team1', 'team1_result', 'team2', 'team2_result')
     result_map = {}
     for gid, t1, t1r, t2, t2r in results:
@@ -95,6 +97,7 @@ def set_draft_picks():
 @timer
 def generate_source_data():
     print "Generating source data."
+    return
     sources = Source.objects.annotate(game_count=Count('game'), stat_count=Count('stat'))
     for source in sources:
         source.games = source.game_count
@@ -423,13 +426,13 @@ def generate_plus_minus(appearance_qs):
     for (i, a) in enumerate(appearance_qs.values()):
         if i % 1000 == 0:
             print i
-            
+
         try:
-            key = a['player']
+            key = a['player_id']
         except:
             import pdb; pdb.set_trace()
         try:
-            d[key] += a.goal_differential
+            d[key] += a['goals_for'] - a['goals_against']
         except:
             "Cannot get +/- for %s" % a
     return d
@@ -447,6 +450,29 @@ def generate_career_plus_minus():
         s = career_stat_dict[k]
         s.plus_minus = v
         s.save()
+
+
+@transaction.commit_on_success
+def generate_season_plus_minus():
+    competition_slugs = ['major-league-soccer']
+    #competition_slugs = ['mls-reserve-league']
+
+    d = {}
+
+    for slug in competition_slugs:
+        c = Competition.objects.get(slug=slug)
+        for season in c.season_set.all():
+            #import pdb; pdb.set_trace()
+            appearances = Appearance.objects.filter(game__season=season)
+            team_ids = set([e[0] for e in appearances.values_list('team')])
+            for team_id in team_ids:
+                team_appearances = appearances.filter(team=team_id)
+                pms = generate_plus_minus(team_appearances)
+                for pid, pm in pms.items():
+                    key = (pid, team_id, season.id)
+                    d[key] = pm
+                
+    return d
 
 
 @timer
