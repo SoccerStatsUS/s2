@@ -18,6 +18,9 @@ class Appearance(models.Model):
     
     game = models.ForeignKey(Game)
 
+    # What order the player is the lineup. (Matt Reis, Avery John, Michael Parkhurst) -> Michael Parkhurst, 3
+    order = models.IntegerField(null=True)
+
     on = models.IntegerField(null=True)
     off = models.IntegerField(null=True)
 
@@ -31,7 +34,7 @@ class Appearance(models.Model):
     minutes = models.IntegerField(null=True)
 
     class Meta:
-        ordering = ('game', 'on', '-id' )
+        ordering = ('game', 'order', 'on', '-id' )
         pass
 
 
