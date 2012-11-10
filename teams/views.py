@@ -237,6 +237,8 @@ def team_games(request, team_slug):
     """
     team = get_object_or_404(Team, slug=team_slug)
 
+    games = Game.objects.team_filter(team)
+
     if request.method == 'GET':
         form = TeamGameForm(team, request.GET)
 
@@ -262,7 +264,6 @@ def team_games(request, team_slug):
 
     else:
         form = TeamGameForm(bio)
-
 
     games = games.select_related()
     standings = [TempGameStanding(games, team)]

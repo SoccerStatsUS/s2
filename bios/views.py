@@ -13,10 +13,10 @@ from bios.forms import BioAppearanceForm
 
 
 class AppearanceStat(object):
-    def __init__(self, appearances):
+    def __init__(self, player, appearances):
         from goals.models import Goal, Assist
 
-        self.player = appearances[0].player
+        self.player = player
 
         self.goals_for = appearances.exclude(goals_for=None).aggregate(Sum('goals_for'))['goals_for__sum']
         self.goals_against = appearances.exclude(goals_against=None).aggregate(Sum('goals_against'))['goals_against__sum']
@@ -154,7 +154,7 @@ def person_detail_games(request, slug):
     context = {
         'form': form,
         'appearances': appearances,
-        'stat': AppearanceStat(appearances),
+        'stat': AppearanceStat(bio, appearances),
         }
     return render_to_response("bios/detail_games.html",
                               context,
