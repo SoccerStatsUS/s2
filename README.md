@@ -1,24 +1,9 @@
 
-# Need to improve position calculation so that we can get MLS coaching records for coaches.
 
-* Investigate why the NASL has a 1967 season.
-* Figure out what to do with /teams/tampa-bay-mutiny/1998 (eg) and do it well.
-* Remove external jquery link; put jquery in the media files.
+# A website for displaying and analyzing soccer statistics.
 
 
-Season types:
 
-Split these further into Federal Park League and Robison Field League of the St. Louis Soccer League
-First Series
-Second Series
-
-Fall
-Fall Playoff
-First Half
-Playoffs
-Second Half
-Spring
-(1928-1929 problem)
 
 # Deployment instructions.
 1. Add to /etc/hosts, /etc/ssh_config
@@ -58,36 +43,9 @@ Use canvas to draw fields?
 
 Create a team ranking system based on the scores.
 
-Migrate to postgresql. SQLite doesn't support unique constraints. Also, this will allow geoDjango support.
-
 # Are a stat and a standing the same thing?
 
-Pretend a standing is a managerial statistic. 
 
-Each one can have:
-
-Player, Team, Competition, Season, Nothing attached; presumably we could map goals or games played or whatever to standings.
-
-Games maps directly to games played.
-
-Relationship between goals, goals for?
-
-Stats can obviously not have a player. Team Stats, League Stats, 
-
-goals_for can represent either minutes gf or games played gf, whereas w/l/t represent only games played.
-
-Probably need to think about the game stat (stat for one player for one game, or stat for one game or whatever. Just another kind of stat. Can just apply game to stat also.
-
-
-# Homepage
-
-Homepage should have:
-1. Today's games
-2. Yesterday's scores
-3. Ongoing competitions (MLS, MLS Playoffs, US Open Cup, CONCACAF)
-
-
-Team Detail should have recent scores graph.
 
 
 #### Bugs
