@@ -3,7 +3,7 @@
 
 <ul>
   {% for pick in player.usmnt_draft_picks %}
-  <li>{{ pick.draft }} - {{ pick.position }}</li>
+  <li>{{ pick.draft.season.name }} - {{ pick.position }}</li>
   {% endfor %}
 </ul>
 

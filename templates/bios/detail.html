@@ -68,7 +68,12 @@
 <tr>
   <td>{{ pick.number }}</td>
   <td><a href="{% url team_detail pick.team.slug %}">{{ pick.team }}</a></td>
+  {% if draft.competition %}
   <td><a href="{% url draft_detail pick.draft.competition.slug pick.draft.slug pick.draft.season.name %}">{{ pick.draft }}</a></td>
+  {% else %}
+  <td>{{ pick.draft.season.name }} {{ pick.draft.name }}</td>
+  {% endif %}
+  
 </tr>
 {% endfor %}
 </table>

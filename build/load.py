@@ -249,7 +249,11 @@ def make_season_getter():
         if key in seasons:
             sid = seasons[key]
         else:
-            competition = Competition.objects.get(id=competition_id)
+            if competition_id:
+                competition = Competition.objects.get(id=competition_id)
+            else:
+                competition = None
+
             sid = Season.objects.find(name, competition).id
             seasons[key] = sid
 
@@ -546,9 +550,13 @@ def load_drafts():
 
     for draft in soccer_db.drafts.find().sort('team', 1):
         draft.pop('_id')
-        competition_id = competition_getter(draft['competition'])        
+
+        if draft['competition']:
+            competition_id = competition_getter(draft['competition'])        
+        else:
+            competition_id = None
+
         season_id = season_getter(draft['season'], competition_id)
-        #competition = Competition.objects.get(id=competition_id)
         draft['competition_id'] = competition_id
 
         Draft.objects.create(**{
@@ -566,7 +574,13 @@ def load_drafts():
     for pick in soccer_db.picks.find():
 
         # draft, text, player, position, team
-        competition_id = competition_getter(pick.get('competition'))
+
+        c = pick.get('competition')
+        if c:
+            competition_id = competition_getter(pick.get('competition'))
+        else:
+            competition_id = None
+
         season_id = season_getter(pick.get('season'), competition_id)
         draft = Draft.objects.get(name=pick.get('draft'), competition_id=competition_id, season_id=season_id)
 
@@ -1029,6 +1043,7 @@ def load_stats():
     source_getter = make_source_getter()
 
     l = []    
+    i = 0
     for i, stat in enumerate(soccer_db.stats.find(timeout=False)): # no timeout because this query takes forever.
         if i % 5000 == 0:
             print i

@@ -280,7 +280,10 @@ class SeasonManager(models.Manager):
         """
         d = {}
         for e in self.get_query_set():
-            d[(e.name, e.competition.id)] = e.id
+            if e.competition:
+                d[(e.name, e.competition.id)] = e.id
+            else:
+                d[(e.name, None)] = e.id
         return d
 
 
@@ -296,7 +299,7 @@ class Season(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField()
 
-    competition = models.ForeignKey(Competition)
+    competition = models.ForeignKey(Competition, null=True)
     competition_original_name = models.CharField(max_length=255)
 
     objects = SeasonManager()

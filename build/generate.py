@@ -86,7 +86,11 @@ def generate_player_standings():
 def set_draft_picks():
 
     # Not bothering parsing since this has only happened one time.
-    d = Draft.objects.get(competition__slug='major-league-soccer', name='SuperDraft', season__name='2002')
+    try:
+        d = Draft.objects.get(competition__slug='major-league-soccer', name='SuperDraft', season__name='2002')
+    except:
+        return
+
     picks = Pick.objects.filter(text__contains='SuperDraft')
     for pick in picks:
         number = int(pick.text.lower().split('pick')[0].strip().replace('#', ''))

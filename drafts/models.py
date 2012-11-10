@@ -13,7 +13,7 @@ class DraftManager(models.Manager):
 
 class Draft(models.Model):
 
-    competition = models.ForeignKey(Competition)
+    competition = models.ForeignKey(Competition, null=True)
     season = models.ForeignKey(Season)
     #season = models.CharField(max_length=255)
 
