@@ -1,3 +1,6 @@
+import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'build_settings'
+
 import datetime
 import difflib
 import re
@@ -94,7 +97,7 @@ def remove_parentheses(name):
         return name
 
 def replace_with_parentheses(name):
-    r = re.match('(.*?)(\(.*?\))(.*)', name)
+    r = re.match('(.*?)\((.*?)\)(.*)', name)
     if r:
         first, middle, last = [e.strip() for e in r.groups()]
         return '%s %s' % (middle, last)
@@ -120,8 +123,32 @@ def find_parenthetical_names(qs=None):
             print "'%s': '%s'" % (e, n2)
 
 
+def remove_middle_initial(name):
+    r = re.match('(\w*?) \w\.? (\w*)', name)
+    if r:
+        first, last = [e.strip() for e in r.groups()]
+        return '%s %s' % (first, last)
+    else:
+        return name
+
+
+
+def find_middle_initial_names(qs=None):
+    if qs is None:
+        qs = Bio.objects.all()
+
+    names = set([e.name for e in qs])
+
+    for e in names:
+        n1 = remove_middle_initial(e)
+
+        if n1 != e and n1 in names:
+            print "'%s': '%s'," % (e, n1)
+
 
 def get_similar_names(qs=None, score=.85):
+
+    f = open('/home/chris/similar', 'w')
 
     if qs is None:
         qs = Bio.objects.all()
@@ -132,11 +159,19 @@ def get_similar_names(qs=None, score=.85):
         #print "Processing %s" % name
         for e in names[i+1:]:
             nscore = difflib.SequenceMatcher(None, name, e).ratio()
-            t = (name, e, nscore)
+            nscores = str(nscore)[:4]
+            t = (name, e, nscores)
             #l.append(t)
             if nscore > score:
-                print datetime.datetime.now()
-                print t
+
+                #print datetime.datetime.now()
+                f.write(str(t))
+                f.write('\n')
+                #print t
+
+    f.close()
 
     return sorted(l, key=lambda e: e[2])
         
+if __name__ == "__main__":
+    pass
