@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
 from bios.models import Bio
-from games.models import Game
+from games.models import Game, GameSource
 from standings.models import Standing
 from stats.models import Stat, CareerStat
 
@@ -129,6 +129,7 @@ def game_detail(request, game_id):
     game = get_object_or_404(Game, id=game_id)
     context = {
         'game': game,
+        'game_sources': GameSource.objects.filter(game=game)
         }
     return render_to_response("games/detail.html",
                               context,

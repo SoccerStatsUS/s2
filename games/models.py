@@ -179,10 +179,7 @@ class Game(models.Model):
     linesman2 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman2_games")
     linesman3 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman3_games")
 
-    source = models.ForeignKey(Source, null=True)
-    source_url = models.CharField(max_length=511)
-
-
+    sources = models.ManyToManyField(Source, through='GameSource')
 
     objects = GameManager()
 
@@ -621,8 +618,10 @@ class Game(models.Model):
         """
         # How to apply lineups to this?
         # Can't generate anything without goal minutes.
-        if self.goals and not self.goal_set.exists():
-            pass
+
+        no_minute_goals = self.goal_set.filter(minute=None)
+        if no_minute_goals.exists():
+            return []
 
         slices = []
 
@@ -658,7 +657,55 @@ class Game(models.Model):
 
 
 
+def get_best_game_ids():
+    competitions = Competition.objects.filter(slug__in=['major-league-soccer', 'usl-first-division', 'usl-second-division', 'ussf-division-2-professional-league', 'north-american-soccer-league-2011-'])
+    competitions = Competition.objects.filter(slug__in=['major-league-soccer'])
+    games = Game.objects.filter(competition__in=competitions).filter(date__gte=datetime.date(2004, 1, 1)).filter(date__lt=datetime.date(2012, 1, 1))
+    
+    gids = []
+    #import pdb; pdb.set_trace()
+    for gid, t1s, t2s, gc in games.filter(starter_count=22).values_list('id', 'team1_score', 'team2_score', 'goal_count'):
+        if t1s + t2s == gc:
+            gids.append(gid)
 
+    #import pdb; pdb.set_trace()
+            
+
+    print "Using %s out of %s games" % (len(gids), games.count())
+
+    return gids
+        
+
+def make_game_blocks():
+    l = []
+    gids = get_best_game_ids()
+    games = Game.objects.filter(id__in=gids)
+
+    used = 0
+
+    for game in games:
+        slices = game.game_scores_by_minute()
+        l.extend(slices)
+        if len(slices) > 0:
+            used += 1
+
+    print "%s out of %s games with complete data" % (len(gids), used)
+
+    return l
+
+
+
+
+class GameSource(models.Model):
+    """
+    A many-to-many mapping of a source to a single game.
+    """
+    # A separate model is used to include source_url, which is unique to each mapping.
+
+
+    game = models.ForeignKey(Game)
+    source = models.ForeignKey(Source)
+    source_url = models.CharField(max_length=1023)
 
 
 

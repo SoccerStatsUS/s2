@@ -269,14 +269,22 @@ def make_game_getter():
     game_team_map = Game.objects.game_dict()
 
     def getter(team_id, dt):
-        # Not doing full game times yet...
-        dx = datetime.date(dt.year, dt.month, dt.day) # Avoid datetime.date/datetime.datetime mismatch.
-        key = (team_id, dx)
-        if key in game_team_map:
-            gid = game_team_map[key]
-        else:
-            print "Failed to find for %s, %s" % (team_id, dx)
+
+        # This is becoming a larger and larger problem.
+        # Going to have to reconsider how we label games because of dateless games.
+
+        if dt is None:
+            print "Failed to find for %s, %s" % (team_id, dt)
             gid = None
+        else:
+            # Not doing full game times yet...
+            dx = datetime.date(dt.year, dt.month, dt.day) # Avoid datetime.date/datetime.datetime mismatch.
+            key = (team_id, dx)
+            if key in game_team_map:
+                gid = game_team_map[key]
+            else:
+                print "Failed to find for %s, %s" % (team_id, dx)
+                gid = None
         
         return gid
 
@@ -348,11 +356,12 @@ def load():
     # Complex game data
     load_games()
 
-    # Mixed data
-    load_stats()
     load_goals()
     load_assists()
     load_lineups()
+
+    # Consider loading stats last so that we can generate 
+    load_stats()
 
     # Analysis data
     #load_news()
@@ -750,6 +759,7 @@ def load_games():
     city_getter = make_city_getter()
 
     games = []
+    game_sources = []
 
     for game in soccer_db.games.find().sort('date', 1):
 
@@ -790,19 +800,23 @@ def load_games():
         if game.get('linesman3'):
             linesman3_id = bio_getter(game['linesman3'])
 
-        source = None
-        source_url = ''
+
         if game.get('sources'):
-            source = game['sources'][-1]
+            sources = sorted(set(game.get('sources')))
         elif game.get('source'):
-            source = game['source']
+            sources = [game['source']]
+        else:
+            sources = []
 
-        if source and source.startswith('http'):
-            source_url = source
-
-        source_id = None
-        if source:
+        
+        for source in sources:
+            if source.startswith('http'):
+                source_url = source
+            else:
+                source_url = ''
             source_id = source_getter(source)
+            t = (game['date'], team1_id, source_id, source_url)
+            game_sources.append(t)
 
         result_unknown = game.get('result_unknown') or False
         played = game.get('played') or True
@@ -858,22 +872,27 @@ def load_games():
                 'linesman2_id': linesman2_id,
                 'linesman3_id': linesman3_id,
 
-                'source_id': source_id,
-                'source_url': source_url,
                 })
 
-                
 
-
-        """
-        try:
-            Game.objects.create(**game)
-        except:
-            print "Skipping game %s" % game
-            import pdb; pdb.set_trace()
-            x = 5
-        """
     insert_sql("games_game", games)
+
+    game_getter = make_game_getter()
+    
+    l = []
+    for date, team_id, source_id, source_url in game_sources:
+        game_id = game_getter(team_id, date)
+        if game_id:
+            l.append({
+                    'game_id': game_id,
+                    'source_id': source_id,
+                    'source_url': source_url,
+                    })
+
+    insert_sql("games_gamesource", l)
+            
+
+
 
 @timer
 @transaction.commit_on_success
@@ -949,7 +968,6 @@ def load_assists():
 
     team_getter = make_team_getter()
     bio_getter = make_bio_getter()
-    game_getter = make_game_getter()
     goal_getter = make_goal_getter()
 
     def create_assists(goal):
@@ -1129,10 +1147,12 @@ def load_lineups():
             'goals_for': a['goals_for'],
             'goals_against': a['goals_against'],
             'result': result,
+            'order': a.get('order', None),
             }
 
     # Create the appearance objects.
     l = []
+    i = 0
     for i, a in enumerate(soccer_db.lineups.find()):
         u = create_appearance(a)
         if u:
