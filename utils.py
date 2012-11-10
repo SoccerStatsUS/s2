@@ -1,5 +1,6 @@
 import datetime
 import difflib
+import re
 import time                                                
 
 from django.db import connection, transaction
@@ -83,18 +84,57 @@ class memoized(object):
 # Run this as a cron job and store in a database?
 # Takes a while.
 
-def get_similar_names(score=.85):
 
-    l = []
+def remove_parentheses(name):
+    r = re.match('(.*?)(\(.*?\))(.*)', name)
+    if r:
+        first, middle, last = [e.strip() for e in r.groups()]
+        return '%s %s' % (first, last)
+    else:
+        return name
 
-    names = sorted([e.name for e in Bio.objects.all()])
+def replace_with_parentheses(name):
+    r = re.match('(.*?)(\(.*?\))(.*)', name)
+    if r:
+        first, middle, last = [e.strip() for e in r.groups()]
+        return '%s %s' % (middle, last)
+    else:
+        return name
+
+
+
+def find_parenthetical_names(qs=None):
+    if qs is None:
+        qs = Bio.objects.all()
+
+    names = set([e.name for e in qs])
+
+    for e in names:
+        n1 = remove_parentheses(e)
+        n2 = replace_with_parentheses(e)
+
+        if n1 != e and n1 in names:
+            print "'%s': '%s'" % (e, n1)
+            
+        if n2 != e and n2 in names:
+            print "'%s': '%s'" % (e, n2)
+
+
+
+def get_similar_names(qs=None, score=.85):
+
+    if qs is None:
+        qs = Bio.objects.all()
+
+    names = sorted([e.name for e in qs])
 
     for i, name in enumerate(names):
+        #print "Processing %s" % name
         for e in names[i+1:]:
-            score = difflib.SequenceMatcher(None, name, e).ratio()
-            t = (name, e, score)
+            nscore = difflib.SequenceMatcher(None, name, e).ratio()
+            t = (name, e, nscore)
             #l.append(t)
-            if score > score:
+            if nscore > score:
                 print datetime.datetime.now()
                 print t
 
