@@ -50,6 +50,12 @@ class Standing(models.Model):
     def triple(self):
         return "%s-%s-%s" % (self.wins, self.ties, self.losses)
 
+    def goal_ratio(self):
+        try:
+            return float(self.goals_for) / self.goal_against
+        except:
+            return 0.0
+
     def __unicode__(self):
         return u"%s %s, %s: %s" % (self.team, self.competition, self.season, self.triple())
 

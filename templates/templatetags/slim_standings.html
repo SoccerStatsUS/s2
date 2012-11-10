@@ -12,6 +12,7 @@
     <th>%</th>
     <th>gf</th>
     <th>ga</th>
+    <th>gf/ga</th>
   </tr>
   </thead>
 
@@ -26,6 +27,7 @@
     <td>{{ standing.win_percentage_100|floatformat }}</td>
     {% datum_or_grey  standing.goals_for %}
     {% datum_or_grey standing.goals_against %}
+    <td>standing.goal_ratio|floatformat</td>
   </tr>
   {% endfor %}
   </tbody>
