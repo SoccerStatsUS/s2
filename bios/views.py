@@ -118,6 +118,7 @@ def person_detail(request, slug):
         'competition_stats': competition_stats,
         'career_stats': bio.career_stats(),
         'team_stats': team_stats,
+        'picks': bio.pick_set.exclude(draft__competition=None),
         }
 
 

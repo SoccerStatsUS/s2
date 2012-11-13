@@ -61,10 +61,10 @@
 {% endif %}
 
 
-{% if bio.pick_set.exists %}
+{% if picks.exists %}
 <h4>Drafts</h4>
 <table>
-{% for pick in bio.pick_set.all %}
+{% for pick in picks %}
 <tr>
   <td>{{ pick.number }}</td>
   <td><a href="{% url team_detail pick.team.slug %}">{{ pick.team }}</a></td>
