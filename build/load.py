@@ -4,6 +4,7 @@ import pymongo
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'build_settings'
 
+from django.contrib.contenttypes.models import ContentType
 from django.db import transaction
 from django.db.utils import IntegrityError
 from django.template.defaultfilters import slugify
@@ -339,17 +340,16 @@ def load():
     load_sources()
     load_places()
 
-    load_bios()
-    load_salaries()
-
-    load_stadiums()
 
     # Simple sport data
     load_competitions()
     load_teams()
-
-
     load_standings()
+
+    load_bios()
+    load_salaries()
+
+    load_stadiums()
 
     # List data
     # Put this before standings?
@@ -486,6 +486,8 @@ def load_awards():
 
     competition_getter = make_competition_getter()
     season_getter = make_season_getter()
+    team_getter = make_team_getter()
+    bio_getter = make_bio_getter()
 
     # Create the set of all awards.
     for item in soccer_db.awards.find():
@@ -505,36 +507,56 @@ def load_awards():
         award_dict[t] = a
 
 
+    bio_ct_id = ContentType.objects.get(app_label='bios', model='bio').id
+    team_ct_id = ContentType.objects.get(app_label='teams', model='team').id
+
     # Create awardItems.
+    items = []
     for item in soccer_db.awards.find().sort('recipient', 1):
         item.pop('_id')
 
         # So we can have a season, a year, both, or neither for an award item
-        item['award'] = award_dict[(item['competition'], item['award'], item.get('type', ''))]
-        item.pop('competition')        
+        award = award_dict[(item['competition'], item['award'], item.get('type', ''))]
+        award_id = award.id
+        
+        #item['award'] = award_dict[(item['competition'], item['award'], item.get('type', ''))]
+        #item.pop('competition')        
 
-        if 'type' in item:
-            item.pop('type')
+        #if 'type' in item:
+        #    item.pop('type')
 
         # NCAA seasons don't exist.
         # Would be good to use get otherwise to ensure we have good data.
-        if item['award'].competition:
-            competition_id = item['award'].competition.id
-            item['season'] = season_getter(item['season'], competition_id)
-            item['season'] = Season.objects.get(id=item['season'])
+        if award.competition:
+            competition_id = award.competition.id
+            season_id = season_getter(item['season'], competition_id)
+            #item['season_id'] = season_getter(item['season'], competition_id)
+            #item['season'] = Season.objects.get(id=item['season'])
+        else:
+            season_id = None
 
         model_name = item.pop('model')
         if model_name == 'Bio':
-            model = Bio
+            content_type_id = bio_ct_id
+            object_id = bio_getter(item['recipient'])
         elif model_name == 'Team':
-            model = Team
+            content_type_id = team_ct_id
+            object_id = team_getter(item['recipient'])
         else:
             import pdb; pdb.set_trace()
             raise
 
-        item['recipient'] = model.objects.find(item['recipient'], create=True)
+        #item['recipient'] = model.objects.find(item['recipient'], create=True)
 
-        AwardItem.objects.create(**item)
+        items.append({
+                'award_id': awards_id,
+                'season_id': season_id,
+                'content_type_id': content_type_id,
+                'object_id': object_id,
+                })
+
+    insert_sql("awards_awarditem", items)
+    #AwardItem.objects.create(**item)
 
 @timer
 @transaction.commit_on_success
@@ -583,6 +605,10 @@ def load_drafts():
 
         season_id = season_getter(pick.get('season'), competition_id)
         draft = Draft.objects.get(name=pick.get('draft'), competition_id=competition_id, season_id=season_id)
+
+        if pick['team'] == 'Sean_Irish_LAGalaxy/Geneva':
+            pass #import pdb; pdb.set_trace()
+
 
         team_id = team_getter(pick['team'])
 
@@ -681,12 +707,49 @@ def load_standings():
     print "loading standings\n"
     # Low-hanging fruit. Please speed this up soon.
 
+    team_getter = make_team_getter()
+    competition_getter = make_competition_getter()
+    season_getter = make_season_getter()
+
+    l = []
     for standing in soccer_db.standings.find().sort('team', 1):
         standing.pop('_id')
-        standing['team'] = Team.objects.find(standing['team'], create=True)
-        standing['competition'] = Competition.objects.find(standing['competition'])
-        standing['season'] = Season.objects.find(standing['season'], standing['competition'])
-        Standing.objects.create(**standing)
+
+        competition_id = competition_getter(standing['competition'])
+        season_id = season_getter(standing['competition'], competition_id)
+        team_id = team_getter(standing['team'])
+
+        group = standing.get('group') or ''
+        division = standing.get('division') or ''
+
+        final = False
+
+        l.append({
+                'competition_id': competition_id,
+                'season_id': season_id,
+                'team_id': team_id,
+                'date': standing.get('date'),
+                'division': division,
+                'group': group,
+                'games': standing['games'],
+                'goals_for': standing['goals_for'],
+                'goals_against': standing['goals_against'],
+                'wins': standing['wins'],
+                'shootout_wins': standing['shootout_wins'],
+                'losses': standing['losses'],
+                'shootout_losses': standing['shootout_losses'],
+                'ties': standing['ties'],
+                'points': standing.get('points'),
+                'final': final,
+                'deduction_reason': '',
+                })
+
+        #standing['team'] = Team.objects.find(standing['team'], create=True)
+        #standing['competition'] = Competition.objects.find(standing['competition'])
+        #standing['season'] = Season.objects.find(standing['season'], standing['competition'])
+        #Standing.objects.create(**standing)
+
+    insert_sql("standings_standing", l)
 
 @timer
 @transaction.commit_on_success
