@@ -90,7 +90,7 @@
       var slug;
       slug = $(this).attr("slug");
       $(".bigboard li").removeClass("red");
-      $(".bigboard li[name=" + slug + "]").addClass("red");
+      $(".bigboard li[slug=" + slug + "]").addClass("red");
       return $("#ajax_box").load("/drafts/x/" + slug);
     });
     $("#tab_wrapper div").each(function() {

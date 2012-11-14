@@ -102,7 +102,7 @@ $(document).ready( ->
   $(".bigboard li").click ->
     slug = $(this).attr("slug")
     $(".bigboard li").removeClass("red")
-    $(".bigboard li[name=#{ slug }]").addClass("red")
+    $(".bigboard li[slug=#{ slug }]").addClass("red")
     $("#ajax_box").load("/drafts/x/#{ slug }")
 
   # Want to do this better.
