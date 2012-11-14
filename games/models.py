@@ -1,5 +1,6 @@
 from collections import defaultdict
 import datetime
+import math
 import random
 
 
@@ -459,14 +460,14 @@ class Game(models.Model):
         assert team in (self.team1, self.team2)
         
         try:
-            home_score = int(self.official_home_score or self.team1_score)
-            away_score = int(self.official_away_score or self.team2_score)
+            team1_score = int(self.official_team1_score or self.team1_score)
+            team2_score = int(self.official_team2_score or self.team2_score)
         except:
             return None
 
-        if self.team1_score == self.team2_score: 
+        if team1_score == team2_score: 
             return 't'
-        if self.team1_score > self.team2_score: 
+        if team1_score > team2_score: 
             if team == self.team1:
                 return 'w'
             else:
@@ -731,4 +732,196 @@ class GameMinute(models.Model):
 
     
 
+def calculate_team_scores(qs):
+    # Based on http://dev.soccerstats.us/static/docs/predicting-soccer-matches.pdf
+    
+    team_game_dates = defaultdict(list)
+    team_attack_ratings = defaultdict(list)
+    team_defense_ratings = defaultdict(list)
 
+
+    # xA,B = number of goals scored for team A against team B
+    # Delta-a-b = (attack-a + defense-a - attack-b - defense-b) / 2
+    # Goals will be poisson-distributed with the distribution equal to
+    # xAB = log-home-goals + attack-a - defense-b - psychology * delta-a-b
+
+    # Rue and Salvesen adjust the poisson-distribution to increase the probability of 0-0 and 1-1
+    # results at the cost of 0-1 and 1-0 results. Apparently due to empirical observation? (Dixon and Coles (1997))
+    # home and away scores are not independend of each other.
+    
+    # Furthermore, they truncate all scores at 5 goals.
+
+
+
+    home_goal_log, away_goal_log = get_score_constants(l)
+
+    # These were picked by Rue and Salvesen to optimize their model's success at making predictions.
+    # Adopting them verbatim now until I can run a similar test.
+    memory_length = 100 # tau
+
+    # gamma; adjusts for stronger teams underestimating weaker ones. a negative gamma would indicate that stronger teams
+    # would psychologically overwhelm weaker ones. Potentially true in the case of large team ability mismatches.
+    psychological_constant = .1 
+
+    # Estimate of the randomness of a match result. (1-epsilon) * 100% of the "information" in the match is informative regarding
+    # team strengths, the resulting epsilon information is non-informative.
+    epsilon = .2 # epsilon
+
+
+    l = qs.exclude(date=None).order_by('date')
+
+    for game in l:
+        team_game_dates[game.team1].append(game.date)
+        team_game_dates[game.team2].append(game.date)
+
+    
+
+def sample_attack(current_value, global_distribution):
+    # Sample a value from a gaussian distribution. Return it with the acceptance probability, otherwise
+    # keep the old value.
+    sample = math.gauss(current_balue, global_distribution)
+
+    acceptance_probability = None # Quite confusing.
+    if acceptance_probability > random.random():
+        return sample
+    else:
+        return None
+
+
+def brownian_team_strength(previous_values, tnew, told):
+    brownian_motion = (simple_brownian(float(tnew)/memory_length) - simple_brownian(float(tnew)/memory_length))
+
+    divisor = math.sqrt(1 - psychological_constant * (1 - psychological_constant / 2))
+    prior_variance = numpy.var(previous_values)
+    dividend = math.sqrt(prior_variance) # sigmaA^2 = the prior variance for aA.
+    new_strength = previous_strength + ((brownian_motion * dividend) / divisor)
+    pass
+
+
+
+
+def estimate_match_result(match):
+    # Trying to implement move type 2.
+    # Basically, estimate the result of a match based on team strengths.
+
+    if random.random() < epsilon:
+        lambda_x = global_home_score
+        lambda_y = global_away_score
+    else:
+        lambda_x = old_lambda_x
+        lambda_y = old_lambda_y
+
+    while True:
+        # Draw x from lambda x (some distribution of x scores) until x <= 5.
+        # Do the same for y.
+        # if x and y are within some weird probablility paramters, set x and y to the appropriate values.
+        # Otherwise, keep pulling values.
+        return None, None
+
+    
+
+
+def get_home_bias(qs):
+    home_scores = away_scores = 0
+    for t1, t1s, t2, t2s, ht in qs.values_list('team1', 'team1_score', 'team2', 'team2_score', 'home_team'):
+        if t1 == ht:
+            home_scores += t1s
+            away_scores += t2s
+        elif t2 == ht:
+            home_scores += t2s
+            away_scores += t1s
+
+        else:
+            import pdb; pdb.set_trace()
+
+    return (home_scores, away_scores, qs.count())
+
+
+
+def get_score_constants(qs):
+    home, away, count = get_home_bias(qs)
+    home_log = math.log(float(home)/count)
+    away_log = math.log(float(away)/count)
+    return home_log, away_log
+        
+
+
+def simple_brownian(f):
+    return brownian(f, 1, 1, 1)
+
+
+"""
+brownian() implements one dimensional Brownian motion (i.e. the Wiener process).
+"""
+
+# File: brownian.py
+
+from math import sqrt
+from scipy.stats import norm
+import numpy as np
+
+
+def brownian(x0, n, dt, delta, out=None):
+    # From http://www.scipy.org/Cookbook/BrownianMotion
+    """\
+    Generate an instance of Brownian motion (i.e. the Wiener process):
+
+        X(t) = X(0) + N(0, delta**2 * t; 0, t)
+
+    where N(a,b; t0, t1) is a normally distributed random variable with mean a and
+    variance b.  The parameters t0 and t1 make explicit the statistical
+    independence of N on different time intervals; that is, if [t0, t1) and
+    [t2, t3) are disjoint intervals, then N(a, b; t0, t1) and N(a, b; t2, t3)
+    are independent.
+    
+    Written as an iteration scheme,
+
+        X(t + dt) = X(t) + N(0, delta**2 * dt; t, t+dt)
+
+
+    If `x0` is an array (or array-like), each value in `x0` is treated as
+    an initial condition, and the value returned is a numpy array with one
+    more dimension than `x0`.
+
+    Arguments
+    ---------
+    x0 : float or numpy array (or something that can be converted to a numpy array
+         using numpy.asarray(x0)).
+        The initial condition(s) (i.e. position(s)) of the Brownian motion.
+    n : int
+        The number of steps to take.
+    dt : float
+        The time step.
+    delta : float
+        delta determines the "speed" of the Brownian motion.  The random variable
+        of the position at time t, X(t), has a normal distribution whose mean is
+        the position at time t=0 and whose variance is delta**2*t.
+    out : numpy array or None
+        If `out` is not None, it specifies the array in which to put the
+        result.  If `out` is None, a new numpy array is created and returned.
+
+    Returns
+    -------
+    A numpy array of floats with shape `x0.shape + (n,)`.
+    
+    Note that the initial value `x0` is not included in the returned array.
+    """
+
+    x0 = np.asarray(x0)
+
+    # For each element of x0, generate a sample of n numbers from a
+    # normal distribution.
+    r = norm.rvs(size=x0.shape + (n,), scale=delta*sqrt(dt))
+
+    # If `out` was not given, create an output array.
+    if out is None:
+        out = np.empty(r.shape)
+
+    # This computes the Brownian motion by forming the cumulative sum of
+    # the random samples. 
+    np.cumsum(r, axis=-1, out=out)
+
+    # Add the initial condition.
+    out += np.expand_dims(x0, axis=-1)
+
+    return out
