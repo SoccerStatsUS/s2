@@ -468,12 +468,7 @@ def load_positions():
         position.pop('_id')
         position['team'] = Team.objects.find(position['team'], create=True)
         position['person'] = Bio.objects.find(position['person'])
-        #try:
         Position.objects.create(**position)
-        #except:
-        #    import pdb; pdb.set_trace()
-        #    x = 5
-
 
 @timer
 @transaction.commit_on_success
@@ -518,20 +513,12 @@ def load_awards():
         # So we can have a season, a year, both, or neither for an award item
         award = award_dict[(item['competition'], item['award'], item.get('type', ''))]
         award_id = award.id
-        
-        #item['award'] = award_dict[(item['competition'], item['award'], item.get('type', ''))]
-        #item.pop('competition')        
-
-        #if 'type' in item:
-        #    item.pop('type')
 
         # NCAA seasons don't exist.
         # Would be good to use get otherwise to ensure we have good data.
         if award.competition:
             competition_id = award.competition.id
             season_id = season_getter(item['season'], competition_id)
-            #item['season_id'] = season_getter(item['season'], competition_id)
-            #item['season'] = Season.objects.get(id=item['season'])
         else:
             season_id = None
 
@@ -546,17 +533,15 @@ def load_awards():
             import pdb; pdb.set_trace()
             raise
 
-        #item['recipient'] = model.objects.find(item['recipient'], create=True)
-
         items.append({
-                'award_id': awards_id,
+                'award_id': award_id,
                 'season_id': season_id,
                 'content_type_id': content_type_id,
                 'object_id': object_id,
                 })
 
     insert_sql("awards_awarditem", items)
-    #AwardItem.objects.create(**item)
+
 
 @timer
 @transaction.commit_on_success
@@ -579,7 +564,6 @@ def load_drafts():
             competition_id = None
 
         season_id = season_getter(draft['season'], competition_id)
-        draft['competition_id'] = competition_id
 
         Draft.objects.create(**{
                 'name': draft['name'],
@@ -589,8 +573,6 @@ def load_drafts():
                 'end': draft.get('end'),
                 })
                 
-        #Draft.objects.create(**draft)
-
     # Create picks
     picks = []
     for pick in soccer_db.picks.find():
@@ -639,10 +621,6 @@ def load_drafts():
 
                 })
 
-
-    #for e in picks:
-    #    Pick.objects.create(**e)
-
     insert_sql("drafts_pick", picks)
         
         
@@ -672,7 +650,7 @@ def load_competitions():
             import pdb; pdb.set_trace()
             x =5 
 
-
+@timer
 @transaction.commit_on_success
 def load_stadiums():
     print "loading stadiums"
@@ -743,11 +721,6 @@ def load_standings():
                 'final': final,
                 'deduction_reason': '',
                 })
-
-        #standing['team'] = Team.objects.find(standing['team'], create=True)
-        #standing['competition'] = Competition.objects.find(standing['competition'])
-        #standing['season'] = Season.objects.find(standing['season'], standing['competition'])
-        #Standing.objects.create(**standing)
 
     insert_sql("standings_standing", l)
 
@@ -948,9 +921,7 @@ def load_games():
                 'linesman1_id': linesman1_id,
                 'linesman2_id': linesman2_id,
                 'linesman3_id': linesman3_id,
-
                 })
-
 
     insert_sql("games_game", games)
 

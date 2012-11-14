@@ -78,9 +78,6 @@ def generate_player_standings():
                 continue
             c.wins, c.losses, c.ties = w, l, t
             c.save()
-        
-        
-        
 
 
 def set_draft_picks():
@@ -101,11 +98,13 @@ def set_draft_picks():
 @timer
 def generate_source_data():
     print "Generating source data."
-    return
-    sources = Source.objects.annotate(game_count=Count('game'), stat_count=Count('stat'))
-    for source in sources:
-        source.games = source.game_count
-        source.stats = source.stat_count
+    from games.models import GameSource
+    game_counts = Counter([e[0] for e in GameSource.objects.values_list('source')])
+    stat_counts = Counter([e[0] for e in Stat.objects.exclude(source=None).values_list('source')])
+
+    for source in Source.objects.all():
+        source.games = game_counts[source.id]
+        source.stats = stat_counts[source.id]
         source.save()
     
         
