@@ -26,12 +26,20 @@ class TempGameStanding(object):
 
         goals_for = goals_against = 0
         if t1_games.exists():
-            goals_for += t1_games.aggregate(Sum('team1_score'))['team1_score__sum']
-            goals_against += t1_games.aggregate(Sum('team2_score'))['team2_score__sum']
+            gf = t1_games.aggregate(Sum('team1_score'))['team1_score__sum']
+            if gf:
+                goals_for += gf
+            ga = t1_games.aggregate(Sum('team2_score'))['team2_score__sum']
+            if ga:
+                goals_against += ga
 
         if t2_games.exists():
-            goals_for +=  t2_games.aggregate(Sum('team2_score'))['team2_score__sum'] 
-            goals_against +=  t2_games.aggregate(Sum('team1_score'))['team1_score__sum'] 
+            gf = t2_games.aggregate(Sum('team2_score'))['team2_score__sum'] 
+            if gf:
+                goals_for +=  gf
+            ga = t2_games.aggregate(Sum('team1_score'))['team1_score__sum'] 
+            if ga:
+                goals_against += ga
         
         self.goals_for = goals_for
         self.goals_against = goals_against
