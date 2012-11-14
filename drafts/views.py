@@ -13,7 +13,7 @@ def drafts_index(request):
     List all drafts.
     """
 
-    drafts = Draft.objects.order_by('season', 'start')
+    drafts = Draft.objects.order_by('season', 'start').exclude(competition=None)
 
     context = {
         'drafts': drafts,
