@@ -74,6 +74,7 @@ class AbstractTeamManager(models.Manager):
             # Don't want to be creating teams all the time.
             raise
 
+        
 
 class TeamManager(AbstractTeamManager):
     """
@@ -264,6 +265,32 @@ class Team(models.Model):
         return Standing.objects.get(team=self, competition=None, season=None)
 
 
+
+    def form(self, start_game=None, count=5, competition=None, season=None, include_start=True):
+        if start_game is None:
+            start_game = self.game_set().order_by('-date')[0]
+
+        games = self.game_set().exclude(date=None).order_by('-date')
+        if include_start:
+            games = games.filter(date__lte=start_game.date).order_by('-date')
+        else:
+            games = games.filter(date__lt=start_game.date).order_by('-date')
+
+
+        if competition:
+            games = games.filter(competition=competition)
+
+        if season:
+            games = games.filter(season=season)
+
+        return self.result_string(games[:count])
+
+    def result_string(self, games):
+        s = ''
+        for game in games:
+            s += game.result(self)
+        return s
+            
 
 
         
