@@ -694,7 +694,7 @@ def load_standings():
         standing.pop('_id')
 
         competition_id = competition_getter(standing['competition'])
-        season_id = season_getter(standing['competition'], competition_id)
+        season_id = season_getter(standing['season'], competition_id)
         team_id = team_getter(standing['team'])
 
         group = standing.get('group') or ''
