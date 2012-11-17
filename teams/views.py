@@ -270,6 +270,20 @@ def team_games(request, team_slug):
                 else:
                     games = games.filter(Q(team1=team, team1_result=r) | Q(team2=team, team2_result=r))
 
+
+
+            if form.cleaned_data['year']:
+                year = int(form.cleaned_data['year'])
+                games = games.exclude(date=None)
+                year_filter = form.cleaned_data['year_filter']
+                if year_filter == '>':
+                    d = datetime.date(year, 1, 1)
+                    games = games.filter(date__gte=d)
+                elif year_filter == '<':
+                    d = datetime.date(year, 12, 31)
+                    games = games.filter(date__lte=d)
+                else:
+                    games = games.filter(date__year=year)
     else:
         form = TeamGameForm(bio)
 

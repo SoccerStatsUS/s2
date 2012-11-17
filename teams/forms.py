@@ -17,6 +17,13 @@ RESULTS = [
     ('l', 'loss'),
     ]
 
+YEAR_FILTERS = [
+    ('', ''),
+    ('=', '='),
+    ('>', '>'),
+    ('<', '<'),
+    ]
+
 
 class TeamStatForm(forms.Form):
 
@@ -63,7 +70,15 @@ class TeamGameForm(forms.Form):
         teams = Team.objects.filter(id__in=tids).exclude(id=team.id)
         self.fields['opponent'] = forms.ModelChoiceField(queryset=teams, required=False)
 
+        min_year = games.exclude(date=None).order_by('date')[0].date.year
+        max_year = games.exclude(date=None).order_by('-date')[0].date.year
+        years = range(min_year, max_year +1)
+        year_choices = [('', '')] + zip(years, years)
+        self.fields['year'] = forms.ChoiceField(year_choices, required=False)
+        self.fields['year_filter'] = forms.ChoiceField(choices=YEAR_FILTERS, required=False)
+
     result = forms.ChoiceField(choices=RESULTS, required=False)
+
 
 
     
