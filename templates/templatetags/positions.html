@@ -9,12 +9,15 @@
     <th>cmp</th>
     <th>season</th>
     <th>position</th>
+    
+    {% comment %}
     <th>w</th>
     <th>t</th>
     <th>l</th>
     <th>%</th>
     <th>gf</th>
     <th>ga</th>
+    {% endcomment %}
   </tr>
 </thead>
 
@@ -46,6 +49,8 @@
   {% endif %}
 
   {% datum_or_grey stat.position %}
+
+    {% comment %}
   {% datum_or_grey stat.wins %}
   {% datum_or_grey stat.ties %}
   {% datum_or_grey stat.losses %}
@@ -56,6 +61,7 @@
 
   {% datum_or_grey stat.goals_for %}
   {% datum_or_grey stat.goals_against %}
+    {% endcomment %}
 </tr>
 {% endfor %}
 </tbody>

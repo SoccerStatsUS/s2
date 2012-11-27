@@ -5,14 +5,13 @@
   <thead>
   <tr>
     <th>team</th>
-    <th>GP</th>
-    <th>W</th>
-    <th>T</th>
-    <th>L</th>
+    <th>games</th>
+    <th>wins</th>
+    <th>ties</th>
+    <th>losses</th>
     <th>%</th>
-    <th>gf</th>
-    <th>ga</th>
-    <th>gf/ga</th>
+    <th>goals for</th>
+    <th>goals against</th>
   </tr>
   </thead>
 
@@ -20,6 +19,7 @@
   {% for standing in standings %}
   <tr>
     <td><a href="{% url team_detail standing.team.slug %}">{{ standing.team }}</a></td>
+
     <td>{{ standing.games }}</td>
     <td>{{ standing.wins }}</td>
     <td>{{ standing.ties|default_if_none:'' }}</td>
@@ -27,7 +27,6 @@
     <td>{{ standing.win_percentage_100|floatformat }}</td>
     {% datum_or_grey  standing.goals_for %}
     {% datum_or_grey standing.goals_against %}
-    <td>{{ standing.goal_ratio|floatformat:2 }}</td>
   </tr>
   {% endfor %}
   </tbody>

@@ -4,6 +4,7 @@ from bios.models import Bio
 from competitions.models import Competition, Season
 from games.models import Game
 from lineups.models import Appearance
+from positions.models import Position
 from sources.models import Source
 from teams.models import Team
 
@@ -13,7 +14,39 @@ from collections import defaultdict
 from django.core.cache import cache
 
 
-class AbstractStat(models.Model):
+class StandingStat(models.Model):
+
+    # Should these be in standing? Probably not.
+    # Probably should merge standing into here.
+    # plus_minus should be a method? Probably not.
+    plus_minus = models.IntegerField(null=True, blank=True)
+    goals_for = models.IntegerField(null=True, blank=True)
+    goals_against = models.IntegerField(null=True, blank=True)
+
+    games = models.IntegerField(null=True, blank=True)
+    wins = models.IntegerField(null=True, blank=True)
+    ties = models.IntegerField(null=True, blank=True)
+    losses = models.IntegerField(null=True, blank=True)
+
+            
+    def win_percentage(self):
+        if not self.games:
+            return None
+        ties = self.ties or 0
+        return (self.wins + .5 * ties) / self.games
+
+    def win_percentage_100(self):
+        if self.win_percentage() is None:
+            return None
+        return self.win_percentage() * 100
+
+
+    class Meta:
+        abstract = True
+
+
+
+class AbstractStat(StandingStat):
 
     #game = models.ForeignKey(Game, null=True)
     #player = models.ForeignKey(Bio, null=True)
@@ -35,17 +68,6 @@ class AbstractStat(models.Model):
     fouls_suffered = models.IntegerField(null=True, blank=True)
     yellow_cards = models.IntegerField(null=True, blank=True)
     red_cards = models.IntegerField(null=True, blank=True)
-
-    # Should these be in standing? Probably not.
-    # Probably should merge standing into here.
-    # plus_minus should be a method? Probably not.
-    plus_minus = models.IntegerField(null=True, blank=True)
-    goals_for = models.IntegerField(null=True, blank=True)
-    goals_against = models.IntegerField(null=True, blank=True)
-
-    wins = models.IntegerField(null=True, blank=True)
-    ties = models.IntegerField(null=True, blank=True)
-    losses = models.IntegerField(null=True, blank=True)
 
     source = models.ForeignKey(Source, null=True)
 
@@ -84,19 +106,6 @@ class AbstractStat(models.Model):
         Proportion of all game goals that a player was involved in.
         """
         return self.goals / float(self.goals_for)
-
-
-            
-    def win_percentage(self):
-        if not self.games:
-            return None
-        ties = self.ties or 0
-        return (self.wins + .5 * ties) / self.games
-
-    def win_percentage_100(self):
-        if self.win_percentage() is None:
-            return None
-        return self.win_percentage() * 100
 
 
 
@@ -142,3 +151,26 @@ class Stat(AbstractStat):
     competition = models.ForeignKey(Competition) # Redundancy
     season = models.ForeignKey(Season)
     team = models.ForeignKey(Team)
+
+
+# Still having trouble figuring out exactly where to put this data.
+class CoachStat(StandingStat):
+
+    person = models.ForeignKey(Bio)
+    #position = models.ForeignKey(Position)
+    competition = models.ForeignKey(Competition)
+    season = models.ForeignKey(Season)
+    team = models.ForeignKey(Team)
+
+
+    # Should these be in standing? Probably not.
+    # Probably should merge standing into here.
+    # plus_minus should be a method? Probably not.
+
+    #plus_minus = models.IntegerField(null=True, blank=True)
+    #goals_for = models.IntegerField(null=True, blank=True)
+    #goals_against = models.IntegerField(null=True, blank=True)
+
+    #wins = models.IntegerField(null=True, blank=True)
+    #ties = models.IntegerField(null=True, blank=True)
+    #losses = models.IntegerField(null=True, blank=True)

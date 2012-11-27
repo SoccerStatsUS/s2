@@ -125,7 +125,9 @@ class Game(models.Model):
     """
     Represents a completed game.
     """
+
     # Need both a date and a datetime field? Not sure.
+
 
     # Secondary data.
     starter_count = models.IntegerField(null=True, blank=True)
@@ -145,6 +147,10 @@ class Game(models.Model):
 
     team1_result = models.CharField(max_length=5)
     team2_result = models.CharField(max_length=5)
+
+    shootout_winner = models.ForeignKey(Team, null=True, related_name='something')
+    #some_field = models.IntegerField(null=True)    
+
 
     # Ambiguous game results.
     result_unknown = models.BooleanField(default=False)
@@ -196,6 +202,9 @@ class Game(models.Model):
     
     def winner(self):
         # Need to hook this in more intelligently with team1_result
+
+        if self.shootout_winner:
+            return self.shootout_winner
 
         if self.team1_score > self.team2_score:
             return self.team1
@@ -256,13 +265,14 @@ class Game(models.Model):
 
 
     def result_string(self):
-            return "%s - %s" % (self.team1_score_or_result, self.team2_score_or_result)
+        s = "%s - %s" % (self.team1_score_or_result, self.team2_score_or_result)
+        return s
 
     def score_or_result(self):
         return self.score_or_result_generic(self.result_string)
 
     def reverse_result_string(self):
-            return "%s - %s" % (self.team2_score_or_result, self.team1_score_or_result)
+        return "%s - %s" % (self.team2_score_or_result, self.team1_score_or_result)
 
     def reverse_score_or_result(self):
         return self.score_or_result_generic(self.reverse_result_string)
@@ -271,13 +281,19 @@ class Game(models.Model):
     @property
     def team1_score_or_result(self):
         if self.team1_score is not None:
-            return self.team1_score
+            if self.shootout_winner == self.team1:
+                return "(SOW) %s" % self.team1_score
+            else:
+                return self.team1_score
         return self.team1_result.capitalize()
 
     @property
     def team2_score_or_result(self):
         if self.team2_score is not None:
-            return self.team2_score
+            if self.shootout_winner == self.team2:
+                return "%s (SOW)" % self.team2_score
+            else:
+                return self.team1_score
         return self.team2_result.capitalize()
 
 

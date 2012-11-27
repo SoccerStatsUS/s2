@@ -12,10 +12,11 @@ from drafts.models import Draft, Pick
 from games.models import Game, GameMinute
 from goals.models import Goal
 from lineups.models import Appearance
+from places.models import Stadium
 from positions.models import Position
 from sources.models import Source
-from standings.models import Standing
-from stats.models import Stat, CareerStat
+from standings.models import Standing, StadiumStanding
+from stats.models import Stat, CareerStat, CoachStat
 from teams.models import Team
 from utils import insert_sql, timer
 
@@ -30,6 +31,7 @@ def generate():
     # Generate coaching stats!
     #generate_position_standings()
     #generate_position_stats()
+    generate_coach_stats_for_competitions()
 
     generate_game_data_quality()
 
@@ -42,6 +44,7 @@ def generate():
     generate_team_stats()
     generate_competition_standings()
     generate_team_standings()
+    generate_stadium_standings()
     generate_season_data()
 
     generate_player_standings()
@@ -384,14 +387,177 @@ def generate_team_standings():
 
 
 @timer
+def generate_stadium_standings():
+    standings = {}
+
+    def update_standing(game, team, stadium):
+        key = (stadium, team)
+        if key not in standings:
+            standings[key] = {
+                'team': team,
+                'stadium': stadium,
+                'games': 0,
+                'wins': 0,
+                'losses': 0,
+                'ties': 0,
+                'goals_for': 0,
+                'goals_against': 0,
+                }
+
+        if team == game.team1:
+            result = game.team1_result
+            gf, ga = game.team1_score, game.team2_score
+        elif team == game.team2:
+            result = game.team2_result
+            gf, ga = game.team2_score, game.team1_score
+        else:
+            import pdb; pdb.set_trace()
+
+        if not result:
+            return
+
+        s = standings[key]
+
+        s['games'] += 1
+
+        if result == 'w':
+            s['wins'] += 1
+        elif result == 't':
+            s['ties'] += 1
+        elif result == 'l':
+            s['losses'] += 1
+        else:
+            import pdb; pdb.set_trace()
+
+        if gf:
+            s['goals_for'] += gf
+        if ga:
+            s['goals_against'] += ga
+
+
+    for stadium in Stadium.objects.all():
+        games = Game.objects.filter(stadium=stadium)
+
+        for game in games:
+            update_standing(game, game.team1, stadium)
+            update_standing(game, game.team2, stadium)
+
+    for e in standings.values():
+        StadiumStanding.objects.create(**e)
+        
+
+@timer
 def generate_position_standings():
     """Generate standings for all positions."""
     print "Calculating standings for positions."
     Position.objects.generate_standings()
 
 
+@timer
+def generate_coach_stats_for_competitions():
+    generate_coach_stats('North American Soccer League')
+    generate_coach_stats('Major League Soccer')
+
+    generate_coach_stats('North American Soccer League (2011-)')
+    generate_coach_stats('USSF Division 2 Professional League')
+    generate_coach_stats('USL First Division')
+    generate_coach_stats('American Professional Soccer League')
 
 
+
+def make_position_date_getter():
+    positions = Position.objects.values_list('person', 'team', 'name', 'start', 'end')
+    pm = defaultdict(list)
+
+    for person, team, name, start, end in positions:
+        l = pm[team]
+        if end is None:
+            end = datetime.date.today()
+
+        if start is None:
+            continue
+
+        t = (person, name, start, end)
+        l.append(t)
+        
+        
+    
+    def position_getter(team, date):
+        l = pm[team]
+        return [e[0] for e in l if e[2] <= date and e[3] >= date]
+
+    return position_getter
+
+
+def generate_coach_stats(competition):
+
+    def update_stat(game_data, person, team, season):
+        date, season, t1, t2, t1s, t2s, t1r, t2r = game_data
+        key = (person, team, season)
+        if key not in coach_stats:
+            coach_stats[key] = {
+                'person_id': person,
+                'team_id': team,
+                'competition_id': c.id,
+                'season_id': season,
+                'plus_minus': 0,
+                'goals_for': 0,
+                'goals_against': 0,
+                'games': 0,
+                'wins': 0,
+                'losses': 0,
+                'ties': 0,
+                }
+            
+        if team == t1:
+            gd = t1s - t2s
+            gf, ga = t1s, t2s
+            result = t1r
+        elif team == t2:
+            gd = t2s - t1s
+            gf, ga = t2s, t1s
+            result = t2r
+        else:
+            import pdb; pdb.set_trace()
+
+        cs = coach_stats[key]
+        cs['plus_minus'] += gd
+        cs['goals_for'] += gf
+        cs['goals_against'] += ga
+        cs['games'] += 1
+        if result == 't':
+            cs['ties'] += 1
+        elif result == 'w':
+            cs['wins'] += 1
+        elif result == 'l':
+            cs['losses'] += 1
+        else:
+            import pdb; pdb.set_trace()
+
+
+    c = Competition.objects.get(name=competition)
+    coach_stats = {}
+
+    games = Game.objects.filter(competition=c).values_list('date', 'season', 'team1', 'team2', 'team1_score', 'team2_score', 'team1_result', 'team2_result')
+    pdg = make_position_date_getter()
+
+    for game_data in games:
+        date, season, t1, t2 = game_data[:4]
+
+        positions1 = pdg(t1, date)
+        for person in positions1:
+            update_stat(game_data, person, t1, season)
+
+        positions2 = pdg(t2, date)
+        for person in positions2:
+            update_stat(game_data, person, t2, season)
+
+    #insert_sql('"stats_coachstat', coach_stats.values())
+    for e in coach_stats.values():
+        CoachStat.objects.create(**e)
+    #x = 5
+
+    
 
 @timer
 @transaction.commit_on_success

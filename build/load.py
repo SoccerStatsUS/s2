@@ -798,7 +798,7 @@ def load_salaries():
 @timer
 @transaction.commit_on_success
 def load_games():
-    print "\nloading %s games\n" % soccer_db.games.count()
+    print "\n loading %s games\n" % soccer_db.games.count()
 
     stadium_getter = make_stadium_getter()
     team_getter = make_team_getter()
@@ -816,7 +816,11 @@ def load_games():
         stadium_id = city_id = None
         if game.get('stadium'):
             stadium_id = stadium_getter(game['stadium'])
-            city_id = Stadium.objects.get(id=stadium_id).id
+            s = Stadium.objects.get(id=stadium_id)
+            if s.city:
+                city_id = s.city.id
+            else:
+                city_id = None
 
         elif game.get('city'):
             city_id = city_getter(game['city']).id
@@ -882,6 +886,12 @@ def load_games():
         # And probably ASL as well. Need to spend a couple
         # of hours repairing those schedules.
 
+        if game['shootout_winner']:
+            shootout_winner = team_getter(game['shootout_winner'])
+        else:
+            shootout_winner = None
+
+
         games.append({
                 'date': game['date'],
                 'team1_id': team1_id,
@@ -893,6 +903,8 @@ def load_games():
                 'official_team1_score': game.get('official_team1_score'),
                 'team2_score': game['team2_score'],
                 'official_team2_score': game.get('official_team2_score'),
+
+                'shootout_winner_id': shootout_winner,
 
                 'team1_result': game['team1_result'],
                 'team2_result': game['team2_result'],
@@ -922,6 +934,8 @@ def load_games():
                 'linesman2_id': linesman2_id,
                 'linesman3_id': linesman3_id,
                 })
+
+
 
     insert_sql("games_game", games)
 
@@ -1030,6 +1044,10 @@ def load_assists():
 
         if goal['goal']:
             bio_id = bio_getter(goal['goal'])
+
+
+        if not goal['date']:
+            return {}
 
         d = datetime.date(goal['date'].year, goal['date'].month, goal['date'].day)
 

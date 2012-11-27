@@ -1,0 +1,15 @@
+{% if goal.player %}
+<td><a href="{% url person_detail goal.player.slug %}">{{ goal.player }}</a> {% if goal.assist_string %}({{ goal.assist_string }}){% endif %}</td>
+{% else %}
+{% if goal.own_goal %}
+
+{% if goal.own_goal_player %}
+<td><a href="{% url person_detail goal.own_goal_player.slug %}">Own Goal ({{ goal.own_goal_player }})</a></td>
+{% else %}
+<td>Own Goal</td>
+{% endif %}
+    
+{% else %}
+<td>Unknown</td>
+{% endif %}
+{% endif %}

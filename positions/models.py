@@ -35,9 +35,9 @@ class Position(models.Model):
     start = models.DateField(null=True, blank=True)
     end = models.DateField(null=True, blank=True)
 
-    wins = models.IntegerField(null=True)
-    losses = models.IntegerField(null=True)
-    ties = models.IntegerField(null=True)
+    #wins = models.IntegerField(null=True)
+    #losses = models.IntegerField(null=True)
+    #ties = models.IntegerField(null=True)
 
     slug = models.SlugField(max_length=100)
 

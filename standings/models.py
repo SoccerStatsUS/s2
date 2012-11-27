@@ -2,11 +2,49 @@ from django.db import models
 
 from bios.models import Bio
 from competitions.models import Competition, Season
+from places.models import Stadium
 from teams.models import Team
 
 
 
-class Standing(models.Model):
+class AbstractStanding(models.Model):
+    
+    games = models.IntegerField()
+    wins = models.IntegerField()
+    losses = models.IntegerField()
+    ties = models.IntegerField(null=True)
+
+    # These should probably be pk losses or a more generic term.
+    shootout_wins = models.IntegerField(null=True)
+    shootout_losses = models.IntegerField(null=True)
+
+    goals_for = models.IntegerField(null=True)
+    goals_against = models.IntegerField(null=True)
+
+
+    class Meta:
+        abstract = True
+
+    def goal_ratio(self):
+        try:
+            return float(self.goals_for) / self.goals_against
+        except:
+            return 0.0
+
+
+    def win_percentage(self):
+        ties = self.ties or 0
+        if self.games:
+            return (self.wins + .5 * ties) / self.games
+        else:
+            return 0
+
+    def win_percentage_100(self):
+        return self.win_percentage() * 100
+
+
+
+class Standing(AbstractStanding):
     """
     Represents game summary information.
     Usually applied to a team, but could also be a person, competition, season, etc.
@@ -26,22 +64,12 @@ class Standing(models.Model):
     final = models.BooleanField(default=True)
     date = models.DateField(null=True)
 
-    games = models.IntegerField()
-    wins = models.IntegerField()
-    losses = models.IntegerField()
-    ties = models.IntegerField(null=True)
-
     points = models.IntegerField(null=True)
     points_deducted = models.IntegerField(null=True)
     deduction_reason = models.TextField()
     position = models.IntegerField(null=True)
 
-    goals_for = models.IntegerField(null=True)
-    goals_against = models.IntegerField(null=True)
 
-    # These should probably be pk losses or a more generic term.
-    shootout_wins = models.IntegerField(null=True)
-    shootout_losses = models.IntegerField(null=True)
 
     class Meta:
         ordering = ('season', 'competition', '-points', '-wins', 'team')
@@ -50,25 +78,11 @@ class Standing(models.Model):
     def triple(self):
         return "%s-%s-%s" % (self.wins, self.ties, self.losses)
 
-    def goal_ratio(self):
-        try:
-            return float(self.goals_for) / self.goal_against
-        except:
-            return 0.0
 
     def __unicode__(self):
         return u"%s %s, %s: %s" % (self.team, self.competition, self.season, self.triple())
 
 
-    def win_percentage(self):
-        ties = self.ties or 0
-        if self.games:
-            return (self.wins + .5 * ties) / self.games
-        else:
-            return 0
-
-    def win_percentage_100(self):
-        return self.win_percentage() * 100
 
 
     def modern_points(self):
@@ -99,3 +113,8 @@ class Standing(models.Model):
 
 
 
+
+class StadiumStanding(AbstractStanding):
+
+    team = models.ForeignKey(Team)
+    stadium = models.ForeignKey(Stadium)

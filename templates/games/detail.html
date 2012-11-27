@@ -3,117 +3,13 @@
 
 {% block content %}
 
+{% include "templatetags/game_result.html" %}
 
-<div id="game_score">
-
-  <h4>
-    {% if game.date %}
-    <a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date }}</a>
-    {% else %}
-    Date Unknown
-    {% endif %}
-    -
-    <a href="{% url competition_detail game.competition.slug %}">{{ game.competition }}</a>
-    <a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.season.name }}</a>
-  </h4>
-
-  {% if game.stadium %}
-
-  {% if game.stadium.slug %}
-  <h4><a href="{% url stadium_detail game.stadium.slug %}">{{ game.stadium }}</a></h4>
-  {% else %}
-  <h4>{{ game.stadium }}</h4>
-  {% endif %}
-
-  {% else %}
-  <h4>{{ game.location }}</h4>
-  {% endif %}
-
-
-
-  <div class="team_data">
-    <div class="team"><a href="{% url team_detail game.team1.slug %}">{{ game.team1_original_name  }}</a></div>
-    <div class="score">{{ game.team1_score_or_result }}</div>
-    <div><a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.home_standings_string  }}</a></div>
-  </div>
-
-  <div class="team_data">
-    <div class="team"><a href="{% url team_detail game.team2.slug %}">{{ game.team2_original_name  }}</a></div>
-    <div class="score">{{ game.team2_score_or_result }}</div>
-    <div><a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.away_standings_string  }}</a></div>
-  </div>
-
-</div>
-
-<div class="clear_both"></div>
-
-
-<ul id="tabs"></ul>
-
-<div id="tab_wrapper">
-
-
-{% if game.goal_set.exists %}
-
-<div tab="goals">
-
-<table>
-  <tr>
-    <th>Team</th>
-    <th>Player</th>
-    <th>Minute</th>
-    {# <th>Assists</th> #}
-  </tr>
-
-  {% for goal in game.goal_set.all %}
-  <tr>
-    <td><a href="{% url team_detail goal.team.slug %}">{{ goal.team }}</a></td>
-    {% if goal.player %}
-    <td><a href="{% url person_detail goal.player.slug %}">{{ goal.player }}</a></td>
-    {% else %}
-    {% if goal.own_goal %}
-
-    {% if goal.own_goal_player %}
-    <td><a href="{% url person_detail goal.own_goal_player.slug %}">Own Goal ({{ goal.own_goal_player }})</a></td>
-    {% else %}
-    <td>Own Goal</td>
-    {% endif %}
-    
-    {% else %}
-    <td>Unknown</td>
-    {% endif %}
-    {% endif %}
-    
-    {% datum_or_grey goal.minute %}
-    {# <td></td> #}
-  {% endfor %}
-</table>
-
-</div>
-
+{% if game.same_day_games %}
+<h3>Scoreboard</h3>
+{% include "templatetags/scoreboard.html" with games=game.same_day_games %}
 {% endif %}
 
-{% if game.appearance_set.exists %}
-{% include "templatetags/game_lineup.html"  %}
-{% endif %}
-
-
-</div>
-
-<p>
-
-{% if game_sources %}
-
-{% for game_source in game_sources %}
-
-<a href="{% url source_detail game_source.source.id %}">{{ game_source.source }}</a> {% if game_source.source_url %}<em><a href="{{ game_source.source_url }}">(external link)</a></em>{% else %}{% if game_source.source.base_url %}<em><a href="{{ game_source.base_url }}">(external link)</a></em>{% endif %}{% endif %}{% if not forloop.last %}, {% endif %}
-
-{% endfor %}
-</p>
-
-{% else %}
-<p>No Source</p>
-{% endif %}
 
 
 {% if game.series.count > 1 %}
@@ -125,11 +21,23 @@
 
 </div>
 
-{% if game.same_day_games %}
-<h3>Scoreboard</h3>
-{% include "templatetags/scoreboard.html" with games=game.same_day_games %}
-{% endif %}
 
+
+
+<h3>Sources</h3>
+{% if game_sources %}
+
+<p>
+{% for game_source in game_sources %}
+
+<a href="{% url source_detail game_source.source.id %}">{{ game_source.source }}</a> {% if game_source.source_url %}<em><a href="{{ game_source.source_url }}">(external link)</a></em>{% else %}{% if game_source.source.base_url %}<em><a href="{{ game_source.source.base_url }}">(external link)</a></em>{% endif %}{% endif %}{% if not forloop.last %}, {% endif %}
+
+{% endfor %}
+</p>
+
+{% else %}
+<p>No Source</p>
+{% endif %}
 
 
 

@@ -80,7 +80,7 @@ def competition_detail(request, competition_slug):
     games = competition.game_set.all()
     context = {
         'competition': competition,
-        'stats': CompetitionStat.objects.filter(competition=competition).order_by('-games_played')[:25],
+        'stats': CompetitionStat.objects.exclude(games_played=None).filter(competition=competition).order_by('-games_played')[:25],
         'games': games.select_related()[:25],
         'top_attendance_games': games.exclude(attendance=None).order_by('-attendance')[:20],
         'worst_attendance_games': games.exclude(attendance=None).order_by('attendance')[:20],
@@ -96,7 +96,7 @@ def competition_stats(request, competition_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
     context = {
         'competition': competition,
-        'stats': CompetitionStat.objects.filter(competition=competition).order_by('-games_played'),
+        'stats': CompetitionStat.objects.filter(competition=competition).order_by('player'),
         }
     return render_to_response("competitions/competition_stats.html",
                               context,

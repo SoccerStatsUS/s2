@@ -7,6 +7,7 @@ from competitions.models import Competition
 from bios.models import Bio
 from games.models import Game
 from places.models import Country, City, State, Stadium
+from standings.models import StadiumStanding
 
 
 def country_index(request):
@@ -132,12 +133,13 @@ def stadium_detail(request, slug):
         games = stadium.game_set.exclude(attendance=None)
         attendance_game_count = games.count()
         average_attendance = games.aggregate(Avg('attendance'))['attendance__avg']
-
+        standings = StadiumStanding.objects.filter(stadium=stadium).order_by('-games')
 
         context = {
                 'stadium': stadium,
                 'average_attendance': average_attendance,
                 'attendance_game_count': attendance_game_count,
+                'standings': standings,
                 }
 
         return render_to_response("places/stadium_detail.html",

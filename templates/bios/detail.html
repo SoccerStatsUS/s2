@@ -71,7 +71,7 @@
   {% if draft.competition %}
   <td><a href="{% url draft_detail pick.draft.competition.slug pick.draft.slug pick.draft.season.name %}">{{ pick.draft }}</a></td>
   {% else %}
-  <td>{{ pick.draft.season.name }} {{ pick.draft.name }}</td>
+  <td><a href="{% url draft_detail pick.draft.competition.slug pick.draft.slug pick.draft.season.name %}">{{ pick.draft.season.name }} {{ pick.draft.name }}</a></td>
   {% endif %}
   
 </tr>
@@ -127,8 +127,13 @@
 
 {% if bio.position_set.count %}
 <div tab="coaching">
+<h4>Coaching</h4>
 {% include "templatetags/coach.html" with positions=bio.position_set.all %}
+
+{% include "templatetags/coachstat.html" %}
 </div>
+
+
 {% endif %}
 
 {% endblock %}

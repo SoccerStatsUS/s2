@@ -1,28 +1,36 @@
 {% load datum_or_none %}
 
-<table>
+<table id="game_lineup">
   <tr>
+    <th>on</th>
+    <th>min</th>
     <th>{{ game.team1 }}</th>
-    <th>on</th>
-    <th>min</th>
-    <th>min</th>
-    <th>on</th>
     <th>{{ game.team2 }}</th>
+    <th>min</th>
+    <th>on</th>
+
   </tr>
+
 
   {% for a,b in game.zipped_lineups %}
   <tr>
+    {% if a %}
+    {% datum_or_grey a.on %}
+    {% datum_or_grey a.minutes %}
+    {% else %}
+    <td class="grey"></td>
+    <td class="grey"></td>
+    {% endif %}
+
     {% if a.player %}
     <td><a href="{% url person_detail a.player.slug %}">{{ a.player }}</a></td>
     {% else %}
     <td class="grey"></td>
     {% endif %}
 
-    {% if a %}
-    {% datum_or_grey a.on %}
-    {% datum_or_grey a.minutes %}
+    {% if b.player %}
+    <td><a href="{% url person_detail b.player.slug %}">{{ b.player }}</a></td>
     {% else %}
-    <td class="grey"></td>
     <td class="grey"></td>
     {% endif %}
 
@@ -34,11 +42,7 @@
     <td class="grey"></td>
     {% endif %}
 
-    {% if b.player %}
-    <td><a href="{% url person_detail b.player.slug %}">{{ b.player }}</a></td>
-    {% else %}
-    <td class="grey"></td>
-    {% endif %}
+
 
   </tr>
   {% endfor %}

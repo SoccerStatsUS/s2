@@ -29,6 +29,13 @@ table {
     border-collapse:collapse;
 }
 
+table.noborder {
+}
+
+table.noborder td, table.noborder td {
+    border: 0
+}
+
 tr {
     margin: 0;
     padding: 0;
@@ -173,13 +180,17 @@ textarea#id_message {
 /* Game detail */
 
 #game_score {
+}
 
+#game_score #team_results {
+    width: 400px;
+    margin: 0 auto;
 }
     
 #game_score .team_data {
     text-align: center;
-    border: 1px solid black;
-    float: left;
+
+    margin: 0 10px;
 }
 
 #game_score .team {
@@ -188,6 +199,14 @@ textarea#id_message {
 
 #game_score .score {
     font-size: 2em;
+}
+
+#goal_list {
+    margin: 20px auto 0 auto;
+}
+
+table#game_lineup {
+    margin: 20px auto 0 auto;
 }
 
 .clear_both {
@@ -254,6 +273,14 @@ textarea#id_message {
 
 
 /* Generic */
+
+.floatleft {
+    float: left;
+}
+
+.floatright {
+    float: right;
+}
 
 .red {
     background-color: red;

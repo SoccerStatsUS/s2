@@ -26,10 +26,12 @@
     <th>champion</th>
     <th>MVP</th>
     <th>Golden Boot</th>
+
+
+    {% comment %}
     <th>Average age</th>
     <th>Ages known %</th>
     
-    {% comment %}
     <th>games</th>
     <th>goals</th>
     <th>stats</th>
@@ -57,10 +59,10 @@
     <td></td>
     {% endif %}
 
+    {% comment %}
     <td>{{ season.average_age|floatformat }}</td>
     <td>{{ season.age_minutes_proportion|floatformat:"3" }}</td>
 
-    {% comment %}
     <td>{{ season.game_set.count }}</td>
     <td>{{ season.goals.count }}</td>
     <td>{{ season.stat_set.count }}</td>
@@ -91,19 +93,23 @@
 </div>
 {% endif %}
 
-
+{% comment %}
 {% if games %}
 <div tab="games">
+<p>HELLO</p>
+
 {% include "templatetags/games.html" %}
 </div>
 {% endif %}
-
+{% endcomment %}
 
 {% if stats %}
 <div tab="stats" >
+  <a href="{% url competition_stats competition.slug %}">(All-time {{ competition.name }} stats)</a>
 {% include "templatetags/career_bio.html" %}
 </div>
 {% endif %}
+
 
 {% if competition.award_set.exists %}
 <div tab="awards">
@@ -118,16 +124,12 @@
 {% endif %}
 
 
-
+{% comment %}
 <div tab="graphs">
-
-
-
 {% include "templatetags/nationality.html" with nstat=competition.confederation_stats %}
-
 {% include "templatetags/nationality.html" with nstat=competition.nationality_stats %}
-
 </div>
+{% endcomment %}
 
 </div>
 

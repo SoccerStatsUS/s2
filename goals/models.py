@@ -60,7 +60,7 @@ class Goal(models.Model):
     objects = GoalManager()
     
     class Meta:
-        ordering = ('game', '-minute', 'team')
+        ordering = ('game', 'minute', 'team')
 
     def opponent(self):
         if self.team == self.game.team1:
@@ -73,6 +73,16 @@ class Goal(models.Model):
         return self.game.result(self.team)
 
 
+    def assists(self):
+        return Assist.objects.filter(goal=self).order_by('order')
+
+
+    def assist_string(self):
+        assists = self.assists()
+        if assists:
+            return ''
+        else:
+            return ', '.join([e.player.name for e in self.assists()])
  
 
     def __unicode__(self):

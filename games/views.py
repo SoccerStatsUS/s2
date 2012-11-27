@@ -129,7 +129,9 @@ def game_detail(request, game_id):
     game = get_object_or_404(Game, id=game_id)
     context = {
         'game': game,
-        'game_sources': GameSource.objects.filter(game=game)
+        'goals': game.goal_set.order_by('minute'),
+        'game_sources': GameSource.objects.filter(game=game),
+
         }
     return render_to_response("games/detail.html",
                               context,
