@@ -55,8 +55,10 @@
 {% include "templatetags/appearances/bio.html" with appearances=recent_appearances %}
 {% endif %}
 
-
-
+{% if positions %}
+<h3>Positions</h3>
+{% include "templatetags/coach.html" %}
+{% endif %}
 
 </div>
 

@@ -73,7 +73,7 @@ class TeamGameForm(forms.Form):
         min_year = games.exclude(date=None).order_by('date')[0].date.year
         max_year = games.exclude(date=None).order_by('-date')[0].date.year
 
-        years = sorted(set([e[0].year for e in games.values_list('date')]))
+        years = sorted(set([e[0].year for e in games.exclude(date=None).values_list('date')]))
 
         #years = range(min_year, max_year +1)
         year_choices = [('', '')] + zip(years, years)

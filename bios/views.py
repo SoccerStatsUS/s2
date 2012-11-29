@@ -126,6 +126,7 @@ def person_detail(request, slug):
         'team_stats': team_stats,
         'picks': bio.pick_set.exclude(draft__competition=None).order_by('draft__season', 'draft__start'),
         'coach_stats': bio.coachstat_set.order_by('season'),
+        'positions': bio.position_set.order_by('start'),
         }
 
 
