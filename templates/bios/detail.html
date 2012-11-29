@@ -15,9 +15,9 @@
 
 {% block content %}
 
+<h2 class="headline">{{ bio.name }}</h2>
 
-<h3>{{ bio.name }}</h3>
-
+<div id="left_column">
 
 {% if bio.height or bio.weight %}
 <div>
@@ -26,24 +26,42 @@
 </div>
 {% endif %}
 
+
 {% if bio.birthdate or bio.birthplace %}
 <div>
   Born 
   {% if bio.birthdate %}<a href="{% url date_detail bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a>{% endif %}
-  {% if bio.birthplace %}
-  in <a href="{% url city_detail bio.birthplace.slug %}">{{ bio.birthplace.name }}</a>
-  {% endif %}
+  {% if bio.birthplace %}in <a href="{% url city_detail bio.birthplace.slug %}">{{ bio.birthplace.name }}</a>{% endif %}
 </div>
 {% endif %}
+
+{% if bio.last_game and bio.last_game != bio.first_game %}
+<div>First game: <a href="{% url game_detail bio.first_game.id %}">{{ bio.first_game.date }}</a></div>
+{% endif %}
+
+
+{% if bio.last_game and bio.last_game != bio.first_game %}
+<div>Last game: <a href="{% url game_detail bio.last_game.id %}">{{ bio.last_game.date }}</a></div>
+{% endif %}
+
+
+{% include "bios/detail_stats.html" with games=bio.games_refereed.all %}
+
+
+
+
+</div>
+
+
+
+<div id="right_column">
 
 
 {% if bio.awards.exists %}
 <h4>Awards</h4>
-<div tab="awards">
 <table>
 {% for award in bio.awards.all %}
 <tr>
-
   {% if award.season %}
   <td><a href="{% url season_detail award.season.competition.slug award.season.slug %}">{{ award.season.name }}</a></td>
   <td><a href="{% url competition_detail award.season.competition.slug %}">{{ award.season.competition }}</a></td>
@@ -51,15 +69,11 @@
   <td class="grey"></td>
   <td class="grey"></td>
   {% endif %}
-
   <td><a href="{% url award_detail award.award.id %}">{{ award.award.name }}</a></td>
-
 </tr>
 {% endfor %}
 </table>
-</div>
 {% endif %}
-
 
 {% if picks.exists %}
 <h4>Drafts</h4>
@@ -73,23 +87,15 @@
   {% else %}
   <td><a href="{% url draft_detail pick.draft.competition.slug pick.draft.slug pick.draft.season.name %}">{{ pick.draft.season.name }} {{ pick.draft.name }}</a></td>
   {% endif %}
-  
 </tr>
 {% endfor %}
 </table>
 {% endif %}
 
-{% if bio.appearance_set.exists %}
-<div tab="games">
-<h3>Recent Games</h3>
-<p><a href="{% url person_detail_games bio.slug %}">(Complete game list)</a><p>
-{% include "templatetags/appearances/bio.html" with appearances=recent_appearances %}
-</div>
-{% endif %}
+
 
 {% if bio.salary_set.count %}
 <h4>Salaries</h4>
-<div tab="salaries">
 <table>
   {% for salary in bio.salary_set.all %}
   <tr>
@@ -98,42 +104,12 @@
   </tr>
   {% endfor %}
 </table>
-
-</div>
 {% endif %}
 
 
-{% if career_stats %}
-<div tab="stats">
-{% include "bios/detail_stats.html" with games=bio.games_refereed.all %}
-</div>
-{% endif %}
 
-
-{% if bio.games_refereed.all %}
-<h4>Games Refereed</h4>
-<div tab="referee">
-{% include "templatetags/games.html" with games=bio.games_refereed.all %}
-</div>
-{% endif %}
-
-{% if bio.position_stats.exists %}
-<div tab="standings">
-<h4>Positions</h4>
-{% include "templatetags/positions.html" with stats=bio.position_stats %}
-</div>
-{% endif %}
-
-
-{% if bio.position_set.count %}
-<div tab="coaching">
-<h4>Coaching</h4>
-{% include "templatetags/coach.html" with positions=bio.position_set.all %}
-
-{% include "templatetags/coachstat.html" %}
 </div>
 
 
-{% endif %}
 
 {% endblock %}

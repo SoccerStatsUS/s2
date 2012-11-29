@@ -5,6 +5,7 @@
 <thead>
   <tr>
     <th>player</th>
+    <th>team</th>
     <th>gp</th>
     <th>gs</th>
     <th>min</th>
@@ -39,6 +40,11 @@
   <td></td>
   {% endif %}
 
+  {% if stat.team %}
+  <td><a href="{% url team_detail stat.team.slug %}">{{ stat.team }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
 
   {% datum_or_grey stat.games_played %}
   {% datum_or_grey stat.games_started %}
@@ -47,37 +53,21 @@
   {% datum_or_grey stat.assists %}
   {% datum_or_grey stat.shots %}
 
-  {% comment %}
-  {% if stat.get_age %}
-  <td>{{ stat.get_age|floatformat }}</td>
-  {% else %}
-  <td></td>
-  {% endif %}
-
-  {% if stat.player.birthplace %}
-  <td><a href="{% url city_detail stat.player.birthplace.slug %}">{{ stat.player.birthplace }}</a></td>
-  {% else %}
-  <td></td>
-  {% endif %}
-
-
-
-  {% datum_or_grey stat.wins %}
-  {% datum_or_grey stat.ties %}
-  {% datum_or_grey stat.losses %}
-
-
-  {% datum_or_grey stat.goals_for %}
-  {% datum_or_grey stat.goals_against %}
-  {% datum_or_grey stat.plus_minus %}
-  <td>{{ stat.plus_minus_per_90|floatformat:"2" }}</td>
-  <td>{{ stat.goals_assists_per_90|floatformat:"2" }}</td>
-  {% endcomment %}
-
 </tr>
 {% endfor %}
 
-
+{% with cs=bio.career_stat %}
+<tr>
+  <td>Career</td>
+  <td></td>
+  {% datum_or_grey cs.games_played %}
+  {% datum_or_grey cs.games_started %}
+  {% datum_or_grey cs.minutes %}
+  {% datum_or_grey cs.goals %}
+  {% datum_or_grey cs.assists %}
+  {% datum_or_grey cs.shots %}
+</tr>
+{% endwith %}
 
 </tbody>
 

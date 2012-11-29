@@ -3,8 +3,9 @@
 
 {% block content %}
 
-<p>+ indicates the player is a member of the <a href="">US Soccer Hall of Fame.</a></p>
+<h2 class="headline">Players</h2>
 
+<div id="left_column">
 <ul>
   {% for letter, stats in name_dict.items %}
   {% if stats.exists %}
@@ -19,7 +20,41 @@
 </ul>
 
 
+<p><strong>+</strong> indicates the player is a member of the <a href="">US Soccer Hall of Fame.</a></p>
+</div>
 
 
+<div id="right_column">
+
+<div class="left_half">
+<h3>Career Top Scorers</h3>
+
+<table>
+
+{% for e in most_goals %}
+<tr>
+  <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
+  <td>{{ e.goals }}</td>
+</tr>
+{% endfor %}
+</table>
+
+</div>
+
+<div class="right_half">
+<h3>Career Games Leaders</h3>
+
+<table>
+{% for e in most_games %}
+
+<tr>
+  <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
+  <td>{{ e.games_played }}</td>
+</tr>
+{% endfor %}
+</table>
+</div>
+
+</div>
 
 {% endblock %}

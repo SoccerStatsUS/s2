@@ -75,8 +75,14 @@ def person_index(request):
     for letter in letters:
         name_dict[letter] = stats.filter(player__name__istartswith=letter)[:5]
 
+
+    most_games = CareerStat.objects.exclude(games_played=None).order_by('-games_played')[:25]
+    most_goals = CareerStat.objects.exclude(goals=None).order_by('-goals')[:25]
+
     context = {
-        'name_dict': name_dict
+        'name_dict': name_dict,
+        'most_games': most_games,
+        'most_goals': most_goals,
         }
 
     return render_to_response("bios/index.html",
@@ -116,9 +122,9 @@ def person_detail(request, slug):
 
         'league_stats': league_stats,
         'competition_stats': competition_stats,
-        'career_stats': bio.career_stats(),
+        'career_stat': bio.career_stat(),
         'team_stats': team_stats,
-        'picks': bio.pick_set.exclude(draft__competition=None),
+        'picks': bio.pick_set.exclude(draft__competition=None).order_by('draft__season', 'draft__start'),
         'coach_stats': bio.coachstat_set.order_by('season'),
         }
 

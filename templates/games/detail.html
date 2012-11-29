@@ -3,41 +3,32 @@
 
 {% block content %}
 
+<div id="left_column">
 {% include "templatetags/game_result.html" %}
+</div>
 
+<div id="right_column">
 {% if game.same_day_games %}
-<h3>Scoreboard</h3>
+
 {% include "templatetags/scoreboard.html" with games=game.same_day_games %}
 {% endif %}
 
 
 
+
 {% if game.series.count > 1 %}
-<div tab="series">
-<h3>Series</h3>
-{% include "templatetags/games.html" with games=game.series %}
-</div>
+{% include "templatetags/series.html" with games=game.series %}
 {% endif %}
 
-</div>
 
-
-
-
-<h3>Sources</h3>
 {% if game_sources %}
+<div id="sources"><strong>Sources:</strong> {% for game_source in game_sources %}<a href="{% url source_detail game_source.source.id %}">{{ game_source.source }}</a> {% if game_source.source_url %}<em><a href="{{ game_source.source_url }}">(external link)</a></em>{% else %}{% if game_source.source.base_url %}<em><a href="{{ game_source.source.base_url }}">(external link)</a></em>{% endif %}{% endif %}{% if not forloop.last %}, {% endif %}{% endfor %}</div>{% endif %}
 
-<p>
-{% for game_source in game_sources %}
+</div>
 
-<a href="{% url source_detail game_source.source.id %}">{{ game_source.source }}</a> {% if game_source.source_url %}<em><a href="{{ game_source.source_url }}">(external link)</a></em>{% else %}{% if game_source.source.base_url %}<em><a href="{{ game_source.source.base_url }}">(external link)</a></em>{% endif %}{% endif %}{% if not forloop.last %}, {% endif %}
+<div class="clear_both"></div>
 
-{% endfor %}
-</p>
 
-{% else %}
-<p>No Source</p>
-{% endif %}
 
 
 

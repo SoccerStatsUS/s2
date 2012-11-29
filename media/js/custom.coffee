@@ -10,6 +10,16 @@ $(document).ready( ->
   $("#money_index").tablesorter()
   $(".standings_list").tablesorter()
 
+  $("#hide_control_form a").click ->
+    $("#controls form").toggle()
+
+    if $(this).html() == 'hide controls'
+      $(this).html('unhide controls')
+    else
+      $(this).html('hide controls')
+    false
+
+
   # Competition page button selection activity
   #$("select").change ->
   #  x = $(this).find("option:selected")
@@ -39,10 +49,13 @@ $(document).ready( ->
     #  getAjax()
 
 
+
   #getLineups = makeAjaxGetter("#lineup_form", "#lineups", "/tools/ajax/lineups")
   #getStats = makeAjaxGetter("#stat_form", "#stats", "/tools/ajax/stats")
   #getGames = makeAjaxGetter("#game_form", "#games", "/tools/ajax/games")
   #getGoals = makeAjaxGetter("#goal_form", "#goals", "/tools/ajax/goals")
+
+
 
 
   # Ajax functionality for stats/lineups/team search.
@@ -54,6 +67,7 @@ $(document).ready( ->
       url = "/tools/ajax/lineups?#{opts}"
       console.log url
       div.load(url)
+
 
   $("#submit_button").click getLineups
   getLineups()
@@ -97,6 +111,7 @@ $(document).ready( ->
 
   $("#submit_button").click getGoals
   getGoals()
+
 
   # USMNT Big Board functionality.
   $(".bigboard li").click ->

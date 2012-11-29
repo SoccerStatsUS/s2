@@ -96,6 +96,29 @@
 
 </tr>
 {% endfor %}
+
+
+{% with cs=bio.career_stat %}
+{% if cs %}
+<tr>
+  <td>Career</td>
+  <td></td>
+  <td></td>
+  <td></td>
+  {% datum_or_grey cs.games_played %}
+  {% datum_or_grey cs.games_started %}
+  {% datum_or_grey cs.minutes %}
+  {% datum_or_grey cs.goals %}
+  {% datum_or_grey cs.assists %}
+  {% datum_or_grey cs.shots %}
+</tr>
+{% endif %}
+{% endwith %}
+
+
+
 </tbody>
+
+
 
 </table>

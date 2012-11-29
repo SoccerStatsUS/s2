@@ -4,14 +4,23 @@
 {% block title %}US Soccer Results and Standings for {{ date }}{% endblock %}
 {% endif %}
 
+{% comment %}
+{% block extrahead %}
+<script>
+    $(function() {
+        $("#datepicker" ).datepicker();
+    });
+    </script>
+
+{% endblock %}
+{% endcomment %}
 
 {% block content %}
-
 
 {% if date %}
 <div id="date_nav">
 {% if previous_date %}<a href="{% url date_detail previous_date.0 previous_date.1 previous_date.2 %}">←</a>{% endif %}
-<div id="specific_date">{{ date }}</div>
+<span id="specific_date">{{ date }}</span>
 {% if next_date %}<a href="{% url date_detail next_date.0 next_date.1 next_date.2 %}">→</a>{% endif %}
 </div>
 
@@ -27,6 +36,10 @@
 {% endif %}
 
 {% endif %}
+
+ 
+{# <p>Date: <input type="text" id="datepicker" /></p> #}
+
 
 
 <ul id="tabs"></ul>

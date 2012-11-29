@@ -82,8 +82,8 @@ def competition_detail(request, competition_slug):
         'competition': competition,
         'stats': CompetitionStat.objects.exclude(games_played=None).filter(competition=competition).order_by('-games_played')[:25],
         'games': games.select_related()[:25],
-        'top_attendance_games': games.exclude(attendance=None).order_by('-attendance')[:20],
-        'worst_attendance_games': games.exclude(attendance=None).order_by('attendance')[:20],
+        'top_attendance_games': games.exclude(attendance=None).order_by('-attendance')[:10],
+        'worst_attendance_games': games.exclude(attendance=None).order_by('attendance')[:10],
         'big_winners': competition.alltime_standings().order_by('-wins')[:50],
         
         }
@@ -108,7 +108,7 @@ def competition_games(request, competition_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
     context = {
         'competition': competition,
-        'games': competition.game_set.all(),
+        'games': competition.game_set.order_by('season', 'date'),
 
         }
     return render_to_response("competitions/competition_games.html",
@@ -168,8 +168,9 @@ def season_detail(request, competition_slug, season_slug):
         #'nation_list': nation_list,
         'average_attendance': average_attendance,
         'attendance_game_count': attendance_game_count,
-        'top_attendance_games': games.exclude(attendance=None).order_by('-attendance')[:20],
-        'worst_attendance_games': games.exclude(attendance=None).order_by('attendance')[:20],
+        'top_attendance_games': games.exclude(attendance=None).order_by('-attendance')[:10],
+        'worst_attendance_games': games.exclude(attendance=None).order_by('attendance')[:10],
+        'awards': season.awarditem_set.order_by('award')
 
         }
     return render_to_response("competitions/season_detail.html",

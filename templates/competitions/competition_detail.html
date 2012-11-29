@@ -7,18 +7,17 @@
 {% block content %}
 
 
-<h3><a href="{% url competition_detail competition.slug %}">{{ competition }}</a></h4>
-<h4>Level {{ competition.level }}, {{ competition.area }}</h4> 
+<h2 class="headline">{{ competition }}</h2>
+<h3 class="center"><a href="{% url season_detail competition.slug competition.first_season.name %}">{{ competition.first_season.name }}</a> to <a href="{% url season_detail competition.slug competition.first_season.name %}">{{ competition.last_season.name }}</a></h3>
+<h3 class="center">{{ competition.area }} - Level {{ competition.level }}</h3> 
 
 
 
-<ul id="tabs"></ul>
 
-<div id="tab_wrapper">
+<div id="left_column">
 
 
 {% if competition.season_set.exists %}
-<div tab="seasons">
 <table>
   <tr>
     <th>competition</th>
@@ -72,6 +71,8 @@
   {% endfor %}
     
 </table>
+{% endif %}
+
 
 {% if top_attendance_games %}
 <h3>Top attendances</h3>
@@ -82,53 +83,46 @@
 <h3>Bottom attendances</h3>
 {% include "templatetags/top_attendance.html" with games=worst_attendance_games %}
 {% endif %}
+
 </div>
-{% endif %}
+
+<div id="right_column">
 
 
 
 {% if competition.alltime_standings.exists %}
-<div tab="standings">
 {% include "templatetags/slim_standings.html" with standings=big_winners %}
-</div>
 {% endif %}
 
 {% comment %}
 {% if games %}
-<div tab="games">
-<p>HELLO</p>
-
 {% include "templatetags/games.html" %}
-</div>
 {% endif %}
 {% endcomment %}
 
-{% if stats %}
-<div tab="stats" >
-  <a href="{% url competition_stats competition.slug %}">(All-time {{ competition.name }} stats)</a>
-{% include "templatetags/career_bio.html" %}
-</div>
-{% endif %}
 
-
+<h3>Awards</h3>
 {% if competition.award_set.exists %}
-<div tab="awards">
 <table>
 {% for award in competition.award_set.all %}
 <tr>
-  <td><a href="{% url award_detail award.id %}">{{ award }}</a></td>
+  <td><a href="{% url award_detail award.id %}">{{ award.name }}</a></td>
 </tr>
 {% endfor %}
 </table>
-</div>
+{% endif %}
+
+
+
+{% if stats %}
+{% include "templatetags/career_bio.html" %}
+<a href="{% url competition_stats competition.slug %}">All-time {{ competition.name }} stats</a>
 {% endif %}
 
 
 {% comment %}
-<div tab="graphs">
 {% include "templatetags/nationality.html" with nstat=competition.confederation_stats %}
 {% include "templatetags/nationality.html" with nstat=competition.nationality_stats %}
-</div>
 {% endcomment %}
 
 </div>

@@ -9,6 +9,15 @@
     $("#position_index").tablesorter();
     $("#money_index").tablesorter();
     $(".standings_list").tablesorter();
+    $("#hide_control_form a").click(function() {
+      $("#controls form").toggle();
+      if ($(this).html() === 'hide controls') {
+        $(this).html('unhide controls');
+      } else {
+        $(this).html('hide controls');
+      }
+      return false;
+    });
     createSortLoader = function(div) {
       var d;
       d = $("table", div);

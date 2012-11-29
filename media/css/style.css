@@ -13,6 +13,16 @@ a {
 .light-blue-bg { background-color: #b5c0ff;}
 .light-grey-bg { background-color: #d9d9d9;}
 
+.left_half {
+    float: left;
+    width: 50%;
+}
+
+.right_half {
+    float: right;
+    width: 50%;
+}
+
 a:visited {
     color: blue;
 }
@@ -45,7 +55,7 @@ tr {
 td, th {
     margin: 0;
     padding: 4px 8px;
-    font-size: 1em;
+    font-size: .9em;
     border: 2px solid #ddd;
 
 }
@@ -91,6 +101,31 @@ h1 span.subhead {
 
 .clear {
     clear: both
+}
+
+#content {
+    width: 1280px;
+    margin: 0 auto;
+}
+
+#left_column {
+    float: left;
+    width: 760px;
+}
+
+#right_column {
+    float: right;
+    width: 520px;
+}
+
+
+
+#controls {
+    margin: 10px;
+}
+
+#controls #hide_control_form {
+    text-align: right;
 }
     
 
@@ -155,8 +190,15 @@ h1 span.subhead {
 /* Scoreboard */
 
 #scoreboard {
-    border: 2px solid black;
-    width: 30%;
+}
+
+#scoreboard h4, #series h4 {
+    margin-left: 25px;
+}
+
+#sources {
+    margin-top: 10px;
+    margin-left: 25px;
 }
 
 #scoreboard .score {
@@ -182,14 +224,17 @@ textarea#id_message {
 #game_score {
 }
 
+.center {
+    text-align: center;
+}
+
 #game_score #team_results {
-    width: 400px;
     margin: 0 auto;
+    text-align: center;
 }
     
 #game_score .team_data {
-    text-align: center;
-
+    display: inline-block;
     margin: 0 10px;
 }
 
@@ -212,6 +257,18 @@ table#game_lineup {
 .clear_both {
     clear: both;
 }
+
+
+/* Season Detail */
+
+.headline {
+    text-align: center;
+}
+
+h2.headline {
+    font-size: 1.8em;
+}
+
 
 /* Search */
 
@@ -318,8 +375,11 @@ table#game_lineup {
     color: red;
 }
 
+#date_nav {
+    font-size: 1.5em;
+    margin-left: 100px;
+}
 
 #specific_date {
-    border: 5px solid black;
     width: 200px;
 }

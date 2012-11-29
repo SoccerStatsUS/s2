@@ -864,7 +864,9 @@ def load_games():
 
         
         for source in sources:
-            if source.startswith('http'):
+            if source.strip() == '':
+                continue
+            elif source.startswith('http'):
                 source_url = source
             else:
                 source_url = ''

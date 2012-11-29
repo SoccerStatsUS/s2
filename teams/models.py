@@ -190,6 +190,24 @@ class Team(models.Model):
     def __unicode__(self):
         return self.short_name
 
+
+    def previous_game(self, game):
+        from games.models import Game
+        games = Game.objects.team_filter(self).filter(date__lt=game.date, season=game.season).order_by('-date')
+        if games:
+            return games[0]
+        else:
+            return None
+    
+    def next_game(self, game):
+        from games.models import Game
+        games = Game.objects.team_filter(self).filter(date__gt=game.date, season=game.season).order_by('date')
+        if games:
+            return games[0]
+        else:
+            return None
+        
+
     def roster(self, season=None):
         """
         Returns a queryset of all players who have played for a team, with an optional season argument.

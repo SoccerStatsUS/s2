@@ -320,6 +320,9 @@ class Season(models.Model):
     def average_attendance(self):
         games = self.game_set.exclude(attendance=None)
         return games.aggregate(Avg('attendance'))['attendance__avg']
+
+    def games_with_attendance(self):
+        return self.game_set.exclude(attendance=None).count()
         
 
 

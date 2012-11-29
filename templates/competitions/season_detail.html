@@ -15,29 +15,30 @@
 {% block content %}
 
 
-
-<h3>
+<h2 class="headline">
 {% if season.previous_season %}<a href="{% url season_detail season.competition.slug season.previous_season.slug %}">←</a>{% endif %}
 {{ season }}
 {% if season.next_season %}<a href="{% url season_detail season.competition.slug season.next_season.slug %}">→</a>{% endif %}
-</h3>
+</h2>
 
 
-<ul id="tabs"></ul>
-
-<div id="tab_wrapper">
+<div id="left_column">
 
 
-<div tab="summary">
-{% include "templatetags/compact_standings.html" %}
-
-
+<div class="left_half">
 <table>
 
   {% if season.champion %}
   <tr>
     <td>champion</td>
     <td><a href="{% url team_detail season.champion.recipient.slug %}">{{ season.champion.recipient }}</a></td>
+  </tr>
+  {% endif %}
+
+  {% if season.mvp %}
+  <tr>
+    <td>mvp</td>
+    <td><a href="{ %url person_detail season.mvp.recipient.slug %}">{{ season.mvp.recipient }}</a></td>
   </tr>
   {% endif %}
 
@@ -48,48 +49,74 @@
   </tr>
   {% endif %}
 
-
-  {% if season.mvp %}
-  <tr>
-    <td>mvp</td>
-    <td><a href="{ %url person_detail season.mvp.recipient.slug %}">{{ season.mvp.recipient }}</a></td>
-  </tr>
-  {% endif %}
-
 </table>
 
 <table>
 
   {% if season.game_set.count %}
-  <tr>
-    <td>games</td>
-    <td>{{ season.game_set.count }}</td>
-  </tr>
-
-  <tr>
-    <td>goals</td>
-    <td>{{ season.goals.count }}</td>
-  </tr>
-
-  <tr>
-    <td>goals per game</td>
-    <td>{{ season.goals_per_game|floatformat }}</td>
-  </tr>
+  <h3>Games: {{ season.game_set.count }}</h3>
+  <h3>Goals: {{ season.goals.count }} ({{ season.goals_per_game|floatformat }} goals/game)</h3>
   {% endif %}
 
   {% if season.total_attendance %}
-  <tr>
-    <td>attendance</td>
-    <td>{{ season.total_attendance }}</td>
-  </tr>
-
-  <tr>
-    <td>average attendance</td>
-    <td>{{ season.average_attendance|floatformat:1 }}</td>
-  </tr>
+  <h3>Average Attendance: {{ season.average_attendance|floatformat:1 }} </h3>
+  <h3>({{ season.total_attendance }} in {{ season.games_with_attendance }} games)</h3>
   {% endif %}
 </table>
 
+
+</div>
+
+<div class="right_half">
+
+
+{% if awards.exists %}
+<table>
+  <tr>
+    <th>Award</th>
+    <th>Winner</th>
+  </tr>
+
+  {% for a in awards %}
+  <tr>
+    <td><a href="{% url award_detail a.award.id %}">{{ a.award.name }}</a></td>
+    <td><a href="{{ a.recipient.get_absolute_url }}">{{ a.recipient }}</a></td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+
+</div>
+
+<div class="clear_both"></div>
+
+
+
+<h3><a href="{% url season_games season.competition.slug season.slug %}">{{ season }} games</a></h3>
+{% if top_attendance_games %}
+<h3>Top attendances</h3>
+{% include "templatetags/top_attendance.html" with games=top_attendance_games %}
+{% endif %}
+
+{% if worst_attendance_games %}
+<h3>Bottom attendances</h3>
+{% include "templatetags/top_attendance.html" with games=worst_attendance_games %}
+
+{% endif %}
+
+
+
+</div>
+
+
+<div id="right_column">
+
+{% include "templatetags/compact_standings.html" %}
+
+
+<h3><a href="{% url season_stats season.competition.slug season.slug %}">{{ season }} stats</a></h3>
+<div class="left_half">
 
 <table>
 <th><td>Goal leaders</td></th>
@@ -106,6 +133,9 @@
 </table>
 
 
+</div>
+<div class="right_half">
+
 <table>
 <th><td>Game leaders</td></th>
 {% for stat in game_leaders %}
@@ -120,49 +150,9 @@
 {% endfor %}
 </table>
 
-
-{% if top_attendance_games %}
-<h3>Top attendances</h3>
-{% include "templatetags/top_attendance.html" with games=top_attendance_games %}
-{% endif %}
-
-{% if worst_attendance_games %}
-<h3>Bottom attendances</h3>
-{% include "templatetags/top_attendance.html" with games=worst_attendance_games %}
-{% endif %}
-
-
 </div>
 
-
-
-{% if season.standing_set.exists %}
-<div tab="standings">
-{% include "templatetags/standings.html" %}
-</div>
-{% endif %}
-
-
-
-
-{% if season.awarditem_set.exists %}
-<div tab="awards">
-<table>
-  <tr>
-    <th>Award</th>
-    <th>Winner</th>
-  </tr>
-
-  {% for a in season.awarditem_set.all %}
-  <tr>
-    <td><a href="{% url award_detail a.award.id %}">{{ a.award.name }}</a></td>
-    <td><a href="{{ a.recipient.get_absolute_url }}">{{ a.recipient }}</a></td>
-  </tr>
-  {% endfor %}
-</table>
-</div>
-{% endif %}
-
+<div class="clear_both"></div>
 
 {% comment %}
 {% if testing %}
@@ -193,6 +183,6 @@
 </div>
 {% endcomment %}
 
-
 </div>
+
 {% endblock %}

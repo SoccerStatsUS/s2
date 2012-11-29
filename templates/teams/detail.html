@@ -16,15 +16,29 @@
 
 {% block content %}
 
-<h2>{{ team.name }}</h2>
+<h2 class="headline">{{ team.name }}</h2>
 
 
-<ul id="tabs"></ul>
+{% if current_staff %}
+<h3>Staff</h3>
+<table>
+{% for position in current_staff %}
+<tr>
+  <td><a href="{% url person_detail position.person.slug %}">{{ position.person }}</a></td>
+  <td>{{ position.name|truncatechars:20 }}</td>
+  {% if position.start %}
+  <td><a href="{% url date_detail position.start.year position.start.month position.start.day %}">{{ position.start|default_if_none:'' }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
 
-<div id="tab_wrapper">
+</tr>
+{% endfor %}
+</table>
+{% endif %}
 
-<div tab="summary">
 
+<div id="left_column">
 <h3>Competition standings</h3>
 
 <table>
@@ -55,12 +69,40 @@
 
 
 
-{% if recent_games %}
-<h3>Recent games (<a href="{% url team_games team.slug %}">All {{ team }} games</a>)</h3> 
-{% include "templatetags/top_attendance.html" with games=recent_games %}
+<div class="left_half">
+{% if goal_leaders %}
+<h3>Goal leaders </h3>
+<table>
+{% for e in goal_leaders %}
+<tr>
+  <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
+  <td>{{ e.goals }}</td>
+</tr>
+{% endfor %}
+</table>
 {% endif %}
+</div>
 
+<div class="right_half">
 
+{% if game_leaders %}
+<h3>Game leaders</h3>
+<table>
+{% for e in game_leaders %}
+<tr>
+  <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
+  <td>{{ e.games_played }}</td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+</div>
+
+<h3><a href="{% url team_stats team.slug %}">All-time {{ team }} stats</a></h3>
+
+</div>
+
+<div id="right_column">
 
 {% if team.awards.exists %}
 <h3>Honors</h3>
@@ -75,28 +117,11 @@
 </table>
 {% endif %}
 
-{% if goal_leaders %}
-<h3>Goal leaders <a href="{% url team_stats team.slug %}">(All-time {{ team }} stats)</a></h3>
-<table>
-{% for e in goal_leaders %}
-<tr>
-  <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
-  <td>{{ e.goals }}</td>
-</tr>
-{% endfor %}
-</table>
-{% endif %}
 
-{% if game_leaders %}
-<h3>Game leaders</h3>
-<table>
-{% for e in game_leaders %}
-<tr>
-  <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
-  <td>{{ e.games_played }}</td>
-</tr>
-{% endfor %}
-</table>
+
+{% if recent_games %}
+<h3>Recent games (<a href="{% url team_games team.slug %}">All {{ team }} games</a>)</h3> 
+{% include "templatetags/top_attendance.html" with games=recent_games %}
 {% endif %}
 
 
@@ -122,26 +147,9 @@
 {% endif %}
 
 
-{% if current_staff %}
-<h3>Staff</h3>
-<table>
-{% for position in current_staff %}
-<tr>
-  <td><a href="{% url person_detail position.person.slug %}">{{ position.person }}</a></td>
-  <td>{{ position.name|truncatechars:20 }}</td>
-  {% if position.start %}
-  <td><a href="{% url date_detail position.start.year position.start.month position.start.day %}">{{ position.start|default_if_none:'' }}</a></td>
-  {% else %}
-  <td></td>
-  {% endif %}
-
-</tr>
-{% endfor %}
-</table>
-{% endif %}
-
-
 </div>
+
+<div class="clear_both"></div>
 
 {% endblock %}
 

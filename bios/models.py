@@ -112,6 +112,24 @@ class Bio(models.Model):
         return reverse('person_detail', args=[self.slug])
 
 
+
+    def first_game(self):
+
+        from lineups.models import Appearance
+        try:
+            return Appearance.objects.filter(player=self).exclude(game__date=None).order_by('game__date')[0].game
+        except:
+            return None
+
+
+    def last_game(self):        
+        from lineups.models import Appearance
+        try:
+            return Appearance.objects.filter(player=self).exclude(game__date=None).order_by('-game__date')[0].game
+        except: 
+            return None
+
+
     def team_year_dict(self):
         d = defaultdict(set)
         for e in self.stat_set.all():

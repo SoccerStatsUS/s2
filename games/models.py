@@ -199,6 +199,18 @@ class Game(models.Model):
         # unique_together = [('team1', 'date', 'minigame'), ('team2', 'date', 'minigame')]
 
 
+    def team1_previous_game(self):
+        return self.team1.previous_game(self)
+
+    def team1_next_game(self):
+        return self.team1.next_game(self)
+
+    def team2_previous_game(self):
+        return self.team2.previous_game(self)
+
+    def team2_next_game(self):
+        return self.team2.next_game(self)
+
     
     def winner(self):
         # Need to hook this in more intelligently with team1_result
@@ -293,7 +305,7 @@ class Game(models.Model):
             if self.shootout_winner == self.team2:
                 return "%s (SOW)" % self.team2_score
             else:
-                return self.team1_score
+                return self.team2_score
         return self.team2_result.capitalize()
 
 
@@ -398,20 +410,34 @@ class Game(models.Model):
         d[self.result(team)] += 1
         return (d['win'], d['tie'], d['loss'])
 
+
     def home_standings(self):
-        return self.standings(self.team1)
+        from standings.models import Standing
+        try:
+            return Standing.objects.get(date=self.date, season=self.season, team=self.team1)
+        except:
+            return None
 
     def away_standings(self):
-        return self.standings(self.team2)
+        from standings.models import Standing
+        try:
+            return Standing.objects.get(date=self.date, season=self.season, team=self.team2)
+        except:
+            return None
 
     def home_standings_string(self):
-        wins, ties, losses = self.home_standings()
-        return "%s-%s-%s" % (wins, ties, losses)
+        s = self.home_standings()
+        if s:
+            return "%s-%s-%s" % (s.wins, s.ties, s.losses)
+        else:
+            return ''
 
     def away_standings_string(self):
-        wins, ties, losses = self.away_standings()
-        return "%s-%s-%s" % (wins, ties, losses)
-
+        s = self.away_standings()
+        if s:
+            return "%s-%s-%s" % (s.wins, s.ties, s.losses)
+        else:
+            return ''
 
     def streaks(self):
         return [(self.result(e), self.streak(e)) for  e in (self.team1, self.team2)]

@@ -1,30 +1,36 @@
-{% comment %}
-{% if games.exists %}
-<div id="scoreboard">
-  {% for game in games %}
-  <div class="score">
+{% load datum_or_none %}
 
-    <a href="{% url game_detail game.id %}">
-    <div>{{ game.team1_original_name }} {{ game.r
-    <div>{{ game.team2_original_name }} {{ game.team2_score_or_result }}</div>
-    </a>
-  </div>
-  {% endfor %}
-</div>
-{% endif %}
-{% endcomment %}
+<div id="series">
+<h4><a href="{% url team_detail game.team1.slug %}">{{ game.team1 }}</a> v. <a href="{% url team_detail game.team2.slug %}">{{ game.team2 }}</a></h4>
 
-<div id="scoreboard">
-<h4>Other results for <a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date|date:"F d, Y" }}</a></h4>
 <table>
+  <tr>
+
+    <th>date</th>
+    <th>team1</th>
+    <th>score</th>
+    <th>team2</th>
+    <th>location</th>
+
+  </tr>
+
   {% for game in games %}
-  <tr class="score">
+  <tr>
+
+    {% if game.date %}
+    <td><a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date }}</a></td>
+    {% else %}
+    <td></td>
+    {% endif %}
+
     {% if game.winner == game.team1 %}
     <td><a href="{% url team_detail game.team1.slug %}"><strong>{{ game.team1_original_name }}</strong></a></td>
     {% else %}
     <td><a href="{% url team_detail game.team1.slug %}">{{ game.team1_original_name }}</a></td>
     {% endif %}
+
     <td><a href="{% url game_detail game.id %}">{{ game.score_or_result }}</a></td>
+
     {% if game.winner == game.team2 %}
     <td><a href="{% url team_detail game.team2.slug %}"><strong>{{ game.team2_original_name }}</strong></a></td>
     {% else %}
@@ -41,7 +47,11 @@
     <td></td>
     {% endif %}
     {% endif %}
+
   </tr>
   {% endfor %}
 </table>
+
 </div>
+
+
