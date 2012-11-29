@@ -3,14 +3,20 @@
 {% block content %}
 
 
+<h3><a href="{% url day_detail today.month today.day %}">Today in American soccer history</a></h3>
+{% if born %}
+<p>Born today: <a href="{% url person_detail born.slug %}">{{ born }}</a></p>
+{% endif %}
 
-
+<div id="left_column">
 <h4>Recent Results</h4>
 {% include "templatetags/games_small.html" %}
+</div>
 
 
-<h3><a href="{% url day_detail today.month today.day %}">Today in American soccer history</a></h3>
+<div id="right_column">
 
+<div class="left_half">
 
 <h4>Game leaders</h4>
 <table>
@@ -24,6 +30,9 @@
 
 </table>
 
+</div>
+<div class="right_half">
+
 <h4>Goal leaders</h4>
 <table>
 
@@ -36,13 +45,11 @@
 
 </table>
 
-
-{% if born %}
-<p>Born today: <a href="{% url person_detail born.slug %}">{{ born }}</a></p>
-{% endif %}
+</div>
 
 
 <p>soccerstats.us aims to create a free and complete statistical resource covering all US soccer history.</p>
 
+</div>
 
 {% endblock %}
