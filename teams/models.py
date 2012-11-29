@@ -169,7 +169,7 @@ class Team(models.Model):
 
 
     def get_image(self):
-        p = os.path.join("/home/chris/www/sdev/media/images/team/%s" % self.slug)
+        p = os.path.join("/home/chris/www/sdev/static/images/team/%s" % self.slug)
         exts = ['svg', 'png', 'gif', 'jpg']
         for ext in exts:
             fp = '%s.%s' % (p, ext)
