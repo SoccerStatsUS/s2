@@ -17,6 +17,7 @@
 
 <h2 class="headline">{{ bio.name }}</h2>
 
+
 <div id="left_column">
 
 {% if bio.height or bio.weight %}
@@ -46,6 +47,13 @@
 
 
 {% include "bios/detail_stats.html" with games=bio.games_refereed.all %}
+
+
+{% if recent_appearances %}
+<h3>Recent games</h3>
+<p><a href="{% url person_detail_games bio.slug %}">(all {{ bio }} games)</a></p>
+{% include "templatetags/appearances/bio.html" with appearances=recent_appearances %}
+{% endif %}
 
 
 
