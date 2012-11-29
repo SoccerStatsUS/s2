@@ -31,6 +31,12 @@ a:visited {
     text-align: right;
 }
 
+#team_logo {
+    margin-left: 100px;
+    padding: 5px;
+    border: 8px solid #ccc;
+}
+
 option {
     width: 100px;
 }

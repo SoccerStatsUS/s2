@@ -7,7 +7,7 @@ from django.template.defaultfilters import slugify
 from collections import defaultdict
 
 import datetime
-
+import os
 
 class AbstractTeamManager(models.Manager):
     """
@@ -74,7 +74,7 @@ class AbstractTeamManager(models.Manager):
             # Don't want to be creating teams all the time.
             raise
 
-        
+
 
 class TeamManager(AbstractTeamManager):
     """
@@ -165,6 +165,17 @@ class Team(models.Model):
 
     class Meta:
         ordering = ('short_name',)
+
+
+
+    def get_image(self):
+        p = os.path.join("/home/chris/www/sdev/media/images/team/%s" % self.slug)
+        exts = ['svg', 'png', 'gif', 'jpg']
+        for ext in exts:
+            fp = '%s.%s' % (p, ext)
+            if os.path.exists(fp):
+                return fp.split('sdev')[1]
+        return ''
 
 
     def save(self, *args, **kwargs):
