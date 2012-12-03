@@ -181,9 +181,6 @@ class Competition(models.Model):
     scope = models.CharField(max_length=255)
     area = models.CharField(max_length=255)
     
-    # Association rules, Boston game, indoor, etc.
-    code = models.CharField(max_length=255)
-
     #international = models.BooleanField()
 
     objects = CompetitionManager()

@@ -527,7 +527,7 @@ class Game(models.Model):
         Returns all games played on the same date (excluding this one).
         """
         if self.date:
-            return Game.objects.filter(date=self.date).exclude(id=self.id)
+            return Game.objects.filter(date=self.date).exclude(id=self.id).order_by('competition__level', 'competition__name')
         else:
             return []
 

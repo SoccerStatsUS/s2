@@ -80,7 +80,7 @@ def competition_detail(request, competition_slug):
     games = competition.game_set.all()
     context = {
         'competition': competition,
-        'stats': CompetitionStat.objects.exclude(games_played=None).filter(competition=competition).order_by('-games_played')[:25],
+        'stats': CompetitionStat.objects.exclude(games_played=None, goals=None).filter(competition=competition).order_by('-games_played', '-goals')[:25],
         'games': games.select_related()[:25],
         'top_attendance_games': games.exclude(attendance=None).order_by('-attendance')[:10],
         'worst_attendance_games': games.exclude(attendance=None).order_by('attendance')[:10],
