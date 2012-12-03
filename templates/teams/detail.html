@@ -103,7 +103,9 @@
 {% endif %}
 </div>
 
+{% if game_leaders.exists %}
 <h3><a href="{% url team_stats team.slug %}">All-time {{ team }} stats</a></h3>
+{% endif %}
 
 </div>
 

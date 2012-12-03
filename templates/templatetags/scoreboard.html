@@ -19,6 +19,8 @@
 <table>
   {% for game in games %}
   <tr class="score">
+    <td><a href="{% url competition_detail game.competition.slug %}">{{ game.competition.abbreviation }}</a></td>
+
     {% if game.winner == game.team1 %}
     <td><a href="{% url team_detail game.team1.slug %}"><strong>{{ game.team1_original_name }}</strong></a></td>
     {% else %}

@@ -8,7 +8,7 @@
 
 
 <h2 class="headline">{{ competition }}</h2>
-<h3 class="center"><a href="{% url season_detail competition.slug competition.first_season.name %}">{{ competition.first_season.name }}</a> to <a href="{% url season_detail competition.slug competition.first_season.name %}">{{ competition.last_season.name }}</a></h3>
+<h3 class="center"><a href="{% url season_detail competition.slug competition.first_season.slug %}">{{ competition.first_season.name }}</a> to <a href="{% url season_detail competition.slug competition.last_season.slug %}">{{ competition.last_season.name }}</a></h3>
 <h3 class="center">{{ competition.area }} - Level {{ competition.level }}</h3> 
 
 
@@ -20,7 +20,6 @@
 {% if competition.season_set.exists %}
 <table>
   <tr>
-    <th>competition</th>
     <th>season</th>
     <th>champion</th>
     <th>MVP</th>
@@ -40,7 +39,6 @@
 
   {% for season in competition.season_set.all %}
   <tr>
-    <td>{{ competition }}</td>
     <td><a href="{% url season_detail competition.slug season.slug %}">{{ season.name }}</a></td>
     <td><a href="{{ season.champion.recipient.get_absolute_url }}">{{ season.champion.recipient }}</a></td>
 

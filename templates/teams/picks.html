@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<h3><a href="{% url team_detail team.slug %}">{{ team }} draft picks</a></h3>
+
 {% include "templatetags/draft.html" %}
 {% endblock %}

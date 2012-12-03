@@ -15,10 +15,13 @@
       <th>start</th>
       <th>end</th>
       <th>length</th>
+
+      {% comment %}
       <th>wins</th>
       <th>losses</th>
       <th>ties</th>
       <th>win %</th>
+      {% endcomment %}
     </tr>
   </thead>
 
@@ -31,12 +34,15 @@
   {% include "templatetags/date_fragment.html" with date=position.start %}
   {% include "templatetags/date_fragment.html" with date=position.end %}
   <td>{{ position.length }}</td>
+  
+  {% comment %}
   {% datum_or_grey position.wins %}
   {% datum_or_grey position.ties %}
   {% datum_or_grey position.losses %}
   {% with wp=position.win_percentage|floatformat:3 %}
   {% datum_or_grey wp %}
   {% endwith %}
+  {% endcomment %}
 
 </tr>
 {% endfor %}
