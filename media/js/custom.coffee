@@ -20,6 +20,13 @@ $(document).ready( ->
     false
 
 
+
+  $("#reporterror").click ->
+    $("#error_dialog").dialog({
+      width: 800,
+      })
+    return false
+
   # Competition page button selection activity
   #$("select").change ->
   #  x = $(this).find("option:selected")

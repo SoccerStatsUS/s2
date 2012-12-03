@@ -18,6 +18,12 @@
       }
       return false;
     });
+    $("#reporterror").click(function() {
+      $("#error_dialog").dialog({
+        width: 800
+      });
+      return false;
+    });
     createSortLoader = function(div) {
       var d;
       d = $("table", div);
