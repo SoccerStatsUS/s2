@@ -204,6 +204,10 @@ class Team(models.Model):
 
     def previous_game(self, game):
         from games.models import Game
+
+        if game.date is None:
+            return None
+
         games = Game.objects.team_filter(self).filter(date__lt=game.date, season=game.season).order_by('-date')
         if games:
             return games[0]
@@ -212,6 +216,10 @@ class Team(models.Model):
     
     def next_game(self, game):
         from games.models import Game
+
+        if game.date is None:
+            return None
+
         games = Game.objects.team_filter(self).filter(date__gt=game.date, season=game.season).order_by('date')
         if games:
             return games[0]
