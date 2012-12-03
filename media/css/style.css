@@ -389,3 +389,8 @@ h2.headline {
 #specific_date {
     width: 200px;
 }
+
+#error_dialog {
+    display: none;
+    width: 800px;
+}
