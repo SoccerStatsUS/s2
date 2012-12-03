@@ -4,16 +4,17 @@
 {% block title %}US Soccer Results and Standings for {{ date }}{% endblock %}
 {% endif %}
 
-{% comment %}
 {% block extrahead %}
+
+{% comment %}
 <script>
     $(function() {
         $("#datepicker" ).datepicker();
     });
     </script>
+{% endcomment %}
 
 {% endblock %}
-{% endcomment %}
 
 {% block content %}
 
@@ -37,8 +38,12 @@
 
 {% endif %}
 
- 
-{# <p>Date: <input type="text" id="datepicker" /></p> #}
+ {% comment %}
+<p>
+Date: <input type="text" id="datepicker" />
+<input type="submit" value="go" />
+</p> 
+{% endcomment %}
 
 
 

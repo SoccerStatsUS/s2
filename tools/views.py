@@ -1,9 +1,11 @@
 from collections import Counter
 
 from django.db.models import Q
+from django.http import HttpResponsePermanentRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
+
 
 from games.models import Game
 from goals.models import Goal
@@ -185,6 +187,8 @@ def games_ajax(request):
 
 @cache_page(60 * 24)
 def stats_ajax_by_id(request):
+    return HttpResponsePermanentRedirect('/')
+
     PAGE = 0
     ITEMS_PER_PAGE = 100
 
@@ -242,6 +246,8 @@ def stats_ajax_by_id(request):
     context = {
         'stats': stats,
         }
+
+
 
     return render_to_response("tools/ajax/stats.html",
                               context,
