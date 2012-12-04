@@ -78,9 +78,17 @@ def competition_index(request):
 def competition_detail(request, competition_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
     games = competition.game_set.all()
+
+
+    stats = CompetitionStat.objects.filter(competition=competition).exclude(games_played=None)
+    if stats.exclude(games_played=None).exists()
+        sx = stats.exclude(games_played=None).order_by('-games_played', '-goals')[:25]
+    else:
+        sx = stats.exclude(games_played=None, goals=None).filter(competition=competition).order_by('-games_played', '-goals')[:25]
+
     context = {
         'competition': competition,
-        'stats': CompetitionStat.objects.exclude(games_played=None, goals=None).filter(competition=competition).order_by('-games_played', '-goals')[:25],
+        'stats': sx,
         'games': games.select_related()[:25],
         'top_attendance_games': games.exclude(attendance=None).order_by('-attendance')[:10],
         'worst_attendance_games': games.exclude(attendance=None).order_by('attendance')[:10],
