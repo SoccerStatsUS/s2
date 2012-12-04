@@ -72,8 +72,12 @@ def team_index(request):
         standings = Standing.objects.filter(competition=None, team__name__istartswith=letter).order_by('-wins')[:5]
         name_dict[letter] = standings
 
+    winningest = Standing.objects.filter(competition=None).order_by('-wins')[:25]
+    #losingest = Standing.objects.filter(competition=None).order_by('-losses')[:25]
+
     context = {
-        'name_dict': name_dict
+        'name_dict': name_dict,
+        'winningest': winningest,
         }
 
     return render_to_response("teams/index.html",

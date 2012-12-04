@@ -5,6 +5,7 @@
 
 <h2 class="headline">Teams</h2>
 
+<div id="left_column">
 <ul>
   {% for letter, standings in name_dict.items %}
   {% if standings.exists %}
@@ -18,7 +19,12 @@
   {% endif %}
   {% endfor %}
 </ul>
+</div>
 
+<div id="right_column">
+<h3>Winningest teams</h3>
+{% include "templatetags/slim_standings.html" with standings=winningest %}
+</div>
 
 
 
