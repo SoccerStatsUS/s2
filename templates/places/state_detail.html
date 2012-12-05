@@ -38,10 +38,11 @@
 </table>
 </div>
 
-
+{% if games %}
 <div tab="games">
 {% include "templatetags/games.html" %}
 </div>
+{% endif %}
 
 
 <div tab="births">
@@ -49,8 +50,8 @@
   <thead>
     <tr>
       <th>name</th>
-      <th>bdate</th>
-      <th>bplace</th>
+      <th>birthdate</th>
+      <th>birthplace</th>
     </tr>
   </thead>
 
