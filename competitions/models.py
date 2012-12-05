@@ -323,14 +323,6 @@ class Season(models.Model):
         
 
 
-    def golden_boot(self):
-        goalscorers = self.stat_set.exclude(goals=None).order_by('-goals', '-assists')
-        if goalscorers.exists():
-            return goalscorers[0].player
-        else:
-            return None
-
-
     def average_date(self):
         if self.game_set.exclude(date=None).exists():
             dates = self.game_set.exclude(date=None).values_list('date')
@@ -471,6 +463,21 @@ class Season(models.Model):
             return AwardItem.objects.get(season=self, award__name='MVP')
         except:
             return None
+
+
+
+    def golden_boot(self):
+        from awards.models import AwardItem
+        try:
+            return AwardItem.objects.get(season=self, award__name='Golden Boot').recipient
+        except:
+            goalscorers = self.stat_set.exclude(goals=None).order_by('-goals', '-assists')
+            if goalscorers.exists():
+                return goalscorers[0].player
+            else:
+                return None
+
+
 
 
 
