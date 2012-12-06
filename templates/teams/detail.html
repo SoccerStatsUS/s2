@@ -44,8 +44,13 @@
 {% endif %}
 
 
-<h3>Competition standings</h3>
+<h3>Standings</h3>
 
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+<div tab="comp">
 <table>
 
 <tr>
@@ -71,6 +76,36 @@
 </tr>
 {% endfor %}
 </table>
+</div>
+
+<div tab="league">
+<table>
+
+<tr>
+  <th>comp.</th>
+  <th>league</th>
+  <th>W</th>
+  <th>T</th>
+  <th>L</th>
+  <th>win %</th>
+</tr>
+
+
+{% for standing in league_standings %}
+<tr>
+  <td><a href="{% url competition_detail standing.competition.slug %}">{{ standing.competition }}</a></td>
+  <td><a href="{% url season_detail standing.competition.slug standing.season.slug %}">{{ standing.season.name }}</a></td>
+  <td>{{ standing.wins }}</td>
+  {% datum_or_grey standing.ties %}
+  <td>{{ standing.losses }}</td>
+  <td>{{ standing.win_percentage_100|floatformat }}%</td>
+</tr>
+{% endfor %}
+</table>
+</div>
+
+
+</div>
 
 
 

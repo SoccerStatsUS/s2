@@ -162,6 +162,7 @@ def team_detail(request, team_slug):
     game_leaders = stats.exclude(games_played=None).order_by('-games_played')
 
     competition_standings = Standing.objects.filter(team=team, season=None).order_by('-wins')
+    league_standings = Standing.objects.filter(team=team, season__competition__ctype='League').order_by('season')
     recent_picks = team.pick_set.exclude(player=None).order_by('-draft__season', 'number')[:10]
 
     recent_games = team.game_set().filter(date__lt=today).order_by('-date').select_related()[:10]
@@ -173,6 +174,7 @@ def team_detail(request, team_slug):
         'game_leaders': game_leaders[:10],
         'recent_games': recent_games,
         'competition_standings': competition_standings,
+        'league_standings': league_standings,
         'head_coaches': team.position_set.filter(name='Head Coach'),
         'current_staff': team.position_set.filter(end=None),
         'recent_picks': recent_picks,
