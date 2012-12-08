@@ -4,10 +4,9 @@
   <div id="team_results">
 
   <h3>
-   
     <a href="{% url competition_detail game.competition.slug %}">{{ game.competition }}</a> - 
     <a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.season.name }}</a>
-    </h3>
+  </h3>
     
   <h3>
     {% if game.date %}
@@ -33,9 +32,7 @@
     {% if game.attendance %}
     {{ game.attendance }} attendance
     {% endif %}
-    
-
-</h4>
+  </h4>
 
     <div class="team_data">
       <div class="team"><a href="{% url team_detail game.team1.slug %}">{{ game.team1_original_name  }}</a></div>
@@ -60,6 +57,9 @@
       </div>
       {% endif %}
     </div>
+
+    {% if game.forfeit %}<h3>Forfeit</h3>{% endif %}
+
 
   </div>
 

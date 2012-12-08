@@ -162,12 +162,9 @@ def season_detail(request, competition_slug, season_slug):
     goal_leaders = stats.exclude(goals=None).order_by('-goals')
     game_leaders = stats.exclude(games_played=None).order_by('-games_played')
 
-
-
-
     context = {
         'season': season,
-        'standings': season.standing_set.filter(date=None),
+        'standings': season.standing_set.filter(final=True),
         'stats': stats.exists(),
         #'total_minutes': total_minutes,
         #'known_minutes': known_minutes,
@@ -221,6 +218,8 @@ def season_stats(request, competition_slug, season_slug):
 
     #stats = Stat.objects.filter(team=None, season=season).order_by('-games_played')
     stats = Stat.objects.filter(season=season).order_by('-games_played').exclude(games_played=None)
+    if not stats.exists():
+        stats = Stat.objects.filter(season=season).order_by('-goals')
 
     context = {
         'season': season,

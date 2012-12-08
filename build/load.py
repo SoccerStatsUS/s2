@@ -700,7 +700,7 @@ def load_standings():
         group = standing.get('group') or ''
         division = standing.get('division') or ''
 
-        final = False
+        final = standing.get('final', False)
 
         l.append({
                 'competition_id': competition_id,

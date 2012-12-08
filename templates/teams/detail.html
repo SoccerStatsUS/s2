@@ -43,7 +43,7 @@
 </table>
 {% endif %}
 
-
+{% if competition_standings.exists %}
 <h3>Standings</h3>
 
 <ul id="tabs"></ul>
@@ -103,7 +103,7 @@
 {% endfor %}
 </table>
 </div>
-
+{% endif %}
 
 </div>
 
