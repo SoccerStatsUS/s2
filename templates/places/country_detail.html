@@ -9,9 +9,51 @@
 <h4>{{ country.population }}</h4>
 
 
+
+
 <ul id="tabs"></ul>
 
 <div id="tab_wrapper">
+
+<div tab="competitions">
+
+<table>
+
+  <thead>
+    <tr>
+      <th></th>
+      <th>level</th>
+      <th>type</th>
+      <th>seasons</th>
+      <th>began</th>
+      <th>last</th>
+    </tr>
+  </thead>
+
+
+{% for competition in competitions %}
+<tr>
+  <td><a href="{% url competition_detail competition.slug %}">{{ competition }}</a></td>
+  <td>{{ competition.level }}</td>
+  <td>{{ competition.ctype }}</td>
+  <td>{{ competition.season_set.count }}</td>
+  {% if competition.first_season %}
+  <td><a href="{% url season_detail competition.slug competition.first_season.slug %}">{{ competition.first_season.name }}</td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
+  {% if competition.last_season %}
+  <td><a href="{% url season_detail competition.slug competition.last_season.slug %}">{{ competition.last_season.name }}</td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
+</tr>
+{% endfor %}
+</table>
+
+</div>
 
 <div tab="stadiums">
 <table>
