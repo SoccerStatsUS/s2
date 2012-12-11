@@ -55,7 +55,7 @@
 
   {% if season.game_set.count %}
   <h3>Games: {{ season.game_set.count }}</h3>
-  <h3>Goals: {{ season.goals.count }} ({{ season.goals_per_game|floatformat }} goals/game)</h3>
+  <h3>Goals: {{ season.goals }} ({{ season.goals_per_game|floatformat }} goals/game)</h3>
   {% endif %}
 
   {% if season.total_attendance %}

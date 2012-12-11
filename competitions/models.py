@@ -382,8 +382,15 @@ class Season(models.Model):
 
 
     def goals(self):
-        from goals.models import Goal
-        return Goal.objects.filter(game__season=self)
+
+
+        if self.standing_set.exists():
+            data = self.standing_set.values_list('goals_for')
+            return sum([e[0] for e in data])
+        else:
+            from goals.models import Goal
+            return Goal.objects.filter(game__season=self)
+
 
 
     def goals_per_game(self): 
@@ -393,7 +400,7 @@ class Season(models.Model):
             data = self.standing_set.values_list('goals_for', 'games')
             goals = sum([e[0] for e in data])
             games = sum([e[1] for e in data])
-            return float(goals) / games
+            return 2 * (float(goals) / games)
 
 
     def previous_season(self):
