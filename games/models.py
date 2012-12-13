@@ -211,6 +211,33 @@ class Game(models.Model):
     def team2_next_game(self):
         return self.team2.next_game(self)
 
+
+    def away_team(self):
+        if self.home_team is None:
+            return None
+        elif self.home_team == self.team1:
+            return self.team2
+        else:
+            return self.team1
+
+
+    def home_score(self):
+        if self.home_team is None:
+            return None
+        elif self.home_team == self.team1:
+            return self.team1_score
+        else:
+            return self.team2_score
+
+
+    def away_score(self):
+        if self.home_team is None:
+            return None
+        elif self.home_team == self.team1:
+            return self.team2_score
+        else:
+            return self.team1_score
+
     
     def winner(self):
         # Need to hook this in more intelligently with team1_result

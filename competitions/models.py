@@ -382,14 +382,13 @@ class Season(models.Model):
 
 
     def goals(self):
-
-
-        if self.standing_set.exists():
-            data = self.standing_set.values_list('goals_for')
+        final_standings = self.standing_set.filter(final=True)
+        if final_standings.count():
+            data = final_standings.values_list('goals_for')
             return sum([e[0] for e in data])
         else:
             from goals.models import Goal
-            return Goal.objects.filter(game__season=self)
+            return Goal.objects.filter(game__season=self).count()
 
 
 
