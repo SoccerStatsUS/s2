@@ -7,6 +7,7 @@
 
   <thead>
   <tr>
+    <th></th>
     <th>team</th>
     <th>gp</th>
     <th>w</th>
@@ -23,6 +24,7 @@
     <th>pts</th>
     <th>gf</th>
     <th>ga</th>
+    <th>gd</th>
 
   </tr>
   </thead>
@@ -30,6 +32,7 @@
   <tbody>
   {% for standing in standings %}
   <tr>
+    <td>{{ forloop.counter }}</td>
     <td><a href="{% url team_detail standing.team.slug %}">{{ standing.team }}</a></td>
     <td>{{ standing.games }}</td>
     <td>{{ standing.wins }}</td>
@@ -46,6 +49,7 @@
     {% datum_or_grey standing.points %}
     {% datum_or_grey  standing.goals_for %}
     {% datum_or_grey standing.goals_against %}
+    {% datum_or_grey standing.goals_difference %}
 
   </tr>
   {% endfor %}
