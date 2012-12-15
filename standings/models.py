@@ -32,6 +32,12 @@ class AbstractStanding(models.Model):
             return 0.0
 
 
+    def goal_difference(self):
+        if self.goals_for and self.goals_against:
+            return self.goals_for - self.goals_against
+        return None
+
+
     def win_percentage(self):
         ties = self.ties or 0
         if self.games:
