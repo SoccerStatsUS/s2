@@ -24,6 +24,18 @@
 
 <div id="left_column">
 
+{% if team.teamalias_set.exists %}
+<div class="alternate-name">
+Alternate names: {% for alias in team.teamalias_set.all %}{{ alias.name }} 
+{% if alias.start.year == alias.end.year %}
+({{ alias.start.year }})
+{% else %}
+({{ alias.start.year }} - {{ alias.end.year }})
+{% endif %}
+{% if not forloop.last %}, {% endif %}{% endfor %}</div>
+{% endif %}
+
+
 
 {% if current_staff %}
 <h3>Staff</h3>

@@ -23,7 +23,7 @@ from positions.models import Position
 from sources.models import Source
 from stats.models import Stat
 from standings.models import Standing
-from teams.models import Team
+from teams.models import Team, TeamAlias
 
 from utils import insert_sql, timer
 
@@ -638,6 +638,19 @@ def load_teams():
     for team in soccer_db.teams.find():
         team.pop('_id')
         Team.objects.create(**team)
+
+
+    for alias in soccer_db.name_maps.find():
+        alias.pop('_id')
+        team = Team.objects.find(name=alias['from_name'], create=True)
+
+        TeamAlias.objects.create(**{
+                'team': team,
+                'name': alias['to_name'],
+                'start': alias['start'],
+                'end': alias['end'],
+                })
+
 
 @transaction.commit_on_success
 def load_competitions():

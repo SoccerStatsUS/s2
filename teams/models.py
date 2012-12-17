@@ -330,6 +330,12 @@ class Team(models.Model):
             
 
 
-        
+class TeamAlias(models.Model):        
+    team = models.ForeignKey(Team)
+    name = models.CharField(max_length=200, unique=True)
+    
+    start = models.DateField()
+    end = models.DateField()
+    
             
 

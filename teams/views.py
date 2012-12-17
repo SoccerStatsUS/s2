@@ -3,6 +3,7 @@ import datetime
 
 
 from django.db.models import Q, Sum
+from django.http import Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
@@ -153,6 +154,7 @@ def team_detail(request, team_slug):
     Just about the most important view of all.
     """
     team = get_object_or_404(Team, slug=team_slug)
+    # Add aliases.
 
     today = datetime.date.today()
 
