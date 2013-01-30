@@ -80,6 +80,7 @@
     <div id="error_dialog" title="Report an error">
 
       <form action="/contact/" method="POST">
+        <p><label for="id_name">Email:</label> <input type="text" name="name" id="id_name" /></p>
         <p><label for="id_email">Email:</label> <input type="text" name="email" id="id_email" /></p>
         <p><label for="id_message">Error:</label> <textarea id="id_message" rows="10" cols="40" name="message"></textarea></p>
         <input type="submit" value="report" />

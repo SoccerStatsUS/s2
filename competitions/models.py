@@ -148,6 +148,7 @@ class CompetitionManager(models.Manager):
         try:
             return Competition.objects.get(name=name)
         except:
+            print "Creating %s" % name
             return Competition.objects.create(name=name)
 
 
@@ -172,7 +173,7 @@ class Competition(models.Model):
     name = models.CharField(max_length=255)
     abbreviation = models.CharField(max_length=15)
     
-    slug = models.SlugField()
+    slug = models.SlugField(max_length=150)
 
     international = models.BooleanField(default=False)
     ctype = models.CharField(max_length=255) # Competition type - cup, league, etc.

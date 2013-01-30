@@ -295,7 +295,8 @@ def team_games(request, team_slug):
     else:
         form = TeamGameForm(bio)
 
-    games = games.select_related()
+    games = games.select_related().order_by('-has_date', '-date', '-season')
+    #games = games.select_related().order_by('-date', '-season')
     standings = [TempGameStanding(games, team)]
 
 

@@ -46,7 +46,9 @@
 {% endif %}
 
 
-{% include "bios/detail_stats.html" with games=bio.games_refereed.all %}
+
+{% include "bios/detail_stats.html" %}
+
 
 
 {% if recent_appearances %}
@@ -59,6 +61,7 @@
 <h3>Positions</h3>
 {% include "templatetags/coach.html" %}
 {% endif %}
+
 
 </div>
 

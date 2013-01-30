@@ -130,10 +130,14 @@ class Game(models.Model):
 
 
     # Secondary data.
+    round = models.CharField(max_length=255)
+
+
     starter_count = models.IntegerField(null=True, blank=True)
     goal_count = models.IntegerField(null=True, blank=True)
 
     date = models.DateField(null=True)
+    has_date = models.BooleanField()
     
     team1 = models.ForeignKey(Team, related_name='t1_games')
     team1_original_name = models.CharField(max_length=255)

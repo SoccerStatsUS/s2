@@ -394,3 +394,7 @@ h2.headline {
     display: none;
     width: 800px;
 }
+
+#id_honeypot {
+    display: none;
+}

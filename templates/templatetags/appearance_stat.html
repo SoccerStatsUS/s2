@@ -37,7 +37,7 @@
     <td>{{ stat.wins }}</td>
     <td>{{ stat.ties|default_if_none:'' }}</td>
     <td>{{ stat.losses }}</td>
-    <td>{{ stat.win_percentage_100|floatformat }}</td>
+    <td>{{ stat.win_percentage_100|floatformat:2 }}</td>
     {% datum_or_grey  stat.goals_for %}
     {% datum_or_grey stat.goals_against %}
   </tr>

@@ -897,6 +897,8 @@ def load_games():
         neutral = game.get('neutral') or False
         attendance = game.get('attendance')
 
+        r = game.get('round') or ''
+
         # There are lots of problems with the NASL games, 
         # And probably ASL as well. Need to spend a couple
         # of hours repairing those schedules.
@@ -909,6 +911,8 @@ def load_games():
 
         games.append({
                 'date': game['date'],
+                'has_date': bool(game['date']),
+
                 'team1_id': team1_id,
                 'team1_original_name': game['team1_original_name'],
                 'team2_id': team2_id,
@@ -934,6 +938,7 @@ def load_games():
                 'minutes': minutes,
                 'competition_id': competition_id,
                 'season_id': season_id,
+                'round': r,
 
                 'home_team_id': home_team_id,
                 'neutral': neutral,
@@ -1133,10 +1138,17 @@ def load_stats():
 
         def c2i(key):
             # Coerce an integer
-            if stat.get(key):
+
+            if key in stat and stat[key] != None:
                 if type(stat[key]) != int:
                     import pdb; pdb.set_trace()
                 return stat[key]
+
+            #elif key in stat:
+            #    import pdb; pdb.set_trace()
+
+            elif key in stat and stat[key] == None:
+                return 0
 
             else:
                 return None
