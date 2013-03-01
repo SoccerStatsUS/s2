@@ -279,7 +279,7 @@ def make_game_getter():
         # Going to have to reconsider how we label games because of dateless games.
 
         if dt is None:
-            print "Failed to find for %s, %s" % (team_id, dt)
+            print "Failed to find game for team %s on %s" % (team_id, dt)
             gid = None
         else:
             # Not doing full game times yet...
@@ -288,7 +288,7 @@ def make_game_getter():
             if key in game_team_map:
                 gid = game_team_map[key]
             else:
-                print "Failed to find for %s, %s" % (team_id, dx)
+                print "Failed to find game for team %s on %s" % (team_id, dx)
                 gid = None
         
         return gid
@@ -311,7 +311,7 @@ def make_goal_getter():
         if key in goal_map:
             gid = goal_map[key]
         else:
-            print "Failed to find for %s, %s" % (team_id, dx)
+            print "Failed to find goal for team %s on %s" % (team_id, dx)
             gid = None
         
         return gid
