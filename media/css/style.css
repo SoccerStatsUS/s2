@@ -1,18 +1,4 @@
 
-
-a {
-    color: blue;
-    text-decoration: none;
-}
-
-.red-bg {    background-color: red;}
-.yellow-bg {  background-color: yellow;}
-.green-bg {    background-color: #57E674;}
-.orange-bg {    background-color: #fcc200;}
-.blue-bg { background-color: #0026ff;}
-.light-blue-bg { background-color: #b5c0ff;}
-.light-grey-bg { background-color: #d9d9d9;}
-
 .left_half {
     float: left;
     width: 50%;
@@ -64,10 +50,6 @@ td, th {
     font-size: .9em;
     border: 2px solid #ddd;
 
-}
-
-ul {
-    list-style-type: none;
 }
 
 .grey {
