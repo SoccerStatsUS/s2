@@ -13,8 +13,12 @@ def contact_index(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            
-            send_mail("Contact from %s" % form.cleaned_data['email'], form.cleaned_data['message'], form.cleaned_data['email'], ['chris@socceroutsider.com'], fail_silently=False)
+
+            if form.cleaned_data['name']:
+                subject = "Spam from %s" % form.cleaned_data['email']
+            else:
+                subject = "Contact from %s" % form.cleaned_data['email']
+            send_mail(subject, form.cleaned_data['message'], form.cleaned_data['email'], ['chris@socceroutsider.com'], fail_silently=False)
             return HttpResponseRedirect(reverse('contact_thanks'))
 
     else:
