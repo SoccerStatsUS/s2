@@ -400,6 +400,9 @@ class Season(models.Model):
             data = self.standing_set.values_list('goals_for', 'games')
             goals = sum([e[0] for e in data])
             games = sum([e[1] for e in data])
+            if games == 0:
+                return 0
+
             return 2 * (float(goals) / games)
 
 
