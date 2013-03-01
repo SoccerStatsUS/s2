@@ -8,7 +8,14 @@
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
   <meta name="Description" content="{% block metadescription %}"Historical and modern Soccer Statistics for all American competitions, teams, and players. Includes stats, results, lineups, awards, drafts, career stats, salary data and more."{% endblock %}"</meta>
 
+  {% if request.mobile %}
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/toast/toast.css" type="text/css" media="screen" >
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/mobile.css" type="text/css" media="screen" >
+  {% else %}
   <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css" type="text/css" media="screen" >
+  {% endif %}
+
+
   <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery-ui.css" type="text/css" media="screen" >
 
 
@@ -44,6 +51,10 @@
 </head>
 
 <body>
+  <div class="wrap">
+    <div class="grids">
+
+  
 
   <h1><a href="{% url home %}">SoccerStats.us</a> <span class="subhead">US soccer statistics from <a href="{% url year_detail 1866 %}">1866</a> to <a href="{% url year_detail 2012 %}">2012</a></span> </h1>
 
@@ -75,18 +86,19 @@
 
   <div id="content">
 
-
+    
+    {% comment %}
     <div class="floatright" id="reporterror" ><a href="">Report an error</a></div>
     <div id="error_dialog" title="Report an error">
 
       <form action="/contact/" method="POST">
-        <p><label for="id_name">Email:</label> <input type="text" name="name" id="id_name" /></p>
         <p><label for="id_email">Email:</label> <input type="text" name="email" id="id_email" /></p>
         <p><label for="id_message">Error:</label> <textarea id="id_message" rows="10" cols="40" name="message"></textarea></p>
         <input type="submit" value="report" />
       </form>
 
     </div>
+    {% endcomment %}
 
 
 
@@ -97,6 +109,7 @@
   </div>
 
   <div id="footer">
+
     <ul>
       <li><a href="/about">about</a></li>
       <li><a href="/contact">contact</a></li>
@@ -113,7 +126,7 @@
 
   </div>
 
-
-
+    </div>
+  </div>
 </body>
 
