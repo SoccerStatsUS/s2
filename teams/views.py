@@ -164,7 +164,7 @@ def team_detail(request, team_slug):
     game_leaders = stats.exclude(games_played=None).order_by('-games_played')
 
     competition_standings = Standing.objects.filter(team=team, season=None).order_by('-wins')
-    league_standings = Standing.objects.filter(team=team, season__competition__ctype='League').order_by('season')
+    league_standings = Standing.objects.filter(team=team, season__competition__ctype='League').order_by('season').filter(final=True)
     recent_picks = team.pick_set.exclude(player=None).order_by('-draft__season', 'number')[:10]
 
     recent_games = team.game_set().filter(date__lt=today).order_by('-date').select_related()[:10]
