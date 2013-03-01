@@ -54,6 +54,8 @@ STATIC_URL = '/static/'
 
 TEMPLATE_CONTEXT_PROCESSORS += (
     'bios.context_processors.debug_mode',
+    'django.core.context_processors.request',
+
 )    
 
 
@@ -160,7 +162,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-
+    'minidetector.Middleware',
 
 )
 
