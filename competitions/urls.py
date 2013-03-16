@@ -21,9 +21,14 @@ urlpatterns = patterns('competitions.views',
                            name='level_detail'),
 
 
+                       url(r'^r/$',
+                           'random_competition_detail',
+                           name='random_competition_detail'),
+
                        url(r'^(?P<competition_slug>[a-z0-9-]+)/$',
                            'competition_detail',
                            name='competition_detail'),
+
 
                        url(r'^(?P<competition_slug>[a-z0-9-]+)/stats/$',
                            'competition_stats',

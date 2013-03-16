@@ -99,6 +99,16 @@ def competition_detail(request, competition_slug):
                               context,
                               context_instance=RequestContext(request))
 
+
+
+def random_competition_detail(request):
+    import random
+    competitions = Competition.objects.count()
+    c_id = random.randint(1, competitions)
+    c_slug = Competition.objects.get(id=c_id).slug
+    return competition_detail(request, c_slug)
+
+
 @cache_page(60 * 60 * 12)
 def competition_stats(request, competition_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)

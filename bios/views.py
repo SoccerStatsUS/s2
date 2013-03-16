@@ -119,6 +119,7 @@ def person_detail(request, slug):
     context = {
         "bio": bio,
         'recent_appearances': bio.appearance_set.all()[:10],
+        'recent_goals': bio.goal_set.all()[:10],
 
         'league_stats': league_stats,
         'competition_stats': competition_stats,
@@ -127,6 +128,7 @@ def person_detail(request, slug):
         'picks': bio.pick_set.exclude(draft__competition=None).order_by('draft__season', 'draft__start'),
         'coach_stats': bio.coachstat_set.order_by('season'),
         'positions': bio.position_set.order_by('start'),
+        'refs': bio.ref_set()[:10]
         }
 
 
@@ -134,6 +136,16 @@ def person_detail(request, slug):
                               context,
                               context_instance=RequestContext(request)
                               )   
+
+
+def random_person_detail(request):
+    import random
+    bios = Bio.objects.count()
+    bio_id = random.randint(1, bios)
+    bio_slug = Bio.objects.get(id=bio_id).slug
+    return person_detail(request, bio_slug)
+
+
 
 
 def person_detail_games(request, slug):

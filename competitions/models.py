@@ -388,22 +388,26 @@ class Season(models.Model):
             data = final_standings.values_list('goals_for')
             return sum([e[0] for e in data])
         else:
-            from goals.models import Goal
-            return Goal.objects.filter(game__season=self).count()
-
+            #from goals.models import Goal
+            #return Goal.objects.filter(game__season=self).count()
+            from games.models import Game
+            return Game.objects.filter(season=self).aggregate(Sum('goals'))['goals__sum']
 
 
     def goals_per_game(self): 
-        if not self.standing_set.exists():
-            return None
-        else:
+        if self.standing_set.exists():
             data = self.standing_set.values_list('goals_for', 'games')
             goals = sum([e[0] for e in data])
             games = sum([e[1] for e in data])
             if games == 0:
                 return 0
 
-            return 2 * (float(goals) / games)
+        else:
+            from games.models import Game
+            goals = self.goals()
+            games = Game.objects.filter(season=self).count()
+
+        return float(goals) / games
 
 
     def previous_season(self):

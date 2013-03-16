@@ -167,7 +167,22 @@ def team_detail(request, team_slug):
     league_standings = Standing.objects.filter(team=team, season__competition__ctype='League').order_by('season').filter(final=True)
     recent_picks = team.pick_set.exclude(player=None).order_by('-draft__season', 'number')[:10]
 
+    draftees = team.former_team_set.exclude(player=None).order_by('-draft__season', 'number')[:10]
+
     recent_games = team.game_set().filter(date__lt=today).order_by('-date').select_related()[:10]
+    if recent_games.count() == 0:
+        recent_games = team.game_set().select_related()[:10]
+
+    current_staff = team.position_set.filter(end=None)
+
+    positions = team.position_set.filter(name='Head Coach')
+    if positions.count() == 0:
+        positions = team.position_set.all()
+
+    #positions = positions.exclude(id__in=[e[0] for e in current_staff.values_list('id')])
+    positions = positions.exclude(id__in=current_staff)
+        
+
 
     context = {
         'team': team,
@@ -177,15 +192,25 @@ def team_detail(request, team_slug):
         'recent_games': recent_games,
         'competition_standings': competition_standings,
         'league_standings': league_standings,
-        'head_coaches': team.position_set.filter(name='Head Coach'),
-        'current_staff': team.position_set.filter(end=None),
+        'positions': positions,
+        'current_staff': current_staff,
         'recent_picks': recent_picks,
+        'draftees': draftees,
         }
 
     return render_to_response("teams/detail.html",
                               context,
                               context_instance=RequestContext(request)
                               )
+
+
+def random_team_detail(request):
+    import random
+    teams = Team.objects.count()
+    team_id = random.randint(1, teams)
+    team_slug = Team.objects.get(id=team_id).slug
+    return team_detail(request, team_slug)
+
     
 
 def team_stats(request, team_slug):

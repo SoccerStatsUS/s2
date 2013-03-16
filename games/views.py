@@ -6,9 +6,11 @@ from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
 from bios.models import Bio
+from competitions.models import Competition
 from games.models import Game, GameSource
 from standings.models import Standing
 from stats.models import Stat, CareerStat
+from teams.models import Team
 
 from collections import defaultdict
 
@@ -46,7 +48,12 @@ def homepage(request):
         'games': recent_games,
         'standings': Standing.objects.filter(season__competition__slug='major-league-soccer').count(), 
         'game_leaders': game_leaders,
-        'goal_leaders': goal_leaders
+        'goal_leaders': goal_leaders,
+        'game_count': Game.objects.count(),
+        'bio_count': Bio.objects.count(),
+        'team_count': Team.objects.count(),
+        'competition_count': Competition.objects.count(),
+        
         }
     return render_to_response("homepage.html",
                               context,
@@ -140,6 +147,11 @@ def game_detail(request, game_id):
 
 
 
+def random_game_detail(request):
+    import random
+    games = Game.objects.count()
+    game_id = random.randint(1, games)
+    return game_detail(request, game_id)
 
 
 

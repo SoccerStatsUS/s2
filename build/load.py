@@ -430,7 +430,7 @@ def load_places():
 
     cg = make_city_pre_getter()
 
-    city_set  = set()
+    city_set = set()
 
     for city in soccer_db.cities.find():
         c = cg(city['name'])
@@ -674,7 +674,10 @@ def load_stadiums():
         stadium.pop('_id')
         stadium['slug'] = slugify(stadium['name'])
 
-        stadium['city'] = cg(stadium['location'])
+        try:
+            stadium['city'] = cg(stadium['location'])
+        except:
+            import pdb; pdb.set_trace()
 
         
         if 'renovations' in stadium:
