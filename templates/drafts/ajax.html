@@ -1,11 +1,13 @@
 <p>{{ player.name }}</p>
 <p>{{ player.birthplace }}, {{ player.age_years|floatformat:1 }}</p>
 
+{% comment %}
 <ul>
   {% for pick in player.usmnt_draft_picks %}
   <li>{{ pick.draft.season.name }} - {{ pick.position }}</li>
   {% endfor %}
 </ul>
+{% endcomment %}
 
 <table class="small inline">
   <tr>

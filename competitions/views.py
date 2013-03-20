@@ -1,6 +1,6 @@
 from django.db.models import Sum, Avg
 from django.http import Http404
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
@@ -106,7 +106,8 @@ def random_competition_detail(request):
     competitions = Competition.objects.count()
     c_id = random.randint(1, competitions)
     c_slug = Competition.objects.get(id=c_id).slug
-    return competition_detail(request, c_slug)
+    return redirect('competition_detail', competition_slug=c_slug)
+    #return competition_detail(request, c_slug)
 
 
 @cache_page(60 * 60 * 12)
