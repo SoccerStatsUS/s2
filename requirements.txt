@@ -15,3 +15,5 @@ Whoosh
 pysolr
 
 -e git://github.com/django-extensions/django-extensions.git#egg=django-extensions
+-e git://github.com/saschwarz/minidetector.git#egg=Package
+

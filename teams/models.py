@@ -145,7 +145,9 @@ class Team(models.Model):
     # Let's just be clear that it's very optional.
     short_name = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=100, unique=False)
-    founded = models.IntegerField(null=True, blank=True)
+
+    founded = models.DateField(null=True)
+    dissolved = models.DateField(null=True)
 
     # Not sure if we want this here.
     # Some teams can have multiple cities?
@@ -330,6 +332,12 @@ class Team(models.Model):
             
 
 
-        
+class TeamAlias(models.Model):        
+    team = models.ForeignKey(Team)
+    name = models.CharField(max_length=200, unique=True)
+    
+    start = models.DateField()
+    end = models.DateField()
+    
             
 

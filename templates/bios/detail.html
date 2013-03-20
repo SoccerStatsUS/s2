@@ -46,7 +46,9 @@
 {% endif %}
 
 
-{% include "bios/detail_stats.html" with games=bio.games_refereed.all %}
+
+{% include "bios/detail_stats.html" %}
+
 
 
 {% if recent_appearances %}
@@ -55,10 +57,24 @@
 {% include "templatetags/appearances/bio.html" with appearances=recent_appearances %}
 {% endif %}
 
+
+{% if recent_goals %}
+<h3>Recent goals</h3>
+{# <p><a href="{% url person_detail_games bio.slug %}">(all {{ bio }} games)</a></p> #}
+{% include "templatetags/appearances/goal.html" with goals=recent_goals %}
+{% endif %}
+
 {% if positions %}
 <h3>Positions</h3>
 {% include "templatetags/coach.html" %}
 {% endif %}
+
+{% if refs %}
+<h3>Games refereed</h3>
+{% include "templatetags/appearances/ref.html" with games=refs %}
+{% endif %}
+
+
 
 </div>
 

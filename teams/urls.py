@@ -31,9 +31,15 @@ urlpatterns = patterns('teams.views',
                            'team_year_detail',
                            name='team_year_detail'),
 
+                       url(r'^r/$',
+                           'random_team_detail',
+                           name='random_team_detail'),
+
+
                        url(r'^(?P<team_slug>[a-z0-9-]+)/$',
                            'team_detail',
                            name='team_detail'),
+
 
                        url(r'^(?P<team_slug>[a-z0-9-]+)/stats/$',
                            'team_stats',
@@ -42,6 +48,11 @@ urlpatterns = patterns('teams.views',
                        url(r'^(?P<team_slug>[a-z0-9-]+)/picks/$',
                            'team_picks',
                            name='team_picks'),
+
+
+                       url(r'^(?P<team_slug>[a-z0-9-]+)/draftees/$',
+                           'team_draftees',
+                           name='team_draftees'),
 
                        url(r'^(?P<team_slug>[a-z0-9-]+)/games/$',
                            'team_games',

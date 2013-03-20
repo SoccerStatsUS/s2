@@ -492,7 +492,14 @@ def make_position_date_getter():
 def generate_coach_stats(competition):
 
     def update_stat(game_data, person, team, season):
+
         date, season, t1, t2, t1s, t2s, t1r, t2r = game_data
+
+        # Short circuit if game doesn't have a result.
+        if not t1r and not t2r:
+            return 
+
+
         key = (person, team, season)
         if key not in coach_stats:
             coach_stats[key] = {
@@ -510,7 +517,11 @@ def generate_coach_stats(competition):
                 }
             
         if team == t1:
-            gd = t1s - t2s
+            try:
+                gd = t1s - t2s
+            except:
+                import pdb; pdb.set_trace()
+
             gf, ga = t1s, t2s
             result = t1r
         elif team == t2:

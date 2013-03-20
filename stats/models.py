@@ -152,6 +152,9 @@ class Stat(AbstractStat):
     season = models.ForeignKey(Season)
     team = models.ForeignKey(Team)
 
+    def __unicode__(self):
+        return u"%s: %s/%s/%s" % (self.player, self.competition, self.season.name, self.team)
+
 
 # Still having trouble figuring out exactly where to put this data.
 class CoachStat(StandingStat):
@@ -174,3 +177,9 @@ class CoachStat(StandingStat):
     #wins = models.IntegerField(null=True, blank=True)
     #ties = models.IntegerField(null=True, blank=True)
     #losses = models.IntegerField(null=True, blank=True)
+
+
+class CoachTeamStat(StandingStat):
+
+    person = models.ForeignKey(Bio)
+    team = models.ForeignKey(Team)

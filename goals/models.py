@@ -46,7 +46,7 @@ class Goal(models.Model):
     date = models.DateField() # This shouldn't be here. Game can tell us the date.
     minute = models.IntegerField(null=True)
     team = models.ForeignKey(Team)
-    team_original_name = models.CharField(max_length=255)
+    #team_original_name = models.CharField(max_length=255)
     
     player = models.ForeignKey(Bio, null=True)
     own_goal_player = models.ForeignKey(Bio, null=True, related_name='own_goal_set')
@@ -62,11 +62,34 @@ class Goal(models.Model):
     class Meta:
         ordering = ('game', 'minute', 'team')
 
+
+    """Inherit from common subclass - Goal, Appearance..."""
     def opponent(self):
         if self.team == self.game.team1:
             return self.game.team2
         else:
             return self.game.team1
+
+
+    def team_original_name(self):
+        if self.team == self.game.team1:
+            return self.game.team1_original_name
+        else:
+            return self.game.team2_original_name
+
+    def opponent_original_name(self):
+        if self.team == self.game.team1:
+            return self.game.team2_original_name
+        else:
+            return self.game.team1_original_name
+
+    def score_or_result(self):
+        if self.team == self.game.team1:
+            return self.game.score_or_result()
+        else:
+            return self.game.reverse_score_or_result()
+
+
 
 
     def result(self):

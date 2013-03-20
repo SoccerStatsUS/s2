@@ -16,6 +16,7 @@
   <th>name</th>
   <th>pos.</th>
   <th>team</th>
+  <th>from</th>
   <th>gp</th>
   <th>minutes</th>
   <th>goals</th>
@@ -45,6 +46,12 @@
 
   {% datum_or_grey pick.position %}
   <td><a href="{% url team_detail pick.team.slug %}">{{ pick.team }}</a></td>
+
+  {% if pick.former_team %}
+  <td><a href="{% url team_detail pick.former_team.slug %}">{{ pick.former_team }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
 
   {% if cs %}
   {% datum_or_grey cs.games_played %}

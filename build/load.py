@@ -23,7 +23,7 @@ from positions.models import Position
 from sources.models import Source
 from stats.models import Stat
 from standings.models import Standing
-from teams.models import Team
+from teams.models import Team, TeamAlias
 
 from utils import insert_sql, timer
 
@@ -279,7 +279,7 @@ def make_game_getter():
         # Going to have to reconsider how we label games because of dateless games.
 
         if dt is None:
-            print "Failed to find for %s, %s" % (team_id, dt)
+            print "Failed to find game for team %s on %s" % (team_id, dt)
             gid = None
         else:
             # Not doing full game times yet...
@@ -288,7 +288,7 @@ def make_game_getter():
             if key in game_team_map:
                 gid = game_team_map[key]
             else:
-                print "Failed to find for %s, %s" % (team_id, dx)
+                print "Failed to find game for team %s on %s" % (team_id, dx)
                 gid = None
         
         return gid
@@ -311,7 +311,7 @@ def make_goal_getter():
         if key in goal_map:
             gid = goal_map[key]
         else:
-            print "Failed to find for %s, %s" % (team_id, dx)
+            print "Failed to find goal for team %s on %s" % (team_id, dx)
             gid = None
         
         return gid
@@ -430,7 +430,7 @@ def load_places():
 
     cg = make_city_pre_getter()
 
-    city_set  = set()
+    city_set = set()
 
     for city in soccer_db.cities.find():
         c = cg(city['name'])
@@ -618,7 +618,6 @@ def load_drafts():
                 'position': pick.get('position') or '',
                 'former_team_id': former_team_id,
                 'number': pick['number'],
-
                 })
 
     insert_sql("drafts_pick", picks)
@@ -635,9 +634,53 @@ def load_news():
 @transaction.commit_on_success
 def load_teams():
     print "loading teams"
+
+
+    names = set()
+
     for team in soccer_db.teams.find():
         team.pop('_id')
-        Team.objects.create(**team)
+
+        if type(team['founded']) == int:
+            try:
+                founded = datetime.datetime(team['founded'], 1, 1)
+            except:
+                print "founded out of range %s" % team
+                founded = None
+            team['founded'] = founded
+
+        if type(team['dissolved']) == int:
+            dissolved = datetime.datetime(team['dissolved'] + 1, 1, 1)
+            dissolved = dissolved - datetime.timedelta(days=1)
+            team['dissolved'] = dissolved
+
+        team['slug'] = slugify(team['name'])
+
+        team['short_name'] = team.get('short_name') or team['name']
+
+
+        if 'abbreviation' in team:
+            team.pop('abbreviation')
+
+
+        if team['name'] in names:
+            print "duplicate team name"
+            print team
+        else:
+            names.add(team['name'])
+            Team.objects.create(**team)
+
+    for alias in soccer_db.name_maps.find():
+        alias.pop('_id')
+        team = Team.objects.find(name=alias['from_name'], create=True)
+
+        TeamAlias.objects.create(**{
+                'team': team,
+                'name': alias['to_name'],
+                'start': alias['start'],
+                'end': alias['end'],
+                })
+
 
 @transaction.commit_on_success
 def load_competitions():
@@ -661,7 +704,10 @@ def load_stadiums():
         stadium.pop('_id')
         stadium['slug'] = slugify(stadium['name'])
 
-        stadium['city'] = cg(stadium['location'])
+        try:
+            stadium['city'] = cg(stadium['location'])
+        except:
+            import pdb; pdb.set_trace()
 
         
         if 'renovations' in stadium:
@@ -746,10 +792,10 @@ def load_bios():
             continue
 
 
-        try:
-            print "Creating bio for %s" % bio['name']
-        except:
-            print "Created bio."
+        #try:
+        #    print "Creating bio for %s" % bio['name']
+        #except:
+        #    print "Created bio."
 
         bio.pop('_id')
 
@@ -884,6 +930,8 @@ def load_games():
         neutral = game.get('neutral') or False
         attendance = game.get('attendance')
 
+        r = game.get('round') or ''
+
         # There are lots of problems with the NASL games, 
         # And probably ASL as well. Need to spend a couple
         # of hours repairing those schedules.
@@ -896,6 +944,8 @@ def load_games():
 
         games.append({
                 'date': game['date'],
+                'has_date': bool(game['date']),
+
                 'team1_id': team1_id,
                 'team1_original_name': game['team1_original_name'],
                 'team2_id': team2_id,
@@ -921,6 +971,7 @@ def load_games():
                 'minutes': minutes,
                 'competition_id': competition_id,
                 'season_id': season_id,
+                'round': r,
 
                 'home_team_id': home_team_id,
                 'neutral': neutral,
@@ -939,19 +990,24 @@ def load_games():
 
 
 
+    print "Inserting games results."
     insert_sql("games_game", games)
 
+    print "Inserting games sources."
     game_getter = make_game_getter()
     
     l = []
     for date, team_id, source_id, source_url in game_sources:
-        game_id = game_getter(team_id, date)
-        if game_id:
-            l.append({
-                    'game_id': game_id,
-                    'source_id': source_id,
-                    'source_url': source_url,
-                    })
+
+        # Don't call game_getter without date. Need to give games unique id's.
+        if date:
+            game_id = game_getter(team_id, date)
+            if game_id:
+                l.append({
+                        'game_id': game_id,
+                        'source_id': source_id,
+                        'source_url': source_url,
+                        })
 
     insert_sql("games_gamesource", l)
             
@@ -996,7 +1052,7 @@ def load_goals():
                 'date': goal['date'],
                 'minute': goal['minute'],
                 'team_id': team_id, 
-                'team_original_name': '',
+                #'team_original_name': '',
 
                 'player_id': bio_id, #player,
                 'own_goal_player_id': ogbio_id,
@@ -1120,10 +1176,17 @@ def load_stats():
 
         def c2i(key):
             # Coerce an integer
-            if stat.get(key):
+
+            if key in stat and stat[key] != None:
                 if type(stat[key]) != int:
                     import pdb; pdb.set_trace()
                 return stat[key]
+
+            #elif key in stat:
+            #    import pdb; pdb.set_trace()
+
+            elif key in stat and stat[key] == None:
+                return 0
 
             else:
                 return None

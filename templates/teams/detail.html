@@ -19,10 +19,22 @@
 
 
 <h2 class="headline">{{ team.name }}</h2>
-
+<h3>{{ team.city }}</h3>
 
 
 <div id="left_column">
+
+{% if team.teamalias_set.exists %}
+<div class="alternate-name">
+Alternate names: {% for alias in team.teamalias_set.all %}{{ alias.name }} 
+{% if alias.start.year == alias.end.year %}
+({{ alias.start.year }})
+{% else %}
+({{ alias.start.year }} - {{ alias.end.year }})
+{% endif %}
+{% if not forloop.last %}, {% endif %}{% endfor %}</div>
+{% endif %}
+
 
 
 {% if current_staff %}
@@ -43,6 +55,30 @@
 </table>
 {% endif %}
 
+
+{% if positions %}
+<h3>Head coaches</h3>
+<table>
+{% for position in positions %}
+<tr>
+  <td><a href="{% url person_detail position.person.slug %}">{{ position.person }}</a></td>
+  <td>{{ position.name|truncatechars:20 }}</td>
+  {% if position.start %}
+  <td><a href="{% url date_detail position.start.year position.start.month position.start.day %}">{{ position.start|default_if_none:'' }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+  {% if position.end %}
+  <td><a href="{% url date_detail position.end.year position.end.month position.end.day %}">{{ position.end|default_if_none:'' }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+
 {% if competition_standings.exists %}
 <h3>Standings</h3>
 
@@ -50,7 +86,7 @@
 
 <div id="tab_wrapper">
 
-<div tab="comp">
+<div tab="cmp">
 <table>
 
 <tr>
@@ -185,6 +221,29 @@
   <td>{{ pick.draft.season.name }} {{ pick.draft.name }}</td>
   {% endif %}
 
+  <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
+</tr>
+{% endfor %}
+</table>
+
+{% endif %}
+
+
+
+{% if draftees %}
+<h3>Recent draftees (<a href="{% url team_draftees team.slug %}">complete {{ team }} draftees</a>)</h3> 
+<table>
+{% for e in draftees %}
+<tr>
+  <td>{{ e.draft.season }}</td>
+  <td>{{ e.team }}</td>
+  <td>{{ e.number }}</td>
+  {% if draft.competition %}
+  <td><a href="{% url draft_detail e.draft.competition.slug e.draft.slug e.draft.season.name %}">{{ e.draft.name }}</a></td>
+  {% else %}
+  <td>{{ pick.draft.season.name }} {{ pick.draft.name }}</td>
+  {% endif %}
+
 
   <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
 </tr>
@@ -192,6 +251,8 @@
 </table>
 
 {% endif %}
+
+
 
 
 </div>

@@ -130,10 +130,14 @@ class Game(models.Model):
 
 
     # Secondary data.
+    round = models.CharField(max_length=255)
+
+
     starter_count = models.IntegerField(null=True, blank=True)
     goal_count = models.IntegerField(null=True, blank=True)
 
     date = models.DateField(null=True)
+    has_date = models.BooleanField()
     
     team1 = models.ForeignKey(Team, related_name='t1_games')
     team1_original_name = models.CharField(max_length=255)
@@ -292,7 +296,7 @@ class Game(models.Model):
     def score_or_result_generic(self, func):
         """Returns a score string."""
         if self.date is not None and self.date > datetime.date.today():
-            return 'np'
+            return 'v'
 
         if self.result_unknown:
             return '?'
@@ -546,6 +550,8 @@ class Game(models.Model):
                 return 'l'
             else:
                 return 'w'
+
+        raise
 
 
 

@@ -9,9 +9,16 @@ urlpatterns = patterns('games.views',
                            'bad_games',
                            name='bad_games'),
 
+
+                       url(r'^r/$',
+                           'random_game_detail',
+                           name='random_game_detail'),
+
+                       
                        url(r'^(?P<game_id>\d+)/$',
                            'game_detail',
                            name='game_detail'),
+
 
 
 

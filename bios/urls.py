@@ -16,6 +16,10 @@ urlpatterns = patterns('bios.views',
                        url(r'^oneword/?$',
                            'one_word',
                            name='one_word'),
+
+                       url(r'^r/$',
+                           'random_person_detail',
+                           name='random_person_detail'),
                        
 
                        url(r'^(?P<slug>[a-z0-9-]+)/$',

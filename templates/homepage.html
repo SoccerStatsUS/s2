@@ -2,11 +2,20 @@
 
 {% block content %}
 
-
+{% comment %}
 <h3><a href="{% url day_detail today.month today.day %}">Today in American soccer history</a></h3>
 {% if born %}
 <p>Born today: <a href="{% url person_detail born.slug %}">{{ born }}</a></p>
 {% endif %}
+{% endcomment %}
+
+<ul>
+  <li><a href="{% url random_team_detail %}">{{ team_count }} teams</a></li>
+  <li><a href="{% url random_game_detail %}">{{ game_count }} games</a></li>
+  <li><a href="{% url random_person_detail %}">{{ bio_count }} players</a></li>
+  <li><a href="{% url random_competition_detail %}">{{ competition_count }} competitions</a></li>
+</ul>
+
 
 <div id="left_column">
 <h4>Recent Results</h4>
@@ -32,6 +41,8 @@
 
 </div>
 <div class="right_half">
+
+
 
 <h4>Goal leaders</h4>
 <table>

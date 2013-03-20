@@ -1,17 +1,16 @@
 
-
-a {
-    color: blue;
-    text-decoration: none;
+option {
+    width: 100px;
 }
 
-.red-bg {    background-color: red;}
-.yellow-bg {  background-color: yellow;}
-.green-bg {    background-color: #57E674;}
-.orange-bg {    background-color: #fcc200;}
-.blue-bg { background-color: #0026ff;}
-.light-blue-bg { background-color: #b5c0ff;}
-.light-grey-bg { background-color: #d9d9d9;}
+
+
+.grey {
+    background-color: #eee;
+}
+
+
+/* Positioning */
 
 .left_half {
     float: left;
@@ -23,9 +22,6 @@ a {
     width: 50%;
 }
 
-a:visited {
-    color: blue;
-}
 
 .align-right {
     text-align: right;
@@ -37,46 +33,9 @@ a:visited {
     border: 8px solid #ccc;
 }
 
-option {
-    width: 100px;
-}
 
-table {
-    border-collapse:collapse;
-}
 
-table.noborder {
-}
 
-table.noborder td, table.noborder td {
-    border: 0
-}
-
-tr {
-    margin: 0;
-    padding: 0;
-
-}
-
-td, th {
-    margin: 0;
-    padding: 4px 8px;
-    font-size: .9em;
-    border: 2px solid #ddd;
-
-}
-
-ul {
-    list-style-type: none;
-}
-
-.grey {
-    background-color: #eee;
-}
-
-h1 {
-    border-bottom: 10px solid #eee;
-}
 
 h1 span.subhead {
     font-size: .55em;
@@ -105,9 +64,6 @@ h1 span.subhead {
 #header li.first {
 }
 
-.clear {
-    clear: both
-}
 
 #content {
     width: 1280px;
@@ -125,7 +81,6 @@ h1 span.subhead {
 }
 
 
-
 #controls {
     margin: 10px;
 }
@@ -137,19 +92,11 @@ h1 span.subhead {
 
 /* homepage */
 
-#blurb {
-    font-size: 2em;
+#blurb { font-size: 2em; }
 
+#blurb a {}
 
-}
-
-#blurb a {
- 
-}
-
-#blurb a:hover {
-    text-decoration: underline;
-}
+#blurb a:hover { text-decoration: underline; }
 
 #history_box {
     border: 2px solid black;
@@ -195,8 +142,7 @@ h1 span.subhead {
 
 /* Scoreboard */
 
-#scoreboard {
-}
+#scoreboard {}
 
 #scoreboard h4, #series h4 {
     margin-left: 25px;
@@ -223,45 +169,6 @@ input#id_email {
 
 textarea#id_message {
     width: 400px;
-}
-
-/* Game detail */
-
-#game_score {
-}
-
-.center {
-    text-align: center;
-}
-
-#game_score #team_results {
-    margin: 0 auto;
-    text-align: center;
-}
-    
-#game_score .team_data {
-    display: inline-block;
-    margin: 0 10px;
-}
-
-#game_score .team {
-    font-size: 1.5em;
-}
-
-#game_score .score {
-    font-size: 2em;
-}
-
-#goal_list {
-    margin: 20px auto 0 auto;
-}
-
-table#game_lineup {
-    margin: 20px auto 0 auto;
-}
-
-.clear_both {
-    clear: both;
 }
 
 
@@ -349,37 +256,6 @@ h2.headline {
     background-color: red;
 }
 
-
-/* tabs */
-
-#tabs {
-    margin: 0;
-    padding: 10px 0;
-    }
-
-#tabs li {
-    border: 1px solid #ccc;
-    color: blue;
-    display: inline;
-    padding: 3px;
-}
-
-#tabs li.grey {
-    color: #000;
-}
-
-
-.win {
-    color: green;
-}
-
-.tie {
-    color: grey;
-}
-
-.loss {
-    color: red;
-}
 
 #date_nav {
     font-size: 1.5em;

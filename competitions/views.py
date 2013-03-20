@@ -99,13 +99,28 @@ def competition_detail(request, competition_slug):
                               context,
                               context_instance=RequestContext(request))
 
+
+
+def random_competition_detail(request):
+    import random
+    competitions = Competition.objects.count()
+    c_id = random.randint(1, competitions)
+    c_slug = Competition.objects.get(id=c_id).slug
+    return competition_detail(request, c_slug)
+
+
 @cache_page(60 * 60 * 12)
 def competition_stats(request, competition_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
+    stats = CompetitionStat.objects.filter(competition=competition).order_by('-games_played').exclude(games_played=None)
+    if not stats.exists():
+        stats = CompetitionStat.objects.filter(competition=competition).order_by('-goals')
+
     context = {
         'competition': competition,
-        'stats': CompetitionStat.objects.filter(competition=competition).order_by('player'),
+        'stats': stats,
         }
+
     return render_to_response("competitions/competition_stats.html",
                               context,
                               context_instance=RequestContext(request))
