@@ -16,7 +16,7 @@
     <td><a href="{% url competition_detail game.competition.slug %}">{{ game.competition.abbreviation }}</a></td>
     <td><a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date }}</a></td>
 
-    <td><a href="{% url team_detail game.team1.slug %}"><strong>{{ game.team2_original_name }}</strong></a></td>
+    <td><a href="{% url team_detail game.team1.slug %}"><strong>{{ game.team1_original_name }}</strong></a></td>
     <td><a href="{% url game_detail game.id %}">{{ game.score_or_result }}</a></td>
     <td><a href="{% url team_detail game.team2.slug %}"><strong>{{ game.team2_original_name }}</strong></a></td>
 
