@@ -222,6 +222,14 @@ Alternate names: {% for alias in team.teamalias_set.all %}{{ alias.name }}
   {% endif %}
 
   <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
+
+  {% if e.former_team %}
+  <td><a href="{% url team_detail e.former_team.slug %}">{{ e.former_team }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
+
 </tr>
 {% endfor %}
 </table>
@@ -236,13 +244,15 @@ Alternate names: {% for alias in team.teamalias_set.all %}{{ alias.name }}
 {% for e in draftees %}
 <tr>
   <td>{{ e.draft.season }}</td>
-  <td>{{ e.team }}</td>
+  <td><a href="{% url team_detail e.team.slug %}">{{ e.team }}</a></td>
   <td>{{ e.number }}</td>
   {% if draft.competition %}
   <td><a href="{% url draft_detail e.draft.competition.slug e.draft.slug e.draft.season.name %}">{{ e.draft.name }}</a></td>
   {% else %}
   <td>{{ pick.draft.season.name }} {{ pick.draft.name }}</td>
   {% endif %}
+
+
 
 
   <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
