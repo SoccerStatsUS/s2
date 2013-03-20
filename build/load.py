@@ -618,7 +618,6 @@ def load_drafts():
                 'position': pick.get('position') or '',
                 'former_team_id': former_team_id,
                 'number': pick['number'],
-
                 })
 
     insert_sql("drafts_pick", picks)
@@ -635,10 +634,41 @@ def load_news():
 @transaction.commit_on_success
 def load_teams():
     print "loading teams"
+
+
+    names = set()
+
     for team in soccer_db.teams.find():
         team.pop('_id')
-        Team.objects.create(**team)
 
+        if type(team['founded']) == int:
+            try:
+                founded = datetime.datetime(team['founded'], 1, 1)
+            except:
+                print "founded out of range %s" % team
+                founded = None
+            team['founded'] = founded
+
+        if type(team['dissolved']) == int:
+            dissolved = datetime.datetime(team['dissolved'] + 1, 1, 1)
+            dissolved = dissolved - datetime.timedelta(days=1)
+            team['dissolved'] = dissolved
+
+        team['slug'] = slugify(team['name'])
+
+        team['short_name'] = team.get('short_name') or team['name']
+
+
+        if 'abbreviation' in team:
+            team.pop('abbreviation')
+
+
+        if team['name'] in names:
+            print "duplicate team name"
+            print team
+        else:
+            names.add(team['name'])
+            Team.objects.create(**team)
 
     for alias in soccer_db.name_maps.find():
         alias.pop('_id')
@@ -762,10 +792,10 @@ def load_bios():
             continue
 
 
-        try:
-            print "Creating bio for %s" % bio['name']
-        except:
-            print "Created bio."
+        #try:
+        #    print "Creating bio for %s" % bio['name']
+        #except:
+        #    print "Created bio."
 
         bio.pop('_id')
 
@@ -960,19 +990,24 @@ def load_games():
 
 
 
+    print "Inserting games results."
     insert_sql("games_game", games)
 
+    print "Inserting games sources."
     game_getter = make_game_getter()
     
     l = []
     for date, team_id, source_id, source_url in game_sources:
-        game_id = game_getter(team_id, date)
-        if game_id:
-            l.append({
-                    'game_id': game_id,
-                    'source_id': source_id,
-                    'source_url': source_url,
-                    })
+
+        # Don't call game_getter without date. Need to give games unique id's.
+        if date:
+            game_id = game_getter(team_id, date)
+            if game_id:
+                l.append({
+                        'game_id': game_id,
+                        'source_id': source_id,
+                        'source_url': source_url,
+                        })
 
     insert_sql("games_gamesource", l)
             
@@ -1017,7 +1052,7 @@ def load_goals():
                 'date': goal['date'],
                 'minute': goal['minute'],
                 'team_id': team_id, 
-                'team_original_name': '',
+                #'team_original_name': '',
 
                 'player_id': bio_id, #player,
                 'own_goal_player_id': ogbio_id,

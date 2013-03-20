@@ -13,7 +13,7 @@ from games.models import Game
 from teams.forms import TeamGameForm, TeamStatForm
 from teams.models import Team
 from standings.models import Standing
-from stats.models import Stat, TeamStat
+from stats.models import Stat, TeamStat, CareerStat
 
 
 class TempGameStanding(object):
@@ -258,17 +258,42 @@ def team_picks(request, team_slug):
 
     player_ids = [e[0] for e in picks.exclude(player=None).values_list('player')]
     #team_stats = Stat.team_stats.filter(team=team, player__in=player_ids)
-    #career_stats = Stat.career_stats.filter(team=team, player__in=player_ids)
+    career_stats = CareerStat.objects.filter(player__in=player_ids)
 
     context = {
         'team': team,
         'picks': picks.select_related(),
+        'stats': career_stats,
         }
 
     return render_to_response("teams/picks.html",
                               context,
                               context_instance=RequestContext(request)
                               )
+
+
+def team_draftees(request, team_slug):
+
+    team = get_object_or_404(Team, slug=team_slug)
+
+    picks = team.former_team_set.all()
+
+    player_ids = [e[0] for e in picks.exclude(player=None).values_list('player')]
+    #team_stats = Stat.team_stats.filter(team=team, player__in=player_ids)
+    career_stats = CareerStat.objects.filter(player__in=player_ids)
+
+    context = {
+        'team': team,
+        'picks': picks.select_related(),
+        'stats': career_stats,
+        }
+
+    return render_to_response("teams/picks.html",
+                              context,
+                              context_instance=RequestContext(request)
+                              )
+
+
     
 
 @cache_page(60 * 24)

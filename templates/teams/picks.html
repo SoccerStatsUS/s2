@@ -4,5 +4,18 @@
 
 <h3><a href="{% url team_detail team.slug %}">{{ team }} draft picks</a></h3>
 
-{% include "templatetags/draft.html" %}
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+  <div tab="picks">
+    {% include "templatetags/draft.html" %}
+  </div>
+
+  <div tab="stats">
+    {% include "templatetags/career_stats.html" %}
+  </div>
+
+</div>
+
 {% endblock %}

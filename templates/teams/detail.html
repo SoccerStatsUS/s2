@@ -19,7 +19,7 @@
 
 
 <h2 class="headline">{{ team.name }}</h2>
-
+<h3>{{ team.city }}</h3>
 
 
 <div id="left_column">
@@ -86,7 +86,7 @@ Alternate names: {% for alias in team.teamalias_set.all %}{{ alias.name }}
 
 <div id="tab_wrapper">
 
-<div tab="comp">
+<div tab="cmp">
 <table>
 
 <tr>
@@ -231,7 +231,7 @@ Alternate names: {% for alias in team.teamalias_set.all %}{{ alias.name }}
 
 
 {% if draftees %}
-<h3>Recent draftes (<a href="{% url team_picks team.slug %}">complete {{ team }} picks</a>)</h3> 
+<h3>Recent draftees (<a href="{% url team_draftees team.slug %}">complete {{ team }} draftees</a>)</h3> 
 <table>
 {% for e in draftees %}
 <tr>
