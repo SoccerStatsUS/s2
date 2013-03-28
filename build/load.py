@@ -18,7 +18,7 @@ from goals.models import Goal
 from lineups.models import Appearance
 from money.models import Salary
 from news.models import NewsSource
-from places.models import Country, State, City, Stadium
+from places.models import Country, State, City, Stadium, Country
 from positions.models import Position
 from sources.models import Source
 from stats.models import Stat
@@ -29,6 +29,30 @@ from utils import insert_sql, timer
 
 connection = pymongo.Connection()
 soccer_db = connection.soccer
+
+
+class Getter(object):
+    """
+    An abstract getter object.
+    """
+
+    
+    def __init__(self, model):
+        self.model = model
+        self.items = model.objects.to_dict()
+
+
+    def get(e):
+        if e not in self.items:
+            self.items[e] = self.model.objects.find(e, create=True).id
+
+        return self.items[e]
+
+
+#def f():
+#    tg = Getter(Team)
+#    cg = Getter(Country)
+#    sg = Getter(Source)
 
 
 
@@ -52,6 +76,22 @@ def make_team_getter():
 
     return get_team
 
+
+
+def make_country_getter():
+
+    d = Country.objects.country_dict()
+
+    def get_country(c):
+        if c in d:
+            return d[c]
+
+        return None
+
+    return get_country
+
+
+    
 
 def make_source_getter():
     """
@@ -81,6 +121,11 @@ def make_source_getter():
             return s.id
 
     return get_source
+
+
+
+
+    
 
 
 # This is way too complex.
@@ -662,6 +707,15 @@ def load_teams():
         if 'abbreviation' in team:
             team.pop('abbreviation')
 
+        if 'parent' in team:
+            team.pop('parent')
+
+        if 'next' in team:
+            team.pop('next')
+        if 'country' in team:
+            team.pop('country')
+            
+
 
         if team['name'] in names:
             print "duplicate team name"
@@ -853,13 +907,16 @@ def load_games():
     bio_getter = make_bio_getter()
 
     city_getter = make_city_getter()
+    country_getter = make_country_getter()
 
     games = []
     game_sources = []
 
     for game in soccer_db.games.find().sort('date', 1):
 
-        stadium_id = city_id = None
+        # Apply stadium / state / country information.
+        
+        stadium_id = city_id = country_id = None
         if game.get('stadium'):
             stadium_id = stadium_getter(game['stadium'])
             s = Stadium.objects.get(id=stadium_id)
@@ -872,7 +929,10 @@ def load_games():
             city_id = city_getter(game['city']).id
 
         elif game.get('location'):
-            city_id = city_getter(game['location']).id
+
+            country_id = country_getter(game['location'])
+            if country_id is None:
+                city_id = city_getter(game['location']).id
 
         competition_id = competition_getter(game['competition'])
         #game['competition'] = Competition.objects.get(id=game['competition'])
@@ -978,6 +1038,7 @@ def load_games():
 
                 'stadium_id': stadium_id,
                 'city_id': city_id,
+                'country_id': country_id,
                 'location': game.get('location', ''),
                 'notes': '',
                 'attendance': attendance,
