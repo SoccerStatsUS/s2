@@ -204,7 +204,7 @@ Alternate names: {% for alias in team.teamalias_set.all %}{{ alias.name }}
 
 {% if recent_games %}
 <h3>Recent games (<a href="{% url team_games team.slug %}">All {{ team }} games</a>)</h3> 
-{% include "templatetags/top_attendance.html" with games=recent_games %}
+{% include "templatetags/games/attendance.html" with games=recent_games %}
 {% endif %}
 
 

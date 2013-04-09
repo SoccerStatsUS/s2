@@ -53,7 +53,7 @@
 <h4>Architect: <a href="{% url person_detail stadium.architect.slug %}">{{ stadium.architect }}</a></h4>
 {% endif %}
 
-{% include "templatetags/slim_standings.html" %}
+{% include "templatetags/standings/slim.html" %}
 
 </div>
 
@@ -66,7 +66,7 @@
   
 {% if stadium.goal_set.exists %}
 <div tab="goals">
-{% include "templatetags/goals.html" with goals=stadium.goal_set.all %}
+{% include "templatetags/goals/goals.html" with goals=stadium.goal_set.all %}
 </div>
 {% endif %}
 

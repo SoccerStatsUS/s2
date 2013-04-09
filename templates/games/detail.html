@@ -5,7 +5,7 @@
 
 
 <div id="left_column">
-{% include "templatetags/game_result.html" %}
+{% include "templatetags/games/detail/result.html" %}
 </div>
 
 
@@ -18,11 +18,11 @@
 {% endif %}
 
 {% if game.same_day_games %}
-{% include "templatetags/scoreboard.html" with games=game.same_day_games %}
+{% include "templatetags/games/scoreboard.html" with games=game.same_day_games %}
 {% endif %}
 
 {% if game.series.count > 1 %}
-{% include "templatetags/series.html" with games=game.series %}
+{% include "templatetags/games/series.html" with games=game.series %}
 {% endif %}
 
 

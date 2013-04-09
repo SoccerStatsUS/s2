@@ -5,7 +5,7 @@
 <tr>
   <td><a href="{% url game_detail game.id %}">{{ game.date }}</a></td>
 
-  {% include "templatetags/result_fragment.html" %}
+  {% include "templatetags/fragments/result.html" %}
   {% datum_or_grey  game.attendance %}
 </tr>
 {% endfor %}

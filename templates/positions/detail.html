@@ -31,8 +31,8 @@
   <td><a href="{% url person_detail position.person.slug %}">{{ position.person }}</a></td>
   <td><a>{{ position.name|truncatechars:32 }}</a></td>
   <td><a href="{% url team_detail position.team.slug %}">{{ position.team }}</a></td>
-  {% include "templatetags/date_fragment.html" with date=position.start %}
-  {% include "templatetags/date_fragment.html" with date=position.end %}
+  {% include "templatetags/fragments/date.html" with date=position.start %}
+  {% include "templatetags/fragments/date.html" with date=position.end %}
   <td>{{ position.length }}</td>
   
   {% comment %}

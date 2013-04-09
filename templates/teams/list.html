@@ -5,10 +5,10 @@
 
 {% if standing_type == "alltime" %}
 <h4>All-time standings</h4>
-{% include "templatetags/alltime_standings.html" %}
+{% include "templatetags/standings/alltime.html" %}
 {% else %}
 <h4>Standings</h4>
-{% include "templatetags/standings.html" %}
+{% include "templatetags/standings/standings.html" %}
 {% endif %}
 
 {% endblock %}

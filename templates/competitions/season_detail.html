@@ -98,12 +98,12 @@
 {% if top_attendance_games %}
 
 <h3>Top attendances</h3>
-{% include "templatetags/top_attendance.html" with games=top_attendance_games %}
+{% include "templatetags/games/attendance.html" with games=top_attendance_games %}
 {% endif %}
 
 {% if worst_attendance_games %}
 <h3>Bottom attendances</h3>
-{% include "templatetags/top_attendance.html" with games=worst_attendance_games %}
+{% include "templatetags/games/attendance.html" with games=worst_attendance_games %}
 
 {% endif %}
 
@@ -114,7 +114,7 @@
 
 <div id="right_column">
 
-{% include "templatetags/compact_standings.html" %}
+{% include "templatetags/standings/compact.html" %}
 
 {% if goal_leaders %}
 <h3><a href="{% url season_stats season.competition.slug season.slug %}">{{ season }} stats</a></h3>
@@ -157,35 +157,6 @@
 <div class="clear_both"></div>
 
 {% endif %}
-
-{% comment %}
-{% if testing %}
-<div tab="added">
-<table>
-{% for stat in testing %}
-<tr>
-  {% if stat.player.slug %}
-  <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
-  {% else %}
-  <td>{{ stat.player }}</td>
-  {% endif %}
-</tr>
-{% endfor %}
-</table>
-</div>
-{% endif %}
-{% endcomment %}
-
-{% comment %}
-<div tab="graphs">
-
-{% include "templatetags/nationality.html" with nstat=season.confederation_stats %}
-
-{% include "templatetags/nationality.html" with nstat=season.nationality_stats %}
-
-{{ known_minutes }} known minutes of {{ total_minutes }} total minutes
-</div>
-{% endcomment %}
 
 </div>
 

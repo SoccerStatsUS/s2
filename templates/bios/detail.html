@@ -54,7 +54,7 @@
 {% if recent_appearances %}
 <h3>Recent games</h3>
 <p><a href="{% url person_detail_games bio.slug %}">(all {{ bio }} games)</a></p>
-{% include "templatetags/appearances/bio.html" with appearances=recent_appearances %}
+{% include "templatetags/appearances/list.html" with appearances=recent_appearances %}
 {% endif %}
 
 

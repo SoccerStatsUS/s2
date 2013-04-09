@@ -82,7 +82,7 @@
   <tr>
 
     {% if goal.team == game.team1 %}
-    {% include "templatetags/goal_fragment.html"  %}
+    {% include "templatetags/fragments/goal.html"  %}
     {% else %}
     <td></td>
     {% endif %}
@@ -90,7 +90,7 @@
     {% datum_or_grey goal.minute %}
 
     {% if goal.team == game.team2 %}
-    {% include "templatetags/goal_fragment.html"  %}
+    {% include "templatetags/fragments/goal.html"  %}
     {% else %}
     <td></td>
     {% endif %}
@@ -108,7 +108,7 @@
 {% endif %}
 
 {% if game.appearance_set.exists %}
-{% include "templatetags/game_lineup.html"  %}
+{% include "templatetags/games/detail/lineup.html"  %}
 {% endif %}
 
 

@@ -8,26 +8,26 @@
 
 {% if team_stats %}
 <div tab="team">
-{% include "templatetags/front_stats.html" with stats=team_stats %}
+{% include "templatetags/stats/team.html" with stats=team_stats %}
 {% endif %}
 </div>
 
 
 {% if league_stats %}
 <div tab="league">
-{% include "templatetags/bio.html" with stats=league_stats %}
+{% include "templatetags/stats/stats.html" with stats=league_stats %}
 </div>
 {% endif %}
 
 {% if competition_stats %}
 <div tab="competition">
-{% include "templatetags/competition_stats.html" with stats=competition_stats %}
+{% include "templatetags/stats/competition.html" with stats=competition_stats %}
 </div>
 {% endif %}
 
 {% if coach_stats %}
 <div tab="coaching">
-{% include "templatetags/coachstat.html" %}
+{% include "templatetags/stats/coach.html" %}
 </div>
 {% endif %}
 
