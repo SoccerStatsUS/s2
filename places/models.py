@@ -1,5 +1,5 @@
 from django.contrib.gis.db import models
-
+from django.db.models import Q
 from django.template.defaultfilters import slugify
 
 from bios.models import Bio
@@ -49,6 +49,17 @@ class CountryManager(models.Manager):
             return Country.objects.create(name=s)
 
 
+    def country_dict(self):
+        """
+        A dict mapping a team's name and short name to an id.
+        """
+        d = {}
+        for e in self.get_query_set():
+            d[e.name] = e.id
+        return d
+
+
+
 class Country(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField()
@@ -66,7 +77,8 @@ class Country(models.Model):
 
     def games(self):
         from games.models import Game
-        return Game.objects.filter(city__country=self)
+        query = Q(city__country=self) | Q(country=self)
+        return Game.objects.filter(query)
 
     class Meta:
         ordering = ('name',)

@@ -8,7 +8,7 @@ from django.db import models
 
 from bios.models import Bio
 from competitions.models import Competition, Season
-from places.models import Stadium, City
+from places.models import Stadium, City, Country
 from sources.models import Source
 from teams.models import Team
 
@@ -179,6 +179,7 @@ class Game(models.Model):
 
     stadium = models.ForeignKey(Stadium, null=True)
     city = models.ForeignKey(City, null=True)
+    country = models.ForeignKey(Country, null=True)
     location = models.CharField(max_length=255)
 
     notes = models.TextField()

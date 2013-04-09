@@ -103,9 +103,9 @@ class Goal(models.Model):
     def assist_string(self):
         assists = self.assists()
         if assists:
-            return ''
+            return ', '.join([e.player.name for e in assists])
         else:
-            return ', '.join([e.player.name for e in self.assists()])
+            return ''
  
 
     def __unicode__(self):
