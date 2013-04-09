@@ -141,6 +141,7 @@ $(document).ready( ->
     $("#tab_wrapper div").each ->
       $(this).hide()
     $("#tab_wrapper div[tab=#{ name }]").show()
+    return false
 
   tabs = $("#tabs li")
   if tabs.length

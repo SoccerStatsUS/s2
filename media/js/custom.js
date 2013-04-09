@@ -122,7 +122,8 @@
       $("#tab_wrapper div").each(function() {
         return $(this).hide();
       });
-      return $("#tab_wrapper div[tab=" + name + "]").show();
+      $("#tab_wrapper div[tab=" + name + "]").show();
+      return false;
     });
     tabs = $("#tabs li");
     if (tabs.length) return $(tabs[0]).click();
