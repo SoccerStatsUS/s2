@@ -26,6 +26,11 @@ urlpatterns = patterns('bios.views',
                            'person_detail',
                            name='person_detail'),
 
+                       url(r'^id/(?P<pid>\d+)/$',
+                           'person_id_detail',
+                           name='person_id_detail'),
+
+
                        url(r'^(?P<slug>[a-z0-9-]+)/goals/$',
                            'person_detail_goals',
                            name='person_detail_goals'),
