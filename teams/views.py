@@ -1,5 +1,6 @@
 from collections import defaultdict, OrderedDict, Counter
 import datetime
+import json
 
 
 from django.db.models import Q, Sum
@@ -8,7 +9,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
-from competitions.models import Season
+from competitions.models import Season, Competition
 from games.models import Game
 from teams.forms import TeamGameForm, TeamStatForm
 from teams.models import Team
@@ -204,6 +205,27 @@ def team_detail(request, team_slug):
                               )
 
 
+
+def team_competition_detail(request, team_slug, competition_slug):
+    team = get_object_or_404(Team, slug=team_slug)
+    c = get_object_or_404(Competition, slug=competition_slug)
+    games = Game.objects.team_filter(team).filter(competition=c)
+
+    context = {
+        'team': team,
+        'competition': c,
+        'stats': TeamStat.objects.filter(team=team), # Wrong stat for the time being.
+        'games': games,
+        'result_json': json.dumps([e.result(team) for e in games]) # Probably need to format better than this.
+        }
+
+    return render_to_response("teams/competition_detail.html",
+                              context,
+                              context_instance=RequestContext(request)
+                              )
+
+        
+
 def random_team_detail(request):
     import random
     teams = Team.objects.count()
@@ -299,7 +321,7 @@ def team_draftees(request, team_slug):
 @cache_page(60 * 24)
 def team_games(request, team_slug):
     """
-    Just about the most important view of all.
+    A filterable table of all games played by a team.
     """
     team = get_object_or_404(Team, slug=team_slug)
 
@@ -358,6 +380,30 @@ def team_games(request, team_slug):
         }
 
     return render_to_response("teams/games.html",
+                              context,
+                              context_instance=RequestContext(request)
+                              )
+    
+
+
+
+
+
+@cache_page(60 * 24)
+def team_calendar(request, team_slug):
+    """
+    A calendar of a team's games.
+    """
+    team = get_object_or_404(Team, slug=team_slug)
+
+    games = Game.objects.team_filter(team).select_related().order_by('-has_date', '-date', '-season')
+
+    context = {
+        'team': team,
+        'games': games,
+        }
+
+    return render_to_response("teams/calendar.html",
                               context,
                               context_instance=RequestContext(request)
                               )
