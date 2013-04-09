@@ -1001,6 +1001,9 @@ def load_games():
         else:
             shootout_winner = None
 
+        if game['notes']:
+            import pdb; pdb.set_trace()
+
 
         games.append({
                 'date': game['date'],
@@ -1040,7 +1043,7 @@ def load_games():
                 'city_id': city_id,
                 'country_id': country_id,
                 'location': game.get('location', ''),
-                'notes': '',
+                'notes': game.get('notes', ''),
                 'attendance': attendance,
                 
                 'referee_id': referee_id,

@@ -1,21 +1,6 @@
-{% comment %}
-{% if games.exists %}
-<div id="scoreboard">
-  {% for game in games %}
-  <div class="score">
 
-    <a href="{% url game_detail game.id %}">
-    <div>{{ game.team1_original_name }} {{ game.r
-    <div>{{ game.team2_original_name }} {{ game.team2_score_or_result }}</div>
-    </a>
-  </div>
-  {% endfor %}
-</div>
-{% endif %}
-{% endcomment %}
-
-<div id="scoreboard">
 <h4>Other results for <a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date|date:"F d, Y" }}</a></h4>
+<div id="scoreboard">
 <table>
   {% for game in games %}
   <tr class="score">
