@@ -70,8 +70,11 @@ class TeamGameForm(forms.Form):
         teams = Team.objects.filter(id__in=tids).exclude(id=team.id)
         self.fields['opponent'] = forms.ModelChoiceField(queryset=teams, required=False)
 
-        min_year = games.exclude(date=None).order_by('date')[0].date.year
-        max_year = games.exclude(date=None).order_by('-date')[0].date.year
+        min_year = max_year = None
+        gx = games.exclude(date=None)
+        if gx.exists():
+            min_year = games.exclude(date=None).order_by('date')[0].date.year
+            max_year = games.exclude(date=None).order_by('-date')[0].date.year
 
         years = sorted(set([e[0].year for e in games.exclude(date=None).values_list('date')]))
 
