@@ -1,6 +1,8 @@
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'build_settings'
 
+from collections import defaultdict
+
 import datetime
 import difflib
 import re
@@ -25,6 +27,13 @@ def search_for_data(o):
                     print item, p.all()
                 except:
                     print "fail on %s" % item
+
+
+def find_duplicate_slugs(model):
+    d = defaultdict(int)
+    for e in model.objects.all():
+        d[e.slug] += 1
+    return [e[0] for e in d.items() if e[1] > 1]
 
 
 
