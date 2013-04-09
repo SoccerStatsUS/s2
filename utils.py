@@ -14,6 +14,20 @@ from bios.models import Bio
 
 
 
+def search_for_data(o):
+    for item in dir(o):
+        if 'set' in item:
+            p = getattr(o, item)
+            try:
+                print item, p()
+            except:
+                try:
+                    print item, p.all()
+                except:
+                    print "fail on %s" % item
+
+
+
 def timer(method):
 
     def timed(*args, **kw):
