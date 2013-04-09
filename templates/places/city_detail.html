@@ -27,9 +27,9 @@
   <th>capacity</th>
   <th>cost</th>
   <th>games</th>
-  <th>goals</th>
+  <th>attendance</th>
 </tr>
-{% for stadium in city.stadium_set.all %}
+{% for stadium in stadiums %}
 <tr>
   <td><a href="{% url stadium_detail stadium.slug %}">{{ stadium }}</a></td>
   {% if stadium.opened %}
@@ -40,8 +40,12 @@
   
   {% datum_or_grey stadium.capacity %}
   {% datum_or_grey stadium.cost %}
-  <td>{{ stadium.game_set.count }}</td>
-  <td>{{ stadium.goal_count }}</td>
+  <td>{{ stadium.game_count }}</td>
+  {% if stadium.total_attendance %}
+  <td>{{ stadium.total_attendance }}</td>
+  {% else %}
+  <td></td>
+  {% endif %}
 </tr>
 {% endfor %}
 </table>

@@ -146,6 +146,12 @@ class SeasonStat(AbstractStat):
     season = models.ForeignKey(Season)
 
 
+class TeamCompetitionStat(AbstractStat):
+    player = models.ForeignKey(Bio)
+    competition = models.ForeignKey(Competition)
+    team = models.ForeignKey(Team)
+
+
 class Stat(AbstractStat):
     player = models.ForeignKey(Bio)
     competition = models.ForeignKey(Competition) # Redundancy

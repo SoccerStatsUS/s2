@@ -1,4 +1,4 @@
-from django.db.models import Avg
+from django.db.models import Avg, Count, Sum
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
@@ -14,9 +14,11 @@ def country_index(request):
         """
         """
 
+
         context = {
-                'countries': Country.objects.all(),
+                'countries': Country.objects.annotate(game_count=Count('game')).annotate(total_attendance=Sum('game__attendance')).order_by('-game_count'),
                 }
+
         return render_to_response("places/country_index.html",
                                   context,
                                   context_instance=RequestContext(request))
@@ -53,17 +55,12 @@ def city_index(request):
 def stadium_index(request):
 
         context = {
-                'stadiums': Stadium.objects.all(),
+                'stadiums': Stadium.objects.annotate(game_count=Count('game')).annotate(total_attendance=Sum('game__attendance')).order_by('-game_count')
                 }
 
         return render_to_response("places/stadium_index.html",
                                   context,
                                   context_instance=RequestContext(request))
-
-
-
-
-
 
 
 
@@ -118,6 +115,7 @@ def city_detail(request, slug):
         context = {
                 'city': city,
                 'games': Game.objects.filter(city=city),
+                'stadiums': city.stadium_set.annotate(game_count=Count('game')).annotate(total_attendance=Sum('game__attendance')).order_by('-game_count')
                 }
 
         return render_to_response("places/city_detail.html",
