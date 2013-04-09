@@ -9,9 +9,10 @@
 
 <h2 class="headline">{{ competition }}</h2>
 
+
 {% if competition.season_set.count == 1 %}
 <h3 class="center"><a href="{% url season_detail competition.slug competition.first_season.slug %}">{{ competition.first_season.name }}</a></h3>
-{% else %}
+{% elif competition.season_set.count > 1 %}
 <h3 class="center"><a href="{% url season_detail competition.slug competition.first_season.slug %}">{{ competition.first_season.name }}</a> to <a href="{% url season_detail competition.slug competition.last_season.slug %}">{{ competition.last_season.name }}</a></h3>
 {% endif %}
 
@@ -105,8 +106,9 @@
 {% endcomment %}
 
 
-<h3>Awards</h3>
+
 {% if competition.award_set.exists %}
+<h3>Awards</h3>
 <table>
 {% for award in competition.award_set.all %}
 <tr>
