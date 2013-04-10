@@ -58,6 +58,15 @@ class CountryManager(models.Manager):
             d[e.name] = e.id
         return d
 
+    def id_dict(self):
+        """
+        A dict mapping a team's name and short name to an id.
+        """
+        d = {}
+        for e in self.get_query_set():
+            d[e.id] = e.name
+        return d
+
 
 
 class Country(models.Model):

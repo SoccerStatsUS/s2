@@ -1,3 +1,4 @@
+
 from django.db.models import Sum, Avg
 from django.http import Http404
 from django.shortcuts import render_to_response, get_object_or_404, redirect
@@ -10,7 +11,8 @@ from competitions.models import Competition, Season
 from places.models import Country
 from stats.models import Stat, CompetitionStat, SeasonStat
 
-from collections import Counter
+from collections import Counter, defaultdict
+import json
 
 @cache_page(60 * 60 * 12)
 def competition_index(request):
@@ -232,14 +234,12 @@ def season_stats(request, competition_slug, season_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
     season = get_object_or_404(Season, competition=competition, slug=season_slug)
 
-    #stats = Stat.objects.filter(team=None, season=season).order_by('-games_played')
     stats = Stat.objects.filter(season=season).order_by('-games_played').exclude(games_played=None)
     if not stats.exists():
         stats = Stat.objects.filter(season=season).order_by('-goals')
 
     context = {
         'season': season,
-        #'stats': SeasonStat.objects.filter(season=season).order_by('-games_played'),
         'stats': stats,
         }
     return render_to_response("competitions/season_stats.html",
@@ -258,6 +258,37 @@ def season_games(request, competition_slug, season_slug):
 
         }
     return render_to_response("competitions/season_games.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+
+
+def get_nationality_distribution(stat_qs):
+    d = defaultdict(int)
+    for gp, country in stat_qs.exclude(player__birthplace__country=None).values_list('games_played', 'player__birthplace__country'):
+        d[country] += gp
+    return sorted(d.items(), key=lambda e: -e[1])
+        
+        
+
+
+@cache_page(60 * 60 * 12)
+def season_graphs(request, competition_slug, season_slug):
+    competition = get_object_or_404(Competition, slug=competition_slug)
+    season = get_object_or_404(Season, competition=competition, slug=season_slug)
+
+    stats = Stat.objects.filter(season=season).exclude(games_played=None)
+    country_dict = Country.objects.id_dict()
+    nationality_id_map = get_nationality_distribution(stats)    
+    nationality_map = [(country_dict[a], b) for (a, b) in nationality_id_map]
+    
+
+    context = {
+        'season': season,
+        'nationality_map': json.dumps(nationality_map),
+
+        }
+    return render_to_response("competitions/season_graphs.html",
                               context,
                               context_instance=RequestContext(request))
 
