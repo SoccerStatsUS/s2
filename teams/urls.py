@@ -54,6 +54,10 @@ urlpatterns = patterns('teams.views',
                            'team_games',
                            name='team_games'),
 
+                       url(r'^(?P<team_slug>[a-z0-9-]+)/graphs/$',
+                           'team_graphs',
+                           name='team_graphs'),
+
 
                        url(r'^(?P<team_slug>[a-z0-9-]+)/calendar/$',
                            'team_calendar',

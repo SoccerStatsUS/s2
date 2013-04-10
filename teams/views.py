@@ -11,6 +11,7 @@ from django.views.decorators.cache import cache_page
 
 from competitions.models import Season, Competition
 from games.models import Game
+from places.models import Country
 from teams.forms import TeamGameForm, TeamStatForm
 from teams.models import Team
 from standings.models import Standing
@@ -292,6 +293,40 @@ def team_picks(request, team_slug):
                               context,
                               context_instance=RequestContext(request)
                               )
+
+
+
+# Duplicate of season.views function.
+def get_nationality_distribution(stat_qs):
+    d = defaultdict(int)
+    for gp, country in stat_qs.exclude(player__birthplace__country=None).values_list('games_played', 'player__birthplace__country'):
+        d[country] += gp
+    return sorted(d.items(), key=lambda e: -e[1])
+
+
+
+def team_graphs(request, team_slug):
+    """
+    Just about the most important view of all.
+    """
+    team = get_object_or_404(Team, slug=team_slug)
+
+    stats = TeamStat.objects.filter(team=team).exclude(games_played=None)
+    country_dict = Country.objects.id_dict()
+    nationality_id_map = get_nationality_distribution(stats)    
+    nationality_map = [(country_dict[a], b) for (a, b) in nationality_id_map]
+
+
+    context = {
+        'team': team,
+        'nationality_map': json.dumps(nationality_map),
+        }
+
+    return render_to_response("teams/graphs.html",
+                              context,
+                              context_instance=RequestContext(request)
+                              )
+
 
 
 def team_draftees(request, team_slug):
