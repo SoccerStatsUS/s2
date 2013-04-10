@@ -234,7 +234,7 @@ DEBUG_TOOLBAR_PANELS = (
 HAYSTACK_SITECONF = 'search_sites'
 HAYSTACK_SEARCH_ENGINE = 'solr'
 HAYSTACK_SOLR_URL = 'http://127.0.0.1:8983/solr'
-HAYSTACK_SOLR_URL = 'http://0.0.0.0:8983/solr'
+HAYSTACK_SOLR_URL = 'http://0.0.0.0:8080/solr'
 
 HAYSTACK_CONNECTIONS = {
     'default': {
