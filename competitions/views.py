@@ -270,7 +270,13 @@ def get_nationality_distribution(stat_qs):
         d[country] += gp
     return sorted(d.items(), key=lambda e: -e[1])
         
-        
+    
+def get_age_counts(l):
+    d = defaultdict(int)
+    for e in l:
+        d[round(e)] += 1
+    return sorted(d.items())
+    
 
 
 @cache_page(60 * 60 * 12)
@@ -285,12 +291,17 @@ def season_graphs(request, competition_slug, season_slug):
 
     appearance_ages = Appearance.objects.filter(game__season=season).exclude(age=None).values_list('age', 'game__date')
     earliest_date = min([e[1] for e in appearance_ages])
-    
 
+    age_counts = get_age_counts([e[0] for e in appearance_ages])
+
+    
+    
     context = {
         'season': season,
         'nationality_map': json.dumps(nationality_map),
         'appearance_ages': json.dumps([(a, (b - earliest_date).days) for (a, b) in appearance_ages]),
+        'age_counts': json.dumps(age_counts),
+
         }
     return render_to_response("competitions/season/graphs.html",
                               context,
