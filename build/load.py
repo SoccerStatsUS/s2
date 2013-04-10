@@ -1001,9 +1001,6 @@ def load_games():
         else:
             shootout_winner = None
 
-        if game['notes']:
-            import pdb; pdb.set_trace()
-
 
         games.append({
                 'date': game['date'],
