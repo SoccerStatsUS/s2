@@ -8,6 +8,7 @@ from django.views.decorators.cache import cache_page
 from bios.models import Bio
 from competitions.forms import CompetitionForm
 from competitions.models import Competition, Season
+from lineups.models import Appearance
 from places.models import Country
 from stats.models import Stat, CompetitionStat, SeasonStat
 
@@ -281,12 +282,15 @@ def season_graphs(request, competition_slug, season_slug):
     country_dict = Country.objects.id_dict()
     nationality_id_map = get_nationality_distribution(stats)    
     nationality_map = [(country_dict[a], b) for (a, b) in nationality_id_map]
+
+    appearance_ages = Appearance.objects.filter(game__season=season).exclude(age=None).values_list('age', 'game__date')
+    earliest_date = min([e[1] for e in appearance_ages])
     
 
     context = {
         'season': season,
         'nationality_map': json.dumps(nationality_map),
-
+        'appearance_ages': json.dumps([(a, (b - earliest_date).days) for (a, b) in appearance_ages]),
         }
     return render_to_response("competitions/season/graphs.html",
                               context,
