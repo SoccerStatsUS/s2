@@ -7,9 +7,9 @@
 {% block content %}
 
 <h2 class="headline">
-{% if season.previous_season %}<a href="{% url season_games season.competition.slug season.previous_season.slug %}">←</a>{% endif %}
+{% if season.previous_season %}<a href="{% url season_graphs season.competition.slug season.previous_season.slug %}">←</a>{% endif %}
 <a href="{% url season_detail season.competition.slug season.slug %}">{{ season }}</a>
-{% if season.next_season %}<a href="{% url season_games season.competition.slug season.next_season.slug %}">→</a>{% endif %}
+{% if season.next_season %}<a href="{% url season_graphs season.competition.slug season.next_season.slug %}">→</a>{% endif %}
 </h2>
 
 
@@ -17,6 +17,67 @@
 
 
 var data = {{ age_counts|safe }}; 
+
+var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var formatPercent = d3.format(".0%");
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .tickFormat(formatPercent);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+x.domain(data.map(function(d) { return d[0]; }));
+y.domain([0, d3.max(data, function(d) { return d[1]; })]);
+
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis)
+    .append("text").attr("y", 20).attr("x", -10).text("Age");
+
+
+svg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis)
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("Frequency");
+
+svg.selectAll(".bar")
+    .data(data)
+    .enter().append("rect")
+    .attr("class", "bar")
+    .attr("x", function(d) { return x(d[0]); })
+    .attr("width", x.rangeBand())
+    .attr("y", function(d) { return y(d[1]); })
+    .attr("height", function(d) { return height - y(d[1]); });
+
+
+
+
+var data2 = {{ nationality_map|safe }}; 
 var w = 800;
 var h = 800;
 var r = 400;                      
@@ -25,7 +86,7 @@ var color = d3.scale.category20c();
     
     var vis = d3.select("body")
         .append("svg:svg")              //create the SVG element inside the <body>
-        .data([data])                   //associate our data with the document
+        .data([data2])                   //associate our data with the document
             .attr("width", w)           //set the width and height of our visualization (these will be attributes of the <svg> tag
             .attr("height", h)
         .append("svg:g")                //make a group to hold our pie chart
@@ -56,7 +117,11 @@ var color = d3.scale.category20c();
                 return "translate(" + arc.centroid(d) + ")";        //this gives us a pair of coordinates like [50, 50]
             })
             .attr("text-anchor", "middle")                          //center the text on it's origin
-            .text(function(d, i) { return data[i][0]; });        //get the label from our original data array
+            .text(function(d, i) { return data2[i][0]; });        //get the label from our original data array
+
+
+
+
 
 
 

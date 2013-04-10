@@ -264,18 +264,22 @@ def season_games(request, competition_slug, season_slug):
 
 
 
-def get_nationality_distribution(stat_qs):
+def get_confederation_distribution(stat_qs):
     d = defaultdict(int)
-    for gp, country in stat_qs.exclude(player__birthplace__country=None).values_list('games_played', 'player__birthplace__country'):
+    for gp, country in stat_qs.exclude(player__birthplace__country=None).values_list('games_played', 'player__birthplace__country__confederation'):
         d[country] += gp
     return sorted(d.items(), key=lambda e: -e[1])
         
     
 def get_age_counts(l):
+    total = 0
     d = defaultdict(int)
     for e in l:
         d[round(e)] += 1
-    return sorted(d.items())
+        total += 1
+
+    ftotal = float(total)
+    return sorted([(e[0], e[1] / ftotal) for e in d.items()])
     
 
 
@@ -285,9 +289,9 @@ def season_graphs(request, competition_slug, season_slug):
     season = get_object_or_404(Season, competition=competition, slug=season_slug)
 
     stats = Stat.objects.filter(season=season).exclude(games_played=None)
-    country_dict = Country.objects.id_dict()
-    nationality_id_map = get_nationality_distribution(stats)    
-    nationality_map = [(country_dict[a], b) for (a, b) in nationality_id_map]
+    #country_dict = Country.objects.id_dict()
+    nationality_map = get_confederation_distribution(stats)    
+    #nationality_map = [(country_dict[a], b) for (a, b) in nationality_id_map]
 
     appearance_ages = Appearance.objects.filter(game__season=season).exclude(age=None).values_list('age', 'game__date')
     earliest_date = min([e[1] for e in appearance_ages])
