@@ -4,37 +4,10 @@
 
 {% block content %}
 
-<h4>goals</h4>
-<table>
-  <tr>
-    <th>min</th>
-    <th>#</th>
-  </tr>
 
-  {% for a,b in goal_tuple %}
-  <tr>
-    <td>{{ a }}</td>
-    <td>{{ b }}</td>
-  </tr>
-  {% endfor %}
+<ul>
+  <li><a href="bias">US player date of birth bias.</a></li>
+</ul>
 
-</table>
-
-
-<h4>lineups</h4>
-<table>
-  <tr>
-    <th>min</th>
-    <th>#</th>
-  </tr>
-
-  {% for a,b in lineup_tuple %}
-  <tr>
-    <td>{{ a }}</td>
-    <td>{{ b }}</td>
-  </tr>
-  {% endfor %}
-
-</table>
 
 {% endblock %}

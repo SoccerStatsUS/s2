@@ -7,4 +7,9 @@ urlpatterns = patterns('graphs.views',
                            name='graphs_index'),
 
 
+                       url(r'^bias/$',
+                           'age_bias_graph',
+                           name='age_bias_graph'),
+
+
 )
