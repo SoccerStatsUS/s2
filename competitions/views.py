@@ -97,7 +97,7 @@ def competition_detail(request, competition_slug):
         'big_winners': competition.alltime_standings().order_by('-wins')[:50],
         
         }
-    return render_to_response("competitions/competition_detail.html",
+    return render_to_response("competitions/competition/detail.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -124,7 +124,7 @@ def competition_stats(request, competition_slug):
         'stats': stats,
         }
 
-    return render_to_response("competitions/competition_stats.html",
+    return render_to_response("competitions/competition/stats.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -137,7 +137,7 @@ def competition_games(request, competition_slug):
         'games': competition.game_set.order_by('season', 'date'),
 
         }
-    return render_to_response("competitions/competition_games.html",
+    return render_to_response("competitions/competition/games.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -196,7 +196,7 @@ def season_detail(request, competition_slug, season_slug):
         'awards': season.awarditem_set.order_by('award')
 
         }
-    return render_to_response("competitions/season_detail.html",
+    return render_to_response("competitions/season/detail.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -242,7 +242,7 @@ def season_stats(request, competition_slug, season_slug):
         'season': season,
         'stats': stats,
         }
-    return render_to_response("competitions/season_stats.html",
+    return render_to_response("competitions/season/stats.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -257,7 +257,7 @@ def season_games(request, competition_slug, season_slug):
         'games': competition.game_set.filter(season=season).order_by('date'),
 
         }
-    return render_to_response("competitions/season_games.html",
+    return render_to_response("competitions/season/games.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -288,7 +288,7 @@ def season_graphs(request, competition_slug, season_slug):
         'nationality_map': json.dumps(nationality_map),
 
         }
-    return render_to_response("competitions/season_graphs.html",
+    return render_to_response("competitions/season/graphs.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -307,7 +307,7 @@ def season_names(request):
         'names': names,
         }
     
-    return render_to_response("competitions/season_names.html",
+    return render_to_response("competitions/season/names.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -325,7 +325,7 @@ def season_list(request, season_slug):
         'seasons': seasons,
         }
 
-    return render_to_response("competitions/season_list.html",
+    return render_to_response("competitions/season/list.html",
                               context,
                               context_instance=RequestContext(request))
 
