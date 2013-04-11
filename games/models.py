@@ -182,6 +182,7 @@ class Game(models.Model):
     country = models.ForeignKey(Country, null=True)
     location = models.CharField(max_length=255)
 
+    video = models.CharField(max_length=255)
     notes = models.TextField()
 
     attendance = models.IntegerField(null=True, blank=True)

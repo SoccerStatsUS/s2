@@ -11,6 +11,11 @@
 
 <div id="right_column">
 
+{% if game.video %}
+<h4>Media</h4>
+{% include "templatetags/embed.html" with video=game.video %}
+{% endif %}
+
 
 {% if game.notes %}
 <h4>Notes</h4>
