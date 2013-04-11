@@ -102,7 +102,12 @@ def month_detail(request, year, month):
         previous_date = previous_game[0].date
         previous_date_tuple = (previous_date.year, previous_date.month, '')
 
-    next_game = Game.objects.filter(date__gte=datetime.date(year, month + 1, 1)).order_by('date')
+
+    if month == 12:
+        next_game = Game.objects.filter(date__gte=datetime.date(year+1, 1, 1)).order_by('date')
+    else:
+        next_game = Game.objects.filter(date__gte=datetime.date(year, month + 1, 1)).order_by('date')
+
     if next_game.exists():
         next_date = next_game[0].date
         next_date_tuple = (next_date.year, next_date.month, '')
