@@ -8,3 +8,5 @@ psql -U soccerstats -d soccerstats_dev -c "CREATE DATABASE soccerstats WITH TEMP
 sudo stop s2prod
 sudo start s2prod
 sudo /etc/init.d/memcached restart
+
+python manage.py rebuild_index
