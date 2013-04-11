@@ -19,6 +19,15 @@ def graphs_index(request):
 
 
 
+
+def map_graph(request):
+    context = {}
+    return render_to_response("graphs/map.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+
+
 def month_distribution(stat_qs):
     d = defaultdict(int)
     for birthdate, minutes in stat_qs.values_list('player__birthdate', 'minutes'):

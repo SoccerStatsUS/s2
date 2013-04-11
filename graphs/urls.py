@@ -12,4 +12,11 @@ urlpatterns = patterns('graphs.views',
                            name='age_bias_graph'),
 
 
+
+
+                       url(r'^map/$',
+                           'map_graph',
+                           name='map_graph'),
+
+
 )

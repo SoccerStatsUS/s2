@@ -1041,6 +1041,7 @@ def load_games():
                 'country_id': country_id,
                 'location': game.get('location', ''),
                 'notes': game.get('notes', ''),
+                'video': game.get('video', ''),
                 'attendance': attendance,
                 
                 'referee_id': referee_id,
