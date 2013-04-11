@@ -65,13 +65,17 @@ urlpatterns = patterns('teams.views',
 
 
 
-                       url(r'^(?P<team1_slug>[a-z0-9-]+)/v/(?P<team2_slug>[a-z0-9-]+)$',
+                       url(r'^(?P<team1_slug>[a-z0-9-]+)/v/(?P<team2_slug>[a-z0-9-]+)/$',
                            'team_versus',
                            name='team_versus'),
 
-                       url(r'^(?P<team_slug>[a-z0-9-]+)/c/(?P<competition_slug>[a-z0-9-]+)$',
+                       url(r'^(?P<team_slug>[a-z0-9-]+)/c/(?P<competition_slug>[a-z0-9-]+)/$',
                            'team_competition_detail',
                            name='team_competition_detail'),
+
+                       url(r'^(?P<team_slug>[a-z0-9-]+)/c/(?P<competition_slug>[a-z0-9-]+)/(?P<season_slug>[a-z0-9-]+)/$',
+                           'team_season_detail',
+                           name='team_season_detail'),
 
 
                        url(r'^ajax$',

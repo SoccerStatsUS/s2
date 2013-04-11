@@ -225,6 +225,46 @@ def team_competition_detail(request, team_slug, competition_slug):
                               context_instance=RequestContext(request)
                               )
 
+
+
+def cumulative_points(gameset, team):
+    points = 0
+    l = []
+    for g in gameset:
+        r = g.result(team)
+        if r == 'w':
+            points += 3
+        elif r == 't':
+            points += 1
+
+        l.append(points)
+
+    return l
+
+
+def team_season_detail(request, team_slug, competition_slug, season_slug):
+    team = get_object_or_404(Team, slug=team_slug)
+    competition = get_object_or_404(Competition, slug=competition_slug)
+    season = get_object_or_404(Season, competition=competition, slug=season_slug)
+    games = Game.objects.team_filter(team).filter(season=season)
+
+    points = cumulative_points(games, team)
+
+    context = {
+        'team': team,
+        #'competition': c,
+        'season': season,
+        'points': json.dumps(points),
+        'stats': Stat.objects.filter(team=team, season=season), # Wrong stat for the time being.
+        'games': games,
+        'result_json': json.dumps([e.result(team) for e in games]) # Probably need to format better than this.
+        }
+
+    return render_to_response("teams/season_detail.html",
+                              context,
+                              context_instance=RequestContext(request)
+                              )
+
         
 
 def random_team_detail(request):
