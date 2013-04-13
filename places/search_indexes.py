@@ -7,7 +7,7 @@ from places.models import Stadium
 class StadiumIndex(ModelSearchIndex):
 
     class Meta:
-        fields = ['name']
+        fields = ['name', 'city']
 
 site.register(Stadium, StadiumIndex)
     
