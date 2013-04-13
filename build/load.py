@@ -680,6 +680,8 @@ def load_news():
 def load_teams():
     print "loading teams"
 
+    cg = make_city_getter()
+
 
     names = set()
 
@@ -693,6 +695,12 @@ def load_teams():
                 print "founded out of range %s" % team
                 founded = None
             team['founded'] = founded
+
+
+        if team['city']:
+            team['city'] = cg(team['city'])
+        else:
+            team['city'] = None
 
         if type(team['dissolved']) == int:
             dissolved = datetime.datetime(team['dissolved'] + 1, 1, 1)
@@ -792,6 +800,9 @@ def load_standings():
     l = []
     for standing in soccer_db.standings.find().sort('team', 1):
         standing.pop('_id')
+        
+        if standing['season'] == None:
+            import pdb; pdb.set_trace()
 
         competition_id = competition_getter(standing['competition'])
         season_id = season_getter(standing['season'], competition_id)

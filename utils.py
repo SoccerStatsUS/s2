@@ -16,6 +16,27 @@ from bios.models import Bio
 
 
 
+def check_competition_teams(competition, country):
+    teams = set()
+    errant_teams = set()
+
+    for game in competition.game_set.all():
+        teams.add(game.team1)
+        teams.add(game.team2)
+
+    for standing in competition.standing_set.all():
+        teams.add(standing.team)
+
+    for team in teams:
+        if team.city and team.city.country and team.city.country != country:
+            errant_teams.add(team)
+
+    return errant_teams
+        
+    
+
+
+
 def search_for_data(o):
     for item in dir(o):
         if 'set' in item:

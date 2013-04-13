@@ -1,13 +1,13 @@
+from collections import defaultdict
+import datetime
+import os
+
 from django.contrib.contenttypes import generic
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
 
-
-from collections import defaultdict
-
-import datetime
-import os
+from places.models import City
 
 class AbstractTeamManager(models.Manager):
     """
@@ -149,9 +149,8 @@ class Team(models.Model):
     founded = models.DateField(null=True)
     dissolved = models.DateField(null=True)
 
-    # Not sure if we want this here.
-    # Some teams can have multiple cities?
-    city = models.CharField(max_length=255)
+    city = models.ForeignKey(City, null=True, blank=True)
+    #city = models.CharField(max_length=255)
 
     # Have some virtual teams from USMNT drafts.
     real = models.BooleanField(default=True)
