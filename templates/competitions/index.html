@@ -26,7 +26,7 @@
   <tr>
     <th>competition</th>
     <th>code</th>
-    <th>international</th>
+    {% comment %}<th>international</th>{% endcomment %}
     <th>level</th>
     <th>type</th>
     <th>scope</th>
@@ -44,7 +44,7 @@
   <tr>
     <td><a href="{% url competition_detail competition.slug %}">{{ competition.name }}</a></td>
     <td>{{ competition.code }}</td>
-    <td>{{ competition.international }}</td>
+    {% comment %}<td>{{ competition.international }}</td>{% endcomment %}
     {% datum_or_grey competition.level %}
     <td>{{ competition.ctype }}</td>
     <td>{{ competition.scope }}</td>
