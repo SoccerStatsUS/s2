@@ -16,6 +16,10 @@ from bios.models import Bio
 
 
 
+            
+
+
+
 def check_competition_teams(competition, country):
     teams = set()
     errant_teams = set()
