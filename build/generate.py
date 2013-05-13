@@ -135,7 +135,7 @@ def generate_season_data():
         minutes_with_age = minutes_with_age_dict[sid]
         age_minutes = age_minutes_dict[sid]
 
-        print 'Setting season %s' % sid        
+        #print 'Setting season %s' % sid        
         s = Season.objects.get(id=sid)
         s.minutes = minutes
         s.minutes_with_age = minutes_with_age

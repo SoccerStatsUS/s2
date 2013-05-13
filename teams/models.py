@@ -61,7 +61,7 @@ class AbstractTeamManager(models.Manager):
         if create:
 
             try:
-                print "Creating %s" % name
+                print "Creating team %s" % name
             except:
                 print "Created a team."
 

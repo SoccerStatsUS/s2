@@ -726,6 +726,8 @@ def load_games():
                 'linesman1_id': linesman1_id,
                 'linesman2_id': linesman2_id,
                 'linesman3_id': linesman3_id,
+
+                'merges': game['merges'],
                 })
 
 

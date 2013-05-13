@@ -148,7 +148,7 @@ class CompetitionManager(models.Manager):
         try:
             return Competition.objects.get(name=name)
         except:
-            print "Creating %s" % name
+            print "Creating competition %s" % name
             return Competition.objects.create(name=name)
 
 
