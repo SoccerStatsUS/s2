@@ -1,5 +1,10 @@
 {% if goal.player %}
-<td><a href="{% url person_detail goal.player.slug %}">{{ goal.player }}</a> {% if goal.assist_string %}({{ goal.assist_string }}){% endif %} 
+<td><a href="{% url person_detail goal.player.slug %}">{{ goal.player }}</a> 
+{% with assists=goal.assists%}
+{% if assists %}
+({% for assist in assists %}<a href="{% url person_detail assist.player.slug %}">{{ assist.player }}</a>{% if not forloop.last %}, {% endif %}{% endfor %})
+{% endif %} 
+{% endwith %}
 </td>
 {% else %}
 {% if goal.own_goal %}
