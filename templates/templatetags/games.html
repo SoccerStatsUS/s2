@@ -32,7 +32,7 @@
     {% endif %}
     <td><a href="{% url competition_detail game.competition.slug %}">{{ game.competition.abbreviation }}</a></td>
 
-    <td class="{{ game.competition.color_code }}-bg"></td>
+    <td><a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.season.name }}</a></td>
 
     {% if game.winner == game.team1 %}
     <td><a href="{% url team_detail game.team1.slug %}"><strong>{{ game.team1_original_name }}</strong></a></td>
@@ -68,14 +68,7 @@
 
     <td class="{{ game.goal_color_code }}-bg">{{ game.goal_count }}</td>
     <td class="{{ game.lineup_color_code }}-bg">{{ game.starter_count }}</td>
-
-    {% if game.source %}
-    <td class="green-bg"></td>
-    {% else %}
-    <td></td>
-    {% endif %}
-
-
+    <td>{{ game.merges }}</td>
 
   </tr>
   {% endfor %}

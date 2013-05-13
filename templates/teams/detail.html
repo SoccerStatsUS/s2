@@ -18,22 +18,39 @@
 
 
 
-<h2 class="headline">{{ team.name }}</h2>
-<h3>{{ team.city }}</h3>
-
 
 <div id="left_column">
 
+
+<h2>{{ team.name }}</h2>
+
+
+
+{% if team.get_image %}
+<img id="team_logo" height="200" src="{{ team.get_image }}">
+{% endif %}
+
+
+
 {% if team.teamalias_set.exists %}
 <div class="alternate-name">
-Alternate names: {% for alias in team.teamalias_set.all %}{{ alias.name }} 
-{% if alias.start.year == alias.end.year %}
-({{ alias.start.year }})
-{% else %}
-({{ alias.start.year }} - {{ alias.end.year }})
+Alternate names: 
+{% for alias in team.teamalias_set.all %}
+{% include "templatetags/team_alias.html" %}
+{% endfor %}
+</div>
 {% endif %}
-{% if not forloop.last %}, {% endif %}{% endfor %}</div>
+
+{% if team.city %}
+<h3><a href="{% url city_detail team.city.slug %}">{{ team.city }}</a></h3>
 {% endif %}
+
+{% if team.founded %}
+<h3>{{ team.founded }}</h3>
+{% endif %}
+
+
+
 
 
 
@@ -180,12 +197,10 @@ Alternate names: {% for alias in team.teamalias_set.all %}{{ alias.name }}
 
 </div>
 
+
+
 <div id="right_column">
 
-
-{% if team.get_image %}
-<img id="team_logo" height="200" src="{{ team.get_image }}">
-{% endif %}
 
 {% if team.awards.exists %}
 <h3>Honors</h3>
