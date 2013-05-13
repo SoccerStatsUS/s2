@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<table>
+  
+  {% for game in games %}
+  <tr>
+    <td><a href="{{ game.video }}">{{ game }}</a></td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

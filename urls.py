@@ -59,6 +59,7 @@ urlpatterns = patterns('',
                        url(r'^stats/', include('stats.urls')),
                        url(r'^teams/', include('teams.urls')),
                        url(r'^tools/', include('tools.urls')),
+                       url(r'^videos/', include('videos.urls')),
 
                        # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
                        # to INSTALLED_APPS to enable admin documentation:
