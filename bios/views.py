@@ -1,11 +1,12 @@
 from collections import OrderedDict, Counter
 
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
 from bios.models import Bio
+from games.models import Game
 from stats.models import Stat, CareerStat
 
 from bios.forms import BioAppearanceForm
@@ -185,6 +186,26 @@ def person_detail_games(request, slug):
                               context,
                               context_instance=RequestContext(request)
                               )   
+
+
+
+
+def person_detail_referee_games(request, slug):
+    bio = get_object_or_404(Bio, slug=slug)
+    
+    query = (Q(referee=bio) | Q(linesman1=bio) | Q(linesman1=bio) | Q(linesman1=bio))
+    games = Game.objects.filter(query)
+    form = BioAppearanceForm(bio)
+
+    context = {
+        'form': form,
+        'games': games,
+        }
+    return render_to_response("bios/detail_ref_games.html",
+                              context,
+                              context_instance=RequestContext(request)
+                              )   
+
 
 def person_detail_goals(request, slug):
     bio = get_object_or_404(Bio, slug=slug)
