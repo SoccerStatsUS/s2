@@ -726,6 +726,8 @@ def load_games():
                 'linesman1_id': linesman1_id,
                 'linesman2_id': linesman2_id,
                 'linesman3_id': linesman3_id,
+
+                'merges': game['merges'],
                 })
 
 
@@ -854,10 +856,13 @@ def load_assists():
             print "Cannot create assists for %s" % goal
             return []
 
+        seen = set()
+
         for assister in goal['assists']:
             assist_ids = [bio_getter(e) for e in goal['assists']]
             for i, assist_id in enumerate(assist_ids, start=1):
-                if assist_id:
+                if assist_id and assist_id not in seen:
+                    seen.add(assist_id)
                     assists.append({
                         'player_id': assist_id,
                         'goal_id': goal_id,

@@ -197,6 +197,9 @@ class Game(models.Model):
     objects = GameManager()
 
 
+    merges = models.IntegerField()
+
+
 
     class Meta:
         ordering = ('-date',)

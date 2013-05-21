@@ -29,6 +29,7 @@ INTERNATIONAL = [
 CODE = [
     ('soccer', 'soccer'),
     ('indoor', 'indoor'),
+    ('women', 'women'),
     ('', ''),
     ]
 

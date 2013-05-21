@@ -17,24 +17,33 @@
 {% block content %}
 
 
-
-<h2 class="headline">{{ team.name }}</h2>
-<h3>{{ team.city }}</h3>
-
-
 <div id="left_column">
+
+
+<h2>{{ team.name }}</h2>
 
 {% if team.teamalias_set.exists %}
 <div class="alternate-name">
-Alternate names: {% for alias in team.teamalias_set.all %}{{ alias.name }} 
-{% if alias.start.year == alias.end.year %}
-({{ alias.start.year }})
-{% else %}
-({{ alias.start.year }} - {{ alias.end.year }})
-{% endif %}
-{% if not forloop.last %}, {% endif %}{% endfor %}</div>
+Alternate names: 
+{% for alias in team.teamalias_set.all %}
+{% include "templatetags/team_alias.html" %}
+{% endfor %}
+</div>
 {% endif %}
 
+{% if team.city %}
+<h3><a href="{% url city_detail team.city.slug %}">{{ team.city }}</a></h3>
+{% endif %}
+
+{% if team.founded %}
+<h3>{{ team.founded }}</h3>
+{% endif %}
+
+
+
+{% if team.get_image %}
+<img id="team_logo" height="200" src="{{ team.get_image }}">
+{% endif %}
 
 
 {% if current_staff %}
@@ -79,113 +88,22 @@ Alternate names: {% for alias in team.teamalias_set.all %}{{ alias.name }}
 </table>
 {% endif %}
 
-{% if competition_standings.exists %}
-<h3>Standings</h3>
-
-<ul id="tabs"></ul>
-
-<div id="tab_wrapper">
-
-<div tab="competition">
-<table>
-
-<tr>
-  <th>competition</th>
-  <th>W</th>
-  <th>T</th>
-  <th>L</th>
-  <th>win %</th>
-</tr>
-
-
-{% for standing in competition_standings %}
-<tr>
-  {% if standing.competition == None %}
-  <td>All-time</td>
-  {% else %}
-  <td><a href="{% url competition_detail standing.competition.slug %}">{{ standing.competition }}</a></td>
-  {% endif %}
-  <td>{{ standing.wins }}</td>
-  {% datum_or_grey standing.ties %}
-  <td>{{ standing.losses }}</td>
-  <td>{{ standing.win_percentage_100|floatformat }}%</td>
-</tr>
-{% endfor %}
-</table>
-</div>
-
-<div tab="league">
-<table>
-
-<tr>
-  <th>comp.</th>
-  <th>league</th>
-  <th>W</th>
-  <th>T</th>
-  <th>L</th>
-  <th>win %</th>
-</tr>
-
-
-{% for standing in league_standings %}
-<tr>
-  <td><a href="{% url competition_detail standing.competition.slug %}">{{ standing.competition }}</a></td>
-  <td><a href="{% url season_detail standing.competition.slug standing.season.slug %}">{{ standing.season.name }}</a></td>
-  <td>{{ standing.wins }}</td>
-  {% datum_or_grey standing.ties %}
-  <td>{{ standing.losses }}</td>
-  <td>{{ standing.win_percentage_100|floatformat }}%</td>
-</tr>
-{% endfor %}
-</table>
-</div>
-{% endif %}
-
-</div>
-
-
-
-<div class="left_half">
-{% if goal_leaders %}
-<h3>Goal leaders </h3>
-<table>
-{% for e in goal_leaders %}
-<tr>
-  <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
-  <td>{{ e.goals }}</td>
-</tr>
-{% endfor %}
-</table>
-{% endif %}
-</div>
-
-<div class="right_half">
-
-{% if game_leaders %}
-<h3>Game leaders</h3>
-<table>
-{% for e in game_leaders %}
-<tr>
-  <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
-  <td>{{ e.games_played }}</td>
-</tr>
-{% endfor %}
-</table>
-{% endif %}
-</div>
 
 {% if game_leaders.exists %}
 <h3><a href="{% url team_stats team.slug %}">All-time {{ team }} stats</a></h3>
 {% endif %}
 
+
+
+
+
+
 </div>
+
+
 
 <div id="right_column">
 
-
-{% if team.get_image %}
-<img id="team_logo" height="200" src="{{ team.get_image }}">
-{% endif %}
 
 {% if team.awards.exists %}
 <h3>Honors</h3>

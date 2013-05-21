@@ -39,6 +39,10 @@ urlpatterns = patterns('bios.views',
                            'person_detail_games',
                            name='person_detail_games'),
 
+                       url(r'^(?P<slug>[a-z0-9-]+)/ref-games/$',
+                           'person_detail_referee_games',
+                           name='person_detail_referee_games'),
+
 
 
                        url(r'^(?P<slug>[a-z0-9-]+)/stats/$',

@@ -45,7 +45,27 @@ def competition_index(request):
             # No changes have been made; use standard competition filter.
             # is_valid() method isn't working because all fields are optional.
             if competitions.count() == Competition.objects.count():
-                competitions = Competition.objects.filter(level=1).filter(code='soccer')
+                #competitions = Competition.objects.filter(level=1)
+                slugs = ['american-league-of-professional-football',
+                         'american-soccer-league-1921-1933',
+                         'concacaf-champions-league',
+                         'fifa-club-world-cup',
+                         'fifa-world-cup',
+                         'major-league-soccer',
+                         'north-american-soccer-league',
+                         'liga-mx',
+                         'copa-america',
+                         'mls-cup-playoffs',
+                         'copa-libertadores',
+                         'us-open-cup',
+                         'concacaf-championship',
+                         'gold-cup',
+                         'national-womens-soccer-league',
+                         'olympic-games',
+                         'womens-united-soccer-association',
+                         'womens-professional-soccer',
+                         ]
+                competitions = Competition.objects.filter(slug__in=slugs)
 
             #international = form.cleaned_data['international']
             #if international is not None:

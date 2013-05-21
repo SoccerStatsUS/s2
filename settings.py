@@ -204,6 +204,7 @@ INSTALLED_APPS = (
     'stats',
     'teams',
     'tools',
+    'videos',
 
     'haystack',
     'django_extensions',
