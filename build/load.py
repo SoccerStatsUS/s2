@@ -24,6 +24,8 @@ from utils import insert_sql, timer
 
 from getters import *
 
+from guppy import hpy
+
 connection = pymongo.Connection()
 soccer_db = connection.soccer
 
@@ -46,11 +48,17 @@ def load():
     # Georgraphical data.
     #load_geo()
 
+    print hpy().heap()
+
     generate_mongo_indexes()
+
+    print hpy().heap()
 
     # Non-game data.
     load_sources()
     load_places()
+
+    print hpy().heap()
 
 
     # Simple sport data
@@ -63,21 +71,30 @@ def load():
 
     load_stadiums()
 
+
+
     # List data
     # Put this before standings?
     load_awards()
     load_drafts()
     load_positions()
 
+    print hpy().heap()
+
     # Complex game data
     load_games()
+
+    print hpy().heap()
 
     load_goals()
     load_assists()
     load_lineups()
 
+    print hpy().heap()
+
     # Consider loading stats last so that we can generate 
     load_stats()
+    print hpy().heap()
 
     # Analysis data
     #load_news()
@@ -348,63 +365,50 @@ def load_teams():
     print "loading teams"
 
     cg = make_city_getter()
-
-
     names = set()
 
     for team in soccer_db.teams.find():
         team.pop('_id')
+
+        founded = city = dissolved =None
+
+        slug = slugify(team['name'])
+        short_name = team.get('short_name') or team['name']
 
         if type(team['founded']) == int:
             try:
                 founded = datetime.datetime(team['founded'], 1, 1)
             except:
                 print "founded out of range %s" % team
-                founded = None
-            team['founded'] = founded
-
 
         if team['city']:
-            team['city'] = cg(team['city'])
-        else:
-            team['city'] = None
+            city = cg(team['city'])
 
         if type(team['dissolved']) == int:
             dissolved = datetime.datetime(team['dissolved'] + 1, 1, 1)
             dissolved = dissolved - datetime.timedelta(days=1)
-            team['dissolved'] = dissolved
 
-        team['slug'] = slugify(team['name'])
-
-        team['short_name'] = team.get('short_name') or team['name']
-
-
-        if 'abbreviation' in team:
-            team.pop('abbreviation')
-
-        if 'parent' in team:
-            team.pop('parent')
-
-        if 'next' in team:
-            team.pop('next')
-        if 'country' in team:
-            team.pop('country')
-            
-
-
-        if team['name'] in names:
+        if team['name'] not in names:
+            names.add(team['name'])
+            Team.objects.create(**{
+                    'name': team['name'],
+                    'short_name': short_name,
+                    'slug': slug,
+                    'founded': founded,
+                    'dissolved': dissolved,
+                    'city': city,
+                    })
+        else:
             print "duplicate team name"
             print team
-        else:
-            names.add(team['name'])
-            Team.objects.create(**team)
+
 
     for alias in soccer_db.name_maps.find():
         alias.pop('_id')
-        team = Team.objects.find(name=alias['from_name'], create=True)
+        t = Team.objects.find(name=alias['from_name'], create=True)
 
         TeamAlias.objects.create(**{
-                'team': team,
+                'team': t,
                 'name': alias['to_name'],
                 'start': alias['start'],
                 'end': alias['end'],

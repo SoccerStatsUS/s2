@@ -291,9 +291,6 @@ class Game(models.Model):
         return ['red', 'yellow', 'green'][self.goal_quality()]
 
 
-
-
-
     def score(self):
         """Returns a score string."""
         return "%s - %s" % (self.team1_score, self.team2_score)
@@ -396,6 +393,16 @@ class Game(models.Model):
             m = max(t1c, t2c)
             l1, l2 = pad_list(list(t1l), m), pad_list(list(t2l), m)
             return zip(l1, l2)
+
+
+    def goal_string(self):
+        from goals.models import Goal
+        goals = Goal.objects.filter(game=self).order_by('minute', 'team')
+        fmt = lambda g: "%s: %s %s" % (g.team, g.player, g.minute) if g.minute else "%s: %s" % (g.team, g.player)
+        if goals.exists():
+            return "\n".join([fmt(goal) for goal in goals])
+        else:
+            return ""
 
 
     # These should hang off of Team, not Game.
