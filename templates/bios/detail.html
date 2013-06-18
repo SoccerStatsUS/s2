@@ -49,20 +49,12 @@
 
 {% include "bios/detail_stats.html" %}
 
-
-
-{% if recent_appearances %}
+{% if recent_game_stats %}
 <h3>Recent games</h3>
 <p><a href="{% url person_detail_games bio.slug %}">(all {{ bio }} games)</a></p>
-{% include "templatetags/appearances/list.html" with appearances=recent_appearances %}
+{% include "templatetags/stats/game_list.html" with stats=recent_game_stats %}
 {% endif %}
 
-
-{% if recent_goals %}
-<h3>Recent goals</h3>
-{# <p><a href="{% url person_detail_games bio.slug %}">(all {{ bio }} games)</a></p> #}
-{% include "templatetags/appearances/goal.html" with goals=recent_goals %}
-{% endif %}
 
 {% if positions %}
 <h3>Positions</h3>

@@ -1,6 +1,8 @@
+from collections import Counter
 import datetime
 import os
 import pymongo
+import sys
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'build_settings'
 
@@ -32,10 +34,7 @@ soccer_db = connection.soccer
 def generate_mongo_indexes():
     soccer_db.games.ensure_index("date")
 
-
-
-def load():
-
+def load1():
     # Watch out for contingencies here.
     # Places depend only on other places.
     # Bio depends on places.
@@ -48,17 +47,14 @@ def load():
     # Georgraphical data.
     #load_geo()
 
-    print hpy().heap()
 
     generate_mongo_indexes()
 
-    print hpy().heap()
+
 
     # Non-game data.
     load_sources()
     load_places()
-
-    print hpy().heap()
 
 
     # Simple sport data
@@ -79,18 +75,27 @@ def load():
     load_drafts()
     load_positions()
 
-    print hpy().heap()
+
 
     # Complex game data
     load_games()
 
-    print hpy().heap()
+
 
     load_goals()
     load_assists()
+
+
+def load2():
+
     load_lineups()
 
-    print hpy().heap()
+
+def load3():
+
+    load_game_stats()
+
+def load4():
 
     # Consider loading stats last so that we can generate 
     load_stats()
@@ -672,7 +677,8 @@ def load_games():
         neutral = game.get('neutral') or False
         attendance = game.get('attendance')
 
-        r = game.get('round') or ''
+        rnd = game.get('round') or ''
+        group = game.get('group') or ''
 
         # There are lots of problems with the NASL games, 
         # And probably ASL as well. Need to spend a couple
@@ -713,7 +719,8 @@ def load_games():
                 'minutes': minutes,
                 'competition_id': competition_id,
                 'season_id': season_id,
-                'round': r,
+                'round': rnd,
+                'group': group,
 
                 'home_team_id': home_team_id,
                 'neutral': neutral,
@@ -886,6 +893,108 @@ def load_assists():
     insert_sql('goals_assist', assists)
 
 
+@transaction.commit_on_success
+def load_game_stats():
+    print "\nloading game stats\n"
+
+    team_getter = make_team_getter()
+    bio_getter = make_bio_getter()
+    competition_getter = make_competition_getter()
+    season_getter = make_season_getter()
+    source_getter = make_source_getter()
+    game_getter = make_game_getter()
+    game_result_getter = make_game_result_getter()
+
+    birthdate_dict = dict(Bio.objects.exclude(birthdate=None).values_list("id", "birthdate"))
+
+    l = []    
+    i = 0
+    for i, stat in enumerate(soccer_db.gstats.find(timeout=False)): # no timeout because this query takes forever.
+        if i % 5000 == 0:
+            print i
+
+        if stat['player'] == '':
+            #import pdb; pdb.set_trace()
+            continue
+
+        
+        try:
+            bio_id = bio_getter(stat['player'])
+        except:
+            continue
+
+        if bio_id is None:
+            continue
+
+
+        bd = birthdate_dict.get(bio_id)
+        if stat['date'] and bd:
+            # Coerce bd from datetime.date to datetime.time
+            bdt = datetime.datetime.combine(bd, datetime.time())
+            age = (stat['date'] - bdt).days / 365.25
+        else:
+            age = None
+
+        team_id = team_getter(stat['team'])
+        game_id = game_getter(team_id, stat['date'])
+        result = game_result_getter(team_id, stat['date'])
+
+        if game_id is None or team_id is None:
+            continue
+
+        #competition_id = competition_getter(stat['competition'])
+        #season_id = season_getter(stat['season'], competition_id)
+
+        #if stat.get('source'):
+        #    source_id = source_getter(stat['source'])
+
+        #else:
+        #    source_id = None
+
+        def c2i(key):
+            # Coerce an integer
+
+            if key in stat and stat[key] != None:
+                if type(stat[key]) != int:
+                    import pdb; pdb.set_trace()
+                return stat[key]
+
+            #elif key in stat:
+            #    import pdb; pdb.set_trace()
+
+            elif key in stat and stat[key] == None:
+                return 0
+
+            else:
+                return None
+
+        l.append({
+            'player_id': bio_id,
+            'team_id': team_id,
+            'game_id': game_id,
+            #'competition_id': competition_id,
+            #'season_id': season_id,
+            'games_started': c2i('games_started'),
+            'games_played': c2i('games_played'),
+            'minutes': c2i('minutes'),
+            'goals': c2i('goals'),
+            'assists': c2i('assists'),
+            'shots': c2i('shots'),
+            'shots_on_goal': c2i('shots_on_goal'),
+            'fouls_committed': c2i('fouls_committed'),
+            'fouls_suffered': c2i('fouls_suffered'),
+            'yellow_cards': c2i('yellow_cards'),
+            'red_cards': c2i('red_cards'),
+            #'source_id': source_id,
+            'age': age,
+            'result': result,
+            })
+
+    print i
+
+
+    insert_sql("stats_gamestat", l)
+
 
 
 @timer
@@ -996,6 +1105,7 @@ def load_lineups():
             print "Cannot create %s" % a
             return {}
 
+        """
         bd = birthdate_dict.get(player_id)
         if a['date'] and bd:
             # Coerce bd from datetime.date to datetime.time
@@ -1003,6 +1113,7 @@ def load_lineups():
             age = (a['date'] - bdt).days / 365.25
         else:
             age = None
+            """
 
         if a['on'] is not None and a['off'] is not None:
             try:
@@ -1013,8 +1124,6 @@ def load_lineups():
         else:
             minutes = None
 
-        result = a.get('result') or ''
-
 
         return {
             'team_id': team_id,
@@ -1023,11 +1132,8 @@ def load_lineups():
             'on': a['on'],
             'off': a['off'],
             #'team_original_name': '',
-            'age': age,
+            #'age': age,
             'minutes': minutes,
-            'goals_for': a['goals_for'],
-            'goals_against': a['goals_against'],
-            'result': result,
             'order': a.get('order', None),
             }
 
@@ -1044,6 +1150,20 @@ def load_lineups():
 
     print i
 
-    print "Creating appearances"
+    print "Creating lineups"
 
     insert_sql('lineups_appearance', l)
+
+
+if __name__ == "__main__":
+    if sys.argv[1] == '1':
+        load1()
+    elif sys.argv[1] == '2':
+        load2()
+    elif sys.argv[1] == '3':
+        load3()
+    elif sys.argv[1] == '4':
+        load4()
+
+    else:
+        raise

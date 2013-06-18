@@ -284,7 +284,7 @@ def make_game_getter():
     Retrieve competitions easily.
     """
 
-    game_team_map = Game.objects.game_dict()
+    game_team_map = Game.objects.id_dict()
 
     def getter(team_id, dt):
 
@@ -307,6 +307,40 @@ def make_game_getter():
         return gid
 
     return getter
+
+
+
+
+def make_game_result_getter():
+    """
+    Retrieve competitions easily.
+    """
+
+    result_map = Game.objects.result_dict()
+
+    def getter(team_id, dt):
+
+        # This is becoming a larger and larger problem.
+        # Going to have to reconsider how we label games because of dateless games.
+
+        if dt is None:
+            print "Failed to find result for team %s on %s" % (team_id, dt)
+            gid = None
+        else:
+            # Not doing full game times yet...
+            dx = datetime.date(dt.year, dt.month, dt.day) # Avoid datetime.date/datetime.datetime mismatch.
+            key = (team_id, dx)
+            if key in result_map:
+                gid = result_map[key]
+            else:
+                print "Failed to find game for team %s on %s" % (team_id, dx)
+                gid = None
+        
+        return gid
+
+    return getter
+
+
 
 
 def make_goal_getter():

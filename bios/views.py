@@ -7,38 +7,35 @@ from django.views.decorators.cache import cache_page
 
 from bios.models import Bio
 from games.models import Game
-from stats.models import Stat, CareerStat
+from stats.models import Stat, CareerStat, GameStat
 
-from bios.forms import BioAppearanceForm
-
-
+from bios.forms import BioGameStatForm
 
 class AppearanceStat(object):
-    def __init__(self, player, appearances):
+    def __init__(self, player, game_stats):
         from goals.models import Goal, Assist
 
         self.player = player
 
-        self.goals_for = appearances.exclude(goals_for=None).aggregate(Sum('goals_for'))['goals_for__sum']
-        self.goals_against = appearances.exclude(goals_against=None).aggregate(Sum('goals_against'))['goals_against__sum']
-        results = [e[0] for e in appearances.filter(result__in='wlt').values_list('result')]
+        #self.goals_for = game_stats.exclude(goals_for=None).aggregate(Sum('goals_for'))['goals_for__sum']
+        #self.goals_against = game_statsexclude(goals_against=None).aggregate(Sum('goals_against'))['goals_against__sum']
+        results = [e[0] for e in game_stats.filter(result__in='wlt').values_list('result')]
         c = Counter(results)
         self.wins, self.ties, self.losses = c['w'], c['t'], c['l']
-        self.games = appearances.count()
+        self.games = game_stats.count()
 
         if self.games:
             self.win_percentage_100 =  (self.wins + .5 * self.ties) / self.games
         else:
             self.win_percentage_100 = 0
 
-        game_ids = appearances.values_list('game')
+        #game_ids = game_stats.values_list('game')
+        self.games_played = game_stats.filter(games_played=1).count()
+        self.games_started = game_stats.filter(games_started=1).count()
 
-        self.games_played = len(game_ids)
-        self.games_started = appearances.filter(on=0).count()
-
-        self.minutes = appearances.exclude(minutes=None).aggregate(Sum('minutes'))['minutes__sum']
-        self.goals = Goal.objects.filter(player=self.player, game__id__in=game_ids).count()
-        self.assists = Assist.objects.filter(player=self.player, goal__game__id__in=game_ids).count()
+        self.minutes = game_stats.exclude(minutes=None).aggregate(Sum('minutes'))['minutes__sum']
+        self.goals = game_stats.exclude(goals=None).aggregate(Sum('goals'))['goals__sum']
+        self.assists = game_stats.exclude(assists=None).aggregate(Sum('assists'))['assists__sum'] 
 
 
 
@@ -122,11 +119,11 @@ def person_detail_abstract(request, bio):
     competition_stats = bio.competition_stats().order_by('-games_played')
     team_stats = bio.team_stats().order_by('-games_played')
     league_stats = Stat.objects.filter(player=bio).filter(competition__ctype='League').order_by('season')
+    league_stats = Stat.objects.filter(player=bio).order_by('season')
     
     context = {
         "bio": bio,
-        'recent_appearances': bio.appearance_set.all()[:10],
-        'recent_goals': bio.goal_set.all()[:10],
+        'recent_game_stats': bio.gamestat_set.all()[:10],
         'league_stats': league_stats,
         'competition_stats': competition_stats,
         'career_stat': bio.career_stat(),
@@ -155,32 +152,32 @@ def random_person_detail(request):
 
 def person_detail_games(request, slug):
     bio = get_object_or_404(Bio, slug=slug)
-    appearances = bio.appearance_set.all()
+    game_stats = bio.gamestat_set.order_by('game')
     
     if request.method == 'GET':
-        form = BioAppearanceForm(bio, request.GET)
+        form = BioGameStatForm(bio, request.GET)
         if form.is_valid():
             if form.cleaned_data['result']:
-                appearances = appearances.filter(result=form.cleaned_data['result'])
+                game_stats = game_stats.filter(result=form.cleaned_data['result'])
 
             if form.cleaned_data['team']:
-                appearances = appearances.filter(team=form.cleaned_data['team'])
+                game_stats = game_stats.filter(team=form.cleaned_data['team'])
 
             if form.cleaned_data['competition']:
-                appearances = appearances.filter(game__competition=form.cleaned_data['competition'])
+                game_stats = game_stats.filter(game__competition=form.cleaned_data['competition'])
 
             if form.cleaned_data['starter']:
-                appearances = appearances.filter(on=0)
+                game_stats = game_stats.filter(games_started=1)
 
 
     else:
-        form = BioAppearanceForm(bio)
+        form = BioGameStatForm(bio)
 
     
     context = {
         'form': form,
-        'appearances': appearances,
-        'stat': AppearanceStat(bio, appearances),
+        'game_stats': game_stats,
+        'stat': AppearanceStat(bio, game_stats),
         }
     return render_to_response("bios/detail_games.html",
                               context,

@@ -67,7 +67,7 @@ class GameManager(models.Manager):
             return None
 
 
-    def game_dict(self):
+    def id_dict(self):
         """
         Returns a dict mapping a team/date combination to a game id.
         """
@@ -78,6 +78,19 @@ class GameManager(models.Manager):
             key2 = (e.team2.id, e.date)
             d[key2] = e.id
         return d
+
+    def result_dict(self):
+        """
+        Returns a dict mapping a team/date combination to a game id.
+        """
+        d = {}
+        for e in self.get_query_set():
+            key = (e.team1.id, e.date)
+            d[key] = e.team1_result
+            key2 = (e.team2.id, e.date)
+            d[key2] = e.team2_result
+        return d
+
 
     def team_filter(self, team1, team2=None):
         """
@@ -131,7 +144,7 @@ class Game(models.Model):
 
     # Secondary data.
     round = models.CharField(max_length=255)
-
+    group = models.CharField(max_length=255)
 
     starter_count = models.IntegerField(null=True, blank=True)
     goal_count = models.IntegerField(null=True, blank=True)
@@ -158,7 +171,9 @@ class Game(models.Model):
 
     # Ambiguous game results.
     result_unknown = models.BooleanField(default=False)
-    played = models.BooleanField(default=True)
+
+    played = models.BooleanField(default=True) # Should be cancelled - indicate that we KNOW a game was not played.
+
     # Was the game forfeited?
     forfeit = models.BooleanField(default=False)
 
@@ -196,10 +211,7 @@ class Game(models.Model):
 
     objects = GameManager()
 
-
     merges = models.IntegerField()
-
-
 
     class Meta:
         ordering = ('-date',)
@@ -219,6 +231,14 @@ class Game(models.Model):
 
     def team2_next_game(self):
         return self.team2.next_game(self)
+
+
+    def season_previous_game(self):
+        return self.season.previous_game(self)
+
+    def season_next_game(self):
+        return self.season.next_game(self)
+
 
 
     def away_team(self):

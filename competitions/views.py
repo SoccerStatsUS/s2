@@ -109,12 +109,14 @@ def competition_detail(request, competition_slug):
     else:
         sx = stats.exclude(games_played=None, goals=None).filter(competition=competition).order_by('-games_played', '-goals')[:25]
 
+    top_attendance_games = games.exclude(attendance=None).order_by('-attendance')[:10]
+
     context = {
         'competition': competition,
         'stats': sx,
         'games': games.select_related()[:25],
-        'top_attendance_games': games.exclude(attendance=None).order_by('-attendance')[:10],
-        'worst_attendance_games': games.exclude(attendance=None).order_by('attendance')[:10],
+        'top_attendance_games': top_attendance_games,
+        'worst_attendance_games': games.exclude(attendance=None).exclude(id__in=top_attendance_games.values_list('id', flat=True)).order_by('attendance')[:10],
         'big_winners': competition.alltime_standings().order_by('-wins')[:50],
         
         }
@@ -201,21 +203,22 @@ def season_detail(request, competition_slug, season_slug):
     goal_leaders = stats.exclude(goals=None).order_by('-goals')
     game_leaders = stats.exclude(games_played=None).order_by('-games_played')
 
+    top_attendance_games = games.exclude(attendance=None).order_by('-attendance')[:10]
+
     context = {
         'season': season,
         'standings': season.standing_set.filter(final=True),
         'stats': stats.exists(),
         #'total_minutes': total_minutes,
         #'known_minutes': known_minutes,
+        #'nation_list': nation_list,
         'goal_leaders': goal_leaders[:10],
         'game_leaders': game_leaders[:10],
-        #'nation_list': nation_list,
         'average_attendance': average_attendance,
         'attendance_game_count': attendance_game_count,
-        'top_attendance_games': games.exclude(attendance=None).order_by('-attendance')[:10],
-        'worst_attendance_games': games.exclude(attendance=None).order_by('attendance')[:10],
+        'top_attendance_games': top_attendance_games,
+        'worst_attendance_games': games.exclude(attendance=None).exclude(id__in=top_attendance_games.values_list('id', flat=True)).order_by('attendance')[:10],
         'awards': season.awarditem_set.order_by('award')
-
         }
     return render_to_response("competitions/season/detail.html",
                               context,

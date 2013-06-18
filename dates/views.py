@@ -37,7 +37,7 @@ def year_detail(request, year):
     Summarize the events of the year.
     """
     year = int(year)
-    games = Game.objects.filter(date__year=int(year)).order_by('date')
+    games = Game.objects.filter(date__year=int(year)).order_by('date', 'season')
     births = Bio.objects.filter(birthdate__year=year).order_by('birthdate')
     deaths = Bio.objects.filter(deathdate__year=year).order_by('deathdate')
     hires = Position.objects.filter(start__year=year)
@@ -86,7 +86,7 @@ def month_detail(request, year, month):
         return year_detail(request, year)
 
     year, month = int(year), int(month)
-    games = Game.objects.filter(date__year=year, date__month=month).order_by('date')
+    games = Game.objects.filter(date__year=year, date__month=month).order_by('date', 'season')
     births = Bio.objects.filter(birthdate__year=year, birthdate__month=month).order_by('birthdate')
     deaths = Bio.objects.filter(deathdate__year=year, deathdate__month=month).order_by('deathdate')
     hires = Position.objects.filter(start__year=year, start__month=month)
@@ -140,7 +140,7 @@ def date_detail(request, year, month, day):
         return month_detail(request, year, month)
 
     d = datetime.date(int(year), int(month), int(day))
-    games = Game.objects.filter(date=d).order_by('date')
+    games = Game.objects.filter(date=d).order_by('date', 'season')
     births = Bio.objects.filter(birthdate=d).order_by('birthdate')
     deaths = Bio.objects.filter(deathdate=d).order_by('deathdate')
     hires = Position.objects.filter(start=d)

@@ -23,21 +23,18 @@ class Appearance(models.Model):
     on = models.IntegerField(null=True)
     off = models.IntegerField(null=True)
 
-    result = models.CharField(max_length=5)
-    goals_for = models.IntegerField(null=True)
-    goals_against = models.IntegerField(null=True)
-    
+    #result = models.CharField(max_length=5)
+    #goals_for = models.IntegerField(null=True)
+    #goals_against = models.IntegerField(null=True)
+
     # Default should be integer.
 
-    age = models.FloatField(null=True) # Age in years at the time of game.
+    #age = models.FloatField(null=True) # Age in years at the time of game.
     minutes = models.IntegerField(null=True)
 
     class Meta:
         ordering = ('game', 'order', 'on', '-id' )
         pass
-
-
-
 
     def opponent(self):
         if self.team == self.game.team1:
@@ -57,14 +54,6 @@ class Appearance(models.Model):
         else:
             return self.game.team1_original_name
 
-    """
-    @property
-    def minutes(self):
-        try:
-            return int(self.off) - int(self.on)
-        except:
-            return None
-            """
 
 
     @property
@@ -76,30 +65,11 @@ class Appearance(models.Model):
     def assists(self):
         return None
 
-    #@property
-    #def result(self):
-    #    return self.game.result(self.team)
-
     def score_or_result(self):
         if self.team == self.game.team1:
             return self.game.score_or_result()
         else:
             return self.game.reverse_score_or_result()
-
-    """
-    @property
-    def goals_for(self):
-        team_goals = Goal.objects.filter(game=self.game, team=self.team, minute__gte=self.on, minute__lte=self.off).count()
-        return team_goals
-
-
-    @property
-    def goals_against(self):
-        opponent = self.game.opponent(self.team)
-        opponent_goals = Goal.objects.filter(game=self.game, team=opponent, minute__gte=self.on, minute__lte=self.off).count()
-        return opponent_goals
-    """
-
 
     @property
     def goal_differential(self):
@@ -107,21 +77,6 @@ class Appearance(models.Model):
             return self.goals_for - self.goals_against
         except:
             return None
-
-
-
-    
-def set_appearance_age(sender, instance, created, **kwargs):
-    if not instance.age and instance.player.birthdate:
-        instance.age = (instance.game.date - instance.player.birthdate).days
-        try:
-            instance.save()
-        except:
-            import pdb; pdb.set_trace()
-            x=5
-            
-
-post_save.connect(set_appearance_age, sender=Appearance)
 
 
 """
@@ -137,8 +92,6 @@ class AppearanceMinute(object):
     Any cool events?
     """
 
-
-    
     #appearance = models.ForeignKey(Appearance)
     #gameMinute = models.ForeignKey(GameMinute)
     #minute = models.IntegerField()

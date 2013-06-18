@@ -57,13 +57,17 @@ class AbstractStat(StandingStat):
     #position = models.CharField(max_length=255, null=True)
     # Position should probably be a ForeignKey to Position.
 
-    minutes = models.IntegerField(null=True, blank=True)
+
     games_started = models.IntegerField(null=True, blank=True)
     games_played = models.IntegerField(null=True, blank=True)
+    minutes = models.IntegerField(null=True, blank=True)
+
     goals = models.IntegerField(null=True, blank=True)
+    own_goals = models.IntegerField(null=True, blank=True)
     assists = models.IntegerField(null=True, blank=True)
     shots = models.IntegerField(null=True, blank=True)
     shots_on_goal = models.IntegerField(null=True, blank=True)
+
     fouls_committed = models.IntegerField(null=True, blank=True)
     fouls_suffered = models.IntegerField(null=True, blank=True)
     yellow_cards = models.IntegerField(null=True, blank=True)
@@ -124,6 +128,47 @@ class AbstractStat(StandingStat):
         return l
             
 
+class GameStat(AbstractStat):
+    player = models.ForeignKey(Bio)
+    game = models.ForeignKey(Game)
+    team = models.ForeignKey(Team)
+
+    age = models.FloatField(null=True) # Age in years at the time of game.
+    on = models.IntegerField(null=True)
+    off = models.IntegerField(null=True)
+
+    result = models.CharField(max_length=5)
+
+    def score_or_result(self):
+        if self.team == self.game.team1:
+            return self.game.score_or_result()
+        else:
+            return self.game.reverse_score_or_result()
+
+    @property
+    def goal_differential(self):
+        try:
+            return self.goals_for - self.goals_against
+        except:
+            return None
+
+    def opponent(self):
+        if self.team == self.game.team1:
+            return self.game.team2
+        else:
+            return self.game.team1
+
+    def team_original_name(self):
+        if self.team == self.game.team1:
+            return self.game.team1_original_name
+        else:
+            return self.game.team2_original_name
+
+    def opponent_original_name(self):
+        if self.team == self.game.team1:
+            return self.game.team2_original_name
+        else:
+            return self.game.team1_original_name
 
 
 class CareerStat(AbstractStat):
@@ -134,6 +179,7 @@ class CareerStat(AbstractStat):
 class CompetitionStat(AbstractStat):
     player = models.ForeignKey(Bio)
     competition = models.ForeignKey(Competition)
+
 
 class TeamStat(AbstractStat):
     player = models.ForeignKey(Bio)

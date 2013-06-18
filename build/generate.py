@@ -16,7 +16,7 @@ from places.models import Stadium
 from positions.models import Position
 from sources.models import Source
 from standings.models import Standing, StadiumStanding
-from stats.models import Stat, CareerStat, CoachStat
+from stats.models import Stat, CareerStat, CoachStat, GameStat
 from teams.models import Team
 from utils import insert_sql, timer
 
@@ -123,7 +123,7 @@ def generate_season_data():
     minutes_with_age_dict = defaultdict(int)
     age_minutes_dict = defaultdict(int)
 
-    for season, minutes, age in Appearance.objects.values_list('game__season', 'minutes', 'age'):
+    for season, minutes, age in GameStat.objects.values_list('game__season', 'minutes', 'age'):
         if minutes:
             minutes_dict[season] += minutes
             if age:
@@ -713,16 +713,5 @@ def generate_top_attendances(qs=None):
                         
 if __name__ == "__main__":
     generate()
-    """
-    t = generate_top_attendances()
-    for g in t:
-        print g
-        print g.id
-        print g.attendance
-        print
-    #generate_team_standings()
-    """
-
-
 
 

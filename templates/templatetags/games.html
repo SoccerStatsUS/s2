@@ -6,6 +6,8 @@
     <th>date</th>
     <th title="competition">cmp</th>
     <th></th>
+    <th>round</th>
+    <th>group</th>
     <th>team1</th>
     <th>score</th>
     <th></th>
@@ -33,6 +35,9 @@
     <td><a href="{% url competition_detail game.competition.slug %}">{{ game.competition.abbreviation }}</a></td>
 
     <td><a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.season.name }}</a></td>
+
+    <td>{{ game.round }}</td>
+    <td>{{ game.group }}</td>
 
     {% if game.winner == game.team1 %}
     <td><a href="{% url team_detail game.team1.slug %}"><strong>{{ game.team1_original_name }}</strong></a></td>
