@@ -4,8 +4,10 @@
   <div id="team_results">
 
   <h3>
+    {% if game.season_previous_game %}<a href="{% url game_detail game.season_previous_game.id %}">←</a>{% endif %}
     <a href="{% url competition_detail game.competition.slug %}">{{ game.competition }}</a> - 
     <a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.season.name }}</a>
+    {% if game.season_next_game %}<a href="{% url game_detail game.season_next_game.id %}">→</a>{% endif %}
   </h3>
     
   <h3>

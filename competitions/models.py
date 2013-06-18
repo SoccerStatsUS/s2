@@ -321,6 +321,44 @@ class Season(models.Model):
 
     def games_with_attendance(self):
         return self.game_set.exclude(attendance=None).count()
+
+
+
+    def previous_game(self, game):
+        # This doesn't really work. 
+
+        from games.models import Game
+
+        if game.date is None:
+            return None
+
+        same_day_games = Game.objects.filter(season=self, date=game.date, id__lt=game.id).order_by('-id')
+        if same_day_games.exists():
+            return same_day_games[0]
+
+        else:
+            games = Game.objects.filter(season=self, date__lt=game.date).order_by('-date', '-id')
+            if games.exists():
+                return games[0]
+            else:
+                return None
+    
+    def next_game(self, game):
+        from games.models import Game
+
+        if game.date is None:
+            return None
+
+        same_day_games = Game.objects.filter(season=self, date=game.date, id__gt=game.id).order_by('id')
+        if same_day_games.exists():
+            return same_day_games[0]
+        else:
+            games = Game.objects.filter(season=self, date__gt=game.date).order_by('date', 'id')
+            if games.exists():
+                return games[0]
+            else:
+                return None
+    
         
 
 
