@@ -123,7 +123,7 @@ def person_detail_abstract(request, bio):
     
     context = {
         "bio": bio,
-        'recent_game_stats': bio.gamestat_set.all()[:10],
+        'recent_game_stats': bio.gamestat_set.order_by('game')[:10],
         'league_stats': league_stats,
         'competition_stats': competition_stats,
         'career_stat': bio.career_stat(),
