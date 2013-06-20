@@ -169,10 +169,9 @@ class Game(models.Model):
     #some_field = models.IntegerField(null=True)    
 
 
-    # Ambiguous game results.
+    # Games not played, games with result unknown, games with result not recorded yet.
     result_unknown = models.BooleanField(default=False)
-
-    played = models.BooleanField(default=True) # Should be cancelled - indicate that we KNOW a game was not played.
+    not_played = models.BooleanField(default=False) 
 
     # Was the game forfeited?
     forfeit = models.BooleanField(default=False)
@@ -317,16 +316,20 @@ class Game(models.Model):
 
     def score_or_result_generic(self, func):
         """Returns a score string."""
-        if self.date is not None and self.date > datetime.date.today():
-            return 'v'
 
         if self.result_unknown:
             return '?'
 
-        elif self.team1_result == self.team2_result == '':
+        if self.not_played:
             return 'np'
-        else:
-            return func()
+
+        if self.date is not None and self.date > datetime.date.today():
+            return 'v'
+
+        if self.team1_result == self.team2_result == '':
+            return 'v'
+
+        return func()
 
 
     def result_string(self):

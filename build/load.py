@@ -668,7 +668,7 @@ def load_games():
             game_sources.append(t)
 
         result_unknown = game.get('result_unknown') or False
-        played = game.get('played') or True
+        not_played = game.get('not_played') or False
         forfeit = game.get('forfeit') or False
         minigame = game.get('minigame') or False
 
@@ -710,7 +710,7 @@ def load_games():
                 'team2_result': game['team2_result'],
 
                 'result_unknown': result_unknown,
-                'played': played,
+                'not_played': not_played,
                 'forfeit': forfeit,
 
                 'goals': goals,

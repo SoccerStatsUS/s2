@@ -12,7 +12,6 @@ python build/load.py 2
 python build/load.py 3
 python build/load.py 4
 python build/generate.py
-#python manage.py rebuild_index --noinput --settings=build_settings
 
 dropdb soccerstats_backup
 psql -U soccerstats -d soccerstats_build -c "ALTER DATABASE soccerstats_dev RENAME TO soccerstats_backup"
