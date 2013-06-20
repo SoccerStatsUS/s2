@@ -7,20 +7,20 @@
     <td><a href="{% url competition_detail game.competition.slug %}">{{ game.competition.abbreviation }}</a></td>
 
     {% if game.winner == game.team1 %}
-    <td><a href="{% url team_detail game.team1.slug %}"><strong>{{ game.team1_original_name }}</strong></a></td>
+    <td><a href="{% url team_detail game.team1.slug %}"><strong>{{ game.team1_original_name|truncatechars:"25" }}</strong></a></td>
     {% else %}
     <td><a href="{% url team_detail game.team1.slug %}">{{ game.team1_original_name }}</a></td>
     {% endif %}
     <td><a href="{% url game_detail game.id %}">{{ game.score_or_result }}</a></td>
     {% if game.winner == game.team2 %}
-    <td><a href="{% url team_detail game.team2.slug %}"><strong>{{ game.team2_original_name }}</strong></a></td>
+    <td><a href="{% url team_detail game.team2.slug %}"><strong>{{ game.team2_original_name|truncatechars:"25" }}</strong></a></td>
     {% else %}
     <td><a href="{% url team_detail game.team2.slug %}">{{ game.team2_original_name }}</a></td>
     {% endif %}
 
     {% if game.stadium %}
-    <td><a href="{% url stadium_detail game.stadium.slug %}"><strong>{{ game.stadium }}</strong></a></td>
-    {# {% if game.city.slug %}<a href="{% url city_detail game.city.slug %}">, {{ game.city.name }}</a>{% endif %} #}
+    <td><a href="{% url stadium_detail game.stadium.slug %}"><strong>{{ game.stadium|truncatechars:"25" }}</strong></a></td>
+    {# {% if game.city.slug %}<a href="{% url city_detail game.city.slug %}">, {{ game.city.name|truncatechars:"25" }}</a>{% endif %} #}
     {% else %}
     {% if game.city %}
     <td><a href="{% url city_detail game.city.slug %}">{{ game.city }}</a></td>

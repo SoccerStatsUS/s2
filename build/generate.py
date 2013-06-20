@@ -47,7 +47,7 @@ def generate():
     generate_stadium_standings()
     generate_season_data()
 
-    generate_player_standings()
+    #generate_player_standings()
 
     #generate_game_minutes()
 
@@ -56,6 +56,8 @@ def generate():
 @timer
 @transaction.commit_on_success
 def generate_player_standings():
+    # Kill this. this is part of game_stat / player_stat now...I think.
+
     # merge this with plus/minus.
 
     results = Game.objects.values_list('id', 'team1', 'team1_result', 'team2', 'team2_result')
