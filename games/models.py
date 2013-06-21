@@ -303,10 +303,23 @@ class Game(models.Model):
 
     def lineup_color_code(self):
         # Merge this and color_code
+        if self.not_played or self.result_unknown:
+            return 'green'
+
+        if self.date and self.date > datetime.date.today():
+            return 'green'
+
         return ['red', 'yellow', 'green'][self.lineup_quality()]
 
     def goal_color_code(self):
         # Merge this and color_code
+        if self.not_played or self.result_unknown:
+            return 'green'
+
+        if self.date and self.date > datetime.date.today():
+            return 'green'
+
+
         return ['red', 'yellow', 'green'][self.goal_quality()]
 
 
