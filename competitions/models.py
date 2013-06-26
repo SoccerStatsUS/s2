@@ -139,9 +139,6 @@ def confederation_stats(stats):
             
 
 
-
-
-
 class CompetitionManager(models.Manager):
 
     def find(self, name):
@@ -211,7 +208,11 @@ class Competition(models.Model):
             return 'light-grey'
         else:
             return ''
-        
+
+
+    def has_mvp(self):
+        from awards.models import Award
+        return Award.objects.filter(competition=self, name='MVP').exists()
 
 
     def save(self, *args, **kwargs):

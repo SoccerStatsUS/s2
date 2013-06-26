@@ -23,24 +23,15 @@
 
 <div id="left_column">
 
-
+{% with has_mvp=competition.has_mvp %}
 {% if competition.season_set.exists %}
 <table>
   <tr>
     <th>season</th>
     <th>champion</th>
-    <th>MVP</th>
+    {% if has_mvp %}<th>MVP</th>{% endif %}
     <th>Golden Boot</th>
 
-
-    {% comment %}
-    <th>Average age</th>
-    <th>Ages known %</th>
-    
-    <th>games</th>
-    <th>goals</th>
-    <th>stats</th>
-    {% endcomment %}
   </tr>
 
 
@@ -49,6 +40,7 @@
     <td><a href="{% url season_detail competition.slug season.slug %}">{{ season.name }}</a></td>
     <td><a href="{{ season.champion.recipient.get_absolute_url }}">{{ season.champion.recipient }}</a></td>
 
+    {% if has_mvp %}
     {% with season.mvp.recipient as mvp %}
     {% if mvp %}
     <td><a href="{% url person_detail mvp.slug %}">{{ mvp }}</a></td>
@@ -56,6 +48,7 @@
     <td></td>
     {% endif %}
     {% endwith %}
+    {% endif %}
 
     {% if season.golden_boot %}
     <td><a href="{% url person_detail season.golden_boot.slug %}">{{ season.golden_boot }}</a></td>
@@ -63,20 +56,12 @@
     <td></td>
     {% endif %}
 
-    {% comment %}
-    <td>{{ season.average_age|floatformat }}</td>
-    <td>{{ season.age_minutes_proportion|floatformat:"3" }}</td>
-
-    <td>{{ season.game_set.count }}</td>
-    <td>{{ season.goals.count }}</td>
-    <td>{{ season.stat_set.count }}</td>
-    {% endcomment %}
-
   </tr>
   {% endfor %}
     
 </table>
 {% endif %}
+{% endwith %}
 
 
 {% if top_attendance_games %}
