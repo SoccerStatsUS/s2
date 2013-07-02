@@ -55,7 +55,7 @@
     <div class="grids">
 
   
-
+      {% comment %}
   <h1><a href="{% url home %}">SoccerStats.us</a> <span class="subhead">North American soccer statistics from <a href="{% url year_detail 1866 %}">1866</a> to <a href="{% url year_detail 2013 %}">2013</a></span> </h1>
 
   <div id="header">
@@ -82,6 +82,10 @@
     <div class="clear"></div>
   </div>
 
+
+  {% endcomment %}
+
+
   <div id="content">
 
     
@@ -106,15 +110,28 @@
   {% endblock %}
   </div>
 
-  <div id="footer">
+
+  <div id="right-nav">
+    <div>
+      <a href="{% url home %}">SoccerStats.us</a>
+    </div>
+
+    <div>
+      <a href="{% url year_detail 1866 %}">1866</a> to <a href="{% url year_detail 2013 %}">2013</a>
+    </div>
 
     <ul>
-      <a href="/about">about</a>
-      -
-      <a href="/sources">sources</a>
+      <li><a href="{% url scoreboard_today %}">scoreboard</a></li>
+      <li><a href="{% url team_index %}">teams</a></li>
+      <li><a href="{% url person_index %}">players</a></li>
+      <li><a href="{% url competition_index %}">competitions</a></li>
+      <li><a href="{% url drafts_index %}">drafts</a></li>
+      <li><a href="{% url award_index %}">awards</a></li>
     </ul>
 
-
+    <div id="footer">
+      <a href="/about">about</a> - <a href="/sources">sources</a>
+      </div>
 
   </div>
 

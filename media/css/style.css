@@ -25,9 +25,18 @@ h2.headline { font-size: 1.8em; }
 #blurb a:hover { text-decoration: underline; }
 
 
-#footer { 
+#right-nav { 
     font-family: monospace;
+    font-size: 1.3em;
+    text-align: right;
 }
+
+#right-nav li {
+    line-height: 2em;
+}
+
+
+
 #header li { font-size: 1.2em; }
 
 /* pages */
@@ -63,9 +72,6 @@ option {
     width: 100px;
 }
 
-#footer { 
-    background-color: #f9f9f9;
-}
 
 
 
@@ -82,6 +88,26 @@ option {
 
 
 /* Positioning */
+
+
+#right-nav {
+    position: fixed;
+    right: 0;
+    top: 0;
+    background-color: #eee;
+    width: 160px;
+    height: 100%;
+    padding-right: 20px;
+}
+
+
+#footer {
+    position: fixed;
+    bottom: 0;
+    width: 160px;
+    height: 50px;
+}
+
 
 .left_half {
     float: left;
@@ -122,14 +148,6 @@ h1 span.subhead {
 }
 
 
-#footer {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    padding-right: 50px;
-    width: 200px;
-    height: 20px;
-}
 
 
 
@@ -154,13 +172,6 @@ h1 span.subhead {
 
 
 /* footer */
-
-#footer {
-    clear: both;
-    padding: 0;
-    margin: 0;
-    padding-bottom: 30px;
-}
 
 
 /* Scoreboard */
