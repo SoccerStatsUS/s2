@@ -6,11 +6,6 @@
 
 {% block extrahead %}
 
-<script type="text/javascript">
-  $(document).ready(function (){
-  });
-</script>
-
 {% endblock %}
 
 
@@ -52,7 +47,7 @@ Alternate names:
 {% for position in current_staff %}
 <tr>
   <td><a href="{% url person_detail position.person.slug %}">{{ position.person }}</a></td>
-  <td>{{ position.name|truncatechars:20 }}</td>
+  <td><a href="{% url team_position_detail team.slug position.slug %}" alt="{{ position.name }}">{{ position.name|truncatechars:20 }}</a></td>
   {% if position.start %}
   <td><a href="{% url date_detail position.start.year position.start.month position.start.day %}">{{ position.start|default_if_none:'' }}</a></td>
   {% else %}
@@ -97,21 +92,15 @@ Alternate names:
 {% include "templatetags/standings/team.html" with games=team.standing_set.all %}
 
 
-
-
-
-
 </div>
-
 
 
 <div id="right_column">
 
-
 {% if team.awards.exists %}
 <h3>Honors</h3>
 <table>
-{% for award in team.awards.all %}
+{% for award in awards %}
 <tr>
   <td><a href="{% url season_detail award.season.competition.slug award.season.slug %}">{{ award.season.name }}</a></td>
   <td><a href="{% url award_detail award.award.id %}">{{ award.award.name }}</a></td>
@@ -121,13 +110,10 @@ Alternate names:
 </table>
 {% endif %}
 
-
-
 {% if recent_games %}
 <h3>Recent games (<a href="{% url team_games team.slug %}">All {{ team }} games</a>)</h3> 
 {% include "templatetags/games/attendance.html" with games=recent_games %}
 {% endif %}
-
 
 {% if recent_picks %}
 <h3>Recent draft picks (<a href="{% url team_picks team.slug %}">complete {{ team }} picks</a>)</h3> 
@@ -149,15 +135,10 @@ Alternate names:
   {% else %}
   <td></td>
   {% endif %}
-
-
 </tr>
 {% endfor %}
 </table>
-
 {% endif %}
-
-
 
 {% if draftees %}
 <h3>Recent draftees (<a href="{% url team_draftees team.slug %}">complete {{ team }} draftees</a>)</h3> 
@@ -172,18 +153,12 @@ Alternate names:
   {% else %}
   <td>{{ pick.draft.season.name }} {{ pick.draft.name }}</td>
   {% endif %}
-
-
-
-
   <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
 </tr>
 {% endfor %}
 </table>
 
 {% endif %}
-
-
 
 
 </div>

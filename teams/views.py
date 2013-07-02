@@ -12,6 +12,7 @@ from django.views.decorators.cache import cache_page
 from competitions.models import Season, Competition
 from games.models import Game
 from places.models import Country
+from positions.models import Position
 from teams.forms import TeamGameForm, TeamStatForm
 from teams.models import Team
 from standings.models import Standing
@@ -148,7 +149,25 @@ def seasons_dashboard(request):
 
 
     
-    
+def team_position_detail(request, team_slug, position_slug):
+
+    team = get_object_or_404(Team, slug=team_slug)
+    positions = Position.objects.filter(slug=position_slug, team=team)
+
+
+
+    context = {
+        'team': team,
+        'positions': positions,
+        }
+
+    return render_to_response("teams/position_detail.html",
+                              context,
+                              context_instance=RequestContext(request)
+                              )
+
+
+
     
 
 def team_detail(request, team_slug):
@@ -177,17 +196,16 @@ def team_detail(request, team_slug):
 
     current_staff = team.position_set.filter(end=None)
 
+    # Get notable positions.
     positions = team.position_set.filter(name='Head Coach')
     if positions.count() == 0:
-        positions = team.position_set.all()
+        positions = team.position_set.exclude(id__in=current_staff)
 
-    #positions = positions.exclude(id__in=[e[0] for e in current_staff.values_list('id')])
-    positions = positions.exclude(id__in=current_staff)
-        
-
+    awards = team.awards.order_by('-season')
 
     context = {
         'team': team,
+        'awards': awards,
         'stats': stats,
         'goal_leaders': goal_leaders[:10],
         'game_leaders': game_leaders[:10],

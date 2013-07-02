@@ -14,7 +14,6 @@ urlpatterns = patterns('teams.views',
                            'bad_teams',
                            name='bad_teams'),
 
-
                        url(r'^seasons/$',
                            'seasons_dashboard',
                            name='seasons_dashboard'),
@@ -31,11 +30,9 @@ urlpatterns = patterns('teams.views',
                            'random_team_detail',
                            name='random_team_detail'),
 
-
                        url(r'^(?P<team_slug>[a-z0-9-]+)/$',
                            'team_detail',
                            name='team_detail'),
-
 
                        url(r'^(?P<team_slug>[a-z0-9-]+)/stats/$',
                            'team_stats',
@@ -44,7 +41,6 @@ urlpatterns = patterns('teams.views',
                        url(r'^(?P<team_slug>[a-z0-9-]+)/picks/$',
                            'team_picks',
                            name='team_picks'),
-
 
                        url(r'^(?P<team_slug>[a-z0-9-]+)/draftees/$',
                            'team_draftees',
@@ -58,12 +54,9 @@ urlpatterns = patterns('teams.views',
                            'team_graphs',
                            name='team_graphs'),
 
-
                        url(r'^(?P<team_slug>[a-z0-9-]+)/calendar/$',
                            'team_calendar',
                            name='team_calendar'),
-
-
 
                        url(r'^(?P<team1_slug>[a-z0-9-]+)/v/(?P<team2_slug>[a-z0-9-]+)/$',
                            'team_versus',
@@ -77,6 +70,9 @@ urlpatterns = patterns('teams.views',
                            'team_season_detail',
                            name='team_season_detail'),
 
+                       url(r'^(?P<team_slug>[a-z0-9-]+)/(?P<position_slug>[a-z0-9-]+)/$',
+                           'team_position_detail',
+                           name='team_position_detail'),
 
                        url(r'^ajax$',
                            'teams_ajax',

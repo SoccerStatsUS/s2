@@ -9,6 +9,7 @@ from django.template.defaultfilters import slugify
 
 from places.models import City
 
+
 class AbstractTeamManager(models.Manager):
     """
     An abstract Team Manager.

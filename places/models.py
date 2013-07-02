@@ -4,12 +4,7 @@ from django.template.defaultfilters import slugify
 
 from bios.models import Bio
 
-"""
-class Place(models.Model):
-    country = models.ForeignKey(Country, null=True, blank=True)
-    country = models.ForeignKey(Country, null=True, blank=True)
-    country = models.ForeignKey(Country, null=True, blank=True)
-"""    
+from collections import defaultdict
 
 
 class WorldBorder(models.Model):
@@ -128,6 +123,18 @@ class StatePopulation(models.Model):
     population = models.IntegerField(null=True)
 
 
+class CityManager(models.Manager):
+
+    def duplicate_slugs(self):
+        """
+        Returns all teams with duplicate slugs.
+        """
+        # Used to find problem teams.
+        d = defaultdict(list)
+        for e in self.get_query_set():
+            d[e.slug].append(e.name)
+        return [(k, v) for (k, v) in d.items() if len(v) > 1]
+
 
 
 class City(models.Model):
@@ -137,6 +144,8 @@ class City(models.Model):
     slug = models.SlugField(max_length=100)
 
     #geometry = models.PointField(srid=4326)
+
+    objects = CityManager()
 
 
     def __unicode__(self):

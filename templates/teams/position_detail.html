@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}{{ team.name }} {{ team.position.name }} Results, Lineups, & Statistics{% endblock %}
+{% block metadescription %}{{ team.name }} {{ team.position.name }} soccer stats with results, lineups, awards, all-time stats, managers...{% endblock %}
+
+
+
+{% block content %}
+
+<table>
+{% for position in positions %}
+<tr>
+  <td><a href="{% url person_detail position.person.slug %}">{{ position.person }}</a></td>
+
+  {# make this a function. #}
+  {% if position.start %}<td><a href="{% url date_detail position.start.year position.start.month position.start.day %}">{{ position.start }}</a></td>{% else %}<td></td>{% endif %}
+  {% if position.end %}<td><a href="{% url date_detail position.end.year position.end.month position.end.day %}">{{ position.end }}</a></td>{% else %}<td></td>{% endif %}
+
+</tr>
+{% endfor %}
+</table>
+
+
+{% endblock %}
