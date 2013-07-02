@@ -279,9 +279,29 @@ def season_games(request, competition_slug, season_slug):
     context = {
         'season': season,
         'games': competition.game_set.filter(season=season).order_by('date'),
-
         }
+
     return render_to_response("competitions/season/games.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+
+
+
+@cache_page(60 * 60 * 12)
+def season_goals(request, competition_slug, season_slug):
+    competition = get_object_or_404(Competition, slug=competition_slug)
+    season = get_object_or_404(Season, competition=competition, slug=season_slug)
+
+    from goals.models import Goal
+
+    context = {
+        'season': season,
+        #'goals': competition.goal_set.filter(season=season).order_by('date'),
+        'goals': Goal.objects.filter(game__season=season).order_by('date', 'team', 'minute'),
+        }
+
+    return render_to_response("competitions/season/goals.html",
                               context,
                               context_instance=RequestContext(request))
 

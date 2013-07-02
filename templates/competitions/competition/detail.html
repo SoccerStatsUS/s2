@@ -28,16 +28,26 @@
 <table>
   <tr>
     <th>season</th>
+    <th>games</th>
+    <th>goals</th>
     <th>champion</th>
     {% if has_mvp %}<th>MVP</th>{% endif %}
-    <th>Golden Boot</th>
+    <th>golden boot</th>
+    <th>attendance</th>
 
   </tr>
 
 
   {% for season in competition.season_set.all %}
   <tr>
+
     <td><a href="{% url season_detail competition.slug season.slug %}">{{ season.name }}</a></td>
+    <td><a href="{% url season_games competition.slug season.slug %}">{{ season.game_set.count }}</a></td>
+    {% if season.goals %}
+    <td><a href="{% url season_goals competition.slug season.slug %}">{{ season.goals }}</a></td>
+    {% else %}
+    <td></td>
+    {% endif %}
     <td><a href="{{ season.champion.recipient.get_absolute_url }}">{{ season.champion.recipient }}</a></td>
 
     {% if has_mvp %}
@@ -55,6 +65,13 @@
     {% else %}
     <td></td>
     {% endif %}
+
+    {% if season.total_attendance %}
+    <td>{{ season.average_attendance|floatformat:1 }} ({{ season.games_with_attendance }})</td>
+    {% else %}
+    <td></td>
+    {% endif %}
+
 
   </tr>
   {% endfor %}

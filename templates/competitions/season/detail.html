@@ -54,13 +54,33 @@
 <table>
 
   {% if season.game_set.count %}
-  <h3>Games: {{ season.game_set.count }}</h3>
-  <h3>Goals: {{ season.goals }} ({{ season.goals_per_game|floatformat }} goals/game)</h3>
+  <tr>
+  <td>Games</td>
+  <td>
+    {{ season.game_set.count }}
+    {% if season.game_set.exists %}
+    <a href="{% url season_games season.competition.slug season.slug %}">(all games)</a>
+    {% endif %}
+
+  </td>
+
+
+  </tr>
+  <tr>
+  <td>Goals</td>
+  <td>{{ season.goals }} ({{ season.goals_per_game|floatformat }} <a href="{% url season_goals season.competition.slug season.slug %}">goals</a>/game)</td>
+  </tr>
   {% endif %}
 
   {% if season.total_attendance %}
-  <h3>Average Attendance: {{ season.average_attendance|floatformat:1 }} </h3>
-  <h3>({{ season.total_attendance }} in {{ season.games_with_attendance }} games)</h3>
+  <tr>
+  <td>Average Attendance</td>
+  <td>{{ season.average_attendance|floatformat:1 }}</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>{{ season.total_attendance }} / {{ season.games_with_attendance }}</td>
+  </tr>
   {% endif %}
 </table>
 
@@ -91,9 +111,6 @@
 
 <div class="clear_both"></div>
 
-{% if season.game_set.exists %}
-<h3><a href="{% url season_games season.competition.slug season.slug %}">{{ season }} games</a></h3>
-{% endif %}
 
 {% if top_attendance_games %}
 
