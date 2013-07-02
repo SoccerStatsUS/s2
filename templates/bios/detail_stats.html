@@ -6,10 +6,15 @@
 
 <div id="tab_wrapper">
 
+{% if domestic_stats %}
+<div tab="domestic">
+{% include "templatetags/stats/stats.html" with stats=domestic_stats %}
+</div>
+{% endif %}
 
-{% if league_stats %}
-<div tab="year">
-{% include "templatetags/stats/stats.html" with stats=league_stats %}
+{% if international_stats %}
+<div tab="international">
+{% include "templatetags/stats/stats.html" with stats=international_stats %}
 </div>
 {% endif %}
 

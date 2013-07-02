@@ -26,15 +26,15 @@
     {% endif %}
 </h3>
 
-  <h4>
+  <ul>
     {% if game.referee %}
-    <a href="{% url person_detail game.referee.slug %}">{{ game.referee }}</a> referee 
+    <li><a href="{% url person_detail game.referee.slug %}">{{ game.referee }}</a> referee </li>
     {% endif %}
 
     {% if game.attendance %}
-    {{ game.attendance }} attendance
+    <li>{{ game.attendance }} attendance</li>
     {% endif %}
-  </h4>
+  </ul>
 
     <div class="team_data">
       <div class="team"><a href="{% url team_detail game.team1.slug %}">{{ game.team1_original_name  }}</a></div>

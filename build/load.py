@@ -402,6 +402,7 @@ def load_teams():
                     'founded': founded,
                     'dissolved': dissolved,
                     'city': city,
+                    'international': team.get('international', False),
                     })
         else:
             print "duplicate team name"

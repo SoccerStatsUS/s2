@@ -116,15 +116,19 @@ def person_id_detail(request, pid):
     return person_detail_abstract(request, bio)
 
 def person_detail_abstract(request, bio):
-    competition_stats = bio.competition_stats().order_by('-games_played')
+    competition_stats = bio.competition_stats().order_by('competition__international', '-games_played')
     team_stats = bio.team_stats().order_by('-games_played')
-    league_stats = Stat.objects.filter(player=bio).filter(competition__ctype='League').order_by('season')
+    #league_stats = Stat.objects.filter(player=bio).filter(competition__ctype='League').order_by('season')
     league_stats = Stat.objects.filter(player=bio).order_by('season')
+    domestic_stats = league_stats.filter(team__international=False)
+    international_stats = league_stats.filter(team__international=True)
     
     context = {
         "bio": bio,
         'recent_game_stats': bio.gamestat_set.order_by('game')[:10],
         'league_stats': league_stats,
+        'domestic_stats': domestic_stats,
+        'international_stats': international_stats,
         'competition_stats': competition_stats,
         'career_stat': bio.career_stat(),
         'team_stats': team_stats,

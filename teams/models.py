@@ -158,6 +158,9 @@ class Team(models.Model):
     defunct = models.BooleanField(default=False)
     notes = models.TextField(blank=True)
 
+    international = models.BooleanField(default=True)
+
+
     objects = TeamManager()
     defuncts = DefunctTeamManager()
     reals = RealTeamManager()
