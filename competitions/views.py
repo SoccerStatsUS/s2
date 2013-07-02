@@ -157,7 +157,7 @@ def competition_games(request, competition_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
     context = {
         'competition': competition,
-        'games': competition.game_set.order_by('season', 'date'),
+        'games': competition.game_set.order_by('season', 'date', 'round'),
 
         }
     return render_to_response("competitions/competition/games.html",
@@ -278,7 +278,7 @@ def season_games(request, competition_slug, season_slug):
 
     context = {
         'season': season,
-        'games': competition.game_set.filter(season=season).order_by('date'),
+        'games': competition.game_set.filter(season=season).order_by('date', 'round'),
         }
 
     return render_to_response("competitions/season/games.html",
