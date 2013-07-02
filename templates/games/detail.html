@@ -3,6 +3,7 @@
 
 {% block content %}
 
+<div id="game-detail-wrapper">
 
 <div id="left_column">
 {% include "templatetags/games/detail/result.html" %}
@@ -10,36 +11,11 @@
 
 
 <div id="right_column">
-
-{% if game.video %}
-<h4>Media</h4>
-{% include "templatetags/embed.html" with video=game.video %}
-{% endif %}
-
-
-{% if game.notes %}
-<h4>Notes</h4>
-<p>{{ game.notes }}</p>
-{% endif %}
-
-{% if game_sources %}
-<h4>Sources</h4>
-<p>{% for game_source in game_sources %}<a href="{% url source_detail game_source.source.id %}">{{ game_source.source|truncatechars:"30" }}</a> {% if game_source.source_url %}<em><a href="{{ game_source.source_url }}">(external link)</a></em>{% else %}{% if game_source.source.base_url %}<em><a href="{{ game_source.source.base_url }}">(external link)</a></em>{% endif %}{% endif %}{% if not forloop.last %}, {% endif %}{% endfor %}
-</p>
-{% endif %}
-
-{% if game.same_day_games %}
-{% include "templatetags/games/scoreboard.html" with games=game.same_day_games %}
-{% endif %}
-
-{% if game.series.count > 1 %}
-{% include "templatetags/games/series.html" with games=game.series %}
-{% endif %}
-
+{% include "templatetags/games/detail/sidebar.html" %}
+</div>
 
 </div>
 
-<div class="clear_both"></div>
 
 {% endblock %}
 

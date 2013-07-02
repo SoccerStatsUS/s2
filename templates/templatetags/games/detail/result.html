@@ -28,7 +28,7 @@
 
   <h4>
     {% if game.referee %}
-    <a href="{% url person_detail game.referee.slug %}">{{ game.referee }}</a> referee, 
+    <a href="{% url person_detail game.referee.slug %}">{{ game.referee }}</a> referee 
     {% endif %}
 
     {% if game.attendance %}

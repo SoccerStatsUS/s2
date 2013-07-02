@@ -1,4 +1,12 @@
 
+
+/* Typography */
+
+
+
+/* Colors */
+
+
 option {
     width: 100px;
 }
@@ -67,14 +75,17 @@ h1 span.subhead {
     margin: 0 auto;
 }
 
+#game-detail-wrapper {
+    width: 300px;
+}
+
 #left_column {
     float: left;
-    width: 760px;
+    width: 660px;
 }
 
 #right_column {
-    float: right;
-    width: 520px;
+    margin-left: 660px;
 }
 
 

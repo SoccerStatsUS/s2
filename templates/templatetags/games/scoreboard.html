@@ -1,7 +1,9 @@
-
-<h4>Other results for <a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date|date:"F d, Y" }}</a></h4>
+  <h4><a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date|date:"F d, Y" }} scoreboard</a></h4>
 <div id="scoreboard">
 <table>
+  <tr>
+  </tr>
+      
   {% for game in games %}
   <tr class="score">
     <td><a href="{% url competition_detail game.competition.slug %}">{{ game.competition.abbreviation }}</a></td>
