@@ -1,6 +1,5 @@
-
-
-/* typography */
+/* typography 
+***************/
 
 html, body {
     margin: 0;
@@ -11,17 +10,52 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-#about {
+
+h1 span.subhead { font-size: .55em; }
+h2.headline { font-size: 1.8em; }
+
+.letter_link { font-size: 1.5em; }
+.small { font-size: .7em; }
+.headline { text-align: center;}
+.align-right { text-align: right; }
+
+/* base */
+
+#blurb { font-size: 2em; }
+#blurb a:hover { text-decoration: underline; }
+
+
+#footer { 
     font-family: monospace;
 }
+#header li { font-size: 1.2em; }
+
+/* pages */
+
+#about { 
+    font-family: monospace; 
+    text-align: center; 
+}
+#about p { font-size: 1.4em; }
+
+/* bigboard */
+
+.bigboard { font-size: .8em; }
+.bigboard h3 { font-size: .9em; }
+
+#date_nav { font-size: 1.5em; }
 
 
-
-/* colors */
+/* colors 
+  *******/
 
 .grey { background-color: #eee; }
+.red { background-color: red; }
 
+h1 span.subhead { color: #777; }
 
+/* Big board */
+.bigboard ul, #ajax_box  {  background-color: #eee; }
 
 /* generic */
 
@@ -29,12 +63,14 @@ option {
     width: 100px;
 }
 
+#footer { 
+    background-color: #f9f9f9;
+}
+
+
 
 /* about */
 
-#about {
-    text-align: center;
-}
 
 #about img {
     margin: 30px 0;
@@ -42,13 +78,7 @@ option {
 
 #about p {
     margin: 2px;
-    font-size: 1.4em;
-    /*font-family: 'Lucida Console', Monaco, monospace;*/
-
 }
-
-
-
 
 
 /* Positioning */
@@ -64,20 +94,13 @@ option {
 }
 
 
-.align-right {
-    text-align: right;
-}
-
 #team_logo {
     padding: 5px;
     border: 8px solid #ccc;
 }
 
 
-
 h1 span.subhead {
-    font-size: .55em;
-    color: #777;
     margin-left: 15px;
 }
 
@@ -85,28 +108,30 @@ h1 span.subhead {
     clear: both;
     padding: 0;
     margin: 0;
-    border-bottom: 20px solid #eee;
     padding-bottom: 10px;
 }
 
-
 #header li {
     float: left;
-    font-size: 1.2em;
     padding-right: 45px;
 }
-
-#header li:hover {
-}
-
-#header li.first {
-}
-
 
 #content {
     width: 1280px;
     margin: 0 auto;
 }
+
+
+#footer {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    padding-right: 50px;
+    width: 200px;
+    height: 20px;
+}
+
+
 
 #game-detail-wrapper {
     width: 300px;
@@ -127,39 +152,10 @@ h1 span.subhead {
     margin: 10px;
 }
 
-#controls #hide_control_form {
-    text-align: right;
-}
-    
-
-/* homepage */
-
-#blurb { font-size: 2em; }
-
-#blurb a {}
-
-#blurb a:hover { text-decoration: underline; }
-
-#history_box {
-    border: 2px solid black;
-    width: 400px;
-    padding: 10px;
-}
-
-#history_box h4 {
-    font-size: 1.5em;
-}
-
-#history_box h5, #history_box p {
-    padding: 0;
-    margin: 0;
-}
 
 /* footer */
 
 #footer {
-    border-top: 10px solid #eee;
-    border-bottom: 20px solid #eee;
     clear: both;
     padding: 0;
     margin: 0;
@@ -167,24 +163,7 @@ h1 span.subhead {
 }
 
 
-
-#footer li {
-    float: left;
-    font-size: 1.2em;
-    padding-right: 45px;
-}
-
-
-/* Letter index pages */
-
-.letter_link {
-    font-size: 1.5em;
-}
-
-
 /* Scoreboard */
-
-#scoreboard {}
 
 #scoreboard h4, #series h4 {
     margin-left: 25px;
@@ -214,16 +193,6 @@ textarea#id_message {
 }
 
 
-/* Season Detail */
-
-.headline {
-    text-align: center;
-}
-
-h2.headline {
-    font-size: 1.8em;
-}
-
 
 /* Search */
 
@@ -242,21 +211,16 @@ h2.headline {
 
 .bigboard {
     float: left;
-    font-size: .8em;
     padding: 0;
     margin: 0;
     width: 11%;
 }
 
-.bigboard h3 {
-    font-size: .9em;
-}
 
 .bigboard ul {
     padding: 0;
     margin: 0;
     padding-top: 5px;
-    background-color: #eee;
 }
 
 .bigboard li {
@@ -266,19 +230,19 @@ h2.headline {
     
 }
 
+
 #ajax_box {
     margin-top: 20px;
     padding-top: 10px;
     position: fixed;
     right: 10px;
     border: 1px solid black;
-    background-color: #eee;
     width: 28%;
     bottom: 20px;
 }
 
+
 .small {
-    font-size: .7em;
     padding: 0;
     border: 0;
 }
@@ -294,13 +258,9 @@ h2.headline {
     float: right;
 }
 
-.red {
-    background-color: red;
-}
-
+/* For what? */
 
 #date_nav {
-    font-size: 1.5em;
     margin-left: 100px;
 }
 
