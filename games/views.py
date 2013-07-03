@@ -8,6 +8,7 @@ from django.views.decorators.cache import cache_page
 from bios.models import Bio
 from competitions.models import Competition
 from games.models import Game, GameSource
+from goals.models import Goal
 from standings.models import Standing
 from stats.models import Stat, CareerStat
 from teams.models import Team
@@ -42,6 +43,15 @@ def homepage(request):
 
     recent_games = Game.objects.exclude(date=None).filter(date__lt=today).exclude(team1_result='').order_by('-date')[:10]
 
+    goals = Goal.objects.count()
+
+
+    try:
+        mls_game = Game.objects.filter(competition__slug='major-league-soccer').order_by('date')[0]
+    except:
+        mls_game = None
+    
+
     context = {
         'today': today,
         'born': Bio.objects.born_on(today.month, today.day),
@@ -53,6 +63,7 @@ def homepage(request):
         'bio_count': Bio.objects.count(),
         'team_count': Team.objects.count(),
         'competition_count': Competition.objects.count(),
+        'mls_game': mls_game,
         
         }
     return render_to_response("homepage.html",

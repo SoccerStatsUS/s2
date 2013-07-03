@@ -3,14 +3,14 @@
 
 {% block content %}
 
-<h4>{{ draft.name }} - {{ draft.season }}</h4>
+<h4><a href="{% url season_detail draft.season.competition.slug draft.season.slug %}">{{ draft.season }}</a> | {{ draft.name }}</h4>
 
 {% if draft.pick_set.exists %}
 
 
 {% load datum_or_none %}
 
-<table>
+<table id="draft">
 <tr>
   <th>#</th>
   <th>name</th>

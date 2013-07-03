@@ -71,7 +71,7 @@ def person_index(request):
 
     name_dict = OrderedDict()
     for letter in letters:
-        name_dict[letter] = stats.filter(player__name__istartswith=letter)[:5]
+        name_dict[letter] = stats.filter(player__name__istartswith=letter)[:15]
 
 
     most_games = CareerStat.objects.exclude(games_played=None).order_by('-games_played')[:25]

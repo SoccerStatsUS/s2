@@ -2,7 +2,14 @@
 
 {% block content %}
 
+{% if mls_game %}
+<div id="homepage_video">
+{% include "templatetags/embed_large.html" with video=mls_game.video %}
+<div id="video_title"><a href="{% url game_detail mls_game.id %}">first mls game</a></div>
+</div>
+{% endif %}
 
+{% comment %}
 <div id="left_column">
 <h4>Recent Results</h4>
 {% load datum_or_none %}
@@ -61,5 +68,7 @@
 </div>
 
 </div>
+
+{% endcomment %}
 
 {% endblock %}

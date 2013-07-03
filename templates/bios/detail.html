@@ -15,10 +15,10 @@
 
 {% block content %}
 
-<h2 class="headline">{{ bio.name }}</h2>
+<h2>{{ bio.name }}</h2>
 
 
-<div id="left_column">
+<div>
 
 {% if bio.height or bio.weight %}
 <div>
@@ -30,19 +30,19 @@
 
 {% if bio.birthdate or bio.birthplace %}
 <div>
-  Born 
+  born 
   {% if bio.birthdate %}<a href="{% url date_detail bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a>{% endif %}
   {% if bio.birthplace %}in <a href="{% url city_detail bio.birthplace.slug %}">{{ bio.birthplace }}</a>{% endif %}
 </div>
 {% endif %}
 
 {% if bio.last_game and bio.last_game != bio.first_game %}
-<div>First game: <a href="{% url game_detail bio.first_game.id %}">{{ bio.first_game.date }}</a></div>
+<div>first game: <a href="{% url game_detail bio.first_game.id %}">{{ bio.first_game.date }}</a></div>
 {% endif %}
 
 
 {% if bio.last_game and bio.last_game != bio.first_game %}
-<div>Last game: <a href="{% url game_detail bio.last_game.id %}">{{ bio.last_game.date }}</a></div>
+<div>last game: <a href="{% url game_detail bio.last_game.id %}">{{ bio.last_game.date }}</a></div>
 {% endif %}
 
 
@@ -50,9 +50,9 @@
 {% include "bios/detail_stats.html" %}
 
 {% if recent_game_stats %}
-<h3>Recent games</h3>
-<p><a href="{% url person_detail_games bio.slug %}">(all {{ bio }} games)</a></p>
+
 {% include "templatetags/stats/game_list.html" with stats=recent_game_stats %}
+<div><a href="{% url person_detail_games bio.slug %}">more games</a></div>
 {% endif %}
 
 
@@ -60,14 +60,6 @@
 <h3>Games refereed</h3>
 {% include "templatetags/appearances/ref.html" with games=refs %}
 {% endif %}
-
-
-
-</div>
-
-
-
-<div id="right_column">
 
 
 {% if bio.awards.exists %}
@@ -119,9 +111,6 @@
 </table>
 {% endif %}
 
-
-
-</div>
 
 
 

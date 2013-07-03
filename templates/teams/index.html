@@ -3,30 +3,19 @@
 
 {% block content %}
 
-<h2 class="headline">Teams</h2>
-
-<div id="left_column">
 <ul>
-  {% for letter, standings in name_dict.items %}
-  {% if standings.exists %}
+  {% for letter, teams in name_dict.items %}
+  {% if teams.exists %}
   <li>
     <a class="letter_link" href="{% url team_name_fragment letter %}">{{ letter }}: </a>
-    {% for standing in standings %}
-    <a href="{% url team_detail standing.team.slug %}">{{ standing.team }}</a>{% if forloop.last %}...{% else %},{% endif %}
+    {% for team in teams %}
+    <a href="{% url team_detail team.slug %}">{{ team }}</a>{% if forloop.last %}...{% else %} |{% endif %}
 
     {% endfor %}
   </li>
   {% endif %}
   {% endfor %}
 </ul>
-</div>
-
-<div id="right_column">
-<h3>Winningest teams</h3>
-{% include "templatetags/standings/slim.html" with standings=winningest %}
-</div>
-
-
 
 
 {% endblock %}

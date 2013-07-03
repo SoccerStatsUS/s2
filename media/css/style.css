@@ -14,7 +14,8 @@ body {
 h1 span.subhead { font-size: .55em; }
 h2.headline { font-size: 1.8em; }
 
-.letter_link { font-size: 1.5em; }
+.letter_link { font-size: 2.2em; }
+
 .small { font-size: .7em; }
 .headline { text-align: center;}
 .align-right { text-align: right; }
@@ -25,19 +26,23 @@ h2.headline { font-size: 1.8em; }
 #blurb a:hover { text-decoration: underline; }
 
 
-#right-nav { 
+#nav { 
     font-family: monospace;
     font-size: 1.3em;
     text-align: right;
 }
 
-#right-nav li {
+#nav li {
     line-height: 2em;
 }
 
+#nav #header {
+    font-weight: bold;
+    padding: 5px 0;
+    border-bottom: 8px solid #f92;
+}
 
 
-#header li { font-size: 1.2em; }
 
 /* pages */
 
@@ -72,7 +77,13 @@ option {
     width: 100px;
 }
 
+#nav {
+    background-color: #eee;
+}
 
+#homepage_video {
+    text-align: center;
+}
 
 
 /* about */
@@ -89,34 +100,58 @@ option {
 
 /* Positioning */
 
+ul, li { 
+    padding: 0;
+    margin: 0;
+}
 
-#right-nav {
+
+#nav, #footer {
     position: fixed;
-    right: 0;
-    top: 0;
-    background-color: #eee;
     width: 160px;
+    left: 0;
+    padding-right: 15px;
+}
+
+#nav {
+
     height: 100%;
-    padding-right: 20px;
+    top: 0;
 }
 
 
 #footer {
     position: fixed;
     bottom: 0;
-    width: 160px;
-    height: 50px;
+    height: 100px;
+}
+
+#content {
+    margin-left: 200px;
 }
 
 
-.left_half {
-    float: left;
-    width: 50%;
+/* Homepage */
+
+
+
+#homepage_video {
+    position: relative;
+    width: 560px;
+    margin: 0 auto;
+    height: 100%;
+    margin-top: 15%;
 }
 
-.right_half {
-    float: right;
-    width: 50%;
+#video_title {
+    padding-top: 20px;
+}
+
+
+/* Alphabet listings - people, teams, cities... */
+
+.alphabet {
+    padding-bottom: 15px;
 }
 
 
@@ -130,21 +165,11 @@ h1 span.subhead {
     margin-left: 15px;
 }
 
-#header {
-    clear: both;
-    padding: 0;
-    margin: 0;
-    padding-bottom: 10px;
-}
-
-#header li {
-    float: left;
-    padding-right: 45px;
-}
 
 #content {
-    width: 1280px;
-    margin: 0 auto;
+    margin-right: 200px;
+    //width: 1280px;
+    //margin: 0 auto;
 }
 
 
@@ -155,24 +180,26 @@ h1 span.subhead {
     width: 300px;
 }
 
-#left_column {
-    float: left;
-    width: 660px;
-}
-
-#right_column {
-    margin-left: 660px;
-    padding-top: 10px;
-}
-
 
 #controls {
     margin: 10px;
 }
 
 
-/* footer */
+/* Bio list */
 
+
+#bio {
+    width: 1000px;
+}
+
+#gamesz {
+    width: 1000px;
+}
+
+#draft {
+    width: 1000px;
+}
 
 /* Scoreboard */
 

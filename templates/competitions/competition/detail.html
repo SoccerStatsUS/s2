@@ -21,8 +21,12 @@
 
 
 
-<div id="left_column">
 
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+<div tab="seasons">
 {% with has_mvp=competition.has_mvp %}
 {% if competition.season_set.exists %}
 <table>
@@ -80,22 +84,10 @@
 {% endif %}
 {% endwith %}
 
-
-{% if top_attendance_games %}
-<h3>Best attendances</h3>
-{% include "templatetags/games/attendance.html" with games=top_attendance_games %}
-{% endif %}
-
-{% if worst_attendance_games %}
-<h3>Worst attendances</h3>
-{% include "templatetags/games/attendance.html" with games=worst_attendance_games %}
-{% endif %}
-
 </div>
 
-<div id="right_column">
 
-
+<div tab="standings">
 
 {% if competition.alltime_standings.exists %}
 {% include "templatetags/standings/slim.html" with standings=big_winners %}
@@ -107,7 +99,17 @@
 {% endif %}
 {% endcomment %}
 
+</div>
 
+<div tab="stats">
+{% if stats %}
+{% include "templatetags/career_bio.html" %}
+<a href="{% url competition_stats competition.slug %}">All-time {{ competition.name }} stats</a>
+{% endif %}
+</div>
+
+
+<div tab="awards">
 
 {% if competition.award_set.exists %}
 <h3>Awards</h3>
@@ -120,14 +122,24 @@
 </table>
 {% endif %}
 
+</div>
 
 
-{% if stats %}
-{% include "templatetags/career_bio.html" %}
-<a href="{% url competition_stats competition.slug %}">All-time {{ competition.name }} stats</a>
+
+<div tab="attendance">
+
+{% if top_attendance_games %}
+<h3>Best attendances</h3>
+{% include "templatetags/games/attendance.html" with games=top_attendance_games %}
 {% endif %}
+{% if worst_attendance_games %}
+<h3>Worst attendances</h3>
+{% include "templatetags/games/attendance.html" with games=worst_attendance_games %}
+{% endif %}
+</div>
 
 
 </div>
+
 
 {% endblock %}
