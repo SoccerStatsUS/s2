@@ -1,0 +1,40 @@
+{% if current_staff %}
+<h3>Staff</h3>
+<table>
+{% for position in current_staff %}
+<tr>
+  <td><a href="{% url person_detail position.person.slug %}">{{ position.person }}</a></td>
+  <td><a href="{% url team_position_detail team.slug position.slug %}" alt="{{ position.name }}">{{ position.name|truncatechars:20 }}</a></td>
+  {% if position.start %}
+  <td><a href="{% url date_detail position.start.year position.start.month position.start.day %}">{{ position.start|default_if_none:'' }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+
+{% if positions %}
+<h3>Head coaches</h3>
+<table>
+{% for position in positions %}
+<tr>
+  <td><a href="{% url person_detail position.person.slug %}">{{ position.person }}</a></td>
+  <td>{{ position.name|truncatechars:20 }}</td>
+  {% if position.start %}
+  <td><a href="{% url date_detail position.start.year position.start.month position.start.day %}">{{ position.start|default_if_none:'' }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+  {% if position.end %}
+  <td><a href="{% url date_detail position.end.year position.end.month position.end.day %}">{{ position.end|default_if_none:'' }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+

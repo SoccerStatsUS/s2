@@ -10,9 +10,7 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-table {
-
-}
+table, tr { margin: 0; padding: 0;}
 
 
 h1 span.subhead { font-size: .55em; }
@@ -178,10 +176,7 @@ ul, li {
 }
 
 
-#team_logo {
-    padding: 5px;
-    border: 8px solid #ccc;
-}
+
 
 
 h1 span.subhead {
@@ -319,6 +314,27 @@ textarea#id_message {
     float: right;
 }
 
+
+/* team detail */
+
+#team_logo {
+    padding: 5px;
+    border: 8px solid #eee;
+    float: left;
+}
+
+
+
+/* Bio detail */
+
+#bio_image {
+    height: 180px;
+    width: 140px;
+    background-color: #eee;
+    float: left;
+}
+
+
 /* For what? */
 
 #date_nav {
@@ -332,4 +348,8 @@ textarea#id_message {
 #error_dialog {
     display: none;
     width: 800px;
+}
+
+.clear {
+    clear: both;
 }

@@ -15,53 +15,35 @@
 
 {% block content %}
 
-<h2>{{ bio.name }}</h2>
+{% include "bios/helpers/summary.html" %}
 
 
-<div>
+<ul id="tabs"></ul>
 
-{% if bio.height or bio.weight %}
-<div>{% if bio.height %}{{ bio.height }}cm{% endif %}</div>
-<div>{% if bio.weight %}{{ bio.weight }}kg{% endif %}</div>
-{% endif %}
+<div id="tab_wrapper">
 
 
-{% if bio.birthdate or bio.birthplace %}
-<div>
-  born on
-  {% if bio.birthdate %}<div><a href="{% url date_detail bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a></div>{% endif %}
-  {% if bio.birthplace %}<div>in <a href="{% url city_detail bio.birthplace.slug %}">{{ bio.birthplace }}</a></div>{% endif %}
-</div>
-{% endif %}
-
-{% if bio.last_game and bio.last_game != bio.first_game %}
-<div>first game: <a href="{% url game_detail bio.first_game.id %}">{{ bio.first_game.date }}</a></div>
-{% endif %}
-
-
-{% if bio.last_game and bio.last_game != bio.first_game %}
-<div>last game: <a href="{% url game_detail bio.last_game.id %}">{{ bio.last_game.date }}</a></div>
-{% endif %}
-
-
-
+{% comment %}
 {% include "bios/detail_stats.html" %}
+{% endcomment %}
 
 {% if recent_game_stats %}
-
+<div tab="games">
 {% include "templatetags/stats/game_list.html" with stats=recent_game_stats %}
-<div><a href="{% url person_detail_games bio.slug %}">more games</a></div>
+<a href="{% url person_detail_games bio.slug %}">more games</a>
+</div>
 {% endif %}
 
 
 {% if refs %}
-<h3>Games refereed</h3>
+<div tab="refereed">
 {% include "templatetags/appearances/ref.html" with games=refs %}
+</div>
 {% endif %}
 
 
 {% if bio.awards.exists %}
-<h4>Awards</h4>
+<div tab="awards">
 <table>
 {% for award in bio.awards.all %}
 <tr>
@@ -76,10 +58,11 @@
 </tr>
 {% endfor %}
 </table>
+</div>
 {% endif %}
 
 {% if picks.exists %}
-<h4>Drafts</h4>
+<div tab="drafts">
 <table>
 {% for pick in picks %}
 <tr>
@@ -93,12 +76,13 @@
 </tr>
 {% endfor %}
 </table>
+</div>
 {% endif %}
 
 
 
 {% if bio.salary_set.count %}
-<h4>Salaries</h4>
+<div tab="salary">
 <table>
   {% for salary in bio.salary_set.all %}
   <tr>
@@ -107,9 +91,10 @@
   </tr>
   {% endfor %}
 </table>
+</div>
 {% endif %}
 
 
-
+</div>
 
 {% endblock %}

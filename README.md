@@ -1,11 +1,12 @@
+## A website for displaying and analyzing soccer statistics.
+
+This is the code used to run soccerstats.us
+
+Contains lots of useful methods and utilities, probably.
 
 
-# A website for displaying and analyzing soccer statistics.
 
-
-
-
-# Deployment instructions.
+#### Deployment instructions.
 1. Add to /etc/hosts, /etc/ssh_config
 2. adduser chris; add chris to /etc/sudoers
 3. Add ssh keys.
@@ -18,44 +19,22 @@
 
 #### Dependencies
 
-LevelDB
-RabbitMQ
 MongoDB
+*RabbitMQ
 
 MongoDB and RabbitMQ have been installed from debs, so add to /etc/apt/sources.list:
 deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen
-deb http://www.rabbitmq.com/debian/ testing main
-
-* Why am I using LevelDB? 
-Using it for data caching from scraped pages. Redis (?) was having issues with some of the characters I was using. 
-Would be best to make sure everything is utf-8 on the data side anyway.
-
-####
+*deb http://www.rabbitmq.com/debian/ testing main
 
 
-Nice features: 
-* team / league / player timelines
-Relevant standings on the date page.
-Coach, ref, attendance, city, stadium on game detail
-Use canvas to draw fields?
+#### Features
 
 #### Todo
 
-Create a team ranking system based on the scores.
-
-# Are a stat and a standing the same thing?
-
-
+* Create a team ranking system based on the scores.
 
 
 #### Bugs
-
-Some of the main problems with this site:
-
-0. Provision AWS
-1. Caching with redis.
-2. Need testing.
-3. Need to figure out how to distinguish players with the same name.
 
 
 #### Stats
@@ -77,11 +56,10 @@ This would solve the long-lasting MLS open cup / regular season problem.
 
 #### Soccermetrics
 
-# Negative binomial distribution matches number of goals scored by a team (?)
-# Some people also us e poisson models though.
-# 
 Difference vs ratio question about scores.
+
 Is a 3-1 victory more like a 6-2 or a 6-4 victory?
+
 Determines motivations of teams.
 
 http://www.wagerlines.net/lib/etj.pdf

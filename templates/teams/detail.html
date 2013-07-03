@@ -12,164 +12,58 @@
 {% block content %}
 
 
-<div id="left_column">
+{% include "teams/helpers/summary.html" %}
 
-
-<h2>{{ team.name }}</h2>
-
-{% if team.teamalias_set.exists %}
-<div class="alternate-name">
-Alternate names: 
-{% for alias in team.teamalias_set.all %}
-{% include "templatetags/team_alias.html" %}
-{% endfor %}
-</div>
-{% endif %}
-
-{% if team.city %}
-<h3><a href="{% url city_detail team.city.slug %}">{{ team.city }}</a></h3>
-{% endif %}
-
-{% if team.founded %}
-<div>founded: {{ team.founded }}</div>
-{% endif %}
-
-
-{% if team.get_image %}
-<img id="team_logo" height="200" src="{{ team.get_image }}">
-{% endif %}
 
 
 <ul id="tabs"></ul>
 
 <div id="tab_wrapper">
 
-{% if current_staff or positions %}
-<div tab="staff">
-
-{% if current_staff %}
-<h3>Staff</h3>
-<table>
-{% for position in current_staff %}
-<tr>
-  <td><a href="{% url person_detail position.person.slug %}">{{ position.person }}</a></td>
-  <td><a href="{% url team_position_detail team.slug position.slug %}" alt="{{ position.name }}">{{ position.name|truncatechars:20 }}</a></td>
-  {% if position.start %}
-  <td><a href="{% url date_detail position.start.year position.start.month position.start.day %}">{{ position.start|default_if_none:'' }}</a></td>
-  {% else %}
-  <td></td>
-  {% endif %}
-
-</tr>
-{% endfor %}
-</table>
-{% endif %}
-
-{% if positions %}
-<h3>Head coaches</h3>
-<table>
-{% for position in positions %}
-<tr>
-  <td><a href="{% url person_detail position.person.slug %}">{{ position.person }}</a></td>
-  <td>{{ position.name|truncatechars:20 }}</td>
-  {% if position.start %}
-  <td><a href="{% url date_detail position.start.year position.start.month position.start.day %}">{{ position.start|default_if_none:'' }}</a></td>
-  {% else %}
-  <td></td>
-  {% endif %}
-  {% if position.end %}
-  <td><a href="{% url date_detail position.end.year position.end.month position.end.day %}">{{ position.end|default_if_none:'' }}</a></td>
-  {% else %}
-  <td></td>
-  {% endif %}
-</tr>
-{% endfor %}
-</table>
-{% endif %}
-
+{% if team.awards.exists %}
+<div tab="honors">
+{% include "teams/helpers/honors.html" %}
 </div>
 {% endif %}
+
+
 
 {% if game_leaders.exists %}
 <div tab="stats">
-<h3><a href="{% url team_stats team.slug %}">All-time {{ team }} stats</a></h3>
-</div>
-{% endif %}
-
-{% include "templatetags/standings/team.html" with games=team.standing_set.all %}
-
-
-{% if team.awards.exists %}
-<div tab="honors">
-<h3>Honors</h3>
-<table>
-{% for award in awards %}
-<tr>
-  <td><a href="{% url season_detail award.season.competition.slug award.season.slug %}">{{ award.season.name }}</a></td>
-  <td><a href="{% url award_detail award.award.id %}">{{ award.award.name }}</a></td>
-  <td><a href="{% url competition_detail award.award.competition.slug %}">{{ award.award.competition }}</a></td>
-</tr>
-{% endfor %}
-</table>
+<h4><a href="{% url team_stats team.slug %}">All-time {{ team }} stats</a></h4>
 </div>
 {% endif %}
 
 
-{% if recent_games %}
-{% include "templatetags/games/attendance.html" with games=recent_games %}
-<div><a href="{% url team_games team.slug %}">all games</a></div>
+
+{% if current_staff or positions %}
+<div tab="staff">
+{% include "teams/helpers/staff.html" %}
+</div>
 {% endif %}
 
 {% if recent_picks or draftees %}
 <div tab="drafts">
-
-{% if recent_picks %}
-<h3>Recent draft picks (<a href="{% url team_picks team.slug %}">complete {{ team }} picks</a>)</h3> 
-<table>
-{% for e in recent_picks %}
-<tr>
-  <td>{{ e.draft.season }}</td>
-  <td>{{ e.number }}</td>
-  {% if draft.competition %}
-  <td><a href="{% url draft_detail e.draft.competition.slug e.draft.slug e.draft.season.name %}">{{ e.draft.name }}</a></td>
-  {% else %}
-  <td>{{ pick.draft.season.name }} {{ pick.draft.name }}</td>
-  {% endif %}
-
-  <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
-
-  {% if e.former_team %}
-  <td><a href="{% url team_detail e.former_team.slug %}">{{ e.former_team }}</a></td>
-  {% else %}
-  <td></td>
-  {% endif %}
-</tr>
-{% endfor %}
-</table>
-{% endif %}
-
-{% if draftees %}
-<h3>Recent draftees (<a href="{% url team_draftees team.slug %}">complete {{ team }} draftees</a>)</h3> 
-<table>
-{% for e in draftees %}
-<tr>
-  <td>{{ e.draft.season }}</td>
-  <td><a href="{% url team_detail e.team.slug %}">{{ e.team }}</a></td>
-  <td>{{ e.number }}</td>
-  {% if draft.competition %}
-  <td><a href="{% url draft_detail e.draft.competition.slug e.draft.slug e.draft.season.name %}">{{ e.draft.name }}</a></td>
-  {% else %}
-  <td>{{ pick.draft.season.name }} {{ pick.draft.name }}</td>
-  {% endif %}
-  <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
-</tr>
-{% endfor %}
-</table>
-
-{% endif %}
-
+{% include "teams/helpers/drafts.html" %}
 </div>
 {% endif %}
+
+
+{% comment %}
+{% include "templatetags/standings/team.html" with games=team.standing_set.all %}
+{% endcomment %}
+
+
+
+
+
+{% if recent_games %}
+<div tab="games">
+  {% include "templatetags/games/attendance.html" with games=recent_games %}
+  <p><a href="{% url team_games team.slug %}">all games</a></p>
+</div>
+{% endif %}
+
 
 
 </div>
