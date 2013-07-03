@@ -8,6 +8,7 @@ from bios.models import Bio
 from games.models import Game
 from places.models import Country, City, State, Stadium
 from standings.models import StadiumStanding
+from teams.models import Team
 
 
 def country_index(request):
@@ -114,6 +115,7 @@ def city_detail(request, slug):
 
         context = {
                 'city': city,
+                'teams': Team.objects.filter(city=city),
                 'games': Game.objects.filter(city=city),
                 'stadiums': city.stadium_set.annotate(game_count=Count('game')).annotate(total_attendance=Sum('game__attendance')).order_by('-game_count')
                 }

@@ -10,11 +10,15 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+table {
+
+}
+
 
 h1 span.subhead { font-size: .55em; }
 h2.headline { font-size: 1.8em; }
 
-.letter_link { font-size: 2.2em; }
+.letter_link { font-size: 2.8em; }
 
 .small { font-size: .7em; }
 .headline { text-align: center;}
@@ -88,9 +92,14 @@ option {
 
 /* about */
 
+#about {
+    padding-bottom: 30px;
+}
+
 
 #about img {
     margin: 30px 0;
+
 }
 
 #about p {
@@ -128,6 +137,7 @@ ul, li {
 
 #content {
     margin-left: 200px;
+    margin-top: 12px;
 }
 
 
@@ -145,6 +155,19 @@ ul, li {
 
 #video_title {
     padding-top: 20px;
+}
+
+/* Search */
+
+#search_box { 
+    position: relative;
+    top: 100px;
+    width: 240px; 
+    background-color: #eee;
+    border: 8px solid #f92;
+    padding: 50px;
+    margin: 0 auto;
+
 }
 
 

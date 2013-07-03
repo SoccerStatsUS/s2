@@ -21,18 +21,16 @@
 <div>
 
 {% if bio.height or bio.weight %}
-<div>
-  {% if bio.height %}Height: {{ bio.height }} cm{% endif %}
-  {% if bio.weight %}Weight: {{ bio.weight }} kg{% endif %}
-</div>
+<div>{% if bio.height %}{{ bio.height }}cm{% endif %}</div>
+<div>{% if bio.weight %}{{ bio.weight }}kg{% endif %}</div>
 {% endif %}
 
 
 {% if bio.birthdate or bio.birthplace %}
 <div>
-  born 
-  {% if bio.birthdate %}<a href="{% url date_detail bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a>{% endif %}
-  {% if bio.birthplace %}in <a href="{% url city_detail bio.birthplace.slug %}">{{ bio.birthplace }}</a>{% endif %}
+  born on
+  {% if bio.birthdate %}<div><a href="{% url date_detail bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a></div>{% endif %}
+  {% if bio.birthplace %}<div>in <a href="{% url city_detail bio.birthplace.slug %}">{{ bio.birthplace }}</a></div>{% endif %}
 </div>
 {% endif %}
 

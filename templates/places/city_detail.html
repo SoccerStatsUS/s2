@@ -4,19 +4,13 @@
 
 {% block content %}
 
-<h3>{{ city.name }}</h3>
+<h3>{{ city.name }}{% if city.state %}, <a href="{% url state_detail city.state.slug %}">{{ city.state.name }}</a>{% endif %}{% if city.country %}, <a href="{% url country_detail city.country.slug %}">{{ city.country.name }}</a>{% endif %}</h3>
 
-{% if city.state %}
-<h4><a href="{% url state_detail city.state.slug %}">{{ city.state.name }}</a></h4>
-{% endif %}
-
-{% if city.country %}
-<h4>{{ city.country.name }}</h4>
-{% endif %}
 
 <ul id="tabs"></ul>
 
 <div id="tab_wrapper">
+
 
 {% if city.stadium_set.exists %}
 <div tab="stadiums">
@@ -55,6 +49,19 @@
 {% if city.birth_set.exists %}
 {% include "templatetags/lists/born.html" %} 
 {% endif %}
+
+{% if teams %}
+<div tab="teams">
+  <table>
+    {% for team in teams %}
+    <tr>
+      <td><a href="{% url team_detail team.slug %}">{{ team }}</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %}
+
 
 {% if games %}
 <div tab="games">
