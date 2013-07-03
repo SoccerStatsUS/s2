@@ -16,7 +16,6 @@ a.external {
     color: #f92;
 }
 
-h1 span.subhead { font-size: .55em; }
 h2.headline { font-size: 1.8em; }
 
 .letter_link { font-size: 2.8em; }
@@ -29,6 +28,12 @@ h2.headline { font-size: 1.8em; }
 
 #blurb { font-size: 2em; }
 #blurb a:hover { text-decoration: underline; }
+
+.white-title {
+    color: #fff;
+    font-size: 2em;
+    font-family: monospace;
+    }
 
 
 #nav { 
@@ -49,6 +54,10 @@ h2.headline { font-size: 1.8em; }
     font-weight: bold;
     padding: 5px 0;
 
+}
+
+.standings_list {
+    width: 100%;
 }
 
 
@@ -72,8 +81,6 @@ h2.headline { font-size: 1.8em; }
 
 .grey { background-color: #eee; }
 .red { background-color: red; }
-
-h1 span.subhead { color: #777; }
 
 /* Big board */
 .bigboard ul, #ajax_box  {  background-color: #eee; }
@@ -132,9 +139,12 @@ ul, li {
 
 
 #content {
-    margin-left: 200px;
-    margin-top: 12px;
+    margin: 0;
+    padding: 0;
+    margin-left: 175px;
+    //width: 1280px;
 }
+
 
 
 
@@ -143,6 +153,18 @@ ul, li {
     bottom: 0;
     height: 100px;
 }
+
+/* generic control bar */
+
+#control-bar {
+    margin: 0;
+    padding: 0;
+    height: 50px;
+    background-color: #f92;
+    width: 100%;
+    border-bottom: 8px solid #eee;
+}
+
 
 
 /* Homepage */
@@ -171,25 +193,28 @@ ul, li {
 #search_box {
     top: 50px;
     margin-left: 50px;    
-    border: 8px solid #f92;
-    background-color: #ddd;
+    border: solid #f92;
+    border-width: 0 8px 8px 8px;
+    background-color: #eee;
     padding: 50px;
     width: 200px;
-
 }
 
 #search_results { 
-    top: 0;
     right: 0;
-    padding: 20px 100px 20px 20px;
+    padding: 20px 0 20px 20px;
     background-color: #eee;
-    height: 800%;
+    height: 100%;
 }
 
 #search_results table {
     margin-top: 20px;
-    width: 300px;
+    width: 470px;
     border: 0;
+}
+
+#search_results td.model {
+    width: 90px;
 }
 
 #search_results td {
@@ -204,6 +229,37 @@ ul, li {
 }
 
 
+
+/* Contact form */
+
+
+#contact_box {
+    position: absolute;
+    top: 50px;
+    margin-left: 400px;
+    padding-top: 100px;
+    border: solid #f92;
+    border-width: 0 8px 8px 8px;
+    background-color: #eee;
+    width: 250px;
+    height: 500px;
+    text-align: center;
+}
+
+#contact_box textarea {
+    height: 300px;
+    width: 200px;
+    margin: 30px 0;
+}
+
+#contact_box input {
+    width: 200px;
+ 
+}
+
+
+
+
 /* Alphabet listings - people, teams, cities... */
 
 .alphabet {
@@ -211,29 +267,6 @@ ul, li {
 }
 
 
-
-
-
-h1 span.subhead {
-    margin-left: 15px;
-}
-
-
-#content {
-    margin-right: 200px;
-    //width: 1280px;
-    //margin: 0 auto;
-}
-
-
-
-
-
-
-
-#controls {
-    margin: 10px;
-}
 
 
 /* Bio list */
@@ -244,7 +277,7 @@ h1 span.subhead {
 }
 
 #gamesz {
-    width: 1000px;
+    width: 100%;
 }
 
 #draft {
@@ -266,19 +299,7 @@ h1 span.subhead {
     border: 1px solid black;
 }
 
-/* Contact form */
 
-label {
-    width: 200px;
-}
-
-input#id_email {
-    width: 400px;
-}
-
-textarea#id_message {
-    width: 400px;
-}
 
 
 
@@ -367,6 +388,12 @@ textarea#id_message {
 
 #game-detail #game-media {
     text-align: center;
+}
+
+/* competition_index */
+
+#competition_index {
+    width: 100%;
 }
 
 

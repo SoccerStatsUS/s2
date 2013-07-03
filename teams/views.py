@@ -67,6 +67,9 @@ def team_index(request):
     """
     Teams shown by letter.
     """
+    # This is not good but not sure how to fix.
+    # Need to broaden team standing generation so we use that
+    # to pull all teams.
     
     letters = 'abcdefghijklmnopqrstuvwxyz'.upper()
 

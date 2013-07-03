@@ -1,6 +1,8 @@
-1;2c{% extends 'base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
+
+<div id="control-bar"></div>
 
 <div id="search_box">
     <form method="get" action=".">
@@ -20,8 +22,8 @@
       <table>
         {% for result in page.object_list %}
         <tr>
-          <td>{{ result.model_name }}</td>
-          <td><a href="{{ result.object.get_absolute_url }}">{{ result.object }}</a></td>
+          <td class="model">{{ result.model_name }}</td>
+          <td><a href="{{ result.object.get_absolute_url }}">{{ result.object|truncatechars:"50" }}</a></td>
 
         </tr>
         {% empty %}

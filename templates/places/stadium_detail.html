@@ -6,52 +6,55 @@
 
 
 
-<ul id="tabs"></ul>
-
-<div id="tab_wrapper">
-
-
-<div tab="summary">
-<h3>Average attendance: {{ average_attendance|floatformat }} ({{ attendance_game_count }} games)</h3>
 
 {% if stadium.address %}
-<h4><a href="{% url city_detail stadium.city.slug %}">{{ stadium.address }}, {{ stadium.city }}</a></h4>
+<div><a href="{% url city_detail stadium.city.slug %}">{{ stadium.address }}, {{ stadium.city }}</a></div>
 {% else %}
 {% if stadium.city %}
-<h4><a href="{% url city_detail stadium.city.slug %}">{{ stadium.city }}</a></h4>
+<div><a href="{% url city_detail stadium.city.slug %}">{{ stadium.city }}</a></div>
 {% endif %}
 {% endif %}
 
 
 {% if stadium.opened %}
-<h4>Opened: <a href="{% url date_detail stadium.opened.year stadium.opened.month stadium.opened.day %}">{{ stadium.opened }}</a></h4>
+<div>Opened: <a href="{% url date_detail stadium.opened.year stadium.opened.month stadium.opened.day %}">{{ stadium.opened }}</a></div>
 {% else %}
 {% if stadium.year_opened %}
-<h4>Opened: <a href="{% url year_detail stadium.year_opened %}">{{ stadium.year_opened }}</a></h4>
+<div>Opened: <a href="{% url year_detail stadium.year_opened %}">{{ stadium.year_opened }}</a></h4>
 {% endif %}
 {% endif %}
 
 {% if stadium.closed %}
-<h4>Closed: <a href="{% url date_detail stadium.closed.year stadium.closed.month stadium.closed.day %}">{{ stadium.closed }}</a></h4>
+<div>Closed: <a href="{% url date_detail stadium.closed.year stadium.closed.month stadium.closed.day %}">{{ stadium.closed }}</a></div>
 {% else %}
 {% if stadium.year_closed %}
-<h4>Closed: <a href="{% url year_detail stadium.year_closed %}">{{ stadium.year_closed }}</a></h4>
+<div>Closed: <a href="{% url year_detail stadium.year_closed %}">{{ stadium.year_closed }}</a></div>
 {% endif %}
 {% endif %}
 
 
 {% if stadium.capacity %}
-<h4>Capacity: {{ stadium.capacity }}</h4>
+<div>Capacity: {{ stadium.capacity }}</div>
 {% endif %}
 
-
 {% if stadium.cost %}
-<h4>Cost: ${{ stadium.cost }}</h4>
+<div>Cost: ${{ stadium.cost }}</div>
 {% endif %}
 
 {% if stadium.architect %}
-<h4>Architect: <a href="{% url person_detail stadium.architect.slug %}">{{ stadium.architect }}</a></h4>
+<div>Architect: <a href="{% url person_detail stadium.architect.slug %}">{{ stadium.architect }}</a></div>
 {% endif %}
+
+<div>Average attendance: {{ average_attendance|floatformat }} ({{ attendance_game_count }} games)</div>
+
+
+
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+
+<div tab="standings">
 
 {% include "templatetags/standings/slim.html" %}
 

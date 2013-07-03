@@ -18,12 +18,13 @@
 
 {% block content %}
 
+<div id="control-bar">
+
 {% if date %}
-<h3>
+
 {% if previous_date %}<a href="{% url date_detail previous_date.0 previous_date.1 previous_date.2 %}">←</a>{% endif %}
 <span id="specific_date">{{ date }}</span>
 {% if next_date %}<a href="{% url date_detail next_date.0 next_date.1 next_date.2 %}">→</a>{% endif %}
-</h3>
 
 {% else %}
 
@@ -35,16 +36,9 @@
 </div>
 
 {% endif %}
-
 {% endif %}
 
- {% comment %}
-<p>
-Date: <input type="text" id="datepicker" />
-<input type="submit" value="go" />
-</p> 
-{% endcomment %}
-
+</div>
 
 
 <ul id="tabs"></ul>
