@@ -1,8 +1,15 @@
-  <h4><a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date|date:"F d, Y" }} scoreboard</a></h4>
 <div id="scoreboard">
 <table>
+
   <tr>
+    {# {{ game.date|date:"F d, Y" }} #}
+    <th><a href="{% url date_detail game.date.year game.date.month game.date.day %}">scoreboard</a></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
   </tr>
+
       
   {% for game in games %}
   <tr class="score">

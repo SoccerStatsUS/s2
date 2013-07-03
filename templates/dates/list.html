@@ -19,11 +19,11 @@
 {% block content %}
 
 {% if date %}
-<div id="date_nav">
+<h3>
 {% if previous_date %}<a href="{% url date_detail previous_date.0 previous_date.1 previous_date.2 %}">←</a>{% endif %}
 <span id="specific_date">{{ date }}</span>
 {% if next_date %}<a href="{% url date_detail next_date.0 next_date.1 next_date.2 %}">→</a>{% endif %}
-</div>
+</h3>
 
 {% else %}
 

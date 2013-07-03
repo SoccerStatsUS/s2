@@ -1,23 +1,26 @@
 {% if game.video %}
-<h4>Media</h4>
+<h4>media</h4>
+<div id="game-media">
 {% include "templatetags/embed.html" with video=game.video %}
+</div>
 {% endif %}
 
 
 {% if game.notes %}
-<h4>Notes</h4>
+<h4>notes</h4>
 <p>{{ game.notes }}</p>
 {% endif %}
 
 {% if game_sources %}
-<h4>Sources</h4>
 <ul>
+<li><strong>sources</strong></li>
 {% for game_source in game_sources %}
 <li>
+
 <a href="{% url source_detail game_source.source.id %}">{{ game_source.source|truncatechars:"30" }}</a> 
-{% if game_source.source_url %}<em><a href="{{ game_source.source_url }}">(external link)</a></em>
+{% if game_source.source_url %}<a class="external" href="{{ game_source.source_url }}">(link)</a>
 {% else %}
-{% if game_source.source.base_url %}<em><a href="{{ game_source.source.base_url }}">(external link)</a></em>
+{% if game_source.source.base_url %}<a class="external" href="{{ game_source.source.base_url }}">(link)</a>
 {% endif %}
 {% endif %}
 </li>

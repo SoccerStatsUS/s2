@@ -49,6 +49,32 @@ class AbstractStanding(models.Model):
         return self.win_percentage() * 100
 
 
+class StandingManager(models.Manager):
+
+
+    def for_date(self, date, team):
+        # use get_query_set
+        standings = Standing.objects.exclude(date=None).filter(team=team, date__lte=date)
+        if standings.exists():
+            return standings[0]
+        else:
+            # Should return null standing?
+            return None
+
+
+    def for_season_date(self, date, season):
+        team_ids = set(Standing.objects.exclude(date=None).filter(season=season).values_list('team', flat=True))
+        teams = Team.objects.filter(id__in=team_ids)
+        return [self.for_date(date, team) for team in teams]
+
+
+    def for_competition_date(self, date, competition):
+        standings = Standing.objects.exclude(date=None).filter(competition=competition).filter(date__lte=date).order_by('date')
+        team_ids = (Standing.objects.filter(season=season).values_list('team', flat=True))
+        teams = Team.objects.filter(id__in=team_ids)
+        return [self.for_date(date, team) for team in teams]
+
+
 
 class Standing(AbstractStanding):
     """
@@ -75,6 +101,8 @@ class Standing(AbstractStanding):
     deduction_reason = models.TextField()
     position = models.IntegerField(null=True)
 
+    objects = StandingManager()
+
 
 
     class Meta:
@@ -87,6 +115,8 @@ class Standing(AbstractStanding):
 
     def __unicode__(self):
         return u"%s %s, %s: %s" % (self.team, self.competition, self.season, self.triple())
+
+
 
 
 

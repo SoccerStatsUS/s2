@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<h3>{{ award }}</h3>
+<h3><a href="{% url competition_detail award.competition.slug %}">{{ award.competition }}</a> | {{ award.name }}</h3>
 
 <table>
 

@@ -15,17 +15,13 @@
 {% block content %}
 
 
-<h2 class="headline">
+<h3>
 {% if season.previous_season %}<a href="{% url season_detail season.competition.slug season.previous_season.slug %}">←</a>{% endif %}
 {{ season }}
 {% if season.next_season %}<a href="{% url season_detail season.competition.slug season.next_season.slug %}">→</a>{% endif %}
-</h2>
+</h3>
 
 
-<div id="left_column">
-
-
-<div class="left_half">
 <table>
 
   {% if season.champion %}
@@ -85,12 +81,16 @@
 </table>
 
 
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+<div tab="standings">
+{% include "templatetags/standings/compact.html" %}
 </div>
 
-<div class="right_half">
-
-
 {% if awards.exists %}
+<div tab="awards">
 <table>
   <tr>
     <th>Award</th>
@@ -104,76 +104,49 @@
   </tr>
   {% endfor %}
 </table>
-{% endif %}
-
-
 </div>
-
-<div class="clear_both"></div>
-
+{% endif %}
 
 {% if top_attendance_games %}
-
+<div tab="games">
 <h3>Best attendances</h3>
 {% include "templatetags/games/attendance.html" with games=top_attendance_games %}
-{% endif %}
 
 {% if worst_attendance_games %}
 <h3>Worst attendances</h3>
 {% include "templatetags/games/attendance.html" with games=worst_attendance_games %}
+{% endif %}
 
+</div>
 {% endif %}
 
 
-
-</div>
-
-
-<div id="right_column">
-
-{% include "templatetags/standings/compact.html" %}
-
-{% if goal_leaders %}
+{% if goal_leaders or game_leaders %}
+<div tab="stats">
 <h3><a href="{% url season_stats season.competition.slug season.slug %}">{{ season }} stats</a></h3>
 
-<div class="left_half">
+{% if goal_leaders %}
 <table>
-<th><td>Goal leaders</td></th>
-{% for stat in goal_leaders %}
-<tr>
-  <td>{{ stat.goals }}</td>
-  {% if stat.player.slug %}
-  <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
-  {% else %}
-  <td>{{ stat.player }}</td>
-  {% endif %}
-</tr>
+  <th><td>Goal leaders</td></th>
+  {% for stat in goal_leaders %}
+  <tr>
+    <td>{{ stat.goals }}</td>
+    {% if stat.player.slug %}
+    <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
+    {% else %}
+    <td>{{ stat.player }}</td>
+    {% endif %}
+  </tr>
 {% endfor %}
 </table>
+{% endif %}
 
-
-</div>
-<div class="right_half">
-
-<table>
-<th><td>Game leaders</td></th>
-{% for stat in game_leaders %}
-<tr>
-  <td>{{ stat.games_played }}</td>
-  {% if stat.player.slug %}
-  <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
-  {% else %}
-  <td>{{ stat.player }}</td>
-  {% endif %}
-</tr>
-{% endfor %}
-</table>
-
-</div>
-
-<div class="clear_both"></div>
+{% comment %}
+{{ game_leaders }}
+{% endcomment %}
 
 {% endif %}
+
 
 </div>
 

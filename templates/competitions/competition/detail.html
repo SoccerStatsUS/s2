@@ -7,18 +7,16 @@
 {% block content %}
 
 
-<h2 class="headline">{{ competition }}</h2>
+<h3>{{ competition }}</h3>
 
 
 {% if competition.season_set.count == 1 %}
-<h3 class="center"><a href="{% url season_detail competition.slug competition.first_season.slug %}">{{ competition.first_season.name }}</a></h3>
+<div><a href="{% url season_detail competition.slug competition.first_season.slug %}">{{ competition.first_season.name }}</a></div>
 {% elif competition.season_set.count > 1 %}
-<h3 class="center"><a href="{% url season_detail competition.slug competition.first_season.slug %}">{{ competition.first_season.name }}</a> to <a href="{% url season_detail competition.slug competition.last_season.slug %}">{{ competition.last_season.name }}</a></h3>
+<div><a href="{% url season_detail competition.slug competition.first_season.slug %}">{{ competition.first_season.name }}</a> to <a href="{% url season_detail competition.slug competition.last_season.slug %}">{{ competition.last_season.name }}</a></div>
 {% endif %}
 
-<h3 class="center">{{ competition.area }} - Level {{ competition.level }}</h3> 
-
-
+<div>{{ competition.area }} - Level {{ competition.level }}</div> 
 
 
 

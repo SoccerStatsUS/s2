@@ -151,6 +151,7 @@ def date_detail(request, year, month, day):
 
     standings = Standing.objects.filter(date=d)
 
+    #standings2 = Standing.objects.for_season_date(d, 
 
     next_date_tuple = previous_date_tuple = None
 

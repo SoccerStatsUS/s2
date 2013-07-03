@@ -12,6 +12,9 @@ body {
 
 table, tr { margin: 0; padding: 0;}
 
+a.external {
+    color: #f92;
+}
 
 h1 span.subhead { font-size: .55em; }
 h2.headline { font-size: 1.8em; }
@@ -38,10 +41,14 @@ h2.headline { font-size: 1.8em; }
     line-height: 2em;
 }
 
+#header {
+    border-bottom: 8px solid #f92;
+}
+
 #nav #header {
     font-weight: bold;
     padding: 5px 0;
-    border-bottom: 8px solid #f92;
+
 }
 
 
@@ -58,8 +65,6 @@ h2.headline { font-size: 1.8em; }
 
 .bigboard { font-size: .8em; }
 .bigboard h3 { font-size: .9em; }
-
-#date_nav { font-size: 1.5em; }
 
 
 /* colors 
@@ -121,21 +126,22 @@ ul, li {
 }
 
 #nav {
-
     height: 100%;
     top: 0;
 }
+
+
+#content {
+    margin-left: 200px;
+    margin-top: 12px;
+}
+
 
 
 #footer {
     position: fixed;
     bottom: 0;
     height: 100px;
-}
-
-#content {
-    margin-left: 200px;
-    margin-top: 12px;
 }
 
 
@@ -157,15 +163,44 @@ ul, li {
 
 /* Search */
 
-#search_box { 
-    position: relative;
-    top: 100px;
-    width: 240px; 
-    background-color: #eee;
-    border: 8px solid #f92;
-    padding: 50px;
-    margin: 0 auto;
+#search_box, #search_results { 
+    position: absolute;
 
+}
+
+#search_box {
+    top: 50px;
+    margin-left: 50px;    
+    border: 8px solid #f92;
+    background-color: #ddd;
+    padding: 50px;
+    width: 200px;
+
+}
+
+#search_results { 
+    top: 0;
+    right: 0;
+    padding: 20px 100px 20px 20px;
+    background-color: #eee;
+    height: 800%;
+}
+
+#search_results table {
+    margin-top: 20px;
+    width: 300px;
+    border: 0;
+}
+
+#search_results td {
+    border: 0;
+}
+
+#search_results #search_directions {
+    font-size: 1.5em;
+    padding: 10px 0 10px 10px;
+    position: fixed;
+    bottom: 20px;
 }
 
 
@@ -194,9 +229,6 @@ h1 span.subhead {
 
 
 
-#game-detail-wrapper {
-    width: 300px;
-}
 
 
 #controls {
@@ -314,6 +346,29 @@ textarea#id_message {
     float: right;
 }
 
+/* game detail */
+
+#game-detail {
+    width: 1000px;
+
+}
+
+#game-detail #game-data {
+    //border: 5px solid black;
+    width: 450px;
+    float: left;
+}
+
+#game-detail #related-data {
+    //border: 5px solid black;
+    margin-left: 460px;
+    width: 530px;
+}
+
+#game-detail #game-media {
+    text-align: center;
+}
+
 
 /* team detail */
 
@@ -332,14 +387,12 @@ textarea#id_message {
     width: 140px;
     background-color: #eee;
     float: left;
+    margin-right: 10px;
 }
 
 
 /* For what? */
 
-#date_nav {
-    margin-left: 100px;
-}
 
 #specific_date {
     width: 200px;
