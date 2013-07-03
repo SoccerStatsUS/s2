@@ -15,18 +15,25 @@
 {% block content %}
 
 
-<h3>
-  {% if season.previous_season %}<a href="{% url season_detail season.competition.slug season.previous_season.slug %}">←</a>{% endif %}
-  <a href="{% url competition_detail season.competition.slug %}">{{ season.competition.name }}</a>
-  | {{ season.name }}
-{% if season.next_season %}<a href="{% url season_detail season.competition.slug season.next_season.slug %}">→</a>{% endif %}
-</h3>
-
-<div>{{ season.competition.area }}</div>
-<div>level {{ season.competition.level }}</div> 
 
 
-<table>
+  <h3><a href="{% url competition_detail season.competition.slug %}">{{ season.competition.name }}</a> | {{ season.name }}</h3>
+
+<div class="block">
+  {% if season.previous_season or seasno.next_season %}
+  <div>
+    {% if season.previous_season %}<a href="{% url season_detail season.competition.slug season.previous_season.slug %}">←</a>{% endif %}
+    {% if season.next_season %}<a href="{% url season_detail season.competition.slug season.next_season.slug %}">→</a>{% endif %}
+  </div>
+  {% endif %}
+
+  <div>{{ season.competition.area }}</div>
+  <div>level {{ season.competition.level }}</div> 
+
+</div>
+
+<div class="block">
+  <table>
 
   {% if season.champion %}
   <tr>
@@ -48,41 +55,45 @@
     <td><a href="{% url person_detail season.golden_boot.slug %}">{{ season.golden_boot }}</a></td>
   </tr>
   {% endif %}
+  </table>
+</div>
 
-</table>
+<div class="block">
+  <table>
 
-<table>
+    {% if season.game_set.count %}
+    <tr>
+      <td>Games</td>
+      <td>
+        {{ season.game_set.count }}
+        {% if season.game_set.exists %}
+        <a href="{% url season_games season.competition.slug season.slug %}">(all games)</a>
+        {% endif %}
+      </td>
+    </tr>
 
-  {% if season.game_set.count %}
-  <tr>
-  <td>Games</td>
-  <td>
-    {{ season.game_set.count }}
-    {% if season.game_set.exists %}
-    <a href="{% url season_games season.competition.slug season.slug %}">(all games)</a>
+    <tr>
+      <td>Goals</td>
+      <td>{{ season.goals }} ({{ season.goals_per_game|floatformat }} <a href="{% url season_goals season.competition.slug season.slug %}">goals</a>/game)</td>
+    </tr>
     {% endif %}
 
-  </td>
+    {% if season.total_attendance %}
+    <tr>
+      <td>Average Attendance</td>
+      <td>{{ season.average_attendance|floatformat:1 }}</td>
+    </tr>
 
+    {% comment %}
+    <tr>
+      <td></td>
+      <td>{{ season.total_attendance }} / {{ season.games_with_attendance }}</td>
+    </tr>
+    {% endcomment %}
+    {% endif %}
 
-  </tr>
-  <tr>
-  <td>Goals</td>
-  <td>{{ season.goals }} ({{ season.goals_per_game|floatformat }} <a href="{% url season_goals season.competition.slug season.slug %}">goals</a>/game)</td>
-  </tr>
-  {% endif %}
-
-  {% if season.total_attendance %}
-  <tr>
-  <td>Average Attendance</td>
-  <td>{{ season.average_attendance|floatformat:1 }}</td>
-  </tr>
-  <tr>
-    <td></td>
-    <td>{{ season.total_attendance }} / {{ season.games_with_attendance }}</td>
-  </tr>
-  {% endif %}
-</table>
+  </table>
+</div>
 
 
 <ul id="tabs"></ul>

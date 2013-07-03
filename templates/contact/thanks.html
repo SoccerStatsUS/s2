@@ -2,6 +2,13 @@
 
 {% block content %}
 
-<p>Thanks for writing.</p>
+<div id="control-bar">
+  <div class="white-title center">thanks</div>
+</div>
+
+<div id="thanks">
+  <p>Thanks for writing.</p>
+  <a href="{% url team_detail 'kearney-clarks-ont' %}"><img width="300" src="/static/images/field.jpg" /></a>
+</div>
 
 {% endblock %}

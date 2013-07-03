@@ -24,14 +24,22 @@ h2.headline { font-size: 1.8em; }
 .headline { text-align: center;}
 .align-right { text-align: right; }
 
+.block { 
+    display: inline-block;
+}
+
 /* base */
 
 #blurb { font-size: 2em; }
 #blurb a:hover { text-decoration: underline; }
 
+.center {
+    text-align: center;
+}
+
 .white-title {
     color: #fff;
-    font-size: 2em;
+    font-size: 2.5em;
     font-family: monospace;
     }
 
@@ -236,8 +244,8 @@ ul, li {
 #contact_box {
     position: absolute;
     top: 50px;
-    margin-left: 400px;
-    padding-top: 100px;
+    margin-left: 200px;
+    padding-top: 60px;
     border: solid #f92;
     border-width: 0 8px 8px 8px;
     background-color: #eee;
@@ -248,16 +256,29 @@ ul, li {
 
 #contact_box textarea {
     height: 300px;
-    width: 200px;
-    margin: 30px 0;
 }
 
-#contact_box input {
+#contact_box input, #contact_box textarea {
     width: 200px;
+    margin-top: 30px;
  
 }
 
+#contact_box label {
+    display: none;
+}
 
+#thanks {
+    top: 50px;
+    position: absolute;
+    background-color: #eee;
+    border: solid #f92;
+    border-width: 0 8px 8px 8px;
+    width: 300px;
+    padding: 50px;
+    text-align: center;
+    left: 30%;
+}
 
 
 /* Alphabet listings - people, teams, cities... */
@@ -265,8 +286,6 @@ ul, li {
 .alphabet {
     padding-bottom: 15px;
 }
-
-
 
 
 /* Bio list */
@@ -298,9 +317,6 @@ ul, li {
 #scoreboard .score {
     border: 1px solid black;
 }
-
-
-
 
 
 /* Search */
@@ -367,6 +383,13 @@ ul, li {
     float: right;
 }
 
+/* date detail */
+
+#specific_date {
+    display: inline-block;
+    width: 190px;
+}
+
 /* game detail */
 
 #game-detail {
@@ -414,16 +437,15 @@ ul, li {
     width: 140px;
     background-color: #eee;
     float: left;
-    margin-right: 10px;
+    margin-right: 8px;
+    margin-left: 8px;
 }
 
 
 /* For what? */
 
 
-#specific_date {
-    width: 200px;
-}
+
 
 #error_dialog {
     display: none;
