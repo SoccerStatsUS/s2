@@ -35,23 +35,6 @@ h1 span.subhead {
 }
 
 
-/* tabs */
-
-#tabs {
-    margin: 0;
-    padding: 10px 0;
-    }
-
-#tabs li {
-    border: 1px solid #ccc;
-    color: blue;
-    display: inline;
-    padding: 3px;
-}
-
-#tabs li.grey {
-    color: #000;
-}
 
 
 /* Game detail */

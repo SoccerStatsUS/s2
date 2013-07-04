@@ -1,12 +1,10 @@
 {% load datum_or_none %}
 
 {% if competition_standings.exists %}
-<h3>Standings</h3>
 
+<ul id="standing-tabs"></ul>
 
-<ul id="tabs"></ul>
-
-<div id="tab_wrapper">
+<div id="standing-tab-wrapper">
 
 <div tab="competition">
 <table>

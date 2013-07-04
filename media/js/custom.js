@@ -27,6 +27,8 @@
               return;
           }
 
+          tabb.addClass("tabbing");
+
           // Assign tab data to the tab container
           tabWrapper.children("div").each(function() {
               var tab = $(this).attr("tab");
@@ -57,6 +59,8 @@
       };
 
       makeTab("#tabs", "#tab_wrapper");
+      makeTab("#stat-tabs", "#stat-tab-wrapper");
+      makeTab("#standing-tabs", "#standing-tab-wrapper");
 
 
   });

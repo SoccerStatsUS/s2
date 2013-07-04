@@ -455,3 +455,23 @@ ul, li {
 .clear {
     clear: both;
 }
+
+
+
+/* tabs */
+
+.tabbing {
+    margin: 0;
+    padding: 10px 0;
+    }
+
+.tabbing li {
+    border: 1px solid #ccc;
+    color: blue;
+    display: inline;
+    padding: 3px;
+}
+
+.tabbing li.grey {
+    color: #000;
+}

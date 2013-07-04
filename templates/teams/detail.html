@@ -26,6 +26,11 @@
 </div>
 {% endif %}
 
+{% if team.standing_set.exists %}
+<div tab="standings">
+{% include "templatetags/standings/team.html" with games=team.standing_set.all %}
+</div>
+{% endif %}
 
 
 {% if game_leaders.exists %}
@@ -48,19 +53,10 @@
 </div>
 {% endif %}
 
-
-{% comment %}
-{% include "templatetags/standings/team.html" with games=team.standing_set.all %}
-{% endcomment %}
-
-
-
-
-
 {% if recent_games %}
 <div tab="games">
-  {% include "templatetags/games/attendance.html" with games=recent_games %}
   <p><a href="{% url team_games team.slug %}">all games</a></p>
+  {% include "templatetags/games/attendance.html" with games=recent_games %}
 </div>
 {% endif %}
 

@@ -23,14 +23,17 @@
 <div id="tab_wrapper">
 
 
-{% comment %}
+{% if domestic_stats or international_stats or coach_stats %}
+<div tab="stats">
 {% include "bios/detail_stats.html" %}
-{% endcomment %}
+</div>
+{% endif %}
+
 
 {% if recent_game_stats %}
 <div tab="games">
+<a href="{% url person_detail_games bio.slug %}">all games</a>
 {% include "templatetags/stats/game_list.html" with stats=recent_game_stats %}
-<a href="{% url person_detail_games bio.slug %}">more games</a>
 </div>
 {% endif %}
 
