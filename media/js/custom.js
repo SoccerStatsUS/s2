@@ -1,132 +1,63 @@
 (function() {
 
   $(document).ready(function() {
-    var createSortLoader, getGames, getGoals, getLineups, getStats, makeAjaxGetter, tabs;
-    $("#bio").tablesorter();
-    $("#player_chart").tablesorter();
-    $("#competition_index").tablesorter();
-    $("#stadium_list").tablesorter();
-    $("#position_index").tablesorter();
-    $("#money_index").tablesorter();
-    $(".standings_list").tablesorter();
-    $("#hide_control_form a").click(function() {
-      $("#controls form").toggle();
-      if ($(this).html() === 'hide controls') {
-        $(this).html('unhide controls');
-      } else {
-        $(this).html('hide controls');
-      }
-      return false;
-    });
-    $("#reporterror").click(function() {
-      $("#error_dialog").dialog({
-        width: 800
-      });
-      return false;
-    });
-    createSortLoader = function(div) {
-      var d;
-      d = $("table", div);
-      return function() {
-        return d.tablesorter();
-      };
-    };
-    makeAjaxGetter = function(form, target, url) {
-      var getAjax;
-      getAjax = function() {
-        var div, opts, u;
-        div = $(target);
-        if (div.length) {
-          div.html("Loading...");
-          opts = $("#lineup_form").serialize();
-          u = "{#url}?" + opts;
-        }
-        console.log(url);
-        return div.load(url);
-      };
-      return $("#submit_button").click(getAjax);
-    };
-    getLineups = function() {
-      var div, opts, url;
-      div = $("#lineups");
-      if (div.length) {
-        div.html("Loading...");
-        opts = $("#lineup_form").serialize();
-        url = "/tools/ajax/lineups?" + opts;
-        console.log(url);
-        return div.load(url);
-      }
-    };
-    $("#submit_button").click(getLineups);
-    getLineups();
-    getStats = function() {
-      var div, opts, url;
-      div = $("#stats");
-      if (div.length) {
-        div.html("Loading...");
-        opts = $("#stat_form").serialize();
-        console.log(opts);
-        url = "/tools/ajax/stats?" + opts;
-        div.load(url);
-      }
-      return false;
-    };
-    $("#submit_button").click(getStats);
-    getStats();
-    getGames = function() {
-      var div, opts, url;
-      div = $("#games");
-      if (div.length) {
-        div.html("Loading...");
-        opts = $("#game_form").serialize();
-        console.log(opts);
-        url = "/tools/ajax/games?" + opts;
-        div.load(url);
-      }
-      return false;
-    };
-    $("#submit_button").click(getGames);
-    getGames();
-    getGoals = function() {
-      var div, opts, url;
-      div = $("#goals");
-      if (div.length) {
-        div.html("Loading...");
-        opts = $("#goal_form").serialize();
-        console.log(opts);
-        url = "/tools/ajax/goals?" + opts;
-        div.load(url);
-      }
-      return false;
-    };
-    $("#submit_button").click(getGoals);
-    getGoals();
-    $(".bigboard li").click(function() {
-      var slug;
-      slug = $(this).attr("slug");
-      $(".bigboard li").removeClass("red");
-      $(".bigboard li[slug=" + slug + "]").addClass("red");
-      return $("#ajax_box").load("/drafts/x/" + slug);
-    });
-    $("#tab_wrapper div").each(function() {
-      var tab, text;
-      tab = $(this).attr("tab");
-      text = "<a href='\#" + tab + "'><li>" + tab + "</li></a>";
-      return $("#tabs").append(text);
-    });
-    $("#tabs li").click(function() {
-      var name;
-      name = $(this).html();
-      $("#tabs li").removeClass("grey");
-      $(this).addClass("grey");
-      $("#tab_wrapper div").each(function() {
-        return $(this).hide();
-      });
-      $("#tab_wrapper div[tab=" + name + "]").show();
-      return false;
-    });
-    tabs = $("#tabs li");
-    if (tabs.length) return $(tabs[0]).click();
-  });
 
+      $("#bio").tablesorter();
+      $("#player_chart").tablesorter();
+      $("#competition_index").tablesorter();
+      $("#stadium_list").tablesorter();
+      $("#position_index").tablesorter();
+      $("#money_index").tablesorter();
+      $(".standings_list").tablesorter();
+      
+      $(".bigboard li").click(function() {
+          var slug = $(this).attr("slug");
+          $(".bigboard li").removeClass("red");
+          $(".bigboard li[slug=" + slug + "]").addClass("red");
+          return $("#ajax_box").load("/drafts/x/" + slug);
+      });
+
+
+      // Turn this into a factory.
+      var makeTab = function(containerID, wrapperID){
+          var tabb = $(containerID);
+          var tabWrapper = $(wrapperID);
+
+          if ((tabb === undefined) || (tabWrapper === undefined)){
+              return;
+          }
+
+          // Assign tab data to the tab container
+          tabWrapper.children("div").each(function() {
+              var tab = $(this).attr("tab");
+              if (tab !== undefined){
+                  var text = "<a href='\#" + tab + "'><li>" + tab + "</li></a>";
+                  tabb.append(text);
+              }
+          });
+
+          // access newly created li's.
+          var tabsLI = tabb.find("li")
+
+          //
+          tabsLI.click(function() {
+              var name = $(this).html();
+              tabsLI.removeClass("grey");
+              $(this).addClass("grey");
+              tabWrapper.children("div").each(function() {
+                  return $(this).hide();
+              });
+              tabWrapper.children("div[tab=" + name + "]").show();
+              return false;
+          });
+
+          if (tabsLI.length) {
+              return $(tabsLI[0]).click();
+          };
+      };
+
+      makeTab("#tabs", "#tab_wrapper");
+
+
+  });
 }).call(this);
