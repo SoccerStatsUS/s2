@@ -40,6 +40,7 @@
 
 {% if refs %}
 <div tab="refereed">
+<a href="{% url person_detail_referee_games bio.slug %}">all games refereed</a>
 {% include "templatetags/appearances/ref.html" with games=refs %}
 </div>
 {% endif %}

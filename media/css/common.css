@@ -52,12 +52,13 @@ h1 span.subhead {
 }
     
 #game_score .team_data {
+    padding-top: 10px;
     display: inline-block;
     margin: 0 10px;
 }
 
 #game_score .team {
-    font-size: 1.5em;
+    font-size: 1.2em;
 }
 
 #game_score .score {
