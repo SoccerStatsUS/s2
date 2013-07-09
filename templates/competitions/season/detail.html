@@ -15,12 +15,10 @@
 {% block content %}
 
 
-
-
   <h3><a href="{% url competition_detail season.competition.slug %}">{{ season.competition.name }}</a> | {{ season.name }}</h3>
 
 <div class="block">
-  {% if season.previous_season or seasno.next_season %}
+  {% if season.previous_season or season.next_season %}
   <div>
     {% if season.previous_season %}<a href="{% url season_detail season.competition.slug season.previous_season.slug %}">←</a>{% endif %}
     {% if season.next_season %}<a href="{% url season_detail season.competition.slug season.next_season.slug %}">→</a>{% endif %}
@@ -95,14 +93,15 @@
   </table>
 </div>
 
-
 <ul id="tabs"></ul>
 
 <div id="tab_wrapper">
 
+{% if standings %}
 <div tab="standings">
 {% include "templatetags/standings/compact.html" %}
 </div>
+{% endif %}
 
 {% if awards.exists %}
 <div tab="awards">
@@ -143,7 +142,7 @@
 
 {% if goal_leaders or game_leaders %}
 <div tab="stats">
-<h3><a href="{% url season_stats season.competition.slug season.slug %}">{{ season }} stats</a></h3>
+<div><a href="{% url season_stats season.competition.slug season.slug %}">complete stats</a></div>
 
 {% if goal_leaders %}
 <table>

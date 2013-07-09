@@ -312,7 +312,7 @@ class Game(models.Model):
         if self.team1_result == '':
             return ''
 
-        return ['red', 'yellow', 'green'][self.lineup_quality()]
+        return ['grey', 'yellow', ''][self.lineup_quality()]
 
     def goal_color_code(self):
         # Merge this and color_code
@@ -325,7 +325,8 @@ class Game(models.Model):
         if self.team1_result == '':
             return ''
 
-        return ['red', 'yellow', 'green'][self.goal_quality()]
+
+        return ['grey', 'yellow', ''][self.goal_quality()]
 
 
     def score(self):

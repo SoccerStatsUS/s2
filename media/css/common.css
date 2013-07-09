@@ -16,9 +16,10 @@ table.noborder td, table.noborder td { border: 0}
 .clear { clear: both }
 
 .red-bg {    background-color: red;}
-.yellow-bg {  background-color: yellow;}
+.yellow-bg {  background-color: #ff9;}
 .green-bg {    background-color: #57E674;}
 .orange-bg {    background-color: #fcc200;}
+.grey-bg {    background-color: #eee; }
 .blue-bg { background-color: #0026ff;}
 .light-blue-bg { background-color: #b5c0ff;}
 .light-grey-bg { background-color: #d9d9d9;}

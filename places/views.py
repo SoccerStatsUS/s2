@@ -74,12 +74,14 @@ def country_detail(request, slug):
         stadiums = Stadium.objects.filter(city__country=country)
         births = Bio.objects.filter(birthplace__country=country).order_by('birthdate')
         competitions = Competition.objects.filter(scope='Country', area=country.name)
+        cities = City.objects.filter(country=country)
 
         context = {
                 'country': country,
                 'births': births,
                 'stadiums': stadiums,
                 'competitions': competitions,
+                'cities': cities,
                 }
         return render_to_response("places/country_detail.html",
                                   context,

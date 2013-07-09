@@ -1,4 +1,4 @@
-from collections import Counter
+from collections import Counter, defaultdict
 import datetime
 import os
 import pymongo
@@ -19,7 +19,7 @@ from money.models import Salary
 from news.models import NewsSource
 from places.models import Country, State, City, Stadium
 from positions.models import Position
-from sources.models import Source
+from sources.models import Source, SourceUrl
 from teams.models import Team, TeamAlias
 
 from utils import insert_sql, timer
@@ -140,10 +140,37 @@ def run(verbose=True):
 
 
 def load_sources():
+
+    sources = defaultdict(dict)
+    source_urls = defaultdict(list)
+    
     for source in soccer_db.sources.find():
         source.pop('_id')
-        #source['games'] = source['stats'] = 0
-        Source.objects.create(**source)
+
+        d = sources['name']
+        d['name'] = source['name']
+        if source['author']:
+            d['author'] = source['author']
+
+        if source.get('url'):
+            source_urls['name'].append(source['url'])
+
+
+    source_ids = {}
+
+    for source in sources.values():
+        s = Source.objects.create(**source)
+        source_ids[s.name] = s.id
+
+    for name, surls in source_urls:
+        sid = source_ids[name]
+        for surl in surls:
+            SourceUrl.objects.create(**{
+                    'source_id': sid,
+                    'url': surl,
+                    })
+        
+
 
 
 def load_places():
@@ -394,6 +421,10 @@ def load_teams():
             dissolved = dissolved - datetime.timedelta(days=1)
 
         if team['name'] not in names:
+
+            if team['name'] == 'New York Giants':
+                import pdb; pdb.set_trace()
+
             names.add(team['name'])
             Team.objects.create(**{
                     'name': team['name'],
@@ -1044,8 +1075,9 @@ def load_stats():
             #elif key in stat:
             #    import pdb; pdb.set_trace()
 
-            elif key in stat and stat[key] == None:
-                return 0
+            # This is very bad behavior.
+            #elif key in stat and stat[key] == None:
+            #    return 0
 
             else:
                 return None

@@ -10,8 +10,8 @@ class SourceManager(models.Manager):
         d = {}
         for e in self.get_query_set():
             d[e.name] = e.id
-            if e.base_url:
-                d[e.base_url] = e.id
+            for su in e.sourceurl_set.all():
+                d[su.url] = e.id
 
         return d
 
@@ -25,7 +25,7 @@ class Source(models.Model):
 
     name = models.CharField(max_length=1023)
     author = models.CharField(max_length=1023)
-    base_url = models.CharField(max_length=1023) 
+    #base_url = models.CharField(max_length=1023) 
 
     # Secondary data.
     games = models.IntegerField(null=True)
@@ -40,6 +40,11 @@ class Source(models.Model):
 
     def __unicode__(self):
         return self.name
+
+class SourceUrl(models.Model):
+    
+    source = models.ForeignKey(Source)
+    url = models.CharField(max_length=1023)
 
 
 # Need to make this a many-to-many

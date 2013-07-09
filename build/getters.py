@@ -293,6 +293,7 @@ def make_game_getter():
 
         if dt is None:
             print "Failed to find game for team %s on %s" % (team_id, dt)
+            import pdb; pdb.set_trace()
             gid = None
         else:
             # Not doing full game times yet...
@@ -302,6 +303,7 @@ def make_game_getter():
                 gid = game_team_map[key]
             else:
                 print "Failed to find game for team %s on %s" % (team_id, dx)
+                import pdb; pdb.set_trace()
                 gid = None
         
         return gid
@@ -333,7 +335,8 @@ def make_game_result_getter():
             if key in result_map:
                 gid = result_map[key]
             else:
-                print "Failed to find game for team %s on %s" % (team_id, dx)
+                print "Failed to find game result for team %s on %s" % (team_id, dx)
+                import pdb; pdb.set_trace()
                 gid = None
         
         return gid

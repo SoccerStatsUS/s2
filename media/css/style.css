@@ -13,7 +13,7 @@ body {
 table, tr { margin: 0; padding: 0;}
 
 a.external {
-    color: #f92;
+    color: #f42;
 }
 
 h2.headline { font-size: 1.8em; }
@@ -55,7 +55,7 @@ h2.headline { font-size: 1.8em; }
 }
 
 #header {
-    border-bottom: 8px solid #f92;
+    border-bottom: 8px solid #f42;
 }
 
 #nav #header {
@@ -168,7 +168,7 @@ ul, li {
     margin: 0;
     padding: 0;
     height: 50px;
-    background-color: #f92;
+    background-color: #f42;
     width: 100%;
     border-bottom: 8px solid #eee;
 }
@@ -201,7 +201,7 @@ ul, li {
 #search_box {
     top: 50px;
     margin-left: 50px;    
-    border: solid #f92;
+    border: solid #f42;
     border-width: 0 8px 8px 8px;
     background-color: #eee;
     padding: 50px;
@@ -246,7 +246,7 @@ ul, li {
     top: 50px;
     margin-left: 200px;
     padding-top: 60px;
-    border: solid #f92;
+    border: solid #f42;
     border-width: 0 8px 8px 8px;
     background-color: #eee;
     width: 250px;
@@ -272,7 +272,7 @@ ul, li {
     top: 50px;
     position: absolute;
     background-color: #eee;
-    border: solid #f92;
+    border: solid #f42;
     border-width: 0 8px 8px 8px;
     width: 300px;
     padding: 50px;
