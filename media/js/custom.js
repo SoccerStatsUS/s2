@@ -9,6 +9,7 @@
       $("#position_index").tablesorter();
       $("#money_index").tablesorter();
       $(".standings_list").tablesorter();
+      $(".game-list").tablesorter();
       
       $(".bigboard li").click(function() {
           var slug = $(this).attr("slug");
@@ -44,8 +45,8 @@
           //
           tabsLI.click(function() {
               var name = $(this).html();
-              tabsLI.removeClass("grey");
-              $(this).addClass("grey");
+              tabsLI.removeClass("active");
+              $(this).addClass("active");
               tabWrapper.children("div").each(function() {
                   return $(this).hide();
               });

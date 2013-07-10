@@ -31,6 +31,26 @@ def dates_index(request):
                               context_instance=RequestContext(request))
 
 
+
+@cache_page(60 * 60 * 12)
+def calendar(request):
+
+    # All games.
+    games = Game.objects.all()
+    min_date = games.aggregate(Min('date'))['date__min']
+    max_date = games.aggregate(Max('date'))['date__max']
+
+    years = range(min_date.year, max_date.year + 1)
+
+    context = {
+        'years': years,
+        }
+
+    return render_to_response("dates/calendar.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+
 @cache_page(60 * 60 * 12)
 def year_detail(request, year):
     """

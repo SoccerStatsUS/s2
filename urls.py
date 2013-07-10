@@ -28,6 +28,7 @@ urlpatterns = patterns('',
 
                        (r'^about/$', direct_to_template, {'template': 'about.html'}),
                        (r'^api/$', direct_to_template, {'template': 'api.html'}),
+
                        #(r'^sources/$', direct_to_template, {'template': 'sources.html'}),
 
                        #(r'^blog/$', direct_to_template, {'template': 'blog.html'}),
@@ -39,7 +40,7 @@ urlpatterns = patterns('',
                        #include('haystack.urls')),
 
 
-
+                       url(r"^calendar/$", "dates.views.calendar", name="calendar_index"),
                        url(r'^awards/', include('awards.urls')),
                        url(r'^bios/', include('bios.urls')),
                        url(r'^c/', include('competitions.urls')),

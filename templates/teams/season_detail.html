@@ -20,24 +20,14 @@
 
 
 
-<h2 class="headline">{{ team.name }}</h2>
-<h3><a href="{% url season_detail season.competition.slug season.slug %}">{{ season }}</a></h3>
-
-
+<h3>{{ team.name }}</h2>
+<div><a href="{% url season_detail season.competition.slug season.slug %}">{{ season }}</a></div>
 
 <div id="points_chart"></div>
-
 
 {% if games %}
 {% include "templatetags/games/attendance.html"%}
 {% endif %}
-
-
-
-
-<div class="clear_both"></div>
-
-
 
     <script type="text/javascript">
 var data = {{ points }}
@@ -95,8 +85,6 @@ svg.append("path")
       .datum(data)
       .attr("class", "line")
       .attr("d", line);
-
-
 
 </script>
 

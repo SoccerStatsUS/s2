@@ -179,9 +179,14 @@ def team_detail(request, team_slug):
     today = datetime.date.today()
 
     stats = TeamStat.objects.filter(team=team)
-
-    goal_leaders = stats.exclude(goals=None).order_by('-goals')
-    game_leaders = stats.exclude(games_played=None).order_by('-games_played')
+    if stats.exclude(minutes=None).exists():
+        stats = stats.exclude(minutes=None).order_by('-minutes')
+    elif stats.exclude(games_played=None).exists():
+        stats = stats.exclude(games_played=None).order_by('-games_played')
+    elif stats.exclude(goals=None).exists():
+        stats = stats.exclude(goals=None).order_by('-goals')
+    else:
+        pass
 
     competition_standings = Standing.objects.filter(team=team, season=None).order_by('-wins')
     league_standings = Standing.objects.filter(team=team, season__competition__ctype='League').order_by('season').filter(final=True)
@@ -205,9 +210,7 @@ def team_detail(request, team_slug):
     context = {
         'team': team,
         'awards': awards,
-        'stats': stats,
-        'goal_leaders': goal_leaders[:10],
-        'game_leaders': game_leaders[:10],
+        'stats': stats[:15],
         'recent_games': recent_games,
         'competition_standings': competition_standings,
         'league_standings': league_standings,

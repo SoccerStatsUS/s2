@@ -146,7 +146,10 @@
 
 {% if goal_leaders %}
 <table>
-  <th><td>Goal leaders</td></th>
+  <tr>
+    <th>Goal leaders</th>
+    <th></th>
+  </tr>
   {% for stat in goal_leaders %}
   <tr>
     <td>{{ stat.goals }}</td>
