@@ -166,6 +166,23 @@ def competition_games(request, competition_slug):
 
 
 
+
+@cache_page(60 * 60 * 12)
+def competition_attendance(request, competition_slug):
+    competition = get_object_or_404(Competition, slug=competition_slug)
+
+    attendance_data = [(e.name, e.average_attendance()) for e in competition.season_set.all()]
+
+    context = {
+        'competition': competition,
+        'attendance_data': json.dumps(attendance_data),
+        }
+    return render_to_response("competitions/competition/attendance.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+
+
 @cache_page(60 * 60 * 12)
 def season_detail(request, competition_slug, season_slug):
     """
@@ -288,7 +305,6 @@ def season_attendance(request, competition_slug, season_slug):
 
     context = {
         'season': season,
-        'games': competition.game_set.filter(season=season).order_by('date', 'round'),
         }
 
     return render_to_response("competitions/season/attendance.html",

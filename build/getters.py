@@ -303,7 +303,7 @@ def make_game_getter():
                 gid = game_team_map[key]
             else:
                 print "Failed to find game for team %s on %s" % (team_id, dx)
-                import pdb; pdb.set_trace()
+                #import pdb; pdb.set_trace()
                 gid = None
         
         return gid
