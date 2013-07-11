@@ -62,6 +62,7 @@
       makeTab("#tabs", "#tab_wrapper");
       makeTab("#stat-tabs", "#stat-tab-wrapper");
       makeTab("#standing-tabs", "#standing-tab-wrapper");
+      makeTab("#sub-tabs", "#sub-tab-wrapper");
 
 
   });

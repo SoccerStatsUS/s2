@@ -46,6 +46,11 @@
 {% endif %}
 
 
+<div tab="info">
+<ul id="sub-tabs"></ul>
+<div id="sub-tab-wrapper">
+
+
 {% if bio.awards.exists %}
 <div tab="awards">
 <table>
@@ -65,6 +70,7 @@
 </div>
 {% endif %}
 
+
 {% if picks.exists %}
 <div tab="drafts">
 <table>
@@ -83,8 +89,6 @@
 </div>
 {% endif %}
 
-
-
 {% if bio.salary_set.count %}
 <div tab="salary">
 <table>
@@ -98,6 +102,8 @@
 </div>
 {% endif %}
 
+</div>
+</div>
 
 </div>
 

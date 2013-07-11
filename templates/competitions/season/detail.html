@@ -140,32 +140,12 @@
 {% endif %}
 
 
-{% if goal_leaders or game_leaders %}
+{% if stats.exists %}
 <div tab="stats">
 <div><a href="{% url season_stats season.competition.slug season.slug %}">complete stats</a></div>
 
-{% if goal_leaders %}
-<table>
-  <tr>
-    <th>Goal leaders</th>
-    <th></th>
-  </tr>
-  {% for stat in goal_leaders %}
-  <tr>
-    <td>{{ stat.goals }}</td>
-    {% if stat.player.slug %}
-    <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
-    {% else %}
-    <td>{{ stat.player }}</td>
-    {% endif %}
-  </tr>
-{% endfor %}
-</table>
-{% endif %}
+{% include "templatetags/stats/stats.html" %}
 
-{% comment %}
-{{ game_leaders }}
-{% endcomment %}
 
 {% endif %}
 

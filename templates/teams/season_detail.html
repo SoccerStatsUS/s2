@@ -23,10 +23,27 @@
 <h3>{{ team.name }}</h2>
 <div><a href="{% url season_detail season.competition.slug season.slug %}">{{ season }}</a></div>
 
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+<div tab="charts">
+
 <div id="points_chart"></div>
+<p>points</p>
+
+</div>
 
 {% if games %}
+<div tab="games">
 {% include "templatetags/games/attendance.html"%}
+</div>
+{% endif %}
+
+{% if stats %}
+<div tab="stats">
+{% include "templatetags/stats/team.html" %}
+</div>
 {% endif %}
 
     <script type="text/javascript">
@@ -50,9 +67,10 @@ var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left");
 
-var line = d3.svg.line()
+var line = d3.svg.area()
     .x(function(d, i) { return x(i); })
-    .y(function(d) { return y(d); });
+    .y0(height)
+    .y1(function(d) { return y(d); });
 
 var svg = d3.select("#points_chart").append("svg")
     .attr("width", width + margin.left + margin.right)

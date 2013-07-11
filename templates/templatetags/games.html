@@ -74,9 +74,10 @@
     {% endif %}
     {% datum_or_grey game.attendance %}
 
-    <td class="{{ game.goal_color_code }}-bg">{{ game.goal_count }}</td>
-    <td class="{{ game.lineup_color_code }}-bg">{{ game.starter_count }}</td>
-    <td>{{ game.merges }}</td>
+    <td class="{{ game.goal_color_code }}-bg"></td>
+    <td class="{{ game.lineup_color_code }}-bg"></td>
+    <td class="light">{{ game.merges }}</td>
+    <td class="light">{{ game.sources.count }}</td>
 
   </tr>
   {% endfor %}

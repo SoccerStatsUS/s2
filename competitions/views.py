@@ -176,29 +176,23 @@ def season_detail(request, competition_slug, season_slug):
     season = get_object_or_404(Season, competition=competition, slug=season_slug)
 
     stats = Stat.objects.filter(season=season, competition=season.competition)
+    if stats.exclude(minutes=None).exists():
+        stats = stats.exclude(minutes=None).order_by('-minutes')
+    elif stats.exclude(games_played=None).exists():
+        stats = stats.exclude(games_played=None).order_by('-games_played')
+    elif stats.exclude(goals=None).exists():
+        stats = stats.exclude(goals=None).order_by('-goals')
+    else:
+        pass
+
 
     bios = Bio.objects.filter(id__in=stats.values_list('player'))
     nationality_count_dict = Counter(bios.exclude(birthplace__country=None).values_list('birthplace__country'))
-
-
-    # Create dict from id to Country object.
-    #nations = Country.objects.filter(id__in=[e[0] for e in nationality_count_dict.keys()])
-    #nation_id_dict = dict([(e.id, e) for e in nations])
-
-    #ordered_nationality_tuple = sorted(nationality_count_dict.items(), key=lambda x: -x[1]) # [(199,), 665),
-    #nation_list = [(nation_id_dict[a], b) for ((a,), b) in ordered_nationality_tuple if a is not None]
 
     # Compute average attendance.
     games = season.game_set.exclude(attendance=None)
     attendance_game_count = games.count()
     average_attendance = games.aggregate(Avg('attendance'))['attendance__avg']
-
-    """
-    # Aggregate returns None given a None value.
-    mstats = stats.exclude(minutes=None)
-    total_minutes = mstats.aggregate(Sum('minutes'))['minutes__sum']
-    known_minutes = mstats.exclude(player__birthdate=None).aggregate(Sum('minutes'))['minutes__sum']
-    """
 
     goal_leaders = stats.exclude(goals=None).order_by('-goals')
     game_leaders = stats.exclude(games_played=None).order_by('-games_played')
@@ -208,7 +202,7 @@ def season_detail(request, competition_slug, season_slug):
     context = {
         'season': season,
         'standings': season.standing_set.filter(final=True),
-        'stats': stats.exists(),
+        'stats': stats[:25],
         #'total_minutes': total_minutes,
         #'known_minutes': known_minutes,
         #'nation_list': nation_list,
@@ -282,6 +276,22 @@ def season_games(request, competition_slug, season_slug):
         }
 
     return render_to_response("competitions/season/games.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+
+
+@cache_page(60 * 60 * 12)
+def season_attendance(request, competition_slug, season_slug):
+    competition = get_object_or_404(Competition, slug=competition_slug)
+    season = get_object_or_404(Season, competition=competition, slug=season_slug)
+
+    context = {
+        'season': season,
+        'games': competition.game_set.filter(season=season).order_by('date', 'round'),
+        }
+
+    return render_to_response("competitions/season/attendance.html",
                               context,
                               context_instance=RequestContext(request))
 

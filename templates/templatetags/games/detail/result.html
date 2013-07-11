@@ -71,12 +71,6 @@
 {% if game.goal_set.exists %}
 
 <table id="goal_list" class="noborder">
-  <tr>
-    {# <th>Team</th> #}
-    {# <th>Player</th>#}
-    {# <th>Minute</th> #}
-    {# <th>Assists</th> #}
-  </tr>
 
   {% for goal in game.goal_set.all %}
   <tr>

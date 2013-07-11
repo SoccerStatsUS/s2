@@ -57,6 +57,11 @@ urlpatterns = patterns('competitions.views',
                            'season_goals',
                            name='season_goals'),
 
+                       url(r'^(?P<competition_slug>[a-z0-9-]+)/(?P<season_slug>[a-z0-9-]+)/attedance/$',
+                           'season_attendance',
+                           name='season_attendance'),
+
+
 
                        url(r'^(?P<competition_slug>[a-z0-9-]+)/(?P<season_slug>[a-z0-9-]+)/graphs/$',
                            'season_graphs',
