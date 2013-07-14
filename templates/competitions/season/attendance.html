@@ -4,6 +4,16 @@
 {% block title %}{{ competition.name }} Soccer History {% endblock %}
 {% block metadescription %}{{ competition.name }} soccer stats with standings, results, lineups, awards, all-time stats...{% endblock %}
 
+{% block extrahead %}
+<style>
+#attendance-chart {
+position: fixed;
+margin-left: 5%;
+top: 10%;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 
 <h3>
@@ -11,6 +21,66 @@
 <a href="{% url season_detail season.competition.slug season.slug %}">{{ season }}</a>
 {% if season.next_season %}<a href="{% url season_games season.competition.slug season.next_season.slug %}">→</a>{% endif %}
 </h3>
+
+<div id="attendance-chart">
+</div>
+
+<script>
+
+var tdata = {{ team_data|safe }};
+
+var margin = {top: 20, right: 20, bottom: 30, left: 300},
+width = 960 - margin.left - margin.right,
+height = 500 - margin.top - margin.bottom;
+
+//var formatPercent = d3.format(".0%");
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1, 1).domain(tdata.map(function(d) { return d[0]; }));
+
+var y = d3.scale.linear()
+    .range([height, 0]).domain([d3.min(tdata, function(d) { return d[1] }), d3.max(tdata, function(d) { return d[1]})]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+//    .tickFormat(formatPercent);
+
+var svg = d3.select("#attendance-chart").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis);
+
+svg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis)
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("avg. attendance");
+
+svg.selectAll(".bar")
+    .data(tdata)
+    .enter().append("rect")
+    .attr("class", "bar")
+    .attr("x", function(d) { return x(d[0]); })
+    .attr("width", x.rangeBand())
+    .attr("y", function(d) { return y(d[1]); })
+    .attr("height", function(d) { return height - y(d[1]); });
+</script>
 
 
 

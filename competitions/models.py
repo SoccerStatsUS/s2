@@ -318,7 +318,10 @@ class Season(models.Model):
         
     def average_attendance(self):
         games = self.game_set.exclude(attendance=None)
-        return int(games.aggregate(Avg('attendance'))['attendance__avg'])
+        if games.exists():
+            return int(games.aggregate(Avg('attendance'))['attendance__avg'])
+        else:
+            return None
 
     def games_with_attendance(self):
         return self.game_set.exclude(attendance=None).count()

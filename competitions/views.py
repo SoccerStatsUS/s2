@@ -173,9 +173,18 @@ def competition_attendance(request, competition_slug):
 
     attendance_data = [(e.name, e.average_attendance()) for e in competition.season_set.all()]
 
+    attendance = defaultdict(int)
+    games = defaultdict(int)
+    for t, a in season.game_set.exclude(home_team=None).exclude(attendance=None).values_list('home_team__name', 'attendance'):
+        attendance[t] += a
+        games[t] += 1
+
+    team_data = sorted([(k, attendance[k] / games[k]) for k in games.keys()])
+
     context = {
         'competition': competition,
         'attendance_data': json.dumps(attendance_data),
+        'team_data': json.dumps(team_data),
         }
     return render_to_response("competitions/competition/attendance.html",
                               context,
@@ -303,8 +312,17 @@ def season_attendance(request, competition_slug, season_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
     season = get_object_or_404(Season, competition=competition, slug=season_slug)
 
+    attendance = defaultdict(int)
+    games = defaultdict(int)
+    for t, a in season.game_set.exclude(home_team=None).exclude(attendance=None).values_list('home_team__name', 'attendance'):
+        attendance[t] += a
+        games[t] += 1
+
+    team_data = sorted([(k, attendance[k] / games[k]) for k in games.keys()])
+
     context = {
         'season': season,
+        'team_data': json.dumps(team_data),
         }
 
     return render_to_response("competitions/season/attendance.html",
