@@ -46,8 +46,11 @@
 {% endif %}
 
 
+{% if bio.awards.exists or picks.exists or bio.salary_set.exists %}
 <div tab="info">
+
 <ul id="sub-tabs"></ul>
+
 <div id="sub-tab-wrapper">
 
 
@@ -89,7 +92,7 @@
 </div>
 {% endif %}
 
-{% if bio.salary_set.count %}
+{% if bio.salary_set.exists %}
 <div tab="salary">
 <table>
   {% for salary in bio.salary_set.all %}
@@ -104,6 +107,7 @@
 
 </div>
 </div>
+{% endif %}
 
 </div>
 
