@@ -59,6 +59,8 @@ def load1():
 
     # Simple sport data
     load_competitions()
+    load_seasons()
+
     load_teams()
     load_standings()
 
@@ -147,14 +149,14 @@ def load_sources():
     for source in soccer_db.sources.find():
         source.pop('_id')
 
-        d = sources['name']
+        d = sources[source['name']]
         d['name'] = source['name']
+
         if source['author']:
             d['author'] = source['author']
 
-        if source.get('url'):
-            source_urls['name'].append(source['url'])
-
+        if source.get('base_url'):
+            source_urls[source['name']].append(source['base_url'])
 
     source_ids = {}
 
@@ -162,7 +164,7 @@ def load_sources():
         s = Source.objects.create(**source)
         source_ids[s.name] = s.id
 
-    for name, surls in source_urls:
+    for name, surls in source_urls.items():
         sid = source_ids[name]
         for surl in surls:
             SourceUrl.objects.create(**{
@@ -457,11 +459,32 @@ def load_competitions():
     print "loading competitions"
     for c in soccer_db.competitions.find():
         c.pop('_id')
-        try:
-            Competition.objects.create(**c)
-        except:
-            import pdb; pdb.set_trace()
-            x =5 
+        Competition.objects.create(**c)
+
+
+@transaction.commit_on_success
+def load_seasons():
+    print "loading seasons"
+
+    competition_getter = make_competition_getter()
+
+    seasons= []
+
+    for s in soccer_db.seasons.find():
+        s.pop('_id')
+        competition_id = competition_getter(s['competition'])
+        seasons.append({
+                'name': s['season'],
+                'slug': slugify(s['season']),
+                'competition_id': competition_id,
+                'order': s['order'],
+                })
+
+    for season in seasons:
+        Season.objects.create(**season)
+
+
+
 
 @timer
 @transaction.commit_on_success
@@ -968,7 +991,12 @@ def load_game_stats():
             age = None
 
         team_id = team_getter(stat['team'])
+
         game_id = game_getter(team_id, stat['date'])
+        #if game_id is None:
+        #    import pdb; pdb.set_trace()
+
+
         result = game_result_getter(team_id, stat['date'])
 
         if game_id is None or team_id is None:
