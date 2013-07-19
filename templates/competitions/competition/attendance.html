@@ -48,7 +48,7 @@ var tdata = {{ attendance_data|safe }};
 
 var zdata = {{ team_data|safe }};
 
-var margin = {top: 20, right: 20, bottom: 30, left: 300},
+var margin = {top: 20, right: 20, bottom: 130, left: 300},
 width = 960 - margin.left - margin.right,
 height = 500 - margin.top - margin.bottom;
 
@@ -79,7 +79,15 @@ var svg = d3.select("#attendance-chart").append("svg")
 svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + height + ")")
-    .call(xAxis);
+    .attr("font-size", ".4em")
+    .call(xAxis)
+    .selectAll("text")  
+    .style("text-anchor", "end")
+    .attr("dx", "-.8em")
+    .attr("dy", ".15em")
+    .attr("transform", function(d) {
+        return "rotate(-65)" 
+    });
 
 svg.append("g")
     .attr("class", "y axis")

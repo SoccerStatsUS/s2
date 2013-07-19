@@ -17,9 +17,9 @@ top: 10%;
 {% block content %}
 
 <h3>
-{% if season.previous_season %}<a href="{% url season_games season.competition.slug season.previous_season.slug %}">←</a>{% endif %}
+{% if season.previous_season %}<a href="{% url season_attendance season.competition.slug season.previous_season.slug %}">←</a>{% endif %}
 <a href="{% url season_detail season.competition.slug season.slug %}">{{ season }}</a>
-{% if season.next_season %}<a href="{% url season_games season.competition.slug season.next_season.slug %}">→</a>{% endif %}
+{% if season.next_season %}<a href="{% url season_attendance season.competition.slug season.next_season.slug %}">→</a>{% endif %}
 </h3>
 
 <div id="attendance-chart">
@@ -29,7 +29,7 @@ top: 10%;
 
 var tdata = {{ team_data|safe }};
 
-var margin = {top: 20, right: 20, bottom: 30, left: 300},
+var margin = {top: 20, right: 20, bottom: 130, left: 300},
 width = 960 - margin.left - margin.right,
 height = 500 - margin.top - margin.bottom;
 
@@ -38,8 +38,12 @@ height = 500 - margin.top - margin.bottom;
 var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .1, 1).domain(tdata.map(function(d) { return d[0]; }));
 
+//var y = d3.scale.linear()
+//    .range([height, 0]).domain([d3.min(tdata, function(d) { return d[1] }), d3.max(tdata, function(d) { return d[1]})]);
+
 var y = d3.scale.linear()
-    .range([height, 0]).domain([d3.min(tdata, function(d) { return d[1] }), d3.max(tdata, function(d) { return d[1]})]);
+    .range([height, 0]).domain([0, d3.max(tdata, function(d) { return d[1]})]);
+
 
 var xAxis = d3.svg.axis()
     .scale(x)
@@ -60,7 +64,15 @@ var svg = d3.select("#attendance-chart").append("svg")
 svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + height + ")")
-    .call(xAxis);
+    .attr("font-size", ".4em")
+    .call(xAxis)
+    .selectAll("text")  
+    .style("text-anchor", "end")
+    .attr("dx", "-.8em")
+    .attr("dy", ".15em")
+    .attr("transform", function(d) {
+        return "rotate(-65)" 
+    });
 
 svg.append("g")
     .attr("class", "y axis")
