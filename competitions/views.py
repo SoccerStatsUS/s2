@@ -102,7 +102,6 @@ def competition_detail(request, competition_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
     games = competition.game_set.all()
 
-
     stats = CompetitionStat.objects.filter(competition=competition).exclude(games_played=None)
     if stats.exclude(games_played=None).exists():
         sx = stats.exclude(games_played=None).order_by('-games_played', '-goals')[:25]
@@ -348,6 +347,30 @@ def season_goals(request, competition_slug, season_slug):
     return render_to_response("competitions/season/goals.html",
                               context,
                               context_instance=RequestContext(request))
+
+
+
+
+
+@cache_page(60 * 60 * 12)
+def season_salaries(request, competition_slug, season_slug):
+    competition = get_object_or_404(Competition, slug=competition_slug)
+    season = get_object_or_404(Season, competition=competition, slug=season_slug)
+    
+    player_ids = season.stat_set.values_list('player', flat=True)
+
+    from money.models import Salary
+    salaries = Salary.objects.filter(season=season.name).filter(person__in=player_ids)
+
+    context = {
+        'season': season,
+        'salary_data': salaries.values_list('person__name', 'amount'),
+        }
+
+    return render_to_response("competitions/season/salaries.html",
+                              context,
+                              context_instance=RequestContext(request))
+
 
 
 
