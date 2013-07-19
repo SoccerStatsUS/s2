@@ -6,6 +6,7 @@
 
 {% block extrahead %}
 
+{% comment %}
 <script>
 (function() {
 
@@ -87,6 +88,7 @@ d3.select(self.frameElement).style("height", "2910px");
   });
 }).call(this);
 </script>
+{% endcomment %}
 
 {% endblock %}
 
@@ -129,8 +131,10 @@ d3.select(self.frameElement).style("height", "2910px");
 </div>
 {% endif %}
 
+{% comment %}
 <div id="calendar" tab="calendar">
 </div>
+{% endcomment %}
 
 
 {% if standings %}
