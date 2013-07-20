@@ -575,9 +575,10 @@ class Game(models.Model):
 
 
     def margin(self, team):
-        return self.goals_for(team) - self.goals_against(team)
-
-
+        try:
+            return self.goals_for(team) - self.goals_against(team)
+        except TypeError:
+            return None
 
     def result(self, team):
         """

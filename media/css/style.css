@@ -12,6 +12,27 @@ a:visited {
 }
 
 
+/* d3 */
+
+.bar.positive {
+    color: green;
+    fill: green;
+}
+
+.bar.negative {
+    color: red;
+    fill: red;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+
+
 /* typography */
 
 ul { list-style-type: none; }

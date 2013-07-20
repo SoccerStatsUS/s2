@@ -262,6 +262,17 @@ def cumulative_points(gameset, team):
     return l
 
 
+def team_form(gameset, team):
+    
+    l = []
+
+    for g in gameset:
+        l.append(g.margin(team))
+
+    return l
+    
+
+
 def team_season_detail(request, team_slug, competition_slug, season_slug):
     team = get_object_or_404(Team, slug=team_slug)
     competition = get_object_or_404(Competition, slug=competition_slug)
@@ -269,15 +280,17 @@ def team_season_detail(request, team_slug, competition_slug, season_slug):
     games = Game.objects.team_filter(team).filter(season=season)
 
     points = cumulative_points(games, team)
+    
+    form_data = team_form(games, team)
 
     context = {
         'team': team,
-        #'competition': c,
         'season': season,
         'points': json.dumps(points),
         'stats': Stat.objects.filter(team=team, season=season), # Wrong stat for the time being.
         'games': games,
-        'result_json': json.dumps([e.result(team) for e in games]) # Probably need to format better than this.
+        'result_json': json.dumps([e.result(team) for e in games]), # Probably need to format better than this.
+        'form_data': json.dumps(form_data),
         }
 
     return render_to_response("teams/season_detail.html",

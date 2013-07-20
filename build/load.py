@@ -597,7 +597,8 @@ def load_standings():
         l2.append(standing)
 
     # Throwing weird data quality error.
-    import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
+
     insert_sql("standings_standing", l2)
 
 

@@ -170,15 +170,15 @@ def competition_games(request, competition_slug):
 def competition_attendance(request, competition_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
 
-    attendance_data = [(e.name, e.average_attendance()) for e in competition.season_set.all()]
+    attendance_data = [(e.name, e.average_attendance(), e.total_attendance()) for e in competition.season_set.all()]
 
     attendance = defaultdict(int)
-    games = defaultdict(int)
+    games = defaultdicts(int)
     for t, a in competition.game_set.exclude(home_team=None).exclude(attendance=None).values_list('home_team__name', 'attendance'):
         attendance[t] += a
         games[t] += 1
 
-    team_data = sorted([(k, attendance[k] / games[k]) for k in games.keys()])
+    team_data = sorted([(k, attendance[k] / games[k], attendance[k]) for k in games.keys()])
 
     context = {
         'competition': competition,

@@ -29,7 +29,7 @@
 
 <div tab="charts">
 
-<div id="points_chart"></div>
+<div id="charts"></div>
 
 </div>
 
@@ -51,17 +51,79 @@
 
 
     <script type="text/javascript">
+
+
+
+var form_data = {{ form_data }}
+
+var margin = {top: 20, right: 20, bottom: 50, left: 50},
+width = 960 - margin.left - margin.right,
+height = 200 - margin.top - margin.bottom;
+
+var x = d3.scale.ordinal().rangeRoundBands([0, width], .1, 1).domain(form_data.map(function(d, i) { return i; }));
+var y = d3.scale.linear().range([height, 0]).domain([d3.min(form_data), d3.max(form_data)]);
+var xAxis = d3.svg.axis().scale(x).orient("bottom");
+var yAxis = d3.svg.axis().scale(y).orient("left")
+
+
+var svg = d3.select("#charts").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .attr("font-size", ".4em")
+    .call(xAxis)
+    .selectAll("text")  
+    .style("text-anchor", "end")
+    .attr("dx", ".2em")
+    .attr("dy", ".8em")
+
+svg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis)
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("results");
+
+svg.append("g")
+      .attr("class", "x axis")
+      .append("line")
+      .attr("y1", y(0))
+      .attr("y2", y(0))
+      .attr("x2", width);
+
+
+svg.selectAll(".bar")
+    .data(form_data)
+    .enter().append("rect")
+    .attr("class", function(d) { return d < 0 ? "bar negative" : "bar positive"; })
+    .attr("x", function(d, i) { return x(i); })
+    .attr("width", x.rangeBand())
+    .attr("y", function(d) { return y(Math.max(0, d)); })
+    //.attr("y", function(d) { return y(0); })
+    .attr("height", function(d) { return Math.abs(y(d) - y(0)); })
+
+    
+
+{% comment %}
+
 var data = {{ points }}
 
 var margin = {top: 20, right: 20, bottom: 30, left: 50},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
-var x = d3.time.scale()
-    .range([0, width]);
+var x = d3.scale.linear().range([0, width]).domain(d3.extent(data, function(d, i) { return i; }));
+var y = d3.scale.linear().range([height, 0]).domain(d3.extent(data, function(d) { return d; }));
 
-var y = d3.scale.linear()
-    .range([height, 0]);
 
 var xAxis = d3.svg.axis()
     .scale(x)
@@ -76,15 +138,11 @@ var line = d3.svg.area()
     .y0(height)
     .y1(function(d) { return y(d); });
 
-var svg = d3.select("#points_chart").append("svg")
+var svg = d3.select("#charts").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
-x.domain(d3.extent(data, function(d, i) { return i; }));
-y.domain(d3.extent(data, function(d) { return d; }));
 
 
 svg.append("g")
@@ -108,10 +166,13 @@ svg.append("path")
       .attr("class", "line")
       .attr("d", line);
 
+{% endcomment %}
+
+
 </script>
 
 
-
+{% comment %}
 <script>
 (function() {
 
@@ -193,7 +254,7 @@ d3.select(self.frameElement).style("height", "2910px");
   });
 }).call(this);
 </script>
-
+{% endcomment %}
 
 {% endblock %}
 
