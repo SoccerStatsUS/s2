@@ -1,4 +1,4 @@
-from collections import Counter
+from collections import Counter, defaultdict
 import datetime
 import os
 import pymongo
@@ -19,7 +19,7 @@ from money.models import Salary
 from news.models import NewsSource
 from places.models import Country, State, City, Stadium
 from positions.models import Position
-from sources.models import Source
+from sources.models import Source, SourceUrl
 from teams.models import Team, TeamAlias
 
 from utils import insert_sql, timer
@@ -59,6 +59,8 @@ def load1():
 
     # Simple sport data
     load_competitions()
+    load_seasons()
+
     load_teams()
     load_standings()
 
@@ -140,10 +142,37 @@ def run(verbose=True):
 
 
 def load_sources():
+
+    sources = defaultdict(dict)
+    source_urls = defaultdict(list)
+    
     for source in soccer_db.sources.find():
         source.pop('_id')
-        #source['games'] = source['stats'] = 0
-        Source.objects.create(**source)
+
+        d = sources[source['name']]
+        d['name'] = source['name']
+
+        if source['author']:
+            d['author'] = source['author']
+
+        if source.get('base_url'):
+            source_urls[source['name']].append(source['base_url'])
+
+    source_ids = {}
+
+    for source in sources.values():
+        s = Source.objects.create(**source)
+        source_ids[s.name] = s.id
+
+    for name, surls in source_urls.items():
+        sid = source_ids[name]
+        for surl in surls:
+            SourceUrl.objects.create(**{
+                    'source_id': sid,
+                    'url': surl,
+                    })
+        
+
 
 
 def load_places():
@@ -394,6 +423,10 @@ def load_teams():
             dissolved = dissolved - datetime.timedelta(days=1)
 
         if team['name'] not in names:
+
+            if team['name'] == 'New York Giants':
+                import pdb; pdb.set_trace()
+
             names.add(team['name'])
             Team.objects.create(**{
                     'name': team['name'],
@@ -426,11 +459,32 @@ def load_competitions():
     print "loading competitions"
     for c in soccer_db.competitions.find():
         c.pop('_id')
-        try:
-            Competition.objects.create(**c)
-        except:
-            import pdb; pdb.set_trace()
-            x =5 
+        Competition.objects.create(**c)
+
+
+@transaction.commit_on_success
+def load_seasons():
+    print "loading seasons"
+
+    competition_getter = make_competition_getter()
+
+    seasons= []
+
+    for s in soccer_db.seasons.find():
+        s.pop('_id')
+        competition_id = competition_getter(s['competition'])
+        seasons.append({
+                'name': s['season'],
+                'slug': slugify(s['season']),
+                'competition_id': competition_id,
+                'order': s['order'],
+                })
+
+    for season in seasons:
+        Season.objects.create(**season)
+
+
+
 
 @timer
 @transaction.commit_on_success
@@ -937,7 +991,12 @@ def load_game_stats():
             age = None
 
         team_id = team_getter(stat['team'])
+
         game_id = game_getter(team_id, stat['date'])
+        #if game_id is None:
+        #    import pdb; pdb.set_trace()
+
+
         result = game_result_getter(team_id, stat['date'])
 
         if game_id is None or team_id is None:
@@ -1044,8 +1103,9 @@ def load_stats():
             #elif key in stat:
             #    import pdb; pdb.set_trace()
 
-            elif key in stat and stat[key] == None:
-                return 0
+            # This is very bad behavior.
+            #elif key in stat and stat[key] == None:
+            #    return 0
 
             else:
                 return None

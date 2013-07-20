@@ -40,9 +40,18 @@
 
 {% if refs %}
 <div tab="refereed">
+<a href="{% url person_detail_referee_games bio.slug %}">all games refereed</a>
 {% include "templatetags/appearances/ref.html" with games=refs %}
 </div>
 {% endif %}
+
+
+{% if bio.awards.exists or picks.exists or bio.salary_set.exists %}
+<div tab="info">
+
+<ul id="sub-tabs"></ul>
+
+<div id="sub-tab-wrapper">
 
 
 {% if bio.awards.exists %}
@@ -64,6 +73,7 @@
 </div>
 {% endif %}
 
+
 {% if picks.exists %}
 <div tab="drafts">
 <table>
@@ -83,20 +93,11 @@
 {% endif %}
 
 
+{% include "bios/helpers/salary.html" %}
 
-{% if bio.salary_set.count %}
-<div tab="salary">
-<table>
-  {% for salary in bio.salary_set.all %}
-  <tr>
-    <td>{{ salary.season }}</td>
-    <td>${{ salary.amount }}</td>
-  </tr>
-  {% endfor %}
-</table>
+</div>
 </div>
 {% endif %}
-
 
 </div>
 

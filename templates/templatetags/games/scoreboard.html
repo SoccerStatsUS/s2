@@ -28,7 +28,7 @@
     {% endif %}
 
     {% if game.stadium %}
-    <td><a href="{% url stadium_detail game.stadium.slug %}"><strong>{{ game.stadium|truncatechars:"25" }}</strong></a></td>
+    <td><a title="{{ game.stadium }}" href="{% url stadium_detail game.stadium.slug %}"><strong>{{ game.stadium|truncatechars:"25" }}</strong></a></td>
     {# {% if game.city.slug %}<a href="{% url city_detail game.city.slug %}">, {{ game.city.name|truncatechars:"25" }}</a>{% endif %} #}
     {% else %}
     {% if game.city %}

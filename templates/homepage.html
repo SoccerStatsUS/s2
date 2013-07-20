@@ -1,74 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-{% if mls_game %}
 <div id="homepage_video">
-{% include "templatetags/embed_large.html" with video=mls_game.video %}
-<div id="video_title"><a href="{% url game_detail mls_game.id %}">first mls game</a></div>
-</div>
+
+{% if oc_game %}
+{% include "templatetags/embed_large.html" with video=oc_game.video %}
+<div id="video_title"><a href="{% url game_detail oc_game.id %}">1924 US Open Cup Final</a></div>
 {% endif %}
 
 {% comment %}
-<div id="left_column">
-<h4>Recent Results</h4>
-{% load datum_or_none %}
-<table>
+{% if mls_game %}
 
-  {% for game in games %}
-  <tr>
-    {% if game.date %}
-    <td><a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date }}</a></td>
-    {% else %}
-    <td></td>
-    {% endif %}
+{% include "templatetags/embed_large.html" with video=mls_game.video %}
+<div id="video_title"><a href="{% url game_detail mls_game.id %}">first mls game</a></div>
 
-    <td><a href="{% url team_detail game.team1.slug %}">{{ game.team1_original_name }}</a></td>
-    <td><a href="{% url game_detail game.id %}">{{ game.score_or_result }}</a></td>
-    <td><a href="{% url team_detail game.team2.slug %}">{{ game.team2_original_name }}</a></td>
-
-  {% endfor %}
-</table>
-</div>
-
-
-<div id="right_column">
-
-<div class="left_half">
-
-<h4>Game leaders</h4>
-<table>
-
-  {% for e in game_leaders %}
-  <tr>
-    <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
-    <td>{{ e.games_played }}</td>
-  </tr>
-  {% endfor %}
-
-</table>
-
-</div>
-<div class="right_half">
-
-
-
-<h4>Goal leaders</h4>
-<table>
-
-  {% for e in goal_leaders %}
-  <tr>
-    <td><a href="{% url person_detail e.player.slug %}">{{ e.player }}</a></td>
-    <td>{{ e.goals }}</td>
-  </tr>
-  {% endfor %}
-
-</table>
-
-</div>
-
-</div>
-
+{% endif %}
 {% endcomment %}
+
+</div>
+
 
 {% endblock %}

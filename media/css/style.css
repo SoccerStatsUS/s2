@@ -1,40 +1,23 @@
-/* typography 
-***************/
+/* color */
 
-html, body {
-    margin: 0;
-    padding: 0;
+
+a { 
+    color: blue; 
+    text-decoration: none; 
 }
+
+
+a:visited { 
+    color: blue; 
+}
+
+
+/* typography */
+
+ul { list-style-type: none; }
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-}
-
-table, tr { margin: 0; padding: 0;}
-
-a.external {
-    color: #f92;
-}
-
-h2.headline { font-size: 1.8em; }
-
-.letter_link { font-size: 2.8em; }
-
-.small { font-size: .7em; }
-.headline { text-align: center;}
-.align-right { text-align: right; }
-
-.block { 
-    display: inline-block;
-}
-
-/* base */
-
-#blurb { font-size: 2em; }
-#blurb a:hover { text-decoration: underline; }
-
-.center {
-    text-align: center;
 }
 
 .white-title {
@@ -43,39 +26,52 @@ h2.headline { font-size: 1.8em; }
     font-family: monospace;
     }
 
-
 #nav { 
     font-family: monospace;
-    font-size: 1.3em;
+    font-size: 1.4em;
     text-align: right;
 }
-
-#nav li {
-    line-height: 2em;
-}
-
-#header {
-    border-bottom: 8px solid #f92;
-}
-
-#nav #header {
-    font-weight: bold;
-    padding: 5px 0;
-
-}
-
-.standings_list {
-    width: 100%;
-}
-
-
-
-/* pages */
 
 #about { 
     font-family: monospace; 
     text-align: center; 
 }
+
+td, th {
+    font-size: .8em; 
+}
+
+h2.headline { font-size: 1.8em; }
+
+.letter_link { font-size: 2.8em; }
+
+.assist {
+    font-size: .8em;
+    opacity: .8;
+}
+
+
+.small { font-size: .7em; }
+.headline { text-align: center;}
+.align-right { text-align: right; }
+
+#blurb { font-size: 2em; }
+
+
+#nav #header {
+    font-weight: bold;
+}
+
+
+
+h1 span.subhead {
+    font-size: .55em;
+    color: #777;
+}
+
+/* pages */
+
+
 #about p { font-size: 1.4em; }
 
 /* bigboard */
@@ -83,12 +79,122 @@ h2.headline { font-size: 1.8em; }
 .bigboard { font-size: .8em; }
 .bigboard h3 { font-size: .9em; }
 
+#search_results #search_directions {
+    font-size: 1.5em;
+}
+
+.tabbing li {
+    font-size: 1.25em;
+    color: #666;
+}
+
+#game_score .team {
+    font-size: 1.2em;
+}
+
+#game_score .score {
+    font-size: 2em;
+}
+
+
+
+/* positioning  */
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+table { 
+    margin: 0; 
+    padding: 0;
+    border-collapse:collapse;
+}
+
+
+tr { 
+    margin: 0; 
+    padding: 0; 
+}
+
+tr.table-head {
+    background-color: #eee;
+    width: 100%;
+    height: 20px;
+}
+
+
+td, th { 
+    padding: 4px 8px; 
+    margin: 0; 
+    min-width: 30px;
+    height: 20px;
+    border-style: solid;
+    border-width: 1px 0;
+
+}
+
+th {
+    text-align: left;
+    background-color: #666;
+    color: #eee;
+}
+
+th a, th a:visited {
+    color: #eef;
+}
+
+a.external {
+    color: #f42;
+}
+
+.block { 
+    display: inline-block;
+}
+
+/* base */
+
+#blurb a:hover { text-decoration: underline; }
+
+.center {
+    text-align: center;
+}
+
+
+#nav {
+    height: 100%;
+    top: 0;
+}
+
+#nav li {
+    line-height: 2em;
+}
+
+#nav #header {
+    padding: 5px 0;
+    border-bottom: 8px solid #f42;
+
+}
+
+
+#nav, #footer {
+    position: fixed;
+    width: 160px;
+    left: 0;
+    padding-right: 15px;
+}
+
+.standings_list {
+    width: 100%;
+}
+
 
 /* colors 
   *******/
 
 .grey { background-color: #eee; }
 .red { background-color: red; }
+.light { color: #ccc; }
 
 /* Big board */
 .bigboard ul, #ajax_box  {  background-color: #eee; }
@@ -133,17 +239,6 @@ ul, li {
 }
 
 
-#nav, #footer {
-    position: fixed;
-    width: 160px;
-    left: 0;
-    padding-right: 15px;
-}
-
-#nav {
-    height: 100%;
-    top: 0;
-}
 
 
 #content {
@@ -168,7 +263,7 @@ ul, li {
     margin: 0;
     padding: 0;
     height: 50px;
-    background-color: #f92;
+    background-color: #f42;
     width: 100%;
     border-bottom: 8px solid #eee;
 }
@@ -201,7 +296,7 @@ ul, li {
 #search_box {
     top: 50px;
     margin-left: 50px;    
-    border: solid #f92;
+    border: solid #f42;
     border-width: 0 8px 8px 8px;
     background-color: #eee;
     padding: 50px;
@@ -230,7 +325,6 @@ ul, li {
 }
 
 #search_results #search_directions {
-    font-size: 1.5em;
     padding: 10px 0 10px 10px;
     position: fixed;
     bottom: 20px;
@@ -246,7 +340,7 @@ ul, li {
     top: 50px;
     margin-left: 200px;
     padding-top: 60px;
-    border: solid #f92;
+    border: solid #f42;
     border-width: 0 8px 8px 8px;
     background-color: #eee;
     width: 250px;
@@ -272,7 +366,7 @@ ul, li {
     top: 50px;
     position: absolute;
     background-color: #eee;
-    border: solid #f92;
+    border: solid #f42;
     border-width: 0 8px 8px 8px;
     width: 300px;
     padding: 50px;
@@ -315,7 +409,7 @@ ul, li {
 }
 
 #scoreboard .score {
-    border: 1px solid black;
+
 }
 
 
@@ -398,13 +492,11 @@ ul, li {
 }
 
 #game-detail #game-data {
-    //border: 5px solid black;
     width: 450px;
     float: left;
 }
 
 #game-detail #related-data {
-    //border: 5px solid black;
     margin-left: 460px;
     width: 530px;
 }
@@ -423,9 +515,10 @@ ul, li {
 /* team detail */
 
 #team_logo {
-    padding: 5px;
-    border: 8px solid #eee;
+    margin: 0 8px;
     float: left;
+    border: 4px solid #ccc;
+    
 }
 
 
@@ -466,12 +559,67 @@ ul, li {
     }
 
 .tabbing li {
-    border: 1px solid #ccc;
-    color: blue;
     display: inline;
-    padding: 3px;
+    padding: 5px 10px;
+
+    background-color: #eee;
 }
 
-.tabbing li.grey {
-    color: #000;
+.tabbing li.active {
+    background-color: #666;
+    color: #eee;
+}
+
+
+
+
+
+table.noborder td, table.noborder td { border: 0}
+
+.clear_both { clear: both; }
+.clear { clear: both }
+
+.red-bg {    background-color: #fdd;}
+.yellow-bg {  background-color: #ffd;}
+.green-bg {    background-color: #57E674;}
+.orange-bg {    background-color: #fcc200;}
+.grey-bg {    background-color: #eee; }
+.blue-bg { background-color: #0026ff;}
+.light-blue-bg { background-color: #b5c0ff;}
+.light-grey-bg { background-color: #d9d9d9;}
+
+.win { color: green;}
+.tie { color: grey;}
+.loss { color: red;}
+
+
+h1 span.subhead {
+    margin-left: 15px;
+}
+
+/* Game detail */
+
+
+.center {
+    text-align: center;
+}
+
+#game_score #team_results {
+    margin: 0 auto;
+    text-align: center;
+}
+    
+#game_score .team_data {
+    padding-top: 10px;
+    display: inline-block;
+    margin: 0 10px;
+}
+
+
+#goal_list {
+    margin: 20px auto 0 auto;
+}
+
+table#game_lineup {
+    margin: 20px auto 0 auto;
 }

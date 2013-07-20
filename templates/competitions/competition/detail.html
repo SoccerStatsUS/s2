@@ -84,29 +84,18 @@
 
 </div>
 
-
-<div tab="standings">
-
 {% if competition.alltime_standings.exists %}
+<div tab="standings">
 {% include "templatetags/standings/slim.html" with standings=big_winners %}
-{% endif %}
-
-{% comment %}
-{% if games %}
-{% include "templatetags/games.html" %}
-{% endif %}
-{% endcomment %}
-
 </div>
+{% endif %}
 
+{% if stats %}
 <div tab="stats">
 <p><a href="{% url competition_stats competition.slug %}">All-time stats</a></p>
-{% if stats %}
 {% include "templatetags/career_bio.html" %}
-
-{% endif %}
 </div>
-
+{% endif %}
 
 <div tab="games">
 

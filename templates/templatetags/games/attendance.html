@@ -1,6 +1,17 @@
 {% load datum_or_none %}
 
+
+
 <table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
 {% for game in games %}
 <tr>
   <td><a href="{% url game_detail game.id %}">{{ game.date }}</a></td>

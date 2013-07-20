@@ -15,11 +15,6 @@ from django.db import connection, transaction
 from bios.models import Bio
 
 
-
-            
-
-
-
 def check_competition_teams(competition, country):
     teams = set()
     errant_teams = set()
@@ -37,9 +32,6 @@ def check_competition_teams(competition, country):
 
     return errant_teams
         
-    
-
-
 
 def search_for_data(o):
     for item in dir(o):
@@ -61,7 +53,6 @@ def find_duplicate_slugs(model):
     return [e[0] for e in d.items() if e[1] > 1]
 
 
-
 def timer(method):
 
     def timed(*args, **kw):
@@ -74,7 +65,6 @@ def timer(method):
         return result
 
     return timed
-
 
 
 def insert_sql(table, dict_list):
@@ -153,7 +143,6 @@ def replace_with_parentheses(name):
         return name
 
 
-
 def find_parenthetical_names(qs=None):
     if qs is None:
         qs = Bio.objects.all()
@@ -180,7 +169,6 @@ def remove_middle_initial(name):
         return name
 
 
-
 def find_middle_initial_names(qs=None):
     if qs is None:
         qs = Bio.objects.all()
@@ -194,14 +182,16 @@ def find_middle_initial_names(qs=None):
             print "'%s': '%s'," % (e, n1)
 
 
-def get_similar_names(qs=None, score=.85):
+def find_similar_names(qs=None, threshold=.85):
 
-    f = open('/home/chris/similar', 'w')
+    f = open('/home/chris/www/sdev/similar', 'w')
 
     if qs is None:
         qs = Bio.objects.all()
 
     names = sorted([e.name for e in qs])
+
+    l = []
 
     for i, name in enumerate(names):
         #print "Processing %s" % name
@@ -210,14 +200,12 @@ def get_similar_names(qs=None, score=.85):
             nscores = str(nscore)[:4]
             t = (name, e, nscores)
             #l.append(t)
-            if nscore > score:
+            if nscore > threshold:
+                l.append(t)
+                #f.write(str(t))
+                #f.write('\n')
 
-                #print datetime.datetime.now()
-                f.write(str(t))
-                f.write('\n')
-                #print t
-
-    f.close()
+    #f.close()
 
     return sorted(l, key=lambda e: e[2])
         

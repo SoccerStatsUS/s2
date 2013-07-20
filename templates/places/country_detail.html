@@ -9,8 +9,6 @@
 <h4>{{ country.population }}</h4>
 
 
-
-
 <ul id="tabs"></ul>
 
 <div id="tab_wrapper">
@@ -73,6 +71,19 @@
 {% include "templatetags/games.html" with games=country.games.all %}
 </div>
 {% endif %}
+
+
+
+{% if country.games.exists %}
+<div tab="cities">
+  <ul>
+    {% for city in cities %}
+    <li><a href="{% url city_detail city.slug %}">{{ city }}</a></li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
 
 <div tab="people">
 

@@ -312,7 +312,7 @@ class Game(models.Model):
         if self.team1_result == '':
             return ''
 
-        return ['red', 'yellow', 'green'][self.lineup_quality()]
+        return ['red', 'yellow', ''][self.lineup_quality()]
 
     def goal_color_code(self):
         # Merge this and color_code
@@ -325,7 +325,8 @@ class Game(models.Model):
         if self.team1_result == '':
             return ''
 
-        return ['red', 'yellow', 'green'][self.goal_quality()]
+
+        return ['red', 'yellow', ''][self.goal_quality()]
 
 
     def score(self):
@@ -368,7 +369,7 @@ class Game(models.Model):
     def team1_score_or_result(self):
         if self.team1_score is not None:
             if self.shootout_winner == self.team1:
-                return "(SOW) %s" % self.team1_score
+                return "(SO) %s" % self.team1_score
             else:
                 return self.team1_score
         return self.team1_result.capitalize()
@@ -377,7 +378,7 @@ class Game(models.Model):
     def team2_score_or_result(self):
         if self.team2_score is not None:
             if self.shootout_winner == self.team2:
-                return "%s (SOW)" % self.team2_score
+                return "%s (SO)" % self.team2_score
             else:
                 return self.team2_score
         return self.team2_result.capitalize()

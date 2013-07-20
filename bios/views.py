@@ -196,7 +196,7 @@ def person_detail_referee_games(request, slug):
     
     query = (Q(referee=bio) | Q(linesman1=bio) | Q(linesman1=bio) | Q(linesman1=bio))
     games = Game.objects.filter(query)
-    form = BioAppearanceForm(bio)
+    form = BioGameStatForm(bio)
 
     context = {
         'form': form,

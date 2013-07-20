@@ -298,6 +298,8 @@ class Season(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField()
 
+    order = models.IntegerField(null=True, blank=True)
+
     competition = models.ForeignKey(Competition, null=True)
     competition_original_name = models.CharField(max_length=255)
 
@@ -309,7 +311,7 @@ class Season(models.Model):
 
 
     class Meta:
-        ordering = ("name", "competition")
+        ordering = ("order", "name", "competition")
 
 
     def total_attendance(self):
@@ -318,7 +320,10 @@ class Season(models.Model):
         
     def average_attendance(self):
         games = self.game_set.exclude(attendance=None)
-        return int(games.aggregate(Avg('attendance'))['attendance__avg'])
+        if games.exists():
+            return int(games.aggregate(Avg('attendance'))['attendance__avg'])
+        else:
+            return None
 
     def games_with_attendance(self):
         return self.game_set.exclude(attendance=None).count()
