@@ -1,15 +1,15 @@
 
 <div id="bio_image">
+
 {% if bio.get_image %}
-<img id="bio_image" height="180" src="{{ bio.get_image }}">
+<img height="180" src="{{ bio.get_image }}">
 {% endif %}
+
 </div>
 
 <div id="bio_data">
 
 <h3>{{ bio.name }}</h3>
-
-<div>
 
 {% if bio.height or bio.weight %}
 <div>{% if bio.height %}{{ bio.height }}cm{% endif %}</div>
@@ -29,11 +29,9 @@
 <div>first game: <a href="{% url game_detail bio.first_game.id %}">{{ bio.first_game.date }}</a></div>
 {% endif %}
 
-
 {% if bio.last_game and bio.last_game != bio.first_game %}
 <div>last game: <a href="{% url game_detail bio.last_game.id %}">{{ bio.last_game.date }}</a></div>
 {% endif %}
 
 </div>
 
-<div class="clear"></div>

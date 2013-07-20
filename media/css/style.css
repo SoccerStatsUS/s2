@@ -518,7 +518,6 @@ ul, li {
     margin: 0 8px;
     float: left;
     border: 4px solid #ccc;
-    
 }
 
 
@@ -526,12 +525,21 @@ ul, li {
 /* Bio detail */
 
 #bio_image {
+    display: inline-block;
     height: 180px;
-    width: 140px;
+    min-width: 140px;
     background-color: #eee;
-    float: left;
     margin-right: 8px;
     margin-left: 8px;
+}
+
+#bio_image img {
+    text-align: center;
+}
+
+
+#bio_data {
+    display: inline-block;
 }
 
 

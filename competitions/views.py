@@ -102,7 +102,7 @@ def competition_detail(request, competition_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
     games = competition.game_set.all()
 
-    stats = CompetitionStat.objects.filter(competition=competition).exclude(games_played=None)
+    stats = CompetitionStat.objects.filter(competition=competition)
     if stats.exclude(games_played=None).exists():
         sx = stats.exclude(games_played=None).order_by('-games_played', '-goals')[:25]
     else:

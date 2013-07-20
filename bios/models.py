@@ -107,6 +107,20 @@ class Bio(models.Model):
 
 
 
+    def get_image(self):
+        import os
+
+        p = os.path.join("/home/chris/www/sdev/static/images/people/%s" % self.slug)
+        exts = ['svg', 'png', 'gif', 'jpg']
+        for ext in exts:
+            fp = '%s.%s' % (p, ext)
+            if os.path.exists(fp):
+                return fp.split('sdev')[1]
+        return ''
+
+
+
+
     def ref_set(self):
         from games.models import Game
         return Game.objects.filter(referee=self)

@@ -97,22 +97,6 @@ DATABASES = {
     }
 }
 
-# Change the location of the build database in build_settings.py
-
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': DB_PATH,
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    }
-}
-"""
-
-
 
 # Fix this soon.
 #EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
@@ -194,6 +178,7 @@ INSTALLED_APPS = (
     'games',
     'goals',
     'graphs',
+    'levels',
     'lineups',
     'money',
     'news',
