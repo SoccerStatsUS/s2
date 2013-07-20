@@ -50,7 +50,11 @@ def homepage(request):
         mls_game = Game.objects.filter(competition__slug='major-league-soccer').order_by('date')[0]
     except:
         mls_game = None
-    
+
+    try:
+        oc_game = Game.objects.get(competition__slug='us-open-cup', season__name='1924', round='f')
+    except:
+        oc_game = None
 
     context = {
         'today': today,
@@ -63,7 +67,9 @@ def homepage(request):
         'bio_count': Bio.objects.count(),
         'team_count': Team.objects.count(),
         'competition_count': Competition.objects.count(),
+
         'mls_game': mls_game,
+        'oc_game': oc_game,
         
         }
     return render_to_response("homepage.html",
