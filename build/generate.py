@@ -321,7 +321,6 @@ def generate_competition_stats():
 def generate_standings_generic(qs, make_key, update_dict):
     """
     Generate team, career, etc. stats.
-    Maybe could improve this.
     """
     # Seems like memory leaks are making this not work for nearly enough stats.
 
@@ -329,7 +328,15 @@ def generate_standings_generic(qs, make_key, update_dict):
     excluded = ('player_id', 'team_id', 'competition_id', 'season_id', 'division', 'group')
     
     # Don't include rolling standings.
-    final_qs = qs.filter(date=None)
+    # This is definitely not working.
+    #final_qs = qs.filter(date=None)
+    
+
+    final_qs = qs.filter(final=True)
+
+    #import pdb; pdb.set_trace()
+    #for standing in final_qs.values():
+
 
     for standing in final_qs.values():
         # This determines what is filtered.
@@ -368,15 +375,20 @@ def generate_standings_generic(qs, make_key, update_dict):
 
 @timer
 def generate_competition_standings():
-    print "generating competition standings"
     """
     Generate all-time standings for each competition.
     """
+    # Broken?
+
+    print "generating competition standings"
     for competition in Competition.objects.all():
         standings = Standing.objects.filter(competition=competition).exclude(season=None)
         make_key = lambda s: (s['team_id'], s['competition_id'])
         update = {'season_id': None }
         generate_standings_generic(standings, make_key, update)
+
+
+
 
 @timer
 def generate_team_standings():

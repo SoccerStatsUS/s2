@@ -522,19 +522,21 @@ def load_stadiums():
 @transaction.commit_on_success
 def load_standings():
     print "loading standings\n"
-    # Low-hanging fruit. Please speed this up soon.
 
     team_getter = make_team_getter()
     competition_getter = make_competition_getter()
     season_getter = make_season_getter()
 
+    # Create final standings from day-to-day standings
+    final_standings = set()
+    all_standings = set()
+    max_game_standings = {}
+
+
     l = []
     for standing in soccer_db.standings.find().sort('team', 1):
         standing.pop('_id')
         
-        if standing['season'] == None:
-            import pdb; pdb.set_trace()
-
         competition_id = competition_getter(standing['competition'])
         season_id = season_getter(standing['season'], competition_id)
         team_id = team_getter(standing['team'])
@@ -544,7 +546,8 @@ def load_standings():
 
         final = standing.get('final', False)
 
-        l.append({
+
+        d = {
                 'competition_id': competition_id,
                 'season_id': season_id,
                 'team_id': team_id,
@@ -562,9 +565,41 @@ def load_standings():
                 'points': standing.get('points'),
                 'final': final,
                 'deduction_reason': '',
-                })
+                }
+        l.append(d)
+
+        """
+        key = (standing['team'], standing['competition'], standing['season'])
+
+        all_standings.add(key)
+        if final:
+            final_standings.add(key)
+
+        if key not in max_game_standings or standing['games'] > max_game_standings[key]:
+            max_game_standings[key] = d
+            """
 
     insert_sql("standings_standing", l)
+
+    # Handle this all in soccerdata?
+
+    l2 = []
+    # Generate appropriate final standings.
+    for key in all_standings - final_standings:
+        #import pdb; pdb.set_trace()
+        standing = max_game_standings[key].copy()
+        #standing['final'] = True
+        #standing['date'] = None
+
+        if standing['wins'] is not None and type(standing['wins']) != int:
+            import pdb; pdb.set_trace()
+
+        l2.append(standing)
+
+    # Throwing weird data quality error.
+    import pdb; pdb.set_trace()
+    insert_sql("standings_standing", l2)
+
 
 @timer
 @transaction.commit_on_success

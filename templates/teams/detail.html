@@ -4,17 +4,10 @@
 {% block title %}{{ team.name }} Results, Lineups, & Statistics{% endblock %}
 {% block metadescription %}{{ team.name }} soccer stats with results, lineups, awards, all-time stats, managers...{% endblock %}
 
-{% block extrahead %}
-
-{% endblock %}
-
 
 {% block content %}
 
-
 {% include "teams/helpers/summary.html" %}
-
-
 
 <ul id="tabs"></ul>
 
@@ -26,12 +19,13 @@
 </div>
 {% endif %}
 
+
+
 {% if team.standing_set.exists %}
 <div tab="standings">
 {% include "templatetags/standings/team.html" with games=team.standing_set.all %}
 </div>
 {% endif %}
-
 
 {% if stats.exists %}
 <div tab="stats">
