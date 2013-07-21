@@ -187,17 +187,10 @@ body {
   stroke-width: 2px;
 }
 
-.RdYlGn .q0-11{fill:rgb(165,0,38)}
-.RdYlGn .q1-11{fill:rgb(215,48,39)}
-.RdYlGn .q2-11{fill:rgb(244,109,67)}
-.RdYlGn .q3-11{fill:rgb(253,174,97)}
-.RdYlGn .q4-11{fill:rgb(254,224,139)}
-.RdYlGn .q5-11{fill:rgb(255,255,191)}
-.RdYlGn .q6-11{fill:rgb(217,239,139)}
-.RdYlGn .q7-11{fill:rgb(166,217,106)}
-.RdYlGn .q8-11{fill:rgb(102,189,99)}
-.RdYlGn .q9-11{fill:rgb(26,152,80)}
-.RdYlGn .q10-11{fill:rgb(0,104,55)}
+
+.RdYlGn .q1-11{fill:red;}
+.RdYlGn .q4-11{fill:yellow;}
+.RdYlGn .q9-11{fill:green;}
 
 </style>
 
@@ -208,15 +201,13 @@ body {
   $(document).ready(function() {
 
 var calendar_data = {{ calendar_data|safe }};
-//console.log(calendar_data);
-//console.log("2005-10-15" in calendar_data);
-//console.log(calendar_data.indexOf("2005-10-15"));
 
-var cdata = [];
+var cdates = []
 for (var i=0; i < calendar_data.length; i++){
-   var fields = calendar_data[i].split('-');
-   cdata.push(new Date(fields[0], fields[1]-1, fields[2]));
+  cdates.push(calendar_data[i][0]);                  
 }
+
+
 
 var width = 960,
     height = 136,
@@ -233,10 +224,9 @@ var color = d3.scale.quantize()
 
 var svg = d3.select("#calendar").selectAll("svg")
 
-  .data(d3.range(d3.min(calendar_data, function(e){ return parseInt(e.split('-')[0]); }), 
-                 1 + d3.max(calendar_data, function(e){ return parseInt(e.split('-')[0]); })))
-  //.data(d3.range(d3.min(cdata, function(e){ return e.getFullYear(); })
-  //               1 + d3.max(cdata, function(e){ return e.getFullYear(); })))
+  .data(d3.range(d3.min(calendar_data, function(e){ return parseInt(e[0].split('-')[0]); }), 
+                 1 + d3.max(calendar_data, function(e){ return parseInt(e[0].split('-')[0]); })))
+
 
   .enter().append("svg")
     .attr("width", width)
@@ -260,8 +250,6 @@ var rect = svg.selectAll(".day")
     .attr("y", function(d) { return day(d) * cellSize; })
     .datum(format);
 
-rect.append("title")
-    .text(function(d) { return d; });
 
 svg.selectAll(".month")
     .data(function(d) { return d3.time.months(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
@@ -269,10 +257,17 @@ svg.selectAll(".month")
     .attr("class", "month")
     .attr("d", monthPath);
 
-//rect.filter(function(d) { return d in cdata; }).attr("class", "day q5-11");
-rect.filter(function(d) { return calendar_data.indexOf(d) > -1; }).attr("class", "day q9-11");
+rect.filter(function(d) { return cdates.indexOf(d) > -1; }).attr("class", function(d){
+    var result = calendar_data[cdates.indexOf(d)][1];
+    if (result == "w"){ return "day q9-11"; }
+    if (result == "t"){ return "day q4-11"; }
+    if (result == "l"){ return "day q1-11"; }
+});
 
-console.log(rect);
+rect.append("title")
+    .text(function(d) { return d; });
+
+
 
 {% comment %}
 d3.csv("dji.csv", function(error, csv) {
