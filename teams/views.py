@@ -283,6 +283,8 @@ def team_season_detail(request, team_slug, competition_slug, season_slug):
     
     form_data = team_form(games, team)
 
+    calendar_data = [e.date.isoformat() for e in games]
+
     context = {
         'team': team,
         'season': season,
@@ -291,6 +293,7 @@ def team_season_detail(request, team_slug, competition_slug, season_slug):
         'games': games,
         'result_json': json.dumps([e.result(team) for e in games]), # Probably need to format better than this.
         'form_data': json.dumps(form_data),
+        'calendar_data': json.dumps(calendar_data),
         }
 
     return render_to_response("teams/season_detail.html",
