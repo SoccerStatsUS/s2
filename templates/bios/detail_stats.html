@@ -5,31 +5,31 @@
 
 {% if domestic_stats %}
 <div tab="domestic">
-{% include "templatetags/stats/stats.html" with stats=domestic_stats %}
+{% include "templatetags/stats/player/stats.html" with stats=domestic_stats %}
 </div>
 {% endif %}
 
 {% if international_stats %}
 <div tab="international">
-{% include "templatetags/stats/stats.html" with stats=international_stats %}
+{% include "templatetags/stats/player/stats.html" with stats=international_stats %}
 </div>
 {% endif %}
 
 {% if team_stats %}
 <div tab="team">
-{% include "templatetags/stats/team.html" with stats=team_stats %}
+{% include "templatetags/stats/player/team.html" with stats=team_stats %}
 {% endif %}
 </div>
 
 {% if competition_stats %}
 <div tab="competition">
-{% include "templatetags/stats/competition.html" with stats=competition_stats %}
+{% include "templatetags/stats/player/competition.html" with stats=competition_stats %}
 </div>
 {% endif %}
 
 {% if coach_stats %}
 <div tab="coaching">
-{% include "templatetags/stats/coach.html" %}
+{% include "templatetags/stats/player/coach.html" %}
 </div>
 {% endif %}
 
