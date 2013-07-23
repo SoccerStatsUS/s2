@@ -110,6 +110,7 @@ def generate_source_data():
     for source in Source.objects.all():
         source.games = game_counts[source.id]
         source.stats = stat_counts[source.id]
+        source.total = source.games + source.stats
         source.save()
     
         

@@ -1,5 +1,5 @@
 {% if game.video %}
-<h4>media</h4>
+<h4 class="headboard">media</h4>
 <div id="game-media">
 {% include "templatetags/embed.html" with video=game.video %}
 </div>
@@ -7,13 +7,13 @@
 
 
 {% if game.notes %}
-<h4>notes</h4>
+<h4 class="headboard">notes</h4>
 <p>{{ game.notes }}</p>
 {% endif %}
 
 {% if game_sources %}
+<h4 class="headboard">sources</h4>
 <ul>
-<li><strong>sources</strong></li>
 {% for game_source in game_sources %}
 <li>
 

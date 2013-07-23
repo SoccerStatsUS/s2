@@ -30,6 +30,7 @@ class Source(models.Model):
     # Secondary data.
     games = models.IntegerField(null=True)
     stats = models.IntegerField(null=True)
+    total = models.IntegerField(null=True)
 
     objects = SourceManager()
 

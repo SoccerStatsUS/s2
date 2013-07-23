@@ -71,6 +71,13 @@ h2.headline { font-size: 1.8em; }
     opacity: .8;
 }
 
+h4.headboard {
+    background-color: #666;
+    color: #eee;
+    font-size: .8em;
+    padding: 7px 0 7px 5px;
+}
+
 
 .small { font-size: .7em; }
 .headline { text-align: center;}

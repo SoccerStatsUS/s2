@@ -10,7 +10,7 @@ from sources.models import Source
 def source_index(request):
 
     context = {
-        'sources': Source.objects.order_by('-games', '-stats', 'name')
+        'sources': Source.objects.order_by('-total', 'name')
         }
     return render_to_response("sources/index.html",
                               context,
