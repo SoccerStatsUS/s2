@@ -105,7 +105,6 @@ svg.selectAll(".bar")
     .attr("x", function(d, i) { return x(i); })
     .attr("width", x.rangeBand())
     .attr("y", function(d) { return y(Math.max(0, d)); })
-    //.attr("y", function(d) { return y(0); })
     .attr("height", function(d) { return Math.abs(y(d) - y(0)); })
 
     
