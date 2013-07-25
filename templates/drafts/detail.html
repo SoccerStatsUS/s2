@@ -33,7 +33,7 @@
   <td>{{ pick.number }}</td>
 
   {% if pick.pick %}
-  <td><a href="{% url draft_detail pick.pick.draft.competition.slug pick.pick.draft.slug pick.pick.draft.season %}">{{ pick.text }}</a> (<a href="{% url person_detail pick.pick.player.slug %}">{{ pick.pick.player }}</a>)</td>
+  <td><a href="{% url draft_detail pick.pick.draft.competition.slug pick.pick.draft.slug pick.pick.draft.season.slug %}">{{ pick.text }}</a> (<a href="{% url person_detail pick.pick.player.slug %}">{{ pick.pick.player }}</a>)</td>
 
   {% else %}
   {% if pick.player %}
