@@ -49,6 +49,9 @@
 
 {% if recent_games %}
 <div tab="games">
+  {% if recent_games %}
+  <a href="{% url team_games team.slug %}">all games</a>
+  {% endif %}
   {% include "templatetags/games.html" with games=recent_games %}
 </div>
 {% endif %}
