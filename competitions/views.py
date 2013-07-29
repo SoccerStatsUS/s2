@@ -173,7 +173,7 @@ def competition_attendance(request, competition_slug):
     attendance_data = [(e.name, e.average_attendance(), e.total_attendance()) for e in competition.season_set.all()]
 
     attendance = defaultdict(int)
-    games = defaultdicts(int)
+    games = defaultdict(int)
     for t, a in competition.game_set.exclude(home_team=None).exclude(attendance=None).values_list('home_team__name', 'attendance'):
         attendance[t] += a
         games[t] += 1
