@@ -181,6 +181,7 @@ class Game(models.Model):
 
     # Minigames were played in MLS, APSL, USL, and probably others.
     minigame = models.BooleanField(default=False)
+    indoor = models.BooleanField(default=False)
 
     minutes = models.IntegerField(default=90)
 

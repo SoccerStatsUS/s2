@@ -5,7 +5,9 @@
 
 {% block content %}
 
+{% if award.competition %}
 <h3><a href="{% url competition_detail award.competition.slug %}">{{ award.competition }}</a> | {{ award.name }}</h3>
+{% endif %}
 
 <table>
 
