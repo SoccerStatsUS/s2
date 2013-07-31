@@ -391,6 +391,13 @@ class Game(models.Model):
     def team2_lineups(self):
         return self.appearance_set.filter(team=self.team2)
 
+    def team1_gamestats(self):
+        return self.gamestat_set.filter(team=self.team1)
+
+    def team2_gamestats(self):
+        return self.gamestat_set.filter(team=self.team2)
+
+
     def team1_starters(self):
         return self.team1_lineups().filter(on=0).exclude(off=0)
 
@@ -436,6 +443,18 @@ class Game(models.Model):
             m = max(t1c, t2c)
             l1, l2 = pad_list(list(t1l), m), pad_list(list(t2l), m)
             return zip(l1, l2)
+
+    def zipped_gamestats(self):
+        # FIX THIS; TRUNACATING TEAM LINEUPS
+        t1l, t2l = self.team1_gamestats(), self.team2_gamestats()
+        t1c, t2c = t1l.count(), t2l.count()
+        if t1c == t2c:
+            return zip(t1l, t2l)
+        else:
+            m = max(t1c, t2c)
+            l1, l2 = pad_list(list(t1l), m), pad_list(list(t2l), m)
+            return zip(l1, l2)
+
 
 
     def goal_string(self):

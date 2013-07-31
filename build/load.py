@@ -89,12 +89,10 @@ def load1():
 
 
 def load2():
-
     load_lineups()
 
 
 def load3():
-
     load_game_stats()
 
 def load4():
@@ -762,6 +760,7 @@ def load_games():
         not_played = game.get('not_played') or False
         forfeit = game.get('forfeit') or False
         minigame = game.get('minigame') or False
+        indoor = game.get('indoor') or False
 
         minutes = game.get('minutes') or 90
 
@@ -806,6 +805,7 @@ def load_games():
 
                 'goals': goals,
                 'minigame': minigame,
+                'indoor': indoor,
 
                 'minutes': minutes,
                 'competition_id': competition_id,
@@ -955,6 +955,7 @@ def load_assists():
 
         goal_id = goal_getter(team_id, bio_id, goal['minute'], d)
         if not goal_id:
+            import pdb; pdb.set_trace()
             print "Cannot create assists for %s" % goal
             return []
 
@@ -984,14 +985,13 @@ def load_assists():
     insert_sql('goals_assist', assists)
 
 
+@timer
 @transaction.commit_on_success
 def load_game_stats():
     print "\nloading game stats\n"
 
     team_getter = make_team_getter()
     bio_getter = make_bio_getter()
-    competition_getter = make_competition_getter()
-    season_getter = make_season_getter()
     source_getter = make_source_getter()
     game_getter = make_game_getter()
     game_result_getter = make_game_result_getter()
@@ -1029,8 +1029,6 @@ def load_game_stats():
         team_id = team_getter(stat['team'])
 
         game_id = game_getter(team_id, stat['date'])
-        #if game_id is None:
-        #    import pdb; pdb.set_trace()
 
 
         result = game_result_getter(team_id, stat['date'])
@@ -1038,14 +1036,6 @@ def load_game_stats():
         if game_id is None or team_id is None:
             continue
 
-        #competition_id = competition_getter(stat['competition'])
-        #season_id = season_getter(stat['season'], competition_id)
-
-        #if stat.get('source'):
-        #    source_id = source_getter(stat['source'])
-
-        #else:
-        #    source_id = None
 
         def c2i(key):
             # Coerce an integer
@@ -1054,9 +1044,6 @@ def load_game_stats():
                 if type(stat[key]) != int:
                     import pdb; pdb.set_trace()
                 return stat[key]
-
-            #elif key in stat:
-            #    import pdb; pdb.set_trace()
 
             elif key in stat and stat[key] == None:
                 return 0
@@ -1068,8 +1055,6 @@ def load_game_stats():
             'player_id': bio_id,
             'team_id': team_id,
             'game_id': game_id,
-            #'competition_id': competition_id,
-            #'season_id': season_id,
             'games_started': c2i('games_started'),
             'games_played': c2i('games_played'),
             'minutes': c2i('minutes'),
@@ -1081,7 +1066,6 @@ def load_game_stats():
             'fouls_suffered': c2i('fouls_suffered'),
             'yellow_cards': c2i('yellow_cards'),
             'red_cards': c2i('red_cards'),
-            #'source_id': source_id,
             'age': age,
             'result': result,
             })
@@ -1135,13 +1119,6 @@ def load_stats():
                 if type(stat[key]) != int:
                     import pdb; pdb.set_trace()
                 return stat[key]
-
-            #elif key in stat:
-            #    import pdb; pdb.set_trace()
-
-            # This is very bad behavior.
-            #elif key in stat and stat[key] == None:
-            #    return 0
 
             else:
                 return None
@@ -1202,15 +1179,6 @@ def load_lineups():
             print "Cannot create %s" % a
             return {}
 
-        """
-        bd = birthdate_dict.get(player_id)
-        if a['date'] and bd:
-            # Coerce bd from datetime.date to datetime.time
-            bdt = datetime.datetime.combine(bd, datetime.time())
-            age = (a['date'] - bdt).days / 365.25
-        else:
-            age = None
-            """
 
         if a['on'] is not None and a['off'] is not None:
             try:
@@ -1228,8 +1196,6 @@ def load_lineups():
             'player_id': player_id,
             'on': a['on'],
             'off': a['off'],
-            #'team_original_name': '',
-            #'age': age,
             'minutes': minutes,
             'order': a.get('order', None),
             }
@@ -1246,9 +1212,7 @@ def load_lineups():
             print i
 
     print i
-
     print "Creating lineups"
-
     insert_sql('lineups_appearance', l)
 
 

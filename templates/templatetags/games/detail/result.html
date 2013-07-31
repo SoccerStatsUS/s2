@@ -103,7 +103,13 @@
 
 {% if game.appearance_set.exists %}
 {% include "templatetags/games/detail/lineup.html"  %}
+
+{% else %}
+
+{% if game.gamestat_set.exists %}
+{% include "templatetags/games/detail/gamestats.html"  %}
 {% endif %}
 
+{% endif %}
 
 
