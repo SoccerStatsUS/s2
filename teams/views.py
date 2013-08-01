@@ -285,15 +285,22 @@ def team_season_detail(request, team_slug, competition_slug, season_slug):
 
     calendar_data = [(e.date.isoformat(), e.result(team), e.score(), e.opponent(team).name) for e in games]
 
+    stats = Stat.objects.filter(team=team, season=season)
+
+    goal_scorers = list(stats.exclude(goals=0).values_list('player__name', 'goals'))
+    assisters = list(stats.exclude(assists=0).values_list('player__name', 'assists'))
+
     context = {
         'team': team,
         'season': season,
         'points': json.dumps(points),
-        'stats': Stat.objects.filter(team=team, season=season), # Wrong stat for the time being.
+        'stats': stats,
         'games': games,
         'result_json': json.dumps([e.result(team) for e in games]), # Probably need to format better than this.
         'form_data': json.dumps(form_data),
         'calendar_data': json.dumps(calendar_data),
+        'goal_scorers': json.dumps(goal_scorers),        
+        'assisters': json.dumps(assisters),
         }
 
     return render_to_response("teams/season_detail.html",
