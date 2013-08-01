@@ -61,25 +61,28 @@
 
     {% if season.game_set.count %}
     <tr>
-      <td>Games</td>
       <td>
         {{ season.game_set.count }}
         {% if season.game_set.exists %}
-        <a href="{% url season_games season.competition.slug season.slug %}">(all games)</a>
+        <a href="{% url season_games season.competition.slug season.slug %}">games</a>
         {% endif %}
       </td>
     </tr>
 
     <tr>
-      <td>Goals</td>
-      <td>{{ season.goals }} ({{ season.goals_per_game|floatformat }} <a href="{% url season_goals season.competition.slug season.slug %}">goals</a>/game)</td>
+      <td>{{ season.goals_per_game|floatformat }}<a href="{% url season_goals season.competition.slug season.slug %}"> goals</a> / game</td>
     </tr>
     {% endif %}
 
     {% if season.total_attendance %}
     <tr>
-      <td>Average Attendance</td>
-      <td>{{ season.average_attendance|floatformat:1 }}</td>
+      <td>
+        {{ season.average_attendance|floatformat:1 }}
+        {% if attendance_game_count %}
+        <a href="{% url season_attendance season.competition.slug season.slug %}">avg. attendance</a>
+        {% endif %}
+      </td>
+      
     </tr>
 
     {% comment %}
@@ -121,20 +124,15 @@
 </div>
 {% endif %}
 
-{% if top_attendance_games %}
+{% if recent_games %}
 <div tab="games">
 
 <p>
   <a href="{% url season_games season.competition.slug season.slug %}">all games</a>
 </p>
 
-<p>best attendances</p>
-{% include "templatetags/games/attendance.html" with games=top_attendance_games %}
+{% include "templatetags/games/attendance.html" with games=recent_games %}
 
-{% if worst_attendance_games %}
-<p>worst attendances</p>
-{% include "templatetags/games/attendance.html" with games=worst_attendance_games %}
-{% endif %}
 
 </div>
 {% endif %}

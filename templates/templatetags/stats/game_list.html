@@ -13,6 +13,7 @@
     <th>a</th>
     <th>gp</th>
     <th>minutes</th>
+    <th></th>
 
     <th>age</th>
     
@@ -52,6 +53,20 @@
     {% datum_or_grey gs.assists %}
     {% datum_or_grey gs.games_played %}
     {% datum_or_grey gs.minutes %}
+
+    {% with game=gs.game %}
+
+    {% if game.stadium %}
+    <td><a href="{% url stadium_detail game.stadium.slug %}" title="{{ game.stadium }}"><strong>{{ game.stadium|truncatechars:"30" }}</strong></a></td>
+    {% elif game.city %}
+    <td><a href="{% url city_detail game.city.slug %}">{{ game.city }}</a></td>
+    {% elif game.country %}
+    <td><a href="{% url country_detail game.country.slug %}">{{ game.country }}</a></td>
+    {% else %}
+    <td></td>
+    {% endif %}
+
+    {% endwith %}
 
 
      <td>{{ gs.age|floatformat:"1" }}</td>

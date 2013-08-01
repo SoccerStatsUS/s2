@@ -553,8 +553,8 @@ def load_standings():
                 'division': division,
                 'group': group,
                 'games': standing['games'],
-                'goals_for': standing['goals_for'],
-                'goals_against': standing['goals_against'],
+                'goals_for': standing.get('goals_for'),
+                'goals_against': standing.get('goals_against'),
                 'wins': standing['wins'],
                 'shootout_wins': standing['shootout_wins'],
                 'losses': standing['losses'],
@@ -955,7 +955,7 @@ def load_assists():
 
         goal_id = goal_getter(team_id, bio_id, goal['minute'], d)
         if not goal_id:
-            import pdb; pdb.set_trace()
+            #import pdb; pdb.set_trace()
             print "Cannot create assists for %s" % goal
             return []
 

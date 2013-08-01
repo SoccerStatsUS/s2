@@ -451,9 +451,31 @@ class Season(models.Model):
             goals = self.goals()
             games = Game.objects.filter(season=self).count()
 
-        return float(goals) / games
+        return 2 * float(goals) / games
 
 
+    def goal_distribution(self, ceiling=5):
+        d = defaultdict(int)
+        for game in self.game_set.exclude(home_team=None).exclude(team1_score=None):
+            if game.home_score() == None:
+                import pdb; pdb.set_trace()
+            d[(min(game.home_score(), ceiling), min(game.away_score(), ceiling))] += 1
+        return d
+
+    def goal_distribution2(self, ceiling=5):
+        gd = self.goal_distribution()
+        d = {}
+        for k in gd:
+            home, away = k
+            if home >= away:
+                d[k] = gd[k]
+            else:
+                d[(away, home)] = gd[k]
+
+        return d
+            
+
+    
     def previous_season(self):
         seasons = Season.objects.filter(competition=self.competition)
         index = list(seasons).index(self)

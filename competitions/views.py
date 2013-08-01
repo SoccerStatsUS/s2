@@ -108,14 +108,10 @@ def competition_detail(request, competition_slug):
     else:
         sx = stats.exclude(games_played=None, goals=None).filter(competition=competition).order_by('-games_played', '-goals')[:25]
 
-    top_attendance_games = games.exclude(attendance=None).order_by('-attendance')[:10]
-
     context = {
         'competition': competition,
         'stats': sx,
-        'games': games.select_related()[:25],
-        'top_attendance_games': top_attendance_games,
-        'worst_attendance_games': games.exclude(attendance=None).exclude(id__in=top_attendance_games.values_list('id', flat=True)).order_by('attendance')[:10],
+        'games': games.order_by('-date').select_related()[:25],
         'big_winners': competition.alltime_standings().order_by('-wins')[:50],
         
         }
@@ -173,17 +169,23 @@ def competition_attendance(request, competition_slug):
     attendance_data = [(e.name, e.average_attendance(), e.total_attendance()) for e in competition.season_set.all()]
 
     attendance = defaultdict(int)
-    games = defaultdict(int)
+    agames = defaultdict(int)
     for t, a in competition.game_set.exclude(home_team=None).exclude(attendance=None).values_list('home_team__name', 'attendance'):
         attendance[t] += a
-        games[t] += 1
+        agames[t] += 1
 
-    team_data = sorted([(k, attendance[k] / games[k], attendance[k]) for k in games.keys()])
+    team_data = sorted([(k, attendance[k] / agames[k], attendance[k]) for k in agames.keys()])
+
+    games = competition.game_set.exclude(attendance=None)
+    top_attendance_games = games.order_by('-attendance')[:10]
 
     context = {
         'competition': competition,
         'attendance_data': json.dumps(attendance_data),
         'team_data': json.dumps(team_data),
+        'top_attendance_games': top_attendance_games,
+        'worst_attendance_games': games.exclude(id__in=top_attendance_games.values_list('id', flat=True)).order_by('attendance')[:10],
+
         }
     return render_to_response("competitions/competition/attendance.html",
                               context,
@@ -222,7 +224,6 @@ def season_detail(request, competition_slug, season_slug):
     goal_leaders = stats.exclude(goals=None).order_by('-goals')
     game_leaders = stats.exclude(games_played=None).order_by('-games_played')
 
-    top_attendance_games = games.exclude(attendance=None).order_by('-attendance')[:10]
 
     context = {
         'season': season,
@@ -235,8 +236,7 @@ def season_detail(request, competition_slug, season_slug):
         'game_leaders': game_leaders[:10],
         'average_attendance': average_attendance,
         'attendance_game_count': attendance_game_count,
-        'top_attendance_games': top_attendance_games,
-        'worst_attendance_games': games.exclude(attendance=None).exclude(id__in=top_attendance_games.values_list('id', flat=True)).order_by('attendance')[:10],
+        'recent_games': season.game_set.order_by('-date')[:20],
         'awards': season.awarditem_set.order_by('award')
         }
     return render_to_response("competitions/season/detail.html",
@@ -311,17 +311,23 @@ def season_attendance(request, competition_slug, season_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
     season = get_object_or_404(Season, competition=competition, slug=season_slug)
 
+    games = season.game_set.exclude(attendance=None)
+    top_attendance_games = games.exclude(attendance=None).order_by('-attendance')[:10]
+
+
     attendance = defaultdict(int)
-    games = defaultdict(int)
+    agames = defaultdict(int)
     for t, a in season.game_set.exclude(home_team=None).exclude(attendance=None).values_list('home_team__name', 'attendance'):
         attendance[t] += a
-        games[t] += 1
+        agames[t] += 1
 
-    team_data = sorted([(k, attendance[k] / games[k]) for k in games.keys()])
+    team_data = sorted([(k, attendance[k] / agames[k]) for k in agames.keys()])
 
     context = {
         'season': season,
         'team_data': json.dumps(team_data),
+        'top_attendance_games': top_attendance_games,
+        'worst_attendance_games': games.exclude(attendance=None).exclude(id__in=top_attendance_games.values_list('id', flat=True)).order_by('attendance')[:10],
         }
 
     return render_to_response("competitions/season/attendance.html",
@@ -340,8 +346,8 @@ def season_goals(request, competition_slug, season_slug):
 
     context = {
         'season': season,
-        #'goals': competition.goal_set.filter(season=season).order_by('date'),
         'goals': Goal.objects.filter(game__season=season).order_by('date', 'team', 'minute'),
+        'goal_distribution': json.dumps(season.goal_distribution().items()),
         }
 
     return render_to_response("competitions/season/goals.html",
