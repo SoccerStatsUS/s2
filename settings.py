@@ -178,6 +178,7 @@ INSTALLED_APPS = (
     'games',
     'goals',
     'graphs',
+    'images',
     'levels',
     'lineups',
     'money',
