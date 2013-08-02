@@ -2,11 +2,14 @@
 
 {% block content %}
 
-<ul>  
-  {% for item in news_sources %}
-  <li><a href="{{ item.url }}">{{ item.name }}</a></li>
+<table>
+  {% for item in items %}
+  <tr>
+    <td><a href="{{ item.url }}">{{ item.title }}</a></td>
+    <td><a href="{% url source_detail item.source.id %}">{{ item.source }}</a></td>
+  </tr>
   {% endfor %}
-</ul>
+</table>
 
 
 {% endblock %}

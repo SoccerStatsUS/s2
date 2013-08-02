@@ -8,6 +8,7 @@
       <th>name</th>
       <th>games</th>
       <th>stats</th>
+      <th>news</th>
       </tr>
     </thead>
   
@@ -16,6 +17,7 @@
     <td><a href="{% url source_detail source.id %}">{{ source }}</a></td>
     <td>{{ source.games }}</td>
     <td>{{ source.stats }}</td>
+    <td>{{ source.feeditem_set.count }}</td>
   </tr>
   {% endfor %}
 </table>

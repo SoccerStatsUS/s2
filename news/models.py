@@ -1,5 +1,7 @@
 from django.db import models
 
+from sources.models import Source
+
 # Going to have to figure out how to save these while rebuilding the database.
 # Probably keep a separate database for persistent / non-built data.
 
@@ -30,11 +32,16 @@ class NewsSource(models.Model):
 
 
 
-class FeedItem(object):
+class FeedItem(models.Model):
     """
     A single rss item.
     """
 
+    title = models.CharField(max_length=1023)
+    dt = models.DateTimeField()
+    summary = models.CharField(max_length=1023) 
+    url = models.CharField(max_length=1023) 
+    source = models.ForeignKey(Source)
 
     class Meta:
         pass

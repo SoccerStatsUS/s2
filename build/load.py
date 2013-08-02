@@ -16,7 +16,7 @@ from bios.models import Bio
 from competitions.models import Competition, Season
 from drafts.models import Draft, Pick
 from money.models import Salary
-from news.models import NewsSource
+from news.models import NewsSource, FeedItem
 from places.models import Country, State, City, Stadium
 from positions.models import Position
 from sources.models import Source, SourceUrl
@@ -102,7 +102,7 @@ def load4():
     print hpy().heap()
 
     # Analysis data
-    #load_news()
+    load_news()
 
 
 
@@ -387,9 +387,15 @@ def load_drafts():
 @transaction.commit_on_success
 def load_news():
     print "loading news"
+
+    source_getter = make_source_getter()
+
     for e in soccer_db.news.find():
         e.pop('_id')
-        NewsSource.objects.create(**e)
+        #NewsSource.objects.create(**e)
+        source_id = source_getter(e.pop('source'))
+        e['source_id'] = source_id
+        FeedItem.objects.create(**e)
 
 @timer
 @transaction.commit_on_success

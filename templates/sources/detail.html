@@ -16,7 +16,24 @@
 <h4>Base url: {{ source.base_url }}</h4>
 {% endif %}
 
-<h4>Games</h4>
+
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+
+<div tab="news">
+
+<ul>
+{% for item in source.feeditem_set.all %}
+<li><a href="{{ item.url }}">{{ item.title }}</a></li>
+{% endfor %}
+</ul>
+
+</div>
+
+
+<div tab="games">
 
 <ul>
 {% for game in source.game_set.all|slice:"50" %}
@@ -25,6 +42,12 @@
 </ul>
 
 <h4>Stats: {{ source.stat_set.count }}</h4>
+
+</div>
+
+
+
+</div>
 
 
 {% endblock %}
