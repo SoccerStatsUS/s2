@@ -37,5 +37,9 @@ urlpatterns = patterns('places.views',
                            'stadium_detail',
                            name='stadium_detail'),
 
+                       url(r'^stadiums/(?P<slug>[a-z0-9-]+)/games$',                       
+                           'stadium_games',
+                           name='stadium_games'),
+
 
 )

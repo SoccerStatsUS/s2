@@ -150,5 +150,27 @@ def stadium_detail(request, slug):
                                   context,
                                   context_instance=RequestContext(request))
 
+
+
+
+
+def stadium_games(request, slug):
+        """
+        """
+
+        stadium = get_object_or_404(Stadium, slug=slug)
+
+        # Compute average attendance.
+        games = stadium.game_set.exclude(attendance=None)
+
+        context = {
+                'stadium': stadium,
+                'games': games,
+                }
+
+        return render_to_response("places/stadium_detail.html",
+                                  context,
+                                  context_instance=RequestContext(request))
+
         
 
