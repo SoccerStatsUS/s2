@@ -2,6 +2,7 @@ from collections import defaultdict
 import datetime
 import os
 
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -20,7 +21,7 @@ class Image(models.Model):
     # United States -> United States U-20 (youth team)
     affiliate = models.ForeignKey('self', null=True)
 
-    src = models.ImageField('self', null=True)
+    #src = models.ImageField('self', null=True)
 
     
 
