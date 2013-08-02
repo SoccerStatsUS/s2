@@ -21,7 +21,7 @@
 
 <div id="tab_wrapper">
 
-
+{% if source.feeditem_set.exists %}
 <div tab="news">
 
 <ul>
@@ -31,6 +31,7 @@
 </ul>
 
 </div>
+{% endif %}
 
 
 <div tab="games">
@@ -45,6 +46,14 @@
 
 </div>
 
+
+<div tab="urls">
+<ul>
+{% for surl in source.sourceurl_set.all %}
+<li><a href="{{ surl.url }}">{{ surl.url }}</a></li>
+{% endfor %}
+</ul>
+</div>
 
 
 </div>
