@@ -7,9 +7,11 @@ from django.views.decorators.cache import cache_page
 
 from bios.models import Bio
 from games.models import Game
+from news.models import FeedItem
 from places.models import City, Stadium
 from positions.models import Position
 from standings.models import Standing
+
 
 
 @cache_page(60 * 60 * 12)
@@ -166,6 +168,8 @@ def date_detail(request, year, month, day):
     hires = Position.objects.filter(start=d)
     fires = Position.objects.filter(end=d)
 
+    news = FeedItem.objects.filter(dt__year=year, dt__month=month, dt__day=day).order_by('dt')
+
     stadium_ids = set([e[0] for e in games.exclude(stadium=None).values_list('stadium')])
     stadiums = Stadium.objects.filter(id__in=stadium_ids)
 
@@ -195,6 +199,7 @@ def date_detail(request, year, month, day):
         'next_date': next_date_tuple,
         'stadiums': stadiums[:20],
         'standings': standings,
+        'news': news,
         }
     return render_to_response("dates/list.html",
                               context,

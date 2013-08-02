@@ -15,7 +15,7 @@
   
   {% for source in sources %}
   <tr>
-    <td><a href="{% url source_detail source.id %}">{{ source }}</a></td>
+    <td><a href="{% url source_detail source.id %}">{{ source|truncatechars:40 }}</a></td>
     <td>{{ source.author }}</td>
     <td>{{ source.games }}</td>
     <td>{{ source.stats }}</td>

@@ -145,11 +145,21 @@ d3.select(self.frameElement).style("height", "2910px");
 
 
 
-{% comment %}
-<div tab="summary">
-{% include "templatetags/lists/stadiums.html" %}
+<div tab="news">
+
+<table>
+{% for item in news %}
+<tr>
+  <td>{{ item.time }}</td>
+  <td><a title="{{ item.title }}" href="{{ item.url }}">{{ item.title|truncatechars:80 }}</a></td>
+  
+  <td><a href="{% url source_detail item.source.id %}">{{ item.source }}</a></td>
+</tr>
+
+{% endfor %}
+</table>
+
 </div>
-{% endcomment %}
 
 
 

@@ -24,11 +24,14 @@
 {% if source.feeditem_set.exists %}
 <div tab="news">
 
-<ul>
-{% for item in source.feeditem_set.all %}
-<li><a href="{{ item.url }}">{{ item.title }}</a></li>
+<table>
+{% for item in feeds %}
+<tr>
+  <td><a href="{{ item.url }}">{{ item.title }}</a></td>
+  <td><a href="{% url date_detail item.dt.year item.dt.month item.dt.day %}">{{ item.dt }}</a></a>
+</tr>
 {% endfor %}
-</ul>
+</table>
 
 </div>
 {% endif %}
@@ -50,7 +53,7 @@
 <div tab="urls">
 <ul>
 {% for surl in source.sourceurl_set.all %}
-<li><a href="{{ surl.url }}">{{ surl.url }}</a></li>
+  <ul><a href="{{ surl.url }}">{{ surl.url }}</a></ul>
 {% endfor %}
 </ul>
 </div>

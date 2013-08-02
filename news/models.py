@@ -43,5 +43,8 @@ class FeedItem(models.Model):
     url = models.CharField(max_length=1023) 
     source = models.ForeignKey(Source)
 
+    def time(self):
+        return self.dt.strftime("%I:%M %p")
+
     class Meta:
         pass

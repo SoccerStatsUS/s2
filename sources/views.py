@@ -22,6 +22,7 @@ def source_detail(request, source_id):
     source = get_object_or_404(Source, id=source_id)
     context = {
         'source': source,
+        'feeds': source.feeditem_set.order_by('-dt'),
         }
     return render_to_response("sources/detail.html",
                               context,

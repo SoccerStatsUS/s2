@@ -14,6 +14,7 @@ from stats.models import Stat, CompetitionStat, SeasonStat
 
 from collections import Counter, defaultdict
 import json
+import datetime
 
 @cache_page(60 * 60 * 12)
 def competition_index(request):
@@ -108,10 +109,16 @@ def competition_detail(request, competition_slug):
     else:
         sx = stats.exclude(games_played=None, goals=None).filter(competition=competition).order_by('-games_played', '-goals')[:25]
 
+    recent_games = games.order_by('-date').exclude(date__gte=datetime.date.today())
+    if not recent_games.exists():
+        recent_games = games.order_by('-date')
+
+
+
     context = {
         'competition': competition,
         'stats': sx,
-        'games': games.order_by('-date').select_related()[:25],
+        'games': recent_games.select_related()[:25],
         'big_winners': competition.alltime_standings().order_by('-wins')[:50],
         
         }
@@ -225,6 +232,10 @@ def season_detail(request, competition_slug, season_slug):
     game_leaders = stats.exclude(games_played=None).order_by('-games_played')
 
 
+    recent_games = season.game_set.exclude(date__gte=datetime.date.today()).order_by('-date')
+    if not recent_games.exists():
+        recent_games = season.game_set.order_by('-date')
+
     context = {
         'season': season,
         'standings': season.standing_set.filter(final=True),
@@ -236,7 +247,7 @@ def season_detail(request, competition_slug, season_slug):
         'game_leaders': game_leaders[:10],
         'average_attendance': average_attendance,
         'attendance_game_count': attendance_game_count,
-        'recent_games': season.game_set.order_by('-date')[:20],
+        'recent_games': recent_games[:25],
         'awards': season.awarditem_set.order_by('award')
         }
     return render_to_response("competitions/season/detail.html",
