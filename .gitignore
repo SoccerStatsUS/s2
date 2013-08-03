@@ -9,4 +9,4 @@ secret_settings.py
 custom_settings.py
 
 media/images/people
-media/images/bio
+media/images/bio/
