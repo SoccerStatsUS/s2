@@ -1,15 +1,17 @@
 
 <div id="bio_image">
 
-{% if bio.get_image %}
-<img height="180" src="{{ bio.get_image }}">
+{% if bio.images.all %}
+<img height="180" src="{{ bio.images.all.0.path }}">
 {% endif %}
 
 </div>
 
+
 <div id="bio_data">
 
 <h3>{{ bio.name }}</h3>
+
 
 {% if bio.height or bio.weight %}
 <div>{% if bio.height %}{{ bio.height }}cm{% endif %}</div>

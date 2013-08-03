@@ -265,3 +265,10 @@ class Stadium(models.Model):
 
 
     
+class StadiumMap(models.Model):
+
+    stadium = models.ForeignKey('places.Stadium')
+    team = models.ForeignKey('teams.Team')
+
+    start = models.DateField()
+    end = models.DateField()

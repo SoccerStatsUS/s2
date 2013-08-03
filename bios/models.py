@@ -4,6 +4,8 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils.functional import memoize
 
+
+
 from collections import defaultdict
 import datetime
 
@@ -71,9 +73,6 @@ class BioManager(models.Manager):
 
 
 class Bio(models.Model):
-
-
-
     """
     Player or anybody else bio.
     """
@@ -94,9 +93,12 @@ class Bio(models.Model):
     weight = models.IntegerField(null=True, blank=True)
 
     awards = generic.GenericRelation('awards.AwardItem')
+    images = generic.GenericRelation('images.Image')
 
     # This doesn't need to be here, but is for filtering / convenience purposes.
     hall_of_fame = models.BooleanField() # Whether or not a player is in the hall of fame.
+
+
 
     objects = BioManager()
 
@@ -117,9 +119,6 @@ class Bio(models.Model):
             if os.path.exists(fp):
                 return fp.split('sdev')[1]
         return ''
-
-
-
 
     def ref_set(self):
         from games.models import Game

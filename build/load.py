@@ -87,6 +87,8 @@ def load1():
     load_goals()
     load_assists()
 
+    load_stadium_maps()
+
 
 def load2():
     load_lineups()
@@ -522,6 +524,29 @@ def load_stadiums():
         x = 5
 
 
+def load_stadium_maps():
+    print("loading stadium maps")
+
+    stadium_getter = make_stadium_getter()
+    team_getter = make_team_getter()
+
+    l = []
+    for e in soccer_db.stadium_maps.find():
+        tid = team_getter(e['team'])
+        sid = stadium_getter(e['stadium'])
+
+        l.append({
+                'team_id': tid,
+                'stadium_id': sid,
+                'start': e['start'],
+                'end': e['end'],
+                })
+
+        
+    insert_sql("places_stadiummap", l)
+
+
+
 @timer
 @transaction.commit_on_success
 def load_standings():
@@ -609,29 +634,26 @@ def load_standings():
 @timer
 @transaction.commit_on_success
 def load_bios():
+    print("loading bios")
+
     cg = make_city_getter()
 
 
     # Find which names are used so we can only load these bios.
-    fields = [('lineups', 'name'), ('goals', 'goal'), ('stats', 'name'), ('awards', 'recipient'), ('picks', 'text')]
-    names = set()
+    # Huh? This is unnecessary.
+    #fields = [('lineups', 'name'), ('goals', 'goal'), ('stats', 'name'), ('awards', 'recipient'), ('picks', 'text')]
+    #names = set()
 
     # Add names to names field where they have been used.
-    for coll, key in fields:
-        names.update([e[key] for e in soccer_db[coll].find()])
+    #for coll, key in fields:
+    #    names.update([e[key] for e in soccer_db[coll].find()])
 
     # Load bios.
     for bio in soccer_db.bios.find().sort('name', 1):
 
-        if bio['name'] not in names:
+        #if bio['name'] not in names:
             #print "Skipping %s" % bio['name']
-            continue
-
-
-        #try:
-        #    print "Creating bio for %s" % bio['name']
-        #except:
-        #    print "Created bio."
+        #    continue
 
         bio.pop('_id')
 
@@ -659,6 +681,24 @@ def load_bios():
         bd['hall_of_fame'] = bio.get('hall_of_fame', False)
 
         Bio.objects.create(**bd)
+
+    bio_getter = make_bio_getter()
+    bio_ct_id = ContentType.objects.get(app_label='bios', model='bio').id
+
+    images = []
+    for bio in soccer_db.bios.find().sort('name', 1):
+        if bio.get('img'):
+            bid = bio_getter(bio['name'])
+            fn = bio['img'].rsplit('/')[-1]
+            
+            images.append({
+                    'filename': fn,
+                    'content_type_id': bio_ct_id,
+                    'object_id': bid,
+                    })
+
+    insert_sql("images_image", images)
+
 
 
 @transaction.commit_on_success
