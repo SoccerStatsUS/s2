@@ -17,7 +17,7 @@ from competitions.models import Competition, Season
 from drafts.models import Draft, Pick
 from money.models import Salary
 from news.models import NewsSource, FeedItem
-from places.models import Country, State, City, Stadium
+from places.models import Country, State, City, Stadium, StadiumMap
 from positions.models import Position
 from sources.models import Source, SourceUrl
 from teams.models import Team, TeamAlias
@@ -542,8 +542,10 @@ def load_stadium_maps():
                 'end': e['end'],
                 })
 
+    for e in l:
+        StadiumMap.objects.create(**e)
         
-    insert_sql("places_stadiummap", l)
+    #insert_sql("places_stadiummap", l)
 
 
 

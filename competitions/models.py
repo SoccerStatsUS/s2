@@ -329,6 +329,39 @@ class Season(models.Model):
         return self.game_set.exclude(attendance=None).count()
 
 
+    def stadium_attendance(self):
+        from places.models import Stadium
+
+        games = self.game_set.exclude(attendance=None).exclude(home_team=None).exclude(stadium__capacity=None)
+        
+        attendance = defaultdict(int)
+        game_dict = defaultdict(int)
+
+        stadiums = set()
+
+        for t,a,sn,sid in games.values_list('home_team__name', 'attendance', 'stadium__name', 'stadium'):
+            key = (t,sn)
+            attendance[key] += a
+            game_dict[key] += 1
+            stadiums.add(sid)
+
+        capacities = dict(Stadium.objects.filter(id__in=stadiums).values_list('name', 'capacity'))
+
+        make_item = lambda key: { 'team': key[0], 'stadium': key[1], 'capacity': capacities[key[1]], 'attendance': float(attendance[key]) / game_dict[key] }
+
+        return [make_item(key) for key in attendance.keys()]
+
+
+    def total_attendances(self):
+        d = defaultdict(int)
+        games = self.game_set.exclude(attendance=None).exclude(home_team=None).values_list('team__name', 'attendance')
+
+        for team, attendance in games:
+            d[team] += attendance
+            
+        return d.items()
+        
+
 
     def previous_game(self, game):
         # This doesn't really work. 

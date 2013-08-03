@@ -339,6 +339,8 @@ def season_attendance(request, competition_slug, season_slug):
         'team_data': json.dumps(team_data),
         'top_attendance_games': top_attendance_games,
         'worst_attendance_games': games.exclude(attendance=None).exclude(id__in=top_attendance_games.values_list('id', flat=True)).order_by('attendance')[:10],
+        'stadium_attendance': json.dumps(season.stadium_attendance()),
+        'team_attendances': json.dumps(season.total_attendances()),
         }
 
     return render_to_response("competitions/season/attendance.html",
