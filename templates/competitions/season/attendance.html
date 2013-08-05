@@ -29,143 +29,13 @@ padding-top: 5%;
 
 <div id="tab_wrapper">
 
-
-
 <div tab="capacity">
-
-<div id="capacity-chart"></div>
-
-<script>
-
-var sdata = {{ stadium_attendance|safe }}
-
-
-var margin = {top: 80, right: 0, bottom: 10, left: 80},
-    width = 500,
-    height = 1500;
-
-var leftMargin = 200; // bars margin
-
-var x = d3.scale.linear()
-          .domain([0, d3.max(sdata, function(e) { return e.capacity; })]).range([0, width - leftMargin])
-
-var y = d3.scale.ordinal().rangeRoundBands([0, height], 1)
-          .domain(sdata.map(function(d) { return d.team + " - " + d.stadium}));
-
-
-var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient("right");
-
-
-var svg = d3.select("#capacity-chart").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .style("margin-left", -margin.left + "px")
-  .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-svg.append("g")
-    .attr("class", "y axis")
-    .attr("font-size", ".4em")
-    .call(yAxis)
-
-svg.selectAll(".box")
-      .data(sdata).enter().append("rect")
-      .attr("x", function(d){ return leftMargin; })
-      .attr("y", function(d, i){ return y(d.team); })
-      .attr("fill", function(d){ return "#ccc"; })
-      .attr("width", function(d){ return x(d.capacity) })
-      .attr("height", function(d){ return 30; })
-
-svg.selectAll(".box")
-      .data(sdata).enter().append("rect")
-      .attr("x", function(d){ return leftMargin; })
-      .attr("y", function(d, i){ return y(d.team); })
-      .attr("fill", function(d){ return "#00c"; })
-      .attr("width", function(d){ return x(d.attendance) })
-      .attr("height", function(d){ return 30; })
-
-
-</script>
-
+  <div id="capacity-chart"></div>
 </div>
-
-
-
 
 <div tab="ranking">
-
-
-<div id="attendance-chart">
+  <div id="attendance-chart"></div>
 </div>
-
-<script>
-
-var tdata = {{ team_data|safe }};
-
-var margin = {top: 20, right: 20, bottom: 130, left: 100},
-width = 960 - margin.left - margin.right,
-height = 450 - margin.top - margin.bottom;
-
-var x = d3.scale.ordinal()
-    .rangeRoundBands([0, width], .1, 1).domain(tdata.map(function(d) { return d[0]; }));
-
-var y = d3.scale.linear()
-    .range([height, 0]).domain([0, d3.max(tdata, function(d) { return d[1]})]);
-
-
-var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom");
-
-var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient("left")
-
-var svg = d3.select("#attendance-chart").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
-svg.append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0," + height + ")")
-    .attr("font-size", ".4em")
-    .call(xAxis)
-    .selectAll("text")  
-    .style("text-anchor", "end")
-    .attr("dx", "-.8em")
-    .attr("dy", ".15em")
-    .attr("transform", function(d) {
-        return "rotate(-65)" 
-    });
-
-svg.append("g")
-    .attr("class", "y axis")
-    .call(yAxis)
-    .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 6)
-    .attr("dy", ".71em")
-    .style("text-anchor", "end")
-    .text("avg. attendance");
-
-svg.selectAll(".bar")
-    .data(tdata)
-    .enter().append("rect")
-    .attr("class", "bar")
-    .attr("x", function(d) { return x(d[0]); })
-    .attr("width", x.rangeBand())
-    .attr("y", function(d) { return y(d[1]); })
-    .attr("height", function(d) { return height - y(d[1]); });
-
-</script>
-
-</div>
-
 
 
 <div tab="records">
@@ -180,7 +50,10 @@ svg.selectAll(".bar")
 
 </div>
 
-
+<script>
+stadiumCapacityChart("#capacity-chart", {{ stadium_attendance|safe }})
+teamAttendanceChart("#attendance-chart", {{ team_data|safe }})
+</script>
 
 </div>
 

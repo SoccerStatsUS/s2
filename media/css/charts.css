@@ -1,0 +1,22 @@
+
+body {
+  shape-rendering: crispEdges;
+}
+
+.day {
+  fill: #fff;
+  stroke: #ccc;
+}
+
+.month {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2px;
+}
+
+
+.RdYlGn .q1-11{fill:red;}
+.RdYlGn .q4-11{fill:yellow;}
+.RdYlGn .q9-11{fill:green;}
+
+

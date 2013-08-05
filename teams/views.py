@@ -232,12 +232,15 @@ def team_competition_detail(request, team_slug, competition_slug):
     c = get_object_or_404(Competition, slug=competition_slug)
     games = Game.objects.team_filter(team).filter(competition=c)
 
+    calendar_data = [(e.date.isoformat(), e.result(team), e.score(), e.opponent(team).name) for e in games]
+
     context = {
         'team': team,
         'competition': c,
         'stats': TeamStat.objects.filter(team=team), # Wrong stat for the time being.
         'games': games,
-        'result_json': json.dumps([e.result(team) for e in games]) # Probably need to format better than this.
+        'result_json': json.dumps([e.result(team) for e in games]), # Probably need to format better than this.
+        'calendar_data': json.dumps(calendar_data),
         }
 
     return render_to_response("teams/competition_detail.html",
@@ -490,11 +493,14 @@ def team_games(request, team_slug):
     standings = [TempGameStanding(games, team)]
 
 
+    calendar_data = [(e.date.isoformat(), e.result(team), e.score(), e.opponent(team).name) for e in games]
+
     context = {
         'team': team,
         'form': form,
         'games': games,
         'standings': standings,
+        'calendar_data': json.dumps(calendar_data),
         }
 
     return render_to_response("teams/games.html",

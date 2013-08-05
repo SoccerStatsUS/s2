@@ -18,11 +18,28 @@
 {% include "templatetags/standings/alltime.html" %}
 
 
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+
 {% if games %}
 <div tab="games">
 {% include "templatetags/games.html" %}
 </div>
+
+<div tab="charts">
+  <div id="calendar-chart"></div>
+</div>
+
 {% endif %}
+
+</div>
+
+<script>
+calendarChart("#calendar-chart", {{ calendar_data|safe }})
+</script>
+
 
 
 {% endblock %}
