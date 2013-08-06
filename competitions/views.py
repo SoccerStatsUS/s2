@@ -236,19 +236,20 @@ def season_detail(request, competition_slug, season_slug):
     if not recent_games.exists():
         recent_games = season.game_set.order_by('-date')
 
+    
+
     context = {
         'season': season,
         'standings': season.standing_set.filter(final=True),
         'stats': stats[:25],
-        #'total_minutes': total_minutes,
-        #'known_minutes': known_minutes,
-        #'nation_list': nation_list,
         'goal_leaders': goal_leaders[:10],
         'game_leaders': game_leaders[:10],
         'average_attendance': average_attendance,
         'attendance_game_count': attendance_game_count,
         'recent_games': recent_games[:25],
-        'awards': season.awarditem_set.order_by('award')
+        'awards': season.awarditem_set.order_by('award'),
+        'stats_nationality_info': json.dumps(season.stats_nationality_info()),
+        
         }
     return render_to_response("competitions/season/detail.html",
                               context,

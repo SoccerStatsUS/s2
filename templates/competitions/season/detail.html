@@ -106,6 +106,32 @@
 </div>
 {% endif %}
 
+
+{% if stats.exists %}
+<div tab="stats">
+<div><a href="{% url season_stats season.competition.slug season.slug %}">complete stats</a></div>
+
+{% include "templatetags/stats/stats.html" %}
+</div>
+
+{% endif %}
+
+
+
+{% if recent_games %}
+<div tab="games">
+
+<p>
+  <a href="{% url season_games season.competition.slug season.slug %}">all games</a>
+</p>
+
+{% include "templatetags/games/attendance.html" with games=recent_games %}
+
+
+</div>
+{% endif %}
+
+
 {% if awards.exists %}
 <div tab="awards">
 <table>
@@ -124,28 +150,20 @@
 </div>
 {% endif %}
 
-{% if recent_games %}
-<div tab="games">
 
-<p>
-  <a href="{% url season_games season.competition.slug season.slug %}">all games</a>
-</p>
 
-{% include "templatetags/games/attendance.html" with games=recent_games %}
+<div tab="charts">
+
+<div id="goal_chart"></div>
+
+<script type="text/javascript">
+pieChart("#goal_chart", {{ stats_nationality_info|safe }});
+</script>
 
 
 </div>
-{% endif %}
 
 
-{% if stats.exists %}
-<div tab="stats">
-<div><a href="{% url season_stats season.competition.slug season.slug %}">complete stats</a></div>
-
-{% include "templatetags/stats/stats.html" %}
-
-
-{% endif %}
 
 
 </div>

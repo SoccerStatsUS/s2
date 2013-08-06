@@ -75,6 +75,7 @@ def nationality_stats(stats):
 
 def confederation_stats(stats):
     from collections import Counter
+    # Ha. Rebuilt this entirely.
 
     # In the process of Creating a more generic state/country/confederation key part.
     # Need to creat Confederation...
@@ -397,8 +398,30 @@ class Season(models.Model):
                 return games[0]
             else:
                 return None
-    
-        
+
+
+    def stats_nationality_info(self):
+        # Turn this into a templatetag.
+
+        gpd = defaultdict(int)
+        md = defaultdict(int)
+        gd = defaultdict(int)
+
+        for e in self.stat_set.values_list('player__birthplace__country__confederation', 'games_played', 'minutes', 'goals'):
+            country, gp, minutes, goals = e
+            if country is None:
+                country = "unknown"
+
+            if gp:
+                gpd[country] += gp
+            if minutes:
+                md[country] += minutes
+            if goals:
+                gd[country] += goals
+
+        make_item = lambda k: [k, gpd[k], md[k], gd[k]]
+
+        return [make_item(e) for e in gpd.keys()]
 
 
     def average_date(self):
