@@ -220,6 +220,7 @@ class Game(models.Model):
         # unique_together = [('team1', 'date', 'minigame'), ('team2', 'date', 'minigame')]
 
 
+    # Calendar functions
     def team1_previous_game(self):
         return self.team1.previous_game(self)
 
@@ -232,7 +233,6 @@ class Game(models.Model):
     def team2_next_game(self):
         return self.team2.next_game(self)
 
-
     def season_previous_game(self):
         return self.season.previous_game(self)
 
@@ -240,7 +240,7 @@ class Game(models.Model):
         return self.season.next_game(self)
 
 
-
+    # Home / Away data
     def away_team(self):
         if self.home_team is None:
             return None
@@ -290,12 +290,14 @@ class Game(models.Model):
             return 0
         return 1
 
-
+    # Colors representing game properties.
     def color_code(self):
+        # completeness_color_code
         return ['red', 'yellow', 'green'][self.get_completeness()]
 
 
     def color_code_result(self):
+        # result color code
         return {
             'win': 'green',
             'tie': 'yellow',
@@ -329,6 +331,8 @@ class Game(models.Model):
 
         return ['red', 'yellow', ''][self.goal_quality()]
 
+
+    # Strings representing result
 
     def score(self):
         """Returns a score string."""
@@ -365,6 +369,10 @@ class Game(models.Model):
     def reverse_score_or_result(self):
         return self.score_or_result_generic(self.reverse_result_string)
 
+    def game_string(self):
+        return "%s %s %s" % (self.team1, self.result_string(), self.team2)
+        
+
 
     @property
     def team1_score_or_result(self):
@@ -385,6 +393,7 @@ class Game(models.Model):
         return self.team2_result.capitalize()
 
 
+    # Queries
     def team1_lineups(self):
         return self.appearance_set.filter(team=self.team1)
 
@@ -397,14 +406,13 @@ class Game(models.Model):
     def team2_gamestats(self):
         return self.gamestat_set.filter(team=self.team2)
 
-
     def team1_starters(self):
         return self.team1_lineups().filter(on=0).exclude(off=0)
-
 
     def team2_starters(self):
         return self.team2_lineups().filter(on=0).exclude(off=0)
 
+    # Game data
     def lineup_quality(self):
         if self.starter_count == 22:
             return 2
@@ -432,7 +440,7 @@ class Game(models.Model):
         return "%s:%s" % (self.team1_starter_count, self.team2_starter_count)
 
 
-
+    # Need tests for these.
     def zipped_lineups(self):
         # FIX THIS; TRUNACATING TEAM LINEUPS
         t1l, t2l = self.team1_lineups(), self.team2_lineups()
@@ -455,8 +463,6 @@ class Game(models.Model):
             l1, l2 = pad_list(list(t1l), m), pad_list(list(t2l), m)
             return zip(l1, l2)
 
-
-
     def goal_string(self):
         from goals.models import Goal
         goals = Goal.objects.filter(game=self).order_by('minute', 'team')
@@ -466,7 +472,6 @@ class Game(models.Model):
         else:
             return ""
 
-
     # These should hang off of Team, not Game.
     def previous_games(self, team):
         assert team in (self.team1, self.team2)
@@ -475,6 +480,8 @@ class Game(models.Model):
         else:
             return []
 
+    # Metainformation
+    # Should be cached?
     def streak(self, team):
         """
         Returns a team's results streak, counting this game.
@@ -502,7 +509,7 @@ class Game(models.Model):
             models.Q(team1=self.team1) | models.Q(team2=self.team1)).filter(
             models.Q(team1=self.team2) | models.Q(team2=self.team2))
 
-        
+    # Standings functions
 
     def standings(self, team):
         """
@@ -543,6 +550,8 @@ class Game(models.Model):
             return "%s-%s-%s" % (s.wins, s.ties, s.losses)
         else:
             return ''
+
+    # More string / streak stuff.
 
     def streaks(self):
         return [(self.result(e), self.streak(e)) for  e in (self.team1, self.team2)]
@@ -628,8 +637,6 @@ class Game(models.Model):
 
         raise
 
-
-
     def same_day_games(self):
         """
         Returns all games played on the same date (excluding this one).
@@ -655,17 +662,24 @@ class Game(models.Model):
 
 
     # Data export/analysis stuff with Beineke.
+    # Split this off into a class.
+
+
+class GameAnalysis(object):
+
+    def __init__(self, game):
+        self.game = game
+        
     
     def game_sections(self):
         # Red cards covered?
 
-        minutes = [int(e[0]) for e in self.appearance_set.all().values_list("on")]
+        minutes = [int(e[0]) for e in self.game.appearance_set.all().values_list("on")]
         minutes = sorted(set(minutes))
         minutes_pairs = zip(minutes, minutes[1:]) + [(minutes[-1], 90)]
         return minutes_pairs
         
 
-    
     def goal_blocks(self):
 
         def add_goal(team, minute):
@@ -681,7 +695,7 @@ class Game(models.Model):
             goal_dict[key] += 1
 
         sections = self.game_sections()
-        goal_tuples = self.goal_set.all().values_list("team", "minute")
+        goal_tuples = self.game.goal_set.all().values_list("team", "minute")
         goal_dict = defaultdict(int)
         for team, goal_minute in goal_tuples:
             add_goal(team, goal_minute)
@@ -691,7 +705,7 @@ class Game(models.Model):
         
 
     def lineup_blocks(self):
-        lineup_tuples = self.appearance_set.all().values_list("player", "team", "on", "off")
+        lineup_tuples = self.game.appearance_set.all().values_list("player", "team", "on", "off")
         sections = self.game_sections()
         d = defaultdict(set)
 
@@ -727,22 +741,22 @@ class Game(models.Model):
         def make_item(section):
             start, end = section
 
-            t1goals = goal_blocks.get((section, self.team1.id), 0)
-            t2goals = goal_blocks.get((section, self.team2.id), 0)
+            t1goals = goal_blocks.get((section, self.game.team1.id), 0)
+            t2goals = goal_blocks.get((section, self.game.team2.id), 0)
 
             lineups = lineup_blocks[section]
 
-            t1lineups = [e[1] for e in lineups if e[0] == self.team1.id]
-            t2lineups = [e[1] for e in lineups if e[0] == self.team2.id]
+            t1lineups = [e[1] for e in lineups if e[0] == self.game.team1.id]
+            t2lineups = [e[1] for e in lineups if e[0] == self.game.team2.id]
 
             return [
-                self.id,
-                self.date.ctime(),
+                self.game.id,
+                self.game.date.ctime(),
                 start,
                 end,
-                self.team1.id,
-                self.team2.id,
-                self.team1.id,
+                self.game.team1.id,
+                self.game.team2.id,
+                self.game.team1.id,
                 t1goals,
                 t2goals,
                 t1lineups,
@@ -750,9 +764,6 @@ class Game(models.Model):
                 ]
                 
         return [make_item(section) for section in self.game_sections()]
-
-
-
 
 
         
@@ -809,21 +820,22 @@ class Game(models.Model):
 
 
 def get_best_game_ids():
+    # Move into class?
+    # Collect game ids for games with valid data.
+
     competitions = Competition.objects.filter(slug__in=['major-league-soccer', 'usl-first-division', 'usl-second-division', 'ussf-division-2-professional-league', 'north-american-soccer-league-2011-'])
-    competitions = Competition.objects.filter(slug__in=['major-league-soccer'])
+    #competitions = Competition.objects.filter(slug__in=['major-league-soccer'])
+
     games = Game.objects.filter(competition__in=competitions).filter(date__gte=datetime.date(2004, 1, 1)).filter(date__lt=datetime.date(2012, 1, 1))
     
     gids = []
-    #import pdb; pdb.set_trace()
+
+    # Is starter_count 
     for gid, t1s, t2s, gc in games.filter(starter_count=22).values_list('id', 'team1_score', 'team2_score', 'goal_count'):
         if t1s + t2s == gc:
             gids.append(gid)
 
-    #import pdb; pdb.set_trace()
-            
-
     print "Using %s out of %s games" % (len(gids), games.count())
-
     return gids
         
 

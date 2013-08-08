@@ -8,6 +8,18 @@ from collections import defaultdict
 
 import datetime
 
+
+
+class Job(models.Model):
+    """
+    Represents a class of jobs.
+    e.g. Player, Head Coach, Owner.
+    """
+
+
+    name = models.CharField(max_length=255)
+
+
 class PositionManager(models.Manager):
 
     def generate_standings(self):
@@ -23,7 +35,6 @@ class PositionManager(models.Manager):
         return sorted(set([(e.name, e.slug) for e in Position.objects.all()]))
 
     
-
 class Position(models.Model):
     # Something like Peter Wilt, Chicago Fire, 2010, 2011
 

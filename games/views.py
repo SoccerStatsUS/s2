@@ -125,11 +125,6 @@ def games_index(request):
         result_dict[result] += 1
 
 
-    # How to get top attendances...
-    #for gid, attendance in games.values_list('date', 'team1, 'id', 'attendance'):
-
-
-
     context = {
         'games': games,
         'game_count': game_count,
@@ -141,8 +136,6 @@ def games_index(request):
         'game_years': sorted(game_year_dict.items(), key=lambda t: t[0]),
         'attendance_years': sorted(attendance_year_dict.items(), key=lambda t: t[0]),
         'top_attendance_games': Game.objects.order_by('-attendance')[:20],
-        
-
         }
     return render_to_response("games/index.html",
                               context,

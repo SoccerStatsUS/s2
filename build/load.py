@@ -399,6 +399,30 @@ def load_news():
         e['source_id'] = source_id
         FeedItem.objects.create(**e)
 
+
+@transaction.commit_on_success
+def update_news():
+    print "loading news"
+
+    urls = set(list(FeedItem.objects.values_list('url', flat=True)))
+
+    print len(urls)
+    print soccer_db.news.count()
+
+    source_getter = make_source_getter()
+
+    for e in soccer_db.news.find():
+        #if e['dt'] > datetime.datetime(2013, 8, 4):
+        #    print(e)
+
+
+        if e['url'] not in urls:
+            e.pop('_id')
+            source_id = source_getter(e.pop('source'))
+            e['source_id'] = source_id
+            FeedItem.objects.create(**e)
+
+
 @timer
 @transaction.commit_on_success
 def load_teams():
@@ -1264,6 +1288,11 @@ def load_lineups():
     insert_sql('lineups_appearance', l)
 
 
+def update():
+    print("updating")
+    update_news()
+
+
 if __name__ == "__main__":
     if sys.argv[1] == '1':
         load1()
@@ -1273,6 +1302,8 @@ if __name__ == "__main__":
         load3()
     elif sys.argv[1] == '4':
         load4()
+    elif sys.argv[1] == '5':
+        update()
 
     else:
         raise

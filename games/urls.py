@@ -19,7 +19,4 @@ urlpatterns = patterns('games.views',
                            'game_detail',
                            name='game_detail'),
 
-
-
-
                        )
