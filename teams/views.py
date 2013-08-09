@@ -232,7 +232,7 @@ def team_competition_detail(request, team_slug, competition_slug):
     c = get_object_or_404(Competition, slug=competition_slug)
     games = Game.objects.team_filter(team).filter(competition=c)
 
-    calendar_data = [(e.date.isoformat(), e.result(team), e.score(), e.opponent(team).name) for e in games.exclude(date=None)]
+    calendar_data = [(e.date.isoformat(), e.result(team), e.score(), e.opponent(team).name) for e in games.exclude(date=None) if e.date]
 
     context = {
         'team': team,
