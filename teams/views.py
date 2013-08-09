@@ -286,7 +286,7 @@ def team_season_detail(request, team_slug, competition_slug, season_slug):
     
     form_data = team_form(games, team)
 
-    calendar_data = [(e.date.isoformat(), e.result(team), e.score(), e.opponent(team).name) for e in games]
+    calendar_data = [(e.date.isoformat(), e.result(team), e.score(), e.opponent(team).name) for e in games if e.date]
 
     stats = Stat.objects.filter(team=team, season=season)
 
@@ -493,7 +493,7 @@ def team_games(request, team_slug):
     standings = [TempGameStanding(games, team)]
 
 
-    calendar_data = [(e.date.isoformat(), e.result(team), e.score(), e.opponent(team).name) for e in games]
+    calendar_data = [(e.date.isoformat(), e.result(team), e.score(), e.opponent(team).name) for e in games if e.date]
 
     context = {
         'team': team,
