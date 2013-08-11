@@ -13,7 +13,8 @@ from standings.models import Standing
 from stats.models import Stat, CareerStat
 from teams.models import Team
 
-from collections import defaultdict
+from collections import defaultdict, Counter
+import json
 
 
 @cache_page(60 * 60 * 12)
@@ -96,9 +97,27 @@ def games_index(request):
     # Home/Away advantage, graphs, etc.
     
     games = Game.objects.order_by("-date").exclude(date=None)
-
     game_count = games.count()
 
+    by_year = Counter([e.year for e in games.values_list('date', flat=True)])
+
+    #gd = defaultdict(int)
+    #ceiling = 8
+    #for game in games.exclude(home_team=None).exclude(team1_score=None).exclude(team2_score=None):
+    #    gd[(min(game.home_score(), ceiling), min(game.away_score(), ceiling))] += 1
+
+    context = {
+        'games': games,
+        'game_count': game_count,
+        'games_by_year': json.dumps(sorted(by_year.items())),
+        'goal_distribution': json.dumps(gd),
+        }
+
+    return render_to_response("games/index.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+    """
     attendance_game_count = 0
     total_attendance = 0
 
@@ -123,11 +142,11 @@ def games_index(request):
         team_dict[t2] += 1
         result = tuple(sorted([t1s, t2s]))
         result_dict[result] += 1
+        """
 
 
-    context = {
-        'games': games,
-        'game_count': game_count,
+
+    """{
         'total_attendance': total_attendance,
         'average_attendance': total_attendance / float(attendance_game_count),
         'teams': sorted(team_dict.items(), key=lambda t: -t[1]),
@@ -136,10 +155,7 @@ def games_index(request):
         'game_years': sorted(game_year_dict.items(), key=lambda t: t[0]),
         'attendance_years': sorted(attendance_year_dict.items(), key=lambda t: t[0]),
         'top_attendance_games': Game.objects.order_by('-attendance')[:20],
-        }
-    return render_to_response("games/index.html",
-                              context,
-                              context_instance=RequestContext(request))
+        }"""
 
 
 def game_detail(request, game_id):

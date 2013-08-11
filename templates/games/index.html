@@ -4,51 +4,15 @@
 
 <p>Games: {{ game_count }}</p>
 
-<p>Attendance: {{ total_attendance }} - {{ average_attendance }} per game.</p>
+<div id="gd_chart"></div>
 
-<h3>Result counts</h3>
-<table>
-{% for result, count in results %}
-<tr>
-  <td>{{ result.0 }}-{{ result.1 }}</td>
-  <td>{{ count }}</td>
-</tr>
-{% endfor %}
-</table>
+<div id="games_chart"></div>
 
+<script type="text/javascript">
 
-<h3>Attendance by year</h3>
-<table>
-{% for year, count in attendance_years %}
-<tr>
-  <td>{{ year }}</td>
-  <td>{{ count }}</td>
-</tr>
-{% endfor %}
-</table>
+barChart("#games_chart", {{ games_by_year }}, "games")
+goalDistChart("gd_chart", {{ goal_distribution }})
 
-<h3>Games by year</h3>
-<table>
-{% for year, count in game_years %}
-<tr>
-  <td>{{ year }}</td>
-  <td>{{ count }}</td>
-</tr>
-{% endfor %}
-</table>
-
-<h3>Games by month</h3>
-<table>
-{% for month, count in months %}
-<tr>
-  <td>{{ month }}</td>
-  <td>{{ count }}</td>
-</tr>
-{% endfor %}
-</table>
-
-
-{% include "templatetags/games/attendance.html" %}
-
+</script>
 
 {% endblock %}
