@@ -213,7 +213,7 @@ class Competition(models.Model):
 
     def has_mvp(self):
         from awards.models import Award
-        return Award.objects.filter(competition=self, name='MVP').exists()
+        return Award.objects.filter(competition=self, type='mvp').exists()
 
 
     def save(self, *args, **kwargs):
@@ -272,7 +272,14 @@ class SeasonManager(models.Manager):
         except:
             if type(competition) in (int, str, unicode):
                 competition = Competition.objects.get(id=competition)
-            return Season.objects.create(name=name, competition=competition)
+            
+            try:
+                ss = SuperSeason.objects.get(name=name)
+            except:
+                print("Creating Super Season %s" % name)
+                ss = SuperSeason.objects.create(name=name, order=-1, order2=-1)
+
+            return Season.objects.create(name=name, competition=competition, order=ss.order)
 
     def as_dict(self):
         """
@@ -288,6 +295,11 @@ class SeasonManager(models.Manager):
 
 
 
+class SuperSeason(models.Model):
+        name = models.CharField(max_length=255)
+        order = models.IntegerField()
+        order2 = models.IntegerField()
+
 
 class Season(models.Model):
     """
@@ -300,6 +312,7 @@ class Season(models.Model):
     slug = models.SlugField()
 
     order = models.IntegerField(null=True, blank=True)
+    order2 = models.IntegerField(null=True, blank=True)
 
     competition = models.ForeignKey(Competition, null=True)
     competition_original_name = models.CharField(max_length=255)
@@ -312,7 +325,8 @@ class Season(models.Model):
 
 
     class Meta:
-        ordering = ("order", "name", "competition")
+        #ordering = ("order", "name", "competition")
+        ordering = ("order", "order2", "competition")
 
 
     def total_attendance(self):
@@ -355,7 +369,7 @@ class Season(models.Model):
 
     def total_attendances(self):
         d = defaultdict(int)
-        games = self.game_set.exclude(attendance=None).exclude(home_team=None).values_list('team__name', 'attendance')
+        games = self.game_set.exclude(attendance=None).exclude(home_team=None).values_list('home_team__name', 'attendance')
 
         for team, attendance in games:
             d[team] += attendance
@@ -596,7 +610,7 @@ class Season(models.Model):
 
         # Need to expand for other names.
         try:
-            return AwardItem.objects.get(season=self, award__name='MVP')
+            return AwardItem.objects.get(season=self, award__type='mvp')
         except:
             return None
 
@@ -607,7 +621,7 @@ class Season(models.Model):
         try:
             return AwardItem.objects.get(season=self, award__name='Golden Boot').recipient
         except:
-            goalscorers = self.stat_set.exclude(goals=None).order_by('-goals', '-assists')
+            goalscorers = self.stat_set.exclude(goals=None).exclude(goals=0).order_by('-goals', '-assists')
             if goalscorers.exists():
                 return goalscorers[0].player
             else:

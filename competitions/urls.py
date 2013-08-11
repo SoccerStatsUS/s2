@@ -43,6 +43,10 @@ urlpatterns = patterns('competitions.views',
                            'competition_games',
                            name='competition_games'),
 
+                       url(r'^(?P<competition_slug>[a-z0-9-]+)/v/(?P<competition2_slug>[a-z0-9-]+)/$',
+                           'competition_vs',
+                           name='competition_vs'),
+
 
 
 

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load datum_or_none %}
+
+{% block title %}{{ competition1.name }} vs {{ competition2.name }}{% endblock %}
+
+{% block content %}
+
+
+<h3>{{ competition1 }} vs {{ competition2 }}</h3>
+
+
+
+
+<table>
+  <tr>
+    <td></td>
+    <td></td>
+    <td>gp</td>
+    <td>g</td>
+    <td></td>
+    <td>gp</td>
+    <td>g</td>
+
+  </tr>
+
+  {% for person, c1, c2 in zipped %}
+  <tr>
+    <td><a href="{% url person_detail person.slug %}">{{ person }}</a></td>
+
+    <td><a href="{% url competition_detail c1.competition.slug %}">{{ c1.competition.abbreviation }}</a></td>    
+    <td>{{ c1.games_played }}</td>
+    <td>{{ c1.goals }}</td>
+
+    <td><a href="{% url competition_detail c2.competition.slug %}">{{ c2.competition.abbreviation }}</a></td>    
+    <td>{{ c2.games_played }}</td>
+    <td>{{ c2.goals }}</td>
+
+  </tr>
+  {% endfor %}
+</ul>
+
+
+{% endblock %}

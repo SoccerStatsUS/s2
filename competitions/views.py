@@ -65,6 +65,7 @@ def competition_index(request):
                          'olympic-games',
                          'womens-united-soccer-association',
                          'womens-professional-soccer',
+                         'premier-league',
                          ]
                 competitions = Competition.objects.filter(slug__in=slugs)
 
@@ -120,7 +121,6 @@ def competition_detail(request, competition_slug):
         'stats': sx,
         'games': recent_games.select_related()[:25],
         'big_winners': competition.alltime_standings().order_by('-wins')[:50],
-        
         }
     return render_to_response("competitions/competition/detail.html",
                               context,
@@ -163,6 +163,35 @@ def competition_games(request, competition_slug):
 
         }
     return render_to_response("competitions/competition/games.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+
+
+@cache_page(60 * 60 * 12)
+def competition_vs(request, competition_slug, competition2_slug):
+    c1 = get_object_or_404(Competition, slug=competition_slug)
+    c2 = get_object_or_404(Competition, slug=competition2_slug)
+
+    s1 = set(Stat.objects.filter(competition=c1).values_list('player', flat=True))
+    s2 = set(Stat.objects.filter(competition=c2).values_list('player', flat=True))
+
+    both = Bio.objects.filter(id__in=s1.intersection(s2)).order_by('name')
+
+    cd1 = dict([(e.player, e) for e in CompetitionStat.objects.filter(competition=c1, player__id__in=both).order_by('player')])
+    cd2 = dict([(e.player, e) for e in CompetitionStat.objects.filter(competition=c2, player__id__in=both).order_by('player')])
+
+    z = [(e, cd1.get(e), cd2.get(e)) for e in both]
+
+    context = {
+        'competition1': c1,
+        'competition2': c2,
+        'players': both,
+        'zipped': z,
+        'c1': cd1,
+        'c2': cd2,
+        }
+    return render_to_response("competitions/competition/vs.html",
                               context,
                               context_instance=RequestContext(request))
 

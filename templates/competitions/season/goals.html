@@ -49,33 +49,9 @@ line {
 
 
 <script type="text/javascript">
-var gd = {{ goal_distribution|safe }};
 
-var margin = {top: 80, right: 0, bottom: 10, left: 80},
-    width = 720,
-    height = 720;
+goalDistribution("#goal_distribution", {{ goal_distribution|safe }})
 
-var x = d3.scale.ordinal().rangeBands([0, width]),
-    z = d3.scale.linear().domain([0, 4]).clamp(true),
-    c = d3.scale.category10().domain(d3.range(10));
-
-var svg = d3.select("#goal_distribution").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .style("margin-left", -margin.left + "px")
-  .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
-  var colorScale = d3.scale.linear().domain([0, d3.max(gd, function(d){ return d[1]})]).range(["white", "red"])
-
-  svg.selectAll(".box")
-      .data(gd).enter().append("rect")
-      .attr("x", function(d){ return d[0][0] * 100 })
-      .attr("y", function(d){ return d[0][1] * 100 })
-      .attr("fill", function(d){ return colorScale(d[1]); })
-      .attr("width", 100)
-      .attr("height", 100);
 
 
 
