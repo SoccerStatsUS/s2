@@ -13,7 +13,7 @@ from django.template.defaultfilters import slugify
 
 from awards.models import Award, AwardItem
 from bios.models import Bio
-from competitions.models import Competition, Season
+from competitions.models import Competition, Season, SuperSeason
 from drafts.models import Draft, Pick
 from money.models import Salary
 from news.models import NewsSource, FeedItem
@@ -21,6 +21,7 @@ from places.models import Country, State, City, Stadium, StadiumMap
 from positions.models import Position
 from sources.models import Source, SourceUrl
 from teams.models import Team, TeamAlias
+
 
 from utils import insert_sql, timer
 
@@ -35,6 +36,7 @@ def generate_mongo_indexes():
     soccer_db.games.ensure_index("date")
 
 def load1():
+
     # Watch out for contingencies here.
     # Places depend only on other places.
     # Bio depends on places.
@@ -70,14 +72,13 @@ def load1():
     load_stadiums()
 
 
-
     # List data
     # Put this before standings?
     load_awards()
     load_drafts()
     load_positions()
 
-
+    
 
     # Complex game data
     load_games()
@@ -91,20 +92,22 @@ def load1():
 
 
 def load2():
+    
     load_lineups()
+
 
 
 def load3():
     load_game_stats()
 
 def load4():
-
+    load_news();
     # Consider loading stats last so that we can generate 
     load_stats()
     print hpy().heap()
 
     # Analysis data
-    load_news()
+
 
 
 
@@ -400,28 +403,6 @@ def load_news():
         FeedItem.objects.create(**e)
 
 
-@transaction.commit_on_success
-def update_news():
-    print "loading news"
-
-    urls = set(list(FeedItem.objects.values_list('url', flat=True)))
-
-    print len(urls)
-    print soccer_db.news.count()
-
-    source_getter = make_source_getter()
-
-    for e in soccer_db.news.find():
-        #if e['dt'] > datetime.datetime(2013, 8, 4):
-        #    print(e)
-
-
-        if e['url'] not in urls:
-            e.pop('_id')
-            source_id = source_getter(e.pop('source'))
-            e['source_id'] = source_id
-            FeedItem.objects.create(**e)
-
 
 @timer
 @transaction.commit_on_success
@@ -496,22 +477,26 @@ def load_competitions():
 def load_seasons():
     print "loading seasons"
 
-    competition_getter = make_competition_getter()
+    #competition_getter = make_competition_getter()
 
-    seasons= []
+    l = []
 
     for s in soccer_db.seasons.find():
-        s.pop('_id')
-        competition_id = competition_getter(s['competition'])
-        seasons.append({
-                'name': s['season'],
-                'slug': slugify(s['season']),
-                'competition_id': competition_id,
+        #s.pop('_id')
+        #competition_id = competition_getter(s['competition'])
+        l.append({
+                'name': s['name'],
+                #'slug': slugify(s['season']),
+                #'competition_id': competition_id,
                 'order': s['order'],
+                'order2': s['order'],
                 })
 
-    for season in seasons:
-        Season.objects.create(**season)
+
+
+    for ss in l:
+        SuperSeason.objects.create(**ss)
+
 
 
 
@@ -1288,9 +1273,6 @@ def load_lineups():
     insert_sql('lineups_appearance', l)
 
 
-def update():
-    print("updating")
-    update_news()
 
 
 if __name__ == "__main__":

@@ -54,6 +54,20 @@ def generate():
 
 
 @timer
+def generate_coach_stats_for_competitions():
+    generate_coach_stats('North American Soccer League')
+    generate_coach_stats('Major League Soccer')
+
+    generate_coach_stats('North American Soccer League (2011-)')
+    generate_coach_stats('USSF Division 2 Professional League')
+    generate_coach_stats('USL First Division')
+    generate_coach_stats('American Professional Soccer League')
+
+    generate_coach_stats('Premier League')
+
+
+
+@timer
 @transaction.commit_on_success
 def generate_player_standings():
     # Kill this. this is part of game_stat / player_stat now...I think.
@@ -468,15 +482,6 @@ def generate_position_standings():
     Position.objects.generate_standings()
 
 
-@timer
-def generate_coach_stats_for_competitions():
-    generate_coach_stats('North American Soccer League')
-    generate_coach_stats('Major League Soccer')
-
-    generate_coach_stats('North American Soccer League (2011-)')
-    generate_coach_stats('USSF Division 2 Professional League')
-    generate_coach_stats('USL First Division')
-    generate_coach_stats('American Professional Soccer League')
 
 
 

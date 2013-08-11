@@ -3,4 +3,4 @@
 export PGPASSWORD=ymctas
 source ~/.virtualenvs/sdev/bin/activate
 
-python build/load.py 5
+python build/update.py 1
