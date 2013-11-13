@@ -40,8 +40,11 @@ class AbstractStanding(models.Model):
 
     def win_percentage(self):
         ties = self.ties or 0
+        shootout_wins = self.shootout_wins or 0
+        shootout_losses = self.shootout_losses or 0
         if self.games:
-            return (self.wins + .5 * ties) / self.games
+            t = ties + shootout_wins + shootout_losses
+            return (self.wins + .5 * t) / self.games
         else:
             return 0
 

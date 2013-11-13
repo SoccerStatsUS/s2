@@ -12,8 +12,10 @@
     <a class="letter_link" href="{% url bio_name_fragment letter %}">{{ letter }}: </a>
     {% for stat in stats %}
     {% if stat.player.hall_of_fame %}<strong>{% endif %}
-    <a class="item" href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a>
-    {% if stat.player.hall_of_fame %}</strong>{% endif %}|
+    <a class="item" href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a>{% if stat.player.hall_of_fame %}
+    </strong>{% endif %}
+    {% if forloop.last %}<a href="{% url bio_name_fragment letter %}">...</a>{% else %}|{% endif %}
+    
     {% endfor %}
   </li>
   {% endif %}

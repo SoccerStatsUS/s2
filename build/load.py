@@ -890,9 +890,19 @@ def load_games():
                 })
 
 
-
     print "Inserting games results."
+    # Broke on massive attendance. 
+    # Watch out for crazy integer values.
     insert_sql("games_game", games)
+
+    """
+    for game in games: 
+        try:
+            insert_sql("games_game", [game])
+        except:
+            import pdb; pdb.set_trace()
+            x = 5
+            """
 
     print "Inserting games sources."
     game_getter = make_game_getter()

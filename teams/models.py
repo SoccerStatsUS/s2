@@ -331,6 +331,25 @@ class Team(models.Model):
         for game in games:
             s += game.result(self)
         return s
+
+
+    def find_data(self):
+        # A utility method to find where a team is coming from.
+        # Used to kill duplicates.
+
+        l = []
+        for method in dir(self):
+            if not method.startswith('_'):
+                try:
+                    m = getattr(self, method)
+                    if 'all' in dir(m) and m.all():
+                        t = (method, m.all())
+                        l.append(t)
+                except:
+                    pass
+        return l
+            
+
             
 
 

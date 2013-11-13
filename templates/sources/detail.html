@@ -21,7 +21,8 @@
 
 <div id="tab_wrapper">
 
-{% if source.feeditem_set.exists %}
+
+{% if feeds.exists %}
 <div tab="news">
 
 <table>
@@ -37,6 +38,7 @@
 {% endif %}
 
 
+{% if source.game_set.exists %}
 <div tab="games">
 
 <ul>
@@ -45,11 +47,11 @@
 {% endfor %}
 </ul>
 
-<h4>Stats: {{ source.stat_set.count }}</h4>
-
 </div>
+{% endif %}
 
 
+{% if source.sourceurl_set.exists %}
 <div tab="urls">
 <ul>
 {% for surl in source.sourceurl_set.all %}
@@ -57,6 +59,7 @@
 {% endfor %}
 </ul>
 </div>
+{% endif %}
 
 
 </div>

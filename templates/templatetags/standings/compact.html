@@ -20,6 +20,10 @@
     <th>t</th>
     {% endif %}
 
+    {% if s0.shootout_losses != None %}
+    <th>sol</th>
+    {% endif %}
+
     <th>l</th>
     <th>pts</th>
     <th>gf</th>
@@ -36,15 +40,9 @@
     <td><a href="{% url team_detail standing.team.slug %}">{{ standing.team }}</a></td>
     <td>{{ standing.games }}</td>
     <td>{{ standing.wins }}</td>
-
-    {% if s0.shootout_wins != None %}
-    <td>{{ standing.shootout_wins }}</td>
-    {% endif %}
-
-    {% if s0.ties != None %}
-    <td>{{ standing.ties|default_if_none:'' }}</td>
-    {% endif %}
-
+    {% if s0.shootout_wins != None %}<td>{{ standing.shootout_wins }}</td>{% endif %}
+    {% if s0.ties != None %}<td>{{ standing.ties|default_if_none:'' }}</td>{% endif %}
+    {% if s0.shootout_losses != None %}<td>{{ standing.shootout_losses }}</td>{% endif %}
     <td>{{ standing.losses }}</td>
     {% datum_or_grey standing.points %}
     {% datum_or_grey  standing.goals_for %}

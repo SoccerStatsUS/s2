@@ -95,6 +95,8 @@ class Bio(models.Model):
     awards = generic.GenericRelation('awards.AwardItem')
     images = generic.GenericRelation('images.Image')
 
+    #position = models.CharField(max_length=20)
+
     # This doesn't need to be here, but is for filtering / convenience purposes.
     hall_of_fame = models.BooleanField() # Whether or not a player is in the hall of fame.
 
