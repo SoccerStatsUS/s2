@@ -121,6 +121,7 @@ def competition_detail(request, competition_slug):
         'stats': sx,
         'games': recent_games.select_related()[:25],
         'big_winners': competition.alltime_standings().order_by('-wins')[:50],
+        'goal_data': json.dumps([(season.goals_per_game(), season.name) for season in competition.season_set.all()]),
         }
     return render_to_response("competitions/competition/detail.html",
                               context,
@@ -281,6 +282,64 @@ def season_detail(request, competition_slug, season_slug):
         
         }
     return render_to_response("competitions/season/detail.html",
+                              context,
+                              context_instance=RequestContext(request))
+
+
+
+@cache_page(60 * 60 * 12)
+def season_date_detail(request, competition_slug, season_slug, year, month, day):
+    """
+    Summarize the events of the day for the season.
+    """
+
+    competition = get_object_or_404(Competition, slug=competition_slug)
+    season = get_object_or_404(Season, competition=competition, slug=season_slug)
+
+    d = datetime.date(int(year), int(month), int(day))
+
+    standings = season.standing_set.filter(final=True)
+    standings_count = standings.count()
+    
+    running_standings = []
+    team_standing_set = set()
+
+
+
+    previous_game = season.standing_set.exclude(final=True).exclude(date__gt=d).order_by('-date')
+    if previous_game.exists():
+        previous_date = previous_game[0].date
+    else:
+        previous_date = None
+
+    next_game = season.standing_set.exclude(final=True).exclude(date__lt=d).order_by('date')
+    if next_game.exists():
+        next_date = next_game[0].date
+    else:
+        next_date = None
+
+    xstandings = season.standing_set.exclude(final=True).filter(date__lte=d).order_by('date')
+
+    for e in xstandings:
+        if e.team not in team_standing_set:
+            running_standings.append(e)
+            team_standing_set.add(e.team)
+        
+        if len(team_standing_set) == standings_count:
+            break
+
+    games = season.game_set.filter(date=d)
+
+    context = {
+        'standings': running_standings,
+        'date': d,
+        'games': games,
+        'previous_date': previous_date,
+        'next_date': next_date,
+        'season': season,
+        }
+
+    return render_to_response("competitions/season/date.html",
                               context,
                               context_instance=RequestContext(request))
 

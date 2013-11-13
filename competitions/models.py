@@ -6,6 +6,7 @@ from collections import defaultdict
 
 from bios.models import Bio
 
+
 import datetime
 
 
@@ -329,6 +330,19 @@ class Season(models.Model):
         ordering = ("order", "order2", "competition")
 
 
+    def salaries(self):
+        # This is terrible.
+        from money.models import Salary
+        return Salary.objects.filter(season=self.name)
+
+
+    def standings_games(self):
+        return sum(self.standing_set.filter(final=True).values_list('games', flat=True)) / 2
+
+
+    def known_games(self):
+        return self.game_set.exclude(team1_result='').count()
+
     def total_attendance(self):
         games = self.game_set.exclude(attendance=None)
         return games.aggregate(Sum('attendance'))['attendance__sum']
@@ -511,7 +525,7 @@ class Season(models.Model):
     def goals_per_game(self): 
         if self.standing_set.exists():
             data = self.standing_set.values_list('goals_for', 'games')
-            goals = sum([e[0] for e in data])
+            goals = sum([e[0] for e in data if e[0]])
             games = sum([e[1] for e in data])
             if games == 0:
                 return 0
@@ -520,6 +534,13 @@ class Season(models.Model):
             from games.models import Game
             goals = self.goals()
             games = Game.objects.filter(season=self).count()
+
+        # Why is goals ever none?
+        if goals is None:
+            goals = 0
+
+        if games in (None, 0):
+            return None
 
         return 2 * float(goals) / games
 
