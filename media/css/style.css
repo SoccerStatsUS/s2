@@ -568,7 +568,23 @@ ul, li {
 
 #bio_data {
     display: inline-block;
+
 }
+
+#bio_data .section1 {
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    display: inline-block;
+    text-align: center;
+    height: 100%;
+    vertical-align: middle;
+}
+
+#bio_data .section2 {
+    display: inline-block;
+}
+
 
 
 /* For what? */

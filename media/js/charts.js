@@ -365,3 +365,98 @@ svg.selectAll(".box")
 
 
 }
+
+
+
+
+
+barChart = function(selector, data, ytitle){
+
+var margin = {top: 20, right: 20, bottom: 130, left: 100},
+width = 1300 - margin.left - margin.right,
+height = 400 - margin.top - margin.bottom;
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1, 1).domain(data.map(function(d) { return d[0]; }));
+
+var y = d3.scale.linear()
+    .range([height, 0]).domain([0, d3.max(data, function(d) { return d[1]})]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+
+var svg = d3.select(selector).append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .attr("font-size", ".7em")
+    .call(xAxis)
+    .selectAll("text")  
+    .style("text-anchor", "end")
+    .attr("dx", "-.8em")
+    .attr("dy", ".15em")
+    .attr("transform", function(d) {
+        return "rotate(-65)" 
+    });
+
+svg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis)
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text(ytitle);
+
+svg.selectAll(".bar")
+    .data(data)
+    .enter().append("rect")
+    .attr("class", "bar")
+    .attr("x", function(d) { return x(d[0]); })
+    .attr("width", x.rangeBand())
+    .attr("y", function(d) { return y(d[1]); })
+    .attr("height", function(d) { return height - y(d[1]); });
+}
+
+
+goalDistChart = function(selector, data){
+
+var margin = {top: 80, right: 0, bottom: 10, left: 80},
+    width = 720,
+    height = 720;
+
+var x = d3.scale.ordinal().rangeBands([0, width]),
+    z = d3.scale.linear().domain([0, 4]).clamp(true),
+    c = d3.scale.category10().domain(d3.range(10));
+
+var svg = d3.select(selector).append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .style("margin-left", -margin.left + "px")
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+  var colorScale = d3.scale.linear().domain([0, d3.max(data, function(d){ return d[1]})]).range(["white", "red"])
+
+  svg.selectAll(".box")
+      .data(data).enter().append("rect")
+      .attr("x", function(d){ return d[0][0] * 100 })
+      .attr("y", function(d){ return d[0][1] * 100 })
+      .attr("fill", function(d){ return colorScale(d[1]); })
+      .attr("width", 100)
+      .attr("height", 100);
+
+
+}
