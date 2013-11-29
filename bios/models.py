@@ -93,7 +93,7 @@ class Bio(models.Model):
     weight = models.IntegerField(null=True, blank=True)
 
     awards = generic.GenericRelation('awards.AwardItem')
-    images = generic.GenericRelation('images.Image')
+    #images = generic.GenericRelation('images.Image')
 
     #position = models.CharField(max_length=20)
 

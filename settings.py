@@ -13,7 +13,7 @@ from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 
 # Locate project folder.
 if os.path.exists("/Users"):
-    PROJECT_ROOT = "/Users/chrisedgemon"
+    PROJECT_ROOT = "/Users/chris"
     PROJECT_DIRNAME = 's2'
 elif DEBUG:
     PROJECT_ROOT = "/home/chris"
@@ -22,6 +22,8 @@ else:
     PROJECT_ROOT = "/home/chris"
     PROJECT_DIRNAME = 's2'
 
+
+print(PROJECT_ROOT)
 
 PROJECT_DIR = "%s/www/%s" % (PROJECT_ROOT, PROJECT_DIRNAME)
 DB_PATH = "%s/www/%s/db/soccer.db" % (PROJECT_ROOT, PROJECT_DIRNAME)
@@ -60,7 +62,7 @@ TEMPLATE_CONTEXT_PROCESSORS += (
 
 
 STATICFILES_DIRS = (
-    "/Users/chrisedgemon/www/s2/media",
+    "/Users/chris/www/s2/media",
 )
 
 
@@ -178,7 +180,7 @@ INSTALLED_APPS = (
     'games',
     'goals',
     'graphs',
-    'images',
+    #'images',
     'levels',
     'lineups',
     'money',
