@@ -6,7 +6,7 @@ source ~/.virtualenvs/sdev/bin/activate
 
 dropdb soccerstats_build
 createdb -T template_postgis soccerstats_build --owner=soccerstats
-python manage.py syncdb --no --settings=build_settings
+python manage.py syncdb --noinput --settings=build_settings
 python build/load.py 1
 python build/load.py 2
 python build/load.py 3
