@@ -1,5 +1,5 @@
 Django==1.4.0
-PyYAML==3.09
+
 pymongo>=2
 South==0.7.2
 feedparser==4.1
