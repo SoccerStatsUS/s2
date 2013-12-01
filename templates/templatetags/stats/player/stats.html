@@ -39,19 +39,19 @@
 <tr>
 
   {% if stat.team %}
-  <td><a href="{% url team_detail stat.team.slug %}">{{ stat.team }}</a></td>
+  <td><a href="{% url 'team_detail' stat.team.slug %}">{{ stat.team }}</a></td>
   {% else %}
   <td></td>
   {% endif %}
 
   {% if stat.competition %}
-  <td><a href="{% url competition_detail stat.competition.slug %}">{{ stat.competition.abbreviation }}</a></td>
+  <td><a href="{% url 'competition_detail' stat.competition.slug %}">{{ stat.competition.abbreviation }}</a></td>
   {% else %}
   <td></td>
   {% endif %}
 
   {% if stat.season %}
-  <td><a href="{% url season_detail stat.competition.slug stat.season.slug %}">{{ stat.season.name }}</a></td>
+  <td><a href="{% url 'season_detail' stat.competition.slug stat.season.slug %}">{{ stat.season.name }}</a></td>
   {% else %}
   <td></td>
   {% endif %}
@@ -71,7 +71,7 @@
   {% endif %}
 
   {% if stat.player.birthplace %}
-  <td><a href="{% url city_detail stat.player.birthplace.slug %}">{{ stat.player.birthplace }}</a></td>
+  <td><a href="{% url 'city_detail' stat.player.birthplace.slug %}">{{ stat.player.birthplace }}</a></td>
   {% else %}
   <td></td>
   {% endif %}

@@ -19,7 +19,7 @@
   <tbody>
   {% for standing in standings %}
   <tr>
-    <td><a href="{% url team_detail standing.team.slug %}">{{ standing.team }}</a></td>
+    <td><a href="{% url 'team_detail' standing.team.slug %}">{{ standing.team }}</a></td>
 
     <td>{{ standing.games }}</td>
     <td>{{ standing.wins }}</td>

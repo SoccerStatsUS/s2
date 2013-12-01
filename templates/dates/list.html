@@ -99,17 +99,17 @@ d3.select(self.frameElement).style("height", "2910px");
 <div class="white-title center">
 {% if date %}
 
-{% if previous_date %}<a href="{% url date_detail previous_date.0 previous_date.1 previous_date.2 %}">-</a>{% endif %}
+{% if previous_date %}<a href="{% url 'date_detail' previous_date.0 previous_date.1 previous_date.2 %}">-</a>{% endif %}
 <span id="specific_date">{{ date }}</span>
-{% if next_date %}<a href="{% url date_detail next_date.0 next_date.1 next_date.2 %}">+</a>{% endif %}
+{% if next_date %}<a href="{% url 'date_detail' next_date.0 next_date.1 next_date.2 %}">+</a>{% endif %}
 
 {% else %}
 
 {% if previous_day %}
 <div id="date_nav">
-<a href="{% url day_detail previous_day.month previous_day.day %}">←</a>
+<a href="{% url 'day_detail' previous_day.month previous_day.day %}">←</a>
 <div id="specific_date">{{ day_string }}</div>
-<a href="{% url day_detail next_day.month next_day.day %}">→</a>
+<a href="{% url 'day_detail' next_day.month next_day.day %}">→</a>
 </div>
 
 {% endif %}
@@ -153,7 +153,7 @@ d3.select(self.frameElement).style("height", "2910px");
   <td>{{ item.time }}</td>
   <td><a title="{{ item.title }}" href="{{ item.url }}">{{ item.title|truncatechars:80 }}</a></td>
   
-  <td><a href="{% url source_detail item.source.id %}">{{ item.source }}</a></td>
+  <td><a href="{% url 'source_detail' item.source.id %}">{{ item.source }}</a></td>
 </tr>
 
 {% endfor %}
@@ -180,10 +180,10 @@ d3.select(self.frameElement).style("height", "2910px");
 
 {% for bio in births %}
 <tr>
-  <td><a href="{% url person_detail bio.slug %}">{{ bio.name }}</a></td>
-  <td><a href="{% url date_detail bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a></td>
+  <td><a href="{% url 'person_detail' bio.slug %}">{{ bio.name }}</a></td>
+  <td><a href="{% url 'date_detail' bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a></td>
   {% if bio.birthplace.slug %}
-  <td><a href="{% url city_detail bio.birthplace.slug %}">{{ bio.birthplace }}</a></td>
+  <td><a href="{% url 'city_detail' bio.birthplace.slug %}">{{ bio.birthplace }}</a></td>
   {% else %}
   <td></td>
   {% endif %}
@@ -199,8 +199,8 @@ d3.select(self.frameElement).style("height", "2910px");
 <table>
 {% for bio in deaths %}
 <tr>
-  <td><a href="{% url person_detail bio.slug %}">{{ bio.name }}</a></td>
-  <td><a href="{% url date_detail bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a></td>
+  <td><a href="{% url 'person_detail' bio.slug %}">{{ bio.name }}</a></td>
+  <td><a href="{% url 'date_detail' bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a></td>
 </tr>
 {% endfor %}
 </table>
@@ -213,9 +213,9 @@ d3.select(self.frameElement).style("height", "2910px");
 <table>
 {% for position in hires %}
 <tr>
-  <td><a href="{% url person_detail position.person.slug %}">{{ position.person.name }}</a></td>
-  <td><a href="{% url team_detail position.team.slug %}">{{ position.team }}</a></td>
-  <td><a href="{% url position_detail position.slug %}">{{ position.name }}</a></td>
+  <td><a href="{% url 'person_detail' position.person.slug %}">{{ position.person.name }}</a></td>
+  <td><a href="{% url 'team_detail' position.team.slug %}">{{ position.team }}</a></td>
+  <td><a href="{% url 'position_detail' position.slug %}">{{ position.name }}</a></td>
   <td>{{ position.start }}</td>
   <td>{{ position.end }}</td>
 </tr>
@@ -230,9 +230,9 @@ d3.select(self.frameElement).style("height", "2910px");
 <table>
 {% for position in fires %}
 <tr>
-  <td><a href="{% url person_detail position.person.slug %}">{{ position.person.name }}</a></td>
-  <td><a href="{% url team_detail position.team.slug %}">{{ position.team }}</a></td>
-  <td><a href="{% url position_detail position.slug %}">{{ position.name }}</a></td>
+  <td><a href="{% url 'person_detail' position.person.slug %}">{{ position.person.name }}</a></td>
+  <td><a href="{% url 'team_detail' position.team.slug %}">{{ position.team }}</a></td>
+  <td><a href="{% url 'position_detail' position.slug %}">{{ position.name }}</a></td>
   <td>{{ position.start }}</td>
   <td>{{ position.end }}</td>
 </tr>

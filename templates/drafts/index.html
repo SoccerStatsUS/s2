@@ -16,11 +16,11 @@
 {% for draft in drafts %}
   <tr>
     <td>{{ draft.season.name }}</td>
-    <td><a href="{% url competition_detail draft.competition.slug %}">{{ draft.competition }}</a></td>
-    <td><a href="{% url draft_detail draft.competition.slug draft.slug draft.season.name %}">{{ draft.name }}</a></td>
+    <td><a href="{% url 'competition_detail' draft.competition.slug %}">{{ draft.competition }}</a></td>
+    <td><a href="{% url 'draft_detail' draft.competition.slug draft.slug draft.season.name %}">{{ draft.name }}</a></td>
 
     {% if draft.start %}
-    <td><a href="{% url date_detail draft.start.year draft.start.month draft.start.day %}">{{ draft.start }}</a></td>
+    <td><a href="{% url 'date_detail' draft.start.year draft.start.month draft.start.day %}">{{ draft.start }}</a></td>
     {% else %}
     <td class="grey"></td>
     {% endif %}
@@ -47,7 +47,7 @@
 {% for dx in dc %}
 
 {% if dx.grouper.slug %}
-<h3 id="{{ dx.grouper.slug }}"><a href="{% url competition_detail dx.grouper.slug %}">{{ dx.grouper }}</a></h3>
+<h3 id="{{ dx.grouper.slug }}"><a href="{% url 'competition_detail' dx.grouper.slug %}">{{ dx.grouper }}</a></h3>
 {% else %}
 <h3 id="no-competition">No Competition</h3>
 {% endif %}
@@ -63,7 +63,7 @@
 {% for item in dx.list %}
   <tr>
     <td>{{ item.season }}</td>
-    <td><a href="{% url draft_detail dx.grouper.slug item.slug item.season %}">{{ item.name }}</a></td>
+    <td><a href="{% url 'draft_detail' dx.grouper.slug item.slug item.season %}">{{ item.name }}</a></td>
     {% datum_or_grey item.start %}
   </tr>
 {% endfor %}

@@ -35,7 +35,7 @@
 <tr>
 
   {% if stat.team %}
-  <td><a href="{% url team_detail stat.team.slug %}">{{ stat.team }}</a></td>
+  <td><a href="{% url 'team_detail' stat.team.slug %}">{{ stat.team }}</a></td>
   {% else %}
   <td></td>
   {% endif %}

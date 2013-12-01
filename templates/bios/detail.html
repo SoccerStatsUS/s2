@@ -32,7 +32,7 @@
 
 {% if recent_game_stats %}
 <div tab="games">
-<a href="{% url person_detail_games bio.slug %}">all games</a>
+<a href="{% url 'person_detail_games' bio.slug %}">all games</a>
 {% include "templatetags/stats/game_list.html" with stats=recent_game_stats %}
 </div>
 {% endif %}
@@ -40,7 +40,7 @@
 
 {% if refs %}
 <div tab="refereed">
-<a href="{% url person_detail_referee_games bio.slug %}">all games refereed</a>
+<a href="{% url 'person_detail_referee_games' bio.slug %}">all games refereed</a>
 {% include "templatetags/appearances/ref.html" with games=refs %}
 </div>
 {% endif %}
@@ -60,13 +60,13 @@
 {% for award in bio.awards.all %}
 <tr>
   {% if award.season %}
-  <td><a href="{% url season_detail award.season.competition.slug award.season.slug %}">{{ award.season.name }}</a></td>
-  <td><a href="{% url competition_detail award.season.competition.slug %}">{{ award.season.competition }}</a></td>
+  <td><a href="{% url 'season_detail' award.season.competition.slug award.season.slug %}">{{ award.season.name }}</a></td>
+  <td><a href="{% url 'competition_detail' award.season.competition.slug %}">{{ award.season.competition }}</a></td>
   {% else %}
   <td class="grey"></td>
   <td class="grey"></td>
   {% endif %}
-  <td><a href="{% url award_detail award.award.id %}">{{ award.award.name }}</a></td>
+  <td><a href="{% url 'award_detail' award.award.id %}">{{ award.award.name }}</a></td>
 </tr>
 {% endfor %}
 </table>
@@ -80,11 +80,11 @@
 {% for pick in picks %}
 <tr>
   <td>{{ pick.number }}</td>
-  <td><a href="{% url team_detail pick.team.slug %}">{{ pick.team }}</a></td>
+  <td><a href="{% url 'team_detail' pick.team.slug %}">{{ pick.team }}</a></td>
   {% if draft.competition %}
-  <td><a href="{% url draft_detail pick.draft.competition.slug pick.draft.slug pick.draft.season.name %}">{{ pick.draft }}</a></td>
+  <td><a href="{% url 'draft_detail' pick.draft.competition.slug pick.draft.slug pick.draft.season.name %}">{{ pick.draft }}</a></td>
   {% else %}
-  <td><a href="{% url draft_detail pick.draft.competition.slug pick.draft.slug pick.draft.season.name %}">{{ pick.draft.season.name }} {{ pick.draft.name }}</a></td>
+  <td><a href="{% url 'draft_detail' pick.draft.competition.slug pick.draft.slug pick.draft.season.name %}">{{ pick.draft.season.name }} {{ pick.draft.name }}</a></td>
   {% endif %}
 </tr>
 {% endfor %}

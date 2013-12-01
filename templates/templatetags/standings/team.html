@@ -23,7 +23,7 @@
   {% if standing.competition == None %}
   <td>All-time</td>
   {% else %}
-  <td><a href="{% url competition_detail standing.competition.slug %}">{{ standing.competition }}</a></td>
+  <td><a href="{% url 'competition_detail' standing.competition.slug %}">{{ standing.competition }}</a></td>
   {% endif %}
   <td>{{ standing.wins }}</td>
   {% datum_or_grey standing.ties %}
@@ -49,8 +49,8 @@
 
 {% for standing in league_standings %}
 <tr>
-  <td><a href="{% url competition_detail standing.competition.slug %}">{{ standing.competition.abbreviation }}</a></td>
-  <td><a href="{% url season_detail standing.competition.slug standing.season.slug %}">{{ standing.season.name }}</a></td>
+  <td><a href="{% url 'competition_detail' standing.competition.slug %}">{{ standing.competition.abbreviation }}</a></td>
+  <td><a href="{% url 'season_detail' standing.competition.slug standing.season.slug %}">{{ standing.season.name }}</a></td>
   <td>{{ standing.wins }}</td>
   {% datum_or_grey standing.ties %}
   <td>{{ standing.losses }}</td>

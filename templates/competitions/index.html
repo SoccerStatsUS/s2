@@ -37,7 +37,7 @@
 
   {% if competition.season_set.exists %}
   <tr>
-    <td><a href="{% url competition_detail competition.slug %}">{{ competition.name }}</a></td>
+    <td><a href="{% url 'competition_detail' competition.slug %}">{{ competition.name }}</a></td>
     <td>{{ competition.code }}</td>
     {% comment %}<td>{{ competition.international }}</td>{% endcomment %}
     {% datum_or_grey competition.level %}
@@ -46,13 +46,13 @@
     <td>{{ competition.area }}</td>
     <td>{{ competition.season_set.count }}</td>
     {% if competition.first_season %}
-    <td><a href="{% url season_detail competition.slug competition.first_season.slug %}">{{ competition.first_season.name }}</td>
+    <td><a href="{% url 'season_detail' competition.slug competition.first_season.slug %}">{{ competition.first_season.name }}</td>
     {% else %}
     <td></td>
     {% endif %}
 
     {% if competition.last_season %}
-    <td><a href="{% url season_detail competition.slug competition.last_season.slug %}">{{ competition.last_season.name }}</td>
+    <td><a href="{% url 'season_detail' competition.slug competition.last_season.slug %}">{{ competition.last_season.name }}</td>
     {% else %}
     <td></td>
     {% endif %}
@@ -61,7 +61,7 @@
     <td>
       <select>
       {% for season in competition.season_set.all %}
-      <option ref="{% url season_detail competition.slug season.slug %}">{{ season.name }}</option>
+      <option ref="{% url 'season_detail' competition.slug season.slug %}">{{ season.name }}</option>
       {% endfor %}
       </select>
     </td>

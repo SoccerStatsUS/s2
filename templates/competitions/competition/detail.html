@@ -1,4 +1,4 @@
-1;2c{% extends "base.html" %}
+{% extends "base.html" %}
 {% load datum_or_none %}
 
 {% block title %}{{ competition.name }} Soccer History {% endblock %}
@@ -11,9 +11,9 @@
 
 
 {% if competition.season_set.count == 1 %}
-<div><a href="{% url season_detail competition.slug competition.first_season.slug %}">{{ competition.first_season.name }}</a></div>
+<div><a href="{% url 'season_detail' competition.slug competition.first_season.slug %}">{{ competition.first_season.name }}</a></div>
 {% elif competition.season_set.count > 1 %}
-<div><a href="{% url season_detail competition.slug competition.first_season.slug %}">{{ competition.first_season.name }}</a> to <a href="{% url season_detail competition.slug competition.last_season.slug %}">{{ competition.last_season.name }}</a></div>
+<div><a href="{% url 'season_detail' competition.slug competition.first_season.slug %}">{{ competition.first_season.name }}</a> to <a href="{% url 'season_detail' competition.slug competition.last_season.slug %}">{{ competition.last_season.name }}</a></div>
 {% endif %}
 
 <div>{{ competition.area }} - Level {{ competition.level }}</div> 
@@ -43,10 +43,10 @@
   {% for season in competition.season_set.all %}
   <tr>
 
-    <td><a href="{% url season_detail competition.slug season.slug %}">{{ season.name }}</a></td>
-    <td><a href="{% url season_games competition.slug season.slug %}">{{ season.known_games }} / {{ season.standings_games }}</a></td>
+    <td><a href="{% url 'season_detail' competition.slug season.slug %}">{{ season.name }}</a></td>
+    <td><a href="{% url 'season_games' competition.slug season.slug %}">{{ season.known_games }} / {{ season.standings_games }}</a></td>
     {% if season.goals %}
-    <td><a href="{% url season_goals competition.slug season.slug %}">{{ season.goals }}</a></td>
+    <td><a href="{% url 'season_goals' competition.slug season.slug %}">{{ season.goals }}</a></td>
     {% else %}
     <td></td>
     {% endif %}
@@ -55,7 +55,7 @@
     {% if has_mvp %}
     {% with season.mvp.recipient as mvp %}
     {% if mvp %}
-    <td><a href="{% url person_detail mvp.slug %}">{{ mvp }}</a></td>
+    <td><a href="{% url 'person_detail' mvp.slug %}">{{ mvp }}</a></td>
     {% else %}
     <td></td>
     {% endif %}
@@ -63,7 +63,7 @@
     {% endif %}
 
     {% if season.golden_boot %}
-    <td><a href="{% url person_detail season.golden_boot.slug %}">{{ season.golden_boot }}</a></td>
+    <td><a href="{% url 'person_detail' season.golden_boot.slug %}">{{ season.golden_boot }}</a></td>
     {% else %}
     <td></td>
     {% endif %}
@@ -92,7 +92,7 @@
 
 {% if stats %}
 <div tab="stats">
-<p><a href="{% url competition_stats competition.slug %}">All-time stats</a></p>
+<p><a href="{% url 'competition_stats' competition.slug %}">All-time stats</a></p>
 {% include "templatetags/career_bio.html" %}
 </div>
 {% endif %}
@@ -100,7 +100,7 @@
 {% if competition.game_set.exists %}
 <div tab="games">
 
-  <p><a href="{% url competition_games competition.slug %}">all games</a></p>
+  <p><a href="{% url 'competition_games' competition.slug %}">all games</a></p>
 
   {% include "templatetags/games/attendance.html" %}
 
@@ -115,7 +115,7 @@
   <table>
     {% for award in competition.award_set.all %}
     <tr>
-      <td><a href="{% url award_detail award.id %}">{{ award.name }}</a></td>
+      <td><a href="{% url 'award_detail' award.id %}">{{ award.name }}</a></td>
     </tr>
     {% endfor %}
   </table>

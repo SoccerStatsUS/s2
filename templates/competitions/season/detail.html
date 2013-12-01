@@ -15,13 +15,13 @@
 {% block content %}
 
 
-  <h3><a href="{% url competition_detail season.competition.slug %}">{{ season.competition.name }}</a> | {{ season.name }}</h3>
+  <h3><a href="{% url 'competition_detail' season.competition.slug %}">{{ season.competition.name }}</a> | {{ season.name }}</h3>
 
 <div class="block">
   {% if season.previous_season or season.next_season %}
   <div>
-    {% if season.previous_season %}<a href="{% url season_detail season.competition.slug season.previous_season.slug %}">←</a>{% endif %}
-    {% if season.next_season %}<a href="{% url season_detail season.competition.slug season.next_season.slug %}">→</a>{% endif %}
+    {% if season.previous_season %}<a href="{% url 'season_detail' season.competition.slug season.previous_season.slug %}">←</a>{% endif %}
+    {% if season.next_season %}<a href="{% url 'season_detail' season.competition.slug season.next_season.slug %}">→</a>{% endif %}
   </div>
   {% endif %}
 
@@ -36,21 +36,21 @@
   {% if season.champion %}
   <tr>
     <td>champion</td>
-    <td><a href="{% url team_detail season.champion.recipient.slug %}">{{ season.champion.recipient }}</a></td>
+    <td><a href="{% url 'team_detail' season.champion.recipient.slug %}">{{ season.champion.recipient }}</a></td>
   </tr>
   {% endif %}
 
   {% if season.mvp %}
   <tr>
     <td>mvp</td>
-    <td><a href="{ %url person_detail season.mvp.recipient.slug %}">{{ season.mvp.recipient }}</a></td>
+    <td><a href="{ %url 'person_detail' season.mvp.recipient.slug %}">{{ season.mvp.recipient }}</a></td>
   </tr>
   {% endif %}
 
   {% if season.golden_boot %}
   <tr>
     <td>golden boot</td>
-    <td><a href="{% url person_detail season.golden_boot.slug %}">{{ season.golden_boot }}</a></td>
+    <td><a href="{% url 'person_detail' season.golden_boot.slug %}">{{ season.golden_boot }}</a></td>
   </tr>
   {% endif %}
   </table>
@@ -64,13 +64,13 @@
       <td>
         {{ season.game_set.count }}
         {% if season.game_set.exists %}
-        <a href="{% url season_games season.competition.slug season.slug %}">games</a>
+        <a href="{% url 'season_games' season.competition.slug season.slug %}">games</a>
         {% endif %}
       </td>
     </tr>
 
     <tr>
-      <td>{{ season.goals_per_game|floatformat }}<a href="{% url season_goals season.competition.slug season.slug %}"> goals</a> / game</td>
+      <td>{{ season.goals_per_game|floatformat }}<a href="{% url 'season_goals' season.competition.slug season.slug %}"> goals</a> / game</td>
     </tr>
     {% endif %}
 
@@ -79,7 +79,7 @@
       <td>
         {{ season.average_attendance|floatformat:1 }}
         {% if attendance_game_count %}
-        <a href="{% url season_attendance season.competition.slug season.slug %}">avg. attendance</a>
+        <a href="{% url 'season_attendance' season.competition.slug season.slug %}">avg. attendance</a>
         {% endif %}
       </td>
       
@@ -109,7 +109,7 @@
 
 {% if stats.exists %}
 <div tab="stats">
-<div><a href="{% url season_stats season.competition.slug season.slug %}">complete stats</a></div>
+<div><a href="{% url 'season_stats' season.competition.slug season.slug %}">complete stats</a></div>
 
 {% include "templatetags/stats/stats.html" %}
 </div>
@@ -122,7 +122,7 @@
 <div tab="games">
 
 <p>
-  <a href="{% url season_games season.competition.slug season.slug %}">all games</a>
+  <a href="{% url 'season_games' season.competition.slug season.slug %}">all games</a>
 </p>
 
 {% include "templatetags/games/attendance.html" with games=recent_games %}
@@ -142,7 +142,7 @@
 
   {% for a in awards %}
   <tr>
-    <td><a href="{% url award_detail a.award.id %}">{{ a.award.name }}</a></td>
+    <td><a href="{% url 'award_detail' a.award.id %}">{{ a.award.name }}</a></td>
     <td><a href="{{ a.recipient.get_absolute_url }}">{{ a.recipient }}</a></td>
   </tr>
   {% endfor %}

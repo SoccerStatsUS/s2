@@ -28,7 +28,7 @@
 
 {% if stats.exists %}
 <div tab="stats">
-<h4><a href="{% url team_stats team.slug %}">All-time {{ team }} stats</a></h4>
+<h4><a href="{% url 'team_stats' team.slug %}">All-time {{ team }} stats</a></h4>
 {% include "templatetags/career_bio.html" %}
 </div>
 {% endif %}
@@ -50,7 +50,7 @@
 {% if recent_games %}
 <div tab="games">
   {% if recent_games %}
-  <a href="{% url team_games team.slug %}">all games</a>
+  <a href="{% url 'team_games' team.slug %}">all games</a>
   {% endif %}
   {% include "templatetags/games.html" with games=recent_games %}
 </div>

@@ -34,7 +34,7 @@
 {% for stat in stats %}
 <tr>
   {% if stat.player.slug %}
-  <td><a href="{% url person_detail stat.player.slug %}">{{ stat.player }}</a></td>
+  <td><a href="{% url 'person_detail' stat.player.slug %}">{{ stat.player }}</a></td>
   {% else %}
   <td></td>
   {% endif %}
@@ -55,7 +55,7 @@
   {% endif %}
 
   {% if stat.player.birthplace %}
-  <td><a href="{% url city_detail stat.player.birthplace.slug %}">{{ stat.player.birthplace }}</a></td>
+  <td><a href="{% url 'city_detail' stat.player.birthplace.slug %}">{{ stat.player.birthplace }}</a></td>
   {% else %}
   <td></td>
   {% endif %}

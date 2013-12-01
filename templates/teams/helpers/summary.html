@@ -8,7 +8,7 @@
 <h3>{{ team.name }}</h3>
 
 {% if team.city %}
-<div>from <a href="{% url city_detail team.city.slug %}">{{ team.city }}</a></div>
+<div>from <a href="{% url 'city_detail' team.city.slug %}">{{ team.city }}</a></div>
 {% endif %}
 
 {% if team.founded %}

@@ -15,18 +15,24 @@ from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 if os.path.exists("/Users"):
     PROJECT_ROOT = "/Users/chris"
     PROJECT_DIRNAME = 's2'
+    PROJECT_DIR = "%s/soccer/%s" % (PROJECT_ROOT, PROJECT_DIRNAME)
 elif DEBUG:
     PROJECT_ROOT = "/home/chris"
     PROJECT_DIRNAME = 'sdev'
+    PROJECT_DIR = "%s/www/%s" % (PROJECT_ROOT, PROJECT_DIRNAME)
 else:
     PROJECT_ROOT = "/home/chris"
     PROJECT_DIRNAME = 's2'
+    PROJECT_DIR = "%s/www/%s" % (PROJECT_ROOT, PROJECT_DIRNAME)
 
 
-print(PROJECT_ROOT)
-
-PROJECT_DIR = "%s/www/%s" % (PROJECT_ROOT, PROJECT_DIRNAME)
 DB_PATH = "%s/www/%s/db/soccer.db" % (PROJECT_ROOT, PROJECT_DIRNAME)
+
+
+STATIC_URL = '/static/'
+
+STATIC_URL = 'http://dev.soccerstats.us/static/'
+
 #### Put this part anywhere else?
 
 
@@ -51,7 +57,7 @@ PRODUCTION_SITES = (
     "bert",
 )
 
-STATIC_URL = '/static/'
+
 
 
 TEMPLATE_CONTEXT_PROCESSORS += (

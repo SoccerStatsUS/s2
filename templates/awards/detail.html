@@ -6,7 +6,7 @@
 {% block content %}
 
 {% if award.competition %}
-<h3><a href="{% url competition_detail award.competition.slug %}">{{ award.competition }}</a> | {{ award.name }}</h3>
+<h3><a href="{% url 'competition_detail' award.competition.slug %}">{{ award.competition }}</a> | {{ award.name }}</h3>
 {% endif %}
 
 <table>
@@ -23,7 +23,7 @@
   <tr>
 
   {% if item.season %}
-  <td><a href="{% url season_detail item.season.competition.slug item.season.slug %}">{{ item.season.name }}</a></td>
+  <td><a href="{% url 'season_detail' item.season.competition.slug item.season.slug %}">{{ item.season.name }}</a></td>
   {% else %}
   <td></td>
   {% endif %}
@@ -57,7 +57,7 @@
     {% endif %}
 
     {% if recipient.birthplace %}
-    <td><a href="{% url city_detail recipient.birthplace.slug %}">{{ recipient.birthplace }}</a></td>
+    <td><a href="{% url 'city_detail' recipient.birthplace.slug %}">{{ recipient.birthplace }}</a></td>
     {% else %}
     <td class="grey"></td>
     {% endif %}

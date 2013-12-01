@@ -4,19 +4,19 @@
   <div id="team_results">
 
   <h3>
-    {% if game.season_previous_game %}<a href="{% url game_detail game.season_previous_game.id %}">←</a>{% endif %}
-    <a href="{% url competition_detail game.competition.slug %}">{{ game.competition }}</a> - 
-    <a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.season.name }}</a>
-    {% if game.season_next_game %}<a href="{% url game_detail game.season_next_game.id %}">→</a>{% endif %}
+    {% if game.season_previous_game %}<a href="{% url 'game_detail' game.season_previous_game.id %}">←</a>{% endif %}
+    <a href="{% url 'competition_detail' game.competition.slug %}">{{ game.competition }}</a> - 
+    <a href="{% url 'season_detail' game.competition.slug game.season.slug %}">{{ game.season.name }}</a>
+    {% if game.season_next_game %}<a href="{% url 'game_detail' game.season_next_game.id %}">→</a>{% endif %}
   </h3>
     
   <h3>
     {% if game.date %}
-    <a href="{% url date_detail game.date.year game.date.month game.date.day %}">{{ game.date|date:"l, F d, Y" }}</a>
+    <a href="{% url 'date_detail' game.date.year game.date.month game.date.day %}">{{ game.date|date:"l, F d, Y" }}</a>
   {% endif %}
   
   {% if game.stadium.slug %}
-    at <a href="{% url stadium_detail game.stadium.slug %}">{{ game.stadium }}</a>
+    at <a href="{% url 'stadium_detail' game.stadium.slug %}">{{ game.stadium }}</a>
     {% else %}
     {% if game.stadium %}
     at {{ game.stadium }}
@@ -30,7 +30,7 @@
 
   <ul>
     {% if game.referee %}
-    <li><a href="{% url person_detail game.referee.slug %}">{{ game.referee }}</a> referee </li>
+    <li><a href="{% url 'person_detail' game.referee.slug %}">{{ game.referee }}</a> referee </li>
     {% endif %}
 
     {% if game.attendance %}
@@ -39,28 +39,28 @@
   </ul>
 
     <div class="team_data">
-      <div class="team"><a href="{% url team_detail game.team1.slug %}">{{ game.team1_original_name  }}</a></div>
-      {# <div><a href="{% url team_season_detail game.team1.slug game.competition.slug game.season.slug %}">{{ game.season.name }}</a></div> #}
+      <div class="team"><a href="{% url 'team_detail' game.team1.slug %}">{{ game.team1_original_name  }}</a></div>
+      {# <div><a href="{% url 'team_season_detail' game.team1.slug game.competition.slug game.season.slug %}">{{ game.season.name }}</a></div> #}
       <div class="score">{{ game.team1_score_or_result }}</div>
 
       {% if game.home_standings_string %}
       <div>
-        {% if game.team1_previous_game %}<a href="{% url game_detail game.team1_previous_game.id %}">←</a>{% endif %}
-        <a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.home_standings_string  }}</a>
-        {% if game.team1_next_game %}<a href="{% url game_detail game.team1_next_game.id %}">→</a>{% endif %}
+        {% if game.team1_previous_game %}<a href="{% url 'game_detail' game.team1_previous_game.id %}">←</a>{% endif %}
+        <a href="{% url 'season_detail' game.competition.slug game.season.slug %}">{{ game.home_standings_string  }}</a>
+        {% if game.team1_next_game %}<a href="{% url 'game_detail' game.team1_next_game.id %}">→</a>{% endif %}
       </div>
       {% endif %}
     </div>
 
     <div class="team_data">
-      <div class="team"><a href="{% url team_detail game.team2.slug %}">{{ game.team2_original_name  }}</a></div>
-      {# <div><a href="{% url team_season_detail game.team2.slug game.competition.slug game.season.slug %}">{{ game.season.name }}</a></div> #}
+      <div class="team"><a href="{% url 'team_detail' game.team2.slug %}">{{ game.team2_original_name  }}</a></div>
+      {# <div><a href="{% url 'team_season_detail' game.team2.slug game.competition.slug game.season.slug %}">{{ game.season.name }}</a></div> #}
       <div class="score">{{ game.team2_score_or_result }}</div>
       {% if game.away_standings_string %}
       <div>
-        {% if game.team2_previous_game %}<a href="{% url game_detail game.team2_previous_game.id %}">←</a>{% else %}←{% endif %}
-        <a href="{% url season_detail game.competition.slug game.season.slug %}">{{ game.away_standings_string  }}</a>
-        {% if game.team2_next_game %}<a href="{% url game_detail game.team2_next_game.id %}">→</a>{% else %}→{% endif %}
+        {% if game.team2_previous_game %}<a href="{% url 'game_detail' game.team2_previous_game.id %}">←</a>{% else %}←{% endif %}
+        <a href="{% url 'season_detail' game.competition.slug game.season.slug %}">{{ game.away_standings_string  }}</a>
+        {% if game.team2_next_game %}<a href="{% url 'game_detail' game.team2_next_game.id %}">→</a>{% else %}→{% endif %}
       </div>
 
       {% endif %}
@@ -95,7 +95,7 @@
     <td></td>
     {% endif %}
 
-    {# <td><a href="{% url team_detail goal.team.slug %}">{{ goal.team }}</a></td> #}
+    {# <td><a href="{% url 'team_detail' goal.team.slug %}">{{ goal.team }}</a></td> #}
 
 
 

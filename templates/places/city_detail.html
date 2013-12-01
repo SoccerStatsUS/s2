@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<h3>{{ city.name }}{% if city.state %}, <a href="{% url state_detail city.state.slug %}">{{ city.state.name }}</a>{% endif %}{% if city.country %}, <a href="{% url country_detail city.country.slug %}">{{ city.country.name }}</a>{% endif %}</h3>
+<h3>{{ city.name }}{% if city.state %}, <a href="{% url 'state_detail' city.state.slug %}">{{ city.state.name }}</a>{% endif %}{% if city.country %}, <a href="{% url 'country_detail' city.country.slug %}">{{ city.country.name }}</a>{% endif %}</h3>
 
 
 <ul id="tabs"></ul>
@@ -26,9 +26,9 @@
 </tr>
 {% for stadium in stadiums %}
 <tr>
-  <td><a href="{% url stadium_detail stadium.slug %}">{{ stadium }}</a></td>
+  <td><a href="{% url 'stadium_detail' stadium.slug %}">{{ stadium }}</a></td>
   {% if stadium.opened %}
-  <td><a href="{% url date_detail stadium.opened.year stadium.opened.month stadium.opened.day %}">{{ stadium.opened }}</a></td>
+  <td><a href="{% url 'date_detail' stadium.opened.year stadium.opened.month stadium.opened.day %}">{{ stadium.opened }}</a></td>
   {% else %}
   <td></td>
   {% endif %}
@@ -56,7 +56,7 @@
   <table>
     {% for team in teams %}
     <tr>
-      <td><a href="{% url team_detail team.slug %}">{{ team }}</a></td>
+      <td><a href="{% url 'team_detail' team.slug %}">{{ team }}</a></td>
     </tr>
     {% endfor %}
   </table>
