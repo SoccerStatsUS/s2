@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load datum_or_none %}
+{% block title %}drafts{% endblock %}
+
+{% block content %}
+
+<table>
+  <thead>
+    <tr>
+      <th>season</th>
+      <th>competition</th>
+      <th>name</th>
+      <th>date</th>
+    </tr>
+  </thead>
+{% for draft in drafts %}
+  <tr>
+    <td>{{ draft.season.name }}</td>
+    <td><a href="{% url 'competition_detail' draft.competition.slug %}">{{ draft.competition }}</a></td>
+    <td><a href="{% url 'draft_detail' draft.competition.slug draft.slug draft.season.name %}">{{ draft.name }}</a></td>
+
+    {% if draft.start %}
+    <td><a href="{% url 'date_detail' draft.start.year draft.start.month draft.start.day %}">{{ draft.start }}</a></td>
+    {% else %}
+    <td class="grey"></td>
+    {% endif %}
+  </tr>
+{% endfor %}
+</table>
+
+{% comment %}
+{% regroup drafts by competition as dc %}
+
+<ul>
+{% for dx in dc %}
+
+{% if dx.grouper.slug %}
+<li><a href="#{{ dx.grouper.slug }}">{{ dx.grouper }}</a></li>
+{% else %}
+<li><a href="#no-competition">No Competition</a></li>
+{% endif %}
+
+{% endfor %}
+</ul>
+
+
+{% for dx in dc %}
+
+{% if dx.grouper.slug %}
+<h3 id="{{ dx.grouper.slug }}"><a href="{% url 'competition_detail' dx.grouper.slug %}">{{ dx.grouper }}</a></h3>
+{% else %}
+<h3 id="no-competition">No Competition</h3>
+{% endif %}
+
+<table>
+  <thead>
+    <tr>
+      <th>season</th>
+      <th>name</th>
+      <th>date</th>
+    </tr>
+  </thead>
+{% for item in dx.list %}
+  <tr>
+    <td>{{ item.season }}</td>
+    <td><a href="{% url 'draft_detail' dx.grouper.slug item.slug item.season %}">{{ item.name }}</a></td>
+    {% datum_or_grey item.start %}
+  </tr>
+{% endfor %}
+</table>
+
+{% endfor %}
+{% endcomment %}
+
+{% endblock %}

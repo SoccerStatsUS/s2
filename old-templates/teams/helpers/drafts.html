@@ -1,0 +1,48 @@
+{% if recent_picks %}
+<div>recent draft picks (<a href="{% url 'team_picks' team.slug %}">all</a>)</div> 
+<table>
+{% for e in recent_picks %}
+<tr>
+  <td><a href="{% url 'competition_detail' e.draft.season.competition.slug %}">{{ e.draft.season.competition.abbreviation }}</a></td>
+  <td><a href="{% url 'season_detail' e.draft.season.competition.slug e.draft.season.slug %}">{{ e.draft.season.name }}</a></td>
+  <td>{{ e.draft.name }}</td>
+  <td>{{ e.number }}</td>
+  {% if draft.competition %}
+  <td><a href="{% url 'draft_detail' e.draft.competition.slug e.draft.slug e.draft.season.name %}">{{ e.draft.name }}</a></td>
+  {% else %}
+  <td>{{ pick.draft.season.name }} {{ pick.draft.name }}</td>
+  {% endif %}
+
+  <td><a href="{% url 'person_detail' e.player.slug %}">{{ e.player }}</a></td>
+
+  {% if e.former_team %}
+  <td><a href="{% url 'team_detail' e.former_team.slug %}">{{ e.former_team }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+
+{% if draftees %}
+<div>recent draftees (<a href="{% url 'team_draftees' team.slug %}">all</a>)</div> 
+<table>
+{% for e in draftees %}
+<tr>
+  <td><a href="{% url 'competition_detail' e.draft.season.competition.slug %}">{{ e.draft.season.competition.abbreviation }}</a></td>
+  <td><a href="{% url 'season_detail' e.draft.season.competition.slug e.draft.season.slug %}">{{ e.draft.season.name }}</a></td>
+  <td>{{ e.draft.name }}</td>
+  <td><a href="{% url 'team_detail' e.team.slug %}">{{ e.team }}</a></td>
+  <td>{{ e.number }}</td>
+  {% if draft.competition %}
+  <td><a href="{% url 'draft_detail' e.draft.competition.slug e.draft.slug e.draft.season.name %}">{{ e.draft.name }}</a></td>
+  {% else %}
+  <td>{{ pick.draft.season.name }} {{ pick.draft.name }}</td>
+  {% endif %}
+  <td><a href="{% url 'person_detail' e.player.slug %}">{{ e.player }}</a></td>
+</tr>
+{% endfor %}
+</table>
+
+{% endif %}

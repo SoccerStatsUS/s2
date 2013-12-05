@@ -1057,6 +1057,7 @@ def load_assists():
 def load_game_stats():
     print "\nloading game stats\n"
 
+    print "\nloading getters\n"
     team_getter = make_team_getter()
     bio_getter = make_bio_getter()
     source_getter = make_source_getter()
@@ -1064,6 +1065,10 @@ def load_game_stats():
     game_result_getter = make_game_result_getter()
 
     birthdate_dict = dict(Bio.objects.exclude(birthdate=None).values_list("id", "birthdate"))
+
+
+
+    print "\nprocessing"
 
     l = []    
     i = 0
@@ -1151,11 +1156,20 @@ def load_stats():
 
     print "\nloading stats\n"
 
-    team_getter = make_team_getter()
-    bio_getter = make_bio_getter()
-    competition_getter = make_competition_getter()
-    season_getter = make_season_getter()
-    source_getter = make_source_getter()
+    @timer
+    def f():
+        return (make_team_getter(), 
+                make_bio_getter(),
+                make_competition_getter(),
+                make_season_getter(),
+                make_source_getter(),
+                )
+
+
+    print "\nloading getters\n"
+    team_getter, bio_getter, competition_getter, season_getter, source_getter = f()
+
+    print "\nprocessing\n"
 
     l = []    
     i = 0

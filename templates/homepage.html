@@ -1,23 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div id="homepage_video">
 
-{% if oc_game %}
-{% include "templatetags/embed_large.html" with video=oc_game.video %}
-<div id="video_title"><a href="{% url game_detail oc_game.id %}">1924 US Open Cup Final</a></div>
-{% endif %}
 
-{% comment %}
-{% if mls_game %}
 
-{% include "templatetags/embed_large.html" with video=mls_game.video %}
-<div id="video_title"><a href="{% url game_detail mls_game.id %}">first mls game</a></div>
-
-{% endif %}
-{% endcomment %}
-
-</div>
 
 
 {% endblock %}

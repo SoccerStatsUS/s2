@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<table>
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>author</th>
+      <th>games</th>
+      <th>stats</th>
+      <th>news</th>
+      </tr>
+    </thead>
+  
+  {% for source in sources %}
+  <tr>
+    <td><a href="{% url 'source_detail' source.id %}">{{ source|truncatechars:40 }}</a></td>
+    <td>{{ source.author }}</td>
+    <td>{{ source.games }}</td>
+    <td>{{ source.stats }}</td>
+    <td>{{ source.feeditem_set.count }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

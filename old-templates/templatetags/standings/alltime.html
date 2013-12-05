@@ -1,0 +1,38 @@
+{% load datum_or_none %}
+
+<table class="standings_list">
+
+  <thead>
+  <tr>
+    <th>team</th>
+    <th>games</th>
+    <th>wins</th>
+    <th>ties</th>
+    <th>losses</th>
+    <th>points</th>
+    <th>%</th>
+    <th>gf</th>
+    <th>ga</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  {% for standing in standings %}
+  <tr>
+    <td><a href="{% url 'team_detail' standing.team.slug %}">{{ standing.team }}</a></td>
+
+    <td>{{ standing.games }}</td>
+    <td>{{ standing.wins }}</td>
+    <td>{{ standing.ties|default_if_none:'' }}</td>
+    <td>{{ standing.losses }}</td>
+    {% datum_or_grey standing.points %}
+    <td>{{ standing.win_percentage_100|floatformat }}</td>
+    {% datum_or_grey  standing.goals_for %}
+    {% datum_or_grey standing.goals_against %}
+  </tr>
+  {% endfor %}
+  </tbody>
+
+</table>
+
+

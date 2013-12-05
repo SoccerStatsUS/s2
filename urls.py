@@ -1,18 +1,19 @@
 from django.conf.urls.defaults import url, include, patterns
 from django.contrib import admin
-from django.views.generic.simple import direct_to_template
+from django.views.generic import RedirectView, TemplateView
+#from django.views.generic.simple import direct_to_template
+
+
 
 from haystack.views import SearchView  
 from haystack.query import SearchQuerySet
 
 sqs = SearchQuerySet().order_by('name')
 
-from tastypie.api import Api
+#from tastypie.api import Api
 #from myapp.api import EntryResource, UserResource
 
-
-
-v1_api = Api(api_name='v1')
+#v1_api = Api(api_name='v1')
 #v1_api.register(UserResource())
 #v1_api.register(EntryResource())
 
@@ -24,13 +25,11 @@ admin.autodiscover()
 urlpatterns = patterns('',
                        url(r"^$", "games.views.homepage", name="home"),
 
-                       (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': 'http://media.socceroutsider.com/images/favicon.ico'}),
-
-                       (r'^about/$', direct_to_template, {'template': 'about.html'}),
-                       (r'^api/$', direct_to_template, {'template': 'api.html'}),
-
+                       url(r'^favicon\.ico$', RedirectView.as_view(url='http://media.socceroutsider.com/images/favicon.ico'), name="favicon"),
+                       url(r'^about/$', TemplateView.as_view(template_name='about.html'), name='about'),
+                       
+                       #(r'^api/$', TemplateView.as_view(template_name='api.html'), name='api'),
                        #(r'^sources/$', direct_to_template, {'template': 'sources.html'}),
-
                        #(r'^blog/$', direct_to_template, {'template': 'blog.html'}),
 
                        url(r'search/', 
@@ -50,7 +49,7 @@ urlpatterns = patterns('',
                        url(r'^games/', include('games.urls')),
                        url(r'^goals/', include('goals.urls')),
                        url(r'^graphs/', include('graphs.urls')),
-                       url(r'^images/', include('images.urls')),
+                       #url(r'^images/', include('images.urls')),
                        url(r'^levels/', include('levels.urls')),
                        url(r'^lineups/', include('lineups.urls')),
                        url(r'^money/', include('money.urls')),

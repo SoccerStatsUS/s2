@@ -1,0 +1,47 @@
+{% load datum_or_none %}
+
+<table class="standings_list">
+
+  <thead>
+  <tr>
+    <th>player</th>
+    <th>gp</th>
+    <th>gs</th>
+    <th>min</th>
+    <th>g</th>
+    <th>a</th>
+    <th>wins</th>
+    <th>ties</th>
+    <th>losses</th>
+    <th>%</th>
+    <th>gf</th>
+    <th>ga</th>
+  </tr>
+  </thead>
+
+  <tbody>
+
+  <tr>
+  {% if stat.player.slug %}
+  <td><a href="{% url 'person_detail' stat.player.slug %}">{{ stat.player }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
+
+    {% datum_or_grey stat.games_played %}
+    {% datum_or_grey stat.games_started %}
+    {% datum_or_grey stat.minutes %}
+    {% datum_or_grey stat.goals %}
+    {% datum_or_grey stat.assists %}
+    <td>{{ stat.wins }}</td>
+    <td>{{ stat.ties|default_if_none:'' }}</td>
+    <td>{{ stat.losses }}</td>
+    <td>{{ stat.win_percentage_100|floatformat:2 }}</td>
+    {% datum_or_grey  stat.goals_for %}
+    {% datum_or_grey stat.goals_against %}
+  </tr>
+  </tbody>
+
+</table>
+

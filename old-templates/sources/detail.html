@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if source.base_url %}
+<h3><a href="{{ source.base_url }}">{{ source }}</a></h3>
+{% else %}
+<h3>{{ source }}</h3>
+{% endif %}
+
+{% if source.author %}
+<h4>Author: {{ source.author }}</h4>
+{% endif %}
+
+{% if source.base_url %}
+<h4>Base url: {{ source.base_url }}</h4>
+{% endif %}
+
+
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+
+{% if feeds.exists %}
+<div tab="news">
+
+<table>
+{% for item in feeds %}
+<tr>
+  <td><a href="{{ item.url }}">{{ item.title }}</a></td>
+  <td><a href="{% url 'date_detail' item.dt.year item.dt.month item.dt.day %}">{{ item.dt }}</a></a>
+</tr>
+{% endfor %}
+</table>
+
+</div>
+{% endif %}
+
+
+{% if source.game_set.exists %}
+<div tab="games">
+
+<ul>
+{% for game in source.game_set.all|slice:"50" %}
+<li><a href="{% url 'game_detail' game.id %}">{{ game }}</a></li>
+{% endfor %}
+</ul>
+
+</div>
+{% endif %}
+
+
+{% if source.sourceurl_set.exists %}
+<div tab="urls">
+<ul>
+{% for surl in source.sourceurl_set.all %}
+  <ul><a href="{{ surl.url }}">{{ surl.url }}</a></ul>
+{% endfor %}
+</ul>
+</div>
+{% endif %}
+
+
+</div>
+
+
+{% endblock %}
