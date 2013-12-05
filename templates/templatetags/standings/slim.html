@@ -1,0 +1,44 @@
+{% load datum_or_none %}
+
+{% with s0=standings.0 %}
+
+<table class="standings_list">
+
+  <thead>
+  <tr>
+    <th>team</th>
+    <th>GP</th>
+    <th>W</th>
+    {% if s0.shootout_wins != None %}<th>SOW</th>{% endif %}
+    <th>T</th>
+    {% if s0.shootout_losses != None %}<th>SOL</th>{% endif %}
+    <th>L</th>
+    <th>%</th>
+    <th>gf</th>
+    <th>ga</th>
+    <th>gf/ga</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  {% for standing in standings %}
+  <tr>
+    <td><a href="{% url 'team_detail' standing.team.slug %}">{{ standing.team }}</a></td>
+    <td>{{ standing.games }}</td>
+    <td>{{ standing.wins }}</td>
+    {% if s0.shootout_wins != None %}<td>{{ standing.shootout_wins|default_if_none:'' }}</td>{% endif %}
+    <td>{{ standing.ties|default_if_none:'' }}</td>
+    {% if s0.shootout_losses != None %}<td>{{ standing.shootout_losses|default_if_none:'' }}</td>{% endif %}
+    <td>{{ standing.losses }}</td>
+    <td>{{ standing.win_percentage_100|floatformat }}</td>
+    {% datum_or_grey  standing.goals_for %}
+    {% datum_or_grey standing.goals_against %}
+    <td>{{ standing.goal_ratio|floatformat:2 }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+
+</table>
+
+
+{% endwith %}

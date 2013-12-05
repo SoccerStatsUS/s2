@@ -31,7 +31,7 @@ DB_PATH = "%s/www/%s/db/soccer.db" % (PROJECT_ROOT, PROJECT_DIRNAME)
 
 STATIC_URL = '/static/'
 
-STATIC_URL = 'http://dev.soccerstats.us/static/'
+STATIC_URL = 'http://dev.soccerstats.us/new-static/'
 
 #### Put this part anywhere else?
 
