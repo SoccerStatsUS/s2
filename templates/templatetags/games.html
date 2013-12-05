@@ -1,0 +1,90 @@
+
+{% load datum_or_none %}
+<table class="game-list">
+  <tr class="table-head">
+
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+
+  </tr>
+
+  {% for game in games %}
+  <tr>
+
+    {% if game.notes %}
+    <td class="grey" title="{{ game.notes }}"></td>
+    {% else %}
+    <td class="collapse"></td>
+    {% endif %}
+
+
+    {% if game.date %}
+    <td><a href="{% url 'date_detail' game.date.year game.date.month game.date.day %}">{{ game.date }}</a></td>
+    {% else %}
+    <td></td>
+    {% endif %}
+    <td><a href="{% url 'competition_detail' game.competition.slug %}">{{ game.competition.abbreviation }}</a></td>
+
+    <td><a href="{% url 'season_detail' game.competition.slug game.season.slug %}">{{ game.season.name }}</a></td>
+
+    <td>{{ game.round }}</td>
+    <td>{{ game.group }}</td>
+
+    {% if game.winner == game.team1 %}
+    <td><a href="{% url 'team_detail' game.team1.slug %}"><strong>{{ game.team1_original_name }}</strong></a></td>
+    {% else %}
+    <td><a href="{% url 'team_detail' game.team1.slug %}">{{ game.team1_original_name }}</a></td>
+    {% endif %}
+
+    <td><a title="{{ game.goal_string }}" href="{% url 'game_detail' game.id %}">{{ game.score_or_result }}</a></td>
+
+
+    {% if game.winner == game.team2 %}
+    <td><a href="{% url 'team_detail' game.team2.slug %}"><strong>{{ game.team2_original_name }}</strong></a></td>
+    {% else %}
+    <td><a href="{% url 'team_detail' game.team2.slug %}">{{ game.team2_original_name }}</a></td>
+    {% endif %}
+
+    {% if game.stadium %}
+    <td><a href="{% url 'stadium_detail' game.stadium.slug %}" title="{{ game.stadium }}"><strong>{{ game.stadium|truncatechars:"30" }}</strong></a></td>
+    {% elif game.city %}
+    <td><a href="{% url 'city_detail' game.city.slug %}">{{ game.city }}</a></td>
+    {% elif game.country %}
+    <td><a href="{% url 'country_detail' game.country.slug %}">{{ game.country }}</a></td>
+    {% else %}
+    <td></td>
+    {% endif %}
+
+    {% if game.referee %}
+    <td><a href="{% url 'person_detail' game.referee.slug %}">{{ game.referee }}</a></td>
+    {% else %}
+    <td></td>
+    {% endif %}
+    {% datum_or_grey game.attendance %}
+
+
+
+    <td class="{{ game.goal_color_code }}-bg"></td>
+    <td class="{{ game.lineup_color_code }}-bg"></td>
+    <td class="light">{{ game.merges }}</td>
+    <td class="light">{{ game.sources.count }}</td>
+
+  </tr>
+  {% endfor %}
+</table>
+
+

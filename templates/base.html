@@ -49,12 +49,17 @@
   <div class="wrap">
 
     <div id="header">
-      <span><a href="{% url 'home' %}">SoccerStats.us</a></span>
+      <span>SoccerStats.us</span>
       <span><a href="#menu" id="menu-button">&#9776;</a></span>
     </div>
 
+
     
     <div id="menu">
+
+      {% load url from future %}
+
+
       <ul>
         <li><a href="{% url 'scoreboard_today' %}">scoreboard</a></li>
         <li><a href="{% url 'team_index' %}">teams</a></li>
@@ -64,8 +69,11 @@
         <li><a href="{% url 'award_index' %}">awards</a></li>
         <li><a href="{% url 'haystack_search' %}">search</a></li>
       </ul>
+
+
       
       <ul>
+
         <li><a href="/about">about</a></li>
         <li><a href="/sources">sources</a></li>
       </ul>
