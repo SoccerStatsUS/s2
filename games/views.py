@@ -17,8 +17,25 @@ from collections import defaultdict, Counter
 import json
 
 
-@cache_page(60 * 60 * 12)
 def homepage(request):
+
+    try:
+        mls = Competition.objects.get(slug='major-league-soccer')
+    except:
+        mls = None
+
+    context = {
+        'mls': mls,
+        }
+
+    return render_to_response("homepage.html",
+                              context,
+                              context_instance=RequestContext(request))
+        
+
+
+@cache_page(60 * 60 * 12)
+def homepage_old(request):
     """
     The site homepage. Currently badly underperfoming.
     """

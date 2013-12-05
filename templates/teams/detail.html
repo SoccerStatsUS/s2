@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load datum_or_none %}
+
+{% block title %}{{ team.name }}{% endblock %}
+{% block metadescription %}Game results, statistics, awards and more for {{ team.name }}{% endblock %}
+
+{% block content %}
+
+
+{% if team.standing_set.exists %}
+<div tab="standings">
+{% include "templatetags/standings/team.html" with games=team.standing_set.all %}
+</div>
+{% endif %}
+
+
+{% endblock %}

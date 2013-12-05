@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load datum_or_none %}
+
+{% block title %}{{ competition.name }} Soccer History {% endblock %}
+{% block metadescription %}Standings, results, player statistics, and awards for the {{ competition.name }}{% endblock %}
+
+{% block content %}
+
+
+<h3>{{ competition }}</h3>
+
+
+{% if competition.alltime_standings.exists %}
+<div tab="standings">
+{% include "templatetags/standings/slim.html" with standings=big_winners %}
+</div>
+{% endif %}
+
+{% endblock %}
