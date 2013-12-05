@@ -1,23 +1,11 @@
 from django.conf.urls.defaults import url, include, patterns
 from django.contrib import admin
 from django.views.generic import RedirectView, TemplateView
-#from django.views.generic.simple import direct_to_template
-
-
 
 from haystack.views import SearchView  
 from haystack.query import SearchQuerySet
 
 sqs = SearchQuerySet().order_by('name')
-
-#from tastypie.api import Api
-#from myapp.api import EntryResource, UserResource
-
-#v1_api = Api(api_name='v1')
-#v1_api.register(UserResource())
-#v1_api.register(EntryResource())
-
-
 
 admin.autodiscover()
 
