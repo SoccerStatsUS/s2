@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load datum_or_none %}
+{% load url from future %}
+{% load stats %}
+
+{% block title %}{{ competition.name }} Soccer History {% endblock %}
+{% block metadescription %}{{ competition.name }} soccer stats with standings, results, lineups, awards, all-time stats...{% endblock %}
+
+{% block content %}
+
+
+<h3><a href="{% url 'competition_detail' competition.slug %}">{{ competition }}</a></h3>
+
+
+{% stats_table stats %}
+
+
+{% endblock %}

@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load url from future %}
+{% load standings %}
+{% load games %}
 
 {% if date %}
 {% block title %}US Soccer Results and Standings for {{ date }}{% endblock %}
@@ -128,7 +130,9 @@ d3.select(self.frameElement).style("height", "2910px");
 
 {% if games %}
 <div tab="games">
-{% include "templatetags/games.html" %}
+
+{% games_table games %}
+
 </div>
 {% endif %}
 
@@ -140,7 +144,7 @@ d3.select(self.frameElement).style("height", "2910px");
 
 {% if standings %}
 <div tab="standings">
-{% include "templatetags/standings/standings.html" %}
+{% standings_table standings %}
 </div>
 {% endif %}
 

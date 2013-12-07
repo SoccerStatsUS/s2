@@ -3,26 +3,6 @@
 
 {% load datum_or_none %}
 <table class="game-list">
-  <tr class="table-head">
-
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-
-  </tr>
 
   {% for game in games %}
   <tr>
@@ -61,8 +41,14 @@
     <td><a href="{% url 'team_detail' game.team2.slug %}">{{ game.team2_original_name }}</a></td>
     {% endif %}
 
+    
     {% if game.stadium %}
-    <td><a href="{% url 'stadium_detail' game.stadium.slug %}" title="{{ game.stadium }}"><strong>{{ game.stadium|truncatechars:"30" }}</strong></a></td>
+    {% if game.stadium.short_name %}
+    <td><a href="{% url 'stadium_detail' game.stadium.slug %}" title="{{ game.stadium }}"><strong>{{ game.stadium.short_name|truncatechars:"30" }}</strong></a></td>
+    {% else %}
+    <td><a href="{% url 'stadium_detail' game.stadium.slug %}" title="{{ game.stadium }}"><strong>{{ game.stadium.name|truncatechars:"30" }}</strong></a></td>
+    {% endif %}
+
     {% elif game.city %}
     <td><a href="{% url 'city_detail' game.city.slug %}">{{ game.city }}</a></td>
     {% elif game.country %}
@@ -77,13 +63,6 @@
     <td></td>
     {% endif %}
     {% datum_or_grey game.attendance %}
-
-
-
-    <td class="{{ game.goal_color_code }}-bg"></td>
-    <td class="{{ game.lineup_color_code }}-bg"></td>
-    <td class="light">{{ game.merges }}</td>
-    <td class="light">{{ game.sources.count }}</td>
 
   </tr>
   {% endfor %}

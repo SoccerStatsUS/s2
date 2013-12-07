@@ -3,6 +3,9 @@
 
   $(document).ready(function() {
 
+      $(".stats").tablesorter();
+      $(".standings").tablesorter();
+
       $("#header").click(function(){
           var m = $("#menu");
           var mb = $("#menu-button");
@@ -14,6 +17,10 @@
           mb.css("color", "#fff").css("background-color", "#000");
           }
       });
+
+      if (window.location.hash === "#menu"){
+          $("#header").click();
+      };
 
   });
 }).call(this);

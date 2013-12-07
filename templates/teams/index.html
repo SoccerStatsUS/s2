@@ -10,10 +10,9 @@
   {% for letter, teams in name_dict.items %}
   {% if teams.exists %}
   <li class="alphabet">
-    <a class="letter_link" href="{% url 'team_name_fragment' letter %}">{{ letter }}: </a>
+    <a class="letter_link" href="{% url 'team_name_fragment' letter %}">{{ letter }}</a>
     {% for team in teams %}
     <a class="item" href="{% url 'team_detail' team.slug %}">{{ team }}</a>{% if forloop.last %}...{% else %} |{% endif %}
-
     {% endfor %}
   </li>
   {% endif %}

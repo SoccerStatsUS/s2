@@ -75,9 +75,12 @@ def team_index(request):
 
     name_dict = OrderedDict()
 
+    standings = Standing.objects.filter(competition=None)
+
     for letter in letters:
-        teams = Team.objects.filter(name__istartswith=letter)[:10]
-        name_dict[letter] = teams
+        #teams = Team.objects.filter(name__istartswith=letter)[:10]
+        team_standings = standings.filter(team__name__istartswith=letter)[:10]
+        name_dict[letter] = team_standings
         
     context = {
         'name_dict': name_dict,

@@ -6,5 +6,6 @@ register = template.Library()
 def datum_or_grey(datum):
     return {
         'datum': datum,
-        'is_none': datum is None
+        'is_none': datum is None,
+        'is_zero': datum == 0,
         }

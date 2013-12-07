@@ -16,7 +16,7 @@
 
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.8.3.js"></script>
   {# <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui.js"></script> #}
-  {# <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tablesorter.min.js"></script> #}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tablesorter.min.js"></script>
 
   <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
 
@@ -64,18 +64,23 @@
         <li><a href="{% url 'scoreboard_today' %}">scoreboard</a></li>
         <li><a href="{% url 'team_index' %}">teams</a></li>
         <li><a href="{% url 'person_index' %}">players</a></li>
-        <li><a href="{% url 'competition_index' %}">competitions</a></li>
         <li><a href="{% url 'drafts_index' %}">drafts</a></li>
         <li><a href="{% url 'award_index' %}">awards</a></li>
-        <li><a href="{% url 'haystack_search' %}">search</a></li>
+
       </ul>
 
-
+      <ul>
+        <li><a href="{% url 'competition_index' %}">competitions</a></li>
+        <li><a href="{% url 'competition_detail' 'major-league-soccer' %}">MLS</a></li>
+        <li><a href="{% url 'competition_detail' 'north-american-soccer-league' %}">NASL</a></li>
+        <li><a href="{% url 'competition_detail' 'concacaf-champions-league' %}">CCL</a></li>
+        <li><a href="{% url 'competition_detail' 'fifa-world-cup' %}">World Cup</a></li>
+      </ul>
       
       <ul>
-
         <li><a href="/about">about</a></li>
         <li><a href="/sources">sources</a></li>
+        <li><a href="{% url 'haystack_search' %}">search</a></li>
       </ul>
     </div>
 

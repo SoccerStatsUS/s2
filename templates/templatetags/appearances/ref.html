@@ -1,0 +1,32 @@
+{% load url from future %}
+
+<table>
+  <thead>
+  <tr>
+    <th>cmp</th>
+    <th>date</th>
+    <th>team1</th>
+    <th>score</th>
+    <th>team2</th>
+  <tr>
+  </thead>
+
+  <tbody>
+  {% for game in games %}
+  <tr>
+    <td><a href="{% url 'competition_detail' game.competition.slug %}">{{ game.competition.abbreviation }}</a></td>
+    {% if game.date %}
+    <td><a href="{% url 'date_detail' game.date.year game.date.month game.date.day %}">{{ game.date }}</a></td>
+    {% else %}
+    <td></td>
+    {% endif %}
+
+    <td><a href="{% url 'team_detail' game.team1.slug %}"><strong>{{ game.team1_original_name }}</strong></a></td>
+    <td><a href="{% url 'game_detail' game.id %}">{{ game.score_or_result }}</a></td>
+    <td><a href="{% url 'team_detail' game.team2.slug %}"><strong>{{ game.team2_original_name }}</strong></a></td>
+
+  </tr>
+  {% endfor %}
+  </tbody>
+
+</table>

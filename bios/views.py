@@ -71,16 +71,16 @@ def person_index(request):
 
     name_dict = OrderedDict()
     for letter in letters:
-        name_dict[letter] = stats.filter(player__name__istartswith=letter)[:15]
+        name_dict[letter] = stats.filter(player__name__istartswith=letter)[:5]
 
 
-    most_games = CareerStat.objects.exclude(games_played=None).order_by('-games_played')[:25]
-    most_goals = CareerStat.objects.exclude(goals=None).order_by('-goals')[:25]
+    #most_games = CareerStat.objects.exclude(games_played=None).order_by('-games_played')[:25]
+    #most_goals = CareerStat.objects.exclude(goals=None).order_by('-goals')[:25]
 
     context = {
         'name_dict': name_dict,
-        'most_games': most_games,
-        'most_goals': most_goals,
+        #'most_games': most_games,
+        #'most_goals': most_goals,
         }
 
     return render_to_response("bios/index.html",
@@ -224,7 +224,7 @@ def person_detail_stats(request, slug):
     bio = get_object_or_404(Bio, slug=slug)
 
     context = {
-        "stats": bio.goal_set.all(),
+        "stats": bio.stat_set.order_by('season'),
         }
     return render_to_response("bios/detail_stats.html",
                               context,

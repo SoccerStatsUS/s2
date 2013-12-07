@@ -1,6 +1,10 @@
 {% if is_none %}
 <td class="grey"></td>
 {% else %}
+{% if is_zero %}
+<td class="grey">0</td>
+{% else %}
 <td>{{ datum|default_if_none:'' }}</td>
+{% endif %}
 {% endif %}
 

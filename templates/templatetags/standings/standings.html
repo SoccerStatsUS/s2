@@ -1,4 +1,5 @@
 {% load datum_or_none %}
+{% load url from future %}
 
 <table class="standings_list">
 
@@ -23,16 +24,16 @@
   <tr>
     <td><a href="{% url 'team_detail' standing.team.slug %}">{{ standing.team }}</a></td>
 
-    {% if standing.competition %}
+    {% if standing.competition.slug %}
     <td><a href="{% url 'competition_detail' standing.competition.slug %}">{{ standing.competition.abbreviation }}</a></td>
     {% else %}
-    <td></td>
+    <td>{{ standing.competition.abbreviation }}</td>
     {% endif %}
 
-    {% if standing.season %}
+    {% if standing.season.slug %}
     <td><a href="{% url 'season_detail' standing.competition.slug standing.season.slug %}">{{ standing.season.name }}</a></td>
     {% else %}
-    <td></td>
+    <td>{{ standing.season.name }}</td>
     {% endif %}
 
     <td>{{ standing.games }}</td>

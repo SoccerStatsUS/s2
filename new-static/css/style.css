@@ -1,28 +1,41 @@
+body {}
 
 html, body {
     margin: 0;
     padding: 0;
+
+}
+
+html { 
+    font-size: 2em;
+}
+
+ul {
+    list-style-type: none;
 }
 
 #header {
-    height: 100px;
+    height: 90px;
     font-size: 80px;
     text-align: right;
     background-color: white;
+    border-bottom: 10px solid black;
+    margin-bottom: 10px;
 }
 
 
 #menu {
     display: none;
-    background-color: red;
+    background-color: #eee;
     position: absolute;
     width: 100%;
-    height: 80%;
+    height: 85%;
+    font-size: 1.5em;
 }
 
 #menu ul {
     list-style-type: none;
-    font-size: 2em;
+    float: left;
 }
 
 
@@ -40,6 +53,58 @@ a, a:visited {
     color: black;
 }
 
-body {
 
+table {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+table td, table th {
+    border: 5px solid #eee;
+}
+
+
+.alphabet {
+    font-size: 1.5em;
+}
+
+.letter_link {
+    font-size: 2em;
+}
+
+
+table.standings {
+    margin-bottom: 10px;
+}
+
+
+table.stats td:first-child {
+    text-align: right;
+    padding-right: 10px;
+}
+
+
+table.game-list td:first-child {
+    text-align: right;
+    padding-right: 10px;
+}
+
+.grey {
+    color: #ccc;
+}
+
+
+#awards_index .cmp {
+    font-size: 1.7em;
+    padding: 2% 0 1% 10%;
+}
+
+#awards_index ul {
+    width: 60%;
+    margin: 0 auto;
+}
+
+#award_detail {
+    font-size: 1.5em;
 }
