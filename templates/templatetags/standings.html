@@ -16,10 +16,15 @@
   <th>T</th>
   {% if s0.shootout_losses != None %}<th>SOL</th>{% endif %}
   <th>L</th>
-  <th>%</th>
+
+  {% if 'pts' not in exclude %}<th>pts</th>{% endif %}
+
   <th>gf</th>
   <th>ga</th>
+  
+  {% if 'ppg' not in exclude %}<th>ppg</th>{% endif %}
   <th>gf/ga</th>
+
 </tr>
 </thead>
 
@@ -45,7 +50,11 @@
   {% endif %}
 
   {% if 'season' not in exclude %}
+  {% if standing.season.slug %}
+  <td><a href="{% url 'season_detail' standing.competition.slug standing.season.slug %}">{{ standing.season.name }}</a></td>
+  {% else %}
   <td>{{ standing.season.name }}</td>
+  {% endif %}
   {% endif %}
 
 
@@ -55,10 +64,21 @@
 
   {% if s0.shootout_losses != None %}<td>{{ standing.shootout_losses|default_if_none:'' }}</td>{% endif %}
   <td>{{ standing.losses }}</td>
-  <td>{{ standing.win_percentage_100|floatformat }}%</td>
+
+  {% if 'pts' not in exclude %}
+  <td>{{ standing.points }}</td>
+  {% endif %}
+
+
   {% datum_or_grey  standing.goals_for %}
   {% datum_or_grey standing.goals_against %}
+
+  {% if 'ppg' not in exclude %}
+  <td>{{ standing.points_per_game|floatformat:2 }}</td>
+  {% endif %}
+
   <td>{{ standing.goal_ratio|floatformat:2 }}</td>
+
 
 </tr>
 {% endfor %}

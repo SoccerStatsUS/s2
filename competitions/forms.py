@@ -38,8 +38,9 @@ AREA = [
     ('Earth', 'Earth'),
     ('CONCACAF', 'CONCACAF'),
     ('CONMEBOL', 'CONMEBOL'),
+    ('UEFA', 'UEFA'),
+    ('AFC', 'AFC'),
     ('United States', 'United States'),
-    ('Canada', 'Canada'),
     ]
     
 

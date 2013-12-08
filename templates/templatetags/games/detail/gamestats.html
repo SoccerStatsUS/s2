@@ -4,8 +4,12 @@
   <tr>
     <th>on</th>
     <th>min</th>
+    <th>g</th>
+    <th>a</th>
     <th>{{ game.team1_original_name }}</th>
     <th>{{ game.team2_original_name }}</th>
+    <th>a</th>    
+    <th>g</th>    
     <th>min</th>
     <th>on</th>
 
@@ -17,27 +21,33 @@
     {% if a %}
     {% datum_or_grey a.on %}
     {% datum_or_grey a.minutes %}
+    {% datum_or_grey a.goals %}
+    {% datum_or_grey a.assists %}
     {% else %}
     <td class="grey"></td>
     <td class="grey"></td>
     {% endif %}
 
     {% if a.player %}
-    <td><a href="{% url person_detail a.player.slug %}">{{ a.player }}</a></td>
+    <td><a href="{% url 'person_detail' a.player.slug %}">{{ a.player }}</a></td>
     {% else %}
     <td class="grey"></td>
     {% endif %}
 
     {% if b.player %}
-    <td><a href="{% url person_detail b.player.slug %}">{{ b.player }}</a></td>
+    <td><a href="{% url 'person_detail' b.player.slug %}">{{ b.player }}</a></td>
     {% else %}
     <td class="grey"></td>
     {% endif %}
 
     {% if b %}
+    {% datum_or_grey b.assists %}
+    {% datum_or_grey b.goals %}
     {% datum_or_grey b.minutes %}
     {% datum_or_grey b.on %}
     {% else %}
+    <td class="grey"></td>
+    <td class="grey"></td>
     <td class="grey"></td>
     <td class="grey"></td>
     {% endif %}

@@ -112,6 +112,8 @@ class Standing(AbstractStanding):
         ordering = ('season', 'competition', '-points', '-wins', 'team')
 
 
+
+
     def triple(self):
         return "%s-%s-%s" % (self.wins, self.ties, self.losses)
 
@@ -121,7 +123,8 @@ class Standing(AbstractStanding):
 
 
 
-
+    def points_per_game(self):
+        return self.points / float(self.games)
 
 
     def modern_points(self):

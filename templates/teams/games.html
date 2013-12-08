@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load datum_or_none %}
+{% load games %}
+
+{% block title %}{{ team.name }} All-time Game Results{% endblock %}
+{% block metadescription %}All-time game results for {{ team.name }}{% endblock %}
+
+{% block content %}
+
+
+<div id="control-bar">
+  <form method="GET" action=".">
+    {% csrf_token %}
+    {{ form.as_table }}
+    <input type="submit" value="submit" />
+  </form>
+</div>
+  
+{# {% include "templatetags/standings/alltime.html" %} #}
+
+
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+{% if games %}
+<div tab="games">
+{% games_table games %}
+</div>
+
+<div tab="calendar">
+  <div id="calendar-chart"></div>
+</div>
+
+{% endif %}
+
+</div>
+
+<script>
+calendarChart("#calendar-chart", {{ calendar_data|safe }})
+</script>
+
+
+
+{% endblock %}

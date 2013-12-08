@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load url from future %}
 {% load games %}
+{% load stats %}
 
 {% block title %}{{ bio.name }}{% endblock %}
 {% block metadescription %}Bio and career statistics for {{ bio.name }} including game results, goals scored, awards...{% endblock %}
@@ -15,6 +16,7 @@
 {% endblock %}
 
 
+
 {% block content %}
 
 {% include "bios/helpers/summary.html" %}
@@ -27,7 +29,10 @@
 
 {% if domestic_stats or international_stats or coach_stats %}
 <div tab="stats">
-{% include "bios/detail_stats.html" %}
+
+{% stats_table domestic_stats 'player' %}
+
+
 </div>
 {% endif %}
 
@@ -36,7 +41,8 @@
 <div tab="games">
 <a href="{% url 'person_detail_games' bio.slug %}">all games</a>
 
-"templatetags/stats/game_list.html" with stats=recent_game_stats
+{# "templatetags/stats/game_list.html" with stats=recent_game_stats #}
+{# {% stats_table recent_game_stats %} #}
 
 
 
@@ -67,7 +73,7 @@
 <tr>
   {% if award.season %}
   <td><a href="{% url 'season_detail' award.season.competition.slug award.season.slug %}">{{ award.season.name }}</a></td>
-  <td><a href="{% url 'competition_detail' award.season.competition.slug %}">{{ award.season.competition }}</a></td>
+  <td><a href="{% url 'competition_detail' award.season.competition.slug %}">{{ award.season.competition.abbreviation }}</a></td>
   {% else %}
   <td class="grey"></td>
   <td class="grey"></td>

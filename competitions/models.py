@@ -335,13 +335,25 @@ class Season(models.Model):
         from money.models import Salary
         return Salary.objects.filter(season=self.name)
 
-
     def standings_games(self):
         return sum(self.standing_set.filter(final=True).values_list('games', flat=True)) / 2
 
-
     def known_games(self):
         return self.game_set.exclude(team1_result='').count()
+
+    def max_games(self):
+        return max([self.standings_games(), self.known_games()])
+
+    def goals(self):
+        final_standings = self.standing_set.filter(final=True)
+        if final_standings.count():
+            data = final_standings.values_list('goals_for')
+            return sum([e[0] for e in data])
+        else:
+            #from goals.models import Goal
+            #return Goal.objects.filter(game__season=self).count()
+            from games.models import Game
+            return Game.objects.filter(season=self).aggregate(Sum('goals'))['goals__sum']
 
     def total_attendance(self):
         games = self.game_set.exclude(attendance=None)
@@ -357,6 +369,8 @@ class Season(models.Model):
     def games_with_attendance(self):
         return self.game_set.exclude(attendance=None).count()
 
+    def games_with_attendance_percentage(self):
+        return self.games_with_attendance() / float(self.max_games())
 
     def stadium_attendance(self):
         from places.models import Stadium
@@ -509,17 +523,6 @@ class Season(models.Model):
             
         super(Season, self).save(*args, **kwargs)
 
-
-    def goals(self):
-        final_standings = self.standing_set.filter(final=True)
-        if final_standings.count():
-            data = final_standings.values_list('goals_for')
-            return sum([e[0] for e in data])
-        else:
-            #from goals.models import Goal
-            #return Goal.objects.filter(game__season=self).count()
-            from games.models import Game
-            return Game.objects.filter(season=self).aggregate(Sum('goals'))['goals__sum']
 
 
     def goals_per_game(self): 

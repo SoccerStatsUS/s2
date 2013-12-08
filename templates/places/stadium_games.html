@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ stadium }}{% endblock %}
+
+{% load standings %}
+{% load games %}
+
+{% block content %}
+
+{{ stadium }}
+
+{% games_table games 'stadium' %}
+
+
+</div>
+
+{% endblock %}

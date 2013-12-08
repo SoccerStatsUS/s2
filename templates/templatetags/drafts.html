@@ -1,0 +1,46 @@
+{% load datum_or_none %}
+
+
+<table id="draft">
+<tr>
+  <th></th>
+  <th></th>
+  <th title="position">p</th>
+  <th>to</th>
+  <th>from</th>
+<tr>
+
+
+
+{% for pick in picks %}
+{% with cs=pick.player.career_stat %}
+<tr>
+
+  <td>{{ pick.number }}</td>
+
+  {% if pick.pick %}
+  <td><a href="{% url 'draft_detail' pick.pick.draft.competition.slug pick.pick.draft.slug pick.pick.draft.season.slug %}">{{ pick.text }}</a> (<a href="{% url 'person_detail' pick.pick.player.slug %}">{{ pick.pick.player }}</a>)</td>
+
+  {% else %}
+  {% if pick.player %}
+  <td><a href="{% url 'person_detail' pick.player.slug %}">{{ pick.player }}</a></td>
+  {% else %}
+  <td>PASS</td>
+  {% endif %}
+
+  {% endif %}
+
+  {% datum_or_grey pick.position %}
+  <td><a href="{% url 'team_detail' pick.team.slug %}">{{ pick.team }}</a></td>
+
+  {% if pick.former_team %}
+  <td><a href="{% url 'team_detail' pick.former_team.slug %}">{{ pick.former_team }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
+</tr>
+{% endwith %}
+{% endfor %}
+</table>
+

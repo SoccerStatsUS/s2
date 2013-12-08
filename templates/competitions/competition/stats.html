@@ -12,7 +12,7 @@
 <h3><a href="{% url 'competition_detail' competition.slug %}">{{ competition }}</a></h3>
 
 
-{% stats_table stats %}
+{% stats_table stats 'competition' %}
 
 
 {% endblock %}

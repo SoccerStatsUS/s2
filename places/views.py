@@ -129,6 +129,7 @@ def city_detail(request, slug):
 
 def stadium_detail(request, slug):
         """
+        Stadium detail view.
         """
 
         stadium = get_object_or_404(Stadium, slug=slug)
@@ -144,6 +145,7 @@ def stadium_detail(request, slug):
                 'average_attendance': average_attendance,
                 'attendance_game_count': attendance_game_count,
                 'standings': standings,
+                'recent_games': games[:25],
                 }
 
         return render_to_response("places/stadium_detail.html",
@@ -168,7 +170,7 @@ def stadium_games(request, slug):
                 'games': games,
                 }
 
-        return render_to_response("places/stadium_detail.html",
+        return render_to_response("places/stadium_games.html",
                                   context,
                                   context_instance=RequestContext(request))
 
