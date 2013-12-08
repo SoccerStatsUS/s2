@@ -1,5 +1,7 @@
 {% load url from future %}
 
+{% load games %}
+
 {% if game.video %}
 <h4 class="headboard">media</h4>
 <div id="game-media">
@@ -12,6 +14,19 @@
 <h4 class="headboard">notes</h4>
 <p>{{ game.notes }}</p>
 {% endif %}
+
+
+{% if game.series.count > 1 %}
+<h3>series</h3>
+{% games_table game.series 'referee,attendance' %}
+{% endif %}
+
+{% if game.same_day_games %}
+<h3>scoreboard</h3>
+{% games_table game.same_day_games 'date,referee,attendance' %}
+{% endif %}
+
+
 
 {% if game_sources %}
 <h4 class="headboard">sources</h4>
@@ -30,16 +45,6 @@
 </ul>
 
 {% endif %}
-
-{% if game.series.count > 1 %}
-{% include "templatetags/games/series.html" with games=game.series %}
-{% endif %}
-
-{% if game.same_day_games %}
-{% include "templatetags/games/scoreboard.html" with games=game.same_day_games %}
-{% endif %}
-
-
 
 
 

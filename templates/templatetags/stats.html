@@ -9,18 +9,17 @@
     {% if 'team' not in exclude %}<th></th>{% endif %}
     {% if 'competition' not in exclude %}<th></th>{% endif %}
     {% if 'season' not in exclude %}<th></th>{% endif %}
-    <th>gp</th>
-    <th>gs</th>
-    <th>min</th>
-    <th>g</th>
-    <th>a</th>
-    <th>sh</th>
+    <th title="games played" >gp</th>
+    {% if has_games_started %}<th title="games started">gs</th>{% endif %}
+    {% if has_minutes %}<th title="minutes">min</th>{% endif %}
+    <th title="goals">g</th>
+    {% if has_assists %}<th title="assists">a</th>{% endif %}
+    {% if has_shots %}<th title="shots">sh</th>{% endif %}
 
     {% comment %}
     <th>w</th>
     <th>t</th>
     <th>l</th>
-
 
     <th>gf</th>
     <th>ga</th>
@@ -38,6 +37,7 @@
 {% for stat in stats %}
 <tr>
 
+
   {% if 'player' not in exclude %}
   {% if stat.player.slug %}
   <td><a href="{% url 'person_detail' stat.player.slug %}">{{ stat.player }}</a></td>
@@ -49,7 +49,7 @@
 
   {% if 'competition' not in exclude %}
   {% if stat.competition.slug %}
-  <td>{{ stat.competition.abbreviation }}</td>
+  <td><a title="{{ stat.competition.name }}" href="{% url 'competition_detail' stat.competition.slug %}">{{ stat.competition.abbreviation }}</a></td>
   {% else %}
   <td>{{ stat.competition.abbreviation }}</td>
   {% endif %}
@@ -57,35 +57,31 @@
 
   {% if 'season' not in exclude %}
   {% if stat.season.slug %}
-  <td>{{ stat.season.name }}</td>
+  <td><a href="{% url 'season_detail' stat.competition.slug stat.season.slug %}">{{ stat.season.name }}</a></td>
   {% else %}
   <td>{{ stat.season.name }}</td>
   {% endif %}
   {% endif %}
 
+  
   {% datum_or_grey stat.games_played %}
-  {% datum_or_grey stat.games_started %}
-  {% datum_or_grey stat.minutes %}
+  {% if has_games_started %}{% datum_or_grey stat.games_started %}{% endif %}
+  {% if has_minutes %}{% datum_or_grey stat.minutes %}{% endif %}
   {% datum_or_grey stat.goals %}
-  {% datum_or_grey stat.assists %}
-  {% datum_or_grey stat.shots %}
+  {% if has_assists %}{% datum_or_grey stat.assists %}{% endif %}
+  {% if has_shots %}{% datum_or_grey stat.shots %}{% endif %}
+
+
 
   {% comment %}
   {% datum_or_grey stat.wins %}
   {% datum_or_grey stat.ties %}
   {% datum_or_grey stat.losses %}
-
-
   {% datum_or_grey stat.goals_for %}
   {% datum_or_grey stat.goals_against %}
   {% datum_or_grey stat.plus_minus %}
-
-
   <td>{{ stat.plus_minus_per_90|floatformat:"2" }}</td>
   <td>{{ stat.goals_assists_per_90|floatformat:"2" }}</td>
-  {% endcomment %}
-
-  {% comment %}
 
   {% if stat.player.birthdate %}
   <td><a href="{% url 'date_detail' stat.player.birthdate.year stat.player.birthdate.month stat.player.birthdate.day %}">{{ stat.player.birthdate }}</a></td>
@@ -104,7 +100,6 @@
   {% else %}
   <td></td>
   {% endif %}
-
   {% endcomment %}
 
 

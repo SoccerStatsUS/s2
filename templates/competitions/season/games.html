@@ -2,6 +2,7 @@
 
 {% load url from future %}
 {% load datum_or_none %}
+{% load games %}
 
 {% block title %}{{ competition.name }} Soccer History {% endblock %}
 {% block metadescription %}{{ competition.name }} soccer stats with standings, results, lineups, awards, all-time stats...{% endblock %}
@@ -15,9 +16,11 @@
 </h3>
 
 
+
+
 {% if games %}
 <div tab="games">
-{% include "templatetags/games.html" %}
+{% games_table games 'competition,season' %}
 </div>
 {% endif %}
 

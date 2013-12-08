@@ -8,6 +8,8 @@ from stats.forms import StatForm
 
 def stats_index(request):
     # Should probably just redirect this to /tools/stats.
+    
+    
 
     context = {
         'stats': Stat.career_stats.all()[:100],

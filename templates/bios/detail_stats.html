@@ -1,4 +1,3 @@
-{% extends "base.html" %}
 {% load datum_or_none %}
 {% load url from future %}
 {% load stats %}
@@ -17,6 +16,8 @@
 </form>
 {% endcomment %}
 
-{% stats_table stats exclude='player' %}
+{% stats_table domestic_stats exclude='player' %}
+{% stats_table international_stats exclude='player' %}
+{% stats_table coach_stats exclude='player' %}
 
 {% endblock %}

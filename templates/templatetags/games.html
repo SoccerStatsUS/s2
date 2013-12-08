@@ -1,6 +1,5 @@
 {% load url from future %}
 
-
 {% load datum_or_none %}
 <table class="game-list">
 
@@ -14,17 +13,22 @@
     {% endif %}
 
 
+    {% if 'date' not in exclude %}
     {% if game.date %}
     <td><a href="{% url 'date_detail' game.date.year game.date.month game.date.day %}">{{ game.date }}</a></td>
     {% else %}
     <td></td>
     {% endif %}
+    {% endif %}
+
+    {% if 'competition' not in exclude %}
     <td><a href="{% url 'competition_detail' game.competition.slug %}">{{ game.competition.abbreviation }}</a></td>
+    {% endif %}
 
     <td><a href="{% url 'season_detail' game.competition.slug game.season.slug %}">{{ game.season.name }}</a></td>
 
-    <td>{{ game.round }}</td>
-    <td>{{ game.group }}</td>
+    {% if has_round %}<td>{{ game.round }}</td>{% endif %}
+    {% if has_group %}<td>{{ game.group }}</td>{% endif %}
 
     {% if game.winner == game.team1 %}
     <td><a href="{% url 'team_detail' game.team1.slug %}"><strong>{{ game.team1_original_name }}</strong></a></td>
@@ -32,7 +36,7 @@
     <td><a href="{% url 'team_detail' game.team1.slug %}">{{ game.team1_original_name }}</a></td>
     {% endif %}
 
-    <td><a title="{{ game.goal_string }}" href="{% url 'game_detail' game.id %}">{{ game.score_or_result }}</a></td>
+    <td class="result"><a title="{{ game.goal_string }}" href="{% url 'game_detail' game.id %}">{{ game.score_or_result }}</a></td>
 
 
     {% if game.winner == game.team2 %}
@@ -41,7 +45,8 @@
     <td><a href="{% url 'team_detail' game.team2.slug %}">{{ game.team2_original_name }}</a></td>
     {% endif %}
 
-    
+
+    {% if 'stadium' not in exclude %}
     {% if game.stadium %}
     {% if game.stadium.short_name %}
     <td><a href="{% url 'stadium_detail' game.stadium.slug %}" title="{{ game.stadium }}"><strong>{{ game.stadium.short_name|truncatechars:"30" }}</strong></a></td>
@@ -56,13 +61,20 @@
     {% else %}
     <td></td>
     {% endif %}
+    {% endif %}
 
+
+    {% if 'referee' not in exclude %}
     {% if game.referee %}
     <td><a href="{% url 'person_detail' game.referee.slug %}">{{ game.referee }}</a></td>
     {% else %}
     <td></td>
     {% endif %}
+    {% endif %}
+
+    {% if 'attendance' not in exclude %}
     {% datum_or_grey game.attendance %}
+    {% endif %}
 
   </tr>
   {% endfor %}

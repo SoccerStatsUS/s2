@@ -17,14 +17,12 @@
   {% endif %}
   
   {% if game.stadium.slug %}
-    at <a href="{% url 'stadium_detail' game.stadium.slug %}">{{ game.stadium }}</a>
-    {% else %}
-    {% if game.stadium %}
-    at {{ game.stadium }}
+    at <a href="{% url 'stadium_detail' game.stadium.slug %}">
+      {% if game.stadium.short_name %}{{ game.stadium.short_name }}{% else %}{{ game.stadium.name }}{% endif %}
+    </a>
     {% else %}
     {% if game.location %}
     in {{ game.location }}
-    {% endif %}
     {% endif %}
     {% endif %}
   </h3>
@@ -108,13 +106,18 @@
 
 {% endif %}
 
-{% if game.appearance_set.exists %}
-{% include "templatetags/games/detail/lineup.html"  %}
-
-{% else %}
 
 {% if game.gamestat_set.exists %}
 {% include "templatetags/games/detail/gamestats.html"  %}
+
+
+{% else %}
+
+
+
+{% if game.appearance_set.exists %}
+{% include "templatetags/games/detail/lineup.html"  %}
+
 {% endif %}
 
 {% endif %}

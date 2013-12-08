@@ -1,0 +1,61 @@
+{% with has_mvp=competition.has_mvp %}
+{% if seasons %}
+<table>
+  <tr>
+    <th>season</th>
+    <th>champion</th>
+    {% if has_mvp %}<th>MVP</th>{% endif %}
+    <th>golden boot</th>
+    <th>games</th>
+    <th>goals</th>
+    {% if has_attendance %}<th title="average attendance">att.</th>{% endif %}
+  </tr>
+
+
+  {% for season in seasons %}
+  <tr>
+
+    <td><a href="{% url 'season_detail' season.competition.slug season.slug %}">{{ season.name }}</a></td>
+
+
+    <td><a href="{{ season.champion.recipient.get_absolute_url }}">{{ season.champion.recipient }}</a></td>
+
+    {% if has_mvp %}
+    {% with season.mvp.recipient as mvp %}
+    {% if mvp %}
+    <td><a href="{% url 'person_detail' mvp.slug %}">{{ mvp }}</a></td>
+    {% else %}
+    <td></td>
+    {% endif %}
+    {% endwith %}
+    {% endif %}
+
+    {% if season.golden_boot %}
+    <td><a href="{% url 'person_detail' season.golden_boot.slug %}">{{ season.golden_boot }}</a></td>
+    {% else %}
+    <td></td>
+    {% endif %}
+
+    <td><a href="{% url 'season_games' season.competition.slug season.slug %}">{{ season.standings_games }}</a></td>
+    {% if season.goals %}
+    <td><a href="{% url 'season_goals' season.competition.slug season.slug %}">{{ season.goals }}</a></td>
+    {% else %}
+    <td></td>
+    {% endif %}
+
+    {% if has_attendance %}
+    {% if season.total_attendance %}
+    <td><a href="{% url 'season_attendance' season.competition.slug season.slug %}">{{ season.average_attendance }}</a></td>
+      {# ({{ season.games_with_attendance_percentage|floatformat:2 }}) #}
+    {% else %}
+    <td></td>
+    {% endif %}
+    {% endif %}
+
+
+  </tr>
+  {% endfor %}
+    
+</table>
+{% endif %}
+{% endwith %}

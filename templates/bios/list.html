@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load stats %}
+
+{% block content %}
+
+{% stats_table stats 'competition,season,team' %}
+
+
+{% endblock %}

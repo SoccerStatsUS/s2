@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load datum_or_none %}
+
 {% load standings %}
+{% load games %}
+{% load stats %}
 
 {% block title %}{{ team.name }}{% endblock %}
 {% block metadescription %}Game results, statistics, awards and more for {{ team.name }}{% endblock %}
@@ -9,5 +12,11 @@
 
 
 {% standings_table competition_standings 'team,season' %}
+
+{% standings_table league_standings 'team' %}
+
+{% stats_table stats 'team,competition,season' %}
+
+{% games_table recent_games %}
 
 {% endblock %}

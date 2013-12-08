@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load datum_or_none %}
 {% load standings %}
+{% load seasons %}
+{% load games %}
 
 {% block title %}{{ competition.name }} Soccer History {% endblock %}
 {% block metadescription %}Standings, results, player statistics, and awards for the {{ competition.name }}{% endblock %}
@@ -10,8 +12,11 @@
 
 <h3>{{ competition }}</h3>
 
+{% seasons_table competition.season_set.all %}
 
 {% standings_table big_winners 'competition,season' %}
+
+{% games_table games 'competition,referee,attendance' %}
 
 
 {% endblock %}
