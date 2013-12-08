@@ -52,6 +52,7 @@
   <td>{{ standing.wins }}</td>
   {% if s0.shootout_wins != None %}<td>{{ standing.shootout_wins|default_if_none:'' }}</td>{% endif %}
   <td>{{ standing.ties|default_if_none:'' }}</td>
+
   {% if s0.shootout_losses != None %}<td>{{ standing.shootout_losses|default_if_none:'' }}</td>{% endif %}
   <td>{{ standing.losses }}</td>
   <td>{{ standing.win_percentage_100|floatformat }}%</td>

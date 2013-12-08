@@ -40,7 +40,7 @@ ul {
 
 
 a, a:visited {
-    color: black;
+    color: blue;
 }
 
 
@@ -94,6 +94,11 @@ table.game-list td:first-child {
     color: #ccc;
 }
 
+.greybg {
+    background-color: #eee;
+}
+
+
 
 #awards_index .cmp {
     font-size: 1.7em;
@@ -107,4 +112,94 @@ table.game-list td:first-child {
 
 #award_detail {
     font-size: 1.5em;
+}
+
+
+
+
+
+/* Search */
+
+#search_box, #search_results { 
+    position: absolute;
+
+}
+
+#search_box {
+    top: 50px;
+    margin-left: 50px;    
+    border: solid #f42;
+    border-width: 0 8px 8px 8px;
+    background-color: #eee;
+    padding: 50px;
+    width: 200px;
+}
+
+#search_results { 
+    right: 0;
+    padding: 20px 0 20px 20px;
+    background-color: #eee;
+    height: 100%;
+}
+
+#search_results table {
+    margin-top: 20px;
+    width: 470px;
+    border: 0;
+}
+
+#search_results td.model {
+    width: 90px;
+}
+
+#search_results td {
+    border: 0;
+}
+
+#search_results #search_directions {
+    padding: 10px 0 10px 10px;
+    position: fixed;
+    bottom: 20px;
+}
+
+td.result {
+    width: 70px;
+}
+
+
+
+/* Game detail */
+
+
+/* game detail */
+
+
+#game-detail #game-media {
+    text-align: center;
+}
+
+
+
+.center {
+    text-align: center;
+}
+
+#game_score #team_results {
+    margin: 0 auto;
+    text-align: center;
+}
+    
+#game_score .team_data {
+    padding-top: 10px;
+    display: inline-block;
+    margin: 0 10px;
+}
+
+
+#goal_list {
+    margin: 20px auto 0 auto;
+}
+
+table#game_lineup {
+    margin: 20px auto 0 auto;
 }
