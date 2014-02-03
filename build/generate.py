@@ -33,7 +33,7 @@ def generate():
     #generate_position_stats()
     generate_coach_stats_for_competitions()
 
-    generate_game_data_quality()
+    #generate_game_data_quality()
 
     set_draft_picks()
 

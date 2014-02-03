@@ -287,6 +287,17 @@ class SeasonManager(models.Manager):
         Dict mapping names to bio id's.
         """
         d = {}
+        for name, competition, sid in self.get_query_set().values_list('name', 'competition', 'id'):
+            d[(name, competition)] = sid
+        return d
+
+
+
+    def as_dictold(self):
+        """
+        Dict mapping names to bio id's.
+        """
+        d = {}
         for e in self.get_query_set():
             if e.competition:
                 d[(e.name, e.competition.id)] = e.id

@@ -344,8 +344,6 @@ def make_game_result_getter():
     return getter
 
 
-
-
 def make_goal_getter():
     """
     Retrieve competitions easily.

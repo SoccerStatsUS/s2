@@ -124,7 +124,10 @@ class Standing(AbstractStanding):
 
 
     def points_per_game(self):
-        return self.points / float(self.games)
+        try:
+            return self.points / float(self.games)
+        except:
+            return None
 
 
     def modern_points(self):

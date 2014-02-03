@@ -110,11 +110,9 @@ def competition_detail(request, competition_slug):
     else:
         sx = stats.exclude(games_played=None, goals=None).filter(competition=competition).order_by('-games_played', '-goals')[:25]
 
-    recent_games = games.order_by('-date').exclude(date__gte=datetime.date.today())
+    recent_games = games.order_by('-date').exclude(date__gte=datetime.date.today()).exclude(date=None)
     if not recent_games.exists():
         recent_games = games.order_by('-date')
-
-
 
     context = {
         'competition': competition,

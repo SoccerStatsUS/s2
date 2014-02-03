@@ -34,6 +34,15 @@ class BioManager(models.Manager):
         Dict mapping names to bio id's.
         """
         d = {}
+        for name, eid in self.get_query_set().values_list('name', 'id'):
+            d[name] = eid
+        return d
+
+    def bio_dictx(self):
+        """
+        Dict mapping names to bio id's.
+        """
+        d = {}
         for e in self.get_query_set():
             d[e.name] = e.id
         return d
