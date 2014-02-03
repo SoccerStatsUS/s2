@@ -18,6 +18,11 @@ def stats_table(stats, exclude=''):
         has_value = lambda i: set(e[0] for e in vals) != set([None])
         has_shots, has_assists, has_minutes, has_games_started = [has_value(e) for e in range(4)]
 
+    #if stats.filter(games_played=None).exists():
+    #    stats = stats.order_by('-games_played')
+    #else:
+    #    stats = stats.order_by('-minutes')        
+
     return {
         'stats': stats,
         'exclude': set(exclude.split(',')),

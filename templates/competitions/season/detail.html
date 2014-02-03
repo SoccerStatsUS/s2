@@ -60,6 +60,9 @@
   </table>
 </div>
 
+
+
+
 <div class="block">
   <table>
 
@@ -104,40 +107,6 @@
 
 <div id="tab_wrapper">
 
-{% if standings %}
-<div tab="standings">
-
-{% standings_table standings %}
-
-</div>
-{% endif %}
-
-
-{% if stats.exists %}
-<div tab="stats">
-<div><a href="{% url 'season_stats' season.competition.slug season.slug %}">complete stats</a></div>
-
-{% stats_table stats %}
-
-</div>
-
-{% endif %}
-
-
-
-{% if recent_games %}
-<div tab="games">
-
-<p>
-  <a href="{% url 'season_games' season.competition.slug season.slug %}">all games</a>
-</p>
-
-{% games_table recent_games %}
-
-
-</div>
-{% endif %}
-
 
 {% if awards.exists %}
 <div tab="awards">
@@ -156,6 +125,42 @@
 </table>
 </div>
 {% endif %}
+
+
+{% if standings %}
+<div tab="standings">
+
+{% standings_table standings 'competition,season' %}
+
+</div>
+{% endif %}
+
+
+{% if stats.exists %}
+<div tab="stats">
+<div><a href="{% url 'season_stats' season.competition.slug season.slug %}">complete stats</a></div>
+
+{% stats_table stats 'competition,season' %}
+
+</div>
+
+{% endif %}
+
+
+
+{% if recent_games %}
+<div tab="games">
+
+<p>
+  <a href="{% url 'season_games' season.competition.slug season.slug %}">all games</a>
+</p>
+
+{% games_table recent_games 'competition,season' %}
+
+
+</div>
+{% endif %}
+
 
 
 

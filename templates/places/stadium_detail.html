@@ -49,7 +49,9 @@
 <div>Architect: <a href="{% url 'person_detail' stadium.architect.slug %}">{{ stadium.architect }}</a></div>
 {% endif %}
 
+{% if attendance_game_count %}
 <div>Average attendance: {{ average_attendance|floatformat }} ({{ attendance_game_count }} games)</div>
+{% endif %}
 
 
 
@@ -64,7 +66,7 @@
 
 </div>
 
-{% games_table games 'stadium' %}
+{% games_table recent_games 'stadium' %}
 
 {% comment %}
 {% if stadium.game_set.exists %}

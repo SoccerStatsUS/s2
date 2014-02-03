@@ -1,6 +1,8 @@
 {% load datum_or_none %}
 {% load url from future %}
 
+{% if stats.exists %}
+
 <table class="stats">
 
 <thead>
@@ -108,3 +110,6 @@
 </tbody>
 
 </table>
+
+
+{% endif %}

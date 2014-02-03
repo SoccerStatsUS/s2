@@ -36,7 +36,7 @@
     <td></td>
     {% endif %}
 
-    <td><a href="{% url 'season_games' season.competition.slug season.slug %}">{{ season.standings_games }}</a></td>
+    <td><a href="{% url 'season_games' season.competition.slug season.slug %}">{{ season.max_games }}</a></td>
     {% if season.goals %}
     <td><a href="{% url 'season_goals' season.competition.slug season.slug %}">{{ season.goals }}</a></td>
     {% else %}
