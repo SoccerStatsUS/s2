@@ -30,17 +30,17 @@
 <div id="tab_wrapper">
 
 
-
-
 {% if domestic_stats or international_stats or coach_stats %}
 <div tab="stats">
 
 <ul id="subtabs"></ul>
 <div id="subtab_wrapper">
 
+{% if domestic_stats %}
 <div tab="domestic">
 {% stats_table domestic_stats 'player' %}
 </div>
+{% endif %}
 
 {% if international_stats %}
 <div tab="international">

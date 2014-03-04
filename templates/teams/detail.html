@@ -43,8 +43,14 @@
 </div>
 {% endif %}
 
-{% if game_leaders %}
+{% if game_leaders or goal_leaders %}
 <div tab="stats">
+
+<div>
+<a href="{% url 'team_stats' team.slug %}">all stats</a>
+</div>
+
+{% if game_leaders %}
 <div class="col">
 <div>game leaders</div>
 {% stats_table game_leaders 'team,competition,season' %}
@@ -59,6 +65,7 @@
 {% endif %}
 
 </div>
+{% endif %}
 
 <div tab="games">
 {% games_table recent_games %}
