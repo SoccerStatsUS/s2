@@ -26,6 +26,7 @@ ul {
     border-bottom: 5px solid black;
     padding-bottom: 5px;
     margin-bottom: 0;
+    cursor: pointer;
 }
 
 
@@ -34,11 +35,11 @@ ul {
     display: none;
     background-color: #fff;
     position: absolute;
-    margin-left: 35%;
+    margin-left: 20%;
     border: solid black;
     border-width: 5px 5px 5px;
     margin-top: -5px;
-    width: 65%;
+    width: 80%;
     height: 80%;
     font-size: 1.5em;
     z-index: 100;
