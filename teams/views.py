@@ -211,17 +211,20 @@ def team_detail(request, team_slug):
 
     awards = team.awards.order_by('-season')
 
+    """
     if game_leaders:
         game_leaders = game_leaders[:15]
 
     if goal_leaders:
         goal_leaders = goal_leaders[:15]
+    """
 
 
     context = {
         'team': team,
         'awards': awards,
-        'stats': stats[:15],
+        #'stats': stats[:15],
+        #'stats': stats,
         'recent_games': recent_games,
         'competition_standings': competition_standings,
         'league_standings': league_standings,

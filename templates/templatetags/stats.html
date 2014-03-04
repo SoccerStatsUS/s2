@@ -1,7 +1,7 @@
 {% load datum_or_none %}
 {% load url from future %}
 
-{% if stats.exists %}
+{% if stats %}
 
 <table class="stats">
 
@@ -73,37 +73,6 @@
   {% datum_or_grey stat.goals %}
   {% if has_assists %}{% datum_or_grey stat.assists %}{% endif %}
   {% if has_shots %}{% datum_or_grey stat.shots %}{% endif %}
-
-
-
-  {% comment %}
-  {% datum_or_grey stat.wins %}
-  {% datum_or_grey stat.ties %}
-  {% datum_or_grey stat.losses %}
-  {% datum_or_grey stat.goals_for %}
-  {% datum_or_grey stat.goals_against %}
-  {% datum_or_grey stat.plus_minus %}
-  <td>{{ stat.plus_minus_per_90|floatformat:"2" }}</td>
-  <td>{{ stat.goals_assists_per_90|floatformat:"2" }}</td>
-
-  {% if stat.player.birthdate %}
-  <td><a href="{% url 'date_detail' stat.player.birthdate.year stat.player.birthdate.month stat.player.birthdate.day %}">{{ stat.player.birthdate }}</a></td>
-  {% else %}
-  <td></td>
-  {% endif %}
-
-  {% if stat.player.age_years %}
-  <td>{{ stat.player.age_years|floatformat:"2" }}</td>
-  {% else %}
-  <td></td>
-  {% endif %}
-
-  {% if stat.player.birthplace %}
-  <td><a href="{% url 'city_detail' stat.player.birthplace.slug %}">{{ stat.player.birthplace }}</a></td>
-  {% else %}
-  <td></td>
-  {% endif %}
-  {% endcomment %}
 
 
 </tr>

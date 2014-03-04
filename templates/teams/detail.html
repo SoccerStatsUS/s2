@@ -53,14 +53,14 @@
 {% if game_leaders %}
 <div class="col">
 <div>game leaders</div>
-{% stats_table game_leaders 'team,competition,season' %}
+{% stats_table game_leaders 'team,competition,season' 15 %}
 </div>
 {% endif %}
 
 {% if goal_leaders %}
 <div class="col">
 <div>goal leaders</div>
-{% stats_table goal_leaders 'team,competition,season' %}
+{% stats_table goal_leaders 'team,competition,season' 15 %}
 </div>
 {% endif %}
 
