@@ -28,23 +28,3 @@
 
 
 
-{% if game_sources %}
-<h4 class="headboard">sources</h4>
-<ul>
-{% for game_source in game_sources %}
-<li>
-
-<a href="{% url 'source_detail' game_source.source.id %}">{{ game_source.source|truncatechars:"30" }}</a> 
-{% if game_source.source_url %}<a class="external" href="{{ game_source.source_url }}">(☢)</a>
-{% else %}
-{% if game_source.source.base_url %}<a class="external" href="{{ game_source.source.base_url }}">(link)</a>
-{% endif %}
-{% endif %}
-</li>
-{% endfor %}
-</ul>
-
-{% endif %}
-
-
-

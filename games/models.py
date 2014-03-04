@@ -72,6 +72,18 @@ class GameManager(models.Manager):
         Returns a dict mapping a team/date combination to a game id.
         """
         d = {}
+        for eid, dt, t1, t2 in self.get_query_set().values_list('id', 'date', 'team1', 'team2'):
+            key = (t1, dt)
+            d[key] = eid
+            key2 = (t2, dt)
+            d[key2] = eid
+        return d
+
+    def id_dict_old(self):
+        """
+        Returns a dict mapping a team/date combination to a game id.
+        """
+        d = {}
         for e in self.get_query_set():
             key = (e.team1.id, e.date)
             d[key] = e.id
@@ -80,6 +92,18 @@ class GameManager(models.Manager):
         return d
 
     def result_dict(self):
+        """
+        Returns a dict mapping a team/date combination to a game id.
+        """
+        d = {}
+        for dt, t1id, t2id, t1r, t2r in self.get_query_set().values_list('date', 'team1', 'team2', 'team1_result', 'team2_result'):
+            key = (t1id, dt)
+            d[key] = t1r
+            key2 = (t2id, dt)
+            d[key2] = t2r
+        return d
+
+    def old_result_dict(self):
         """
         Returns a dict mapping a team/date combination to a game id.
         """

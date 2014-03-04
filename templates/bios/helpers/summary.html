@@ -1,3 +1,4 @@
+<div id="bio_block">
 
 <div id="bio_image">
 
@@ -9,44 +10,12 @@
 
 
 <div id="bio_data">
-
-<div class="section1">
+  
   <div>{{ bio.name }}</div>
   {% if bio.position %}
   <div>position: {{ bio.position }}</div>
   {% endif %}
-</div>
-
-<div class="section2">
-
-
-{% if bio.height or bio.weight %}
-<div>height: {% if bio.height %}{{ bio.height }}cm{% endif %}</div>
-<div>weight: {% if bio.weight %}{{ bio.weight }}kg{% endif %}</div>
-{% endif %}
-
-{% if bio.birthdate %}
-<div>birthdate: <a href="{% url 'date_detail' bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a></div>
-<div>age: {{ bio.age_years|floatformat:1 }}</div>
-{% endif %}
-  
-{% if bio.birthplace %}
-<div>birthplace: <a href="{% url 'city_detail' bio.birthplace.slug %}">{{ bio.birthplace }}</a></div>
-{% endif %}
-
-{% if bio.nationality %}
-<div>nationality: {{ bio.nationality }}</div>
-{% endif %}
-
-{% if bio.last_game and bio.last_game != bio.first_game %}
-<div>first game: <a href="{% url 'game_detail' bio.first_game.id %}">{{ bio.first_game.date }}</a></div>
-{% endif %}
-
-{% if bio.last_game and bio.last_game != bio.first_game %}
-<div>last game: <a href="{% url 'game_detail' bio.last_game.id %}">{{ bio.last_game.date }}</a></div>
-{% endif %}
 
 </div>
 
 </div>
-

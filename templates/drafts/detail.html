@@ -5,7 +5,11 @@
 
 {% block content %}
 
+<div id="draft_block">
+
 <h4><a href="{% url 'season_detail' draft.season.competition.slug draft.season.slug %}">{{ draft.season }}</a> | {{ draft.name }}</h4>
+
+</div>
 
 {% picks_table draft.pick_set.all %}
 

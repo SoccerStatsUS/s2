@@ -192,6 +192,10 @@ class Competition(models.Model):
         return self.name
 
     def make_abbreviation(self):
+        
+        if self.name is None:
+            import pdb; pdb.set_trace()
+
         words = self.name.split(' ')
         first_letters = [e.strip()[0] for e in words if e.strip()]
         first_letters = [e for e in first_letters if e not in '-()']
@@ -278,11 +282,24 @@ class SeasonManager(models.Manager):
                 ss = SuperSeason.objects.get(name=name)
             except:
                 print("Creating Super Season %s" % name)
+                if name in (None, ''):
+                    import pdb; pdb.set_trace()
                 ss = SuperSeason.objects.create(name=name, order=-1, order2=-1)
 
             return Season.objects.create(name=name, competition=competition, order=ss.order)
 
     def as_dict(self):
+        """
+        Dict mapping names to bio id's.
+        """
+        d = {}
+        for name, competition, sid in self.get_query_set().values_list('name', 'competition', 'id'):
+            d[(name, competition)] = sid
+        return d
+
+
+
+    def as_dictold(self):
         """
         Dict mapping names to bio id's.
         """
@@ -354,6 +371,9 @@ class Season(models.Model):
             #return Goal.objects.filter(game__season=self).count()
             from games.models import Game
             return Game.objects.filter(season=self).aggregate(Sum('goals'))['goals__sum']
+
+    def goals_per_game(self):
+        return self.goals() / self.max_games()
 
     def total_attendance(self):
         games = self.game_set.exclude(attendance=None)

@@ -6,12 +6,6 @@
   {% for game in games %}
   <tr>
 
-    {% if game.notes %}
-    <td class="grey" title="{{ game.notes }}"></td>
-    {% else %}
-    <td class="collapse"></td>
-    {% endif %}
-
 
     {% if 'date' not in exclude %}
     {% if game.date %}

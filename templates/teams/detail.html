@@ -10,13 +10,54 @@
 
 {% block content %}
 
+<div id="team_info">
 
+<div id="team_logo"></div>
+
+<div id="team_data">
+<div>{{ team.name }}</div>
+</div>
+
+
+</div>
+
+
+<div id="tab_block">
+<ul id="tabs"></ul>
+</div>
+
+
+<div id="tab_wrapper">
+
+<div tab="summary">
+</div>
+
+
+<div tab="standings">
 {% standings_table competition_standings 'team,season' %}
 
 {% standings_table league_standings 'team' %}
+</div>
 
-{% stats_table stats 'team,competition,season' %}
+{% if game_leaders %}
+<div tab="stats">
+<div class="col">
+<div>game leaders</div>
+{% stats_table game_leaders 'team,competition,season' %}
+</div>
+{% endif %}
 
+{% if goal_leaders %}
+<div class="col">
+<div>goal leaders</div>
+{% stats_table goal_leaders 'team,competition,season' %}
+</div>
+{% endif %}
+
+</div>
+
+<div tab="games">
 {% games_table recent_games %}
+</div>
 
 {% endblock %}

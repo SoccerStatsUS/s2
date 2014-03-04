@@ -34,6 +34,15 @@ class BioManager(models.Manager):
         Dict mapping names to bio id's.
         """
         d = {}
+        for name, eid in self.get_query_set().values_list('name', 'id'):
+            d[name] = eid
+        return d
+
+    def bio_dictx(self):
+        """
+        Dict mapping names to bio id's.
+        """
+        d = {}
         for e in self.get_query_set():
             d[e.name] = e.id
         return d
@@ -65,6 +74,25 @@ class BioManager(models.Manager):
         return [k for (k, v) in d.items() if len(v) > 1]
 
 
+    def reverse_names(self):
+        """
+        Returns all bios with duplicate slugs.
+        """
+
+        # Do this in pairs.
+
+        #def rv(s):
+        #    first, last = s.split(' ', 1)
+        #    return "%s %s" % (last, first)
+
+        regular_names = set(self.get_query_set().values_list('name', flat=True))
+
+        reversed_names = set()
+        for e in self.get_query_set().filter(name__contains=' ').values_list('name', flat=True):
+            reversed_names.add(s)
+
+        tmp = regular_names.intersection(reversed_names)
+        final = set()
 
     def id_to_slug(self, pid):
         return Bio.objects.get(id=pid).slug
@@ -93,7 +121,7 @@ class Bio(models.Model):
     weight = models.IntegerField(null=True, blank=True)
 
     awards = generic.GenericRelation('awards.AwardItem')
-    #images = generic.GenericRelation('images.Image')
+    images = generic.GenericRelation('images.Image')
 
     #position = models.CharField(max_length=20)
 

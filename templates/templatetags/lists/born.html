@@ -1,0 +1,28 @@
+<div tab="births">
+
+<table>
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>bdate</th>
+      <th>gp</th>
+      <th>goals</th>
+    </tr>
+  </thead>
+{% for bio in city.birth_set.all %}
+{% with stat=bio.career_stat %}
+<tr>
+  <td><a href="{% url 'person_detail' bio.slug %}">{{ bio }}</a></td>
+  {% if bio.birthdate %}
+  <td><a href="{% url 'date_detail' bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+  <td>{{ stat.games_played }}</td>
+  <td>{{ stat.goals }}</td>
+
+</tr>
+{% endwith %}
+{% endfor %}
+</table>
+</div>

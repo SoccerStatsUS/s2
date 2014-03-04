@@ -11,6 +11,13 @@ class GoalManager(models.Manager):
 
     def unique_dict(self):
         d = {}
+        for pid, ogpid, tid, minute, date, eid in self.get_query_set().values_list("player", "own_goal_player", "team", "minute", "date", "id"):
+            key = (tid, pid, ogpid, minute, date)
+            d[key] = eid
+        return d
+
+    def unique_dict_old(self):
+        d = {}
         for e in self.get_query_set():
             player_id = own_goal_player_id = None
             if e.player:
@@ -48,6 +55,7 @@ class Goal(models.Model):
     team = models.ForeignKey(Team)
     #team_original_name = models.CharField(max_length=255)
     
+    # There should only be player.
     player = models.ForeignKey(Bio, null=True)
     own_goal_player = models.ForeignKey(Bio, null=True, related_name='own_goal_set')
 

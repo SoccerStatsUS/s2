@@ -10,7 +10,11 @@
 
 <div id="awards_index">
 {% for competition in ac %}
-    <div class="cmp"><a href="{% url 'competition_detail' competition.grouper.slug %}">{{ competition.grouper }}</a></div>
+    {% if competition.grouper %}
+<div class="cmp"><a href="{% url 'competition_detail' competition.grouper.slug %}">{{ competition.grouper }}</a></div> 
+    {% else %}
+    <div class="cmp">None</div>
+    {% endif %}
     <ul>
         {% for item in competition.list %}
           <li><a href="{% url 'award_detail' item.id %}">{{ item.name }}</a></li>

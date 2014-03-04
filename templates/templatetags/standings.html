@@ -1,7 +1,10 @@
 {% load datum_or_none %}
 {% load url from future %}
 
+{% if standings.exists %}
+
 {% with s0=standings.0 %}
+
 
 <table class="standings">
 
@@ -11,6 +14,7 @@
   {% if 'competition' not in exclude %}<th></th>{% endif %}
   {% if 'season' not in exclude %}<th></th>{% endif %}
 
+  <th>GP</th>
   <th>W</th>
   {% if s0.shootout_wins != None %}<th>SOW</th>{% endif %}
   <th>T</th>
@@ -58,6 +62,7 @@
   {% endif %}
 
 
+  <td>{{ standing.games }}</td>
   <td>{{ standing.wins }}</td>
   {% if s0.shootout_wins != None %}<td>{{ standing.shootout_wins|default_if_none:'' }}</td>{% endif %}
   <td>{{ standing.ties|default_if_none:'' }}</td>
@@ -87,3 +92,4 @@
 </table>
 
 {% endwith %}
+{% endif %}

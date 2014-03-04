@@ -12,6 +12,6 @@ def games_table(games, exclude=''):
     return {
         'games': games,
         'exclude': set(exclude.split(',')),
-        'has_round': not(len(rounds) == 1 and None in rounds),
-        'has_group': not(len(groups) == 1 and None in groups),
+        'has_round': len(rounds - set(['', None])) > 0,
+        'has_group': len(groups - set(['', None])) > 0,
         }

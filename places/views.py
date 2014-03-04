@@ -145,7 +145,7 @@ def stadium_detail(request, slug):
                 'average_attendance': average_attendance,
                 'attendance_game_count': attendance_game_count,
                 'standings': standings,
-                'recent_games': games[:25],
+                'recent_games': stadium.game_set.all()[:25],
                 }
 
         return render_to_response("places/stadium_detail.html",

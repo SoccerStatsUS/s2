@@ -60,6 +60,7 @@ def load1():
 
 
     # Simple sport data
+
     load_competitions()
     load_seasons()
 
@@ -78,12 +79,8 @@ def load1():
     load_drafts()
     load_positions()
 
-    
-
     # Complex game data
     load_games()
-
-
 
     load_goals()
     load_assists()
@@ -229,7 +226,7 @@ def load_places():
 @timer
 @transaction.commit_on_success
 def load_positions():
-    print "\nloading positions\n"
+    print "\nloading %s positions\n" % soccer_db.positions.count()
     for position in soccer_db.positions.find():
         position.pop('_id')
         position['team'] = Team.objects.find(position['team'], create=True)
@@ -239,11 +236,10 @@ def load_positions():
 @timer
 @transaction.commit_on_success
 def load_awards():
-    print
+
     print "\nloading awards\n"
     awards = set()
     award_dict = {}
-
 
     competition_getter = make_competition_getter()
     season_getter = make_season_getter()
@@ -338,6 +334,8 @@ def load_drafts():
                 'start': draft.get('start'),
                 'end': draft.get('end'),
                 })
+
+    print "\nloading %s picks\n" % soccer_db.picks.count()
                 
     # Create picks
     picks = []
@@ -407,7 +405,7 @@ def load_news():
 @timer
 @transaction.commit_on_success
 def load_teams():
-    print "loading teams"
+    print "loading %s teams" % soccer_db.teams.count()
 
     cg = make_city_getter()
     names = set()
@@ -561,7 +559,7 @@ def load_stadium_maps():
 @timer
 @transaction.commit_on_success
 def load_standings():
-    print "loading standings\n"
+    print "\n loading %s standings\n" % soccer_db.standings.count()
 
     team_getter = make_team_getter()
     competition_getter = make_competition_getter()
@@ -621,23 +619,15 @@ def load_standings():
 
     insert_sql("standings_standing", l)
 
-    # Handle this all in soccerdata?
-
-    l2 = []
+    # Handle this somewhere else.
     # Generate appropriate final standings.
+    print("Generating final standings.")
+    l2 = []
     for key in all_standings - final_standings:
-        #import pdb; pdb.set_trace()
         standing = max_game_standings[key].copy()
         #standing['final'] = True
         #standing['date'] = None
-
-        if standing['wins'] is not None and type(standing['wins']) != int:
-            import pdb; pdb.set_trace()
-
         l2.append(standing)
-
-    # Throwing weird data quality error.
-    #import pdb; pdb.set_trace()
 
     insert_sql("standings_standing", l2)
 
@@ -742,6 +732,8 @@ def load_games():
     city_getter = make_city_getter()
     country_getter = make_country_getter()
 
+    season_getter = make_season_getter()
+
     games = []
     game_sources = []
 
@@ -769,7 +761,12 @@ def load_games():
 
         competition_id = competition_getter(game['competition'])
         #game['competition'] = Competition.objects.get(id=game['competition'])
-        season_id = Season.objects.find(game['season'], competition_id).id
+
+        #season_id = Season.objects.find(game['season'], competition_id).id # this!!
+        season_id = season_getter(game['season'], competition_id)
+
+        if game['season'] is None:
+            import pdb; pdb.set_trace()
 
         team1_id = team_getter(game['team1'])
         team2_id = team_getter(game['team2'])
@@ -836,6 +833,10 @@ def load_games():
         else:
             shootout_winner = None
 
+        location = game.get('location', '')
+
+        location = location or ''
+
 
         games.append({
                 'date': game['date'],
@@ -876,7 +877,7 @@ def load_games():
                 'stadium_id': stadium_id,
                 'city_id': city_id,
                 'country_id': country_id,
-                'location': game.get('location', ''),
+                'location': location,
                 'notes': game.get('notes', ''),
                 'video': game.get('video', ''),
                 'attendance': attendance,
@@ -890,19 +891,10 @@ def load_games():
                 })
 
 
-    print "Inserting games results."
+    print "Inserting %s games results." % len(games)
     # Broke on massive attendance. 
     # Watch out for crazy integer values.
     insert_sql("games_game", games)
-
-    """
-    for game in games: 
-        try:
-            insert_sql("games_game", [game])
-        except:
-            import pdb; pdb.set_trace()
-            x = 5
-            """
 
     print "Inserting games sources."
     game_getter = make_game_getter()
@@ -955,6 +947,7 @@ def load_goals():
         # Coerce to date to match dict.
         d = datetime.date(goal['date'].year, goal['date'].month, goal['date'].day)
         game_id = game_getter(team_id, d)
+
         if not game_id:
             print "Cannot create %s" % goal
             return {}
@@ -974,13 +967,10 @@ def load_goals():
                 'penalty': goal.get('penalty', False),
                 }
 
-                                
-
+    i = 0 # if no goals.
     goals = []
-
-    i = 0
     for i, goal in enumerate(soccer_db.goals.find()):
-        if i % 5000 == 0:
+        if i % 50000 == 0:
             print i
 
         g = create_goal(goal)
@@ -989,7 +979,6 @@ def load_goals():
 
     
     print i
-
     insert_sql('goals_goal', goals)
         
 @timer
@@ -1043,12 +1032,12 @@ def load_assists():
 
     i = 0
     for i, goal in enumerate(soccer_db.goals.find()):
-        if i % 5000 == 0:
+        if i % 50000 == 0:
             print i
         create_assists(goal)
 
     print i
-
+    print len(assists)
     insert_sql('goals_assist', assists)
 
 
@@ -1057,7 +1046,6 @@ def load_assists():
 def load_game_stats():
     print "\nloading game stats\n"
 
-    print "\nloading getters\n"
     team_getter = make_team_getter()
     bio_getter = make_bio_getter()
     source_getter = make_source_getter()
@@ -1073,7 +1061,7 @@ def load_game_stats():
     l = []    
     i = 0
     for i, stat in enumerate(soccer_db.gstats.find(timeout=False)): # no timeout because this query takes forever.
-        if i % 5000 == 0:
+        if i % 50000 == 0:
             print i
 
         if stat['player'] == '':
@@ -1138,6 +1126,8 @@ def load_game_stats():
             'fouls_suffered': c2i('fouls_suffered'),
             'yellow_cards': c2i('yellow_cards'),
             'red_cards': c2i('red_cards'),
+            'on': c2i('on'),
+            'on': c2i('off'),
             'age': age,
             'result': result,
             })
@@ -1152,29 +1142,22 @@ def load_game_stats():
 @timer
 @transaction.commit_on_success
 def load_stats():
-    # Stats takes forever.
-
     print "\nloading stats\n"
 
     @timer
     def f():
-        return (make_team_getter(), 
-                make_bio_getter(),
-                make_competition_getter(),
-                make_season_getter(),
-                make_source_getter(),
-                )
+        return 
 
 
-    print "\nloading getters\n"
-    team_getter, bio_getter, competition_getter, season_getter, source_getter = f()
-
+    team_getter, bio_getter, competition_getter, season_getter, source_getter = (
+        make_team_getter(), make_bio_getter(), make_competition_getter(), make_season_getter(), make_source_getter(),)
+                
     print "\nprocessing\n"
 
     l = []    
     i = 0
     for i, stat in enumerate(soccer_db.stats.find(timeout=False)): # no timeout because this query takes forever.
-        if i % 5000 == 0:
+        if i % 50000 == 0:
             print i
 
         if stat['name'] == '':
@@ -1235,19 +1218,12 @@ def load_lineups():
     print "\nloading lineups\n"
     from django.db import connection
 
-
     team_getter = make_team_getter()
     bio_getter = make_bio_getter()
     game_getter = make_game_getter()
 
-    birthdate_dict = dict(Bio.objects.exclude(birthdate=None).values_list("id", "birthdate"))
-
-    games = {}
-    
     def create_appearance(a):
 
-        # Setting find functions to memoize should do the same job.
-        # Don't create all those extra references if not necessary.
         if not a['name']:
             print a
             return None
@@ -1260,7 +1236,6 @@ def load_lineups():
             print "Cannot create %s" % a
             return {}
 
-
         if a['on'] is not None and a['off'] is not None:
             try:
                 minutes = int(a['off']) - int(a['on'])
@@ -1269,7 +1244,6 @@ def load_lineups():
                 minutes = None
         else:
             minutes = None
-
 
         return {
             'team_id': team_id,
@@ -1289,7 +1263,7 @@ def load_lineups():
         if u:
             l.append(u)
 
-        if i % 5000 == 0:
+        if i % 50000 == 0:
             print i
 
     print i

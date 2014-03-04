@@ -6,6 +6,20 @@
 
 {% block content %}
 
+
+
+<ul>
+  {% for letter, standings in name_dict.items %}
+  <li>
+    <a class="letter_link" href="{% url 'team_name_fragment' letter %}">{{ letter }}</a>
+    {% for standing in standings %}
+    <a class="item" href="{% url 'team_detail' standing.team.slug %}">{{ standing.team }}</a>{% if forloop.last %}...{% else %} |{% endif %}
+    {% endfor %}
+  </li>
+  {% endfor  %}
+</ul>
+
+{% comment %}
 <ul>
   {% for letter, teams in name_dict.items %}
   {% if teams.exists %}
@@ -18,6 +32,7 @@
   {% endif %}
   {% endfor %}
 </ul>
+{% endcomment %}
 
 
 {% endblock %}
