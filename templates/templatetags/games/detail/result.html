@@ -24,6 +24,14 @@
     {% if game.location %}<li>in {{ game.location }}</li>{% endif %}
     {% endif %}
 
+  </ul>
+
+
+</div>
+
+<div id="game_score">
+
+
     {% if game.referee %}
     <li>referee: <a href="{% url 'person_detail' game.referee.slug %}">{{ game.referee }}</a></li>
     {% endif %}
@@ -31,12 +39,7 @@
     {% if game.attendance %}
     <li>attendance: {{ game.attendance }}</li>
     {% endif %}
-  </ul>
 
-
-</div>
-
-<div id="game_score">
   <div id="team_results">
 
 
