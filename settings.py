@@ -61,7 +61,7 @@ PRODUCTION_SITES = (
 
 
 TEMPLATE_CONTEXT_PROCESSORS += (
-    'bios.context_processors.debug_mode',
+    #'bios.context_processors.debug_mode',
     'django.core.context_processors.request',
 
 )    
@@ -153,8 +153,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'minidetector.Middleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
+    #'minidetector.Middleware',
 
 )
 
@@ -176,7 +176,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'gunicorn',
-    'debug_toolbar',
+    #'debug_toolbar',
     'awards',
     'bios',
     'competitions',
