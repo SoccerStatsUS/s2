@@ -3,7 +3,7 @@ from django import template
 register = template.Library()
 
 @register.inclusion_tag('templatetags/stats.html')
-def stats_table(stats, exclude=''):
+def stats_table(stats, exclude='', count=None):
 
     # Can't filter a query once a slice has been taken.
     # The first try might (?) be faster for large, unsliced stats.

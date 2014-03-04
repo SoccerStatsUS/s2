@@ -1,5 +1,4 @@
 from collections import OrderedDict, Counter
-
 from django.db.models import Sum, Q
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
@@ -71,7 +70,7 @@ def person_index(request):
 
     name_dict = OrderedDict()
     for letter in letters:
-        name_dict[letter] = stats.filter(player__name__istartswith=letter)[:5]
+        name_dict[letter] = stats.filter(player__name__istartswith=letter)[:10]
 
 
     #most_games = CareerStat.objects.exclude(games_played=None).order_by('-games_played')[:25]
@@ -120,8 +119,8 @@ def person_detail_abstract(request, bio):
     team_stats = bio.team_stats().order_by('-games_played')
     #league_stats = Stat.objects.filter(player=bio).filter(competition__ctype='League').order_by('season')
     league_stats = Stat.objects.filter(player=bio).order_by('season')
-    domestic_stats = league_stats.filter(team__international=False)
-    international_stats = league_stats.filter(team__international=True)
+    domestic_stats = league_stats.filter(team__international=False).reverse()
+    international_stats = league_stats.filter(team__international=True).reverse()
     
     context = {
         "bio": bio,

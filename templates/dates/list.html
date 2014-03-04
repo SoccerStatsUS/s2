@@ -2,6 +2,7 @@
 {% load url from future %}
 {% load standings %}
 {% load games %}
+{% load stats %}
 
 {% if date %}
 {% block title %}US Soccer Results and Standings for {{ date }}{% endblock %}
@@ -97,7 +98,7 @@ d3.select(self.frameElement).style("height", "2910px");
 
 {% block content %}
 
-<div id="control-bar">
+<div id="date_block">
 
 <div class="white-title center">
 {% if date %}
@@ -149,7 +150,14 @@ d3.select(self.frameElement).style("height", "2910px");
 {% endif %}
 
 
+{% if stats %}
+<div tab="stats">
+{% stats_table stats %}
+</div>
+{% endif %}
 
+
+{% if news %}
 <div tab="news">
 
 <table>
@@ -165,6 +173,7 @@ d3.select(self.frameElement).style("height", "2910px");
 </table>
 
 </div>
+{% endif %}
 
 
 
@@ -213,8 +222,9 @@ d3.select(self.frameElement).style("height", "2910px");
 {% endif %}
 
 
-{% if hires.exists %}
-<div tab="hired">
+{% if hires.exists or fires.exists %}
+<div tab="transactions">
+
 <table>
 {% for position in hires %}
 <tr>
@@ -226,12 +236,9 @@ d3.select(self.frameElement).style("height", "2910px");
 </tr>
 {% endfor %}
 </table>
-</div>
-{% endif %}
 
 
-{% if fires.exists %}
-<div tab="fired">
+
 <table>
 {% for position in fires %}
 <tr>
@@ -243,8 +250,10 @@ d3.select(self.frameElement).style("height", "2910px");
 </tr>
 {% endfor %}
 </table>
+
 </div>
 {% endif %}
+
 
 </div>
 

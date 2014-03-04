@@ -10,7 +10,6 @@ from django.template.defaultfilters import slugify
 
 
 
-"""
 class Image(models.Model):
 
     filename = models.CharField(max_length=200, unique=True)
@@ -32,4 +31,4 @@ class Image(models.Model):
         return "/static/images/bios/mls/" + self.filename
 
 
-"""
+

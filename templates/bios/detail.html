@@ -21,21 +21,77 @@
 
 {% include "bios/helpers/summary.html" %}
 
-
-
-
+<div id="tab_block">
 <ul id="tabs"></ul>
+</div>
+
+
 
 <div id="tab_wrapper">
+
+<div tab="summary">
+
+  games: {{ career_stat.games_played }}
+  goals: {{ career_stat.goals }}
+
+
+{% if bio.height or bio.weight %}
+<div>height: {% if bio.height %}{{ bio.height }}cm{% endif %}</div>
+<div>weight: {% if bio.weight %}{{ bio.weight }}kg{% endif %}</div>
+{% endif %}
+
+{% if bio.birthdate %}
+<div>birthdate: <a href="{% url 'date_detail' bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a></div>
+<div>age: {{ bio.age_years|floatformat:1 }}</div>
+{% endif %}
+  
+{% if bio.birthplace %}
+<div>birthplace: <a href="{% url 'city_detail' bio.birthplace.slug %}">{{ bio.birthplace }}</a></div>
+{% endif %}
+
+{% if bio.nationality %}
+<div>nationality: {{ bio.nationality }}</div>
+{% endif %}
+
+{% if bio.last_game and bio.last_game != bio.first_game %}
+<div>first game: <a href="{% url 'game_detail' bio.first_game.id %}">{{ bio.first_game.date }}</a></div>
+{% endif %}
+
+{% if bio.last_game and bio.last_game != bio.first_game %}
+<div>last game: <a href="{% url 'game_detail' bio.last_game.id %}">{{ bio.last_game.date }}</a></div>
+{% endif %}
+
+
+</div>
+
+
 
 
 {% if domestic_stats or international_stats or coach_stats %}
 <div tab="stats">
 
+<ul id="subtabs"></ul>
+<div id="subtab_wrapper">
+
+<div tab="domestic">
 {% stats_table domestic_stats 'player' %}
+</div>
 
+{% if international_stats %}
+<div tab="international">
+{% stats_table international_stats 'player' %}
+</div>
+{% endif %}
 
-{{ coach_stats }}
+<div tab="team">
+{% stats_table team_stats 'player' %}
+</div>
+
+<div tab="competition">
+{% stats_table competition_stats 'player' %}
+</div>
+
+</div>
 
 
 </div>
@@ -46,9 +102,10 @@
 <div tab="games">
 <a href="{% url 'person_detail_games' bio.slug %}">all games</a>
 
+{% include "templatetags/stats/game_list.html" with stats=recent_game_stats %}
+
 {# "templatetags/stats/game_list.html" with stats=recent_game_stats #}
 {# {% stats_table recent_game_stats %} #}
-
 
 
 </div>
@@ -66,9 +123,8 @@
 {% if bio.awards.exists or picks.exists or bio.salary_set.exists %}
 <div tab="info">
 
-<ul id="sub-tabs"></ul>
-
-<div id="sub-tab-wrapper">
+<ul id="subtabs"></ul>
+<div id="subtab_wrapper">
 
 
 {% if bio.awards.exists %}

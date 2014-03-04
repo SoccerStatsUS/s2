@@ -137,7 +137,16 @@ class GameStat(AbstractStat):
     on = models.IntegerField(null=True)
     off = models.IntegerField(null=True)
 
+    # What order the player is the lineup. (Matt Reis, Avery John, Michael Parkhurst) -> Michael Parkhurst, 3
+    order = models.IntegerField(null=True)
+
     result = models.CharField(max_length=5)
+
+
+    class Meta:
+        ordering = ('game', 'order', 'on', '-id' )
+        pass
+
 
     def score_or_result(self):
         if self.team == self.game.team1:

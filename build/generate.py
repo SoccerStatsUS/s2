@@ -31,7 +31,10 @@ def generate():
     # Generate coaching stats!
     #generate_position_standings()
     #generate_position_stats()
-    generate_coach_stats_for_competitions()
+
+
+    # This broke unexpectedly for Premier League coach stats.
+    #generate_coach_stats_for_competitions()
 
     #generate_game_data_quality()
 
@@ -308,7 +311,9 @@ def generate_career_stats():
         'competition_id': None,
         'season_id': None,
         }
-    generate_stats_generic("stats_careerstat", Stat.objects.filter(competition__code='soccer'), make_key, update)    
+    
+    #generate_stats_generic("stats_careerstat", Stat.objects.filter(competition__code='soccer'), make_key, update)    
+    generate_stats_generic("stats_careerstat", Stat.objects.all(), make_key, update)    
     #generate_career_plus_minus()
         
 @timer

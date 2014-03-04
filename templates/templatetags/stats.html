@@ -45,7 +45,8 @@
   <td><a href="{% url 'person_detail' stat.player.slug %}">{{ stat.player }}</a></td>
   {% else %}<td></td>{% endif %}{% endif %}
 
-  {% if 'team' not in exclude %}{% if stat.team.slug %}
+  {% if 'team' not in exclude %}
+  {% if stat.team.slug %}
   <td><a href="{% url 'team_detail' stat.team.slug %}">{{ stat.team }}</a></td>
   {% else %}<td></td>{% endif %}{% endif %}
 

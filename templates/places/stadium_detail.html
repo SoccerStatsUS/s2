@@ -6,10 +6,22 @@
 
 {% block content %}
 
+<div id="stadium_block">
+
 <h3>{{ stadium.name }}</h3>
 
+</div>
 
 
+
+
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+
+
+<div tab="summary">
 
 {% if stadium.address %}
 <div><a href="{% url 'city_detail' stadium.city.slug %}">{{ stadium.address }}, {{ stadium.city }}</a></div>
@@ -52,12 +64,8 @@
 {% if attendance_game_count %}
 <div>Average attendance: {{ average_attendance|floatformat }} ({{ attendance_game_count }} games)</div>
 {% endif %}
+</div>
 
-
-
-<ul id="tabs"></ul>
-
-<div id="tab_wrapper">
 
 
 <div tab="standings">
@@ -66,31 +74,11 @@
 
 </div>
 
+<div tab="games">
+
 {% games_table recent_games 'stadium' %}
 
-{% comment %}
-{% if stadium.game_set.exists %}
-<div tab="games">
-{% include "templatetags/games.html" with games=stadium.game_set.all %}
 </div>
-{% endif %}
-{% endcomment %}
-
-{% comment %}  
-{% if stadium.goal_set.exists %}
-<div tab="goals">
-{% include "templatetags/goals/goals.html" with goals=stadium.goal_set.all %}
-</div>
-{% endif %}
-{% endcomment %}
-
-{% comment %}
-{% if stadium.appearance_set.exists %}
-<div tab="lineups">
-{% include "templatetags/appearance.html" with appearances=stadium.appearance_set.all %}
-</div>
-{% endif %}
-{% endcomment %}
 
 
 </div>

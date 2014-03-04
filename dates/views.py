@@ -11,6 +11,7 @@ from news.models import FeedItem
 from places.models import City, Stadium
 from positions.models import Position
 from standings.models import Standing
+from stats.models import GameStat
 
 
 
@@ -179,6 +180,8 @@ def date_detail(request, year, month, day):
 
     next_date_tuple = previous_date_tuple = None
 
+    
+
     previous_game = Game.objects.filter(date__lt=d)
     if previous_game.exists():
         previous_date = previous_game[0].date
@@ -188,6 +191,8 @@ def date_detail(request, year, month, day):
     if next_game.exists():
         next_date = next_game[0].date
         next_date_tuple = (next_date.year, next_date.month, next_date.day)
+
+    stats = GameStat.objects.filter(game__in=games)
 
     context = {
         'games': games.select_related(),
@@ -200,6 +205,7 @@ def date_detail(request, year, month, day):
         'stadiums': stadiums[:20],
         'standings': standings,
         'news': news,
+        'stats': stats,
         }
     return render_to_response("dates/list.html",
                               context,
@@ -223,12 +229,13 @@ def day_detail(request, month, day):
     deaths = Bio.objects.filter(deathdate__month=month, deathdate__day=day).order_by('deathdate')
     hires = Position.objects.filter(start__month=month, start__day=day)
     fires = Position.objects.filter(end__month=month, end__day=day)
+
+
     context = {
         'games': games.select_related(),
         'births': births,
         'hires': hires,
         'fires': fires,
-
         'day_string': day_string,
         'next_day': next_day,
         'previous_day': previous_day,

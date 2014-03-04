@@ -236,11 +236,10 @@ def load_positions():
 @timer
 @transaction.commit_on_success
 def load_awards():
-    print
+
     print "\nloading awards\n"
     awards = set()
     award_dict = {}
-
 
     competition_getter = make_competition_getter()
     season_getter = make_season_getter()
@@ -336,7 +335,7 @@ def load_drafts():
                 'end': draft.get('end'),
                 })
 
-    print "\nloading picks\n"
+    print "\nloading %s picks\n" % soccer_db.picks.count()
                 
     # Create picks
     picks = []
@@ -766,6 +765,9 @@ def load_games():
         #season_id = Season.objects.find(game['season'], competition_id).id # this!!
         season_id = season_getter(game['season'], competition_id)
 
+        if game['season'] is None:
+            import pdb; pdb.set_trace()
+
         team1_id = team_getter(game['team1'])
         team2_id = team_getter(game['team2'])
 
@@ -831,6 +833,10 @@ def load_games():
         else:
             shootout_winner = None
 
+        location = game.get('location', '')
+
+        location = location or ''
+
 
         games.append({
                 'date': game['date'],
@@ -871,7 +877,7 @@ def load_games():
                 'stadium_id': stadium_id,
                 'city_id': city_id,
                 'country_id': country_id,
-                'location': game.get('location', ''),
+                'location': location,
                 'notes': game.get('notes', ''),
                 'video': game.get('video', ''),
                 'attendance': attendance,
@@ -941,6 +947,7 @@ def load_goals():
         # Coerce to date to match dict.
         d = datetime.date(goal['date'].year, goal['date'].month, goal['date'].day)
         game_id = game_getter(team_id, d)
+
         if not game_id:
             print "Cannot create %s" % goal
             return {}
@@ -960,9 +967,10 @@ def load_goals():
                 'penalty': goal.get('penalty', False),
                 }
 
+    i = 0 # if no goals.
     goals = []
     for i, goal in enumerate(soccer_db.goals.find()):
-        if i % 5000 == 0:
+        if i % 50000 == 0:
             print i
 
         g = create_goal(goal)
@@ -1024,7 +1032,7 @@ def load_assists():
 
     i = 0
     for i, goal in enumerate(soccer_db.goals.find()):
-        if i % 5000 == 0:
+        if i % 50000 == 0:
             print i
         create_assists(goal)
 
@@ -1038,7 +1046,6 @@ def load_assists():
 def load_game_stats():
     print "\nloading game stats\n"
 
-    print "\nloading getters\n"
     team_getter = make_team_getter()
     bio_getter = make_bio_getter()
     source_getter = make_source_getter()
@@ -1054,7 +1061,7 @@ def load_game_stats():
     l = []    
     i = 0
     for i, stat in enumerate(soccer_db.gstats.find(timeout=False)): # no timeout because this query takes forever.
-        if i % 5000 == 0:
+        if i % 50000 == 0:
             print i
 
         if stat['player'] == '':
@@ -1119,6 +1126,8 @@ def load_game_stats():
             'fouls_suffered': c2i('fouls_suffered'),
             'yellow_cards': c2i('yellow_cards'),
             'red_cards': c2i('red_cards'),
+            'on': c2i('on'),
+            'on': c2i('off'),
             'age': age,
             'result': result,
             })
@@ -1140,7 +1149,6 @@ def load_stats():
         return 
 
 
-    print "\nloading getters\n"
     team_getter, bio_getter, competition_getter, season_getter, source_getter = (
         make_team_getter(), make_bio_getter(), make_competition_getter(), make_season_getter(), make_source_getter(),)
                 
@@ -1149,7 +1157,7 @@ def load_stats():
     l = []    
     i = 0
     for i, stat in enumerate(soccer_db.stats.find(timeout=False)): # no timeout because this query takes forever.
-        if i % 5000 == 0:
+        if i % 50000 == 0:
             print i
 
         if stat['name'] == '':
@@ -1255,7 +1263,7 @@ def load_lineups():
         if u:
             l.append(u)
 
-        if i % 5000 == 0:
+        if i % 50000 == 0:
             print i
 
     print i

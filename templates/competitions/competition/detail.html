@@ -2,6 +2,7 @@
 {% load datum_or_none %}
 {% load standings %}
 {% load seasons %}
+{% load stats %}
 {% load games %}
 
 {% block title %}{{ competition.name }} Soccer History {% endblock %}
@@ -9,14 +10,38 @@
 
 {% block content %}
 
+<div id="competition_block">
 
-<h3>{{ competition }}</h3>
+  <h3>{{ competition }}</h3>
 
-{% seasons_table competition.season_set.all %}
+</div>
 
+<div id="tab_block">
+<ul id="tabs"></ul>
+</div>
+
+
+<div id="tab_wrapper">
+
+
+<div tab="seasons">
+{% seasons_table competition.season_set.reverse %}
+</div>
+
+<div tab="stats">
+{% stats_table stats 'team,season'%}
+</div>
+
+
+<div tab="standings">
 {% standings_table big_winners 'competition,season' %}
+</div>
 
+<div tab="games">
 {% games_table games 'competition,referee,attendance' %}
+</div>
+
+</div>
 
 
 {% endblock %}

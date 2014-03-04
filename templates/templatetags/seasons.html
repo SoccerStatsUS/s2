@@ -7,7 +7,7 @@
     {% if has_mvp %}<th>MVP</th>{% endif %}
     <th>golden boot</th>
     <th>games</th>
-    <th>goals</th>
+    <th title="goals per game">gpg</th>
     {% if has_attendance %}<th title="average attendance">att.</th>{% endif %}
   </tr>
 
@@ -38,7 +38,7 @@
 
     <td><a href="{% url 'season_games' season.competition.slug season.slug %}">{{ season.max_games }}</a></td>
     {% if season.goals %}
-    <td><a href="{% url 'season_goals' season.competition.slug season.slug %}">{{ season.goals }}</a></td>
+    <td><a href="{% url 'season_goals' season.competition.slug season.slug %}">{{ season.goals_per_game|floatformat:2 }} <em>({{ season.goals }})</em></a></td>
     {% else %}
     <td></td>
     {% endif %}

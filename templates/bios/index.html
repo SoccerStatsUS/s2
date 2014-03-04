@@ -8,7 +8,7 @@
 <ul>
   {% for letter, stats in name_dict.items %}
   {% if stats.exists %}
-  <li class="alphabet">
+  <li>
     <a class="letter_link" href="{% url 'bio_name_fragment' letter %}">{{ letter }}: </a>
     {% for stat in stats %}
     {% if stat.player.hall_of_fame %}<strong>{% endif %}

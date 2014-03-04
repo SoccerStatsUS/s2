@@ -8,6 +8,8 @@
 
 {% block content %}
 
+<h3><a href="{% url 'team_detail' team.slug %}">{{ team.name }}</a></h3>
+
 
 {% comment %}
 <form method="GET" action=".">

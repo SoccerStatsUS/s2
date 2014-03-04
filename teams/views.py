@@ -106,7 +106,7 @@ def team_standings(request):
 
 
 
-def team_list_generic(request, team_list=None, standing_type=None):
+def team_list_generic(request, team_list=None, standing_type=None, ):
 
     if team_list is None:
         standings = Standing.objects.filter(competition=None).order_by("-wins")[:1000]
@@ -182,17 +182,18 @@ def team_detail(request, team_slug):
     today = datetime.date.today()
 
     stats = TeamStat.objects.filter(team=team)
-    if stats.exclude(minutes=None).exists():
-        stats = stats.exclude(minutes=None).order_by('-minutes')
-    elif stats.exclude(games_played=None).exists():
-        stats = stats.exclude(games_played=None).order_by('-games_played')
+    goal_leaders = game_leaders = None
+    if stats.exclude(games_played=None).exists():
+        stats = game_leaders = stats.exclude(games_played=None).order_by('-games_played')
+        goal_leaders = stats.exclude(goals=None).order_by('-goals')
     elif stats.exclude(goals=None).exists():
-        stats = stats.exclude(goals=None).order_by('-goals')
+        stats = goal_leaders = stats.exclude(goals=None).order_by('-goals')
     else:
         pass
 
+
     competition_standings = Standing.objects.filter(team=team, season=None).order_by('-wins')
-    league_standings = Standing.objects.filter(team=team, season__competition__ctype='League').order_by('season').filter(final=True)
+    league_standings = Standing.objects.filter(team=team, season__competition__ctype='League').filter(final=True).reverse()
     recent_picks = team.pick_set.exclude(player=None).order_by('-draft__season', 'number')[:10]
 
     draftees = team.former_team_set.exclude(player=None).order_by('-draft__season', 'number')[:10]
@@ -221,6 +222,9 @@ def team_detail(request, team_slug):
         'current_staff': current_staff,
         'recent_picks': recent_picks,
         'draftees': draftees,
+        'game_leaders': game_leaders,
+        'goal_leaders': goal_leaders,
+        'gx': True,
         }
 
     return render_to_response("teams/detail.html",
