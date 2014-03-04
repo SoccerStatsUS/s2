@@ -35,11 +35,13 @@
 {% endcomment %}
 
 
+{% if competition_standings or league_standings %}
 <div tab="standings">
 {% standings_table competition_standings 'team,season' %}
 
 {% standings_table league_standings 'team' %}
 </div>
+{% endif %}
 
 {% if game_leaders %}
 <div tab="stats">
