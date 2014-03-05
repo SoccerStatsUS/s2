@@ -1056,9 +1056,7 @@ def load_game_stats():
     game_result_getter = make_game_result_getter()
 
     birthdate_dict = dict(Bio.objects.exclude(birthdate=None).values_list("id", "birthdate"))
-
-
-
+    
     print "\nprocessing"
 
     l = []    
@@ -1130,7 +1128,7 @@ def load_game_stats():
             'yellow_cards': c2i('yellow_cards'),
             'red_cards': c2i('red_cards'),
             'on': c2i('on'),
-            'on': c2i('off'),
+            'off': c2i('off'),
             'age': age,
             'result': result,
             })
