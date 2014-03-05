@@ -1098,7 +1098,7 @@ def load_game_stats():
             continue
 
 
-        def c2i(key):
+        def c2i(key, coerce_none=True):
             # Coerce an integer
 
             if key in stat and stat[key] != None:
@@ -1127,8 +1127,8 @@ def load_game_stats():
             'fouls_suffered': c2i('fouls_suffered'),
             'yellow_cards': c2i('yellow_cards'),
             'red_cards': c2i('red_cards'),
-            'on': c2i('on'),
-            'off': c2i('off'),
+            'on': c2i('on', False),
+            'off': c2i('off', False),
             'age': age,
             'result': result,
             })
