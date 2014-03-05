@@ -373,7 +373,7 @@ class Season(models.Model):
             return Game.objects.filter(season=self).aggregate(Sum('goals'))['goals__sum']
 
     def goals_per_game(self):
-        return self.goals() / self.max_games()
+        return self.goals() / float(self.max_games())
 
     def total_attendance(self):
         games = self.game_set.exclude(attendance=None)
@@ -543,29 +543,6 @@ class Season(models.Model):
             
         super(Season, self).save(*args, **kwargs)
 
-
-
-    def goals_per_game(self): 
-        if self.standing_set.exists():
-            data = self.standing_set.values_list('goals_for', 'games')
-            goals = sum([e[0] for e in data if e[0]])
-            games = sum([e[1] for e in data])
-            if games == 0:
-                return 0
-
-        else:
-            from games.models import Game
-            goals = self.goals()
-            games = Game.objects.filter(season=self).count()
-
-        # Why is goals ever none?
-        if goals is None:
-            goals = 0
-
-        if games in (None, 0):
-            return None
-
-        return 2 * float(goals) / games
 
 
     def goal_distribution(self, ceiling=5):
