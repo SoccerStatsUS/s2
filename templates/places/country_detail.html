@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}{{ country }}{% endblock %}
+
+{% load datum_or_none %}
+{% load games %}
+
+{% block content %}
+
+<h2>{{ country }}</h2>
+
+<h4>{{ country.population }}</h4>
+
+
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+{% if competitions %}
+<div tab="competitions">
+
+<table>
+
+  <thead>
+    <tr>
+      <th></th>
+      <th>level</th>
+      <th>type</th>
+      <th>seasons</th>
+      <th>began</th>
+      <th>last</th>
+    </tr>
+  </thead>
+
+
+{% for competition in competitions %}
+<tr>
+  <td><a href="{% url 'competition_detail' competition.slug %}">{{ competition }}</a></td>
+  <td>{{ competition.level }}</td>
+  <td>{{ competition.ctype }}</td>
+  <td>{{ competition.season_set.count }}</td>
+  {% if competition.first_season %}
+  <td><a href="{% url 'season_detail' competition.slug competition.first_season.slug %}">{{ competition.first_season.name }}</td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
+  {% if competition.last_season %}
+  <td><a href="{% url 'season_detail' competition.slug competition.last_season.slug %}">{{ competition.last_season.name }}</td>
+  {% else %}
+  <td></td>
+  {% endif %}
+
+</tr>
+{% endfor %}
+</table>
+
+</div>
+{% endif %}
+
+
+{% if stadiums %}
+<div tab="stadiums">
+<table>
+{% for stadium in stadiums %}
+<tr>
+  <td><a href="{% url 'stadium_detail' stadium.slug %}">{{ stadium }}</a></td>
+  {% datum_or_grey stadium.opened %}
+  {% datum_or_grey stadium.capacity %}
+  {% datum_or_grey stadium.cost %}
+</tr>
+{% endfor %}
+</table>
+</div>
+{% endif %}
+
+{% if country.games.exists %}
+<div tab="games">
+{% games_table country.games.all %}
+</div>
+{% endif %}
+
+
+
+{% if country.games.exists %}
+<div tab="cities">
+  <ul>
+    {% for city in cities %}
+    <li><a href="{% url 'city_detail' city.slug %}">{{ city }}</a></li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+
+{% if births %}
+<div tab="people">
+
+<table>
+
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>birthplace</th>
+      <th>birthdate</th>
+      <th>gp</th>
+      <th>g</th>
+    </tr>
+  </thead>
+
+{% for bio in births %}
+{% with cs=bio.career_stat %}
+<tr>
+  <td><a href="{% url 'person_detail' bio.slug %}">{{ bio }}</a></td>
+  <td><a href="{% url 'city_detail' bio.birthplace.slug %}">{{ bio.birthplace }}</a></td>
+  {% if bio.birthdate %}
+  <td><a href="{% url 'date_detail' bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a></td>
+  {% else %}
+  <td></td>
+  {% endif %}
+  <td>{{ cs.games_played }}</td>
+  <td>{{ cs.goals }}</td>
+
+</tr>
+{% endwith %}
+{% endfor %}
+</table>
+
+</div>
+{% endif %}
+
+{% endblock %}
