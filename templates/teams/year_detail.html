@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% load result_chart %}
+
+
+{% load stats %}
+{% load games %}
+{% load standings %}
+
+{% block content %}
+
+<h2><a href="{% url 'team_detail' team.slug %}">{{ team.name }}</a></h2>
+
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+
+<div tab="summary">
+{% if standings %}
+{% standings_table standings %}
+{% endif %}
+
+{% comment %}
+{% team_result_data team games %}
+{% endcomment %}
+
+</div>
+
+{% if games.exists %}
+<div tab="games">
+{% games_table games %}
+</div>
+{% endif %}
+
+{% if stats %}
+<div tab="stats">
+{% stats_table stats 'team,season' %}
+</div>
+{% endif %}
+
+{% comment %}
+<div tab="chart">
+{% include "templatetags/player_chart.html" %}
+</div>
+{% endcomment %}
+
+</div>
+
+{% endblock %}
