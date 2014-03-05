@@ -201,7 +201,7 @@ def person_detail_referee_games(request, slug):
         'form': form,
         'games': games,
         }
-    return render_to_response("bios/detail_ref_games.html",
+    return render_to_response("bios/referee.html",
                               context,
                               context_instance=RequestContext(request)
                               )   
