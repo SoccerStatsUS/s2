@@ -1,5 +1,14 @@
 body {}
 
+td.w { background-color: green; }
+td.l { background-color: red; }
+td.t { background-color: yellow; }
+td.date { width: 200px;}
+
+td.international { background-color: #cdf }
+td.domestic { background-color: #fec;}
+td.friendly { background-color: #fff;}
+
 html, body {
     margin: 0;
     padding: 0;

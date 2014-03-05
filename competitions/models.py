@@ -231,6 +231,16 @@ class Competition(models.Model):
         super(Competition, self).save(*args, **kwargs)
 
 
+    def category(self):
+        if self.international:
+            return "international"
+        
+        elif self.ctype == '':
+            return "friendly"
+
+        else:
+            return "domestic"
+
 
     def alltime_standings(self):
         from standings.models import Standing
