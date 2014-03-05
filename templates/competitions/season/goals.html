@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load datum_or_none %}
+
+{% block title %}{{ competition.name }} Soccer History {% endblock %}
+{% block metadescription %}{{ competition.name }} soccer stats with standings, results, lineups, awards, all-time stats...{% endblock %}
+
+{% block extrahead %}
+<style>
+.background {
+  fill: #eee;
+}
+
+line {
+  stroke: #fff;
+}
+
+.red {
+  fill: red;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<h2 class="headline">
+{% if season.previous_season %}<a href="{% url 'season_goals' season.competition.slug season.previous_season.slug %}">←</a>{% endif %}
+<a href="{% url 'season_detail' season.competition.slug season.slug %}">{{ season }}</a>
+{% if season.next_season %}<a href="{% url 'season_goals' season.competition.slug season.next_season.slug %}">→</a>{% endif %}
+</h2>
+
+
+
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+{% if goals %}
+<div tab="list">
+{% include "templatetags/goals/goals.html" %}
+</div>
+{% endif %}
+
+<div tab="charts">
+
+
+
+<div id="goal_distribution">
+</div>
+
+
+<script type="text/javascript">
+
+goalDistribution("#goal_distribution", {{ goal_distribution|safe }})
+
+
+
+
+
+
+
+
+</script>
+
+
+</div>
+
+
+</div>
+
+
+{% endblock %}

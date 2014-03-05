@@ -3,6 +3,7 @@
 <table id="game_lineup">
   <tr>
     <th>on</th>
+    <th>off</th>
     <th>min</th>
     <th>g</th>
     <th>a</th>
@@ -11,6 +12,7 @@
     <th>a</th>    
     <th>g</th>    
     <th>min</th>
+    <th>off</th>
     <th>on</th>
 
   </tr>
@@ -20,6 +22,7 @@
   <tr>
     {% if a %}
     {% datum_or_grey a.on %}
+    {% datum_or_grey a.off %}
     {% datum_or_grey a.minutes %}
     {% datum_or_grey a.goals %}
     {% datum_or_grey a.assists %}
@@ -46,6 +49,7 @@
     {% datum_or_grey b.assists %}
     {% datum_or_grey b.goals %}
     {% datum_or_grey b.minutes %}
+    {% datum_or_grey b.off %}
     {% datum_or_grey b.on %}
     {% else %}
     <td class="grey"></td>

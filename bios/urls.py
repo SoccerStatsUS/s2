@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls import patterns, url
 
 urlpatterns = patterns('bios.views', 
                        url(r'^$',
@@ -39,7 +39,7 @@ urlpatterns = patterns('bios.views',
                            'person_detail_games',
                            name='person_detail_games'),
 
-                       url(r'^(?P<slug>[a-z0-9-]+)/ref-games/$',
+                       url(r'^(?P<slug>[a-z0-9-]+)/referee/$',
                            'person_detail_referee_games',
                            name='person_detail_referee_games'),
 

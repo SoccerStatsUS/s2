@@ -29,34 +29,46 @@
 
 <div id="tab_wrapper">
 
+{% comment %}
 <div tab="summary">
 </div>
+{% endcomment %}
 
 
+{% if competition_standings or league_standings %}
 <div tab="standings">
 {% standings_table competition_standings 'team,season' %}
 
 {% standings_table league_standings 'team' %}
 </div>
+{% endif %}
+
+{% if game_leaders or goal_leaders %}
+<div tab="stats">
+
+<div>
+<a href="{% url 'team_stats' team.slug %}">all stats</a>
+</div>
 
 {% if game_leaders %}
-<div tab="stats">
 <div class="col">
 <div>game leaders</div>
-{% stats_table game_leaders 'team,competition,season' %}
+{% stats_table game_leaders 'team,competition,season' 15 %}
 </div>
 {% endif %}
 
 {% if goal_leaders %}
 <div class="col">
 <div>goal leaders</div>
-{% stats_table goal_leaders 'team,competition,season' %}
+{% stats_table goal_leaders 'team,competition,season' 15 %}
 </div>
 {% endif %}
 
 </div>
+{% endif %}
 
 <div tab="games">
+<a href="{% url 'team_games' team.slug %}">all games</a>
 {% games_table recent_games %}
 </div>
 

@@ -29,6 +29,53 @@
 
 <div id="tab_wrapper">
 
+
+{% if domestic_stats or international_stats or coach_stats %}
+<div tab="stats">
+
+<ul id="subtabs"></ul>
+<div id="subtab_wrapper">
+
+{% if domestic_stats %}
+<div tab="domestic">
+{% stats_table domestic_stats 'player' %}
+</div>
+{% endif %}
+
+{% if international_stats %}
+<div tab="international">
+{% stats_table international_stats 'player' %}
+</div>
+{% endif %}
+
+<div tab="team">
+{% stats_table team_stats 'player' %}
+</div>
+
+<div tab="competition">
+{% stats_table competition_stats 'player' %}
+</div>
+
+</div>
+
+
+</div>
+{% endif %}
+
+
+{% if recent_game_stats %}
+<div tab="games">
+<a href="{% url 'person_detail_games' bio.slug %}">all games</a>
+
+{% include "templatetags/stats/game_list.html" with stats=recent_game_stats %}
+
+{# "templatetags/stats/game_list.html" with stats=recent_game_stats #}
+{# {% stats_table recent_game_stats %} #}
+
+
+</div>
+{% endif %}
+
 <div tab="summary">
 
   games: {{ career_stat.games_played }}
@@ -67,49 +114,6 @@
 
 
 
-{% if domestic_stats or international_stats or coach_stats %}
-<div tab="stats">
-
-<ul id="subtabs"></ul>
-<div id="subtab_wrapper">
-
-<div tab="domestic">
-{% stats_table domestic_stats 'player' %}
-</div>
-
-{% if international_stats %}
-<div tab="international">
-{% stats_table international_stats 'player' %}
-</div>
-{% endif %}
-
-<div tab="team">
-{% stats_table team_stats 'player' %}
-</div>
-
-<div tab="competition">
-{% stats_table competition_stats 'player' %}
-</div>
-
-</div>
-
-
-</div>
-{% endif %}
-
-
-{% if recent_game_stats %}
-<div tab="games">
-<a href="{% url 'person_detail_games' bio.slug %}">all games</a>
-
-{% include "templatetags/stats/game_list.html" with stats=recent_game_stats %}
-
-{# "templatetags/stats/game_list.html" with stats=recent_game_stats #}
-{# {% stats_table recent_game_stats %} #}
-
-
-</div>
-{% endif %}
 
 
 {% if refs %}

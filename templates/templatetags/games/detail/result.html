@@ -1,28 +1,7 @@
 {% load datum_or_none %}
-{% load url from future %}
 
-<div id="game_block">
+<div id="game_score">
 
-  <h3>
-    {% if game.season_previous_game %}<a href="{% url 'game_detail' game.season_previous_game.id %}">←</a>{% endif %}
-    <a href="{% url 'competition_detail' game.competition.slug %}">{{ game.competition }}</a> - 
-    <a href="{% url 'season_detail' game.competition.slug game.season.slug %}">{{ game.season.name }}</a>
-    {% if game.season_next_game %}<a href="{% url 'game_detail' game.season_next_game.id %}">→</a>{% endif %}
-  </h3>
-    
-  <ul>
-    
-    {% if game.date %}
-    <li><a href="{% url 'date_detail' game.date.year game.date.month game.date.day %}">{{ game.date|date:"l, F d, Y" }}</a></li>
-    {% endif %}
-  
-    {% if game.stadium.slug %}
-    <li><a href="{% url 'stadium_detail' game.stadium.slug %}">
-      {% if game.stadium.short_name %}{{ game.stadium.short_name }}{% else %}{{ game.stadium.name }}{% endif %}
-    </a></li>
-    {% else %}
-    {% if game.location %}<li>in {{ game.location }}</li>{% endif %}
-    {% endif %}
 
     {% if game.referee %}
     <li>referee: <a href="{% url 'person_detail' game.referee.slug %}">{{ game.referee }}</a></li>
@@ -31,12 +10,7 @@
     {% if game.attendance %}
     <li>attendance: {{ game.attendance }}</li>
     {% endif %}
-  </ul>
 
-
-</div>
-
-<div id="game_score">
   <div id="team_results">
 
 

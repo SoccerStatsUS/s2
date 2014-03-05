@@ -4,20 +4,75 @@
 
 {% block content %}
 
-<div id="game-detail">
+{% load games %}
 
 
-<div id="game-data">
+<div id="game_block">
+
+  <h3>
+    {% if game.season_previous_game %}<a href="{% url 'game_detail' game.season_previous_game.id %}">←</a>{% endif %}
+    <a href="{% url 'competition_detail' game.competition.slug %}">{{ game.competition }}</a> - 
+    <a href="{% url 'season_detail' game.competition.slug game.season.slug %}">{{ game.season.name }}</a>
+    {% if game.season_next_game %}<a href="{% url 'game_detail' game.season_next_game.id %}">→</a>{% endif %}
+  </h3>
+    
+  <ul>
+    {% if game.date %}
+    <li><a href="{% url 'date_detail' game.date.year game.date.month game.date.day %}">{{ game.date|date:"l, F d, Y" }}</a></li>
+    {% endif %}
+  
+    {% if game.stadium.slug %}
+    <li><a href="{% url 'stadium_detail' game.stadium.slug %}">
+      {% if game.stadium.short_name %}{{ game.stadium.short_name }}{% else %}{{ game.stadium.name }}{% endif %}
+    </a></li>
+    {% else %}
+    {% if game.location %}<li>in {{ game.location }}</li>{% endif %}
+    {% endif %}
+  </ul>
+
+</div>
+
+<div id="tab_block"><ul id="tabs"></ul></div>
+
+<div id="tab_wrapper">
+
+
+<div tab="game" id="game-data">
 {% include "templatetags/games/detail/result.html" %}
+
+{% if game.video %}
+<h4 class="headboard">media</h4>
+<div id="game-media">
+{% include "templatetags/embed.html" with video=game.video %}
+</div>
+{% endif %}
+
+{% if game.notes %}
+<h4 class="headboard">notes</h4>
+<p>{{ game.notes }}</p>
+{% endif %}
+
 </div>
 
 
-<div id="related-data">
-{% include "templatetags/games/detail/sidebar.html" %}
+{% if game.series.count > 1 %}
+<div tab="series">
+<h3>series</h3>
+{% games_table game.series 'referee,attendance' %}
 </div>
+{% endif %}
+
+{% if game.same_day_games %}
+<div tab="scoreboard">
+<h3>scoreboard</h3>
+{% games_table game.same_day_games 'date,referee,attendance' %}
+</div>
+{% endif %}
 
 </div>
 
+
+</div>
 
 {% endblock %}
 

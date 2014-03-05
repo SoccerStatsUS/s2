@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load datum_or_none %}
+
+{% block title %}{{ competition.name }} Soccer History {% endblock %}
+{% block metadescription %}{{ competition.name }} soccer stats with standings, results, lineups, awards, all-time stats...{% endblock %}
+
+{% block extrahead %}
+<style>
+#attendance-chart {
+position: fixed;
+margin-left: 5%;
+padding-top: 5%;
+
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<h3>
+{% if season.previous_season %}<a href="{% url 'season_attendance' season.competition.slug season.previous_season.slug %}">←</a>{% endif %}
+<a href="{% url 'season_detail' season.competition.slug season.slug %}">{{ season }}</a>
+{% if season.next_season %}<a href="{% url 'season_attendance' season.competition.slug season.next_season.slug %}">→</a>{% endif %}
+</h3>
+
+
+
+<ul id="tabs"></ul>
+
+<div id="tab_wrapper">
+
+<div tab="capacity">
+  <div id="capacity-chart"></div>
+</div>
+
+<div tab="ranking">
+  <div id="attendance-chart"></div>
+</div>
+
+
+<div tab="records">
+
+<p>best</p>
+{% include "templatetags/games/attendance.html" with games=top_attendance_games %}
+
+{% if worst_attendance_games %}
+<p>worst</p>
+{% include "templatetags/games/attendance.html" with games=worst_attendance_games %}
+{% endif %}
+
+</div>
+
+<script>
+stadiumCapacityChart("#capacity-chart", {{ stadium_attendance|safe }})
+teamAttendanceChart("#attendance-chart", {{ team_data|safe }})
+</script>
+
+</div>
+
+
+{% endblock %}

@@ -33,9 +33,11 @@
 </div>
 
 
+{% if big_winners %}
 <div tab="standings">
 {% standings_table big_winners 'competition,season' %}
 </div>
+{% endif %}
 
 <div tab="games">
 {% games_table games 'competition,referee,attendance' %}

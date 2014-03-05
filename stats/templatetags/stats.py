@@ -23,6 +23,9 @@ def stats_table(stats, exclude='', count=None):
     #else:
     #    stats = stats.order_by('-minutes')        
 
+    if count:
+        stats = stats[:count]
+
     return {
         'stats': stats,
         'exclude': set(exclude.split(',')),
