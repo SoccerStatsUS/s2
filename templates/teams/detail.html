@@ -68,6 +68,7 @@
 {% endif %}
 
 <div tab="games">
+<a href="{% url 'team_games' team.slug %}">all games</a>
 {% games_table recent_games %}
 </div>
 
