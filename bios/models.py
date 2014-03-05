@@ -60,7 +60,7 @@ class BioManager(models.Manager):
         if bios:
             return bios[0]
         else:
-            return Bio.objects.create(name=name)
+            return Bio.objects.create(name=name, hall_of_fame=False)
 
 
     def duplicate_slugs(self):

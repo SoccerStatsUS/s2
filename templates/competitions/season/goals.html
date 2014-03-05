@@ -23,9 +23,9 @@ line {
 {% block content %}
 
 <h2 class="headline">
-{% if season.previous_season %}<a href="{% url season_goals season.competition.slug season.previous_season.slug %}">←</a>{% endif %}
-<a href="{% url season_detail season.competition.slug season.slug %}">{{ season }}</a>
-{% if season.next_season %}<a href="{% url season_goals season.competition.slug season.next_season.slug %}">→</a>{% endif %}
+{% if season.previous_season %}<a href="{% url 'season_goals' season.competition.slug season.previous_season.slug %}">←</a>{% endif %}
+<a href="{% url 'season_detail' season.competition.slug season.slug %}">{{ season }}</a>
+{% if season.next_season %}<a href="{% url 'season_goals' season.competition.slug season.next_season.slug %}">→</a>{% endif %}
 </h2>
 
 

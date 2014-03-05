@@ -679,7 +679,10 @@ def load_bios():
         if bio.get('deathplace'):
             bd['deathplace'] = cg(bio['deathplace'])
 
-        bd['hall_of_fame'] = bio.get('hall_of_fame', False)
+        # Having unexpected problems here...
+        bd['hall_of_fame'] = bio.get('hall_of_fame')
+        if bd['hall_of_fame'] not in (True, False):
+            bd['hall_of_fame'] = False
 
         Bio.objects.create(**bd)
 
