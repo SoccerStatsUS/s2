@@ -1170,6 +1170,29 @@ def load_stats():
         competition_id = competition_getter(stat['competition'])
         season_id = season_getter(stat['season'], competition_id)
 
+
+        # cf game_sources stuff.
+        """
+        # change to sources!
+        if stat.get('sources'): 
+            sources = sorted(set(stat.get('sources')))
+        elif stat.get('source'):
+            sources = [stat['source']]
+        else:
+            sources = []
+
+        for source in sources:
+            if source.strip() == '':
+                continue
+            elif source.startswith('http'):
+                source_url = source
+            else:
+                source_url = ''
+            source_id = source_getter(source)
+            #t = (game['date'], team1_id, source_id, source_url)
+            #stat_sources.append(t)
+        """
+
         if stat.get('source'):
             source_id = source_getter(stat['source'])
 
