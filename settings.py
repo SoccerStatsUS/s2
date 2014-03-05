@@ -166,6 +166,8 @@ TEMPLATE_DIRS = (
 
 FIXTURE_DIR = "%s/fixtures" % PROJECT_DIR,
 
+ALLOWED_HOSTS = ['.soccerstats.us']
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
