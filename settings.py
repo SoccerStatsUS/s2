@@ -72,11 +72,7 @@ STATICFILES_DIRS = (
 )
 
 
-
-
-
 INTERNAL_IPS = ('127.0.0.1',)
-
 
 TEMPLATE_DEBUG = DEBUG
 
@@ -173,6 +169,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'django.contrib.sitemaps',
     'django.contrib.admin',
     'django.contrib.messages',
     'django.contrib.staticfiles',

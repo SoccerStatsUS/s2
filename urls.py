@@ -14,6 +14,8 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
                        url(r"^$", "games.views.homepage", name="home"),
+                       
+                       #url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
 
                        url(r'^favicon\.ico$', RedirectView.as_view(url='http://media.socceroutsider.com/images/favicon.ico'), name="favicon"),
                        url(r'^about/$', TemplateView.as_view(template_name='about.html'), name='about'),
