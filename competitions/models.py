@@ -383,7 +383,13 @@ class Season(models.Model):
             return Game.objects.filter(season=self).aggregate(Sum('goals'))['goals__sum']
 
     def goals_per_game(self):
-        return self.goals() / float(self.max_games())
+        goals = self.goals()
+        games = self.max_games()
+
+        if goals is None or games is None:
+            return 0
+        else:
+            return self.goals() / float(self.max_games())
 
     def total_attendance(self):
         games = self.game_set.exclude(attendance=None)
