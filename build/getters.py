@@ -59,6 +59,20 @@ def make_team_getter():
     return get_team
 
 
+
+def make_gid_getter():
+    gd = dict(Game.objects.values_list('gid', 'id'))
+    
+    def get_game(gid):
+        if gid in gd:
+            return gd[gid]
+        else:
+            return None
+
+    return get_game
+        
+
+
 def make_country_getter():
 
     d = Country.objects.country_dict()

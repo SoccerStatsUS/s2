@@ -165,10 +165,15 @@ class Game(models.Model):
 
     # Need both a date and a datetime field? Not sure.
 
+    # This is used to uniquely identify games without dates, etc.
+    gid = models.CharField(max_length=255, unique=True)
+
 
     # Secondary data.
     round = models.CharField(max_length=255)
     group = models.CharField(max_length=255)
+
+    
 
     starter_count = models.IntegerField(null=True, blank=True)
     goal_count = models.IntegerField(null=True, blank=True)

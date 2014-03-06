@@ -1,8 +1,10 @@
 from collections import Counter, defaultdict
 import datetime
+import hashlib
 import os
 import pymongo
 import sys
+import time
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'build_settings'
 
@@ -31,6 +33,18 @@ from guppy import hpy
 
 connection = pymongo.Connection()
 soccer_db = connection.soccer
+
+
+# Copied from donelli.
+def get_id():
+    """
+    Create a unique hash string based on the current time.
+    Used for linking goals, lineups to a unique game, when normal identifiers
+    are absent (basically, when we don't know the date of a game.)
+    """
+    return hashlib.md5(str(time.time()).encode('utf8')).hexdigest()
+
+
 
 def generate_mongo_indexes():
     soccer_db.games.ensure_index("date")
@@ -89,8 +103,11 @@ def load1():
 
 
 def load2():
-    
-    load_lineups()
+
+    # Some weird bug has been making massive amount of lineup loads fail.
+    # If you want to see, try loading the old nasl.
+    #load_lineups()
+    pass
 
 
 
@@ -841,6 +858,10 @@ def load_games():
         location = location or ''
 
 
+        if 'gid' not in game:
+            game['gid'] = get_id()
+
+
         games.append({
                 'date': game['date'],
                 'has_date': bool(game['date']),
@@ -891,6 +912,7 @@ def load_games():
                 'linesman3_id': linesman3_id,
 
                 'merges': game['merges'],
+                'gid': game['gid'],
                 })
 
 
@@ -928,6 +950,7 @@ def load_goals():
     team_getter = make_team_getter()
     bio_getter = make_bio_getter()
     game_getter = make_game_getter()
+    gid_getter = make_gid_getter()
 
     l = []
 
@@ -949,7 +972,15 @@ def load_goals():
 
         # Coerce to date to match dict.
         d = datetime.date(goal['date'].year, goal['date'].month, goal['date'].day)
-        game_id = game_getter(team_id, d)
+
+        # Try gid first, fall back on team/date.
+        game_id = None
+
+        if 'gid' in goal:
+            game_id = gid_getter(goal['gid'])
+
+        if game_id is None:
+            game_id = game_getter(team_id, d)
 
         if not game_id:
             print "Cannot create %s" % goal
@@ -1053,6 +1084,7 @@ def load_game_stats():
     bio_getter = make_bio_getter()
     source_getter = make_source_getter()
     game_getter = make_game_getter()
+    gid_getter = make_gid_getter()
     game_result_getter = make_game_result_getter()
 
     birthdate_dict = dict(Bio.objects.exclude(birthdate=None).values_list("id", "birthdate"))
@@ -1089,7 +1121,13 @@ def load_game_stats():
 
         team_id = team_getter(stat['team'])
 
-        game_id = game_getter(team_id, stat['date'])
+
+        if 'gid' in stat:
+            game_id = gid_getter(stat['gid'])
+        else:
+            game_id = game_getter(team_id, stat['date'])
+
+        #game_id = game_getter(team_id, stat['date'])
 
 
         result = game_result_getter(team_id, stat['date'])
@@ -1245,6 +1283,7 @@ def load_lineups():
     team_getter = make_team_getter()
     bio_getter = make_bio_getter()
     game_getter = make_game_getter()
+    gid_getter = make_gid_getter()
 
     def create_appearance(a):
 
@@ -1254,9 +1293,22 @@ def load_lineups():
 
         team_id = team_getter(a['team'])
         player_id = bio_getter(a['name'])
-        game_id = game_getter(team_id, a['date'])
+
+        game_id = None
+
+        if 'gid' in a:
+            game_id = gid_getter(a['gid'])
+
+        if game_id is None:
+            game_id = game_getter(team_id, a['date'])
+
+            
+        #game_id = game_getter(team_id, a['date'])
 
         if not game_id:
+
+            import pdb; pdb.set_trace()
+
             print "Cannot create %s" % a
             return {}
 
