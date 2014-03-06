@@ -3,21 +3,24 @@
 
 {% block content %}
 
-<h3>{{ bio }}</h3>
+{% load standings %}
 
+{% load games %}
+
+<h3><a href="{% url 'person_detail' bio.slug %}">{{ bio }}</a></h3>
+
+{% comment %}
 <form method="GET" action=".">
-
 {% csrf_token %}
-
 {{ form.as_table }}
-
 <input type="submit" value="submit" />
-
 </form>
+{% endcomment %}
 
+{% games_table games 'round,group,referee' %}
+{# {% include "templatetags/appearances/ref.html" %} #}
 
-{# {% include "templatetags/standings/alltime.html" %} #}
+{# not computing? {% standings_table standings %} #}
 
-{% include "templatetags/games.html" %}
 
 {% endblock %}

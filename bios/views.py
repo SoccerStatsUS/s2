@@ -199,6 +199,7 @@ def person_detail_referee_games(request, slug):
 
     context = {
         'form': form,
+        'bio': bio,
         'games': games,
         }
     return render_to_response("bios/referee.html",
