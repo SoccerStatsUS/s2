@@ -21,8 +21,8 @@
 
     <td><a href="{% url 'season_detail' game.competition.slug game.season.slug %}">{{ game.season.name }}</a></td>
 
-    {% if has_round %}<td>{{ game.round }}</td>{% endif %}
-    {% if has_group %}<td>{{ game.group }}</td>{% endif %}
+    {% if 'round' not in exclude %}{% if has_round %}<td>{{ game.round }}</td>{% endif %}{% endif %}
+    {% if 'group' not in exclude %}{% if has_group %}<td>{{ game.group }}</td>{% endif %}{% endif %}
 
     {% if game.winner == game.team1 %}
     <td><a href="{% url 'team_detail' game.team1.slug %}"><strong>{{ game.team1_original_name }}</strong></a></td>
@@ -39,24 +39,9 @@
     <td><a href="{% url 'team_detail' game.team2.slug %}">{{ game.team2_original_name }}</a></td>
     {% endif %}
 
-
     {% if 'stadium' not in exclude %}
-    {% if game.stadium %}
-    {% if game.stadium.short_name %}
-    <td><a href="{% url 'stadium_detail' game.stadium.slug %}" title="{{ game.stadium }}"><strong>{{ game.stadium.short_name|truncatechars:"30" }}</strong></a></td>
-    {% else %}
-    <td><a href="{% url 'stadium_detail' game.stadium.slug %}" title="{{ game.stadium }}"><strong>{{ game.stadium.name|truncatechars:"30" }}</strong></a></td>
+    {% include "templatetags/games/place.html"  %}
     {% endif %}
-
-    {% elif game.city %}
-    <td><a href="{% url 'city_detail' game.city.slug %}">{{ game.city }}</a></td>
-    {% elif game.country %}
-    <td><a href="{% url 'country_detail' game.country.slug %}">{{ game.country }}</a></td>
-    {% else %}
-    <td></td>
-    {% endif %}
-    {% endif %}
-
 
     {% if 'referee' not in exclude %}
     {% if game.referee %}

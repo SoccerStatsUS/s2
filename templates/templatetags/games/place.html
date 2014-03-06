@@ -1,0 +1,17 @@
+
+
+    {% if game.stadium %}
+    {% if game.stadium.short_name %}
+    <td><a href="{% url 'stadium_detail' game.stadium.slug %}" title="{{ game.stadium }}"><strong>{{ game.stadium.short_name|truncatechars:"30" }}</strong></a></td>
+    {% else %}
+    <td><a href="{% url 'stadium_detail' game.stadium.slug %}" title="{{ game.stadium }}"><strong>{{ game.stadium.name|truncatechars:"30" }}</strong></a></td>
+    {% endif %}
+
+    {% elif game.city %}
+    <td><a href="{% url 'city_detail' game.city.slug %}">{{ game.city }}</a></td>
+    {% elif game.country %}
+    <td><a href="{% url 'country_detail' game.country.slug %}">{{ game.country }}</a></td>
+    {% else %}
+    <td></td>
+    {% endif %}
+

@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load url from future %}
 {% load games %}
 {% load stats %}
 
@@ -119,6 +118,7 @@
 {% if refs %}
 <div tab="refereed">
 <a href="{% url 'person_detail_referee_games' bio.slug %}">all games refereed</a>
+{# {% games_table games 'round,group,referee' %} #}
 {% include "templatetags/appearances/ref.html" with games=refs %}
 </div>
 {% endif %}
