@@ -55,7 +55,7 @@ def load1():
     # Places depend only on other places.
     # Bio depends on places.
     # Stadium depends on places and bios.
-    # Teams depends on (nothing?)
+    # Teams depends on places
     # Standings depends on Bio, Team, Competition, and Season
     # Games depends on Team, Stadium, City, Bio.
     # etc.

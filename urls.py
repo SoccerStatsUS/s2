@@ -52,7 +52,7 @@ urlpatterns = patterns('',
                        url(r'^standings/', include('standings.urls')),
                        url(r'^stats/', include('stats.urls')),
                        url(r'^teams/', include('teams.urls')),
-                       url(r'^tools/', include('tools.urls')),
+                       #url(r'^tools/', include('tools.urls')),
                        url(r'^videos/', include('videos.urls')),
 
                        # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
