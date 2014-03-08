@@ -386,10 +386,10 @@ class Season(models.Model):
         goals = self.goals()
         games = self.max_games()
 
-        if goals is None or games is None:
+        if goals is None or games in (0, None):
             return 0
         else:
-            return self.goals() / float(self.max_games())
+            return goals / float(games)
 
     def total_attendance(self):
         games = self.game_set.exclude(attendance=None)
