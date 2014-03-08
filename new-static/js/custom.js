@@ -70,8 +70,8 @@
       };
 
       makeTab("#tabs", "#tab_wrapper");
-
       makeTab("#subtabs", "#subtab_wrapper");
+      makeTab("#subtabs2", "#subtab_wrapper2");
 
   });
 }).call(this);

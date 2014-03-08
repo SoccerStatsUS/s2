@@ -75,6 +75,26 @@
 </div>
 {% endif %}
 
+
+
+
+{% if refs %}
+<div tab="refereed">
+<a href="{% url 'person_detail_referee_games' bio.slug %}">all games refereed</a>
+{# {% games_table games 'round,group,referee' %} #}
+{% include "templatetags/appearances/ref.html" with games=refs %}
+</div>
+{% endif %}
+
+
+{% if bio.awards.exists or picks.exists or bio.salary_set.exists %}
+<div tab="info">
+
+<ul id="subtabs2"></ul>
+<div id="subtab_wrapper2">
+
+
+
 <div tab="summary">
 
   games: {{ career_stat.games_played }}
@@ -106,29 +126,7 @@
 {% if bio.last_game and bio.last_game != bio.first_game %}
 <div>last game: <a href="{% url 'game_detail' bio.last_game.id %}">{{ bio.last_game.date }}</a></div>
 {% endif %}
-
-
 </div>
-
-
-
-
-
-
-{% if refs %}
-<div tab="refereed">
-<a href="{% url 'person_detail_referee_games' bio.slug %}">all games refereed</a>
-{# {% games_table games 'round,group,referee' %} #}
-{% include "templatetags/appearances/ref.html" with games=refs %}
-</div>
-{% endif %}
-
-
-{% if bio.awards.exists or picks.exists or bio.salary_set.exists %}
-<div tab="info">
-
-<ul id="subtabs"></ul>
-<div id="subtab_wrapper">
 
 
 {% if bio.awards.exists %}

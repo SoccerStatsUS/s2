@@ -166,7 +166,8 @@ class Game(models.Model):
     # Need both a date and a datetime field? Not sure.
 
     # This is used to uniquely identify games without dates, etc.
-    gid = models.CharField(max_length=255, unique=True)
+    gid = models.CharField(max_length=255)
+    #gid = models.CharField(max_length=255, unique=True) # We got a duplicate, figure out why!
 
 
     # Secondary data.
