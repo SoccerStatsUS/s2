@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<table>
+
+<thead>
+  <tr>
+    <th>name</th>
+    <th>games</th>
+    <th>attendance</th>
+    <!--<th>population</th>-->
+    </tr>
+</thead>
+
+{% for country in countries %}
+<tr>
+  <td><a href="{% url 'country_detail' country.slug %}">{{ country }}</a></td>
+  <td>{{ country.game_count }}</td>
+  <td>{{ country.total_attendance }}</td>
+  <!--<td>{{ country.population }}</td>-->
+</tr>
+{% endfor %}
+
+</table>
+
+
+{% endblock %}
