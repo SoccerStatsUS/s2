@@ -249,6 +249,10 @@ class Game(models.Model):
         # This no longer seems to be true.
         # unique_together = [('team1', 'date', 'minigame'), ('team2', 'date', 'minigame')]
 
+    def __unicode__(self):
+        return u"%s: %s v %s" % (self.date, self.team1, self.team2)
+
+
 
     # Calendar functions
     def team1_previous_game(self):
@@ -796,9 +800,6 @@ class GameAnalysis(object):
         return [make_item(section) for section in self.game_sections()]
 
 
-        
-    def __unicode__(self):
-        return u"%s: %s v %s" % (self.date, self.team1, self.team2)
 
 
 

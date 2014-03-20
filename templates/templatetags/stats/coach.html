@@ -1,0 +1,47 @@
+{% load datum_or_none %}
+
+{% if stats %}
+
+<table>
+
+<thead>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+
+    <th>w</th>
+    <th>t</th>
+    <th>l</th>
+
+    <th>gf</th>
+    <th>ga</th>
+    <th>+-</th>
+  </tr>
+</thead>
+
+
+
+<tbody>
+{% for stat in stats %}
+<tr>
+  <td><a href="{% url 'team_detail' stat.team.slug %}">{{ stat.team }}</a></td>
+  <td><a href="{% url 'competition_detail' stat.competition.slug %}">{{ stat.competition.abbreviation }}</a></td>
+  <td><a href="{% url 'season_detail' stat.competition.slug stat.competition.slug %}">{{ stat.season.name }}</a></td>
+
+  <td>{{ stat.wins }}</td>
+  <td>{{ stat.ties }}</td>
+  <td>{{ stat.losses }}</td>
+
+  <td>{{ stat.goals_for }}</td>
+  <td>{{ stat.goals_against }}</td>
+  <td>{{ stat.plus_minus }}</td>
+
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
+
+{% endif %}
+

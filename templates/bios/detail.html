@@ -29,7 +29,7 @@
 <div id="tab_wrapper">
 
 
-{% if domestic_stats or international_stats or coach_stats %}
+{% if domestic_stats or international_stats %}
 <div tab="stats">
 
 <ul id="subtabs"></ul>
@@ -58,6 +58,7 @@
 </div>
 
 
+
 </div>
 {% endif %}
 
@@ -76,10 +77,18 @@
 {% endif %}
 
 
+{% if coach_stats %}
 
+<div tab="coach">
+
+{% include "templatetags/stats/coach.html" with stats=coach_stats %}
+
+</div>
+
+{% endif %}
 
 {% if refs %}
-<div tab="refereed">
+<div tab="referee">
 <a href="{% url 'person_detail_referee_games' bio.slug %}">all games refereed</a>
 {# {% games_table games 'round,group,referee' %} #}
 {% include "templatetags/appearances/ref.html" with games=refs %}

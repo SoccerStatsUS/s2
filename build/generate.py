@@ -21,6 +21,10 @@ from teams.models import Team
 from utils import insert_sql, timer
 
 
+# Really need to rethink how generate works.
+# Some intermediate models could probably help improve speeds.
+
+
 @timer
 def generate():
     """
@@ -34,7 +38,7 @@ def generate():
 
 
     # This broke unexpectedly for Premier League coach stats.
-    #generate_coach_stats_for_competitions()
+    generate_coach_stats_for_competitions()
 
     #generate_game_data_quality()
 
@@ -64,9 +68,14 @@ def generate_coach_stats_for_competitions():
     generate_coach_stats('North American Soccer League (2011-)')
     generate_coach_stats('USSF Division 2 Professional League')
     generate_coach_stats('USL First Division')
+    generate_coach_stats('USL Second Division')
     generate_coach_stats('American Professional Soccer League')
 
     generate_coach_stats('Premier League')
+    generate_coach_stats('La Liga')
+    generate_coach_stats('Serie A')
+
+    generate_coach_stats('CONCACAF Champions League')
 
 
 
@@ -103,12 +112,13 @@ def generate_player_standings():
 
 
 def set_draft_picks():
+    """
+    Handle abnormal draft conditions
+    """
+    # This applies to drafts where a team picked another draft pick, e.g.
 
     # Not bothering parsing since this has only happened one time.
-    try:
-        d = Draft.objects.get(competition__slug='major-league-soccer', name='SuperDraft', season__name='2002')
-    except:
-        return
+    d = Draft.objects.get(competition__slug='major-league-soccer', name='SuperDraft', season__name='2002')
 
     picks = Pick.objects.filter(text__contains='SuperDraft')
     for pick in picks:
@@ -336,27 +346,22 @@ def generate_competition_stats():
         generate_stats_generic('stats_competitionstat', stats, make_key, update)
 
 
+#############
+### Standings 
+#############
 
 @transaction.commit_on_success
 def generate_standings_generic(qs, make_key, update_dict):
     """
-    Generate team, career, etc. stats.
+    Used to generate different kinds of standings.
+    Currently: team standings and career standings
     """
-    # Seems like memory leaks are making this not work for nearly enough stats.
 
-    final_dict = {}
+    final_dict = {} # Used to record final standings.
     excluded = ('player_id', 'team_id', 'competition_id', 'season_id', 'division', 'group')
     
     # Don't include rolling standings.
-    # This is definitely not working.
-    #final_qs = qs.filter(date=None)
-    
-
     final_qs = qs.filter(final=True)
-
-    #import pdb; pdb.set_trace()
-    #for standing in final_qs.values():
-
 
     for standing in final_qs.values():
         # This determines what is filtered.
@@ -689,6 +694,8 @@ def generate_game_minutes():
     Really intensive cpu use.
     """
     print "Generating game minutes"
+    # Possibly use game stat objects.
+
 
     l = []
     print "Creating score for %s games" % Game.objects.count()
