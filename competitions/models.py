@@ -371,6 +371,21 @@ class Season(models.Model):
     def max_games(self):
         return max([self.standings_games(), self.known_games()])
 
+    def min_games(self):
+        return min([self.standings_games(), self.known_games()])
+
+    def min_max_games(self):
+        ming = self.min_games()
+        maxg = self.max_games()
+
+        if maxg == 0:
+            return 0
+        elif ming == maxg:
+            return None
+        else:
+            return ming / float(maxg)
+        
+
     def goals(self):
         final_standings = self.standing_set.filter(final=True)
         if final_standings.count():
