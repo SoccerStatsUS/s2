@@ -36,7 +36,11 @@
     <td></td>
     {% endif %}
 
-    <td><a href="{% url 'season_games' season.competition.slug season.slug %}">{{ season.max_games }}</a></td>
+    {% with mmg=season.min_max_games %}
+    <td><a href="{% url 'season_games' season.competition.slug season.slug %}">{{ season.max_games }} {% if mmg %}<em>({{ season.min_max_games|floatformat:2 }})</em>{% endif %}</a></td>
+    {% endwith %}
+        
+
     {% if season.goals %}
     <td><a href="{% url 'season_goals' season.competition.slug season.slug %}">{{ season.goals_per_game|floatformat:2 }} <em>({{ season.goals }})</em></a></td>
     {% else %}

@@ -214,6 +214,7 @@ table.game-list td:first-child {
 
 .greybg {
     background-color: #eee;
+    color: #ccc;
 }
 
 
@@ -311,6 +312,11 @@ td.result {
 
 #goal_list {
     margin: 20px auto 0 auto;
+    width: 70%;
+}
+
+#goal_list .left_goal, #goal_list .right_goal {
+    width: 45%;
 }
 
 #goal_list .assist {

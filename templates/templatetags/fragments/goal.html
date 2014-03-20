@@ -1,29 +1,26 @@
 {% load url from future %}
 
 {% if goal.player %}
-<td>
-<div><a href="{% url 'person_detail' goal.player.slug %}">{{ goal.player }}</a> </div>
 
+<div><a href="{% url 'person_detail' goal.player.slug %}">{{ goal.player }}</a> </div>
 {% with assists=goal.assists%}
 {% for assist in assists %}
 <div class="assist"><a href="{% url 'person_detail' assist.player.slug %}">{{ assist.player }}</a></div>
 {% endfor %}
 {% endwith %}
 
-</td>
 {% else %}
+
 {% if goal.own_goal %}
 
 {% if goal.own_goal_player %}
-<td>
   <div>Own Goal</div>
   <div class="assist"><a href="{% url 'person_detail' goal.own_goal_player.slug %}">{{ goal.own_goal_player }}</a></div>
-</td>
 {% else %}
-<td>Own Goal</td>
+<div>Own Goal</div>
 {% endif %}
     
 {% else %}
-<td>Unknown</td>
+<div>Unknown</div>
 {% endif %}
 {% endif %}

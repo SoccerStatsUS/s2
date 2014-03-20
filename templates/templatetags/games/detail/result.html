@@ -60,17 +60,17 @@
   <tr>
 
     {% if goal.team == game.team1 %}
-    {% include "templatetags/fragments/goal.html"  %}
+    <td class="left_goal">{% include "templatetags/fragments/goal.html"  %}</td>
     {% else %}
-    <td></td>
+    <td class="greybg"></td>
     {% endif %}
 
     {% datum_or_grey goal.minute %}
 
     {% if goal.team == game.team2 %}
-    {% include "templatetags/fragments/goal.html"  %}
+    <td class="right_goal">{% include "templatetags/fragments/goal.html"  %}</td>
     {% else %}
-    <td></td>
+    <td class="greybg"></td>
     {% endif %}
 
     {# <td><a href="{% url 'team_detail' goal.team.slug %}">{{ goal.team }}</a></td> #}
