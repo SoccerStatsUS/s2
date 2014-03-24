@@ -504,10 +504,8 @@ def load_seasons():
                 #'slug': slugify(s['season']),
                 #'competition_id': competition_id,
                 'order': s['order'],
-                'order2': s['order'],
+                'order2': s['order2'],
                 })
-
-
 
     for ss in l:
         SuperSeason.objects.create(**ss)

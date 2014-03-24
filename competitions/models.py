@@ -351,10 +351,13 @@ class Season(models.Model):
     minutes_with_age = models.IntegerField(null=True, blank=True)
     age_minutes = models.FloatField(null=True, blank=True)
 
+    #super_season = models.ForeignKey(SuperSeason, null=False)
+
 
     class Meta:
         #ordering = ("order", "name", "competition")
         ordering = ("order", "order2", "competition")
+        #ordering = ("super_season", )
 
 
     def salaries(self):
@@ -374,16 +377,16 @@ class Season(models.Model):
     def min_games(self):
         return min([self.standings_games(), self.known_games()])
 
-    def min_max_games(self):
-        ming = self.min_games()
-        maxg = self.max_games()
+    def verified_games(self):
+        gg = self.known_games()
+        sg = self.standings_games()
 
-        if maxg == 0:
+        if sg == 0:
             return 0
-        elif ming == maxg:
+        elif sg == gg:
             return None
         else:
-            return ming / float(maxg)
+            return gg / float(sg)
         
 
     def goals(self):

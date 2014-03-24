@@ -55,6 +55,8 @@
     {% datum_or_grey game.attendance %}
     {% endif %}
 
+    <td>{{ game.sources.count }}</td>
+
   </tr>
   {% endfor %}
 </table>

@@ -71,9 +71,9 @@ def generate_coach_stats_for_competitions():
     generate_coach_stats('USL Second Division')
     generate_coach_stats('American Professional Soccer League')
 
-    generate_coach_stats('Premier League')
-    generate_coach_stats('La Liga')
-    generate_coach_stats('Serie A')
+    #generate_coach_stats('Premier League')
+    #generate_coach_stats('La Liga')
+    #generate_coach_stats('Serie A')
 
     generate_coach_stats('CONCACAF Champions League')
 

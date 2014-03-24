@@ -36,8 +36,8 @@
     <td></td>
     {% endif %}
 
-    {% with mmg=season.min_max_games %}
-    <td><a href="{% url 'season_games' season.competition.slug season.slug %}">{{ season.max_games }} {% if mmg %}<em>({{ season.min_max_games|floatformat:2 }})</em>{% endif %}</a></td>
+    {% with vg=season.verified_games %}
+    <td><a href="{% url 'season_games' season.competition.slug season.slug %}">{{ season.standings_games }} {% if vg %}<em>({{ vg|floatformat:2 }})</em>{% endif %}</a></td>
     {% endwith %}
         
 
