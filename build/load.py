@@ -1194,6 +1194,8 @@ def load_stats():
     l = []    
     i = 0
     for i, stat in enumerate(soccer_db.stats.find(timeout=False)): # no timeout because this query takes forever.
+
+
         if i % 50000 == 0:
             print i
 

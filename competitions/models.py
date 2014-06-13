@@ -387,6 +387,17 @@ class Season(models.Model):
             return None
         else:
             return gg / float(sg)
+
+    def attendance_games(self):
+        gg = self.game_set.exclude(attendance=None).count()
+        sg = self.standings_games()
+
+        if sg == 0:
+            return 0
+        elif sg == gg:
+            return None
+        else:
+            return gg / float(sg)
         
 
     def goals(self):

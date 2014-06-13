@@ -6,6 +6,9 @@ Contains lots of useful methods and utilities, probably.
 
 
 
+
+
+
 #### Deployment instructions.
 1. Add to /etc/hosts, /etc/ssh_config
 2. adduser chris; add chris to /etc/sudoers
@@ -28,6 +31,8 @@ deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen
 
 
 #### Features
+
+* Consider implementing date-ish comparisons for seasons - eg 2012 Apertura > 2012 Clausura
 
 #### Todo
 

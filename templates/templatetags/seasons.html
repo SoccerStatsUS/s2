@@ -48,12 +48,18 @@
     {% endif %}
 
     {% if has_attendance %}
+    {% with ag=season.attendance_games %}
     {% if season.total_attendance %}
-    <td><a href="{% url 'season_attendance' season.competition.slug season.slug %}">{{ season.average_attendance }}</a></td>
+
+
+    <td><a href="{% url 'season_attendance' season.competition.slug season.slug %}">{{ season.average_attendance }}     {% if ag %}<em>({{ ag|floatformat:2 }})</em>{% endif %}</a></td></a></td>
       {# ({{ season.games_with_attendance_percentage|floatformat:2 }}) #}
     {% else %}
     <td></td>
+
+
     {% endif %}
+    {% endwith %}
     {% endif %}
 
 
