@@ -110,11 +110,7 @@ ul {
 
     }
 
-#subtabs li {
-    float: left;
-    border: 5px solid #eee;
-    margin-bottom: 5px;
-}
+
 
 #subtabs li:hover {
     background-color: #eee;
