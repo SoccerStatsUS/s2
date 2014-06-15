@@ -14,6 +14,7 @@ def stats_table(stats, exclude='', count=None):
         has_games_started = stats.exclude(games_started=None).exists()
 
     except AssertionError:
+        # this seems incorrect
         vals = stats.values_list('shots', 'assists', 'minutes', 'games_started')
         has_value = lambda i: set(e[0] for e in vals) != set([None])
         has_shots, has_assists, has_minutes, has_games_started = [has_value(e) for e in range(4)]

@@ -17,16 +17,16 @@
   <th>GP</th>
   <th>W</th>
   {% if s0.shootout_wins != None %}<th>SOW</th>{% endif %}
-  <th>T</th>
+  {% if has_ties %}<th>T</th>{% endif %}
   {% if s0.shootout_losses != None %}<th>SOL</th>{% endif %}
   <th>L</th>
 
-  {% if 'pts' not in exclude %}<th>pts</th>{% endif %}
+  {% if has_points %}{% if 'pts' not in exclude %}<th>pts</th>{% endif %}{% endif %}
 
   <th>gf</th>
   <th>ga</th>
   
-  {% if 'ppg' not in exclude %}<th>ppg</th>{% endif %}
+  {% if has_points %}{% if 'ppg' not in exclude %}<th>ppg</th>{% endif %}{% endif %}
   <th>gf/ga</th>
 
 </tr>
@@ -65,21 +65,26 @@
   <td>{{ standing.games }}</td>
   <td>{{ standing.wins }}</td>
   {% if s0.shootout_wins != None %}<td>{{ standing.shootout_wins|default_if_none:'' }}</td>{% endif %}
-  <td>{{ standing.ties|default_if_none:'' }}</td>
+
+  {% if has_ties %}<td>{{ standing.ties|default_if_none:'' }}</td>{% endif %}
 
   {% if s0.shootout_losses != None %}<td>{{ standing.shootout_losses|default_if_none:'' }}</td>{% endif %}
   <td>{{ standing.losses }}</td>
-
+  
+  {% if has_points %}
   {% if 'pts' not in exclude %}
   <td>{{ standing.points }}</td>
+  {% endif %}
   {% endif %}
 
 
   {% datum_or_grey  standing.goals_for %}
   {% datum_or_grey standing.goals_against %}
 
+  {% if has_points %}
   {% if 'ppg' not in exclude %}
   <td>{{ standing.points_per_game|floatformat:2 }}</td>
+  {% endif %}
   {% endif %}
 
   <td>{{ standing.goal_ratio|floatformat:2 }}</td>

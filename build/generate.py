@@ -118,7 +118,13 @@ def set_draft_picks():
     # This applies to drafts where a team picked another draft pick, e.g.
 
     # Not bothering parsing since this has only happened one time.
-    d = Draft.objects.get(competition__slug='major-league-soccer', name='SuperDraft', season__name='2002')
+
+    try:
+        d = Draft.objects.get(competition__slug='major-league-soccer', name='SuperDraft', season__name='2002')
+    #except drafts.models.DoesNotExist: 
+    except:
+        return # haven't loaded draft.
+        
 
     picks = Pick.objects.filter(text__contains='SuperDraft')
     for pick in picks:
