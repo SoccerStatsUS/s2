@@ -21,6 +21,9 @@ class AbstractStanding(models.Model):
     goals_for = models.IntegerField(null=True)
     goals_against = models.IntegerField(null=True)
 
+    # Organizational data
+    stage = models.CharField(max_length=255)
+    group = models.CharField(max_length=255)
 
     class Meta:
         abstract = True
@@ -90,9 +93,6 @@ class Standing(AbstractStanding):
     competition = models.ForeignKey(Competition, null=True)
     season = models.ForeignKey(Season, null=True)
 
-    # Merge these into one.
-    group = models.CharField(max_length=255)
-    division = models.CharField(max_length=255)
 
     # Standing can be a completed standing or just for a given date.
     # Gonna try to generate standings by date.
@@ -109,7 +109,7 @@ class Standing(AbstractStanding):
 
 
     class Meta:
-        ordering = ('season', 'competition', '-points', '-wins', 'team')
+        ordering = ('season', 'competition', 'stage', 'group', '-points', '-wins', 'team')
 
 
 

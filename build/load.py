@@ -594,8 +594,11 @@ def load_standings():
         season_id = season_getter(standing['season'], competition_id)
         team_id = team_getter(standing['team'])
 
+        stage = standing.get('stage') or ''
         group = standing.get('group') or ''
-        division = standing.get('division') or ''
+
+        # make sure this is gone everywhere.
+        # division = standing.get('division') or '' # division
 
         final = standing.get('final', False)
 
@@ -603,10 +606,12 @@ def load_standings():
         d = {
                 'competition_id': competition_id,
                 'season_id': season_id,
+                'group': group,
+                'stage': stage,
+
                 'team_id': team_id,
                 'date': standing.get('date'),
-                'division': division,
-                'group': group,
+
                 'games': standing['games'],
                 'goals_for': standing.get('goals_for'),
                 'goals_against': standing.get('goals_against'),
@@ -839,8 +844,10 @@ def load_games():
         neutral = game.get('neutral') or False
         attendance = game.get('attendance')
 
-        rnd = game.get('round') or ''
+        stage = game.get('stage') or ''
         group = game.get('group') or ''
+        rnd = game.get('round') or ''
+
 
         # There are lots of problems with the NASL games, 
         # And probably ASL as well. Need to spend a couple
@@ -890,8 +897,10 @@ def load_games():
                 'minutes': minutes,
                 'competition_id': competition_id,
                 'season_id': season_id,
-                'round': rnd,
+                'stage': stage,
                 'group': group,
+                'round': rnd,
+
 
                 'home_team_id': home_team_id,
                 'neutral': neutral,

@@ -40,6 +40,7 @@ padding-top: 5%;
 
 <div tab="records">
 
+{% comment %}
 <p>best</p>
 {% include "templatetags/games/attendance.html" with games=top_attendance_games %}
 
@@ -47,6 +48,7 @@ padding-top: 5%;
 <p>worst</p>
 {% include "templatetags/games/attendance.html" with games=worst_attendance_games %}
 {% endif %}
+{% endcomment %}
 
 </div>
 

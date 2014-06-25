@@ -170,9 +170,10 @@ class Game(models.Model):
     #gid = models.CharField(max_length=255, unique=True) # We got a duplicate, figure out why!
 
 
-    # Secondary data.
+    # Organizational data
     round = models.CharField(max_length=255)
     group = models.CharField(max_length=255)
+    stage = models.CharField(max_length=255)
 
     
 

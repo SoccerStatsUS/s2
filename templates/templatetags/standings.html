@@ -6,6 +6,20 @@
 {% with s0=standings.0 %}
 
 
+
+
+{% regroup standings by stage as standings_by_stage %}
+
+
+
+
+{% for sx in standings_by_stage %} 
+
+{% if sx.grouper %}
+<h4>{{ sx.grouper }}</h4>
+{% endif %}
+
+
 <table class="standings">
 
 <thead>
@@ -32,8 +46,16 @@
 </tr>
 </thead>
 
+
 <tbody>
-{% for standing in standings %}
+
+
+{% for standing in sx.list %}
+
+
+
+
+
 <tr>
 
   {% if 'team' not in exclude %}
@@ -91,10 +113,22 @@
 
 
 </tr>
+
+
+
+
 {% endfor %}
+
 </tbody>
 
 </table>
+
+{% endfor %}
+
+
+
+
+
 
 {% endwith %}
 {% endif %}
