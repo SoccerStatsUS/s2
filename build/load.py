@@ -77,24 +77,25 @@ def load1():
 
     load_competitions()
     load_seasons()
-
     load_teams()
-    load_standings()
-
     load_bios()
-    load_salaries()
-
     load_stadiums()
 
+    load_salaries()
 
     # List data
     # Put this before standings?
     load_awards()
+
     load_drafts()
+
     load_positions()
+
+    load_standings()
 
     # Complex game data
     load_games()
+
 
     load_goals()
     load_assists()

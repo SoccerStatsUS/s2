@@ -364,7 +364,7 @@ def generate_standings_generic(qs, make_key, update_dict):
     """
 
     final_dict = {} # Used to record final standings.
-    excluded = ('player_id', 'team_id', 'competition_id', 'season_id', 'division', 'group')
+    excluded = ('player_id', 'team_id', 'competition_id', 'season_id', 'division', 'group', 'stage')
     
     # Don't include rolling standings.
     final_qs = qs.filter(final=True)
@@ -400,7 +400,10 @@ def generate_standings_generic(qs, make_key, update_dict):
     for key, standing in final_dict.items():
         standing.pop('id')
         standing.update(update_dict)
-        s = Standing.objects.create(**standing)
+        try:
+            s = Standing.objects.create(**standing)
+        except:
+            import pdb; pdb.set_trace()
 
 
 
