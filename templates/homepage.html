@@ -4,9 +4,9 @@
 {% block extrahead %}
   <script type="text/javascript">
     
-  $(document).ready(function() {
-      $("#header").click();
-  });
+  //$(document).ready(function() {
+  //    $("#header").click();
+  //});
 
   </script>
 
@@ -15,9 +15,125 @@
 {% block content %}
 
 
+<h3>United States</h3>
+<h4>Division 1</h4>
+
+<ul>
+<li><a href="{% url 'competition_detail' 'major-league-soccer' %}">Major League Soccer</a></li>
+<li><a href="{% url 'competition_detail' 'north-american-soccer-league' %}">North American Soccer League</a></li>
+<li><a href="{% url 'competition_detail' 'american-soccer-league-1933-1983' %}">American Soccer League (1921-1933)</a></li>
+<li><a href="{% url 'competition_detail' 'american-league-of-professional-football' %}">American League of Professional Football</a></li>
+</ul>
+
+<h4>Minor Leagues</h4>
+
+<ul>
+<li><a href="{% url 'competition_detail' 'north-american-soccer-league-2011-' %}">North American Soccer League (2011-)</a></li>
+<li><a href="{% url 'competition_detail' 'usl-second-division' %}">USL Pro</a></li>
+<li><a href="{% url 'competition_detail' 'usl-premier-developmental-league' %}">USL PDL</li>
+<!--<li><a href="{% url 'competition_detail' 'national-premier-soccer-league' %}">NPSL</a></li>-->
+<li><a href="{% url 'competition_detail' 'usl-first-division' %}">USL First Division</li>
+<li><a href="{% url 'competition_detail' 'american-soccer-league-1933-1983' %}">American Soccer League (1933-1983)</li>
+</ul>
+
+<h4>Cups</h4>
+
+<ul>
+<li><a href="{% url 'competition_detail' 'us-open-cup' %}">US Open Cup</li>
+<li><a href="{% url 'competition_detail' 'afa-cup' %}">AFA Cup</li>
+<li><a href="{% url 'competition_detail' 'lewis-cupp' %}">Lewis Cup</li>
+<li><a href="{% url 'competition_detail' 'national-amateur-cup' %}">National Amateur Cup</li>
+</ul>
+
+<h3>CONCACAF<h3>
+
+<ul>
+<li><a href="{% url 'competition_detail' 'brasileirao' %}">CONCACAF Champions' League</a></li>
+<li><a href="{% url 'competition_detail' 'liga-mx' %}">Liga MX</a></li>
+<li><a href="{% url 'competition_detail' 'liga-mx' %}">Costa Rica</a></li>
+<li><a href="{% url 'competition_detail' 'liga-mx' %}">Honduras</a></li>
+<li><a href="{% url 'competition_detail' 'liga-mx' %}">Guatemala</a></li>
+<li><a href="{% url 'competition_detail' 'liga-mx' %}">Panama</a></li>
+<li><a href="{% url 'competition_detail' 'liga-mx' %}">El Salvador</a></li>
+<li><a href="{% url 'competition_detail' 'liga-mx' %}">Nicaragua</a></li>
+</ul>
 
 
-{# <a href="{% url 'competition_detail' mls.slug %}">{{ mls }}</a> #}
+<h3>CONMEBOL<h3>
+
+<ul>
+<li><a href="{% url 'competition_detail' 'copa-libertadores' %}">Copa Libertadores</a></li>
+<li><a href="{% url 'competition_detail' 'brasileirao' %}">Brasileirao</a></li>
+<li><a href="{% url 'competition_detail' 'arg' %}">Argentina</a></li>
+<li><a href="{% url 'competition_detail' 'liga-mx' %}">Uruguay</a></li>
+<li><a href="{% url 'competition_detail' 'liga-mx' %}">Chile</a></li>
+<li><a href="{% url 'competition_detail' 'liga-mx' %}">Colombia</a></li>
+<li><a href="{% url 'competition_detail' 'liga-mx' %}">Ecuador</a></li>
+<li><a href="{% url 'competition_detail' 'liga-mx' %}">Peru</a></li>
+<li><a href="{% url 'competition_detail' 'liga-mx' %}">Paraguay</a></li>
+</ul>
+
+
+<h3>UEFA</h3>
+
+<ul>
+<li><a href="{% url 'competition_detail' 'uefa-champions-league' %}">UEFA Champions League</a></li>
+<li><a href="{% url 'competition_detail' 'premier-leagu' %}">Premier League</a></li>
+<li><a href="{% url 'competition_detail' 'la-liga' %}">La Liga</a></li>
+<li><a href="{% url 'competition_detail' 'bundesliga' %}">1. Bundesliga</a></li>
+<li><a href="{% url 'competition_detail' 'serie-a' %}">Serie A</a></li>
+<li><a href="{% url 'competition_detail' 'ligue-1' %}">Ligue 1</a></li>
+
+<li><a href="{% url 'competition_detail' 'liga-mx' %}">Russia</a></li>
+<li><a href="{% url 'competition_detail' 'eredivisie' %}">Eredivisie</a></li>
+<li><a href="{% url 'competition_detail' 'liga-mx' %}">Belgium</a></li>
+<li><a href="{% url 'competition_detail' 'portugal' %}">Portugal</a></li>
+</ul>
+
+
+
+<h3>AFC</h3>
+
+<ul>
+<li><a href="{% url 'competition_detail' 'afc-champions-league' %}">AFC Champions League</a></li>
+<li><a href="{% url 'competition_detail' 'chinese-super-leagueo' %}">Chinese Super League</a></li>
+<li><a href="{% url 'competition_detail' 'j-league' %}">J. League</a></li>
+<li><a href="{% url 'competition_detail' 'k-league' %}">K. League</a></li>
+<li><a href="{% url 'competition_detail' 'a-league' %}">A League</a></li>
+</ul>
+
+
+
+<h3>International</h3>
+
+<ul>
+<li><a href="{% url 'competition_detail' 'fifa-world-cup' %}">FIFA World Cup</a></li>
+<li><a href="{% url 'team_detail' 'united-states' %}">USMNT</a></li>
+<li><a href="{% url 'competition_detail' 'major-indoor-soccer-league-1978-1992' %}">FIFA World Cup Qualifying (CONCACAF)</a></li>
+</ul>
+
+<h3>Indoor Soccer</h3>
+
+<ul>
+<li><a href="{% url 'competition_detail' 'major-indoor-soccer-league-1978-1992' %}">MISL (1978-1992)</a></li>
+<li><a href="{% url 'competition_detail' 'national-professional-soccer-league-indoor' %}">NPSL</a></li>
+<li><a href="{% url 'competition_detail' 'continental-indoor-soccer-league' %}">CISL</a></li>
+<li><a href="{% url 'competition_detail' 'major-indoor-soccer-league-2001-2008' %}">MISL (2001-2008)</a></li>
+<li><a href="{% url 'competition_detail' 'major-indoor-soccer-league-2008-2014' %}">MISL (2008-2014)</a></li>
+</ul>
+
+
+<h3>Women's Soccer</h3>
+
+
+<ul>
+<li><a href="{% url 'competition_detail' 'fifa-womens-world-cup' %}">FIFA Women's World Cup</a></li>
+<li><a href="{% url 'competition_detail' 'national-womens-soccer-league' %}">NWSL</a></li>
+<li><a href="{% url 'competition_detail' 'womens-professional-soccer' %}">WPS</li>
+<li><a href="{% url 'competition_detail' 'womens-united-soccer-association' %}">WUSA</a></li>
+<li><a href="{% url 'competition_detail' 'damallsvenskan' %}">Damallsvenskan</a></li>
+
+</ul>
 
 
 

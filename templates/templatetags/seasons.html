@@ -37,7 +37,7 @@
     {% endif %}
 
     {% with vg=season.verified_games %}
-    <td><a href="{% url 'season_games' season.competition.slug season.slug %}">{{ season.standings_games }} {% if vg %}<em>({{ vg|floatformat:2 }})</em>{% endif %}</a></td>
+    <td><a href="{% url 'season_games' season.competition.slug season.slug %}">{{ season.max_games }} {% if vg %}<span class="vg"><em>({{ vg|floatformat:2 }})</em></span>{% endif %}</a></td>
     {% endwith %}
         
 

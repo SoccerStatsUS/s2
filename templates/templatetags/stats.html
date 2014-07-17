@@ -52,7 +52,9 @@
 
   {% if 'competition' not in exclude %}
   {% if stat.competition.slug %}
-  <td><a title="{{ stat.competition.name }}" href="{% url 'competition_detail' stat.competition.slug %}">{{ stat.competition.abbreviation }}</a></td>
+  <td class="bg-{{ stat.competition.code }}-{{ stat.competition.level }}">
+  <a title="{{ stat.competition.name }}" href="{% url 'competition_detail' stat.competition.slug %}">{{ stat.competition.abbreviation }}</a>
+  </td>
   {% else %}
   <td>{{ stat.competition.abbreviation }}</td>
   {% endif %}

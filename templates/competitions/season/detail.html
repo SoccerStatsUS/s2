@@ -127,6 +127,14 @@
 </div>
 
 
+{% if standings %}
+
+{% standings_table standings 'competition,season' %}
+
+{% endif %}
+
+
+
 {% if awards.exists %}
 <div>
 <table>
@@ -146,18 +154,12 @@
 {% endif %}
 
 
-</div>
-
-
-
-
-{% if standings %}
-<div tab="standings">
-
-{% standings_table standings 'competition,season' %}
 
 </div>
-{% endif %}
+
+
+
+
 
 
 

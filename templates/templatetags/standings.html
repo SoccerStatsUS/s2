@@ -51,12 +51,8 @@
 
 
 {% for standing in sx.list %}
-
-
-
-
-
 <tr>
+
 
   {% if 'team' not in exclude %}
   {% if standing.team.slug %}
@@ -69,7 +65,9 @@
 
   {% if 'competition' not in exclude %}
   {% if standing.competition.slug %}
-  <td><a href="{% url 'competition_detail' standing.competition.slug %}">{{ standing.competition.abbreviation }}</a></td>
+  <td class="bg-{{ stat.competition.code }}-{{ stat.competition.level }}">
+  <a href="{% url 'competition_detail' standing.competition.slug %}">{{ standing.competition.abbreviation }}</a>
+  </td>
   {% else %}
   <td>{{ standing.competition.abbreviation }}</td>
   {% endif %}
@@ -88,14 +86,16 @@
   <td>{{ standing.wins }}</td>
   {% if s0.shootout_wins != None %}<td>{{ standing.shootout_wins|default_if_none:'' }}</td>{% endif %}
 
-  {% if has_ties %}<td>{{ standing.ties|default_if_none:'' }}</td>{% endif %}
+  {% if has_ties %}
+  {% datum_or_grey standing.ties %}
+  {% endif %}
 
   {% if s0.shootout_losses != None %}<td>{{ standing.shootout_losses|default_if_none:'' }}</td>{% endif %}
   <td>{{ standing.losses }}</td>
   
   {% if has_points %}
   {% if 'pts' not in exclude %}
-  <td>{{ standing.points }}</td>
+  {% datum_or_grey standing.points %}
   {% endif %}
   {% endif %}
 
