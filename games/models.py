@@ -232,6 +232,7 @@ class Game(models.Model):
     notes = models.TextField()
 
     attendance = models.IntegerField(null=True, blank=True)
+    #effective_attendance = models.IntegerField(null=True, blank=True) # account for doubleheaders
 
     referee = models.ForeignKey(Bio, null=True, blank=True, related_name="games_refereed")
     linesman1 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman1_games")
