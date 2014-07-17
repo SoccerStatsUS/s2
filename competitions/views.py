@@ -403,6 +403,24 @@ def season_games(request, competition_slug, season_slug):
                               context_instance=RequestContext(request))
 
 
+def attendance_data_by_team(game_set):
+
+    # Add year-to-year comparisons
+    # Pull this out into a function.
+    # Include home and away attendances
+    attendance = defaultdict(int)
+    agames = defaultdict(int)
+    
+    for t, a in game_set.values_list('home_team__name', 'attendance'):
+        attendance[t] += a
+        agames[t] += 1
+
+    team_data = [(k, attendance[k], agames[k], attendance[k] / agames[k]) for k in agames.keys()]
+    team_data = sorted(team_data, key=lambda k: k[-1])
+
+    return team_data
+
+
 
 @cache_page(60 * 60 * 12)
 def season_attendance(request, competition_slug, season_slug):
@@ -413,26 +431,21 @@ def season_attendance(request, competition_slug, season_slug):
     top_attendance_games = games.exclude(attendance=None).order_by('-attendance')[:10]
 
 
-    attendance = defaultdict(int)
-    agames = defaultdict(int)
-    for t, a in season.game_set.exclude(home_team=None).exclude(attendance=None).values_list('home_team__name', 'attendance'):
-        attendance[t] += a
-        agames[t] += 1
-
-    team_data = sorted([(k, attendance[k] / agames[k]) for k in agames.keys()])
+    team_data = attendance_data_by_team(season.game_set.exclude(home_team=None).exclude(attendance=None))
 
     context = {
         'season': season,
-        'team_data': json.dumps(team_data),
+        'team_data': team_data,
         'top_attendance_games': top_attendance_games,
         'worst_attendance_games': games.exclude(attendance=None).exclude(id__in=top_attendance_games.values_list('id', flat=True)).order_by('attendance')[:10],
-        'stadium_attendance': json.dumps(season.stadium_attendance()),
-        'team_attendances': json.dumps(season.total_attendances()),
-        }
+        'stadium_attendance': season.stadium_attendance(),
+         }
 
     return render_to_response("competitions/season/attendance.html",
                               context,
                               context_instance=RequestContext(request))
+
+
 
 
 

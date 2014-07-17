@@ -24,40 +24,48 @@ padding-top: 5%;
 </h3>
 
 
+<table>
 
-<ul id="tabs"></ul>
+<!--summary-->
 
-<div id="tab_wrapper">
+<tr>
+  <th>games</th>
+  <th>known</th>
+  <th>total</th>
+  <th>average</th>
+</tr>
 
-<div tab="capacity">
-  <div id="capacity-chart"></div>
-</div>
+<tr>
+  <td>{{ season.max_games }}</td>
+  <td>{{ season.attendance_games|floatformat:3 }}</td>
+  <td>{{ season.total_attendance }}</td>
+  <td>{{ season.average_attendance }}</td>
+</tr>
 
-<div tab="ranking">
-  <div id="attendance-chart"></div>
-</div>
+</table>
 
 
-<div tab="records">
 
-{% comment %}
-<p>best</p>
-{% include "templatetags/games/attendance.html" with games=top_attendance_games %}
+<table>
 
-{% if worst_attendance_games %}
-<p>worst</p>
-{% include "templatetags/games/attendance.html" with games=worst_attendance_games %}
-{% endif %}
-{% endcomment %}
+<tr>
+  <th>team</th>
+  <th>average</th>
+  <th>games</th>
+  <th>total</th>
 
-</div>
+</tr>
 
-<script>
-stadiumCapacityChart("#capacity-chart", {{ stadium_attendance|safe }})
-teamAttendanceChart("#attendance-chart", {{ team_data|safe }})
-</script>
+{% for team in team_data %}
+<tr>
+  <td>{{ team.0 }}</td>
+  <td>{{ team.3 }}</td>
+  <td>{{ team.2 }}</td>
+  <td>{{ team.1 }}</td>
+</tr>
 
-</div>
+{% endfor %}
+</table>
 
 
 {% endblock %}

@@ -161,9 +161,71 @@ class CompetitionManager(models.Manager):
         return d
 
 
+class AbstractCompetition(models.Model):
+
+    # Anything that has a standing_set and a game_set 
+    # mostly competitions and seasons.
 
 
-class Competition(models.Model):
+    def standings_games(self):
+        return sum(self.standing_set.filter(final=True).values_list('games', flat=True)) / 2
+
+    def known_games(self):
+        return self.game_set.exclude(team1_result='').count()
+
+    def max_games(self):
+        return max([self.standings_games(), self.known_games()])
+
+    def min_games(self):
+        return min([self.standings_games(), self.known_games()])
+
+    def verified_games(self):
+        gg = self.known_games()
+        sg = self.standings_games()
+
+        if sg == 0:
+            return 0
+        elif sg == gg:
+            return None
+        else:
+            return gg / float(sg)
+
+
+
+    def attendance_games(self):
+        gg = self.game_set.exclude(attendance=None).count()
+        sg = self.standings_games()
+
+        if sg == 0:
+            return 0
+        elif sg == gg:
+            return None
+        else:
+            return gg / float(sg)
+
+
+
+    def total_attendance(self):
+        games = self.game_set.exclude(attendance=None)
+        return games.aggregate(Sum('attendance'))['attendance__sum']
+        
+    def average_attendance(self):
+        games = self.game_set.exclude(attendance=None)
+        if games.exists():
+            return int(games.aggregate(Avg('attendance'))['attendance__avg'])
+        else:
+            return None
+
+    class Meta:
+        abstract = True
+
+
+    
+
+
+
+
+class Competition(AbstractCompetition):
     """
     A generic competition such as MLS Cup Playoffs, US Open Cup, or Friendly
     """
@@ -187,6 +249,7 @@ class Competition(models.Model):
 
     class Meta:
         ordering = ("name",)
+
 
     def __unicode__(self):
         return self.name
@@ -329,7 +392,7 @@ class SuperSeason(models.Model):
         order2 = models.IntegerField()
 
 
-class Season(models.Model):
+class Season(AbstractCompetition):
     """
     A season of a competition.
     """
@@ -365,39 +428,6 @@ class Season(models.Model):
         from money.models import Salary
         return Salary.objects.filter(season=self.name)
 
-    def standings_games(self):
-        return sum(self.standing_set.filter(final=True).values_list('games', flat=True)) / 2
-
-    def known_games(self):
-        return self.game_set.exclude(team1_result='').count()
-
-    def max_games(self):
-        return max([self.standings_games(), self.known_games()])
-
-    def min_games(self):
-        return min([self.standings_games(), self.known_games()])
-
-    def verified_games(self):
-        gg = self.known_games()
-        sg = self.standings_games()
-
-        if sg == 0:
-            return 0
-        elif sg == gg:
-            return None
-        else:
-            return gg / float(sg)
-
-    def attendance_games(self):
-        gg = self.game_set.exclude(attendance=None).count()
-        sg = self.standings_games()
-
-        if sg == 0:
-            return 0
-        elif sg == gg:
-            return None
-        else:
-            return gg / float(sg)
         
 
     def goals(self):
@@ -419,17 +449,6 @@ class Season(models.Model):
             return 0
         else:
             return goals / float(games)
-
-    def total_attendance(self):
-        games = self.game_set.exclude(attendance=None)
-        return games.aggregate(Sum('attendance'))['attendance__sum']
-        
-    def average_attendance(self):
-        games = self.game_set.exclude(attendance=None)
-        if games.exists():
-            return int(games.aggregate(Avg('attendance'))['attendance__avg'])
-        else:
-            return None
 
     def games_with_attendance(self):
         return self.game_set.exclude(attendance=None).count()
@@ -461,6 +480,8 @@ class Season(models.Model):
 
 
     def total_attendances(self):
+        # This is a duplicate.
+
         d = defaultdict(int)
         games = self.game_set.exclude(attendance=None).exclude(home_team=None).values_list('home_team__name', 'attendance')
 

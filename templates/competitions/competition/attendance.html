@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load datum_or_none %}
+
+{% block title %}{{ competition.name }} Soccer History {% endblock %}
+{% block metadescription %}{{ competition.name }} soccer stats with standings, results, lineups, awards, all-time stats...{% endblock %}
+
+{% block extrahead %}
+<style>
+#attendance-chart {
+position: fixed;
+margin-left: 5%;
+padding-top: 5%;
+
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<h3>
+<a href="{% url 'competition_detail' competition.slug %}">{{ competition }}</a>
+</h3>
+
+
+<table>
+
+<!--summary-->
+
+<tr>
+  <th>games</th>
+  <th>known</th>
+  <th>total</th>
+  <th>average</th>
+</tr>
+
+<tr>
+  <td>{{ competition.max_games }}</td>
+  <td>{{ competition.attendance_games|floatformat:3 }}</td>
+  <td>{{ competition.total_attendance }}</td>
+  <td>{{ competition.average_attendance }}</td>
+</tr>
+
+</table>
+
+
+{% endblock %}
