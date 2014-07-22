@@ -322,3 +322,25 @@ td.result {
 table#game_lineup {
     margin: 20px auto 0 auto;
 }
+
+
+.bg-indoor-1 {
+    background-color: #ffffe0;
+}
+
+
+.bg-indoor-2 {
+    background-color: #fffff6;
+}
+
+.bg-soccer-1 {
+    background-color: #d0ffff;
+}
+
+.bg-soccer-2 {
+    background-color: #f0ffff;
+}
+
+.bg-soccer-3 {
+    background-color: #f9ffff;
+}
