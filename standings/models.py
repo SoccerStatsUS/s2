@@ -20,7 +20,7 @@ class AbstractStanding(models.Model):
 
     goals_for = models.IntegerField(null=True)
     goals_against = models.IntegerField(null=True)
-    goal_difference = models.IntegerField(null=True)
+    #goal_difference = models.IntegerField(null=True)
 
     # Organizational data
     stage = models.CharField(max_length=255)
@@ -110,7 +110,8 @@ class Standing(AbstractStanding):
 
 
     class Meta:
-        ordering = ('season', 'competition', 'stage', 'group', '-points', '-goal_difference', '-wins', 'team')
+        #ordering = ('season', 'competition', 'stage', 'group', '-points', '-goal_difference', '-wins', 'team')
+        ordering = ('season', 'competition', 'stage', 'group', '-points', '-wins', 'team')
 
 
 
