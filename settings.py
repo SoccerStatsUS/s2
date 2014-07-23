@@ -16,22 +16,25 @@ if os.path.exists("/Users"):
     PROJECT_ROOT = "/Users/chris"
     PROJECT_DIRNAME = 's2'
     PROJECT_DIR = "%s/soccer/%s" % (PROJECT_ROOT, PROJECT_DIRNAME)
+    STATIC_URL = 'http://dev.soccerstats.us/static/'
 elif DEBUG:
     PROJECT_ROOT = "/home/chris"
     PROJECT_DIRNAME = 'sdev'
     PROJECT_DIR = "%s/www/%s" % (PROJECT_ROOT, PROJECT_DIRNAME)
+    STATIC_URL = 'http://dev.soccerstats.us/static/'
 else:
     PROJECT_ROOT = "/home/chris"
     PROJECT_DIRNAME = 's2'
     PROJECT_DIR = "%s/www/%s" % (PROJECT_ROOT, PROJECT_DIRNAME)
+    STATIC_URL = '/static/'
 
 
 DB_PATH = "%s/www/%s/db/soccer.db" % (PROJECT_ROOT, PROJECT_DIRNAME)
 
 
-STATIC_URL = '/static/'
 
-STATIC_URL = 'http://dev.soccerstats.us/new-static/'
+
+
 
 #### Put this part anywhere else?
 
