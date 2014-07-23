@@ -49,27 +49,31 @@
   <div class="wrap">
 
     <div id="header">
-      <span>SoccerStats.us</span>
-      <span><a href="#menu" id="menu-button">&#9776;</a></span>
+
+      <table>
+        <tr>
+          <td id="title"><a href="/">SoccerStats.us</a></td>
+          <td><a href="{% url 'scoreboard_today' %}">scores</a></td>
+          <td><a href="{% url 'team_index' %}">teams</a></td>
+          <td><a href="{% url 'person_index' %}">players</a></td>
+          <td><a href="{% url 'competition_index' %}">competitions</a></td>
+          <td id="more"><a href="">more</a></td>
+          <td><a href="/about">about</a></td>
+      </table>
+
     </div>
 
 
-    
+
     <div id="menu">
 
       {% load url from future %}
 
-
       <ul>
-        <li><a href="{% url 'haystack_search' %}">search</a></li>
+        <!--<li><a href="{% url 'haystack_search' %}">search</a></li>-->
 
-        <li><a href="{% url 'scoreboard_today' %}">scoreboard</a></li>
-        <li><a href="{% url 'team_index' %}">teams</a></li>
-        <li><a href="{% url 'person_index' %}">players</a></li>
         <li><a href="{% url 'drafts_index' %}">drafts</a></li>
         <li><a href="{% url 'award_index' %}">awards</a></li>
-        <li></li>
-
 
       </ul>
 
@@ -88,10 +92,6 @@
 
         <li><a title="" href="{% url 'competition_detail' 'north-american-soccer-league' %}">NASL</a></li>
         <li><a title="" href="{% url 'competition_detail' 'american-soccer-league-1921-1933' %}">ASL</a></li>
-        <li>-</li>
-        <li><a href="/about">about</a></li>
-        <li><a href="/sources">sources</a></li>
-        <li><a href="/contact">contact</a></li>
       </ul>
 
 

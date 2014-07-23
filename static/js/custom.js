@@ -52,8 +52,8 @@
 
           
       };
-
-      $("#header").click(function(){
+      
+      $("#more").click(function(){
           var m = $("#menu");
           var mb = $("#menu-button");
           var display = ((m.css("display") === "none") ? "block" : "none");
@@ -63,11 +63,13 @@
           } else {
           mb.css("color", "#fff").css("background-color", "#000");
           }
+          return false;
       });
 
       if (window.location.hash === "#menu"){
           $("#header").click();
       };
+      
 
       makeTab("#tabs", "#tab_wrapper");
       makeTab("#subtabs", "#subtab_wrapper");
