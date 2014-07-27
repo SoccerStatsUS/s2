@@ -6,6 +6,10 @@
       $(".stats").tablesorter();
       $(".standings").tablesorter();
 
+      $("#search_button").click(function(){
+          $("#search_form").submit();
+      });
+
       //$("#tab_wrapper").hide();
       //$("#sub-tab-wrapper").hide();
 

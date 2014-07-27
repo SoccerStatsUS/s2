@@ -59,6 +59,26 @@
           <td><a href="{% url 'competition_index' %}">competitions</a></td>
           <td id="more"><a href="">more</a></td>
           <td><a href="/about">about</a></td>
+          <td>
+            <form id="search_form" method="get" action="/search">
+              <input id="id_q" name="q" type="text" value="search" />
+              <span id="search_button">x</span>
+
+              {% comment %}
+              <div style="-webkit-transform: rotate(-45deg); 
+               -moz-transform: rotate(-45deg); 
+                 -o-transform: rotate(-45deg);">
+                &#9906;
+              </div>
+              {% endcomment %}
+
+            </form>
+          </td>
+        </tr>
+      </table>
+
+</div>
+
       </table>
 
     </div>
