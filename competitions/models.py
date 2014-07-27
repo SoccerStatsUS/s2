@@ -359,7 +359,7 @@ class SeasonManager(models.Manager):
                     import pdb; pdb.set_trace()
                 ss = SuperSeason.objects.create(name=name, order=-1, order2=-1)
 
-            return Season.objects.create(name=name, competition=competition, order=ss.order)
+            return Season.objects.create(name=name, competition=competition, order=ss.order, super_season=ss)
 
     def as_dict(self):
         """
@@ -414,12 +414,12 @@ class Season(AbstractCompetition):
     minutes_with_age = models.IntegerField(null=True, blank=True)
     age_minutes = models.FloatField(null=True, blank=True)
 
-    #super_season = models.ForeignKey(SuperSeason, null=False)
+    super_season = models.ForeignKey(SuperSeason, null=False)
 
 
     class Meta:
         #ordering = ("order", "name", "competition")
-        ordering = ("order", "order2", "competition")
+        ordering = ("order", "super_season__order2", "competition")
         #ordering = ("super_season", )
 
 

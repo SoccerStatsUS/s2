@@ -359,6 +359,19 @@ class TeamAlias(models.Model):
     
     start = models.DateField()
     end = models.DateField()
+
+    def start_text(self):
+        if self.start.month == 1 and self.start.day == 1:
+            return self.start.year
+        else:
+            return self.start
+    
+
+    def end_text(self):
+        if self.end.month == 12 and self.end.day == 31:
+            return self.end.year
+        else:
+            return self.end
     
             
 
