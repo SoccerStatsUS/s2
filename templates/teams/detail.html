@@ -18,6 +18,14 @@
 <div>{{ team.name }}</div>
 </div>
 
+{% if team.teamalias_set.exists %}
+<p class="small">also known as: 
+{% for alias in team.teamalias_set.all %}
+{{ alias.name }} ({{ alias.start_text }} to {{ alias.end_text }}) {% if not forloop.last %},{% endif %}
+{% endfor %}
+</p>
+{% endif %}
+
 
 </div>
 
