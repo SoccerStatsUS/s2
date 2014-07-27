@@ -9,6 +9,10 @@ td.international { background-color: #cdf }
 td.domestic { background-color: #fec;}
 td.friendly { background-color: #fff;}
 
+.small {
+    font-size: .7em;
+}
+
 html, body {
     margin: 0;
     padding: 0;
