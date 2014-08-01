@@ -138,6 +138,14 @@ def confederation_stats(stats):
         'total_count': total_count,
         'stat_list': l,
         }
+
+
+class Code(models.Model):
+    """
+    A soccer code
+    eg soccer, indoor, women's...
+    """
+    name = models.CharField(max_length=255)
             
 
 
@@ -241,6 +249,7 @@ class Competition(AbstractCompetition):
     code = models.CharField(max_length=255) # Code: soccer, indoor, Boston game, etc.
     level = models.IntegerField(null=True, blank=True) # 1st Divison, 2nd Vision, etc.
     scope = models.CharField(max_length=255)
+
     area = models.CharField(max_length=255)
 
     relationships = models.ManyToManyField('self',through='CompetitionRelationship',symmetrical=False)
@@ -395,9 +404,37 @@ class SeasonManager(models.Manager):
 
 
 class SuperSeason(models.Model):
-        name = models.CharField(max_length=255)
-        order = models.IntegerField()
-        order2 = models.IntegerField()
+    """
+    A larger version of season.
+    eg 1996, 2004-2005
+    """
+
+    name = models.CharField(max_length=255)
+    slug = models.SlugField()
+
+    order = models.IntegerField()
+    order2 = models.IntegerField()
+
+
+    
+    def previous(self):
+        seasons = SuperSeason.objects.all()
+        index = list(seasons).index(self)
+        if index > 0:
+            return seasons[index - 1]
+        else:
+            return None
+
+    def next(self):
+        seasons = SuperSeason.objects.all()
+        index = list(seasons).index(self)
+        next = index + 1
+        if next < seasons.count():
+            return seasons[next]
+        else:
+            return None
+
+
 
 
 class Season(AbstractCompetition):

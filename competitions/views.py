@@ -7,7 +7,7 @@ from django.views.decorators.cache import cache_page
 
 from bios.models import Bio
 from competitions.forms import CompetitionForm
-from competitions.models import Competition, Season
+from competitions.models import Competition, SuperSeason, Season
 from lineups.models import Appearance
 from places.models import Country
 from stats.models import Stat, CompetitionStat, SeasonStat
@@ -226,6 +226,20 @@ def competition_attendance(request, competition_slug):
                               context,
                               context_instance=RequestContext(request))
 
+
+@cache_page(60 * 60 * 12)
+def superseason_detail(request, superseason_slug):
+
+    ss = get_object_or_404(SuperSeason, slug=superseason_slug)
+
+    context = {
+        'superseason': ss,
+        }
+    
+
+    return render_to_response("competitions/superseason/detail.html",
+                              context,
+                              context_instance=RequestContext(request))
 
 
 @cache_page(60 * 60 * 12)
