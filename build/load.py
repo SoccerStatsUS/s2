@@ -75,6 +75,8 @@ def load1():
 
     # Non-game data.
     load_sources()
+    load_confederations()
+
     load_places()
 
 
@@ -201,7 +203,12 @@ def load_places():
     for country in soccer_db.countries.find():
         country.pop('_id')
         country['slug'] = slugify(country['name'])
-        country['confederation'] = country['confederation'] or ''
+        
+        try:
+            country['confederation'] = Confederation.objects.get(name=country['confederation'])
+        except:
+            import pdb; pdb.set_trace()
+
         country['subconfederation'] = country['subconfederation'] or ''
         Country.objects.create(**country)
 
@@ -485,21 +492,29 @@ def load_teams():
 
 
 @transaction.commit_on_success
-def load_competitions():
-
+def load_confederations():
     for cc in soccer_db.confederations.find():
         cc.pop('_id')
+        cc['slug'] = slugify(cc['name'])
         Confederation.objects.create(**cc)
+
+
+@transaction.commit_on_success
+def load_competitions():
+
 
     print "loading competitions"
     for c in soccer_db.competitions.find():
         c.pop('_id')
         Competition.objects.create(**c)
 
+    for d in soccer_db.competition_relations.find():
+        try:
+            b = Competition.objects.get(name=d['before'])
+        except:
+            import pdb; pdb.set_trace()
 
-    for before, after in soccer_db.competition_relations.find():
-        b = Competition.objects.get(name=before)
-        a = Competition.objects.get(name=after)
+        a = Competition.objects.get(name=d['after'])
         CompetitionRelationship.objects.create(before=b, after=a)
         
 
@@ -509,6 +524,7 @@ def load_competitions():
 @transaction.commit_on_success
 def load_seasons():
     print "loading seasons"
+    # This appears to just be loading superseasons...
 
     #competition_getter = make_competition_getter()
 
@@ -519,6 +535,7 @@ def load_seasons():
         #competition_id = competition_getter(s['competition'])
         l.append({
                 'name': s['name'],
+                'slug': slugify(s['name']),
                 #'slug': slugify(s['season']),
                 #'competition_id': competition_id,
                 'order': s['order'],
