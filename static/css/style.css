@@ -9,6 +9,18 @@ td.international { background-color: #cdf }
 td.domestic { background-color: #fec;}
 td.friendly { background-color: #fff;}
 
+
+.leftcol {
+    width: 50%;
+    float: left;
+}
+
+.rightcol {
+    width: 50%;
+    float: right;
+}
+
+
 .small {
     font-size: .7em;
 }
