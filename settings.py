@@ -193,6 +193,7 @@ INSTALLED_APPS = (
     'lineups',
     'money',
     'news',
+    'organizations',
     'places',
     'positions',
     'sources',

@@ -15,10 +15,11 @@ from django.template.defaultfilters import slugify
 
 from awards.models import Award, AwardItem
 from bios.models import Bio
-from competitions.models import Competition, Season, SuperSeason
+from competitions.models import Competition, CompetitionRelationship, Season, SuperSeason
 from drafts.models import Draft, Pick
 from money.models import Salary
 from news.models import NewsSource, FeedItem
+from organizations.models import Confederation
 from places.models import Country, State, City, Stadium, StadiumMap
 from positions.models import Position
 from sources.models import Source, SourceUrl
@@ -36,7 +37,7 @@ soccer_db = connection.soccer
 
 
 # Copied from donelli.
-def get_id():
+def get_id_by_time():
     """
     Create a unique hash string based on the current time.
     Used for linking goals, lineups to a unique game, when normal identifiers
@@ -47,6 +48,10 @@ def get_id():
 
 
 def generate_mongo_indexes():
+    """
+    """
+    # Not sure why I need to do this, but it seems necessary.
+
     soccer_db.games.ensure_index("date")
 
 def load1():
@@ -104,12 +109,10 @@ def load1():
 
 
 def load2():
-
-    # Some weird bug has been making massive amount of lineup loads fail.
-    # If you want to see, try loading the old nasl.
+    # Need to have this work again.
+    # Need to work on events stuff a lot more.
     #load_lineups()
     pass
-
 
 
 def load3():
@@ -483,10 +486,24 @@ def load_teams():
 
 @transaction.commit_on_success
 def load_competitions():
+
+    for cc in soccer_db.confederations.find():
+        cc.pop('_id')
+        Confederation.objects.create(**cc)
+
     print "loading competitions"
     for c in soccer_db.competitions.find():
         c.pop('_id')
         Competition.objects.create(**c)
+
+
+    for before, after in soccer_db.competition_relations.find():
+        b = Competition.objects.get(name=before)
+        a = Competition.objects.get(name=after)
+        CompetitionRelationship.objects.create(before=b, after=a)
+        
+
+
 
 
 @transaction.commit_on_success
@@ -865,7 +882,7 @@ def load_games():
 
 
         if 'gid' not in game:
-            game['gid'] = get_id()
+            game['gid'] = get_id_by_time()
 
 
         games.append({

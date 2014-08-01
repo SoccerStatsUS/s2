@@ -242,6 +242,9 @@ class Competition(AbstractCompetition):
     level = models.IntegerField(null=True, blank=True) # 1st Divison, 2nd Vision, etc.
     scope = models.CharField(max_length=255)
     area = models.CharField(max_length=255)
+
+    relationships = models.ManyToManyField('self',through='CompetitionRelationship',symmetrical=False)
+
     
     #international = models.BooleanField()
 
@@ -338,6 +341,11 @@ class Competition(AbstractCompetition):
         stats = CompetitionStat.objects.filter(competition=self)
         return confederation_stats(stats)
 
+
+
+class CompetitionRelationship(models.Model):
+    before = models.ForeignKey('Competition', related_name='before')
+    after = models.ForeignKey('Competition', related_name='after')
 
 
 
