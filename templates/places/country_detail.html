@@ -8,6 +8,8 @@
 
 <h2>{{ country }}</h2>
 
+<h4><a href="{% url 'confederation_detail' country.confederation.slug %}">{{ country.confederation.name }}</a></h4>
+
 <h4>{{ country.population }}</h4>
 
 

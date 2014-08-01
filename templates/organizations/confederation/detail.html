@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+{{ confederation.name }}
+
+<ul>
+  {% for country in confederation.country_set.all %}
+  <li><a href="{% url 'country_detail' country.slug %}">{{ country }}</a></li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

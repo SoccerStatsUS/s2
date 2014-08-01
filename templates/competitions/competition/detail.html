@@ -14,6 +14,15 @@
 
   <h3>{{ competition }}</h3>
 
+  {% if competition.after.exists %}
+  <p>preceded by {% for item in competition.after.all %}<a href="{% url 'competition_detail' item.before.slug %}">{{ item.before }}</a>{% endfor %}</p>
+  {% endif %}
+
+  {% if competition.before.exists %}
+  <p>followed by {% for item in competition.before.all %}<a href="{% url 'competition_detail' item.after.slug %}">{{ item.after }}</a>{% endfor %}</p>
+  {% endif %}
+
+
 </div>
 
 <div id="tab_block">

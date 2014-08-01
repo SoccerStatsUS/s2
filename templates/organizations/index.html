@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}player directory{% endblock %}
+
+{% block content %}
+
+<ul>
+  {% for confederation in confederations %}
+  <li><a href="{% url confederation_detail confederation.slug %}">{{ confederation.name }}</a></li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

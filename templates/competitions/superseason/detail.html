@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+
+<h2>
+{% if superseason.previous %}<a href="{% url 'superseason_detail' superseason.previous.slug %}">←</a>{% endif %}
+{{ superseason.name }}
+{% if superseason.next %}<a href="{% url 'superseason_detail' superseason.next.slug %}">→</a>{% endif %}
+</h2>
+
+    
+    
+
+
+<ul>
+  {% for season in superseason.season_set.all %}
+  <li><a href="{% url 'season_detail' season.competition.slug season.slug %}"> {{ season }}</a></li>
+  {% endfor %}
+
+</ul>
+
+{% endblock %}
