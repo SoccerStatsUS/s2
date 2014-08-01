@@ -5,7 +5,10 @@
 
   {% for game in games %}
   <tr>
-
+    {% comment %}
+    Need to figure out an elegant way to handle team1 / home team management.
+    Probably team1 should be home team if possible, then 
+    {% endcomment %}
 
     {% if 'date' not in exclude %}
     {% if game.date %}
