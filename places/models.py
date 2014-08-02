@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.template.defaultfilters import slugify
 
 from bios.models import Bio
+from organizations.models import Confederation
 
 from collections import defaultdict
 
@@ -71,7 +72,9 @@ class Country(models.Model):
     #population = models.IntegerField(null=True)
     code = models.CharField(max_length=15)
 
-    confederation = models.CharField(max_length=15)
+    #confederation = models.CharField(max_length=15)
+    confederation = models.ForeignKey(Confederation)
+
     subconfederation = models.CharField(max_length=15)
 
     objects = CountryManager()
