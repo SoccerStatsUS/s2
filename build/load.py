@@ -104,8 +104,7 @@ def load1():
     load_games()
 
 
-    load_goals()
-    load_assists()
+    load_events()
 
     load_stadium_maps()
 
@@ -983,6 +982,18 @@ def load_games():
             
 
 
+def load_events():
+    """
+    Load generic events.
+    """
+    # shots (including goals), fouls (including cards), substitutions, corner kicks, throw ins
+    # passes and tackles would be the ultimate extension here.
+
+    load_substitutions()
+    load_goals()
+    load_assists()
+
+
 
 @timer
 @transaction.commit_on_success
@@ -1067,11 +1078,19 @@ def load_assists():
     goal_getter = make_goal_getter()
 
     def create_assists(goal):
+
+        #if goal['competition'] == 'Major League Soccer'  and goal['season'] == '1996':
+        #    import pdb; pdb.set_trace()
+        
+
+
         if not goal['assists']:
             return []
 
         if goal['assists'] == ['']:
             return []
+
+
 
         team_id = team_getter(goal['team'])
         bio_id = ogbio_id = None
@@ -1320,6 +1339,11 @@ def load_stats():
 @timer
 @transaction.commit_on_success
 def load_lineups():
+    # This should be removed in favor of substitutions
+    # Ultimately subsumed by a combination game stats / substitutions
+    # Too big to be worthwhile.
+
+
     # Need to do this with raw sql and standard dict management functions.
     print "\nloading lineups\n"
     from django.db import connection
