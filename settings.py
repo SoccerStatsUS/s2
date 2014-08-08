@@ -185,6 +185,7 @@ INSTALLED_APPS = (
     'contact',
     'dates',
     'drafts',
+    'events',
     'games',
     'goals',
     'graphs',
