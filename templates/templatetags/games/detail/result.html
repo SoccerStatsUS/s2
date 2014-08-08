@@ -2,6 +2,14 @@
 
 <div id="game_score">
 
+  {% if game.group %}
+    <li>group {{ game.group }}</li>
+  {% endif %}
+
+  {% if game.round %}
+    <li>round {{ game.round }}</li>
+  {% endif %}
+
 
     {% if game.referee %}
     <li>referee: <a href="{% url 'person_detail' game.referee.slug %}">{{ game.referee }}</a></li>

@@ -1,5 +1,7 @@
+from django.db import models
 
-
+from bios.models import Bio
+from games.models import Game
 
 
 class Event(models.Model):
@@ -12,8 +14,8 @@ class Event(models.Model):
 
 class Foul(models.Model):
 
-    subject = models.ForeignKey(Player)
-    object = models.ForeignKey(Player, null=True)
+    subject = models.ForeignKey(Bio, related_name="fouls_committed")
+    object = models.ForeignKey(Bio, null=True, related_name="fouls_suffered")
     
     red = models.BooleanField()
     yellow = models.BooleanField()

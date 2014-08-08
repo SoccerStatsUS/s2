@@ -15,7 +15,7 @@
   <h3>{{ competition }}</h3>
 
   {% if competition.after.exists %}
-  <p>preceded by {% for item in competition.after.all %}<a href="{% url 'competition_detail' item.before.slug %}">{{ item.before }}</a>{% endfor %}</p>
+  <p>preceded by {% for item in competition.after.all %}<a href="{% url 'competition_detail' item.before.slug %}">{{ item.before }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>
   {% endif %}
 
   {% if competition.before.exists %}
