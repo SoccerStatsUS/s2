@@ -14,12 +14,12 @@ def export_game(g):
     away_team = g.away_team()
     if g.team1 == home_team:
         home_goals, away_goals = g.team1_score, g.team2_score
-        home_standing = Standing.objects.get(date=g.date, team=g.team1)
-        away_standing = Standing.objects.get(date=g.date, team=g.team2)
+        home_standing = Standing.objects.get(date=g.date, team=g.team1).triple()
+        away_standing = Standing.objects.get(date=g.date, team=g.team2).triple()
     else:
         home_goals, away_goals = g.team2_score, g.team1_score        
-        home_standing = Standing.objects.get(date=g.date, team=g.team2)
-        away_standing = Standing.objects.get(date=g.date, team=g.team1)
+        home_standing = Standing.objects.get(date=g.date, team=g.team2).triple()
+        away_standing = Standing.objects.get(date=g.date, team=g.team1).triple()
 
     shootout_winner = g.shootout_winner
 
@@ -28,13 +28,15 @@ def export_game(g):
         player = gs.player.name
         assists = gs.assists or 0
         
-        gx = Goal.objects.filter(player=gs.player, date=g.date)
-        goal_minutes = [e.minute for e in gx]
-        goal_final = goal_minutes + (5-len(goal_minutes)) * ['']
+        #gx = Goal.objects.filter(player=gs.player, date=g.date)
+        #goal_minutes = [e.minute for e in gx]
+        #goal_final = goal_minutes + (5-len(goal_minutes)) * ['']
+
+        dt = g.date.strftime("%m/%d/%Y")
 
         lx = [
-            g.date,
-            g.stadium,
+            dt,
+            g.stadium.name,
             g.attendance,
             home_team,
             home_goals,
@@ -47,7 +49,10 @@ def export_game(g):
             player,
             gs.goals,
             assists,
-            ] + goal_final # + assist_final
+            gs.on,
+            gs.off,
+            gs.minutes,
+            ] # + goal_final # + assist_final
 
         #s = "\t".join(lx)
         
@@ -56,8 +61,8 @@ def export_game(g):
                 
 
 
-def process():
-    games = Game.objects.filter(competition__slug='major-league-soccer').exclude(not_played=True).order_by('id')
+def process_games():
+    games = Game.objects.filter(competition__slug='major-league-soccer').exclude(not_played=True).exclude(season__name='2014').order_by('id')
     l = []
     for game in games:
         print game.id
@@ -70,8 +75,74 @@ def process():
 
 
 def create_csv(l):
-    l2 = ["\t".join(e) for e in l]
+    l2 = ["\t".join([unicode(a) for a in e]) for e in l]
     return "\n".join(l2)
+
+
+
+def process_goals():
+    goals = Goal.objects.filter(game__competition__slug='major-league-soccer').exclude(game__season__name='2014').select_related().order_by('date')
+    l = []
+
+    for i, goal in enumerate(goals):
+        print(i)
+
+        if goal.player:
+            scorer = goal.player.name
+        elif goal.own_goal_player:
+            scorer = goal.own_goal_player.name
+        else:
+            scorer = None
+
+        assists = [e.player.name for e in goal.assist_set.all()]
+
+        assists_final = assists + (2-len(assists)) * ['']
+        
+        
+        dt = goal.date.strftime("%m/%d/%Y")
+
+        x = [
+            dt,
+            goal.team.name,
+            goal.minute,
+            goal.own_goal,
+            scorer,
+            assists_final[0],
+            assists_final[1],
+            ]
+
+                                   
+
+        """
+        d = {
+            'date': goal.date,
+            'minute': goal.minute
+            'team': goal.team,
+            'scorer': goal.player.name,
+            'assists': assists,
+            }"""
+
+        l.append(x)
+
+    return l
+        
+
+            
+def process():
+    games = process_games()
+    goals = process_goals()
+    
+    s = [unicode(e) for e in games]
+    s2 = [unicode(e) for e in goals]
+
+    f = open('games.txt', 'w')
+    f.write(s.encode('utf8'))
+    f.close()
+
+    f2 = open('goals.txt', 'w')
+    f2.write(s2.encode('utf8'))
+    f2.close()
+
     
         
                                     

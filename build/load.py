@@ -103,7 +103,6 @@ def load1():
     # Complex game data
     load_games()
 
-
     load_events()
 
     load_stadium_maps()
@@ -994,6 +993,9 @@ def load_events():
     load_assists()
 
 
+def load_substitutions():
+    pass
+
 
 @timer
 @transaction.commit_on_success
@@ -1064,7 +1066,6 @@ def load_goals():
         if g:
             goals.append(g)
 
-    
     print i
     insert_sql('goals_goal', goals)
         
