@@ -47,7 +47,7 @@ class GameManager(models.Manager):
         """
         l = []
         for g in Game.objects.with_lineups().exclude(date__year=2007):
-            print g
+            print(g)
             l.extend(g.section_list())
         return l
 
@@ -868,7 +868,7 @@ def get_best_game_ids():
         if t1s + t2s == gc:
             gids.append(gid)
 
-    print "Using %s out of %s games" % (len(gids), games.count())
+    print("Using {} out of {} games".format(len(gids), games.count()))
     return gids
         
 
@@ -885,7 +885,7 @@ def make_game_blocks():
         if len(slices) > 0:
             used += 1
 
-    print "%s out of %s games with complete data" % (len(gids), used)
+    print("{} out of {} games with complete data".format((len(gids), used)))
 
     return l
 

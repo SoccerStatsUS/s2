@@ -91,16 +91,16 @@ MANAGERS = ADMINS
 
 
 if DEBUG == True:
-    db_name = 'soccerstats_dev'
+    DB_NAME = 'soccerstats_dev'
 else:
-    db_name = 'soccerstats'
+    DB_NAME = 'soccerstats'
 
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         #'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': db_name,                      # Or path to database file if using sqlite3.
+        'NAME': DB_NAME,                      # Or path to database file if using sqlite3.
         'USER': 'soccerstats',                      # Not used with sqlite3.
         'PASSWORD': 'ymctas',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -181,7 +181,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #'django.contrib.gis',
-    'gunicorn',
+    #'gunicorn',
     #'debug_toolbar',
     'awards',
     'bios',
@@ -208,7 +208,7 @@ INSTALLED_APPS = (
     'tools',
     'videos',
 
-    'haystack',
+    #'haystack',
     'django_extensions',
 )
 

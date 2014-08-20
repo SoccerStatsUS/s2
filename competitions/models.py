@@ -155,7 +155,7 @@ class CompetitionManager(models.Manager):
         try:
             return Competition.objects.get(name=name)
         except:
-            print "Creating competition %s" % name
+            print("Creating competition {}".format(name))
             return Competition.objects.create(name=name)
 
 
@@ -365,7 +365,8 @@ class SeasonManager(models.Manager):
         try:
             return Season.objects.get(name=name, competition=competition)
         except:
-            if type(competition) in (int, str, unicode):
+            #if type(competition) in (int, str, unicode):
+            if type(competition) in (int, str):
                 competition = Competition.objects.get(id=competition)
             
             try:
@@ -719,7 +720,7 @@ class Season(AbstractCompetition):
     def get_next_name(self):
         try:
             name = int(self.name)
-            return unicode(name + 1)
+            return str(name + 1)
         except:
             # Need to do a regular expression?
             return None

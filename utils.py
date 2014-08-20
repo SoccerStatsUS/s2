@@ -38,12 +38,12 @@ def search_for_data(o):
         if 'set' in item:
             p = getattr(o, item)
             try:
-                print item, p()
+                print(item, p())
             except:
                 try:
-                    print item, p.all()
+                    print(item, p.all())
                 except:
-                    print "fail on %s" % item
+                    print("fail on {}".format(item))
 
 
 def find_duplicate_slugs(model):
@@ -60,8 +60,8 @@ def timer(method):
         result = method(*args, **kw)
         te = time.time()
 
-        print '%r (%r, %r) %2.2f sec' % \
-              (method.__name__, args, kw, te-ts)
+        print('%r (%r, %r) %2.2f sec' % \
+              (method.__name__, args, kw, te-ts))
         return result
 
     return timed
@@ -80,11 +80,11 @@ def insert_sql(table, dict_list):
     field_string = "%s" % ", ".join(['"%s"' % e for e in fields])
 
     # Placeholders for values.
-    values = [e.values() for e in dict_list]
+    values = [list(e.values()) for e in dict_list]
     value_string = ', '.join(['%s'] * len(values[0]))
 
     cursor = connection.cursor()
-    command = "INSERT INTO %s (%s) VALUES (%s);" % (table, field_string, value_string)
+    command = "INSERT INTO {} ({}) VALUES ({});".format(table, field_string, value_string)
     cursor.executemany(command, values)
 
 
@@ -130,7 +130,7 @@ def remove_parentheses(name):
     r = re.match('(.*?)(\(.*?\))(.*)', name)
     if r:
         first, middle, last = [e.strip() for e in r.groups()]
-        return '%s %s' % (first, last)
+        return '{} {}'.format(first, last)
     else:
         return name
 
@@ -138,7 +138,7 @@ def replace_with_parentheses(name):
     r = re.match('(.*?)\((.*?)\)(.*)', name)
     if r:
         first, middle, last = [e.strip() for e in r.groups()]
-        return '%s %s' % (middle, last)
+        return '{} {}'.format(middle, last)
     else:
         return name
 
@@ -154,17 +154,17 @@ def find_parenthetical_names(qs=None):
         n2 = replace_with_parentheses(e)
 
         if n1 != e and n1 in names:
-            print "'%s': '%s'" % (e, n1)
+            print("'{}': '{}'".format(e, n1))
             
         if n2 != e and n2 in names:
-            print "'%s': '%s'" % (e, n2)
+            print("'{}': '{}'".format(e, n2))
 
 
 def remove_middle_initial(name):
     r = re.match('(\w*?) \w\.? (\w*)', name)
     if r:
         first, last = [e.strip() for e in r.groups()]
-        return '%s %s' % (first, last)
+        return '{} {}'.format(first, last)
     else:
         return name
 
@@ -179,7 +179,7 @@ def find_middle_initial_names(qs=None):
         n1 = remove_middle_initial(e)
 
         if n1 != e and n1 in names:
-            print "'%s': '%s'," % (e, n1)
+            print("'{}': '{}',".format(e, n1))
 
 
 def find_similar_names(qs=None, threshold=.85):
@@ -194,7 +194,7 @@ def find_similar_names(qs=None, threshold=.85):
     l = []
 
     for i, name in enumerate(names):
-        #print "Processing %s" % name
+        #print("Processing %s" % name)
         for e in names[i+1:]:
             nscore = difflib.SequenceMatcher(None, name, e).ratio()
             nscores = str(nscore)[:4]

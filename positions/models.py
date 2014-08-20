@@ -28,7 +28,7 @@ class PositionManager(models.Manager):
             try:
                 e.generate_standings()
             except:
-                print "failed on %s" % e.id
+                print("failed on {}".format(e.id))
 
 
     def distinct_names(self):
@@ -121,7 +121,7 @@ class Position(models.Model):
                 dx['goals_for'] += game.goals_for(self.team)
                 dx['goals_against'] += game.goals_against(self.team)
             except:
-                print "FAIL"
+                print("FAIL")
 
         for season, dx in d.items():
             Stat.objects.create(
