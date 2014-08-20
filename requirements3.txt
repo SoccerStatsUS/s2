@@ -1,5 +1,5 @@
-#Django
+Django
 pymongo>=2
-#simplejson
-#psycopg2
+simplejson
+psycopg2
 #gunicorn
