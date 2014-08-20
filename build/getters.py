@@ -306,7 +306,7 @@ def make_game_getter():
         # Going to have to reconsider how we label games because of dateless games.
 
         if dt is None:
-            print "Failed to find game for team %s on %s" % (team_id, dt)
+            print("Failed to find game for team {} on {}".format(team_id, dt))
             #import pdb; pdb.set_trace()
             gid = None
         else:
@@ -316,7 +316,7 @@ def make_game_getter():
             if key in game_team_map:
                 gid = game_team_map[key]
             else:
-                print "Failed to find game for team %s on %s" % (team_id, dx)
+                print("Failed to find game for team {} on {}".format(team_id, dx))
                 #import pdb; pdb.set_trace()
                 gid = None
         
@@ -340,7 +340,7 @@ def make_game_result_getter():
         # Going to have to reconsider how we label games because of dateless games.
 
         if dt is None:
-            print "Failed to find result for team %s on %s" % (team_id, dt)
+            print("Failed to find result for team {} on {}".format(team_id, dt))
             gid = None
         else:
             # Not doing full game times yet...
@@ -349,7 +349,7 @@ def make_game_result_getter():
             if key in result_map:
                 gid = result_map[key]
             else:
-                print "Failed to find game result for team %s on %s" % (team_id, dx)
+                print("Failed to find game result for team {} on {}".format(team_id, dx))
                 #import pdb; pdb.set_trace()
                 gid = None
         
@@ -372,7 +372,7 @@ def make_goal_getter():
         if key in goal_map:
             gid = goal_map[key]
         else:
-            print "Failed to find goal for team %s on %s" % (team_id, dx)
+            print("Failed to find goal for team {} on {}".format(team_id, dx))
             gid = None
         
         return gid

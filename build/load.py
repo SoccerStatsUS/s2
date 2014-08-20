@@ -92,6 +92,9 @@ def load1():
 
     # List data
     # Put this before standings?
+
+
+    # This is breaking currently.
     load_awards()
 
     load_drafts()
@@ -233,10 +236,10 @@ def load_places():
 
         # Create slugs
         if c['state']:
-            slug = "%s %s" % (c['name'], c['state'].abbreviation)
+            slug = "{} {}".format(c['name'], c['state'].abbreviation)
 
         elif c['country']:
-            slug = "%s %s" % (c['name'], c['country'])
+            slug = "{} {}".format(c['name'], c['country'])
 
         else:
             slug = c['name']
@@ -252,7 +255,7 @@ def load_places():
 @timer
 @transaction.commit_on_success
 def load_positions():
-    print "\nloading %s positions\n" % soccer_db.positions.count()
+    print("\nloading {} positions\n".format(soccer_db.positions.count()))
     for position in soccer_db.positions.find():
         position.pop('_id')
         position['team'] = Team.objects.find(position['team'], create=True)
@@ -263,7 +266,7 @@ def load_positions():
 @transaction.commit_on_success
 def load_awards():
 
-    print "\nloading awards\n"
+    print("\nloading awards\n")
     awards = set()
     award_dict = {}
 
@@ -328,13 +331,13 @@ def load_awards():
                 'object_id': object_id,
                 })
 
-    insert_sql("awards_awarditem", items)
+    insert_sql("awards_awarditem", list(items))
 
 
 @timer
 @transaction.commit_on_success
 def load_drafts():
-    print "\nloading drafts\n"
+    print("\nloading drafts\n")
 
     competition_getter = make_competition_getter()
     season_getter = make_season_getter()
@@ -361,7 +364,7 @@ def load_drafts():
                 'end': draft.get('end'),
                 })
 
-    print "\nloading %s picks\n" % soccer_db.picks.count()
+    print("\nloading {} picks\n".format(soccer_db.picks.count()))
                 
     # Create picks
     picks = []
@@ -410,12 +413,12 @@ def load_drafts():
                 'number': pick['number'],
                 })
 
-    insert_sql("drafts_pick", picks)
+    insert_sql("drafts_pick", list(picks))
         
         
 @transaction.commit_on_success
 def load_news():
-    print "loading news"
+    print("loading news")
 
     source_getter = make_source_getter()
 
@@ -431,7 +434,7 @@ def load_news():
 @timer
 @transaction.commit_on_success
 def load_teams():
-    print "loading %s teams" % soccer_db.teams.count()
+    print("loading {} teams".format(soccer_db.teams.count()))
 
     cg = make_city_getter()
     names = set()
@@ -448,7 +451,7 @@ def load_teams():
             try:
                 founded = datetime.datetime(team['founded'], 1, 1)
             except:
-                print "founded out of range %s" % team
+                print("founded out of range %s" % team)
 
         if team['city']:
             city = cg(team['city'])
@@ -473,8 +476,8 @@ def load_teams():
                     'international': team.get('international', False),
                     })
         else:
-            print "duplicate team name"
-            print team
+            print("duplicate team name")
+            print(team)
 
 
     for alias in soccer_db.name_maps.find():
@@ -501,7 +504,7 @@ def load_confederations():
 def load_competitions():
 
 
-    print "loading competitions"
+    print("loading competitions")
     for c in soccer_db.competitions.find():
         c.pop('_id')
         Competition.objects.create(**c)
@@ -521,7 +524,7 @@ def load_competitions():
 
 @transaction.commit_on_success
 def load_seasons():
-    print "loading seasons"
+    print("loading seasons")
     # This appears to just be loading superseasons...
 
     #competition_getter = make_competition_getter()
@@ -550,7 +553,7 @@ def load_seasons():
 @timer
 @transaction.commit_on_success
 def load_stadiums():
-    print "loading stadiums"
+    print("loading stadiums")
 
     cg = make_city_getter()
 
@@ -607,7 +610,7 @@ def load_stadium_maps():
 @timer
 @transaction.commit_on_success
 def load_standings():
-    print "\n loading %s standings\n" % soccer_db.standings.count()
+    print("\n loading {} standings\n".format(soccer_db.standings.count()))
 
     team_getter = make_team_getter()
     competition_getter = make_competition_getter()
@@ -706,14 +709,14 @@ def load_bios():
     for bio in soccer_db.bios.find().sort('name', 1):
 
         #if bio['name'] not in names:
-            #print "Skipping %s" % bio['name']
+            #print("Skipping %s" % bio['name'])
         #    continue
 
         bio.pop('_id')
 
         if not bio['name']:
             import pdb; pdb.set_trace()
-            print "NO BIO: %s" % str(bio)
+            print("NO BIO: %s" % str(bio))
             continue
 
         # nationality should be many-to-many
@@ -770,14 +773,14 @@ def load_salaries():
         Salary.objects.create(
             person=b,
             amount=e['base'],
-            season=unicode(e['year']).strip()
+            season=str(e['year']).strip()
             )
                  
 
 @timer
 @transaction.commit_on_success
 def load_games():
-    print "\n loading %s games\n" % soccer_db.games.count()
+    print("\n loading {} games\n".format(soccer_db.games.count()))
 
     stadium_getter = make_stadium_getter()
     team_getter = make_team_getter()
@@ -956,12 +959,12 @@ def load_games():
                 })
 
 
-    print "Inserting %s games results." % len(games)
+    print("Inserting {} games results.".format(len(games)))
     # Broke on massive attendance. 
     # Watch out for crazy integer values.
     insert_sql("games_game", games)
 
-    print "Inserting games sources."
+    print("Inserting games sources.")
     game_getter = make_game_getter()
     
     l = []
@@ -1000,7 +1003,7 @@ def load_substitutions():
 @timer
 @transaction.commit_on_success
 def load_goals():
-    print "\nloading goals\n"
+    print("\nloading goals\n")
 
     team_getter = make_team_getter()
     bio_getter = make_bio_getter()
@@ -1038,7 +1041,7 @@ def load_goals():
             game_id = game_getter(team_id, d)
 
         if not game_id:
-            print "Cannot create %s" % goal
+            print("Cannot create %s" % goal)
             return {}
         else:
             return {
@@ -1060,19 +1063,19 @@ def load_goals():
     goals = []
     for i, goal in enumerate(soccer_db.goals.find()):
         if i % 50000 == 0:
-            print i
+            print(i)
 
         g = create_goal(goal)
         if g:
             goals.append(g)
 
-    print i
+    print(i)
     insert_sql('goals_goal', goals)
         
 @timer
 @transaction.commit_on_success
 def load_assists():
-    print "\nloading assists\n"
+    print("\nloading assists\n")
 
     team_getter = make_team_getter()
     bio_getter = make_bio_getter()
@@ -1108,7 +1111,7 @@ def load_assists():
         goal_id = goal_getter(team_id, bio_id, goal['minute'], d)
         if not goal_id:
             #import pdb; pdb.set_trace()
-            print "Cannot create assists for %s" % goal
+            print("Cannot create assists for %s" % goal)
             return []
 
         seen = set()
@@ -1129,18 +1132,18 @@ def load_assists():
     i = 0
     for i, goal in enumerate(soccer_db.goals.find()):
         if i % 50000 == 0:
-            print i
+            print(i)
         create_assists(goal)
 
-    print i
-    print len(assists)
+    print(i)
+    print(len(assists))
     insert_sql('goals_assist', assists)
 
 
 @timer
 @transaction.commit_on_success
 def load_game_stats():
-    print "\nloading game stats\n"
+    print("\nloading game stats\n")
 
     team_getter = make_team_getter()
     bio_getter = make_bio_getter()
@@ -1151,13 +1154,13 @@ def load_game_stats():
 
     birthdate_dict = dict(Bio.objects.exclude(birthdate=None).values_list("id", "birthdate"))
     
-    print "\nprocessing"
+    print("\nprocessing")
 
     l = []    
     i = 0
     for i, stat in enumerate(soccer_db.gstats.find(timeout=False)): # no timeout because this query takes forever.
         if i % 50000 == 0:
-            print i
+            print(i)
 
         if stat['player'] == '':
             #import pdb; pdb.set_trace()
@@ -1233,7 +1236,7 @@ def load_game_stats():
             'result': result,
             })
 
-    print i
+    print(i)
 
 
     insert_sql("stats_gamestat", l)
@@ -1243,7 +1246,7 @@ def load_game_stats():
 @timer
 @transaction.commit_on_success
 def load_stats():
-    print "\nloading stats\n"
+    print("\nloading stats\n")
 
     @timer
     def f():
@@ -1253,7 +1256,7 @@ def load_stats():
     team_getter, bio_getter, competition_getter, season_getter, source_getter = (
         make_team_getter(), make_bio_getter(), make_competition_getter(), make_season_getter(), make_source_getter(),)
                 
-    print "\nprocessing\n"
+    print("\nprocessing\n")
 
     l = []    
     i = 0
@@ -1261,7 +1264,7 @@ def load_stats():
 
 
         if i % 50000 == 0:
-            print i
+            print(i)
 
         if stat['name'] == '':
             #import pdb; pdb.set_trace()
@@ -1332,7 +1335,7 @@ def load_stats():
             'source_id': source_id,
             })
 
-    print i
+    print(i)
 
     insert_sql("stats_stat", l)
 
@@ -1346,7 +1349,7 @@ def load_lineups():
 
 
     # Need to do this with raw sql and standard dict management functions.
-    print "\nloading lineups\n"
+    print("\nloading lineups\n")
     from django.db import connection
 
     team_getter = make_team_getter()
@@ -1357,7 +1360,7 @@ def load_lineups():
     def create_appearance(a):
 
         if not a['name']:
-            print a
+            print(a)
             return None
 
         team_id = team_getter(a['team'])
@@ -1378,14 +1381,14 @@ def load_lineups():
 
             import pdb; pdb.set_trace()
 
-            print "Cannot create %s" % a
+            print("Cannot create %s" % a)
             return {}
 
         if a['on'] is not None and a['off'] is not None:
             try:
                 minutes = int(a['off']) - int(a['on'])
             except:
-                print "Fail on %s" % str(a)
+                print("Fail on %s" % str(a))
                 minutes = None
         else:
             minutes = None
@@ -1409,10 +1412,10 @@ def load_lineups():
             l.append(u)
 
         if i % 50000 == 0:
-            print i
+            print(i)
 
-    print i
-    print "Creating lineups"
+    print(i)
+    print("Creating lineups")
     insert_sql('lineups_appearance', l)
 
 

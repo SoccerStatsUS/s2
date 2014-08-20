@@ -135,7 +135,7 @@ def set_draft_picks():
 
 @timer
 def generate_source_data():
-    print "Generating source data."
+    print("Generating source data.")
     from games.models import GameSource
     game_counts = Counter([e[0] for e in GameSource.objects.values_list('source')])
     stat_counts = Counter([e[0] for e in Stat.objects.exclude(source=None).values_list('source')])
@@ -153,7 +153,7 @@ def generate_source_data():
 @transaction.commit_on_success
 def generate_season_data():
     # Generate season data including average age, nationality data (somehow)
-    print "Generating season data."
+    print("Generating season data.")
 
     minutes_dict = defaultdict(int)
     minutes_with_age_dict = defaultdict(int)
@@ -238,7 +238,7 @@ def generate_game_data_quality():
     """
     Generate game data quality info.
     """
-    print "Quality data for all games."
+    print("Quality data for all games.")
 
 
     global_starters = Appearance.objects.filter(on=0).exclude(off=0)
@@ -259,7 +259,7 @@ def generate_stats_generic(table, qs, make_key, update_dict):
     Maybe could improve this.
     """
 
-    #print "Merging stats."
+    #print("Merging stats.")
     final_dict = {}
 
     # Don't try to add these items.
@@ -308,7 +308,7 @@ def generate_stats_generic(table, qs, make_key, update_dict):
         # update_dict seems unnecessary at this point. Those values aren't in the given stat.
         #stat.update(update_dict)
 
-    insert_sql(table, final_dict.values())
+    insert_sql(table, list(final_dict.values()))
     #insert_sql("stats_stat", final_dict.values())
         #Stat.objects.create(**stat)
 
@@ -320,7 +320,7 @@ def generate_career_stats():
     generate from individual stat objects.
     """
     # Need to exclude indoor stats from career stats.
-    print "generating career stats"
+    print("generating career stats")
     make_key = lambda s: s['player_id']
     update = {
         'team_id': None,
@@ -334,7 +334,7 @@ def generate_career_stats():
         
 @timer
 def generate_team_stats():
-    print "generating team stats"
+    print("generating team stats")
     for team in Team.objects.all():
         stats = Stat.objects.filter(team=team)
         make_key = lambda s: (s['player_id'], s['team_id'])
@@ -344,7 +344,7 @@ def generate_team_stats():
 
 @timer
 def generate_competition_stats():
-    print "generating competition stats"
+    print("generating competition stats")
     for competition in Competition.objects.all():
         stats = Stat.objects.filter(competition=competition)
         make_key = lambda s: (s['player_id'], s['competition_id'])
@@ -414,7 +414,7 @@ def generate_competition_standings():
     """
     # Broken?
 
-    print "generating competition standings"
+    print("generating competition standings")
     for competition in Competition.objects.all():
         standings = Standing.objects.filter(competition=competition).exclude(season=None)
         make_key = lambda s: (s['team_id'], s['competition_id'])
@@ -426,7 +426,7 @@ def generate_competition_standings():
 
 @timer
 def generate_team_standings():
-    print "generating team standings"
+    print("generating team standings")
     for team in Team.objects.all():
         standings = Standing.objects.filter(team=team).exclude(season=None)
         make_key = lambda s: s['team_id']
@@ -497,7 +497,7 @@ def generate_stadium_standings():
 @timer
 def generate_position_standings():
     """Generate standings for all positions."""
-    print "Calculating standings for positions."
+    print("Calculating standings for positions.")
     Position.objects.generate_standings()
 
 
@@ -631,9 +631,9 @@ def generate_position_stats():
             games = Game.objects.team_filter(position.team).filter(date__gte=position.start, date__lte=end)
             if games.exists():
                 try:
-                    print "Creating result stats for %s games for %s - %s at %s" % (games.count(), position.person, position.name, position.team)
+                    print("Creating result stats for {} games for {} - {} at {}".format(games.count(), position.person, position.name, position.team))
                 except:
-                    print "Creating result stats."
+                    print("Creating result stats.")
                 position.wins, position.losses, position.ties = calculate_standings(position.team, games)
                 position.save()
         
@@ -645,12 +645,12 @@ def generate_plus_minus(appearance_qs):
     Generate the +/- for a given queryset.
     """
 
-    print "Generating plus_minus"
+    print("Generating plus_minus")
     d = defaultdict(int)
 
     for (i, a) in enumerate(appearance_qs.values()):
         if i % 1000 == 0:
-            print i
+            print(i)
 
         try:
             key = a['player_id']
@@ -665,13 +665,13 @@ def generate_plus_minus(appearance_qs):
 
 @transaction.commit_on_success
 def generate_career_plus_minus():
-    print "generating career plus minus"
+    print("generating career plus minus")
     plus_minus = generate_plus_minus(Appearance.objects.all())
     career_stat_dict = Stat.career_stats.to_dict()
 
     for i, (k, v) in enumerate(plus_minus.items()):
         if i % 100 == 0:
-            print i
+            print(i)
         s = career_stat_dict[k]
         s.plus_minus = v
         s.save()
@@ -708,22 +708,22 @@ def generate_game_minutes():
     These are single minute slices of a game.
     Really intensive cpu use.
     """
-    print "Generating game minutes"
+    print("Generating game minutes")
     # Possibly use game stat objects.
 
 
     l = []
-    print "Creating score for %s games" % Game.objects.count()
+    print("Creating score for {} games".format(Game.objects.count()))
     for i, e in enumerate(Game.objects.all()):
         if i % 1000 == 0:
-            print "Making scores for %s" % i
+            print("Making scores for %s".format(i))
         
         l.extend(e.game_scores_by_minute())
 
     # Just want to know how long this takes.
     @timer
     def insert_game_minutes():
-        print "Generating %s game minutes" % len(l)
+        print("Generating {} game minutes".format(len(l)))
         insert_sql("games_gameminute", l)
 
     insert_game_minutes()
