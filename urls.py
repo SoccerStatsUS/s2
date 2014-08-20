@@ -18,7 +18,10 @@ urlpatterns = patterns('',
                        #url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
 
                        url(r'^favicon\.ico$', RedirectView.as_view(url='http://media.socceroutsider.com/images/favicon.ico'), name="favicon"),
-                       url(r'^about/$', TemplateView.as_view(template_name='about.html'), name='about'),
+
+                       url(r'^about/$', TemplateView.as_view(template_name='about/index.html'), name='about_index'),
+                       url(r'^about/news/$', TemplateView.as_view(template_name='about/news.html'), name='about_news'),
+                       url(r'^about/build/$', TemplateView.as_view(template_name='about/build.html'), name='about_build'),
                        
                        #(r'^api/$', TemplateView.as_view(template_name='api.html'), name='api'),
                        #(r'^sources/$', direct_to_template, {'template': 'sources.html'}),
