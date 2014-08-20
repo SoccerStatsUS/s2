@@ -1,18 +1,19 @@
 Django==1.6
-guppy
 pymongo>=2
-South==0.7.2
-feedparser==4.1
 simplejson==2.0.9
 gunicorn==18.0
 psycopg2
-Celery
 python-memcached
 django-debug-toolbar
 django-tastypie
 django-haystack==1.2.7
 Whoosh
 pysolr
+
+# South==0.7.2
+# feedparser==4.1
+# Celery
+# guppy # memory profiling
 
 -e git://github.com/django-extensions/django-extensions.git#egg=django-extensions
 #-e git://github.com/saschwarz/minidetector.git#egg=Package
