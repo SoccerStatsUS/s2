@@ -4,8 +4,9 @@ import os
 import sys
 
 from custom_settings import DEBUG
+from settings import PROJECT_DIRNAME
 
-if DEBUG is False or os.path.exists("/Users"):
+if DEBUG is False or os.path.exists("/Users") or PROJECT_DIRNAME == 's2':
     prefix = 's2'
 else:
     prefix = 'sdev'

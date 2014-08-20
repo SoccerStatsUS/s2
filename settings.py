@@ -18,8 +18,12 @@ if os.path.exists("/Users"):
     PROJECT_DIR = "%s/soccer/%s" % (PROJECT_ROOT, PROJECT_DIRNAME)
     STATIC_URL = 'http://dev.soccerstats.us/static/'
 elif DEBUG:
+
     PROJECT_ROOT = "/home/chris"
-    PROJECT_DIRNAME = 'sdev'
+
+    if not PROJECT_DIRNAME:
+        PROJECT_DIRNAME = 'sdev'
+
     PROJECT_DIR = "%s/www/%s" % (PROJECT_ROOT, PROJECT_DIRNAME)
     STATIC_URL = 'http://dev.soccerstats.us/static/'
 else:
@@ -94,8 +98,8 @@ else:
 
 DATABASES = {
     'default': {
-        #'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        #'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': db_name,                      # Or path to database file if using sqlite3.
         'USER': 'soccerstats',                      # Not used with sqlite3.
         'PASSWORD': 'ymctas',                  # Not used with sqlite3.
@@ -176,7 +180,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.gis',
+    #'django.contrib.gis',
     'gunicorn',
     #'debug_toolbar',
     'awards',
