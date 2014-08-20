@@ -2,10 +2,12 @@
 export PGPASSWORD=ymctas
 
 # Need separate script for moving to prod?
-source ~/.virtualenvs/sdev/bin/activate
+#source ~/.virtualenvs/sdev/bin/activate
 
 dropdb soccerstats_build
-createdb -T template_postgis soccerstats_build --owner=soccerstats
+createdb soccerstats_build --owner=soccerstats
+createdb soccerstats_backup --owner=soccerstats
+createdb soccerstats --owner=soccerstats
 python manage.py syncdb --noinput --settings=build_settings
 python build/load.py 1
 python build/load.py 2
