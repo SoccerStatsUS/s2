@@ -1,4 +1,5 @@
-from django.contrib.gis.db import models
+#from django.contrib.gis.db import models
+from django.db import models
 from django.db.models import Q
 from django.template.defaultfilters import slugify
 
@@ -7,7 +8,7 @@ from organizations.models import Confederation
 
 from collections import defaultdict
 
-
+"""
 class WorldBorder(models.Model):
     # Regular Django fields corresponding to the attributes in the
     # world borders shapefile.
@@ -32,7 +33,7 @@ class WorldBorder(models.Model):
     def __unicode__(self):
         return self.name
 
-
+"""
 
 
 class CountryManager(models.Manager):

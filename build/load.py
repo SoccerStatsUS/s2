@@ -30,7 +30,7 @@ from utils import insert_sql, timer
 
 from getters import *
 
-from guppy import hpy
+#from guppy import hpy
 
 connection = pymongo.Connection()
 soccer_db = connection.soccer
@@ -122,12 +122,12 @@ def load4():
     load_news();
     # Consider loading stats last so that we can generate 
     load_stats()
-    print hpy().heap()
+    #print hpy().heap()
 
     # Analysis data
 
 
-
+"""
 
 def load_geo():
     import os
@@ -159,7 +159,7 @@ def run(verbose=True):
                       transform=False, encoding='iso-8859-1')
 
     lm.save(strict=True, verbose=verbose)    
-
+"""
 
 
 def load_sources():
