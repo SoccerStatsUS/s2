@@ -523,7 +523,10 @@ def make_position_date_getter():
     
     def position_getter(team, date):
         l = pm[team]
-        return [e[0] for e in l if e[2] <= date and e[3] >= date]
+        try:
+            return [e[0] for e in l if e[2] <= date and e[3] >= date]
+        except:
+            import pdb; pdb.set_trace()
 
     return position_getter
 
@@ -593,6 +596,9 @@ def generate_coach_stats(competition):
 
     for game_data in games:
         date, season, t1, t2 = game_data[:4]
+
+        if not date:
+            continue
 
         positions1 = pdg(t1, date)
         for person in positions1:

@@ -36,7 +36,7 @@ connection = pymongo.Connection()
 soccer_db = connection.soccer
 
 
-# Copied from donelli.
+# Copied from parse.
 def get_id_by_time():
     """
     Create a unique hash string based on the current time.

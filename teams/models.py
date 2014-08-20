@@ -253,7 +253,7 @@ class Team(models.Model):
         Return something like this:
         http://www.flipflopflyin.com/flipflopflyball/info-1994expos.html
         """
-        from s2.bios.models import Bio
+        from bios.models import Bio
 
         # Get all players for a given year.
         stats = self.stat_set.filter(season__name=year)
@@ -359,6 +359,10 @@ class TeamAlias(models.Model):
     
     start = models.DateField()
     end = models.DateField()
+
+    class Meta:
+        ordering = ('start',)
+
 
     def start_text(self):
         if self.start.month == 1 and self.start.day == 1:

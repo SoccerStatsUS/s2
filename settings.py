@@ -107,7 +107,7 @@ DATABASES = {
 
 # Fix this soon.
 #EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-#EMAIL_FILE_PATH = '/home/chris/www/s2/run/messages' # change this to a proper location
+#EMAIL_FILE_PATH = '/home/chris/www/www.soccerstats.us/run/messages' # change this to a proper location
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'chris@soccerstats.us'
 EMAIL_PORT = 587
