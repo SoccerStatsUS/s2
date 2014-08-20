@@ -1,14 +1,12 @@
 Django==1.6
 pymongo>=2
-simplejson==2.0.9
-gunicorn==18.0
-psycopg2
-python-memcached
-django-debug-toolbar
-django-tastypie
-django-haystack==1.2.7
-Whoosh
-pysolr
+
+#python-memcached
+#django-debug-toolbar
+#django-tastypie
+#django-haystack==1.2.7
+#Whoosh
+#pysolr
 
 # South==0.7.2
 # feedparser==4.1
