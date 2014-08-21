@@ -4,10 +4,10 @@ from django.conf.urls import url, include, patterns
 from django.contrib import admin
 from django.views.generic import RedirectView, TemplateView
 
-from haystack.views import SearchView  
-from haystack.query import SearchQuerySet
+#from haystack.views import SearchView  
+#from haystack.query import SearchQuerySet
 
-sqs = SearchQuerySet().order_by('name')
+#sqs = SearchQuerySet().order_by('name')
 
 admin.autodiscover()
 
@@ -27,12 +27,11 @@ urlpatterns = patterns('',
                        #(r'^sources/$', direct_to_template, {'template': 'sources.html'}),
                        #(r'^blog/$', direct_to_template, {'template': 'blog.html'}),
 
-                       url(r'search/', 
-                           SearchView(load_all=False, searchqueryset=sqs),
-                           name='haystack_search',  
-                           ),
+                       #url(r'search/', 
+                       #    SearchView(load_all=False, searchqueryset=sqs),
+                       #    name='haystack_search',  
+                       #    ),
                        #include('haystack.urls')),
-
 
                        url(r"^calendar/$", "dates.views.calendar", name="calendar_index"),
                        url(r'^awards/', include('awards.urls')),

@@ -2,4 +2,13 @@ Django
 pymongo>=2
 simplejson
 psycopg2
-#gunicorn
+gunicorn
+
+#python-memcached
+#django-debug-toolbar
+#django-tastypie
+#django-haystack==1.2.7
+#Whoosh
+#pysolr
+
+# -e git://github.com/django-extensions/django-extensions.git#egg=django-extensions
