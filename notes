@@ -23,3 +23,35 @@ Homepage should have:
 
 
 Team Detail should have recent scores graph.
+
+
+
+
+
+
+#### Stats
+
+Every game is part of several competitions. We save stats for each competition into a stats object. That should be relatively standard. 
+Try to generate stats for everything that doesn't have them.
+
+So a FC Dallas regular season  2011 game would be part of:
+MLS regular season 2011, regularseasoncareer, everythingcareer, FC Dallas regular season 2011, FC Dallas regular season
+National team by competition, nationalteam2011, nationalteamcareer
+
+An FC Dallas playoff game would be part of:
+MLS playofss 2011, playoffscareer, everythingcareer, FC Dallas playoffs 2011, FC Dalals playoffs
+
+A friendly would be part of:
+friendly, (that's it)
+
+This would solve the long-lasting MLS open cup / regular season problem.
+
+#### Soccermetrics
+
+Difference vs ratio question about scores.
+
+Is a 3-1 victory more like a 6-2 or a 6-4 victory?
+
+Determines motivations of teams.
+
+http://www.wagerlines.net/lib/etj.pdf
