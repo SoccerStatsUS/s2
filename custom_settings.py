@@ -1,0 +1,2 @@
+DEBUG = True
+PROJECT_DIRNAME = 's2'

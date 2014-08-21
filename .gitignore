@@ -5,8 +5,6 @@ db/
 run/*.pid
 run/*.log
 run/search/
-secret_settings.py
-custom_settings.py
 
 media/images/people
 media/images/bio/
