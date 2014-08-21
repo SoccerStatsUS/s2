@@ -209,7 +209,7 @@ INSTALLED_APPS = (
     'videos',
 
     #'haystack',
-    'django_extensions',
+    #'django_extensions',
 )
 
 
