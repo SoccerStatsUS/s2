@@ -1,4 +1,0 @@
-<h2>{{ object.name }}</h2>
-
-<p>{{ object.birthdate }}</p>
-<p>{{ object.birthplace }}</p>

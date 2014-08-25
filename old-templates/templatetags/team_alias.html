@@ -1,7 +1,0 @@
-{{ alias.name }} 
-{% if alias.start.year == alias.end.year %}
-({{ alias.start.year }})
-{% else %}
-({{ alias.start.year }} - {{ alias.end.year }})
-{% endif %}
-{% if not forloop.last %}, {% endif %}
