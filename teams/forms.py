@@ -79,7 +79,7 @@ class TeamGameForm(forms.Form):
         years = sorted(set([e[0].year for e in games.exclude(date=None).values_list('date')]))
 
         #years = range(min_year, max_year +1)
-        year_choices = [('', '')] + zip(years, years)
+        year_choices = [('', '')] + list(zip(years, years))
         self.fields['year'] = forms.ChoiceField(year_choices, required=False)
         self.fields['year_filter'] = forms.ChoiceField(choices=YEAR_FILTERS, required=False)
 

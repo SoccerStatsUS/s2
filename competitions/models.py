@@ -647,7 +647,7 @@ class Season(AbstractCompetition):
             
 
     def __unicode__(self):
-        return u"%s %s" % (self.name, self.competition)
+        return u"%s %s" % (self.name, self.competition.name)
 
     def save(self, *args, **kwargs):
         if not self.slug:
