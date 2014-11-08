@@ -34,11 +34,17 @@ line {
 
 <div id="tab_wrapper">
 
+
+
+{% comment %}
+
 {% if goals %}
 <div tab="list">
 {% include "templatetags/goals/goals.html" %}
 </div>
 {% endif %}
+
+{% endcomment %}
 
 <div tab="charts">
 

@@ -51,7 +51,7 @@
     <div>
 
                
-      <div>
+      <div id="nav">
         <table>
           <tr>
             <td><a href="{% url 'scoreboard_today' %}">scores</a></td>
@@ -62,8 +62,8 @@
             <td><a href="{% url 'about_index' %}">about</a></td>
             <td>
               <form id="search_form" method="get" action="/search">
-                <input id="id_q" name="q" type="text" value="search" />
-                <span id="search_button">x</span>
+                <input id="id_q" name="q" type="text" value="" placeholder="search" />
+                <span id="search_button"><a>?</a></span>
                 
                 {% comment %}
                 <div style="-webkit-transform: rotate(-45deg); 
@@ -81,9 +81,10 @@
 
 
 
-      <h2 id="title"><a href="/">SoccerStats.us</a></h2>
-      <h3>open source soccer statistics and information</h3>
-
+      <div id="title">
+	<a href="/" id="maintitle">SoccerStats.us</a>
+	<span id="subtitle">open source soccer statistics and information</span>
+      </div>
     </div>
 
 

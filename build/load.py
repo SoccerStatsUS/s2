@@ -24,6 +24,7 @@ from places.models import Country, State, City, Stadium, StadiumMap
 from positions.models import Position
 from sources.models import Source, SourceUrl
 from teams.models import Team, TeamAlias
+from transactions.models import Transaction
 
 
 from utils import insert_sql, timer
@@ -98,6 +99,8 @@ def load1():
     load_awards()
 
     load_drafts()
+
+    load_transactions()
 
     load_positions()
 
@@ -994,6 +997,44 @@ def load_events():
     load_substitutions()
     load_goals()
     load_assists()
+
+
+def load_transactions():
+
+    print("\n loading {} transactions\n".format(soccer_db.transactions.count()))
+
+    transactions = []
+
+    print("\nloading {} transactions\n".format(soccer_db.positions.count()))
+    for t in soccer_db.transactions.find():
+        try:
+            t.pop('_id')
+
+            if t.get('team_from'):
+                team_from = Team.objects.find(t['team_from'], create=True)
+                team_from_id = team_from.id
+            else:
+                team_from_id= None
+
+            if t.get('team_to'):
+                team_to = Team.objects.find(t['team_to'], create=True)
+                team_to_id = team_to.id
+            else:
+                team_to_id = None
+
+            person = Bio.objects.find(t['person'])
+
+            transactions.append({
+                'ttype': t['ttype'],
+                'person_id': person.id,
+                'team_to_id': team_to_id,
+                'team_from_id': team_from_id,
+                'date': t['date'],
+                })
+        except:
+            import pdb; pdb.set_trace()
+
+    insert_sql("transactions_transaction", transactions)
 
 
 def load_substitutions():

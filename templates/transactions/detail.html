@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load datum_or_none %}
+{% block title %}{{ transaction.id }}{% endblock %}
+
+{% block content %}
+
+<p>
+<a href="{% url 'date_detail' transaction.date.year transaction.date.month transaction.date.day %}">{{ transaction.date }}</a>
+{{ transaction.ttype }}
+<p>
+
+<p>
+<a href="{% url 'person_detail' transaction.person.slug %}">{{ transaction.person }}</a>
+</p>
+
+<p>
+{% if transaction.team_to %}
+to <a href="{% url 'team_detail' transaction.team_to.slug %}">{{ transaction.team_to }}</a>
+{% endif %}
+</p>
+
+<p>
+{% if transaction.team_from %}
+from: <a href="{% url 'team_detail' transaction.team_from.slug %}">{{ transaction.team_from }}</a>
+{% endif %}
+</p>
+
+
+
+{% endblock %}

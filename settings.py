@@ -202,6 +202,7 @@ INSTALLED_APPS = (
     'standings',
     'stats',
     'teams',
+    'transactions',
     'tools',
     'videos',
 

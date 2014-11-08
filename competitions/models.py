@@ -656,7 +656,6 @@ class Season(AbstractCompetition):
         super(Season, self).save(*args, **kwargs)
 
 
-
     def goal_distribution(self, ceiling=5):
         d = defaultdict(int)
         for game in self.game_set.exclude(home_team=None).exclude(team1_score=None):
@@ -664,6 +663,7 @@ class Season(AbstractCompetition):
                 import pdb; pdb.set_trace()
             d[(min(game.home_score(), ceiling), min(game.away_score(), ceiling))] += 1
         return d
+
 
     def goal_distribution2(self, ceiling=5):
         gd = self.goal_distribution()

@@ -474,7 +474,7 @@ def season_goals(request, competition_slug, season_slug):
     context = {
         'season': season,
         'goals': Goal.objects.filter(game__season=season).order_by('date', 'team', 'minute'),
-        'goal_distribution': json.dumps(season.goal_distribution().items()),
+        'goal_distribution': json.dumps(tuple(season.goal_distribution().items())),
         }
 
     return render_to_response("competitions/season/goals.html",

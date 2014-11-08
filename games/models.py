@@ -239,11 +239,11 @@ class Game(models.Model):
     linesman2 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman2_games")
     linesman3 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman3_games")
 
+    merges = models.IntegerField()
+
     sources = models.ManyToManyField(Source, through='GameSource')
 
     objects = GameManager()
-
-    merges = models.IntegerField()
 
     class Meta:
         ordering = ('-date',)
