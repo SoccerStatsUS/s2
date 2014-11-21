@@ -1,12 +1,11 @@
-### A database website for analysis of soccer statistics.
+### An open source, logical soccer database
 
-This is the code used to run soccerstats.us
+This is the code used to create an integrated, reasonably maintained soccer database, with an ORM layer including models and views written in Django.
+
+For the time being it also contains the code for the website, but this is being migrated to separate website repositories (soccerstats.us)
 
 
-#### Deployment instructions.
-
-
-    # for building the website / postgres db
+#### Build instructions
     
     sudo apt-get install python-pip python-dev postgresql-server-dev-all postgresql  python3-psycopg2
     
