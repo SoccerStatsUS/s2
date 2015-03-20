@@ -135,14 +135,17 @@ def make_city_getter():
         if c['country']:
             country = Country.objects.get(name=c['country'])
         
-        return City.objects.get(name=c['name'], state=state, country=country)
+        try:
+            return City.objects.get(name=c['name'], state=state, country=country)
+        except:
+            return City.objects.create(name=c['name'], state=state, country=country)
 
     return get_city
 
 
 def make_city_pre_getter():
     """
-    Dissasseble a location string into city, state, and country pieces.
+    Dissassemble a location string into city, state, and country pieces.
     City, state, and country are all optional, although country should (always?) 
     exist.
     e.g. Dallas, Texas -> {'name': 'Dallas', 'state': 'Texas', 'country': 'United States' }

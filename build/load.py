@@ -562,13 +562,10 @@ def load_stadiums():
 
     for stadium in soccer_db.stadiums.find():
         stadium.pop('_id')
+
         stadium['slug'] = slugify(stadium['name'])
 
-        try:
-            stadium['city'] = cg(stadium['location'])
-        except:
-            import pdb; pdb.set_trace()
-
+        stadium['city'] = cg(stadium['location'])
         
         if 'renovations' in stadium:
             stadium.pop('renovations')
@@ -577,6 +574,12 @@ def load_stadiums():
         
         if stadium['architect']:
             stadium['architect'] = Bio.objects.find(stadium['architect'])
+
+        if 'opened' in stadium and type(stadium['opened']) == int:
+            stadium['year_opened'] = stadium.pop('opened')
+
+        if 'closed' in stadium and type(stadium['closed']) == int:
+            stadium['year_closed'] = stadium.pop('closed')
 
         try:
             Stadium.objects.create(**stadium)

@@ -2,9 +2,9 @@ from collections import defaultdict
 
 from django.db import models
 
-from bios.models import Bio
-from games.models import Game
-from teams.models import Team
+from s2.bios.models import Bio
+from s2.games.models import Game
+from s2.teams.models import Team
 
 
 class GoalManager(models.Manager):

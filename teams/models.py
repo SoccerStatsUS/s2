@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
 
-from places.models import City
+from s2.places.models import City
 
 
 class AbstractTeamManager(models.Manager):

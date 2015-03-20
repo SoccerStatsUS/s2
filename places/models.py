@@ -3,8 +3,8 @@ from django.db import models
 from django.db.models import Q
 from django.template.defaultfilters import slugify
 
-from bios.models import Bio
-from organizations.models import Confederation
+from s2.bios.models import Bio
+from s2.organizations.models import Confederation
 
 from collections import defaultdict
 

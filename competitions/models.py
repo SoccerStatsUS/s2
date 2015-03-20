@@ -4,7 +4,7 @@ from django.template.defaultfilters import slugify
 
 from collections import defaultdict
 
-from bios.models import Bio
+from s2.bios.models import Bio
 
 
 import datetime

@@ -6,11 +6,11 @@ import random
 
 from django.db import models
 
-from bios.models import Bio
-from competitions.models import Competition, Season
-from places.models import Stadium, City, Country
-from sources.models import Source
-from teams.models import Team
+from s2.bios.models import Bio
+from s2.competitions.models import Competition, Season
+from s2.places.models import Stadium, City, Country
+from s2.sources.models import Source
+from s2.teams.models import Team
 
 
 
