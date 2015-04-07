@@ -3,8 +3,8 @@ from django.db import models
 from django.db.models import Q
 from django.template.defaultfilters import slugify
 
-from s2.bios.models import Bio
-from s2.organizations.models import Confederation
+from bios.models import Bio
+from organizations.models import Confederation
 
 from collections import defaultdict
 
@@ -51,7 +51,7 @@ class CountryManager(models.Manager):
         A dict mapping a team's name and short name to an id.
         """
         d = {}
-        for e in self.get_query_set():
+        for e in self.get_queryset():
             d[e.name] = e.id
         return d
 
@@ -60,7 +60,7 @@ class CountryManager(models.Manager):
         A dict mapping a team's name and short name to an id.
         """
         d = {}
-        for e in self.get_query_set():
+        for e in self.get_queryset():
             d[e.id] = e.name
         return d
 
@@ -135,7 +135,7 @@ class CityManager(models.Manager):
         """
         # Used to find problem teams.
         d = defaultdict(list)
-        for e in self.get_query_set():
+        for e in self.get_queryset():
             d[e.slug].append(e.name)
         return [(k, v) for (k, v) in d.items() if len(v) > 1]
 
@@ -173,7 +173,7 @@ class StadiumManager(models.Manager):
         Dict mapping names to stadium id's.
         """
         d = {}
-        for e in self.get_query_set():
+        for e in self.get_queryset():
             d[e.name] = e.id
         return d
 

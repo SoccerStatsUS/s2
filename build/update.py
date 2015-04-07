@@ -2,7 +2,11 @@ import os
 import pymongo
 import sys
 
+
+from django.core.wsgi import get_wsgi_application
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+application = get_wsgi_application()
+
 
 
 from django.db import transaction
@@ -14,7 +18,7 @@ soccer_db = connection.soccer
 
 from getters import make_source_getter
 
-@transaction.commit_on_success
+@transaction.atomic
 def update_news():
     print("loading news")
 

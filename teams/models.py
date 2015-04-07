@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
 
-from s2.places.models import City
+from places.models import City
 
 
 class AbstractTeamManager(models.Manager):
@@ -20,14 +20,14 @@ class AbstractTeamManager(models.Manager):
         Returns a queryset of games played within a given timedelta.
         """
         since = datetime.date.today() - delta
-        return self.get_query_set().filter(date__gte=since)
+        return self.get_queryset().filter(date__gte=since)
 
     def team_dict(self):
         """
         A dict mapping a team's name and short name to an id.
         """
         d = {}
-        for e in self.get_query_set():
+        for e in self.get_queryset():
             d[e.name] = e.id
             d[e.short_name] = e.id
         return d
@@ -38,7 +38,7 @@ class AbstractTeamManager(models.Manager):
         """
         # Used to find problem teams.
         d = defaultdict(list)
-        for e in self.get_query_set():
+        for e in self.get_queryset():
             d[e.slug].append(e.name)
         return [(k, v) for (k, v) in d.items() if len(v) > 1]
 
@@ -88,8 +88,8 @@ class DefunctTeamManager(AbstractTeamManager):
     Team.defunct - teams that no longer exist.
     """
 
-    def get_query_set(self):
-        return super(DefunctTeamManager, self).get_query_set().filter(defunct=True, real=True)
+    def get_queryset(self):
+        return super(DefunctTeamManager, self).get_queryset().filter(defunct=True, real=True)
 
 
 class ActiveTeamManager(AbstractTeamManager):
@@ -97,8 +97,8 @@ class ActiveTeamManager(AbstractTeamManager):
     Team.active - teams that no longer exist.
     """
 
-    def get_query_set(self):
-        return super(DefunctTeamManager, self).get_query_set().filter(defunct=False, real=True)
+    def get_queryset(self):
+        return super(DefunctTeamManager, self).get_queryset().filter(defunct=False, real=True)
 
     
 
@@ -108,8 +108,8 @@ class RealTeamManager(AbstractTeamManager):
     Team.real - teams that are not fictional.
     """
 
-    def get_query_set(self):
-        return super(RealTeamManager, self).get_query_set().filter(real=True)
+    def get_queryset(self):
+        return super(RealTeamManager, self).get_queryset().filter(real=True)
 
 
 class UnrealTeamManager(AbstractTeamManager):
@@ -117,8 +117,8 @@ class UnrealTeamManager(AbstractTeamManager):
     Team.unreal - teams that are fictional.
     """
 
-    def get_query_set(self):
-        return super(RealTeamManager, self).get_query_set().filter(real=True)
+    def get_queryset(self):
+        return super(RealTeamManager, self).get_queryset().filter(real=True)
 
 
 

@@ -6,7 +6,9 @@ import pymongo
 import sys
 import time
 
+from django.core.wsgi import get_wsgi_application
 os.environ['DJANGO_SETTINGS_MODULE'] = 'build_settings'
+application = get_wsgi_application()
 
 from django.contrib.contenttypes.models import ContentType
 from django.db import transaction
@@ -96,7 +98,7 @@ def load1():
 
 
     # This is breaking currently.
-    load_awards()
+    #load_awards()
 
     load_drafts()
 
@@ -256,7 +258,7 @@ def load_places():
 
 
 @timer
-@transaction.commit_on_success
+@transaction.atomic
 def load_positions():
     print("\nloading {} positions\n".format(soccer_db.positions.count()))
     for position in soccer_db.positions.find():
@@ -266,7 +268,7 @@ def load_positions():
         Position.objects.create(**position)
 
 @timer
-@transaction.commit_on_success
+@transaction.atomic
 def load_awards():
 
     print("\nloading awards\n")
@@ -338,7 +340,7 @@ def load_awards():
 
 
 @timer
-@transaction.commit_on_success
+@transaction.atomic
 def load_drafts():
     print("\nloading drafts\n")
 
@@ -419,7 +421,7 @@ def load_drafts():
     insert_sql("drafts_pick", list(picks))
         
         
-@transaction.commit_on_success
+@transaction.atomic
 def load_news():
     print("loading news")
 
@@ -435,7 +437,7 @@ def load_news():
 
 
 @timer
-@transaction.commit_on_success
+@transaction.atomic
 def load_teams():
     print("loading {} teams".format(soccer_db.teams.count()))
 
@@ -495,7 +497,7 @@ def load_teams():
                 })
 
 
-@transaction.commit_on_success
+@transaction.atomic
 def load_confederations():
     for cc in soccer_db.confederations.find():
         cc.pop('_id')
@@ -503,7 +505,7 @@ def load_confederations():
         Confederation.objects.create(**cc)
 
 
-@transaction.commit_on_success
+@transaction.atomic
 def load_competitions():
 
 
@@ -525,7 +527,7 @@ def load_competitions():
 
 
 
-@transaction.commit_on_success
+@transaction.atomic
 def load_seasons():
     print("loading seasons")
     # This appears to just be loading superseasons...
@@ -554,7 +556,7 @@ def load_seasons():
 
 
 @timer
-@transaction.commit_on_success
+@transaction.atomic
 def load_stadiums():
     print("loading stadiums")
 
@@ -614,7 +616,7 @@ def load_stadium_maps():
 
 
 @timer
-@transaction.commit_on_success
+@transaction.atomic
 def load_standings():
     print("\n loading {} standings\n".format(soccer_db.standings.count()))
 
@@ -695,7 +697,7 @@ def load_standings():
 
 
 @timer
-@transaction.commit_on_success
+@transaction.atomic
 def load_bios():
     print("loading bios")
 
@@ -767,7 +769,7 @@ def load_bios():
 
 
 
-@transaction.commit_on_success
+@transaction.atomic
 def load_salaries():
     bg = make_bio_getter()
 
@@ -784,7 +786,7 @@ def load_salaries():
                  
 
 @timer
-@transaction.commit_on_success
+@transaction.atomic
 def load_games():
     print("\n loading {} games\n".format(soccer_db.games.count()))
 
@@ -1045,7 +1047,7 @@ def load_substitutions():
 
 
 @timer
-@transaction.commit_on_success
+@transaction.atomic
 def load_goals():
     print("\nloading goals\n")
 
@@ -1117,7 +1119,7 @@ def load_goals():
     insert_sql('goals_goal', goals)
         
 @timer
-@transaction.commit_on_success
+@transaction.atomic
 def load_assists():
     print("\nloading assists\n")
 
@@ -1185,7 +1187,7 @@ def load_assists():
 
 
 @timer
-@transaction.commit_on_success
+@transaction.atomic
 def load_game_stats():
     print("\nloading game stats\n")
 
@@ -1288,7 +1290,7 @@ def load_game_stats():
 
 
 @timer
-@transaction.commit_on_success
+@transaction.atomic
 def load_stats():
     print("\nloading stats\n")
 
@@ -1385,7 +1387,7 @@ def load_stats():
 
 
 @timer
-@transaction.commit_on_success
+@transaction.atomic
 def load_lineups():
     # This should be removed in favor of substitutions
     # Ultimately subsumed by a combination game stats / substitutions

@@ -2,10 +2,8 @@ from django.contrib.contenttypes import generic
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
-from django.utils.functional import memoize
 
-
-
+from functools import lru_cache
 from collections import defaultdict
 import datetime
 
@@ -19,7 +17,7 @@ class BioManager(models.Manager):
         Returns a random person born on this day.
         """
         # Should split into two methods.
-        b = self.get_query_set().filter(birthdate__month=month, birthdate__day=day)
+        b = self.get_queryset().filter(birthdate__month=month, birthdate__day=day)
         if b:
             c = b.count()
             i = random.randint(0, c-1)
@@ -34,7 +32,7 @@ class BioManager(models.Manager):
         Dict mapping names to bio id's.
         """
         d = {}
-        for name, eid in self.get_query_set().values_list('name', 'id'):
+        for name, eid in self.get_queryset().values_list('name', 'id'):
             d[name] = eid
         return d
 
@@ -43,7 +41,7 @@ class BioManager(models.Manager):
         Dict mapping names to bio id's.
         """
         d = {}
-        for e in self.get_query_set():
+        for e in self.get_queryset():
             d[e.name] = e.id
         return d
 
@@ -69,7 +67,7 @@ class BioManager(models.Manager):
         """
         # Used to find problem bios.
         d = defaultdict(list)
-        for e in self.get_query_set():
+        for e in self.get_queryset():
             d[e.slug].append(e.name)
         return [k for (k, v) in d.items() if len(v) > 1]
 
@@ -85,10 +83,10 @@ class BioManager(models.Manager):
         #    first, last = s.split(' ', 1)
         #    return "%s %s" % (last, first)
 
-        regular_names = set(self.get_query_set().values_list('name', flat=True))
+        regular_names = set(self.get_queryset().values_list('name', flat=True))
 
         reversed_names = set()
-        for e in self.get_query_set().filter(name__contains=' ').values_list('name', flat=True):
+        for e in self.get_queryset().filter(name__contains=' ').values_list('name', flat=True):
             reversed_names.add(s)
 
         tmp = regular_names.intersection(reversed_names)
@@ -97,7 +95,7 @@ class BioManager(models.Manager):
     def id_to_slug(self, pid):
         return Bio.objects.get(id=pid).slug
 
-    id_to_slug = memoize(id_to_slug, {}, 2)
+    # id_to_slug = lru_cache(id_to_slug, {}, 2)
 
 
 class Bio(models.Model):

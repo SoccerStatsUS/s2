@@ -4,7 +4,7 @@ from django.template.defaultfilters import slugify
 
 from collections import defaultdict
 
-from s2.bios.models import Bio
+from bios.models import Bio
 
 
 import datetime
@@ -164,7 +164,7 @@ class CompetitionManager(models.Manager):
         Dict mapping names to bio id's.
         """
         d = {}
-        for e in self.get_query_set():
+        for e in self.get_queryset():
             d[e.name] = e.id
         return d
 
@@ -384,7 +384,7 @@ class SeasonManager(models.Manager):
         Dict mapping names to bio id's.
         """
         d = {}
-        for name, competition, sid in self.get_query_set().values_list('name', 'competition', 'id'):
+        for name, competition, sid in self.get_queryset().values_list('name', 'competition', 'id'):
             d[(name, competition)] = sid
         return d
 
@@ -395,7 +395,7 @@ class SeasonManager(models.Manager):
         Dict mapping names to bio id's.
         """
         d = {}
-        for e in self.get_query_set():
+        for e in self.get_queryset():
             if e.competition:
                 d[(e.name, e.competition.id)] = e.id
             else:

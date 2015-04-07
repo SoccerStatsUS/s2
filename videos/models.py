@@ -8,7 +8,7 @@ class VideoManager(models.Manager):
         Returns a dict mapping a name to a source id.
         """
         d = {}
-        for e in self.get_query_set():
+        for e in self.get_queryset():
             d[e.name] = e.id
             if e.base_url:
                 d[e.base_url] = e.id

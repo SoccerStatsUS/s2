@@ -2,23 +2,23 @@ from collections import defaultdict
 
 from django.db import models
 
-from s2.bios.models import Bio
-from s2.games.models import Game
-from s2.teams.models import Team
+from bios.models import Bio
+from games.models import Game
+from teams.models import Team
 
 
 class GoalManager(models.Manager):
 
     def unique_dict(self):
         d = {}
-        for pid, ogpid, tid, minute, date, eid in self.get_query_set().values_list("player", "own_goal_player", "team", "minute", "date", "id"):
+        for pid, ogpid, tid, minute, date, eid in self.get_queryset().values_list("player", "own_goal_player", "team", "minute", "date", "id"):
             key = (tid, pid, ogpid, minute, date)
             d[key] = eid
         return d
 
     def unique_dict_old(self):
         d = {}
-        for e in self.get_query_set():
+        for e in self.get_queryset():
             player_id = own_goal_player_id = None
             if e.player:
                 player_id = e.player.id
