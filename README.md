@@ -19,7 +19,7 @@ For the time being it also contains the code for the website, but this is being 
     sudo service postgresql restart
     
     cd ~/soccer
-    git clone https://github.com/Soccerstats/s2.git
+    git clone https://github.com/Soccerstatsus/s2.git
     cd s2
     
     # Add DEBUG, PROJECT_DIRNAME to custom_settings
@@ -29,7 +29,7 @@ For the time being it also contains the code for the website, but this is being 
     emacs secret_settings.py
     
     sudo pip install -r requirements.txt 
-    ./build.sh
+    python3 make/
 
     
 #### Deploy
