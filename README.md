@@ -31,6 +31,11 @@ For the time being it also contains the code for the website, but this is being 
     sudo pip install -r requirements.txt 
     ./build.sh
 
+    
+#### Deploy
+
+     python3 manage.py runserver 45.33.68.58:8080
+
 
 #### Dependencies
 
