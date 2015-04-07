@@ -6,11 +6,11 @@ import random
 
 from django.db import models
 
-from s2.bios.models import Bio
-from s2.competitions.models import Competition, Season
-from s2.places.models import Stadium, City, Country
-from s2.sources.models import Source
-from s2.teams.models import Team
+from bios.models import Bio
+from competitions.models import Competition, Season
+from places.models import Stadium, City, Country
+from sources.models import Source
+from teams.models import Team
 
 
 
@@ -72,7 +72,7 @@ class GameManager(models.Manager):
         Returns a dict mapping a team/date combination to a game id.
         """
         d = {}
-        for eid, dt, t1, t2 in self.get_query_set().values_list('id', 'date', 'team1', 'team2'):
+        for eid, dt, t1, t2 in self.get_queryset().values_list('id', 'date', 'team1', 'team2'):
             key = (t1, dt)
             d[key] = eid
             key2 = (t2, dt)
@@ -84,7 +84,7 @@ class GameManager(models.Manager):
         Returns a dict mapping a team/date combination to a game id.
         """
         d = {}
-        for e in self.get_query_set():
+        for e in self.get_queryset():
             key = (e.team1.id, e.date)
             d[key] = e.id
             key2 = (e.team2.id, e.date)
@@ -96,7 +96,7 @@ class GameManager(models.Manager):
         Returns a dict mapping a team/date combination to a game id.
         """
         d = {}
-        for dt, t1id, t2id, t1r, t2r in self.get_query_set().values_list('date', 'team1', 'team2', 'team1_result', 'team2_result'):
+        for dt, t1id, t2id, t1r, t2r in self.get_queryset().values_list('date', 'team1', 'team2', 'team1_result', 'team2_result'):
             key = (t1id, dt)
             d[key] = t1r
             key2 = (t2id, dt)
@@ -108,7 +108,7 @@ class GameManager(models.Manager):
         Returns a dict mapping a team/date combination to a game id.
         """
         d = {}
-        for e in self.get_query_set():
+        for e in self.get_queryset():
             key = (e.team1.id, e.date)
             d[key] = e.team1_result
             key2 = (e.team2.id, e.date)
@@ -150,7 +150,7 @@ class GameManager(models.Manager):
         Get a list of games where a team plays twice on the same day.
         """
         d = defaultdict(list)
-        for e in self.get_query_set():
+        for e in self.get_queryset():
             k1 = (e.team1, e.date)
             d[k1].append(e)
             k2 = (e.team2, e.date)

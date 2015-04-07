@@ -22,9 +22,9 @@ class Image(models.Model):
 
     #src = models.ImageField('self', null=True)
 
-    content_type = models.ForeignKey(ContentType)
+    #content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
-    target = generic.GenericForeignKey('content_type', 'object_id')
+    #target = generic.GenericForeignKey('content_type', 'object_id')
 
 
     def path(self):

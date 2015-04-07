@@ -1,5 +1,10 @@
 import os
+import sys
+
+from django.core.wsgi import get_wsgi_application
 os.environ['DJANGO_SETTINGS_MODULE'] = 'build_settings'
+application = get_wsgi_application()
+
 
 from collections import defaultdict
 
@@ -87,6 +92,8 @@ def insert_sql(table, dict_list):
     command = "INSERT INTO {} ({}) VALUES ({});".format(table, field_string, value_string)
     cursor.executemany(command, values)
 
+
+# This should be eliminated. Replace with functools.lru_cache
 
 class memoized(object):
     """

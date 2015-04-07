@@ -1,7 +1,11 @@
 from collections import defaultdict, Counter
 import datetime
 import os
+import sys
+
+from django.core.wsgi import get_wsgi_application
 os.environ['DJANGO_SETTINGS_MODULE'] = 'build_settings'
+application = get_wsgi_application()
 
 from django.db import transaction
 from django.db.models import Count
@@ -80,7 +84,7 @@ def generate_coach_stats_for_competitions():
 
 
 @timer
-@transaction.commit_on_success
+@transaction.atomic
 def generate_player_standings():
     # Kill this. this is part of game_stat / player_stat now...I think.
 
@@ -150,7 +154,7 @@ def generate_source_data():
 
 
 @timer
-@transaction.commit_on_success
+@transaction.atomic
 def generate_season_data():
     # Generate season data including average age, nationality data (somehow)
     print("Generating season data.")
@@ -233,7 +237,7 @@ def calculate_standings(team, games=None):
             
     
 @timer
-@transaction.commit_on_success
+@transaction.atomic
 def generate_game_data_quality():
     """
     Generate game data quality info.
@@ -252,7 +256,7 @@ def generate_game_data_quality():
         game.save()
     
 
-@transaction.commit_on_success
+@transaction.atomic
 def generate_stats_generic(table, qs, make_key, update_dict):
     """
     Generate team, career, etc. stats.
@@ -356,7 +360,7 @@ def generate_competition_stats():
 ### Standings 
 #############
 
-@transaction.commit_on_success
+@transaction.atomic
 def generate_standings_generic(qs, make_key, update_dict):
     """
     Used to generate different kinds of standings.
@@ -616,7 +620,7 @@ def generate_coach_stats(competition):
     
 
 @timer
-@transaction.commit_on_success
+@transaction.atomic
 def generate_position_stats():
     # Generate stats for non-players. Coaches, Owners, etc.
     # Need to start by initializing a list of all games.
@@ -663,7 +667,7 @@ def generate_plus_minus(appearance_qs):
     return d
 
 
-@transaction.commit_on_success
+@transaction.atomic
 def generate_career_plus_minus():
     print("generating career plus minus")
     plus_minus = generate_plus_minus(Appearance.objects.all())
@@ -677,7 +681,7 @@ def generate_career_plus_minus():
         s.save()
 
 
-@transaction.commit_on_success
+@transaction.atomic
 def generate_season_plus_minus():
     competition_slugs = ['major-league-soccer']
     #competition_slugs = ['mls-reserve-league']
@@ -701,7 +705,7 @@ def generate_season_plus_minus():
 
 
 @timer
-@transaction.commit_on_success
+@transaction.atomic
 def generate_game_minutes():
     """
     Generate all game minutes that we can.

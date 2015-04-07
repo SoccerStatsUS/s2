@@ -8,7 +8,7 @@ class SourceManager(models.Manager):
         Returns a dict mapping a name to a source id.
         """
         d = {}
-        for e in self.get_query_set():
+        for e in self.get_queryset():
             d[e.name] = e.id
             for su in e.sourceurl_set.all():
                 d[su.url] = e.id

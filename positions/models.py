@@ -1,8 +1,8 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 
-from s2.teams.models import Team
-from s2.bios.models import Bio
+from teams.models import Team
+from bios.models import Bio
 
 from collections import defaultdict
 
@@ -24,7 +24,7 @@ class PositionManager(models.Manager):
 
     def generate_standings(self):
         # Pick a name!! standings or stats!!
-        for e in self.get_query_set():
+        for e in self.get_queryset():
             try:
                 e.generate_standings()
             except:

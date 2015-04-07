@@ -60,7 +60,7 @@ class StandingManager(models.Manager):
 
 
     def for_date(self, date, team):
-        # use get_query_set
+        # use get_queryset
         standings = Standing.objects.exclude(date=None).filter(team=team, date__lte=date)
         if standings.exists():
             return standings[0]
