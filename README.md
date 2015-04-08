@@ -28,7 +28,7 @@ For the time being it also contains the code for the website, but this is being 
     # Add SECRET_KEY to secret_settings.
     emacs secret_settings.py
     
-    sudo pip install -r requirements.txt 
+    sudo pip install -r requirements3.txt 
     python3 make/
 
     
@@ -36,7 +36,11 @@ For the time being it also contains the code for the website, but this is being 
 
      python3 manage.py runserver 45.33.68.58:8080
 
+     nginx definition at build/install/files/nginx/soccerstats.us
+     service ?
+     name server
+
 
 #### Dependencies
 
-MongoDB
+     soccerstatsus.build
