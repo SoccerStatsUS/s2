@@ -48,7 +48,7 @@
 
     {% if 'referee' not in exclude %}
     {% if game.referee %}
-    <td><a href="{% url 'person_detail' game.referee.slug %}">{{ game.referee }}</a></td>
+    <td><a href="{% url 'person_detail' game.referee.slug %}">{{ game.referee.name }}</a></td>
     {% else %}
     <td></td>
     {% endif %}

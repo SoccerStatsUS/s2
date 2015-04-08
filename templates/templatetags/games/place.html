@@ -8,7 +8,7 @@
     {% endif %}
 
     {% elif game.city %}
-    <td><a href="{% url 'city_detail' game.city.slug %}">{{ game.city }}</a></td>
+    <td><a href="{% url 'city_detail' game.city.slug %}">{{ game.city.name }}</a></td>
     {% elif game.country %}
     <td><a href="{% url 'country_detail' game.country.slug %}">{{ game.country }}</a></td>
     {% else %}

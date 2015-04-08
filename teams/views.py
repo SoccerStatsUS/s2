@@ -209,7 +209,7 @@ def team_detail(request, team_slug):
     if positions.count() == 0:
         positions = team.position_set.exclude(id__in=current_staff)
 
-    awards = team.awards.order_by('-season')
+    #awards = team.awards.order_by('-season')
 
     """
     if game_leaders:
@@ -222,7 +222,7 @@ def team_detail(request, team_slug):
 
     context = {
         'team': team,
-        'awards': awards,
+        #'awards': awards,
         #'stats': stats[:15],
         #'stats': stats,
         'recent_games': recent_games,
