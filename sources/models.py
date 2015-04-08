@@ -39,7 +39,7 @@ class Source(models.Model):
         ordering = ('name',)
 
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 class SourceUrl(models.Model):

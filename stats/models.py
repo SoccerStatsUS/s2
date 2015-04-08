@@ -213,7 +213,7 @@ class Stat(AbstractStat):
     season = models.ForeignKey(Season)
     team = models.ForeignKey(Team)
 
-    def __unicode__(self):
+    def __str__(self):
         return u"%s: %s/%s/%s" % (self.player, self.competition, self.season.name, self.team)
 
 

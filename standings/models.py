@@ -120,7 +120,7 @@ class Standing(AbstractStanding):
         return "%s-%s-%s" % (self.wins, self.ties, self.losses)
 
 
-    def __unicode__(self):
+    def __str__(self):
         return u"%s %s, %s: %s" % (self.team, self.competition, self.season, self.triple())
 
 

@@ -33,7 +33,7 @@ class Salary(models.Model):
     #end = models.DateField(blank=True, null=True)
 
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s: %s (%s)" % (self.person, self.amount, self.season)
 
     

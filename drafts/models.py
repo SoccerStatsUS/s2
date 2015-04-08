@@ -32,7 +32,7 @@ class Draft(models.Model):
         super(Draft, self).save(*args, **kwargs)
 
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s %s %s" % (self.season, self.competition, self.name)
 
     class Meta:
@@ -64,7 +64,7 @@ class Pick(models.Model):
                 return None
 
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s %s" % (self.number, self.player)
 
     class Meta:

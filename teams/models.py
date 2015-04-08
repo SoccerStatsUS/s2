@@ -202,7 +202,7 @@ class Team(models.Model):
             return self.short_name
         return self.name
 
-    def __unicode__(self):
+    def __str__(self):
         return self.short_name
 
 

@@ -30,7 +30,7 @@ class Award(models.Model):
         return False
 
 
-    def __unicode__(self):
+    def __str__(self):
         if self.competition:
             return "%s %s" % (self.competition.name, self.name)
         else:
@@ -56,7 +56,7 @@ class AwardItem(models.Model):
     object_id = models.PositiveIntegerField()
     #recipient = generic.GenericForeignKey()
 
-    #def __unicode__(self):
+    #def __str__(self):
     #    return "%s %s %s" % (self.season, self.award.name, self.recipient)
 
     class Meta:

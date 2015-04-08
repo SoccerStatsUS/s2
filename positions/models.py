@@ -54,7 +54,7 @@ class Position(models.Model):
 
     objects = PositionManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s, %s, %s" % (self.person, self.team, self.name)
 
     def save(self, *args, **kwargs):

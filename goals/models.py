@@ -116,7 +116,7 @@ class Goal(models.Model):
             return ''
  
 
-    def __unicode__(self):
+    def __str__(self):
         return u"%s: %s (%s)" % (self.game.date, self.player, self.minute)
 
 

@@ -263,7 +263,7 @@ class Competition(AbstractCompetition):
         ordering = ("name",)
 
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def make_abbreviation(self):
@@ -646,7 +646,7 @@ class Season(AbstractCompetition):
             return self.age_minutes / self.minutes_with_age
             
 
-    def __unicode__(self):
+    def __str__(self):
         return u"%s %s" % (self.name, self.competition.name)
 
     def save(self, *args, **kwargs):

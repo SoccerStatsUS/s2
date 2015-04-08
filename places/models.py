@@ -30,7 +30,7 @@ class WorldBorder(models.Model):
     objects = models.GeoManager()
 
     # Returns the string representation of the model.
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 """
@@ -80,7 +80,7 @@ class Country(models.Model):
 
     objects = CountryManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def games(self):
@@ -111,7 +111,7 @@ class State(models.Model):
 
     objects = StateManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
         #return "%s, %s" % (self.name, self.country)
 
@@ -152,7 +152,7 @@ class City(models.Model):
     objects = CityManager()
 
 
-    def __unicode__(self):
+    def __str__(self):
         if self.state:
             return "%s, %s" % (self.name, self.state.abbreviation)
         elif self.country:
@@ -230,7 +230,7 @@ class Stadium(models.Model):
 
     objects = StadiumManager()    
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 

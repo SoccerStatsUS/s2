@@ -251,7 +251,7 @@ class Game(models.Model):
         # This no longer seems to be true.
         # unique_together = [('team1', 'date', 'minigame'), ('team2', 'date', 'minigame')]
 
-    def __unicode__(self):
+    def __str__(self):
         return u"%s: %s v %s" % (self.date, self.team1, self.team2)
 
 
