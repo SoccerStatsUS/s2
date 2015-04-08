@@ -34,11 +34,25 @@ For the time being it also contains the code for the website, but this is being 
     
 #### Deploy
 
-     python3 manage.py runserver 45.33.68.58:8080
+     # deploy to a url.
 
-     nginx definition at build/install/files/nginx/soccerstats.us
-     service ?
-     name server
+     # register the url with the appropriate name server
+
+     sudo apt-get install nginx
+
+     sudo cp ~/soccer/build/install/files/nginx/soccerstats.us /etc/nginx/sites-available
+     sudo ln -s /etc/nginx/sites-available/soccerstats.us /etc/nginx/sites-enabled
+
+     # Edit this to the port, url you want. 
+     sudo emacs /etc/nginx/sites-available/soccerstats.us 
+
+     sudo /etc/init.d/nginx reload				      
+
+     python3 manage.py runserver 8080
+
+     # how to set up appropriate services
+     # run through gunicorn? 
+     # look up new django 1.8 deployment documentation.
 
 
 #### Dependencies
