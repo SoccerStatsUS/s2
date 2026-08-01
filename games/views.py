@@ -28,7 +28,7 @@ def homepage(request):
         'mls': mls,
         }
 
-    return render(None, "homepage.html",
+    return render(request, "homepage.html",
                               context)
         
 
@@ -89,7 +89,7 @@ def homepage_old(request):
         'oc_game': oc_game,
         
         }
-    return render(None, "homepage.html",
+    return render(request, "homepage.html",
                               context)
 
 def bad_games(request):
@@ -98,7 +98,7 @@ def bad_games(request):
         'duplicate_games': Game.objects.duplicate_games(),
         }
 
-    return render(None, "games/bad.html",
+    return render(request, "games/bad.html",
                               context)    
 
     
@@ -127,7 +127,7 @@ def games_index(request):
         'goal_distribution': json.dumps(gd),
         }
 
-    return render(None, "games/index.html",
+    return render(request, "games/index.html",
                               context)
 
     """
@@ -179,7 +179,7 @@ def game_detail(request, game_id):
         'game_sources': GameSource.objects.filter(game=game),
 
         }
-    return render(None, "games/detail.html",
+    return render(request, "games/detail.html",
                               context)
 
 

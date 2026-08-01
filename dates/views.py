@@ -29,7 +29,7 @@ def dates_index(request):
         'years': years,
         }
 
-    return render(None, "dates/index.html",
+    return render(request, "dates/index.html",
                               context)
 
 
@@ -48,7 +48,7 @@ def calendar(request):
         'years': years,
         }
 
-    return render(None, "dates/calendar.html",
+    return render(request, "dates/calendar.html",
                               context)
 
 
@@ -93,7 +93,7 @@ def year_detail(request, year):
         'next_date': next_date_tuple,
 
         }
-    return render(None, "dates/list.html",
+    return render(request, "dates/list.html",
                               context)
 
 @cache_page(60 * 60 * 12)
@@ -144,7 +144,7 @@ def month_detail(request, year, month):
         'previous_date': previous_date_tuple,
         'next_date': next_date_tuple,
         }
-    return render(None, "dates/list.html",
+    return render(request, "dates/list.html",
                               context)
 
 
@@ -203,7 +203,7 @@ def date_detail(request, year, month, day):
         'news': news,
         'stats': stats,
         }
-    return render(None, "dates/list.html",
+    return render(request, "dates/list.html",
                               context)
 
 
@@ -236,7 +236,7 @@ def day_detail(request, month, day):
         'previous_day': previous_day,
 
         }
-    return render(None, "dates/list.html",
+    return render(request, "dates/list.html",
                               context)
 
 @cache_page(60 * 60 * 1)

@@ -18,7 +18,7 @@ def drafts_index(request):
     context = {
         'drafts': drafts,
         }
-    return render(None, "drafts/index.html",
+    return render(request, "drafts/index.html",
                               context)
 
 
@@ -34,7 +34,7 @@ def draft_detail(request, competition_slug, draft_slug, season):
     context = {
         'draft': draft,
         }
-    return render(None, "drafts/detail.html",
+    return render(request, "drafts/detail.html",
                               context)
 
 
@@ -48,7 +48,7 @@ def big_board(request):
         'drafts': drafts,
         }
 
-    return render(None, 'drafts/bigboard.html',
+    return render(request, 'drafts/bigboard.html',
                               context)
 
 
@@ -56,5 +56,5 @@ def draft_person_ajax(request, slug):
     context = {
         'player': Bio.objects.get(slug=slug)
         }
-    return render(None, 'drafts/ajax.html',
+    return render(request, 'drafts/ajax.html',
                               context)

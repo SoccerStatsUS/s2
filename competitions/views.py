@@ -92,7 +92,7 @@ def competition_index(request):
         #'errors': form.errors,
 
         }
-    return render(None, "competitions/index.html",
+    return render(request, "competitions/index.html",
                               context)
 
 
@@ -120,7 +120,7 @@ def competition_detail(request, competition_slug):
         'big_winners': competition.alltime_standings().order_by('-wins')[:50],
         'goal_data': json.dumps([(season.goals_per_game(), season.name) for season in competition.season_set.all()]),
         }
-    return render(None, "competitions/competition/detail.html",
+    return render(request, "competitions/competition/detail.html",
                               context)
 
 
@@ -146,7 +146,7 @@ def competition_stats(request, competition_slug):
         'stats': stats,
         }
 
-    return render(None, "competitions/competition/stats.html",
+    return render(request, "competitions/competition/stats.html",
                               context)
 
 
@@ -158,7 +158,7 @@ def competition_games(request, competition_slug):
         'games': competition.game_set.order_by('season', 'date', 'round'),
 
         }
-    return render(None, "competitions/competition/games.html",
+    return render(request, "competitions/competition/games.html",
                               context)
 
 
@@ -186,7 +186,7 @@ def competition_vs(request, competition_slug, competition2_slug):
         'c1': cd1,
         'c2': cd2,
         }
-    return render(None, "competitions/competition/vs.html",
+    return render(request, "competitions/competition/vs.html",
                               context)
 
 
@@ -217,7 +217,7 @@ def competition_attendance(request, competition_slug):
         'worst_attendance_games': games.exclude(id__in=top_attendance_games.values_list('id', flat=True)).order_by('attendance')[:10],
 
         }
-    return render(None, "competitions/competition/attendance.html",
+    return render(request, "competitions/competition/attendance.html",
                               context)
 
 
@@ -231,7 +231,7 @@ def superseason_detail(request, superseason_slug):
         }
     
 
-    return render(None, "competitions/superseason/detail.html",
+    return render(request, "competitions/superseason/detail.html",
                               context)
 
 
@@ -286,7 +286,7 @@ def season_detail(request, competition_slug, season_slug):
         'stats_nationality_info': json.dumps(season.stats_nationality_info()),
         
         }
-    return render(None, "competitions/season/detail.html",
+    return render(request, "competitions/season/detail.html",
                               context)
 
 
@@ -343,7 +343,7 @@ def season_date_detail(request, competition_slug, season_slug, year, month, day)
         'season': season,
         }
 
-    return render(None, "competitions/season/date.html",
+    return render(request, "competitions/season/date.html",
                               context)
 
 
@@ -369,7 +369,7 @@ def level_detail(request, level_slug):
         'goal_leaders': goal_leaders[:10],
         'game_leaders': game_leaders[:10],
         }
-    return render(None, "competitions/level_detail.html",
+    return render(request, "competitions/level_detail.html",
                               context)
 
 
@@ -387,7 +387,7 @@ def season_stats(request, competition_slug, season_slug):
         'season': season,
         'stats': stats,
         }
-    return render(None, "competitions/season/stats.html",
+    return render(request, "competitions/season/stats.html",
                               context)
 
 
@@ -401,7 +401,7 @@ def season_games(request, competition_slug, season_slug):
         'games': competition.game_set.filter(season=season).order_by('date', 'round'),
         }
 
-    return render(None, "competitions/season/games.html",
+    return render(request, "competitions/season/games.html",
                               context)
 
 
@@ -443,7 +443,7 @@ def season_attendance(request, competition_slug, season_slug):
         'stadium_attendance': season.stadium_attendance(),
          }
 
-    return render(None, "competitions/season/attendance.html",
+    return render(request, "competitions/season/attendance.html",
                               context)
 
 
@@ -464,7 +464,7 @@ def season_goals(request, competition_slug, season_slug):
         'goal_distribution': json.dumps(tuple(season.goal_distribution().items())),
         }
 
-    return render(None, "competitions/season/goals.html",
+    return render(request, "competitions/season/goals.html",
                               context)
 
 
@@ -486,7 +486,7 @@ def season_salaries(request, competition_slug, season_slug):
         'salary_data': salaries.values_list('person__name', 'amount'),
         }
 
-    return render(None, "competitions/season/salaries.html",
+    return render(request, "competitions/season/salaries.html",
                               context)
 
 
@@ -535,7 +535,7 @@ def season_graphs(request, competition_slug, season_slug):
         'age_counts': json.dumps(age_counts),
 
         }
-    return render(None, "competitions/season/graphs.html",
+    return render(request, "competitions/season/graphs.html",
                               context)
 
 
@@ -553,7 +553,7 @@ def season_names(request):
         'names': names,
         }
     
-    return render(None, "competitions/season/names.html",
+    return render(request, "competitions/season/names.html",
                               context)
 
     
@@ -570,7 +570,7 @@ def season_list(request, season_slug):
         'seasons': seasons,
         }
 
-    return render(None, "competitions/season/list.html",
+    return render(request, "competitions/season/list.html",
                               context)
 
 

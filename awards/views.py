@@ -15,7 +15,7 @@ def award_index(request):
     context = {
         'awards': Award.objects.all(),
         }
-    return render(None, "awards/index.html",
+    return render(request, "awards/index.html",
                               context)
 
 
@@ -46,7 +46,7 @@ def award_detail(request, award_id):
         }
 
     
-    return render(None, 'awards/detail.html',
+    return render(request, 'awards/detail.html',
                               context)
 
 

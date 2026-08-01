@@ -86,7 +86,7 @@ def team_index(request):
         'name_dict': name_dict,
         }
 
-    return render(None, "teams/index.html",
+    return render(request, "teams/index.html",
                               context)
 
 
@@ -98,7 +98,7 @@ def team_standings(request):
         'standings': standings,
         }
 
-    return render(None, "teams/standings.html",
+    return render(request, "teams/standings.html",
                               context)
 
 
@@ -115,7 +115,7 @@ def team_list_generic(request, team_list=None, standing_type=None, ):
         'standings': standings.select_related(),
         'standing_type': standing_type,
         }
-    return render(None, "teams/list.html",
+    return render(request, "teams/list.html",
                               context)    
 
 
@@ -140,7 +140,7 @@ def seasons_dashboard(request):
         'seasons': sorted(season_names.keys()),
         }
 
-    return render(None, "teams/seasons.html",
+    return render(request, "teams/seasons.html",
                               context)
 
 
@@ -157,7 +157,7 @@ def team_position_detail(request, team_slug, position_slug):
         'positions': positions,
         }
 
-    return render(None, "teams/position_detail.html",
+    return render(request, "teams/position_detail.html",
                               context)
 
 
@@ -229,7 +229,7 @@ def team_detail(request, team_slug):
         'gx': True,
         }
 
-    return render(None, "teams/detail.html",
+    return render(request, "teams/detail.html",
                               context)
 
 
@@ -250,7 +250,7 @@ def team_competition_detail(request, team_slug, competition_slug):
         'calendar_data': json.dumps(calendar_data),
         }
 
-    return render(None, "teams/competition_detail.html",
+    return render(request, "teams/competition_detail.html",
                               context)
 
 
@@ -311,7 +311,7 @@ def team_season_detail(request, team_slug, competition_slug, season_slug):
         'assisters': json.dumps(assisters),
         }
 
-    return render(None, "teams/season_detail.html",
+    return render(request, "teams/season_detail.html",
                               context)
 
         
@@ -353,7 +353,7 @@ def team_stats(request, team_slug):
         'stats': stats.order_by('-games_played'), #.select_related(),
         }
 
-    return render(None, "teams/stats.html",
+    return render(request, "teams/stats.html",
                               context)
 
 
@@ -376,7 +376,7 @@ def team_picks(request, team_slug):
         'stats': career_stats,
         }
 
-    return render(None, "teams/picks.html",
+    return render(request, "teams/picks.html",
                               context)
 
 
@@ -407,7 +407,7 @@ def team_graphs(request, team_slug):
         'nationality_map': json.dumps(nationality_map),
         }
 
-    return render(None, "teams/graphs.html",
+    return render(request, "teams/graphs.html",
                               context)
 
 
@@ -428,7 +428,7 @@ def team_draftees(request, team_slug):
         'stats': career_stats,
         }
 
-    return render(None, "teams/picks.html",
+    return render(request, "teams/picks.html",
                               context)
 
 
@@ -498,7 +498,7 @@ def team_games(request, team_slug):
         'calendar_data': json.dumps(calendar_data),
         }
 
-    return render(None, "teams/games.html",
+    return render(request, "teams/games.html",
                               context)
     
 
@@ -520,7 +520,7 @@ def team_calendar(request, team_slug):
         'games': games,
         }
 
-    return render(None, "teams/calendar.html",
+    return render(request, "teams/calendar.html",
                               context)
     
 
@@ -538,7 +538,7 @@ def team_versus(request, team1_slug, team2_slug):
         'games': Game.objects.team_filter(team1, team2),
         }
 
-    return render(None, "teams/versus.html",
+    return render(request, "teams/versus.html",
                               context)
     
 
@@ -562,7 +562,7 @@ def team_year_detail(request, team_slug, year):
         'chart_years': chart_years,
         }
 
-    return render(None, "teams/year_detail.html",
+    return render(request, "teams/year_detail.html",
                               context)
     
 
@@ -598,7 +598,7 @@ def teams_ajax(request):
         'stats': stats[:1000],
         }
 
-    return render(None, "stats/ajax.html",
+    return render(request, "stats/ajax.html",
                               context)
 
     
@@ -612,6 +612,6 @@ def bad_teams(request):
         'duplicate_slugs': Team.objects.duplicate_slugs(),
         }
 
-    return render(None, "teams/bad.html",
+    return render(request, "teams/bad.html",
                               context)    
                               

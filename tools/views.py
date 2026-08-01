@@ -20,7 +20,7 @@ def tool_index(request):
     
     context = {}
 
-    return render(None, "tools/index.html",
+    return render(request, "tools/index.html",
                               context)
 
 
@@ -32,7 +32,7 @@ def game_search(request):
         'form': GameSearchForm(),
         }
 
-    return render(None, "tools/games.html",
+    return render(request, "tools/games.html",
                               context)
 
 def stat_search(request):
@@ -41,7 +41,7 @@ def stat_search(request):
         'form': StatSearchForm(),
         }
 
-    return render(None, "tools/stats.html",
+    return render(request, "tools/stats.html",
                               context)
 
 
@@ -53,7 +53,7 @@ def goal_search(request):
         'form': GoalSearchForm(),
         }
 
-    return render(None, "tools/goals.html",
+    return render(request, "tools/goals.html",
                               context)
 
 
@@ -63,7 +63,7 @@ def lineup_search(request):
         'form': LineupSearchForm(),
             }
 
-    return render(None, "tools/lineups.html",
+    return render(request, "tools/lineups.html",
                               context)
 
 
@@ -123,7 +123,7 @@ def games_ajax_by_id(request):
         'games': games,
         }
 
-    return render(None, "tools/ajax/games.html",
+    return render(request, "tools/ajax/games.html",
                               context)
 
 
@@ -170,7 +170,7 @@ def games_ajax(request):
         'games': games[START:END],
         }
 
-    return render(None, "tools/ajax/games.html",
+    return render(request, "tools/ajax/games.html",
                               context)
 
     
@@ -242,7 +242,7 @@ def stats_ajax_by_id(request):
 
 
 
-    return render(None, "tools/ajax/stats.html",
+    return render(request, "tools/ajax/stats.html",
                               context)
 
 
@@ -301,7 +301,7 @@ def stats_ajax(request):
         'stats': stats[START:END]
         }
 
-    return render(None, "tools/ajax/stats.html",
+    return render(request, "tools/ajax/stats.html",
                               context)
 
     
@@ -367,7 +367,7 @@ def lineups_ajax(request):
         'appearances': appearances[START:END]
         }
 
-    return render(None, "tools/ajax/lineups.html",
+    return render(request, "tools/ajax/lineups.html",
                               context)
 
     
@@ -421,7 +421,7 @@ def goals_ajax(request):
         'goals': goals[START:END]
         }
 
-    return render(None, "tools/ajax/goals.html",
+    return render(request, "tools/ajax/goals.html",
                               context)
 
     

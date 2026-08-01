@@ -44,7 +44,7 @@ def lineup_index(request):
         'appearances': appearances[:1000],
         'form': AppearanceForm(),
         }
-    return render(None, "lineups/list.html",
+    return render(request, "lineups/list.html",
                               context)
 
 
@@ -53,7 +53,7 @@ def lineup_ajax(request):
     context = {
         'appearances': appearances[:1000],
         }
-    return render(None, "lineups/ajax.html",
+    return render(request, "lineups/ajax.html",
                               context)
 
     

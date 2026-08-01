@@ -49,7 +49,7 @@ def person_list_generic(request, person_list=None):
     context =  {
         'stats': stats.select_related(),
         }
-    return render(None, "bios/list.html",
+    return render(request, "bios/list.html",
                               context)    
 
         
@@ -80,7 +80,7 @@ def person_index(request):
         #'most_goals': most_goals,
         }
 
-    return render(None, "bios/index.html",
+    return render(request, "bios/index.html",
                               context)
 
 
@@ -96,7 +96,7 @@ def bad_bios(request):
         'duplicate_slugs': Bio.objects.duplicate_slugs(),
         }
 
-    return render(None, "bios/bad.html",
+    return render(request, "bios/bad.html",
                               context)    
                               
 
@@ -132,7 +132,7 @@ def person_detail_abstract(request, bio):
         'refs': bio.ref_set()[:10]
         }
 
-    return render(None, "bios/detail.html",
+    return render(request, "bios/detail.html",
                               context)   
 
 
@@ -175,7 +175,7 @@ def person_detail_games(request, slug):
         'game_stats': game_stats,
         'stat': AppearanceStat(bio, game_stats),
         }
-    return render(None, "bios/detail_games.html",
+    return render(request, "bios/detail_games.html",
                               context)   
 
 
@@ -193,7 +193,7 @@ def person_detail_referee_games(request, slug):
         'bio': bio,
         'games': games,
         }
-    return render(None, "bios/referee.html",
+    return render(request, "bios/referee.html",
                               context)   
 
 
@@ -203,7 +203,7 @@ def person_detail_goals(request, slug):
     context = {
         "goals": bio.goal_set.all(),
         }
-    return render(None, "bios/detail_goals.html",
+    return render(request, "bios/detail_goals.html",
                               context)   
 
 
@@ -213,7 +213,7 @@ def person_detail_stats(request, slug):
     context = {
         "stats": bio.stat_set.order_by('season'),
         }
-    return render(None, "bios/detail_stats.html",
+    return render(request, "bios/detail_stats.html",
                               context)   
 
 

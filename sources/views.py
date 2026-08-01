@@ -12,7 +12,7 @@ def source_index(request):
     context = {
         'sources': Source.objects.order_by('-total', 'name')
         }
-    return render(None, "sources/index.html",
+    return render(request, "sources/index.html",
                               context)
 
 
@@ -23,7 +23,7 @@ def source_detail(request, source_id):
         'source': source,
         'feeds': source.feeditem_set.order_by('-dt'),
         }
-    return render(None, "sources/detail.html",
+    return render(request, "sources/detail.html",
                               context)
 
 

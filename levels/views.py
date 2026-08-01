@@ -30,7 +30,7 @@ def level_index(request):
         #'errors': form.errors,
 
         }
-    return render(None, "levels/index.html",
+    return render(request, "levels/index.html",
                               context)
 
 
@@ -62,6 +62,6 @@ def level_detail(request, country_slug, level):
         'games': games.select_related()[:25],
         'big_winners': standings.order_by('-wins')[:50],
         }
-    return render(None, "levels/detail.html",
+    return render(request, "levels/detail.html",
                               context)
 

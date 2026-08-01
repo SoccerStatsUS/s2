@@ -20,7 +20,7 @@ def country_index(request):
                 'countries': Country.objects.annotate(game_count=Count('game')).annotate(total_attendance=Sum('game__attendance')).order_by('-game_count'),
                 }
 
-        return render(None, "places/country_index.html",
+        return render(request, "places/country_index.html",
                                   context)
 
 
@@ -33,7 +33,7 @@ def state_index(request):
                 'states': State.objects.all(),
 
                 }
-        return render(None, "places/state_index.html",
+        return render(request, "places/state_index.html",
                                   context)
 
 
@@ -43,7 +43,7 @@ def city_index(request):
                 'cities': City.objects.all(),
                 }
 
-        return render(None, "places/city_index.html",
+        return render(request, "places/city_index.html",
                                   context)
 
 
@@ -56,7 +56,7 @@ def stadium_index(request):
                 'stadiums': Stadium.objects.annotate(game_count=Count('game')).annotate(total_attendance=Sum('game__attendance')).order_by('-game_count')
                 }
 
-        return render(None, "places/stadium_index.html",
+        return render(request, "places/stadium_index.html",
                                   context)
 
 
@@ -79,7 +79,7 @@ def country_detail(request, slug):
                 'competitions': competitions,
                 'cities': cities,
                 }
-        return render(None, "places/country_detail.html",
+        return render(request, "places/country_detail.html",
                                   context)
 
 
@@ -98,7 +98,7 @@ def state_detail(request, slug):
                 'stadiums': stadiums,
                 'games': games,
                 }
-        return render(None, "places/state_detail.html",
+        return render(request, "places/state_detail.html",
                                   context)
 
 
@@ -116,7 +116,7 @@ def city_detail(request, slug):
                 'stadiums': city.stadium_set.annotate(game_count=Count('game')).annotate(total_attendance=Sum('game__attendance')).order_by('-game_count')
                 }
 
-        return render(None, "places/city_detail.html",
+        return render(request, "places/city_detail.html",
                                   context)
 
 
@@ -141,7 +141,7 @@ def stadium_detail(request, slug):
                 'recent_games': stadium.game_set.all()[:25],
                 }
 
-        return render(None, "places/stadium_detail.html",
+        return render(request, "places/stadium_detail.html",
                                   context)
 
 
@@ -162,7 +162,7 @@ def stadium_games(request, slug):
                 'games': games,
                 }
 
-        return render(None, "places/stadium_games.html",
+        return render(request, "places/stadium_games.html",
                                   context)
 
         

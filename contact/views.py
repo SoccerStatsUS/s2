@@ -28,11 +28,11 @@ def contact_index(request):
         'form': form,
     }
 
-    return render(None, 'contact/index.html', 
+    return render(request, 'contact/index.html', 
                               context)
 
 
 
 def contact_thanks(request):
-    return render(None, 'contact/thanks.html', 
+    return render(request, 'contact/thanks.html', 
                               {})

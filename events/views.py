@@ -12,7 +12,7 @@ def events_index(request):
         'goal_count': Goal.objects.count(),
         'goal_minutes': goal_minutes,
         }
-    return render(None, "goals/index.html",
+    return render(request, "goals/index.html",
                               context)
 
 

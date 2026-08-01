@@ -15,5 +15,5 @@ def stats_index(request):
         'stats': Stat.career_stats.all()[:100],
         'form': StatForm(),
         }
-    return render(None, "stats/list.html",
+    return render(request, "stats/list.html",
                               context)

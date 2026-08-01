@@ -12,7 +12,7 @@ def index(request):
         'positions': Position.objects.all(),
         }
 
-    return render(None, "positions/index.html",
+    return render(request, "positions/index.html",
                               context)
 
 
@@ -23,7 +23,7 @@ def position_detail(request, slug):
     context = {
         'positions': positions.select_related(),
         }
-    return render(None, "positions/detail.html",
+    return render(request, "positions/detail.html",
                               context)   
 
 
@@ -38,5 +38,5 @@ def manager_index(request):
         'positions': positions,
         }
 
-    return render(None, "positions/index.html",
+    return render(request, "positions/index.html",
                               context)

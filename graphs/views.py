@@ -13,7 +13,7 @@ from stats.models import CompetitionStat
 
 def graphs_index(request):
     context = {}
-    return render(None, "graphs/index.html",
+    return render(request, "graphs/index.html",
                               context)
 
 
@@ -21,7 +21,7 @@ def graphs_index(request):
 
 def map_graph(request):
     context = {}
-    return render(None, "graphs/map.html",
+    return render(request, "graphs/map.html",
                               context)
 
 
@@ -48,7 +48,7 @@ def age_bias_graph(request):
         'domestic_distribution': json.dumps(domestic_dist),
         'international_distribution': json.dumps(international_dist),
         }
-    return render(None, "graphs/bias.html",
+    return render(request, "graphs/bias.html",
                               context)
 
     

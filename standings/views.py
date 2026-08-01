@@ -18,7 +18,7 @@ def bad_standings(request):
         'standings': bad_standings,
         }
 
-    return render(None, "standings/index.html",
+    return render(request, "standings/index.html",
                               context)
 
                      

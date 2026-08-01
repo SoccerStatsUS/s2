@@ -11,6 +11,6 @@ def image_detail(request, image_id):
         'image': image,
         }
 
-    return render(None, "images/detail.html",
+    return render(request, "images/detail.html",
                               context)
 
