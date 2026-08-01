@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Browse by year{% endblock %}
+
+{% block content %}
+
+<h3>Browse by year</h3>
+
+<p>
+{% for year in years %}
+<a href="{% url 'year_detail' year %}">{{ year }}</a>{% if not forloop.last %} &middot;{% endif %}
+{% endfor %}
+</p>
+
+{% endblock %}

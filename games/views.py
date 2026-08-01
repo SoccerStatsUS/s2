@@ -9,6 +9,7 @@ from bios.models import Bio
 from competitions.models import Competition
 from games.models import Game, GameSource
 from goals.models import Goal
+from sources.models import Source
 from standings.models import Standing
 from stats.models import Stat, CareerStat
 from teams.models import Team
@@ -17,20 +18,59 @@ from collections import defaultdict, Counter
 import json
 
 
+HISTORIANS = ['Colin Jose', 'Roger Allaway', 'Dave Litterer', 'David Wangerin']
+
+
+@cache_page(60 * 60)
 def homepage(request):
 
-    try:
-        mls = Competition.objects.get(slug='major-league-soccer')
-    except:
-        mls = None
+    today = datetime.date.today()
+    month, day = today.month, today.day
+
+    games = Game.objects.filter(date__month=month, date__day=day).order_by('date').select_related()
+    births = Bio.objects.filter(birthdate__month=month, birthdate__day=day).order_by('birthdate')
+    deaths = Bio.objects.filter(deathdate__month=month, deathdate__day=day).order_by('deathdate')
+
+    historians = []
+    for name in HISTORIANS:
+        total = Source.objects.filter(
+            models.Q(author__icontains=name) | models.Q(name__icontains=name)
+        ).aggregate(models.Sum('total'))['total__sum']
+        historians.append((name, total))
 
     context = {
-        'mls': mls,
+        'today': today,
+        'games': games,
+        'births': births,
+        'deaths': deaths,
+        'game_count': Game.objects.count(),
+        'historians': historians,
         }
 
     return render(request, "homepage.html",
                               context)
-        
+
+
+def search(request):
+
+    q = request.GET.get('q', '').strip()
+
+    players = teams = competitions = []
+    if q:
+        players = Bio.objects.filter(name__icontains=q)[:30]
+        teams = Team.objects.filter(name__icontains=q)[:30]
+        competitions = Competition.objects.filter(name__icontains=q)[:30]
+
+    context = {
+        'query': q,
+        'players': players,
+        'teams': teams,
+        'competitions': competitions,
+        }
+
+    return render(request, "search/search.html",
+                              context)
+
 
 
 @cache_page(60 * 60 * 12)

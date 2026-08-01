@@ -23,7 +23,7 @@
     <div class="header-inner">
       <div id="title">
         <a href="/" id="maintitle">SoccerStats.us</a>
-        <span id="subtitle">open source soccer statistics</span>
+        <span id="subtitle">American soccer history, 1866&ndash;present</span>
       </div>
 
       <nav id="nav">
@@ -32,21 +32,21 @@
         <a href="{% url 'person_index' %}">players</a>
         <a href="{% url 'competition_index' %}">competitions</a>
         <a href="{% url 'about_index' %}">about</a>
-        <form id="search_form" method="get" action="/search">
+        <form id="search_form" method="get" action="{% url 'search' %}">
           <input id="id_q" name="q" type="text" placeholder="search">
         </form>
       </nav>
     </div>
 
     <nav id="league-bar">
-      <a title="Major League Soccer" href="{% url 'competition_detail' 'major-league-soccer' %}">MLS</a>
-      <a title="National Women's Soccer League" href="{% url 'competition_detail' 'national-womens-soccer-league' %}">NWSL</a>
-      <a title="US Open Cup" href="{% url 'competition_detail' 'us-open-cup' %}">USOC</a>
-      <a title="North American Soccer League (2011-)" href="{% url 'competition_detail' 'north-american-soccer-league-2011-' %}">NASL2</a>
       <a title="US Men's National Team" href="{% url 'team_detail' 'united-states' %}">USMNT</a>
-      <a title="Liga MX" href="{% url 'competition_detail' 'liga-mx' %}">Mexico</a>
-      <a title="North American Soccer League" href="{% url 'competition_detail' 'north-american-soccer-league' %}">NASL</a>
+      <a title="US Open Cup" href="{% url 'competition_detail' 'us-open-cup' %}">USOC</a>
       <a title="American Soccer League (1921-1933)" href="{% url 'competition_detail' 'american-soccer-league-1921-1933' %}">ASL</a>
+      <a title="North American Soccer League" href="{% url 'competition_detail' 'north-american-soccer-league' %}">NASL</a>
+      <a title="North American Soccer League (2011-)" href="{% url 'competition_detail' 'north-american-soccer-league-2011-' %}">NASL2</a>
+      <a title="National Women's Soccer League" href="{% url 'competition_detail' 'national-womens-soccer-league' %}">NWSL</a>
+      <a title="Major League Soccer" href="{% url 'competition_detail' 'major-league-soccer' %}">MLS</a>
+      <a title="Liga MX" href="{% url 'competition_detail' 'liga-mx' %}">Mexico</a>
     </nav>
   </header>
 

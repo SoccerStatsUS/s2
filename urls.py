@@ -10,6 +10,8 @@ from games import views as games_views
 urlpatterns = [
     path('', games_views.homepage, name="home"),
 
+    path('search/', games_views.search, name="search"),
+
     path('favicon.ico', RedirectView.as_view(url='http://media.socceroutsider.com/images/favicon.ico'), name="favicon"),
 
     path('about/', TemplateView.as_view(template_name='about/index.html'), name='about_index'),
