@@ -8,6 +8,11 @@ DEBUG = os.environ.get('DJANGO_DEBUG', '1') == '1'
 
 ALLOWED_HOSTS = ['.soccerstats.us', 'localhost', '127.0.0.1']
 
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
 ADMINS = [
     ("Chris Edgemon", 'chris@soccerstats.us'),
 ]
