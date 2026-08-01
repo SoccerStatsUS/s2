@@ -12,6 +12,15 @@ starting {% if first_game %}<a href="{% url 'game_detail' first_game.id %}">in W
   <input type="submit" value="search">
 </form>
 
+<nav id="league-bar">
+  <a title="American Soccer League (1921-1933)" href="{% url 'competition_detail' 'american-soccer-league-1921-1933' %}">ASL</a>
+  <a title="North American Soccer League" href="{% url 'competition_detail' 'north-american-soccer-league' %}">NASL</a>
+  <a title="Major League Soccer" href="{% url 'competition_detail' 'major-league-soccer' %}">MLS</a>
+  <a title="National Women's Soccer League" href="{% url 'competition_detail' 'national-womens-soccer-league' %}">NWSL</a>
+  <a title="US Open Cup" href="{% url 'competition_detail' 'us-open-cup' %}">USOC</a>
+  <a title="US Men's National Team" href="{% url 'team_detail' 'united-states' %}">USMNT</a>
+</nav>
+
 
 <div id="otd">
 

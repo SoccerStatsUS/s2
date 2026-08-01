@@ -115,13 +115,12 @@ ul { list-style-type: none; padding-left: 0; }
 }
 
 #league-bar {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 16px 10px;
+    margin: 0 0 30px;
     display: flex;
     flex-wrap: wrap;
-    gap: 4px 14px;
-    font-size: 13px;
+    justify-content: center;
+    gap: 6px 26px;
+    font-size: 18px;
 }
 
 #league-bar a {
@@ -516,7 +515,7 @@ td.result { width: 70px; }
 }
 
 #home-search {
-    margin: 0 0 30px;
+    margin: 0 0 16px;
     text-align: center;
 }
 
