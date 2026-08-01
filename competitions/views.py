@@ -93,8 +93,7 @@ def competition_index(request):
 
         }
     return render(None, "competitions/index.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -122,8 +121,7 @@ def competition_detail(request, competition_slug):
         'goal_data': json.dumps([(season.goals_per_game(), season.name) for season in competition.season_set.all()]),
         }
     return render(None, "competitions/competition/detail.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -149,8 +147,7 @@ def competition_stats(request, competition_slug):
         }
 
     return render(None, "competitions/competition/stats.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 @cache_page(60 * 60 * 12)
@@ -162,8 +159,7 @@ def competition_games(request, competition_slug):
 
         }
     return render(None, "competitions/competition/games.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -191,8 +187,7 @@ def competition_vs(request, competition_slug, competition2_slug):
         'c2': cd2,
         }
     return render(None, "competitions/competition/vs.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -223,8 +218,7 @@ def competition_attendance(request, competition_slug):
 
         }
     return render(None, "competitions/competition/attendance.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 @cache_page(60 * 60 * 12)
@@ -238,8 +232,7 @@ def superseason_detail(request, superseason_slug):
     
 
     return render(None, "competitions/superseason/detail.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 @cache_page(60 * 60 * 12)
@@ -294,8 +287,7 @@ def season_detail(request, competition_slug, season_slug):
         
         }
     return render(None, "competitions/season/detail.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -352,8 +344,7 @@ def season_date_detail(request, competition_slug, season_slug, year, month, day)
         }
 
     return render(None, "competitions/season/date.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -379,8 +370,7 @@ def level_detail(request, level_slug):
         'game_leaders': game_leaders[:10],
         }
     return render(None, "competitions/level_detail.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -398,8 +388,7 @@ def season_stats(request, competition_slug, season_slug):
         'stats': stats,
         }
     return render(None, "competitions/season/stats.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 @cache_page(60 * 60 * 12)
@@ -413,8 +402,7 @@ def season_games(request, competition_slug, season_slug):
         }
 
     return render(None, "competitions/season/games.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 def attendance_data_by_team(game_set):
@@ -456,8 +444,7 @@ def season_attendance(request, competition_slug, season_slug):
          }
 
     return render(None, "competitions/season/attendance.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -478,8 +465,7 @@ def season_goals(request, competition_slug, season_slug):
         }
 
     return render(None, "competitions/season/goals.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -501,8 +487,7 @@ def season_salaries(request, competition_slug, season_slug):
         }
 
     return render(None, "competitions/season/salaries.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -551,8 +536,7 @@ def season_graphs(request, competition_slug, season_slug):
 
         }
     return render(None, "competitions/season/graphs.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -570,8 +554,7 @@ def season_names(request):
         }
     
     return render(None, "competitions/season/names.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
     
 
@@ -588,8 +571,7 @@ def season_list(request, season_slug):
         }
 
     return render(None, "competitions/season/list.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 

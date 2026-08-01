@@ -13,10 +13,10 @@ def stats_table(stats, exclude='', count=None):
         has_minutes = stats.exclude(minutes=None).exists()
         has_games_started = stats.exclude(games_started=None).exists()
 
-    except AssertionError:
-        # this seems incorrect
+    except (AssertionError, TypeError):
+        # Sliced querysets can't be filtered; check the values directly.
         vals = stats.values_list('shots', 'assists', 'minutes', 'games_started')
-        has_value = lambda i: set(e[0] for e in vals) != set([None])
+        has_value = lambda i: set(e[i] for e in vals) != set([None])
         has_shots, has_assists, has_minutes, has_games_started = [has_value(e) for e in range(4)]
 
     #if stats.filter(games_played=None).exists():

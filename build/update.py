@@ -13,7 +13,7 @@ from django.db import transaction
 
 from news.models import NewsSource, FeedItem
 
-connection = pymongo.Connection()
+connection = pymongo.MongoClient()
 soccer_db = connection.soccer
 
 from getters import make_source_getter
@@ -25,7 +25,7 @@ def update_news():
     urls = set(list(FeedItem.objects.values_list('url', flat=True)))
 
     print(len(urls))
-    print(soccer_db.news.count())
+    print(soccer_db.news.estimated_document_count())
 
     source_getter = make_source_getter()
 

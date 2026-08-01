@@ -19,7 +19,6 @@ def bad_standings(request):
         }
 
     return render(None, "standings/index.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
                      

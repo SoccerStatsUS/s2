@@ -50,9 +50,7 @@ def person_list_generic(request, person_list=None):
         'stats': stats.select_related(),
         }
     return render(None, "bios/list.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )    
+                              context)    
 
         
 
@@ -83,8 +81,7 @@ def person_index(request):
         }
 
     return render(None, "bios/index.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 @cache_page(60 * 60 * 12)
@@ -100,9 +97,7 @@ def bad_bios(request):
         }
 
     return render(None, "bios/bad.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )    
+                              context)    
                               
 
 
@@ -138,9 +133,7 @@ def person_detail_abstract(request, bio):
         }
 
     return render(None, "bios/detail.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )   
+                              context)   
 
 
 def random_person_detail(request):
@@ -183,9 +176,7 @@ def person_detail_games(request, slug):
         'stat': AppearanceStat(bio, game_stats),
         }
     return render(None, "bios/detail_games.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )   
+                              context)   
 
 
 
@@ -203,9 +194,7 @@ def person_detail_referee_games(request, slug):
         'games': games,
         }
     return render(None, "bios/referee.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )   
+                              context)   
 
 
 def person_detail_goals(request, slug):
@@ -215,9 +204,7 @@ def person_detail_goals(request, slug):
         "goals": bio.goal_set.all(),
         }
     return render(None, "bios/detail_goals.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )   
+                              context)   
 
 
 def person_detail_stats(request, slug):
@@ -227,9 +214,7 @@ def person_detail_stats(request, slug):
         "stats": bio.stat_set.order_by('season'),
         }
     return render(None, "bios/detail_stats.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )   
+                              context)   
 
 
 

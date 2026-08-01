@@ -40,17 +40,12 @@ def lineup_index(request):
     # Just show interesting stuff.
     appearances = get_appearances(request.GET)
 
-    for appearance in appearances.values_list(''):
-        pass
-
-
     context = {
         'appearances': appearances[:1000],
         'form': AppearanceForm(),
         }
     return render(None, "lineups/list.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 def lineup_ajax(request):    
@@ -59,8 +54,7 @@ def lineup_ajax(request):
         'appearances': appearances[:1000],
         }
     return render(None, "lineups/ajax.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
     
 

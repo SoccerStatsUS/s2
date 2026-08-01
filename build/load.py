@@ -35,7 +35,7 @@ from getters import *
 
 #from guppy import hpy
 
-connection = pymongo.Connection()
+connection = pymongo.MongoClient()
 soccer_db = connection.soccer
 
 
@@ -55,7 +55,7 @@ def generate_mongo_indexes():
     """
     # Not sure why I need to do this, but it seems necessary.
 
-    soccer_db.games.ensure_index("date")
+    soccer_db.games.create_index("date")
 
 def load1():
 
@@ -260,7 +260,7 @@ def load_places():
 @timer
 @transaction.atomic
 def load_positions():
-    print("\nloading {} positions\n".format(soccer_db.positions.count()))
+    print("\nloading {} positions\n".format(soccer_db.positions.estimated_document_count()))
     for position in soccer_db.positions.find():
         position.pop('_id')
         position['team'] = Team.objects.find(position['team'], create=True)
@@ -369,7 +369,7 @@ def load_drafts():
                 'end': draft.get('end'),
                 })
 
-    print("\nloading {} picks\n".format(soccer_db.picks.count()))
+    print("\nloading {} picks\n".format(soccer_db.picks.estimated_document_count()))
                 
     # Create picks
     picks = []
@@ -439,7 +439,7 @@ def load_news():
 @timer
 @transaction.atomic
 def load_teams():
-    print("loading {} teams".format(soccer_db.teams.count()))
+    print("loading {} teams".format(soccer_db.teams.estimated_document_count()))
 
     cg = make_city_getter()
     names = set()
@@ -618,7 +618,7 @@ def load_stadium_maps():
 @timer
 @transaction.atomic
 def load_standings():
-    print("\n loading {} standings\n".format(soccer_db.standings.count()))
+    print("\n loading {} standings\n".format(soccer_db.standings.estimated_document_count()))
 
     team_getter = make_team_getter()
     competition_getter = make_competition_getter()
@@ -788,7 +788,7 @@ def load_salaries():
 @timer
 @transaction.atomic
 def load_games():
-    print("\n loading {} games\n".format(soccer_db.games.count()))
+    print("\n loading {} games\n".format(soccer_db.games.estimated_document_count()))
 
     stadium_getter = make_stadium_getter()
     team_getter = make_team_getter()
@@ -1006,11 +1006,11 @@ def load_events():
 
 def load_transactions():
 
-    print("\n loading {} transactions\n".format(soccer_db.transactions.count()))
+    print("\n loading {} transactions\n".format(soccer_db.transactions.estimated_document_count()))
 
     transactions = []
 
-    print("\nloading {} transactions\n".format(soccer_db.positions.count()))
+    print("\nloading {} transactions\n".format(soccer_db.positions.estimated_document_count()))
     for t in soccer_db.transactions.find():
         try:
             t.pop('_id')
@@ -1204,7 +1204,7 @@ def load_game_stats():
 
     l = []    
     i = 0
-    for i, stat in enumerate(soccer_db.gstats.find(timeout=False)): # no timeout because this query takes forever.
+    for i, stat in enumerate(soccer_db.gstats.find(no_cursor_timeout=True)): # no timeout because this query takes forever.
         if i % 50000 == 0:
             print(i)
 
@@ -1306,7 +1306,7 @@ def load_stats():
 
     l = []    
     i = 0
-    for i, stat in enumerate(soccer_db.stats.find(timeout=False)): # no timeout because this query takes forever.
+    for i, stat in enumerate(soccer_db.stats.find(no_cursor_timeout=True)): # no timeout because this query takes forever.
 
 
         if i % 50000 == 0:
@@ -1468,6 +1468,15 @@ def load_lineups():
 
 
 if __name__ == "__main__":
+    # The loaders drop into pdb when data looks wrong; with no terminal
+    # attached, fail loudly instead of hanging on a dead debugger.
+    if not sys.stdin.isatty():
+        import pdb
+
+        def _fail_set_trace(*args, **kwargs):
+            raise RuntimeError("pdb.set_trace() hit in non-interactive load")
+        pdb.set_trace = _fail_set_trace
+
     if sys.argv[1] == '1':
         load1()
     elif sys.argv[1] == '2':

@@ -18,8 +18,7 @@ def money_index(request):
         'salaries': Salary.objects.all(),
         }
     return render(None, "money/index.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -34,6 +33,5 @@ def bad_money_index(request):
         'salaries': salaries,
         }
     return render(None, "money/index.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 

@@ -16,8 +16,7 @@ def award_index(request):
         'awards': Award.objects.all(),
         }
     return render(None, "awards/index.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 @cache_page(60 * 60 * 12)
@@ -48,7 +47,6 @@ def award_detail(request, award_id):
 
     
     return render(None, 'awards/detail.html',
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 

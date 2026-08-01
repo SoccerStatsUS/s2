@@ -19,8 +19,7 @@ def drafts_index(request):
         'drafts': drafts,
         }
     return render(None, "drafts/index.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 @cache_page(60 * 60 * 12)
@@ -36,8 +35,7 @@ def draft_detail(request, competition_slug, draft_slug, season):
         'draft': draft,
         }
     return render(None, "drafts/detail.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -51,8 +49,7 @@ def big_board(request):
         }
 
     return render(None, 'drafts/bigboard.html',
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 def draft_person_ajax(request, slug):
@@ -60,5 +57,4 @@ def draft_person_ajax(request, slug):
         'player': Bio.objects.get(slug=slug)
         }
     return render(None, 'drafts/ajax.html',
-                              context,
-                              context_instance=RequestContext(request))
+                              context)

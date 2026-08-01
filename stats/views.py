@@ -16,5 +16,4 @@ def stats_index(request):
         'form': StatForm(),
         }
     return render(None, "stats/list.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)

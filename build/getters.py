@@ -9,7 +9,7 @@ from teams.models import Team
 from places.models import Country, State, City, Stadium
 from sources.models import Source
 
-connection = pymongo.Connection()
+connection = pymongo.MongoClient()
 soccer_db = connection.soccer
 
 

@@ -21,8 +21,7 @@ def tool_index(request):
     context = {}
 
     return render(None, "tools/index.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -34,8 +33,7 @@ def game_search(request):
         }
 
     return render(None, "tools/games.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 def stat_search(request):
 
@@ -44,8 +42,7 @@ def stat_search(request):
         }
 
     return render(None, "tools/stats.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -57,8 +54,7 @@ def goal_search(request):
         }
 
     return render(None, "tools/goals.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 def lineup_search(request):
@@ -68,8 +64,7 @@ def lineup_search(request):
             }
 
     return render(None, "tools/lineups.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -129,8 +124,7 @@ def games_ajax_by_id(request):
         }
 
     return render(None, "tools/ajax/games.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -177,8 +171,7 @@ def games_ajax(request):
         }
 
     return render(None, "tools/ajax/games.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
     
 
@@ -250,8 +243,7 @@ def stats_ajax_by_id(request):
 
 
     return render(None, "tools/ajax/stats.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -310,8 +302,7 @@ def stats_ajax(request):
         }
 
     return render(None, "tools/ajax/stats.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
     
 
@@ -377,8 +368,7 @@ def lineups_ajax(request):
         }
 
     return render(None, "tools/ajax/lineups.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
     
 
@@ -432,8 +422,7 @@ def goals_ajax(request):
         }
 
     return render(None, "tools/ajax/goals.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
     
 

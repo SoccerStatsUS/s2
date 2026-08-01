@@ -17,7 +17,6 @@ def video_index(request):
         'games': video_games,
         }
     return render(None, "videos/index.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 

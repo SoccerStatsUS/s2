@@ -21,8 +21,7 @@ def country_index(request):
                 }
 
         return render(None, "places/country_index.html",
-                                  context,
-                                  context_instance=RequestContext(request))
+                                  context)
 
 
 
@@ -35,8 +34,7 @@ def state_index(request):
 
                 }
         return render(None, "places/state_index.html",
-                                  context,
-                                  context_instance=RequestContext(request))
+                                  context)
 
 
 def city_index(request):
@@ -46,8 +44,7 @@ def city_index(request):
                 }
 
         return render(None, "places/city_index.html",
-                                  context,
-                                  context_instance=RequestContext(request))
+                                  context)
 
 
 
@@ -60,8 +57,7 @@ def stadium_index(request):
                 }
 
         return render(None, "places/stadium_index.html",
-                                  context,
-                                  context_instance=RequestContext(request))
+                                  context)
 
 
 
@@ -84,8 +80,7 @@ def country_detail(request, slug):
                 'cities': cities,
                 }
         return render(None, "places/country_detail.html",
-                                  context,
-                                  context_instance=RequestContext(request))
+                                  context)
 
 
 def state_detail(request, slug):
@@ -104,8 +99,7 @@ def state_detail(request, slug):
                 'games': games,
                 }
         return render(None, "places/state_detail.html",
-                                  context,
-                                  context_instance=RequestContext(request))
+                                  context)
 
 
 
@@ -123,8 +117,7 @@ def city_detail(request, slug):
                 }
 
         return render(None, "places/city_detail.html",
-                                  context,
-                                  context_instance=RequestContext(request))
+                                  context)
 
 
 def stadium_detail(request, slug):
@@ -149,8 +142,7 @@ def stadium_detail(request, slug):
                 }
 
         return render(None, "places/stadium_detail.html",
-                                  context,
-                                  context_instance=RequestContext(request))
+                                  context)
 
 
 
@@ -171,8 +163,7 @@ def stadium_games(request, slug):
                 }
 
         return render(None, "places/stadium_games.html",
-                                  context,
-                                  context_instance=RequestContext(request))
+                                  context)
 
         
 

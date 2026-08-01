@@ -13,7 +13,6 @@ def events_index(request):
         'goal_minutes': goal_minutes,
         }
     return render(None, "goals/index.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 

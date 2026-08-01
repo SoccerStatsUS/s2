@@ -29,8 +29,7 @@ def homepage(request):
         }
 
     return render(None, "homepage.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
         
 
 
@@ -91,8 +90,7 @@ def homepage_old(request):
         
         }
     return render(None, "homepage.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 def bad_games(request):
     
@@ -101,9 +99,7 @@ def bad_games(request):
         }
 
     return render(None, "games/bad.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )    
+                              context)    
 
     
 
@@ -118,6 +114,7 @@ def games_index(request):
 
     by_year = Counter([e.year for e in games.values_list('date', flat=True)])
 
+    gd = {}
     #gd = defaultdict(int)
     #ceiling = 8
     #for game in games.exclude(home_team=None).exclude(team1_score=None).exclude(team2_score=None):
@@ -131,8 +128,7 @@ def games_index(request):
         }
 
     return render(None, "games/index.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
     """
     attendance_game_count = 0
@@ -184,8 +180,7 @@ def game_detail(request, game_id):
 
         }
     return render(None, "games/detail.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 

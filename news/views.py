@@ -12,8 +12,7 @@ def news_index(request):
         'items': FeedItem.objects.order_by('-dt')[:25]
         }
     return render(None, "news/index.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 

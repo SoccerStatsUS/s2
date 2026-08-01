@@ -16,8 +16,7 @@ def organizations_index(request):
     
 
     return render(None, "organizations/index.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -30,8 +29,7 @@ def confederations_index(request):
     
 
     return render(None, "organizations/confederation/index.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -45,5 +43,4 @@ def confederation_detail(request, confederation_slug):
         }
 
     return render(None, "organizations/confederation/detail.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)

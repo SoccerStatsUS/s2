@@ -368,7 +368,7 @@ def generate_standings_generic(qs, make_key, update_dict):
     """
 
     final_dict = {} # Used to record final standings.
-    excluded = ('player_id', 'team_id', 'competition_id', 'season_id', 'division', 'group', 'stage')
+    excluded = ('player_id', 'team_id', 'competition_id', 'season_id', 'division', 'group', 'stage', 'final')
     
     # Don't include rolling standings.
     final_qs = qs.filter(final=True)
@@ -763,6 +763,13 @@ def generate_top_attendances(qs=None):
             
                         
 if __name__ == "__main__":
+    if not sys.stdin.isatty():
+        import pdb
+
+        def _fail_set_trace(*args, **kwargs):
+            raise RuntimeError("pdb.set_trace() hit in non-interactive generate")
+        pdb.set_trace = _fail_set_trace
+
     generate()
 
 

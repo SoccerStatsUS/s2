@@ -1,14 +1,4 @@
-Django
-pymongo>=2
-simplejson
-psycopg2
+Django~=5.2
+psycopg[binary]
 gunicorn
-
-#python-memcached
-#django-debug-toolbar
-#django-tastypie
-#django-haystack==1.2.7
-#Whoosh
-#pysolr
-
-# -e git://github.com/django-extensions/django-extensions.git#egg=django-extensions
+pymongo>=4

@@ -29,12 +29,10 @@ def contact_index(request):
     }
 
     return render(None, 'contact/index.html', 
-                              context, 
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
 def contact_thanks(request):
     return render(None, 'contact/thanks.html', 
-                              {},
-                              context_instance=RequestContext(request))
+                              {})

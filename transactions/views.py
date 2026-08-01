@@ -16,8 +16,7 @@ def transaction_index(request):
         }
 
     return render(None, "transactions/index.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 def transaction_detail(request, transaction_id):
@@ -26,5 +25,4 @@ def transaction_detail(request, transaction_id):
         'transaction': transaction,
         }
     return render(None, "transactions/detail.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)

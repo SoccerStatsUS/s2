@@ -30,8 +30,7 @@ def dates_index(request):
         }
 
     return render(None, "dates/index.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -50,8 +49,7 @@ def calendar(request):
         }
 
     return render(None, "dates/calendar.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 @cache_page(60 * 60 * 12)
@@ -96,8 +94,7 @@ def year_detail(request, year):
 
         }
     return render(None, "dates/list.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 @cache_page(60 * 60 * 12)
 def month_detail(request, year, month):
@@ -148,8 +145,7 @@ def month_detail(request, year, month):
         'next_date': next_date_tuple,
         }
     return render(None, "dates/list.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 @cache_page(60 * 60 * 12)
@@ -208,8 +204,7 @@ def date_detail(request, year, month, day):
         'stats': stats,
         }
     return render(None, "dates/list.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 @cache_page(60 * 60 * 12)
@@ -242,8 +237,7 @@ def day_detail(request, month, day):
 
         }
     return render(None, "dates/list.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 @cache_page(60 * 60 * 1)
 def scoreboard_today(request):

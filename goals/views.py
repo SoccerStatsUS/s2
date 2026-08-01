@@ -9,14 +9,13 @@ def goals_index(request):
     # Cache it?
     
     
-    goal_minutes = sorted(Goal.objects.frequency().items())
+    goal_minutes = sorted((k, v) for k, v in Goal.objects.frequency().items() if k is not None)
 
     context = {
         'goal_count': Goal.objects.count(),
         'goal_minutes': goal_minutes,
         }
     return render(None, "goals/index.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 

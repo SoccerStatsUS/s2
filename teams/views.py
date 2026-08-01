@@ -87,8 +87,7 @@ def team_index(request):
         }
 
     return render(None, "teams/index.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 def team_standings(request):
@@ -100,8 +99,7 @@ def team_standings(request):
         }
 
     return render(None, "teams/standings.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
 
 
@@ -118,9 +116,7 @@ def team_list_generic(request, team_list=None, standing_type=None, ):
         'standing_type': standing_type,
         }
     return render(None, "teams/list.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )    
+                              context)    
 
 
 @cache_page(60 * 60 * 12)
@@ -145,9 +141,7 @@ def seasons_dashboard(request):
         }
 
     return render(None, "teams/seasons.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )
+                              context)
 
 
     
@@ -164,9 +158,7 @@ def team_position_detail(request, team_slug, position_slug):
         }
 
     return render(None, "teams/position_detail.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )
+                              context)
 
 
 
@@ -238,9 +230,7 @@ def team_detail(request, team_slug):
         }
 
     return render(None, "teams/detail.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )
+                              context)
 
 
 
@@ -261,9 +251,7 @@ def team_competition_detail(request, team_slug, competition_slug):
         }
 
     return render(None, "teams/competition_detail.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )
+                              context)
 
 
 
@@ -324,9 +312,7 @@ def team_season_detail(request, team_slug, competition_slug, season_slug):
         }
 
     return render(None, "teams/season_detail.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )
+                              context)
 
         
 
@@ -368,9 +354,7 @@ def team_stats(request, team_slug):
         }
 
     return render(None, "teams/stats.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )
+                              context)
 
 
 
@@ -393,9 +377,7 @@ def team_picks(request, team_slug):
         }
 
     return render(None, "teams/picks.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )
+                              context)
 
 
 
@@ -426,9 +408,7 @@ def team_graphs(request, team_slug):
         }
 
     return render(None, "teams/graphs.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )
+                              context)
 
 
 
@@ -449,9 +429,7 @@ def team_draftees(request, team_slug):
         }
 
     return render(None, "teams/picks.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )
+                              context)
 
 
     
@@ -521,9 +499,7 @@ def team_games(request, team_slug):
         }
 
     return render(None, "teams/games.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )
+                              context)
     
 
 
@@ -545,9 +521,7 @@ def team_calendar(request, team_slug):
         }
 
     return render(None, "teams/calendar.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )
+                              context)
     
 
 
@@ -565,9 +539,7 @@ def team_versus(request, team1_slug, team2_slug):
         }
 
     return render(None, "teams/versus.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )
+                              context)
     
 
 
@@ -591,9 +563,7 @@ def team_year_detail(request, team_slug, year):
         }
 
     return render(None, "teams/year_detail.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )
+                              context)
     
 
 
@@ -629,8 +599,7 @@ def teams_ajax(request):
         }
 
     return render(None, "stats/ajax.html",
-                              context,
-                              context_instance=RequestContext(request))
+                              context)
 
     
 
@@ -644,7 +613,5 @@ def bad_teams(request):
         }
 
     return render(None, "teams/bad.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )    
+                              context)    
                               

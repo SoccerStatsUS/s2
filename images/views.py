@@ -12,7 +12,5 @@ def image_detail(request, image_id):
         }
 
     return render(None, "images/detail.html",
-                              context,
-                              context_instance=RequestContext(request)
-                              )
+                              context)
 
