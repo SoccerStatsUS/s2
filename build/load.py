@@ -116,10 +116,7 @@ def load1():
 
 
 def load2():
-    # Need to have this work again.
-    # Need to work on events stuff a lot more.
-    #load_lineups()
-    pass
+    load_lineups()
 
 
 def load3():
@@ -1423,9 +1420,6 @@ def load_lineups():
         #game_id = game_getter(team_id, a['date'])
 
         if not game_id:
-
-            import pdb; pdb.set_trace()
-
             print("Cannot create %s" % a)
             return {}
 
