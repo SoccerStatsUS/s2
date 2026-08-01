@@ -1,5 +1,5 @@
 
-from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
@@ -30,7 +30,7 @@ def level_index(request):
         #'errors': form.errors,
 
         }
-    return render_to_response("levels/index.html",
+    return render(None, "levels/index.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -63,7 +63,7 @@ def level_detail(request, country_slug, level):
         'games': games.select_related()[:25],
         'big_winners': standings.order_by('-wins')[:50],
         }
-    return render_to_response("levels/detail.html",
+    return render(None, "levels/detail.html",
                               context,
                               context_instance=RequestContext(request))
 

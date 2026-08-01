@@ -1,13 +1,12 @@
-from django.conf.urls import patterns, url
+from money import views
+from django.urls import path
 
-urlpatterns = patterns('money.views', 
+urlpatterns = [ 
 
-                       url(r'^$',
-                           'money_index',
+                       path('', views.money_index,
                            name='money_index'),
 
-                       url(r'^bad/$',
-                           'bad_money_index',
+                       path('bad/', views.bad_money_index,
                            name='bad_money_index'),
 
-)
+]

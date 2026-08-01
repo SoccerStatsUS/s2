@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
@@ -18,7 +18,7 @@ def drafts_index(request):
     context = {
         'drafts': drafts,
         }
-    return render_to_response("drafts/index.html",
+    return render(None, "drafts/index.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -35,7 +35,7 @@ def draft_detail(request, competition_slug, draft_slug, season):
     context = {
         'draft': draft,
         }
-    return render_to_response("drafts/detail.html",
+    return render(None, "drafts/detail.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -50,7 +50,7 @@ def big_board(request):
         'drafts': drafts,
         }
 
-    return render_to_response('drafts/bigboard.html',
+    return render(None, 'drafts/bigboard.html',
                               context,
                               context_instance=RequestContext(request))
 
@@ -59,6 +59,6 @@ def draft_person_ajax(request, slug):
     context = {
         'player': Bio.objects.get(slug=slug)
         }
-    return render_to_response('drafts/ajax.html',
+    return render(None, 'drafts/ajax.html',
                               context,
                               context_instance=RequestContext(request))

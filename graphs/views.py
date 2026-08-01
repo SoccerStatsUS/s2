@@ -1,7 +1,7 @@
 from collections import Counter, defaultdict
 import json
 
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
@@ -13,7 +13,7 @@ from stats.models import CompetitionStat
 
 def graphs_index(request):
     context = {}
-    return render_to_response("graphs/index.html",
+    return render(None, "graphs/index.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -22,7 +22,7 @@ def graphs_index(request):
 
 def map_graph(request):
     context = {}
-    return render_to_response("graphs/map.html",
+    return render(None, "graphs/map.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -50,7 +50,7 @@ def age_bias_graph(request):
         'domestic_distribution': json.dumps(domestic_dist),
         'international_distribution': json.dumps(international_dist),
         }
-    return render_to_response("graphs/bias.html",
+    return render(None, "graphs/bias.html",
                               context,
                               context_instance=RequestContext(request))
 

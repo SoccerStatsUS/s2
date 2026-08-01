@@ -10,12 +10,12 @@ from django.db.models.signals import post_save
 
 class Appearance(models.Model):
 
-    player = models.ForeignKey(Bio)
+    player = models.ForeignKey(Bio, on_delete=models.CASCADE)
 
-    team = models.ForeignKey(Team)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
     #opponent = models.ForeignKey(Team)
     
-    game = models.ForeignKey(Game)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
 
     # What order the player is the lineup. (Matt Reis, Avery John, Michael Parkhurst) -> Michael Parkhurst, 3
     order = models.IntegerField(null=True)

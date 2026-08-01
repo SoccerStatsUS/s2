@@ -1,13 +1,12 @@
-from django.conf.urls import patterns, url
+from standings import views
+from django.urls import path
 
-urlpatterns = patterns('standings.views', 
+urlpatterns = [ 
 
-                       url(r'^$',
-                           'bad_standings',
+                       path('', views.bad_standings,
                            name='bad_standings'),
 
-                       url(r'^bad/$',
-                           'bad_standings',
+                       path('bad/', views.bad_standings,
                            name='bad_standings'),
 
-)
+]

@@ -1,53 +1,49 @@
-from django.conf.urls import patterns, url
+from bios import views
+from django.urls import path, re_path
 
-urlpatterns = patterns('bios.views', 
-                       url(r'^$',
-                           'person_index',
+urlpatterns = [ 
+                       path('', views.person_index,
                            name='person_index'),
 
-                       url(r'^az/(?P<fragment>.+)/$',
-                           'bio_name_fragment',
+                       path('az/<path:fragment>/', views.bio_name_fragment,
                            name='bio_name_fragment'),
 
-                       url(r'^bad/$',
-                           'bad_bios',
+                       path('bad/', views.bad_bios,
                            name='bad_bios'),
 
-                       url(r'^oneword/?$',
-                           'one_word',
+                       re_path(r'^oneword/?$',
+                           views.one_word,
                            name='one_word'),
 
-                       url(r'^r/$',
-                           'random_person_detail',
+                       path('r/', views.random_person_detail,
                            name='random_person_detail'),
                        
 
-                       url(r'^(?P<slug>[a-z0-9-]+)/$',
-                           'person_detail',
+                       re_path(r'^(?P<slug>[a-z0-9-]+)/$',
+                           views.person_detail,
                            name='person_detail'),
 
-                       url(r'^id/(?P<pid>\d+)/$',
-                           'person_id_detail',
+                       path('id/<int:pid>/', views.person_id_detail,
                            name='person_id_detail'),
 
 
-                       url(r'^(?P<slug>[a-z0-9-]+)/goals/$',
-                           'person_detail_goals',
+                       re_path(r'^(?P<slug>[a-z0-9-]+)/goals/$',
+                           views.person_detail_goals,
                            name='person_detail_goals'),
 
-                       url(r'^(?P<slug>[a-z0-9-]+)/games/$',
-                           'person_detail_games',
+                       re_path(r'^(?P<slug>[a-z0-9-]+)/games/$',
+                           views.person_detail_games,
                            name='person_detail_games'),
 
-                       url(r'^(?P<slug>[a-z0-9-]+)/referee/$',
-                           'person_detail_referee_games',
+                       re_path(r'^(?P<slug>[a-z0-9-]+)/referee/$',
+                           views.person_detail_referee_games,
                            name='person_detail_referee_games'),
 
 
 
-                       url(r'^(?P<slug>[a-z0-9-]+)/stats/$',
-                           'person_detail_stats',
+                       re_path(r'^(?P<slug>[a-z0-9-]+)/stats/$',
+                           views.person_detail_stats,
                            name='person_detail_stats'),
 
 
-)
+]

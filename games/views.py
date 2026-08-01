@@ -1,7 +1,7 @@
 import datetime
 
 from django.db import models
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
@@ -28,7 +28,7 @@ def homepage(request):
         'mls': mls,
         }
 
-    return render_to_response("homepage.html",
+    return render(None, "homepage.html",
                               context,
                               context_instance=RequestContext(request))
         
@@ -90,7 +90,7 @@ def homepage_old(request):
         'oc_game': oc_game,
         
         }
-    return render_to_response("homepage.html",
+    return render(None, "homepage.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -100,7 +100,7 @@ def bad_games(request):
         'duplicate_games': Game.objects.duplicate_games(),
         }
 
-    return render_to_response("games/bad.html",
+    return render(None, "games/bad.html",
                               context,
                               context_instance=RequestContext(request)
                               )    
@@ -130,7 +130,7 @@ def games_index(request):
         'goal_distribution': json.dumps(gd),
         }
 
-    return render_to_response("games/index.html",
+    return render(None, "games/index.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -183,7 +183,7 @@ def game_detail(request, game_id):
         'game_sources': GameSource.objects.filter(game=game),
 
         }
-    return render_to_response("games/detail.html",
+    return render(None, "games/detail.html",
                               context,
                               context_instance=RequestContext(request))
 

@@ -3,10 +3,10 @@ import datetime
 import os
 
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes import generic
-from django.core.urlresolvers import reverse
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.urls import reverse
 
 
 
@@ -24,7 +24,7 @@ class Image(models.Model):
 
     #content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
-    #target = generic.GenericForeignKey('content_type', 'object_id')
+    #target = GenericForeignKey('content_type', 'object_id')
 
 
     def path(self):

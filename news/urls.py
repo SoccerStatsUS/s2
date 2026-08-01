@@ -1,10 +1,10 @@
-from django.conf.urls import patterns, url
+from news import views
+from django.urls import path
 
-urlpatterns = patterns('news.views',
+urlpatterns = [
 
-                       url(r'^$',
-                           'news_index',
+                       path('', views.news_index,
                            name='news_index'),
 
 
-)
+]

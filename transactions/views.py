@@ -1,7 +1,7 @@
 import datetime
 
 from django.db import models
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
@@ -15,7 +15,7 @@ def transaction_index(request):
         'tranactions': transactions,
         }
 
-    return render_to_response("transactions/index.html",
+    return render(None, "transactions/index.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -25,6 +25,6 @@ def transaction_detail(request, transaction_id):
     context = {
         'transaction': transaction,
         }
-    return render_to_response("transactions/detail.html",
+    return render(None, "transactions/detail.html",
                               context,
                               context_instance=RequestContext(request))

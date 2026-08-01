@@ -89,10 +89,10 @@ class Standing(AbstractStanding):
     Usually applied to a team, but could also be a person, competition, season, etc.
     """
 
-    player = models.ForeignKey(Bio, null=True)
-    team = models.ForeignKey(Team, null=True)
-    competition = models.ForeignKey(Competition, null=True)
-    season = models.ForeignKey(Season, null=True)
+    player = models.ForeignKey(Bio, null=True, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, null=True, on_delete=models.CASCADE)
+    competition = models.ForeignKey(Competition, null=True, on_delete=models.CASCADE)
+    season = models.ForeignKey(Season, null=True, on_delete=models.CASCADE)
 
 
     # Standing can be a completed standing or just for a given date.
@@ -163,5 +163,5 @@ class Standing(AbstractStanding):
 
 class StadiumStanding(AbstractStanding):
 
-    team = models.ForeignKey(Team)
-    stadium = models.ForeignKey(Stadium)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    stadium = models.ForeignKey(Stadium, on_delete=models.CASCADE)

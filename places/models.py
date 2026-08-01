@@ -74,7 +74,7 @@ class Country(models.Model):
     code = models.CharField(max_length=15)
 
     #confederation = models.CharField(max_length=15)
-    confederation = models.ForeignKey(Confederation)
+    confederation = models.ForeignKey(Confederation, on_delete=models.CASCADE)
 
     subconfederation = models.CharField(max_length=15)
 
@@ -106,7 +106,7 @@ class State(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField()
     abbreviation = models.CharField(max_length=5)
-    country = models.ForeignKey(Country, null=True, blank=True)
+    country = models.ForeignKey(Country, null=True, blank=True, on_delete=models.CASCADE)
     joined = models.DateField(null=True)
 
     objects = StateManager()
@@ -122,7 +122,7 @@ class State(models.Model):
 
 class StatePopulation(models.Model):
 
-    state = models.ForeignKey(State)
+    state = models.ForeignKey(State, on_delete=models.CASCADE)
     year = models.IntegerField()
     population = models.IntegerField(null=True)
 
@@ -143,8 +143,8 @@ class CityManager(models.Manager):
 
 class City(models.Model):
     name = models.CharField(max_length=255)
-    state = models.ForeignKey(State, null=True, blank=True)
-    country = models.ForeignKey(Country, null=True, blank=True)
+    state = models.ForeignKey(State, null=True, blank=True, on_delete=models.CASCADE)
+    country = models.ForeignKey(Country, null=True, blank=True, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=100)
 
     #geometry = models.PointField(srid=4326)
@@ -205,7 +205,7 @@ class Stadium(models.Model):
     address = models.CharField(max_length=255)
     location = models.CharField(max_length=255)
 
-    city = models.ForeignKey(City, null=True, blank=True)
+    city = models.ForeignKey(City, null=True, blank=True, on_delete=models.CASCADE)
     #location = models.PointField()
 
     opened = models.DateField(null=True)
@@ -214,7 +214,7 @@ class Stadium(models.Model):
     closed = models.DateField(null=True)
     year_closed = models.IntegerField(null=True)
     
-    architect = models.ForeignKey(Bio, null=True)
+    architect = models.ForeignKey(Bio, null=True, on_delete=models.CASCADE)
 
     capacity = models.IntegerField(null=True)
 
@@ -271,8 +271,8 @@ class Stadium(models.Model):
     
 class StadiumMap(models.Model):
 
-    stadium = models.ForeignKey('places.Stadium')
-    team = models.ForeignKey('teams.Team')
+    stadium = models.ForeignKey('places.Stadium', on_delete=models.CASCADE)
+    team = models.ForeignKey('teams.Team', on_delete=models.CASCADE)
 
     start = models.DateField()
     end = models.DateField()

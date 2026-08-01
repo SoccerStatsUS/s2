@@ -1,12 +1,11 @@
-from django.conf.urls import patterns, url
+from lineups import views
+from django.urls import path
 
-urlpatterns = patterns('lineups.views', 
-                       url(r'^$',
-                           'lineup_index',
+urlpatterns = [ 
+                       path('', views.lineup_index,
                            name='lineup_index'),
 
-                       url(r'^ajax$',
-                           'lineup_ajax',
+                       path('ajax', views.lineup_ajax,
                            name='lineup_ajax'),
 
-)
+]

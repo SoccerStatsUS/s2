@@ -1,13 +1,12 @@
-from django.conf.urls import patterns, url
+from transactions import views
+from django.urls import path
 
-urlpatterns = patterns('transactions.views', 
-                       url(r'^$',
-                           'transaction_index',
+urlpatterns = [ 
+                       path('', views.transaction_index,
                            name='transaction_index'),
 
-                       url(r'^(?P<transaction_id>\d+)/$',
-                           'transaction_detail',
+                       path('<int:transaction_id>/', views.transaction_detail,
                            name='transaction_detail'),
 
 
-                       )
+                       ]

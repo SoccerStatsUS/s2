@@ -18,10 +18,10 @@ class Transaction(models.Model):
 
     date = models.DateField(null=True)
 
-    person = models.ForeignKey(Bio)
+    person = models.ForeignKey(Bio, on_delete=models.CASCADE)
     
-    team_from = models.ForeignKey(Team, related_name="transactions_from", null=True)
-    team_to = models.ForeignKey(Team, related_name="transactions_to", null=True)
+    team_from = models.ForeignKey(Team, related_name="transactions_from", null=True, on_delete=models.CASCADE)
+    team_to = models.ForeignKey(Team, related_name="transactions_to", null=True, on_delete=models.CASCADE)
 
 
     objects = TransactionManager()    

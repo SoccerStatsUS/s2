@@ -1,22 +1,20 @@
-from django.conf.urls import patterns, url
+from graphs import views
+from django.urls import path
 
-urlpatterns = patterns('graphs.views', 
+urlpatterns = [ 
 
-                       url(r'^$',
-                           'graphs_index',
+                       path('', views.graphs_index,
                            name='graphs_index'),
 
 
-                       url(r'^bias/$',
-                           'age_bias_graph',
+                       path('bias/', views.age_bias_graph,
                            name='age_bias_graph'),
 
 
 
 
-                       url(r'^map/$',
-                           'map_graph',
+                       path('map/', views.map_graph,
                            name='map_graph'),
 
 
-)
+]

@@ -1,13 +1,12 @@
-from django.conf.urls import patterns, url
+from sources import views
+from django.urls import path
 
-urlpatterns = patterns('sources.views', 
+urlpatterns = [ 
 
-                       url(r'^$',
-                           'source_index',
+                       path('', views.source_index,
                            name='source_index'),
 
-                       url(r'^(?P<source_id>\d+)/$',
-                           'source_detail',
+                       path('<int:source_id>/', views.source_detail,
                            name='source_detail'),
 
-                       )
+                       ]

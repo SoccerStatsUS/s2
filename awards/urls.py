@@ -1,12 +1,11 @@
-from django.conf.urls import patterns, url
+from awards import views
+from django.urls import path
 
-urlpatterns = patterns('awards.views', 
-                       url(r'^$',
-                           'award_index',
+urlpatterns = [ 
+                       path('', views.award_index,
                            name='award_index'),
 
-                       url(r'^(?P<award_id>\d+)/$',
-                           'award_detail',
+                       path('<int:award_id>/', views.award_detail,
                            name='award_detail'),
 
-)
+]

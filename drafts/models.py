@@ -13,8 +13,8 @@ class DraftManager(models.Manager):
 
 class Draft(models.Model):
 
-    competition = models.ForeignKey(Competition, null=True)
-    season = models.ForeignKey(Season)
+    competition = models.ForeignKey(Competition, null=True, on_delete=models.CASCADE)
+    season = models.ForeignKey(Season, on_delete=models.CASCADE)
     #season = models.CharField(max_length=255)
 
     name = models.CharField(max_length=255)
@@ -40,16 +40,16 @@ class Draft(models.Model):
 
 
 class Pick(models.Model):
-    draft = models.ForeignKey(Draft)
+    draft = models.ForeignKey(Draft, on_delete=models.CASCADE)
     number = models.IntegerField()
 
-    team = models.ForeignKey(Team)
-    former_team = models.ForeignKey(Team, null=True, related_name='former_team_set')
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    former_team = models.ForeignKey(Team, null=True, related_name='former_team_set', on_delete=models.CASCADE)
 
     text = models.CharField(max_length=255)
-    player = models.ForeignKey(Bio, null=True)
+    player = models.ForeignKey(Bio, null=True, on_delete=models.CASCADE)
 
-    pick = models.ForeignKey('self', null=True, related_name='drafted_pick_set')
+    pick = models.ForeignKey('self', null=True, related_name='drafted_pick_set', on_delete=models.CASCADE)
 
     position = models.CharField(max_length=5)
 

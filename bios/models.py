@@ -1,5 +1,4 @@
-from django.contrib.contenttypes import generic
-from django.core.urlresolvers import reverse
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.db import models
 from django.template.defaultfilters import slugify
 
@@ -8,6 +7,7 @@ from collections import defaultdict
 import datetime
 
 import random
+from django.urls import reverse
 
 
 class BioManager(models.Manager):
@@ -109,17 +109,17 @@ class Bio(models.Model):
     height = models.IntegerField(null=True, blank=True)
 
     birthdate = models.DateField(null=True, blank=True)
-    birthplace = models.ForeignKey('places.City', null=True, blank=True, related_name='birth_set')
-    birth_country = models.ForeignKey('places.Country', null=True, blank=True, related_name='citizen_set')
+    birthplace = models.ForeignKey('places.City', null=True, blank=True, related_name='birth_set', on_delete=models.CASCADE)
+    birth_country = models.ForeignKey('places.Country', null=True, blank=True, related_name='citizen_set', on_delete=models.CASCADE)
 
     deathdate = models.DateField(null=True, blank=True)
-    deathplace = models.ForeignKey('places.City', null=True, blank=True, related_name='death_set')
+    deathplace = models.ForeignKey('places.City', null=True, blank=True, related_name='death_set', on_delete=models.CASCADE)
 
     height = models.IntegerField(null=True, blank=True)
     weight = models.IntegerField(null=True, blank=True)
 
-    awards = generic.GenericRelation('awards.AwardItem')
-    images = generic.GenericRelation('images.Image')
+    awards = GenericRelation('awards.AwardItem')
+    images = GenericRelation('images.Image')
 
     #position = models.CharField(max_length=20)
 

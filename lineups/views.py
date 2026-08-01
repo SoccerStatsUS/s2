@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
@@ -48,7 +48,7 @@ def lineup_index(request):
         'appearances': appearances[:1000],
         'form': AppearanceForm(),
         }
-    return render_to_response("lineups/list.html",
+    return render(None, "lineups/list.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -58,7 +58,7 @@ def lineup_ajax(request):
     context = {
         'appearances': appearances[:1000],
         }
-    return render_to_response("lineups/ajax.html",
+    return render(None, "lineups/ajax.html",
                               context,
                               context_instance=RequestContext(request))
 

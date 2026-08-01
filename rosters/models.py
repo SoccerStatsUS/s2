@@ -23,9 +23,9 @@ class RosterItem(models.Model):
     A tenure of a person with a given team.
     """
     
-    person = models.ForeignKey(Bio)
-    position = models.ForeignKey(Position)
-    team = models.ForeignKey(Team)
+    person = models.ForeignKey(Bio, on_delete=models.CASCADE)
+    position = models.ForeignKey(Position, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
     start = models.DateField()
     end = modelsDateField()
 
@@ -35,9 +35,9 @@ class Transfer(models.Model):
     Represents a transfer from one team to another team.
     """
 
-    person = models.ForeignKey(Bio)
-    src = models.ForeignKey(Team)
-    dst = models.ForeignKey(Team)
+    person = models.ForeignKey(Bio, on_delete=models.CASCADE)
+    src = models.ForeignKey(Team, on_delete=models.CASCADE)
+    dst = models.ForeignKey(Team, on_delete=models.CASCADE)
     date = models.DateField(null=True)
 
     

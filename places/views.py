@@ -1,5 +1,5 @@
 from django.db.models import Avg, Count, Sum
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
@@ -20,7 +20,7 @@ def country_index(request):
                 'countries': Country.objects.annotate(game_count=Count('game')).annotate(total_attendance=Sum('game__attendance')).order_by('-game_count'),
                 }
 
-        return render_to_response("places/country_index.html",
+        return render(None, "places/country_index.html",
                                   context,
                                   context_instance=RequestContext(request))
 
@@ -34,7 +34,7 @@ def state_index(request):
                 'states': State.objects.all(),
 
                 }
-        return render_to_response("places/state_index.html",
+        return render(None, "places/state_index.html",
                                   context,
                                   context_instance=RequestContext(request))
 
@@ -45,7 +45,7 @@ def city_index(request):
                 'cities': City.objects.all(),
                 }
 
-        return render_to_response("places/city_index.html",
+        return render(None, "places/city_index.html",
                                   context,
                                   context_instance=RequestContext(request))
 
@@ -59,7 +59,7 @@ def stadium_index(request):
                 'stadiums': Stadium.objects.annotate(game_count=Count('game')).annotate(total_attendance=Sum('game__attendance')).order_by('-game_count')
                 }
 
-        return render_to_response("places/stadium_index.html",
+        return render(None, "places/stadium_index.html",
                                   context,
                                   context_instance=RequestContext(request))
 
@@ -83,7 +83,7 @@ def country_detail(request, slug):
                 'competitions': competitions,
                 'cities': cities,
                 }
-        return render_to_response("places/country_detail.html",
+        return render(None, "places/country_detail.html",
                                   context,
                                   context_instance=RequestContext(request))
 
@@ -103,7 +103,7 @@ def state_detail(request, slug):
                 'stadiums': stadiums,
                 'games': games,
                 }
-        return render_to_response("places/state_detail.html",
+        return render(None, "places/state_detail.html",
                                   context,
                                   context_instance=RequestContext(request))
 
@@ -122,7 +122,7 @@ def city_detail(request, slug):
                 'stadiums': city.stadium_set.annotate(game_count=Count('game')).annotate(total_attendance=Sum('game__attendance')).order_by('-game_count')
                 }
 
-        return render_to_response("places/city_detail.html",
+        return render(None, "places/city_detail.html",
                                   context,
                                   context_instance=RequestContext(request))
 
@@ -148,7 +148,7 @@ def stadium_detail(request, slug):
                 'recent_games': stadium.game_set.all()[:25],
                 }
 
-        return render_to_response("places/stadium_detail.html",
+        return render(None, "places/stadium_detail.html",
                                   context,
                                   context_instance=RequestContext(request))
 
@@ -170,7 +170,7 @@ def stadium_games(request, slug):
                 'games': games,
                 }
 
-        return render_to_response("places/stadium_games.html",
+        return render(None, "places/stadium_games.html",
                                   context,
                                   context_instance=RequestContext(request))
 

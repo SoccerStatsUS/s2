@@ -2,12 +2,12 @@ from collections import defaultdict
 import datetime
 import os
 
-from django.contrib.contenttypes import generic
-from django.core.urlresolvers import reverse
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.db import models
 from django.template.defaultfilters import slugify
 
 from places.models import City
+from django.urls import reverse
 
 
 class AbstractTeamManager(models.Manager):
@@ -139,7 +139,7 @@ class Team(models.Model):
     # Portland Timbers Reserves -> Portland Timbers (reserve -> main)
     # Chicago Fire Select -> Chicago Fire (? affiliation)
     # United States -> United States U-20 (youth team)
-    affiliate = models.ForeignKey('self', null=True)
+    affiliate = models.ForeignKey('self', null=True, on_delete=models.CASCADE)
 
     # Let's get rid of short name! It's really just another alias.
     # No way, it's useful when you want to display a better name.
@@ -150,7 +150,7 @@ class Team(models.Model):
     founded = models.DateField(null=True)
     dissolved = models.DateField(null=True)
 
-    city = models.ForeignKey(City, null=True, blank=True)
+    city = models.ForeignKey(City, null=True, blank=True, on_delete=models.CASCADE)
     #city = models.CharField(max_length=255)
 
     # Have some virtual teams from USMNT drafts.
@@ -164,7 +164,7 @@ class Team(models.Model):
     defuncts = DefunctTeamManager()
     reals = RealTeamManager()
 
-    awards = generic.GenericRelation('awards.AwardItem')
+    awards = GenericRelation('awards.AwardItem')
 
 
     class Meta:
@@ -354,7 +354,7 @@ class Team(models.Model):
 
 
 class TeamAlias(models.Model):        
-    team = models.ForeignKey(Team)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
     name = models.CharField(max_length=200, unique=True)
     
     start = models.DateField()

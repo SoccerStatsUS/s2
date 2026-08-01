@@ -1,9 +1,9 @@
-from django.conf.urls import patterns, url
+from videos import views
+from django.urls import path
 
-urlpatterns = patterns('videos.views', 
+urlpatterns = [ 
 
-                       url(r'^$',
-                           'video_index',
+                       path('', views.video_index,
                            name='video_index'),
 
-                       )
+                       ]

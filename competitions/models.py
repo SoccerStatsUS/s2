@@ -1,4 +1,4 @@
-from django.db.models import Sum, Avg
+from django.db.models import Avg, Sum
 from django.db import models
 from django.template.defaultfilters import slugify
 
@@ -353,8 +353,8 @@ class Competition(AbstractCompetition):
 
 
 class CompetitionRelationship(models.Model):
-    before = models.ForeignKey('Competition', related_name='before')
-    after = models.ForeignKey('Competition', related_name='after')
+    before = models.ForeignKey('Competition', related_name='before', on_delete=models.CASCADE)
+    after = models.ForeignKey('Competition', related_name='after', on_delete=models.CASCADE)
 
 
 
@@ -451,7 +451,7 @@ class Season(AbstractCompetition):
     order = models.IntegerField(null=True, blank=True)
     order2 = models.IntegerField(null=True, blank=True)
 
-    competition = models.ForeignKey(Competition, null=True)
+    competition = models.ForeignKey(Competition, null=True, on_delete=models.CASCADE)
     competition_original_name = models.CharField(max_length=255)
 
     objects = SeasonManager()
@@ -460,7 +460,7 @@ class Season(AbstractCompetition):
     minutes_with_age = models.IntegerField(null=True, blank=True)
     age_minutes = models.FloatField(null=True, blank=True)
 
-    super_season = models.ForeignKey(SuperSeason, null=False)
+    super_season = models.ForeignKey(SuperSeason, null=False, on_delete=models.CASCADE)
 
 
     class Meta:

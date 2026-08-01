@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
@@ -15,6 +15,6 @@ def stats_index(request):
         'stats': Stat.career_stats.all()[:100],
         'form': StatForm(),
         }
-    return render_to_response("stats/list.html",
+    return render(None, "stats/list.html",
                               context,
                               context_instance=RequestContext(request))

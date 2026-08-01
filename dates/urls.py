@@ -1,31 +1,28 @@
-from django.conf.urls import patterns, url
+from dates import views
+from django.urls import path, re_path
 
-urlpatterns = patterns('dates.views', 
+urlpatterns = [ 
 
-                       url(r'^$',
-                           'dates_index',
+                       path('', views.dates_index,
                            name='dates_index'),
 
 
-                       url('^today/$',
-                           'scoreboard_today',
+                       path('today/', views.scoreboard_today,
                            name='scoreboard_today'),
 
-                       url(r'^(?P<year>\d+)/$',
-                           'year_detail',
+                       path('<int:year>/', views.year_detail,
                            name='year_detail'),
 
-                       url(r'^(?P<year>\d+)/(?P<month>\d*)/$',
-                           'month_detail',
+                       re_path(r'^(?P<year>\d+)/(?P<month>\d*)/$',
+                           views.month_detail,
                            name='month_detail'),
 
-                       url(r'^(?P<year>\d+)/(?P<month>\d*)/(?P<day>\d*)/$',
-                           'date_detail',
+                       re_path(r'^(?P<year>\d+)/(?P<month>\d*)/(?P<day>\d*)/$',
+                           views.date_detail,
                            name='date_detail'),
 
-                       url(r'^day/(?P<month>\d+)/(?P<day>\d+)/$',
-                           'day_detail',
+                       path('day/<int:month>/<int:day>/', views.day_detail,
                            name='day_detail'),
 
 
-                       )
+                       ]

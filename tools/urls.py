@@ -1,59 +1,49 @@
-from django.conf.urls import patterns, url
+from tools import views
+from django.urls import path
 
-urlpatterns = patterns('tools.views', 
+urlpatterns = [ 
 
-                       url(r'^$',
-                           'tool_index',
+                       path('', views.tool_index,
                            name='tool_index'),
 
 
-                       url(r'^games/$',
-                           'game_search',
+                       path('games/', views.game_search,
                            name='game_search'),
 
-                       url(r'^stats/$',
-                           'stat_search',
+                       path('stats/', views.stat_search,
                            name='stat_search'),
 
 
-                       url(r'^goals/$',
-                           'goal_search',
+                       path('goals/', views.goal_search,
                            name='goal_search'),
 
 
-                       url(r'^lineups/$',
-                           'lineup_search',
+                       path('lineups/', views.lineup_search,
                            name='lineup_search'),
 
 
-                       url(r'^ajax/games/$',
-                           'games_ajax',
+                       path('ajax/games/', views.games_ajax,
                            name='games_ajax'),
 
-                       url(r'^ajax/gamesid/$',
-                           'games_ajax_by_id',
+                       path('ajax/gamesid/', views.games_ajax_by_id,
                            name='games_ajax_by_id'),
 
-                       url(r'^ajax/statsid/$',
-                           'stats_ajax_by_id',
+                       path('ajax/statsid/', views.stats_ajax_by_id,
                            name='stats_ajax_by_id'),
 
 
-                       url(r'^ajax/stats/$',
-                           'stats_ajax',
+                       path('ajax/stats/', views.stats_ajax,
                            name='stats_ajax'),
 
 
-                       url(r'^ajax/goals/$',
-                           'goals_ajax',
+                       path('ajax/goals/', views.goals_ajax,
                            name='goals_ajax'),
 
 
-                       url(r'^ajax/lineups/$',
-                           'lineups_ajax',
+                       path('ajax/lineups/', views.lineups_ajax,
                            name='lineups_ajax'),
 
 
 
 
-)
+]

@@ -41,7 +41,7 @@ class FeedItem(models.Model):
     dt = models.DateTimeField()
     summary = models.CharField(max_length=1023) 
     url = models.CharField(max_length=1023) 
-    source = models.ForeignKey(Source)
+    source = models.ForeignKey(Source, on_delete=models.CASCADE)
 
     def time(self):
         return self.dt.strftime("%I:%M %p")

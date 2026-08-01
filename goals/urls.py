@@ -1,8 +1,8 @@
-from django.conf.urls import patterns, url
+from goals import views
+from django.urls import path
 
-urlpatterns = patterns('goals.views', 
-                       url(r'^$',
-                           'goals_index',
+urlpatterns = [ 
+                       path('', views.goals_index,
                            name='goals_index'),
 
-                       )
+                       ]

@@ -1,4 +1,4 @@
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
@@ -7,7 +7,7 @@ from competitions.models import Competition, Season
 class Award(models.Model):
     
     name = models.CharField(max_length=255)
-    competition = models.ForeignKey(Competition, null=True)
+    competition = models.ForeignKey(Competition, null=True, on_delete=models.CASCADE)
     #date = models.DateField()
 
     # This is used to distinguish awards that are named differently but mean the same thing.
@@ -46,15 +46,15 @@ class AwardItem(models.Model):
     Can be applied either to a season or a year.
     """
 
-    award = models.ForeignKey(Award)
-    season = models.ForeignKey(Season, blank=True, null=True)
+    award = models.ForeignKey(Award, on_delete=models.CASCADE)
+    season = models.ForeignKey(Season, blank=True, null=True, on_delete=models.CASCADE)
     year = models.IntegerField(blank=True, null=True)
 
     #content_type = models.ForeignKey(ContentType)
 
 
     object_id = models.PositiveIntegerField()
-    #recipient = generic.GenericForeignKey()
+    #recipient = GenericForeignKey()
 
     #def __str__(self):
     #    return "%s %s %s" % (self.season, self.award.name, self.recipient)

@@ -12,8 +12,8 @@ class Currency(models.Model):
 
 
 class ExchangeValue(models.Model):
-    from_currency = models.ForeignKey(Currency, related_name='from_rate')
-    to_currency = models.ForeignKey(Currency, related_name='to_rate')
+    from_currency = models.ForeignKey(Currency, related_name='from_rate', on_delete=models.CASCADE)
+    to_currency = models.ForeignKey(Currency, related_name='to_rate', on_delete=models.CASCADE)
     proportion = models.FloatField()
 
     
@@ -25,7 +25,7 @@ class SalaryManager(models.Manager):
 
 class Salary(models.Model):
 
-    person = models.ForeignKey(Bio)
+    person = models.ForeignKey(Bio, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=15, decimal_places=2, null=False)
 
     season = models.CharField(max_length=255)

@@ -52,14 +52,14 @@ class Goal(models.Model):
 
     date = models.DateField() # This shouldn't be here. Game can tell us the date.
     minute = models.IntegerField(null=True)
-    team = models.ForeignKey(Team)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
     #team_original_name = models.CharField(max_length=255)
     
     # There should only be player.
-    player = models.ForeignKey(Bio, null=True)
-    own_goal_player = models.ForeignKey(Bio, null=True, related_name='own_goal_set')
+    player = models.ForeignKey(Bio, null=True, on_delete=models.CASCADE)
+    own_goal_player = models.ForeignKey(Bio, null=True, related_name='own_goal_set', on_delete=models.CASCADE)
 
-    game = models.ForeignKey(Game, null=True)
+    game = models.ForeignKey(Game, null=True, on_delete=models.CASCADE)
 
     penalty = models.BooleanField(default=False)
     own_goal = models.BooleanField(default=False)
@@ -123,8 +123,8 @@ class Goal(models.Model):
 
 class Assist(models.Model):
     
-    goal = models.ForeignKey(Goal)
-    player = models.ForeignKey(Bio)
+    goal = models.ForeignKey(Goal, on_delete=models.CASCADE)
+    player = models.ForeignKey(Bio, on_delete=models.CASCADE)
 
     # Primary assist (1), secondary assist (2), ad infinitum.
     # Goals and assists could be represented with the same object.

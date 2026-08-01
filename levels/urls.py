@@ -1,11 +1,11 @@
-from django.conf.urls import patterns, url
+from levels import views
+from django.urls import path, re_path
 
-urlpatterns = patterns('levels.views', 
-                       url(r'^$',
-                           'level_index',
+urlpatterns = [ 
+                       path('', views.level_index,
                            name='level_index'),
 
-                       url(r'^(?P<country_slug>[a-z0-9-]+)/(?P<level>[0-9]+)/$',
-                           'level_detail',
+                       re_path(r'^(?P<country_slug>[a-z0-9-]+)/(?P<level>[0-9]+)/$',
+                           views.level_detail,
                            name='level_detail'),
-)
+]

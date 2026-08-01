@@ -5,7 +5,7 @@ import json
 
 from django.db.models import Q, Sum
 from django.http import Http404
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
@@ -86,7 +86,7 @@ def team_index(request):
         'name_dict': name_dict,
         }
 
-    return render_to_response("teams/index.html",
+    return render(None, "teams/index.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -99,7 +99,7 @@ def team_standings(request):
         'standings': standings,
         }
 
-    return render_to_response("teams/standings.html",
+    return render(None, "teams/standings.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -117,7 +117,7 @@ def team_list_generic(request, team_list=None, standing_type=None, ):
         'standings': standings.select_related(),
         'standing_type': standing_type,
         }
-    return render_to_response("teams/list.html",
+    return render(None, "teams/list.html",
                               context,
                               context_instance=RequestContext(request)
                               )    
@@ -144,7 +144,7 @@ def seasons_dashboard(request):
         'seasons': sorted(season_names.keys()),
         }
 
-    return render_to_response("teams/seasons.html",
+    return render(None, "teams/seasons.html",
                               context,
                               context_instance=RequestContext(request)
                               )
@@ -163,7 +163,7 @@ def team_position_detail(request, team_slug, position_slug):
         'positions': positions,
         }
 
-    return render_to_response("teams/position_detail.html",
+    return render(None, "teams/position_detail.html",
                               context,
                               context_instance=RequestContext(request)
                               )
@@ -237,7 +237,7 @@ def team_detail(request, team_slug):
         'gx': True,
         }
 
-    return render_to_response("teams/detail.html",
+    return render(None, "teams/detail.html",
                               context,
                               context_instance=RequestContext(request)
                               )
@@ -260,7 +260,7 @@ def team_competition_detail(request, team_slug, competition_slug):
         'calendar_data': json.dumps(calendar_data),
         }
 
-    return render_to_response("teams/competition_detail.html",
+    return render(None, "teams/competition_detail.html",
                               context,
                               context_instance=RequestContext(request)
                               )
@@ -323,7 +323,7 @@ def team_season_detail(request, team_slug, competition_slug, season_slug):
         'assisters': json.dumps(assisters),
         }
 
-    return render_to_response("teams/season_detail.html",
+    return render(None, "teams/season_detail.html",
                               context,
                               context_instance=RequestContext(request)
                               )
@@ -367,7 +367,7 @@ def team_stats(request, team_slug):
         'stats': stats.order_by('-games_played'), #.select_related(),
         }
 
-    return render_to_response("teams/stats.html",
+    return render(None, "teams/stats.html",
                               context,
                               context_instance=RequestContext(request)
                               )
@@ -392,7 +392,7 @@ def team_picks(request, team_slug):
         'stats': career_stats,
         }
 
-    return render_to_response("teams/picks.html",
+    return render(None, "teams/picks.html",
                               context,
                               context_instance=RequestContext(request)
                               )
@@ -425,7 +425,7 @@ def team_graphs(request, team_slug):
         'nationality_map': json.dumps(nationality_map),
         }
 
-    return render_to_response("teams/graphs.html",
+    return render(None, "teams/graphs.html",
                               context,
                               context_instance=RequestContext(request)
                               )
@@ -448,7 +448,7 @@ def team_draftees(request, team_slug):
         'stats': career_stats,
         }
 
-    return render_to_response("teams/picks.html",
+    return render(None, "teams/picks.html",
                               context,
                               context_instance=RequestContext(request)
                               )
@@ -520,7 +520,7 @@ def team_games(request, team_slug):
         'calendar_data': json.dumps(calendar_data),
         }
 
-    return render_to_response("teams/games.html",
+    return render(None, "teams/games.html",
                               context,
                               context_instance=RequestContext(request)
                               )
@@ -544,7 +544,7 @@ def team_calendar(request, team_slug):
         'games': games,
         }
 
-    return render_to_response("teams/calendar.html",
+    return render(None, "teams/calendar.html",
                               context,
                               context_instance=RequestContext(request)
                               )
@@ -564,7 +564,7 @@ def team_versus(request, team1_slug, team2_slug):
         'games': Game.objects.team_filter(team1, team2),
         }
 
-    return render_to_response("teams/versus.html",
+    return render(None, "teams/versus.html",
                               context,
                               context_instance=RequestContext(request)
                               )
@@ -590,7 +590,7 @@ def team_year_detail(request, team_slug, year):
         'chart_years': chart_years,
         }
 
-    return render_to_response("teams/year_detail.html",
+    return render(None, "teams/year_detail.html",
                               context,
                               context_instance=RequestContext(request)
                               )
@@ -628,7 +628,7 @@ def teams_ajax(request):
         'stats': stats[:1000],
         }
 
-    return render_to_response("stats/ajax.html",
+    return render(None, "stats/ajax.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -643,7 +643,7 @@ def bad_teams(request):
         'duplicate_slugs': Team.objects.duplicate_slugs(),
         }
 
-    return render_to_response("teams/bad.html",
+    return render(None, "teams/bad.html",
                               context,
                               context_instance=RequestContext(request)
                               )    

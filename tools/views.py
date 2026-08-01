@@ -2,7 +2,7 @@ from collections import Counter
 
 from django.db.models import Q
 from django.http import HttpResponsePermanentRedirect
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
@@ -20,7 +20,7 @@ def tool_index(request):
     
     context = {}
 
-    return render_to_response("tools/index.html",
+    return render(None, "tools/index.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -33,7 +33,7 @@ def game_search(request):
         'form': GameSearchForm(),
         }
 
-    return render_to_response("tools/games.html",
+    return render(None, "tools/games.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -43,7 +43,7 @@ def stat_search(request):
         'form': StatSearchForm(),
         }
 
-    return render_to_response("tools/stats.html",
+    return render(None, "tools/stats.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -56,7 +56,7 @@ def goal_search(request):
         'form': GoalSearchForm(),
         }
 
-    return render_to_response("tools/goals.html",
+    return render(None, "tools/goals.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -67,7 +67,7 @@ def lineup_search(request):
         'form': LineupSearchForm(),
             }
 
-    return render_to_response("tools/lineups.html",
+    return render(None, "tools/lineups.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -128,7 +128,7 @@ def games_ajax_by_id(request):
         'games': games,
         }
 
-    return render_to_response("tools/ajax/games.html",
+    return render(None, "tools/ajax/games.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -176,7 +176,7 @@ def games_ajax(request):
         'games': games[START:END],
         }
 
-    return render_to_response("tools/ajax/games.html",
+    return render(None, "tools/ajax/games.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -249,7 +249,7 @@ def stats_ajax_by_id(request):
 
 
 
-    return render_to_response("tools/ajax/stats.html",
+    return render(None, "tools/ajax/stats.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -309,7 +309,7 @@ def stats_ajax(request):
         'stats': stats[START:END]
         }
 
-    return render_to_response("tools/ajax/stats.html",
+    return render(None, "tools/ajax/stats.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -376,7 +376,7 @@ def lineups_ajax(request):
         'appearances': appearances[START:END]
         }
 
-    return render_to_response("tools/ajax/lineups.html",
+    return render(None, "tools/ajax/lineups.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -431,7 +431,7 @@ def goals_ajax(request):
         'goals': goals[START:END]
         }
 
-    return render_to_response("tools/ajax/goals.html",
+    return render(None, "tools/ajax/goals.html",
                               context,
                               context_instance=RequestContext(request))
 

@@ -1,9 +1,9 @@
-from django.conf.urls import patterns, url
+from stats import views
+from django.urls import path
 
-urlpatterns = patterns('stats.views', 
+urlpatterns = [ 
 
-                       url(r'^$',
-                           'stats_index',
+                       path('', views.stats_index,
                            name='stats_index'),
 
-)
+]

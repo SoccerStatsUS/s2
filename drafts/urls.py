@@ -1,22 +1,21 @@
-from django.conf.urls import patterns, url
+from drafts import views
+from django.urls import path, re_path
 
-urlpatterns = patterns('drafts.views', 
+urlpatterns = [ 
 
-                       url(r'^$',
-                           'drafts_index',
+                       path('', views.drafts_index,
                            name='drafts_index'),
 
-                       url(r'^(?P<competition_slug>[a-z0-9-]+)/(?P<draft_slug>[a-z0-9-]+)/(?P<season>[a-z0-9-]+)/$',
-                           'draft_detail',
+                       re_path(r'^(?P<competition_slug>[a-z0-9-]+)/(?P<draft_slug>[a-z0-9-]+)/(?P<season>[a-z0-9-]+)/$',
+                           views.draft_detail,
                            name='draft_detail'),
 
-                       url('^bigboard$',
-                           'big_board',
+                       path('bigboard', views.big_board,
                            name='big_board'),
 
-                       url(r'^x/(?P<slug>[a-z0-9-]+)',
-                           'draft_person_ajax',
+                       re_path(r'^x/(?P<slug>[a-z0-9-]+)',
+                           views.draft_person_ajax,
                            name='draft_person_ajax'),
 
 
-)
+]

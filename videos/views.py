@@ -1,7 +1,7 @@
 import datetime
 
 from django.db.models import Count
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 
 from videos.models import Video
@@ -16,7 +16,7 @@ def video_index(request):
         #'videos': video_urls,
         'games': video_games,
         }
-    return render_to_response("videos/index.html",
+    return render(None, "videos/index.html",
                               context,
                               context_instance=RequestContext(request))
 

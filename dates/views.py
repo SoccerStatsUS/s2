@@ -1,7 +1,7 @@
 import datetime
 
-from django.db.models import Max, Min, Count, Sum, Avg
-from django.shortcuts import render_to_response, get_object_or_404
+from django.db.models import Avg, Count, Max, Min, Sum
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
@@ -29,7 +29,7 @@ def dates_index(request):
         'years': years,
         }
 
-    return render_to_response("dates/index.html",
+    return render(None, "dates/index.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -49,7 +49,7 @@ def calendar(request):
         'years': years,
         }
 
-    return render_to_response("dates/calendar.html",
+    return render(None, "dates/calendar.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -95,7 +95,7 @@ def year_detail(request, year):
         'next_date': next_date_tuple,
 
         }
-    return render_to_response("dates/list.html",
+    return render(None, "dates/list.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -147,7 +147,7 @@ def month_detail(request, year, month):
         'previous_date': previous_date_tuple,
         'next_date': next_date_tuple,
         }
-    return render_to_response("dates/list.html",
+    return render(None, "dates/list.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -207,7 +207,7 @@ def date_detail(request, year, month, day):
         'news': news,
         'stats': stats,
         }
-    return render_to_response("dates/list.html",
+    return render(None, "dates/list.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -241,7 +241,7 @@ def day_detail(request, month, day):
         'previous_day': previous_day,
 
         }
-    return render_to_response("dates/list.html",
+    return render(None, "dates/list.html",
                               context,
                               context_instance=RequestContext(request))
 

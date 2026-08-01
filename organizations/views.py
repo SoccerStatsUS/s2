@@ -1,7 +1,7 @@
 
-from django.db.models import Sum, Avg
+from django.db.models import Avg, Sum
 from django.http import Http404
-from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
@@ -15,7 +15,7 @@ def organizations_index(request):
         }
     
 
-    return render_to_response("organizations/index.html",
+    return render(None, "organizations/index.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -29,7 +29,7 @@ def confederations_index(request):
         }
     
 
-    return render_to_response("organizations/confederation/index.html",
+    return render(None, "organizations/confederation/index.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -44,6 +44,6 @@ def confederation_detail(request, confederation_slug):
         'confederation': confederation,
         }
 
-    return render_to_response("organizations/confederation/detail.html",
+    return render(None, "organizations/confederation/detail.html",
                               context,
                               context_instance=RequestContext(request))

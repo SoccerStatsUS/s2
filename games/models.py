@@ -183,9 +183,9 @@ class Game(models.Model):
     date = models.DateField(null=True)
     has_date = models.BooleanField()
     
-    team1 = models.ForeignKey(Team, related_name='t1_games')
+    team1 = models.ForeignKey(Team, related_name='t1_games', on_delete=models.CASCADE)
     team1_original_name = models.CharField(max_length=255)
-    team2 = models.ForeignKey(Team, related_name='t2_games')
+    team2 = models.ForeignKey(Team, related_name='t2_games', on_delete=models.CASCADE)
     team2_original_name = models.CharField(max_length=255)
 
     team1_score = models.IntegerField(null=True)
@@ -196,7 +196,7 @@ class Game(models.Model):
     team1_result = models.CharField(max_length=5)
     team2_result = models.CharField(max_length=5)
 
-    shootout_winner = models.ForeignKey(Team, null=True, related_name='something')
+    shootout_winner = models.ForeignKey(Team, null=True, related_name='something', on_delete=models.CASCADE)
     #some_field = models.IntegerField(null=True)    
 
 
@@ -217,15 +217,15 @@ class Game(models.Model):
     minutes = models.IntegerField(default=90)
 
     # This should probably be a many-to-many?
-    competition = models.ForeignKey(Competition)
-    season = models.ForeignKey(Season)
+    competition = models.ForeignKey(Competition, on_delete=models.CASCADE)
+    season = models.ForeignKey(Season, on_delete=models.CASCADE)
 
-    home_team = models.ForeignKey(Team, null=True, related_name='home_games')
+    home_team = models.ForeignKey(Team, null=True, related_name='home_games', on_delete=models.CASCADE)
     neutral = models.BooleanField(default=False)
 
-    stadium = models.ForeignKey(Stadium, null=True)
-    city = models.ForeignKey(City, null=True)
-    country = models.ForeignKey(Country, null=True)
+    stadium = models.ForeignKey(Stadium, null=True, on_delete=models.CASCADE)
+    city = models.ForeignKey(City, null=True, on_delete=models.CASCADE)
+    country = models.ForeignKey(Country, null=True, on_delete=models.CASCADE)
     location = models.CharField(max_length=255)
 
     video = models.CharField(max_length=255)
@@ -234,10 +234,10 @@ class Game(models.Model):
     attendance = models.IntegerField(null=True, blank=True)
     #effective_attendance = models.IntegerField(null=True, blank=True) # account for doubleheaders
 
-    referee = models.ForeignKey(Bio, null=True, blank=True, related_name="games_refereed")
-    linesman1 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman1_games")
-    linesman2 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman2_games")
-    linesman3 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman3_games")
+    referee = models.ForeignKey(Bio, null=True, blank=True, related_name="games_refereed", on_delete=models.CASCADE)
+    linesman1 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman1_games", on_delete=models.CASCADE)
+    linesman2 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman2_games", on_delete=models.CASCADE)
+    linesman3 = models.ForeignKey(Bio, null=True, blank=True, related_name="linesman3_games", on_delete=models.CASCADE)
 
     merges = models.IntegerField()
 
@@ -899,8 +899,8 @@ class GameSource(models.Model):
     # A separate model is used to include source_url, which is unique to each mapping.
 
 
-    game = models.ForeignKey(Game)
-    source = models.ForeignKey(Source)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    source = models.ForeignKey(Source, on_delete=models.CASCADE)
     source_url = models.CharField(max_length=1023)
 
 
@@ -912,7 +912,7 @@ class GameMinute(models.Model):
     # The smallest measurable unit in a game.
     # Need to bind a lineup and events to this thing as well.
 
-    game = models.ForeignKey(Game)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
     minute = models.IntegerField()
     team1_score = models.IntegerField()
     team2_score = models.IntegerField()

@@ -1,13 +1,12 @@
-from django.conf.urls import patterns, url
+from contact import views
+from django.urls import path
 
-urlpatterns = patterns('contact.views', 
+urlpatterns = [ 
 
-                       url(r'^$',
-                           'contact_index',
+                       path('', views.contact_index,
                            name='contact_index'),
 
-                       url(r'^thanks/$',
-                           'contact_thanks',
+                       path('thanks/', views.contact_thanks,
                            name='contact_thanks'),
 
-)
+]

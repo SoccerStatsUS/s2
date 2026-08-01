@@ -1,17 +1,16 @@
-from django.conf.urls import patterns, url
+from positions import views
+from django.urls import path, re_path
 
-urlpatterns = patterns('positions.views', 
+urlpatterns = [ 
 
-                       url(r'^$',
-                           'index',
+                       path('', views.index,
                            name='index'),
 
-                       url(r'^(?P<slug>[a-z0-9-]+)/$',
-                           'position_detail',
+                       re_path(r'^(?P<slug>[a-z0-9-]+)/$',
+                           views.position_detail,
                            name='position_detail'),
 
-                       url(r'^managers/$',
-                           'manager_index',
+                       path('managers/', views.manager_index,
                            name='manager_index'),
 
-)
+]

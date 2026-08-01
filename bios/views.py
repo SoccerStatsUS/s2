@@ -1,6 +1,6 @@
 from collections import OrderedDict, Counter
-from django.db.models import Sum, Q
-from django.shortcuts import render_to_response, get_object_or_404
+from django.db.models import Q, Sum
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
@@ -49,7 +49,7 @@ def person_list_generic(request, person_list=None):
     context =  {
         'stats': stats.select_related(),
         }
-    return render_to_response("bios/list.html",
+    return render(None, "bios/list.html",
                               context,
                               context_instance=RequestContext(request)
                               )    
@@ -82,7 +82,7 @@ def person_index(request):
         #'most_goals': most_goals,
         }
 
-    return render_to_response("bios/index.html",
+    return render(None, "bios/index.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -99,7 +99,7 @@ def bad_bios(request):
         'duplicate_slugs': Bio.objects.duplicate_slugs(),
         }
 
-    return render_to_response("bios/bad.html",
+    return render(None, "bios/bad.html",
                               context,
                               context_instance=RequestContext(request)
                               )    
@@ -137,7 +137,7 @@ def person_detail_abstract(request, bio):
         'refs': bio.ref_set()[:10]
         }
 
-    return render_to_response("bios/detail.html",
+    return render(None, "bios/detail.html",
                               context,
                               context_instance=RequestContext(request)
                               )   
@@ -182,7 +182,7 @@ def person_detail_games(request, slug):
         'game_stats': game_stats,
         'stat': AppearanceStat(bio, game_stats),
         }
-    return render_to_response("bios/detail_games.html",
+    return render(None, "bios/detail_games.html",
                               context,
                               context_instance=RequestContext(request)
                               )   
@@ -202,7 +202,7 @@ def person_detail_referee_games(request, slug):
         'bio': bio,
         'games': games,
         }
-    return render_to_response("bios/referee.html",
+    return render(None, "bios/referee.html",
                               context,
                               context_instance=RequestContext(request)
                               )   
@@ -214,7 +214,7 @@ def person_detail_goals(request, slug):
     context = {
         "goals": bio.goal_set.all(),
         }
-    return render_to_response("bios/detail_goals.html",
+    return render(None, "bios/detail_goals.html",
                               context,
                               context_instance=RequestContext(request)
                               )   
@@ -226,7 +226,7 @@ def person_detail_stats(request, slug):
     context = {
         "stats": bio.stat_set.order_by('season'),
         }
-    return render_to_response("bios/detail_stats.html",
+    return render(None, "bios/detail_stats.html",
                               context,
                               context_instance=RequestContext(request)
                               )   

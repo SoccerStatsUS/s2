@@ -1,10 +1,10 @@
-from django.conf.urls import patterns, url
+from images import views
+from django.urls import path
 
-urlpatterns = patterns('images.views', 
+urlpatterns = [ 
 
-                       url(r'^(?P<image_id>\d+)/$',
-                           'image_detail',
+                       path('<int:image_id>/', views.image_detail,
                            name='image_detail'),
 
 
-)
+]

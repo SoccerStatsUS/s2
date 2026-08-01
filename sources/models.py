@@ -44,7 +44,7 @@ class Source(models.Model):
 
 class SourceUrl(models.Model):
     
-    source = models.ForeignKey(Source)
+    source = models.ForeignKey(Source, on_delete=models.CASCADE)
     url = models.CharField(max_length=1023)
 
 

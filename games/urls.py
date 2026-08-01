@@ -1,22 +1,19 @@
-from django.conf.urls import patterns, url
+from games import views
+from django.urls import path
 
-urlpatterns = patterns('games.views', 
-                       url(r'^$',
-                           'games_index',
+urlpatterns = [ 
+                       path('', views.games_index,
                            name='games_index'),
 
-                       url(r'^bad/$',
-                           'bad_games',
+                       path('bad/', views.bad_games,
                            name='bad_games'),
 
 
-                       url(r'^r/$',
-                           'random_game_detail',
+                       path('r/', views.random_game_detail,
                            name='random_game_detail'),
 
                        
-                       url(r'^(?P<game_id>\d+)/$',
-                           'game_detail',
+                       path('<int:game_id>/', views.game_detail,
                            name='game_detail'),
 
-                       )
+                       ]

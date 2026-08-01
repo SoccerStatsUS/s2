@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 
 from standings.models import Standing
@@ -18,7 +18,7 @@ def bad_standings(request):
         'standings': bad_standings,
         }
 
-    return render_to_response("standings/index.html",
+    return render(None, "standings/index.html",
                               context,
                               context_instance=RequestContext(request))
 

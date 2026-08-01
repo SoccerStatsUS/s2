@@ -38,8 +38,8 @@ class PositionManager(models.Manager):
 class Position(models.Model):
     # Something like Peter Wilt, Chicago Fire, 2010, 2011
 
-    person = models.ForeignKey(Bio)
-    team = models.ForeignKey(Team)
+    person = models.ForeignKey(Bio, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
 
     name = models.CharField(max_length=255)
 

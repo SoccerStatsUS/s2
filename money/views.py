@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
@@ -17,7 +17,7 @@ def money_index(request):
     context = {
         'salaries': Salary.objects.all(),
         }
-    return render_to_response("money/index.html",
+    return render(None, "money/index.html",
                               context,
                               context_instance=RequestContext(request))
 
@@ -33,7 +33,7 @@ def bad_money_index(request):
     context = {
         'salaries': salaries,
         }
-    return render_to_response("money/index.html",
+    return render(None, "money/index.html",
                               context,
                               context_instance=RequestContext(request))
 

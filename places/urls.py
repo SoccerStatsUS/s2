@@ -1,45 +1,39 @@
-from django.conf.urls import patterns, url
+from places import views
+from django.urls import path, re_path
 
-urlpatterns = patterns('places.views', 
+urlpatterns = [ 
 
-                       url(r'^$',
-                           'country_index',
+                       path('', views.country_index,
                            name='country_index'),
 
-                       url(r'^states/$',
-                           'state_index',
+                       path('states/', views.state_index,
                            name='state_index'),
 
-                       url(r'^countries/(?P<slug>.+)/$',
-                           'country_detail',
+                       path('countries/<path:slug>/', views.country_detail,
                            name='country_detail'),
 
 
-                       url(r'^states/(?P<slug>.+)/$',
-                           'state_detail',
+                       path('states/<path:slug>/', views.state_detail,
                            name='state_detail'),
 
-                       url(r'^cities/$',
-                           'city_index',
+                       path('cities/', views.city_index,
                            name='city_index'),
 
 
-                       url(r'^cities/(?P<slug>.+)/$',
-                           'city_detail',
+                       path('cities/<path:slug>/', views.city_detail,
                            name='city_detail'),
 
-                       url(r'^stadiums/$',
-                           'stadium_index',
+                       path('stadiums/', views.stadium_index,
                            name='stadium_index'),
 
 
-                       url(r'^stadiums/(?P<slug>[a-z0-9-]+)/$',                       
-                           'stadium_detail',
+                       re_path(r'^stadiums/(?P<slug>[a-z0-9-]+)/$',                       
+                           views.stadium_detail,
                            name='stadium_detail'),
 
-                       url(r'^stadiums/(?P<slug>[a-z0-9-]+)/games$',                       
-                           'stadium_games',
+                       re_path(r'^stadiums/(?P<slug>[a-z0-9-]+)/games$',                       
+                           views.stadium_games,
                            name='stadium_games'),
 
 
-)
+]

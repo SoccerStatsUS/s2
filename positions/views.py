@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 
 from bios.models import Bio
@@ -12,7 +12,7 @@ def index(request):
         'positions': Position.objects.all(),
         }
 
-    return render_to_response("positions/index.html",
+    return render(None, "positions/index.html",
                               context,
                               context_instance=RequestContext(request)
                               )
@@ -25,7 +25,7 @@ def position_detail(request, slug):
     context = {
         'positions': positions.select_related(),
         }
-    return render_to_response("positions/detail.html",
+    return render(None, "positions/detail.html",
                               context,
                               context_instance=RequestContext(request)
                               )   
@@ -42,7 +42,7 @@ def manager_index(request):
         'positions': positions,
         }
 
-    return render_to_response("positions/index.html",
+    return render(None, "positions/index.html",
                               context,
                               context_instance=RequestContext(request)
                               )

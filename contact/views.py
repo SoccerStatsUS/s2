@@ -1,11 +1,11 @@
 from django.core.mail import send_mail
-from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 
 from contact.forms import ContactForm
+from django.urls import reverse
 
 @csrf_exempt
 def contact_index(request):
@@ -28,13 +28,13 @@ def contact_index(request):
         'form': form,
     }
 
-    return render_to_response('contact/index.html', 
+    return render(None, 'contact/index.html', 
                               context, 
                               context_instance=RequestContext(request))
 
 
 
 def contact_thanks(request):
-    return render_to_response('contact/thanks.html', 
+    return render(None, 'contact/thanks.html', 
                               {},
                               context_instance=RequestContext(request))

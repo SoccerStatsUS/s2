@@ -1,16 +1,15 @@
-from django.conf.urls import patterns, url
+from organizations import views
+from django.urls import path, re_path
 
-urlpatterns = patterns('organizations.views', 
-                       url(r'^$',
-                           'organizations_index',
+urlpatterns = [ 
+                       path('', views.organizations_index,
                            name='organizations_index'),
 
-                       url(r'^confederations/$',
-                           'confederations_index',
+                       path('confederations/', views.confederations_index,
                            name='confederations_index'),
 
-                       url(r'^(?P<confederation_slug>[a-z0-9-]+)/$',
-                           'confederation_detail',
+                       re_path(r'^(?P<confederation_slug>[a-z0-9-]+)/$',
+                           views.confederation_detail,
                            name='confederation_detail'),
 
-)
+]

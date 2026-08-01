@@ -73,7 +73,7 @@ class AbstractStat(StandingStat):
     yellow_cards = models.IntegerField(null=True, blank=True)
     red_cards = models.IntegerField(null=True, blank=True)
 
-    source = models.ForeignKey(Source, null=True)
+    source = models.ForeignKey(Source, null=True, on_delete=models.CASCADE)
 
     class Meta:
         abstract = True
@@ -129,9 +129,9 @@ class AbstractStat(StandingStat):
             
 
 class GameStat(AbstractStat):
-    player = models.ForeignKey(Bio)
-    game = models.ForeignKey(Game)
-    team = models.ForeignKey(Team)
+    player = models.ForeignKey(Bio, on_delete=models.CASCADE)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
 
     age = models.FloatField(null=True) # Age in years at the time of game.
     on = models.IntegerField(null=True)
@@ -182,36 +182,36 @@ class GameStat(AbstractStat):
 
 class CareerStat(AbstractStat):
     # Should rename player person?
-    player = models.ForeignKey(Bio)
+    player = models.ForeignKey(Bio, on_delete=models.CASCADE)
 
 
 class CompetitionStat(AbstractStat):
-    player = models.ForeignKey(Bio)
-    competition = models.ForeignKey(Competition)
+    player = models.ForeignKey(Bio, on_delete=models.CASCADE)
+    competition = models.ForeignKey(Competition, on_delete=models.CASCADE)
 
 
 class TeamStat(AbstractStat):
-    player = models.ForeignKey(Bio)
-    team = models.ForeignKey(Team)
+    player = models.ForeignKey(Bio, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
 
 
 class SeasonStat(AbstractStat):
-    player = models.ForeignKey(Bio)
-    competition = models.ForeignKey(Competition) # Redundancy
-    season = models.ForeignKey(Season)
+    player = models.ForeignKey(Bio, on_delete=models.CASCADE)
+    competition = models.ForeignKey(Competition, on_delete=models.CASCADE) # Redundancy
+    season = models.ForeignKey(Season, on_delete=models.CASCADE)
 
 
 class TeamCompetitionStat(AbstractStat):
-    player = models.ForeignKey(Bio)
-    competition = models.ForeignKey(Competition)
-    team = models.ForeignKey(Team)
+    player = models.ForeignKey(Bio, on_delete=models.CASCADE)
+    competition = models.ForeignKey(Competition, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
 
 
 class Stat(AbstractStat):
-    player = models.ForeignKey(Bio)
-    competition = models.ForeignKey(Competition) # Redundancy
-    season = models.ForeignKey(Season)
-    team = models.ForeignKey(Team)
+    player = models.ForeignKey(Bio, on_delete=models.CASCADE)
+    competition = models.ForeignKey(Competition, on_delete=models.CASCADE) # Redundancy
+    season = models.ForeignKey(Season, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
 
     def __str__(self):
         return u"%s: %s/%s/%s" % (self.player, self.competition, self.season.name, self.team)
@@ -220,11 +220,11 @@ class Stat(AbstractStat):
 # Still having trouble figuring out exactly where to put this data.
 class CoachStat(StandingStat):
 
-    person = models.ForeignKey(Bio)
+    person = models.ForeignKey(Bio, on_delete=models.CASCADE)
     #position = models.ForeignKey(Position)
-    competition = models.ForeignKey(Competition)
-    season = models.ForeignKey(Season)
-    team = models.ForeignKey(Team)
+    competition = models.ForeignKey(Competition, on_delete=models.CASCADE)
+    season = models.ForeignKey(Season, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
 
 
     # Should these be in standing? Probably not.
@@ -242,5 +242,5 @@ class CoachStat(StandingStat):
 
 class CoachTeamStat(StandingStat):
 
-    person = models.ForeignKey(Bio)
-    team = models.ForeignKey(Team)
+    person = models.ForeignKey(Bio, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
