@@ -97,8 +97,7 @@ def load1():
     # Put this before standings?
 
 
-    # This is breaking currently.
-    #load_awards()
+    load_awards()
 
     load_drafts()
 

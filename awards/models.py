@@ -50,14 +50,13 @@ class AwardItem(models.Model):
     season = models.ForeignKey(Season, blank=True, null=True, on_delete=models.CASCADE)
     year = models.IntegerField(blank=True, null=True)
 
-    #content_type = models.ForeignKey(ContentType)
-
+    content_type = models.ForeignKey(ContentType, null=True, on_delete=models.CASCADE)
 
     object_id = models.PositiveIntegerField()
-    #recipient = GenericForeignKey()
+    recipient = GenericForeignKey()
 
-    #def __str__(self):
-    #    return "%s %s %s" % (self.season, self.award.name, self.recipient)
+    def __str__(self):
+        return "%s %s %s" % (self.season, self.award.name, self.recipient)
 
     class Meta:
         ordering = ("year", 'season')
