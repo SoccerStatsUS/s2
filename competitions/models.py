@@ -10,6 +10,13 @@ from bios.models import Bio
 import datetime
 
 
+# Leagues whose championship is decided in a separate playoffs competition,
+# keyed by league slug -> playoffs competition slug.
+PLAYOFF_CHAMPIONSHIPS = {
+    'major-league-soccer': 'mls-cup-playoffs',
+}
+
+
 
 
 def nationality_stats(stats):
@@ -732,6 +739,17 @@ class Season(AbstractCompetition):
 
     def champion(self):
         from awards.models import AwardItem
+
+        # Some leagues decide their championship in a separate playoffs
+        # competition; prefer that champion when one exists.
+        playoff_slug = PLAYOFF_CHAMPIONSHIPS.get(self.competition.slug)
+        if playoff_slug:
+            item = AwardItem.objects.filter(
+                season__name=self.name,
+                season__competition__slug=playoff_slug,
+                award__type='champion').first()
+            if item:
+                return item
 
         try:
             return AwardItem.objects.get(season=self, award__type='champion')
