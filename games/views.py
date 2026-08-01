@@ -16,6 +16,7 @@ from teams.models import Team
 
 from collections import defaultdict, Counter
 import json
+import random
 
 
 HISTORIANS = ['Colin Jose', 'Roger Allaway', 'Dave Litterer', 'David Wangerin']
@@ -27,9 +28,13 @@ def homepage(request):
     today = datetime.date.today()
     month, day = today.month, today.day
 
-    games = Game.objects.filter(date__month=month, date__day=day).order_by('date').select_related()
-    births = Bio.objects.filter(birthdate__month=month, birthdate__day=day).order_by('birthdate')
-    deaths = Bio.objects.filter(deathdate__month=month, deathdate__day=day).order_by('deathdate')
+    game = None
+    games = Game.objects.filter(date__month=month, date__day=day).select_related()
+    count = games.count()
+    if count:
+        game = games[random.randint(0, count - 1)]
+
+    born = Bio.objects.born_on(month, day)
 
     historians = []
     for name in HISTORIANS:
@@ -40,9 +45,8 @@ def homepage(request):
 
     context = {
         'today': today,
-        'games': games,
-        'births': births,
-        'deaths': deaths,
+        'game': game,
+        'born': born,
         'game_count': Game.objects.count(),
         'historians': historians,
         }

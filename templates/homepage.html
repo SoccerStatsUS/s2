@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load games %}
 {% load humanize %}
 
 
@@ -16,34 +15,23 @@
 
 <h3>On this day &mdash; {{ today|date:"F j" }}</h3>
 
-{% if games %}
-{% games_table games %}
+{% if game %}
+<p><a href="{% url 'date_detail' game.date.year game.date.month game.date.day %}">{{ game.date }}</a> &mdash;
+<a href="{% url 'team_detail' game.team1.slug %}">{{ game.team1_original_name }}</a>
+<a href="{% url 'game_detail' game.id %}">{{ game.score_or_result }}</a>
+<a href="{% url 'team_detail' game.team2.slug %}">{{ game.team2_original_name }}</a>,
+<a href="{% url 'competition_detail' game.competition.slug %}">{{ game.competition }}</a></p>
 {% else %}
 <p>No recorded match on {{ today|date:"F j" }} &mdash; yet.
 <a href="{% url 'dates_index' %}">Browse by year</a> instead.</p>
 {% endif %}
 
-{% if births %}
-<h4>Born on this day</h4>
-<ul>
-{% for bio in births %}
-<li><a href="{% url 'person_detail' bio.slug %}">{{ bio.name }}</a>,
-<a href="{% url 'date_detail' bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate.year }}</a></li>
-{% endfor %}
-</ul>
+{% if born %}
+<p><a href="{% url 'person_detail' born.slug %}">{{ born.name }}</a> was born on
+<a href="{% url 'date_detail' born.birthdate.year born.birthdate.month born.birthdate.day %}">{{ born.birthdate }}</a>.</p>
 {% endif %}
 
-{% if deaths %}
-<h4>Died on this day</h4>
-<ul>
-{% for bio in deaths %}
-<li><a href="{% url 'person_detail' bio.slug %}">{{ bio.name }}</a>,
-<a href="{% url 'date_detail' bio.deathdate.year bio.deathdate.month bio.deathdate.day %}">{{ bio.deathdate.year }}</a></li>
-{% endfor %}
-</ul>
-{% endif %}
-
-<p><a href="{% url 'day_detail' today.month today.day %}">All events on {{ today|date:"F j" }}, any year &rarr;</a></p>
+<p><a href="{% url 'day_detail' today.month today.day %}">Everything that happened on {{ today|date:"F j" }} &rarr;</a></p>
 
 
 <div class="leftcol">
