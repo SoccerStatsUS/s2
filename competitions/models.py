@@ -741,15 +741,14 @@ class Season(AbstractCompetition):
         from awards.models import AwardItem
 
         # Some leagues decide their championship in a separate playoffs
-        # competition; prefer that champion when one exists.
+        # competition; their own champion-type awards (e.g. Supporters'
+        # Shield) are not the champion, so never fall back to them.
         playoff_slug = PLAYOFF_CHAMPIONSHIPS.get(self.competition.slug)
         if playoff_slug:
-            item = AwardItem.objects.filter(
+            return AwardItem.objects.filter(
                 season__name=self.name,
                 season__competition__slug=playoff_slug,
                 award__type='champion').first()
-            if item:
-                return item
 
         try:
             return AwardItem.objects.get(season=self, award__type='champion')
