@@ -8,7 +8,7 @@
 starting {% if first_game %}<a href="{% url 'game_detail' first_game.id %}">in Waukesha, Wisconsin, in 1866</a>{% else %}in Waukesha, Wisconsin, in 1866{% endif %}.</p>
 
 <form id="home-search" method="get" action="{% url 'search' %}">
-  <input name="q" type="text" placeholder="Search {{ bio_count|intcomma }} players and {{ team_count|intcomma }} teams &mdash; try Bethlehem Steel, or Pel&eacute;, or your grandfather">
+  <input name="q" type="text" placeholder="Search players and teams &mdash; try Bethlehem Steel, or Pel&eacute;, or your grandfather">
   <input type="submit" value="search">
 </form>
 
@@ -89,20 +89,5 @@ October 6; by October 23 the league had played its last game and folded.
 
 </div>
 
-
-<h3><a href="{% url 'source_index' %}">Sources</a></h3>
-
-<p>Every figure on this site is traced to a source &mdash; most to the work of
-a small group of historians of the American game:</p>
-
-<ul>
-{% for name, total in historians %}
-<li>{{ name }}{% if total %} &mdash; {{ total|intcomma }} contributions{% endif %}</li>
-{% endfor %}
-</ul>
-
-<p><a href="{% url 'source_index' %}">All sources &rarr;</a> &middot;
-<a href="http://github.com/soccerstatsus">The data is open source</a> &mdash;
-<a href="{% url 'about_build' %}">build your own copy</a>.</p>
 
 {% endblock %}

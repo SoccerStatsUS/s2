@@ -9,16 +9,12 @@ from bios.models import Bio
 from competitions.models import Competition
 from games.models import Game, GameSource
 from goals.models import Goal
-from sources.models import Source
 from standings.models import Standing
 from stats.models import Stat, CareerStat
 from teams.models import Team
 
 from collections import defaultdict, Counter
 import json
-
-
-HISTORIANS = ['Colin Jose', 'Roger Allaway', 'Dave Litterer', 'David Wangerin']
 
 
 @cache_page(60 * 60)
@@ -40,13 +36,6 @@ def homepage(request):
     alpf_count = Game.objects.filter(
         competition__slug='american-league-of-professional-football').count()
 
-    historians = []
-    for name in HISTORIANS:
-        total = Source.objects.filter(
-            models.Q(author__icontains=name) | models.Q(name__icontains=name)
-        ).aggregate(models.Sum('total'))['total__sum']
-        historians.append((name, total))
-
     context = {
         'today': today,
         'first_game': first_game,
@@ -54,9 +43,6 @@ def homepage(request):
         'crowd': crowd,
         'born': born,
         'alpf_count': alpf_count,
-        'bio_count': Bio.objects.count() // 1000 * 1000,
-        'team_count': Team.objects.count() // 100 * 100,
-        'historians': historians,
         }
 
     return render(request, "homepage.html",
