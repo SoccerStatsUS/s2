@@ -16,7 +16,6 @@ from teams.models import Team
 
 from collections import defaultdict, Counter
 import json
-import random
 
 
 HISTORIANS = ['Colin Jose', 'Roger Allaway', 'Dave Litterer', 'David Wangerin']
@@ -28,13 +27,18 @@ def homepage(request):
     today = datetime.date.today()
     month, day = today.month, today.day
 
-    game = None
+    first_game = Game.objects.exclude(date=None).order_by('date').first()
+
     games = Game.objects.filter(date__month=month, date__day=day).select_related()
-    count = games.count()
-    if count:
-        game = games[random.randint(0, count - 1)]
+    oldest = games.order_by('date').first()
+    crowd = games.exclude(attendance=None).order_by('-attendance').first()
+    if crowd is not None and oldest is not None and crowd.pk == oldest.pk:
+        crowd = None
 
     born = Bio.objects.born_on(month, day)
+
+    alpf_count = Game.objects.filter(
+        competition__slug='american-league-of-professional-football').count()
 
     historians = []
     for name in HISTORIANS:
@@ -45,9 +49,13 @@ def homepage(request):
 
     context = {
         'today': today,
-        'game': game,
+        'first_game': first_game,
+        'oldest': oldest,
+        'crowd': crowd,
         'born': born,
-        'game_count': Game.objects.count(),
+        'alpf_count': alpf_count,
+        'bio_count': Bio.objects.count() // 1000 * 1000,
+        'team_count': Team.objects.count() // 100 * 100,
         'historians': historians,
         }
 

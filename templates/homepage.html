@@ -4,94 +4,91 @@
 
 {% block content %}
 
-<p>Every American soccer match anyone has a record of, from 1866 to today &mdash;
-{{ game_count|intcomma }} games, every number traced to a named source.</p>
+<p id="tagline">A website dedicated to the deep history of American soccer &mdash;
+starting {% if first_game %}<a href="{% url 'game_detail' first_game.id %}">in Waukesha, Wisconsin, in 1866</a>{% else %}in Waukesha, Wisconsin, in 1866{% endif %}.</p>
 
-<form method="get" action="{% url 'search' %}">
-  <input name="q" type="text" size="40" placeholder="search players, teams, competitions">
+<form id="home-search" method="get" action="{% url 'search' %}">
+  <input name="q" type="text" placeholder="Search {{ bio_count|intcomma }} players and {{ team_count|intcomma }} teams &mdash; try Bethlehem Steel, or Pel&eacute;, or your grandfather">
   <input type="submit" value="search">
 </form>
 
 
+<div id="otd">
+
 <h3>On this day &mdash; {{ today|date:"F j" }}</h3>
 
-{% if game %}
-<p><a href="{% url 'date_detail' game.date.year game.date.month game.date.day %}">{{ game.date }}</a> &mdash;
-<a href="{% url 'team_detail' game.team1.slug %}">{{ game.team1_original_name }}</a>
-<a href="{% url 'game_detail' game.id %}">{{ game.score_or_result }}</a>
-<a href="{% url 'team_detail' game.team2.slug %}">{{ game.team2_original_name }}</a>,
-<a href="{% url 'competition_detail' game.competition.slug %}">{{ game.competition }}</a></p>
+{% if oldest %}
+<p>
+<a class="otd-year" href="{% url 'date_detail' oldest.date.year oldest.date.month oldest.date.day %}">{{ oldest.date.year }}</a>
+{% if oldest.winner == oldest.team1 %}
+<a class="otd-team" href="{% url 'team_detail' oldest.team1.slug %}"><strong>{{ oldest.team1_original_name }}</strong></a>
+{% else %}
+<a class="otd-team" href="{% url 'team_detail' oldest.team1.slug %}">{{ oldest.team1_original_name }}</a>
+{% endif %}
+<a class="otd-score" href="{% url 'game_detail' oldest.id %}">{{ oldest.score_or_result }}</a>
+{% if oldest.winner == oldest.team2 %}
+<a class="otd-team" href="{% url 'team_detail' oldest.team2.slug %}"><strong>{{ oldest.team2_original_name }}</strong></a>
+{% else %}
+<a class="otd-team" href="{% url 'team_detail' oldest.team2.slug %}">{{ oldest.team2_original_name }}</a>
+{% endif %}
+<a class="otd-comp" href="{% url 'competition_detail' oldest.competition.slug %}">{{ oldest.competition }}</a>
+</p>
 {% else %}
 <p>No recorded match on {{ today|date:"F j" }} &mdash; yet.
 <a href="{% url 'dates_index' %}">Browse by year</a> instead.</p>
 {% endif %}
 
-{% if born %}
-<p><a href="{% url 'person_detail' born.slug %}">{{ born.name }}</a> was born on
-<a href="{% url 'date_detail' born.birthdate.year born.birthdate.month born.birthdate.day %}">{{ born.birthdate }}</a>.</p>
+{% if crowd %}
+<p>
+<a class="otd-year" href="{% url 'date_detail' crowd.date.year crowd.date.month crowd.date.day %}">{{ crowd.date.year }}</a>
+{% if crowd.winner == crowd.team1 %}
+<a class="otd-team" href="{% url 'team_detail' crowd.team1.slug %}"><strong>{{ crowd.team1_original_name }}</strong></a>
+{% else %}
+<a class="otd-team" href="{% url 'team_detail' crowd.team1.slug %}">{{ crowd.team1_original_name }}</a>
+{% endif %}
+<a class="otd-score" href="{% url 'game_detail' crowd.id %}">{{ crowd.score_or_result }}</a>
+{% if crowd.winner == crowd.team2 %}
+<a class="otd-team" href="{% url 'team_detail' crowd.team2.slug %}"><strong>{{ crowd.team2_original_name }}</strong></a>
+{% else %}
+<a class="otd-team" href="{% url 'team_detail' crowd.team2.slug %}">{{ crowd.team2_original_name }}</a>
+{% endif %}
+<span class="otd-note">{{ crowd.attendance|intcomma }} in the crowd</span>
+</p>
 {% endif %}
 
-<p><a href="{% url 'day_detail' today.month today.day %}">Everything that happened on {{ today|date:"F j" }} &rarr;</a></p>
+{% if born %}
+<p>
+<a class="otd-year" href="{% url 'date_detail' born.birthdate.year born.birthdate.month born.birthdate.day %}">{{ born.birthdate.year }}</a>
+<a class="otd-team" href="{% url 'person_detail' born.slug %}">{{ born.name }}</a>
+<span class="otd-note">was born</span>
+</p>
+{% endif %}
 
-
-<div class="leftcol">
-
-<h3>Where to start</h3>
-
-<ul>
-<li><a href="{% url 'year_detail' 1894 %}">1894</a> &mdash;
-<a href="{% url 'competition_detail' 'american-league-of-professional-football' %}">the American League of Professional Football</a>:
-baseball owners' six-week experiment, the first professional soccer league in America</li>
-
-<li><a href="{% url 'competition_detail' 'american-soccer-league-1921-1933' %}">The American Soccer League, 1921&ndash;1933</a>:
-for a decade, arguably the strongest league outside Britain</li>
-
-<li><a href="{% url 'team_detail' 'bethlehem-steel' %}">Bethlehem Steel, 1909&ndash;1930</a>:
-the steel company's team, American soccer's first dynasty</li>
-
-<li><a href="{% url 'team_detail' 'united-states' %}">The US men's national team</a>:
-every international, all-time</li>
-
-<li><a href="{% url 'competition_detail' 'north-american-soccer-league' %}">The NASL, 1968&ndash;1984</a>:
-Pel&eacute;, the Cosmos, the boom and the bust</li>
-</ul>
-
-
-<h3>United States</h3>
-
-<h4>Division 1</h4>
-<ul>
-<li><a href="{% url 'competition_detail' 'american-league-of-professional-football' %}">American League of Professional Football (1894)</a></li>
-<li><a href="{% url 'competition_detail' 'american-soccer-league-1921-1933' %}">American Soccer League (1921&ndash;1933)</a></li>
-<li><a href="{% url 'competition_detail' 'north-american-soccer-league' %}">North American Soccer League (1968&ndash;1984)</a></li>
-<li><a href="{% url 'competition_detail' 'major-league-soccer' %}">Major League Soccer</a></li>
-</ul>
-
-<h4>Cups</h4>
-<ul>
-<li><a href="{% url 'competition_detail' 'us-open-cup' %}">US Open Cup</a></li>
-<li><a href="{% url 'competition_detail' 'afa-cup' %}">AFA Cup</a></li>
-<li><a href="{% url 'competition_detail' 'lewis-cupp' %}">Lewis Cup</a></li>
-<li><a href="{% url 'competition_detail' 'national-amateur-cup' %}">National Amateur Cup</a></li>
-</ul>
-
-<h4>Minor leagues</h4>
-<ul>
-<li><a href="{% url 'competition_detail' 'national-association-foot-ball-league' %}">National Association Foot Ball League</a></li>
-<li><a href="{% url 'competition_detail' 'american-soccer-league-1933-1983' %}">American Soccer League (1933&ndash;1983)</a></li>
-<li><a href="{% url 'competition_detail' 'american-professional-soccer-league' %}">American Professional Soccer League</a></li>
-<li><a href="{% url 'competition_detail' 'western-soccer-league' %}">Western Soccer League</a></li>
-<li><a href="{% url 'competition_detail' 'usl-first-division' %}">USL First Division (1997&ndash;2009)</a></li>
-<li><a href="{% url 'competition_detail' 'usl-second-division' %}">USL Pro</a></li>
-<li><a href="{% url 'competition_detail' 'usl-premier-developmental-league' %}">USL PDL</a></li>
-<li><a href="{% url 'competition_detail' 'north-american-soccer-league-2011-' %}">North American Soccer League (2011&ndash;)</a></li>
-<li><a href="{% url 'competition_detail' 'mls-reserve-league' %}">MLS Reserve League</a></li>
-</ul>
+<p class="otd-more"><a href="{% url 'day_detail' today.month today.day %}">Everything that happened on {{ today|date:"F j" }} &rarr;</a></p>
 
 </div>
 
 
-<div class="rightcol">
+<div id="featured">
+
+<h3><a href="{% url 'year_detail' 1894 %}">1894</a> &mdash;
+<a href="{% url 'competition_detail' 'american-league-of-professional-football' %}">the American League of Professional Football</a></h3>
+
+<p>In the fall of 1894, the owners of six National League baseball clubs launched
+the first professional soccer league in America. The first ball was kicked on
+October 6; by October 23 the league had played its last game and folded.
+{% if alpf_count %}All {{ alpf_count }} matches anyone has found are
+<a href="{% url 'competition_detail' 'american-league-of-professional-football' %}">here</a>.{% endif %}</p>
+
+<p class="more-links">More:
+<a href="{% url 'competition_detail' 'american-soccer-league-1921-1933' %}">The ASL, 1921&ndash;1933</a> &middot;
+<a href="{% url 'team_detail' 'bethlehem-steel' %}">Bethlehem Steel</a> &middot;
+<a href="{% url 'team_detail' 'united-states' %}">The USMNT, all-time</a> &middot;
+<a href="{% url 'competition_detail' 'north-american-soccer-league' %}">The NASL, 1968&ndash;1984</a> &middot;
+<a href="{% url 'competition_index' %}">all competitions &rarr;</a></p>
+
+</div>
+
 
 <h3><a href="{% url 'source_index' %}">Sources</a></h3>
 
@@ -107,37 +104,5 @@ a small group of historians of the American game:</p>
 <p><a href="{% url 'source_index' %}">All sources &rarr;</a> &middot;
 <a href="http://github.com/soccerstatsus">The data is open source</a> &mdash;
 <a href="{% url 'about_build' %}">build your own copy</a>.</p>
-
-
-<h3>Women's soccer</h3>
-<ul>
-<li><a href="{% url 'competition_detail' 'national-womens-soccer-league' %}">National Women's Soccer League</a></li>
-<li><a href="{% url 'competition_detail' 'womens-professional-soccer' %}">Women's Professional Soccer</a></li>
-<li><a href="{% url 'competition_detail' 'womens-united-soccer-association' %}">Women's United Soccer Association</a></li>
-</ul>
-
-<h3>Indoor soccer</h3>
-<ul>
-<li><a href="{% url 'competition_detail' 'major-indoor-soccer-league-1978-1992' %}">MISL (1978&ndash;1992)</a></li>
-<li><a href="{% url 'competition_detail' 'north-american-soccer-league-indoor' %}">NASL (indoor)</a></li>
-<li><a href="{% url 'competition_detail' 'national-professional-soccer-league-indoor' %}">National Professional Soccer League</a></li>
-<li><a href="{% url 'competition_detail' 'continental-indoor-soccer-league' %}">Continental Indoor Soccer League</a></li>
-<li><a href="{% url 'competition_detail' 'major-indoor-soccer-league-2001-2008' %}">MISL (2001&ndash;2008)</a></li>
-<li><a href="{% url 'competition_detail' 'major-indoor-soccer-league-2008-2014' %}">MISL (2008&ndash;2014)</a></li>
-<li><a href="{% url 'competition_detail' 'professional-arena-soccer-league' %}">Professional Arena Soccer League</a></li>
-</ul>
-
-<h3>Elsewhere</h3>
-<ul>
-<li><a href="{% url 'competition_index' %}">All competitions</a></li>
-<li><a href="{% url 'confederation_detail' 'concacaf' %}">CONCACAF</a> &middot;
-<a href="{% url 'confederation_detail' 'conmebol' %}">CONMEBOL</a> &middot;
-<a href="{% url 'confederation_detail' 'uefa' %}">UEFA</a> &middot;
-<a href="{% url 'confederation_detail' 'afc' %}">AFC</a> &middot;
-<a href="{% url 'confederation_detail' 'ofc' %}">OFC</a> &middot;
-<a href="{% url 'confederation_detail' 'caf' %}">CAF</a></li>
-</ul>
-
-</div>
 
 {% endblock %}

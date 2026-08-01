@@ -469,3 +469,81 @@ td.result { width: 70px; }
         overflow-x: auto;
     }
 }
+
+
+/* ---- Homepage: on this day ---- */
+
+#otd p { margin: 3px 0; }
+
+#otd .otd-year {
+    display: inline-block;
+    min-width: 46px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    color: var(--ink-soft);
+}
+
+#otd .otd-year:hover { color: var(--accent); text-decoration: none; }
+
+#otd .otd-team { color: var(--ink); }
+#otd .otd-team strong { font-weight: 600; }
+#otd .otd-team:hover { color: var(--accent); text-decoration: none; }
+
+#otd .otd-score {
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+#otd .otd-comp {
+    margin-left: 8px;
+    font-size: 13px;
+    color: var(--ink-soft);
+}
+
+#otd .otd-comp:hover { color: var(--accent); text-decoration: none; }
+
+#otd .otd-note { color: var(--ink-soft); }
+
+#otd .otd-more { margin-top: 10px; font-size: 14px; }
+
+
+/* ---- Homepage: tagline + search ---- */
+
+#tagline {
+    margin: 20px 0 8px;
+    text-align: center;
+    font-size: 16px;
+}
+
+#home-search {
+    margin: 0 0 30px;
+    text-align: center;
+}
+
+#home-search input[type="text"] {
+    width: min(640px, 100%);
+    font-size: 16px;
+    padding: 10px 14px;
+    border: 1px solid var(--hairline);
+    border-radius: 6px;
+    background: var(--fill);
+}
+
+#home-search input[type="text"]:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: #fff;
+}
+
+#home-search input[type="submit"] {
+    font-size: 15px;
+    padding: 10px 16px;
+    margin-left: 6px;
+    border: 1px solid var(--hairline);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--accent);
+    cursor: pointer;
+}
+
+#home-search input[type="submit"]:hover { border-color: var(--accent); }
