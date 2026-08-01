@@ -33,9 +33,13 @@ Production runs on the server "bert" at /home/chris/www/s2:
 To deploy code changes:
 
     ssh bert 'cd /home/chris/www/s2 && git pull && \
+        set -a && . ./.env && set +a && \
         .venv/bin/python manage.py migrate --noinput && \
         .venv/bin/python manage.py collectstatic --noinput && \
         chmod -R a+rX staticfiles && sudo systemctl restart s2'
+
+Sourcing .env is not optional: without it manage.py falls back to settings.py's
+dev defaults and migrate fails on Postgres peer auth as "soccerstats".
 
 To ship a freshly built database:
 
