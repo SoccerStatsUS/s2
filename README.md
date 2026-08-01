@@ -1,60 +1,46 @@
 ### An open source, logical soccer database
 
-This is the code used to create an integrated, reasonably maintained soccer database, with an ORM layer including models and views written in Django.
+This is the code used to create an integrated, reasonably maintained soccer database, with an ORM layer including models and views written in Django (5.2, Python 3.12).
 
-For the time being it also contains the code for the website, but this is being migrated to separate website repositories (soccerstats.us)
+The site is served at stats.soccerstats.us; the static landing page lives in the soccerstats.us repository.
 
+#### Local setup
 
-#### Build instructions
-    
-    sudo apt-get install python-pip python-dev postgresql-server-dev-all postgresql  python3-psycopg2
-    
-    sudo su - postgres
-    createuser -s chris
-    createuser -s soccerstats
-    logout
-    
-    # modify  pg_hba.conf to accept local connections on "trust" (this is probably too broad).
-    sudo emacs /etc/postgresql/9.3/main/pg_hba.conf 
-    sudo service postgresql restart
-    
-    cd ~/soccer
-    git clone https://github.com/Soccerstatsus/s2.git
-    cd s2
-    
-    # Add DEBUG, PROJECT_DIRNAME to custom_settings
-    emacs custom_settings.py
-    
-    # Add SECRET_KEY to secret_settings.
-    emacs secret_settings.py
-    
-    sudo pip install -r requirements3.txt 
-    python3 make/
+    # postgres (e.g. brew install postgresql@18) with a soccerstats role:
+    psql -d postgres -c "CREATE ROLE soccerstats LOGIN CREATEDB"
 
-    
+    cd ~/soccer/s2
+    uv venv --python 3.12
+    uv pip install -p .venv/bin/python -r requirements3.txt
+
+    # Build the mongo database first (see the build repo), then:
+    ./build.sh              # mongo -> postgres (soccerstats_dev)
+
+    .venv/bin/python manage.py runserver
+
+Settings are env-driven (see settings.py): DJANGO_SECRET_KEY, DJANGO_DEBUG,
+DB_NAME, DB_USER, DB_PASSWORD, DB_HOST. Local defaults work with a trusting
+local postgres and DEBUG on.
+
 #### Deploy
 
-     # deploy to a url.
+Production runs on the server "bert" at /home/chris/www/s2:
 
-     # register the url with the appropriate name server
+* gunicorn via systemd (etc/systemd/s2.service), bound to 127.0.0.1:8100
+* nginx proxies stats.soccerstats.us to it (etc/nginx/stats.soccerstats.us)
+* secrets live in /home/chris/www/s2/.env (not in git)
 
-     sudo apt-get install nginx
+To deploy code changes:
 
-     sudo cp ~/soccer/build/install/files/nginx/soccerstats.us /etc/nginx/sites-available
-     sudo ln -s /etc/nginx/sites-available/soccerstats.us /etc/nginx/sites-enabled
+    ssh bert 'cd /home/chris/www/s2 && git pull && \
+        .venv/bin/python manage.py migrate --noinput && \
+        .venv/bin/python manage.py collectstatic --noinput && \
+        chmod -R a+rX staticfiles && sudo systemctl restart s2'
 
-     # Edit this to the port, url you want. 
-     sudo emacs /etc/nginx/sites-available/soccerstats.us 
+To ship a freshly built database:
 
-     sudo /etc/init.d/nginx reload				      
-
-     python3 manage.py runserver 8080
-
-     # how to set up appropriate services
-     # run through gunicorn? 
-     # look up new django 1.8 deployment documentation.
-
+    ./upload.sh
 
 #### Dependencies
 
-     soccerstatsus.build
+soccerstatsus/build (mongo database), soccerstatsus/metadata, soccerstatsus/parse, and the data repositories.
