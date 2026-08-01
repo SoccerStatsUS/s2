@@ -1,63 +1,50 @@
 {% load datum_or_none %}
+{% load humanize %}
 
 <div id="game_score">
 
-  {% if game.group %}
-    <li>group {{ game.group }}</li>
-  {% endif %}
-
-  {% if game.round %}
-    <li>round {{ game.round }}</li>
-  {% endif %}
-
-
-    {% if game.referee %}
-    <li>referee: <a href="{% url 'person_detail' game.referee.slug %}">{{ game.referee }}</a></li>
-    {% endif %}
-
-    {% if game.attendance %}
-    <li>attendance: {{ game.attendance }}</li>
-    {% endif %}
-
   <div id="team_results">
 
-
-    <div class="team_data">
-      <div class="team"><a href="{% url 'team_detail' game.team1.slug %}">{{ game.team1_original_name  }}</a></div>
-      {# <div><a href="{% url 'team_season_detail' game.team1.slug game.competition.slug game.season.slug %}">{{ game.season.name }}</a></div> #}
-      <div class="score">{{ game.team1_score_or_result }}</div>
-
+    <div class="team_data{% if game.team1_result == 'w' %} winner{% endif %}">
+      <div class="team"><a href="{% url 'team_detail' game.team1.slug %}">{{ game.team1_original_name }}</a></div>
       {% if game.home_standings_string %}
-      <div>
+      <div class="team-nav">
         {% if game.team1_previous_game %}<a href="{% url 'game_detail' game.team1_previous_game.id %}">←</a>{% endif %}
-        <a href="{% url 'season_detail' game.competition.slug game.season.slug %}">{{ game.home_standings_string  }}</a>
+        <a href="{% url 'season_detail' game.competition.slug game.season.slug %}">{{ game.home_standings_string }}</a>
         {% if game.team1_next_game %}<a href="{% url 'game_detail' game.team1_next_game.id %}">→</a>{% endif %}
       </div>
       {% endif %}
     </div>
 
-    <div class="team_data">
-      <div class="team"><a href="{% url 'team_detail' game.team2.slug %}">{{ game.team2_original_name  }}</a></div>
-      {# <div><a href="{% url 'team_season_detail' game.team2.slug game.competition.slug game.season.slug %}">{{ game.season.name }}</a></div> #}
-      <div class="score">{{ game.team2_score_or_result }}</div>
-      {% if game.away_standings_string %}
-      <div>
-        {% if game.team2_previous_game %}<a href="{% url 'game_detail' game.team2_previous_game.id %}">←</a>{% else %}←{% endif %}
-        <a href="{% url 'season_detail' game.competition.slug game.season.slug %}">{{ game.away_standings_string  }}</a>
-        {% if game.team2_next_game %}<a href="{% url 'game_detail' game.team2_next_game.id %}">→</a>{% else %}→{% endif %}
-      </div>
+    <div class="score-box">
+      <span class="score">{{ game.team1_score_or_result }}</span><span class="score-sep">–</span><span class="score">{{ game.team2_score_or_result }}</span>
+    </div>
 
+    <div class="team_data{% if game.team2_result == 'w' %} winner{% endif %}">
+      <div class="team"><a href="{% url 'team_detail' game.team2.slug %}">{{ game.team2_original_name }}</a></div>
+      {% if game.away_standings_string %}
+      <div class="team-nav">
+        {% if game.team2_previous_game %}<a href="{% url 'game_detail' game.team2_previous_game.id %}">←</a>{% endif %}
+        <a href="{% url 'season_detail' game.competition.slug game.season.slug %}">{{ game.away_standings_string }}</a>
+        {% if game.team2_next_game %}<a href="{% url 'game_detail' game.team2_next_game.id %}">→</a>{% endif %}
+      </div>
       {% endif %}
     </div>
 
-    {% if game.forfeit %}<h3>Forfeit</h3>{% endif %}
-
   </div>
+
+  {% if game.forfeit %}<div class="forfeit">Forfeit</div>{% endif %}
+
+  <div class="game-meta">
+    {% if game.date %}<span><a href="{% url 'date_detail' game.date.year game.date.month game.date.day %}">{{ game.date|date:"l, F j, Y" }}</a></span>{% endif %}
+    {% if game.stadium.slug %}<span><a href="{% url 'stadium_detail' game.stadium.slug %}">{% if game.stadium.short_name %}{{ game.stadium.short_name }}{% else %}{{ game.stadium.name }}{% endif %}</a></span>{% elif game.location %}<span>{{ game.location }}</span>{% endif %}
+    {% if game.round %}<span>round {{ game.round }}</span>{% endif %}
+    {% if game.group %}<span>group {{ game.group }}</span>{% endif %}
+    {% if game.referee %}<span>referee <a href="{% url 'person_detail' game.referee.slug %}">{{ game.referee }}</a></span>{% endif %}
+    {% if game.attendance %}<span>attendance {{ game.attendance|intcomma }}</span>{% endif %}
+  </div>
+
 </div>
-
-
-
-<div class="clear_both"></div>
 
 
 {% if game.goal_set.exists %}
@@ -70,7 +57,7 @@
     {% if goal.team == game.team1 %}
     <td class="left_goal">{% include "templatetags/fragments/goal.html"  %}</td>
     {% else %}
-    <td class="greybg"></td>
+    <td class="left_goal"></td>
     {% endif %}
 
     {% datum_or_grey goal.minute %}
@@ -78,16 +65,9 @@
     {% if goal.team == game.team2 %}
     <td class="right_goal">{% include "templatetags/fragments/goal.html"  %}</td>
     {% else %}
-    <td class="greybg"></td>
+    <td class="right_goal"></td>
     {% endif %}
 
-    {# <td><a href="{% url 'team_detail' goal.team.slug %}">{{ goal.team }}</a></td> #}
-
-
-
-
-
-    {# <td></td> #}
   {% endfor %}
 </table>
 
@@ -117,8 +97,8 @@
 {% for game_source in game_sources %}
 <li>
 
-<a href="{% url 'source_detail' game_source.source.id %}">{{ game_source.source|truncatechars:"30" }}</a> 
-{% if game_source.source_url %}<a class="external" href="{{ game_source.source_url }}">(☢)</a>
+<a href="{% url 'source_detail' game_source.source.id %}">{{ game_source.source|truncatechars:"30" }}</a>
+{% if game_source.source_url %}<a class="external" href="{{ game_source.source_url }}">(link)</a>
 {% else %}
 {% if game_source.source.base_url %}<a class="external" href="{{ game_source.source.base_url }}">(link)</a>
 {% endif %}
@@ -128,5 +108,3 @@
 </ul>
 
 {% endif %}
-
-

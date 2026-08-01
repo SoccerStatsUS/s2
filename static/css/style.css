@@ -292,26 +292,107 @@ td.friendly { background-color: transparent; }
 
 #game-detail #game-media { text-align: center; }
 
-#game_score #team_results {
-    margin: 0 auto;
+#game_score {
+    margin: 12px 0 8px;
+    padding: 20px 0 14px;
+    border-bottom: 1px solid var(--hairline);
     text-align: center;
 }
 
+#team_results {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 28px;
+}
+
 #game_score .team_data {
-    padding-top: 10px;
-    display: inline-block;
-    margin: 0 12px;
+    flex: 1;
+    max-width: 320px;
+}
+
+#game_score .team_data:first-child { text-align: right; }
+#game_score .team_data:last-child { text-align: left; }
+
+#game_score .team a {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    line-height: 1.2;
+}
+
+#game_score .winner .team a {
+    font-weight: 700;
+    color: var(--ink);
+}
+
+#game_score .team a:hover { color: var(--accent); text-decoration: none; }
+
+#game_score .team-nav {
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--ink-soft);
+}
+
+#game_score .score-box {
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1.1;
+    white-space: nowrap;
+}
+
+#game_score .score-sep {
+    margin: 0 10px;
+    color: var(--ink-soft);
+    font-weight: 400;
+}
+
+#game_score .forfeit {
+    margin-top: 8px;
+    font-weight: 600;
+    color: #a33;
+}
+
+#game_score .game-meta {
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--ink-soft);
+}
+
+#game_score .game-meta span + span::before {
+    content: "·";
+    margin: 0 8px;
+    color: var(--hairline);
 }
 
 #goal_list {
-    margin: 20px auto 0;
-    width: 80%;
+    margin: 4px auto 20px;
+    max-width: 680px;
 }
 
-#goal_list .left_goal, #goal_list .right_goal { width: 45%; }
+#goal_list td {
+    border: none;
+    padding: 3px 10px;
+    background: none;
+}
+
+#goal_list tr:nth-child(even) td,
+#goal_list tr:hover td { background: none; }
+
+#goal_list td.greybg { background: none; }
+
+#goal_list .left_goal { width: 45%; text-align: right; }
+#goal_list .right_goal { width: 45%; text-align: left; }
+
+#goal_list td:nth-child(2) {
+    width: 10%;
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 13px;
+}
 
 #goal_list .assist {
-    font-size: .75em;
+    font-size: .8em;
     color: var(--ink-soft);
 }
 
