@@ -136,7 +136,7 @@ ul { list-style-type: none; padding-left: 0; }
 }
 
 #nav-search input {
-    width: 180px;
+    width: 200px;
     padding: 4px 10px;
     margin-right: 6px;
     border: 1px solid var(--hairline);
