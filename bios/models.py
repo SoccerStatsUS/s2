@@ -14,16 +14,13 @@ class BioManager(models.Manager):
 
     def born_on(self, month, day):
         """
-        Returns a random person born on this day.
+        Returns the most notable person born on this day:
+        hall of famers first, then most career games played.
         """
-        # Should split into two methods.
         b = self.get_queryset().filter(birthdate__month=month, birthdate__day=day)
-        if b:
-            c = b.count()
-            i = random.randint(0, c-1)
-            return b[i]
-        else:
-            return None
+        return b.order_by(
+            '-hall_of_fame',
+            models.F('careerstat__games_played').desc(nulls_last=True)).first()
         
         
 

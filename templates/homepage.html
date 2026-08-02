@@ -63,7 +63,7 @@ starting in <a href="{% url 'city_detail' 'waukesha-wi' %}">Waukesha, Wisconsin<
 </p>
 {% endif %}
 
-<p class="otd-more"><a href="{% url 'day_detail' today.month today.day %}">Everything that happened on {{ today|date:"F j" }} &rarr;</a></p>
+<p class="otd-more"><a href="{% url 'day_detail' today.month today.day %}">Everything on record for {{ today|date:"F j" }} &rarr;</a></p>
 
 </div>
 
