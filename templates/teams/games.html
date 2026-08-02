@@ -28,18 +28,8 @@
 {% games_table games %}
 </div>
 
-<div tab="calendar">
-  <div id="calendar-chart"></div>
-</div>
-
 {% endif %}
 
 </div>
-
-<script>
-calendarChart("#calendar-chart", {{ calendar_data|safe }})
-</script>
-
-
 
 {% endblock %}
