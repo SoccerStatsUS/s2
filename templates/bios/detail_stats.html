@@ -1,22 +1,18 @@
-{% load datum_or_none %}
+{% extends "base.html" %}
 {% load stats %}
 
-{% block title %}{{ team.name }} All-time Stats {% endblock %}
-{% block metadescription %}All-time player statistics for {{ team.name }}{% endblock %}
+{% block title %}{{ bio.name }} season statistics{% endblock %}
+{% block metadescription %}Season-by-season statistics for {{ bio.name }}{% endblock %}
 
 {% block content %}
 
+<h1><a href="{% url 'person_detail' bio.slug %}">{{ bio.name }}</a> season by season</h1>
 
-{% comment %}
-<form method="GET" action=".">
-{% csrf_token %}
-{{ form.as_table }}
-<input type="submit" value="submit" />
-</form>
-{% endcomment %}
-
-{% stats_table domestic_stats exclude='player' %}
-{% stats_table international_stats exclude='player' %}
-{% stats_table coach_stats exclude='player' %}
+{% if stats %}
+{% stats_table stats 'player' %}
+{% else %}
+<p class="coverage-note">No season stat lines on record for {{ bio.name }} yet.
+<a href="{% url 'contact_index' %}">Tell us</a> if you have a source for them.</p>
+{% endif %}
 
 {% endblock %}

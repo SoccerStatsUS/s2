@@ -232,10 +232,11 @@ def person_detail_stats(request, slug):
     bio = Bio.objects.by_slug(slug)
 
     context = {
-        "stats": bio.stat_set.order_by('season'),
+        'bio': bio,
+        'stats': bio.stat_set.order_by('season'),
         }
     return render(request, "bios/detail_stats.html",
-                              context)   
+                              context)
 
 
 
