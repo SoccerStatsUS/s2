@@ -1,16 +1,18 @@
 /* SoccerStats.us — clean, data-dense. */
 
+/* The palette. DESIGN.md §1: add nothing here without a stated reason —
+   a new color is a claim that a new kind of meaning exists on the page. */
 :root {
-    --ink: #1a1a1a;
-    --ink-soft: #55606a;
-    --accent: #0b6e4f;
-    --accent-dark: #085239;
-    --hairline: #e5e7e9;
-    --fill: #f6f7f8;
-    --fill-hover: #eef4f1;
-    --win: #d9f0e1;
-    --loss: #f8dcd9;
-    --tie: #faf0cf;
+    --ink: #1a1a1a;        /* body text; page ground is plain #fff */
+    --ink-soft: #55606a;   /* secondary text, must hit 4.5:1 on white */
+    --accent: #0b6e4f;     /* the green */
+    --accent-dark: #085239;/* accent on hover/darker contexts */
+    --hairline: #e5e7e9;   /* hairlines */
+    --fill: #f6f7f8;       /* subtle panel/row ground */
+    --fill-hover: #eef4f1; /* row hover highlight */
+    --win: #d9f0e1;        /* result semantics: win */
+    --loss: #f8dcd9;       /* result semantics: loss */
+    --tie: #faf0cf;        /* result semantics: tie */
 }
 
 * { box-sizing: border-box; }

@@ -25,20 +25,10 @@ Two consequences that decide most design questions:
 
 ## 1. Tokens
 
-```css
---ink:         #1a1a1a;   /* body text; page ground is plain #fff */
---ink-soft:    #55606a;   /* secondary text, must hit 4.5:1 on white */
---accent:      #0b6e4f;   /* the green */
---accent-dark: #085239;   /* accent on hover/darker contexts */
---hairline:    #e5e7e9;   /* hairlines */
---fill:        #f6f7f8;   /* subtle panel/row ground */
---fill-hover:  #eef4f1;   /* row hover highlight */
---win:         #d9f0e1;   /* result semantics: win */
---loss:        #f8dcd9;   /* result semantics: loss */
---tie:         #faf0cf;   /* result semantics: tie */
-```
+The palette lives in `static/css/style.css` under `:root`, annotated there. That file is
+the source of truth; a second copy in this document would only drift out of sync with it.
 
-Add nothing to this palette without a stated reason. A new color is a claim that a new
+Add nothing to the palette without a stated reason. A new color is a claim that a new
 kind of meaning exists on the page.
 
 ---
@@ -87,7 +77,22 @@ newspaper *costume*. No sepia, no faux-aged paper, no blackletter.
 
 ---
 
-## 4. Numerals
+## 4. Narrow screens
+
+One breakpoint, at 760px. Below it the multi-column layouts collapse to a single column
+and wide tables scroll horizontally inside themselves (`display: block; overflow-x: auto`).
+
+Tables do not restack as cards, and columns are not dropped to make them fit. A standings
+row read across is the unit of meaning; breaking it into stacked label/value pairs destroys
+the comparison the table exists to support. Horizontal scroll is the deliberate trade —
+the reader gives up seeing every column at once and keeps the ability to compare rows.
+
+If a table is genuinely unusable on a phone, the fix is fewer columns in that view (§3's
+"omit columns that are empty for every row"), not a different shape.
+
+---
+
+## 5. Numerals
 
 Numbers are the product; treat them as typography.
 
@@ -101,38 +106,36 @@ Numbers are the product; treat them as typography.
 
 ---
 
-## 5. Type
+## 6. Type
 
 - **Serif for voice, sans for the record.** Prose gets the serif; tables, scores, and
-  column headers get the neutral face. This is functional as well as aesthetic: if a
-  competition page renders entirely in sans, no one has written an introduction for it yet.
-- Set an explicit scale (1.25 works). The wordmark sits at the top; section headings drop
-  at least two steps below it. A heading must never compete with the wordmark for first read.
+  column headers get the neutral face. A competition page rendering entirely in sans
+  means no one has written an introduction for it yet.
+- Set an explicit scale. The wordmark sits at the top; section headings drop at least two
+  steps below it. A heading must never compete with the wordmark for first read.
 - Cap prose at 65–72ch. Tables take full width; prose does not.
 - Two density registers: prose pages are loose, data pages are tight. Do not inherit one
   line-height across both.
 
 ---
 
-## 6. Spacing
+## 7. Spacing
 
-One base unit; every vertical gap is a multiple of it. Do not introduce ad-hoc margins.
-Nothing else improves perceived craft this cheaply, and irregular spacing is the most
+One base unit; every vertical gap is a multiple of it. Irregular spacing is the most
 common way a page comes to look unmaintained.
 
 ---
 
-## 7. Links, focus, and states
+## 8. Links and focus
 
 - Prose links carry a persistent underline (`text-underline-offset: 0.2em`), not color alone.
 - Table cells: no underline, no color, hover only (see §2).
 - Visible `:focus-visible` ring — 2px `--accent` with offset. Never `outline: none`.
 - Tap targets are 44px minimum. Pad the box; don't rely on the glyph.
-- Every interactive element needs empty, loading, and error states designed, not defaulted.
 
 ---
 
-## 8. Absence and uncertainty
+## 9. Absence and uncertainty
 
 The database is historical and incomplete. That is a feature to be displayed, not a flaw
 to be hidden. **A blank cell reads as a bug; a marked gap reads as rigor.**
@@ -152,7 +155,7 @@ Where coverage stops, say so in place. Do not let a page imply currency it doesn
 
 ---
 
-## 9. Copy
+## 10. Copy
 
 - Sentence case. Plain verbs. No filler.
 - Name things as a reader recognizes them, never as the schema stores them.
@@ -166,8 +169,22 @@ Where coverage stops, say so in place. Do not let a page imply currency it doesn
 
 ---
 
+## 11. Page identity
 
-## 11. Do not add
+Every page carries exactly one `<h1>`, naming the thing the page is about — the player,
+the competition, the season, the date. The wordmark is not the h1; it is navigation that
+happens to sit at the top of every page.
+
+Every page sets a `{% block title %}`, rendering as `<page> | SoccerStats.us`, and no two
+pages share one. Falling through to the default title is a bug: it means the template
+never declared what it is.
+
+Headings below the h1 name the tables under them (§3). Never skip a heading level to get
+a particular size — that is what CSS is for.
+
+---
+
+## 12. Do not add
 
 - Club crests or player photographs. Coverage would be wildly uneven across eras, which
   visually amplifies exactly the gaps the site is trying to report honestly. Type, rule,
