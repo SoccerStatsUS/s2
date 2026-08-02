@@ -172,9 +172,9 @@ ul { list-style-type: none; padding-left: 0; }
     border-radius: 4px;
 }
 
-#nav-comps { position: relative; }
+.nav-drop { position: relative; }
 
-#comp-menu {
+.nav-menu {
     display: none;
     position: absolute;
     top: 100%;
@@ -187,10 +187,10 @@ ul { list-style-type: none; padding-left: 0; }
     border-radius: 6px;
 }
 
-#nav-comps:hover #comp-menu,
-#nav-comps:focus-within #comp-menu { display: block; }
+.nav-drop:hover .nav-menu,
+.nav-drop:focus-within .nav-menu { display: block; }
 
-#comp-menu a {
+.nav-menu a {
     display: block;
     padding: 6px 18px;
     border-radius: 4px;
@@ -199,7 +199,7 @@ ul { list-style-type: none; padding-left: 0; }
     white-space: nowrap;
 }
 
-#comp-menu a:hover {
+.nav-menu a:hover {
     background: var(--fill-hover);
     color: var(--accent);
     text-decoration: none;
@@ -546,8 +546,8 @@ td.result { width: 70px; }
     .header-inner { padding-bottom: 6px; }
     #nav { margin-left: 0; }
     #subtitle { display: none; }
-    #nav-comps:hover #comp-menu,
-    #nav-comps:focus-within #comp-menu { display: none; }
+    .nav-drop:hover .nav-menu,
+    .nav-drop:focus-within .nav-menu { display: none; }
 
     table {
         display: block;
@@ -590,6 +590,17 @@ td.result { width: 70px; }
 #otd .otd-note { color: var(--ink-soft); }
 
 #otd .otd-more { margin-top: 10px; font-size: 14px; }
+
+
+/* ---- More page ---- */
+
+#more { max-width: 68ch; }
+
+#more .more-list li { margin: 0 0 6px; }
+
+#more .more-unbuilt li { color: var(--ink-soft); }
+
+#more .more-unbuilt span { font-size: 13px; }
 
 
 /* ---- Date pages ---- */

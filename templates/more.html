@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}more{% endblock %}
+{% block metadescription %}Everything else in the database: dates, awards, drafts, places, and the pages still being built{% endblock %}
+
+{% block content %}
+
+<div id="more">
+
+<h2>More</h2>
+
+<p>Everything in the database with a page of its own. The unfinished ones are marked
+rather than hidden &mdash; they exist in the data, but their pages aren't built yet.</p>
+
+<ul class="more-list">
+  <li><a href="{% url 'dates_index' %}">dates</a> &mdash; browse by year or by day, 1866 to present</li>
+  <li><a href="{% url 'award_index' %}">awards</a> &mdash; championships, MVPs, best XIs, the hall of fame</li>
+  <li><a href="{% url 'drafts_index' %}">drafts</a> &mdash; every MLS draft since 1996</li>
+  <li><a href="{% url 'country_index' %}">places</a> &mdash; the countries American soccer has been played in and against</li>
+</ul>
+
+<h3>Not built yet</h3>
+
+<ul class="more-list more-unbuilt">
+  <li>calendar</li>
+  <li>events</li>
+  <li>games index <span>(individual game pages work)</span></li>
+  <li>goals</li>
+  <li>graphs</li>
+  <li>lineups</li>
+  <li>news</li>
+  <li>organizations</li>
+  <li>positions index <span>(individual position pages work)</span></li>
+  <li>salaries</li>
+  <li>standings index <span>(standings appear on team and season pages)</span></li>
+  <li>stats index <span>(stats appear on player, team, and season pages)</span></li>
+  <li>stadiums, cities, and states indexes <span>(individual pages work)</span></li>
+  <li>transactions <span>(page exists, no data loaded yet)</span></li>
+  <li>videos</li>
+</ul>
+
+</div>
+
+{% endblock %}
