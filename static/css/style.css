@@ -172,22 +172,50 @@ ul { list-style-type: none; padding-left: 0; }
     border-radius: 4px;
 }
 
-#league-bar {
-    margin: 0 0 30px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 6px 26px;
-    font-size: 18px;
+#nav-comps { position: relative; }
+
+#comp-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    width: 380px;
+    padding: 6px;
+    background: #fff;
+    border: 1px solid var(--hairline);
+    border-radius: 6px;
 }
 
-#league-bar a {
+#nav-comps:hover #comp-menu,
+#nav-comps:focus-within #comp-menu { display: block; }
+
+#comp-menu a {
+    display: block;
+    padding: 8px 10px;
+    border-radius: 4px;
+    color: var(--ink);
+}
+
+#comp-menu a:hover {
+    background: var(--fill-hover);
+    text-decoration: none;
+}
+
+#comp-menu .comp-title {
+    display: block;
+    font-size: 14px;
+}
+
+#comp-menu .comp-title strong { font-weight: 600; }
+
+#comp-menu .comp-blurb {
+    display: block;
+    font-size: 13px;
+    line-height: 1.35;
     color: var(--ink-soft);
-    font-weight: 600;
-    letter-spacing: 0.3px;
 }
-
-#league-bar a:hover { color: var(--accent); text-decoration: none; }
 
 
 #site-footer {
@@ -531,6 +559,8 @@ td.result { width: 70px; }
     .header-inner { padding-bottom: 6px; }
     #nav { margin-left: 0; }
     #subtitle { display: none; }
+    #nav-comps:hover #comp-menu,
+    #nav-comps:focus-within #comp-menu { display: none; }
 
     table {
         display: block;
