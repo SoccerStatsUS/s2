@@ -20,6 +20,7 @@
 {% if competitions %}
 <div tab="competitions">
 
+<h3>Competitions in {{ country.name }}</h3>
 <table>
 
   <thead>
@@ -62,6 +63,7 @@
 
 {% if stadiums %}
 <div tab="stadiums">
+<h3>Grounds in {{ country.name }}</h3>
 <table>
 <thead>
   <tr>
@@ -85,6 +87,7 @@
 
 {% if country.games.exists %}
 <div tab="games">
+<h3>Games played in {{ country.name }}</h3>
 {% games_table country.games.all %}
 </div>
 {% endif %}
@@ -93,6 +96,7 @@
 
 {% if country.games.exists %}
 <div tab="cities">
+  <h3>Cities in {{ country.name }}</h3>
   <ul>
     {% for city in cities %}
     <li><a href="{% url 'city_detail' city.slug %}">{{ city }}</a></li>
@@ -105,6 +109,7 @@
 {% if births %}
 <div tab="people">
 
+<h3>Players born in {{ country.name }}</h3>
 <table>
 
   <thead>

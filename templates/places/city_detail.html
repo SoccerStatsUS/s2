@@ -21,6 +21,7 @@
 
 {% if city.stadium_set.exists %}
 <div tab="stadiums">
+<h3>Grounds in {{ city.name }}</h3>
 <table>
 <thead>
 <tr>
@@ -61,6 +62,7 @@
 
 {% if teams %}
 <div tab="teams">
+  <h3>Teams from {{ city.name }}</h3>
   <table>
     <thead><tr><th scope="col">team</th></tr></thead>
     {% for team in teams %}
@@ -75,6 +77,7 @@
 
 {% if games %}
 <div tab="games">
+<h3>Games played in {{ city.name }}</h3>
 {% include "templatetags/games.html" %}
 </div>
 {% endif %}

@@ -90,6 +90,7 @@ no record.</p>
 {% if games %}
 <div tab="games">
 
+<h3>Games</h3>
 {% games_table games %}
 
 </div>
@@ -97,6 +98,7 @@ no record.</p>
 
 {% if standings %}
 <div tab="standings">
+<h3>Standings</h3>
 {% standings_table standings %}
 </div>
 {% endif %}
@@ -104,6 +106,7 @@ no record.</p>
 
 {% if stats %}
 <div tab="stats">
+<h3>Player statistics</h3>
 {% stats_table stats %}
 </div>
 {% endif %}
@@ -112,6 +115,7 @@ no record.</p>
 {% if news %}
 <div tab="news">
 
+<h3>News</h3>
 <table>
 <thead>
   <tr>
@@ -139,7 +143,7 @@ no record.</p>
 {% if births.exists %}
 <div tab="births">
 
-
+<h3>Births</h3>
 <table>
 
   <thead>
@@ -168,7 +172,8 @@ no record.</p>
 {% endif %}
 
 {% if deaths.exists %}
-<div tab="deathss">
+<div tab="deaths">
+<h3>Deaths</h3>
 <table>
 <thead>
   <tr>
@@ -190,6 +195,7 @@ no record.</p>
 {% if hires.exists or fires.exists %}
 <div tab="transactions">
 
+<h3>Hirings and departures</h3>
 <table>
 <thead>
   <tr>

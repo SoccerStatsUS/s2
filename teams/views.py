@@ -542,6 +542,7 @@ def team_year_detail(request, team_slug, year):
 
     context = {
         'team': team,
+        'year': year,
         'standings': Standing.objects.filter(team=team, season__in=seasons),
         'stats': Stat.objects.filter(team=team, season__in=seasons),
         'games': team.game_set().filter(date__year=year),

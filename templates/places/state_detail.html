@@ -33,6 +33,7 @@
 </table>
 
 <div tab="stadiums">
+<h3>Grounds in {{ state }}</h3>
 <table>
 <thead>
   <tr>
@@ -55,12 +56,14 @@
 
 {% if games %}
 <div tab="games">
+<h3>Games played in {{ state }}</h3>
 {% include "templatetags/games.html" %}
 </div>
 {% endif %}
 
 
 <div tab="births">
+<h3>Players born in {{ state }}</h3>
 <table>
   <thead>
     <tr>

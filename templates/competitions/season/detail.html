@@ -53,6 +53,7 @@
 
 
 <div class="block">
+  <h3>Honors</h3>
   <table>
 
   {% if season.champion %}
@@ -82,6 +83,7 @@
 
 
 <div class="block">
+  <h3>Season totals</h3>
   <table>
 
     {% if season.game_set.count %}
@@ -124,6 +126,7 @@
 
 {% if standings %}
 
+<h3>Standings</h3>
 {% standings_table standings 'competition,season' %}
 
 {% endif %}
@@ -132,6 +135,7 @@
 
 {% if awards.exists %}
 <div>
+<h3>Awards</h3>
 <table>
   <thead>
   <tr>
@@ -162,6 +166,7 @@
 
 {% if stats.exists %}
 <div tab="stats">
+<h3>Season leaders</h3>
 <div><a href="{% url 'season_stats' season.competition.slug season.slug %}">complete stats</a></div>
 
 {% stats_table stats 'competition,season' %}
@@ -175,6 +180,7 @@
 {% if recent_games %}
 <div tab="games">
 
+<h3>Most recent games</h3>
 <p>
   <a href="{% url 'season_games' season.competition.slug season.slug %}">all games</a>
 </p>

@@ -30,21 +30,25 @@
 <div id="subtab_wrapper">
 
 <div tab="by competition">
+<h3>Career totals by competition</h3>
 {% stats_table competition_stats 'player' %}
 </div>
 
 <div tab="by team">
+<h3>Career totals by team</h3>
 {% stats_table team_stats 'player' %}
 </div>
 
 {% if domestic_stats %}
 <div tab="domestic">
+<h3>Season by season, clubs</h3>
 {% stats_table domestic_stats 'player' %}
 </div>
 {% endif %}
 
 {% if international_stats %}
 <div tab="international">
+<h3>Season by season, international</h3>
 {% stats_table international_stats 'player' %}
 </div>
 {% endif %}
@@ -60,6 +64,7 @@
 {% if recent_game_stats %}
 <div tab="games">
 
+<h3>Most recent games</h3>
 {% include "templatetags/stats/game_list.html" with stats=recent_game_stats %}
 
 <div class="all-link"><a href="{% url 'person_detail_games' bio.slug %}">
@@ -78,6 +83,7 @@ all {{ career_stat.games_played }} games &rarr;
 
 <div tab="coach">
 
+<h3>Coaching record, season by season</h3>
 {% include "templatetags/stats/coach.html" with stats=coach_stats %}
 
 </div>
@@ -86,6 +92,7 @@ all {{ career_stat.games_played }} games &rarr;
 
 {% if refs %}
 <div tab="referee">
+<h3>Most recent games refereed</h3>
 {% include "templatetags/appearances/ref.html" with games=refs %}
 <div class="all-link"><a href="{% url 'person_detail_referee_games' bio.slug %}">all games refereed &rarr;</a></div>
 </div>
@@ -94,6 +101,7 @@ all {{ career_stat.games_played }} games &rarr;
 
 {% if bio.awards.exists %}
 <div tab="awards">
+<h3>Awards</h3>
 <table>
 <thead>
   <tr>
@@ -121,6 +129,7 @@ all {{ career_stat.games_played }} games &rarr;
 
 {% if picks.exists %}
 <div tab="drafts">
+<h3>Draft picks</h3>
 <table>
 <thead>
   <tr>

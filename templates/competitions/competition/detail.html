@@ -34,10 +34,12 @@
 
 
 <div tab="seasons">
+<h3>Seasons</h3>
 {% seasons_table competition.season_set.reverse %}
 </div>
 
 <div tab="stats">
+<h3>Career leaders</h3>
 {% stats_table stats 'team,season'%}
 <p class="more-links"><a href="{% url 'competition_stats' competition.slug %}">all {{ competition.abbreviation|default:competition.name }} stats &rarr;</a></p>
 </div>
@@ -45,11 +47,13 @@
 
 {% if big_winners %}
 <div tab="standings">
+<h3>All-time club records</h3>
 {% standings_table big_winners 'competition,season' %}
 </div>
 {% endif %}
 
 <div tab="games">
+<h3>Most recent games</h3>
 {% games_table games 'competition,referee,attendance' %}
 <p class="more-links"><a href="{% url 'competition_games' competition.slug %}">all {{ competition.abbreviation|default:competition.name }} games &rarr;</a></p>
 </div>
