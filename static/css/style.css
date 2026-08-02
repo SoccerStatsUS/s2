@@ -780,14 +780,25 @@ td.result { width: 70px; }
 
 /* ---- Homepage: tagline + search ---- */
 
+#otd {
+    padding: 4px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+}
+
+#home-intro {
+    padding: 26px 0 30px;
+    border-bottom: 1px solid var(--hairline);
+    margin-bottom: 28px;
+}
+
 #tagline {
-    margin: 20px 0 8px;
+    margin: 0 0 16px;
     text-align: center;
     font-size: 16px;
 }
 
 #home-search {
-    margin: 0 0 16px;
+    margin: 0;
     text-align: center;
 }
 

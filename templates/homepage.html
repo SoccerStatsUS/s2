@@ -4,14 +4,6 @@
 
 {% block content %}
 
-<p id="tagline">A website dedicated to the deep history of American soccer &mdash;
-starting in <a href="{% url 'city_detail' 'waukesha-wi' %}">Waukesha, Wisconsin</a> in <a href="{% url 'year_detail' 1866 %}">1866</a>.</p>
-
-<form id="home-search" method="get" action="{% url 'search' %}">
-  <input name="q" type="text" placeholder="Search American soccer history">
-  <input type="submit" value="search">
-</form>
-
 <div id="otd">
 
 <h3>On this day &mdash; {{ today|date:"F j" }}</h3>
@@ -65,6 +57,19 @@ starting in <a href="{% url 'city_detail' 'waukesha-wi' %}">Waukesha, Wisconsin<
 {% endif %}
 
 <p class="otd-more"><a href="{% url 'day_detail' today.month today.day %}">Everything on record for {{ today|date:"F j" }} &rarr;</a></p>
+
+</div>
+
+
+<div id="home-intro">
+
+<p id="tagline">A website dedicated to the deep history of American soccer &mdash;
+starting in <a href="{% url 'city_detail' 'waukesha-wi' %}">Waukesha, Wisconsin</a> in <a href="{% url 'year_detail' 1866 %}">1866</a>.</p>
+
+<form id="home-search" method="get" action="{% url 'search' %}">
+  <input name="q" type="text" placeholder="Search American soccer history">
+  <input type="submit" value="search">
+</form>
 
 </div>
 
