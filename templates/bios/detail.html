@@ -96,14 +96,6 @@
 {% endif %}
 
 
-{% if bio.awards.exists or picks.exists or bio.salary_set.exists %}
-<div tab="info">
-
-<ul id="subtabs2"></ul>
-<div id="subtab_wrapper2">
-
-
-
 {% if bio.awards.exists %}
 <div tab="awards">
 <table>
@@ -158,10 +150,6 @@
 
 
 {% include "bios/helpers/salary.html" %}
-
-</div>
-</div>
-{% endif %}
 
 </div>
 
