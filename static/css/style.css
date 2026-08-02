@@ -102,12 +102,6 @@ ul { list-style-type: none; padding-left: 0; }
     color: #fff;
 }
 
-#subtitle {
-    margin-left: 8px;
-    font-size: 13px;
-    color: var(--ink-soft);
-}
-
 #nav {
     display: flex;
     align-items: center;
