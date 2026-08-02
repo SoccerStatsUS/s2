@@ -34,6 +34,10 @@ Production runs on the server "bert" at /home/chris/www/s2:
   They were doing ~84k req/day combined before this (2026-08-02).
 * secrets live in /home/chris/www/s2/.env (not in git)
 
+Before deploying, smoke-test every major URL pattern against the local db:
+
+    .venv/bin/python manage.py smoketest
+
 To deploy code changes:
 
     ssh bert 'cd /home/chris/www/s2 && git pull && \

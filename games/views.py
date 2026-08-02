@@ -34,7 +34,7 @@ def about(request):
     return render(request, "about/index.html", context)
 
 
-@cache_page(60 * 60)
+@cache_page(60 * 30)
 def homepage(request):
 
     today = datetime.date.today()
