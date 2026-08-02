@@ -374,6 +374,12 @@ td.friendly { background-color: transparent; }
 
 #bio_facts strong { color: var(--ink); }
 
+.all-link {
+    margin: -8px 0 16px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
 #team_info h2 { margin: 10px 0 2px; }
 
 #team_facts {

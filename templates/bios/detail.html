@@ -65,13 +65,10 @@
 
 {% if recent_game_stats %}
 <div tab="games">
-<a href="{% url 'person_detail_games' bio.slug %}">all games</a>
 
 {% include "templatetags/stats/game_list.html" with stats=recent_game_stats %}
 
-{# "templatetags/stats/game_list.html" with stats=recent_game_stats #}
-{# {% stats_table recent_game_stats %} #}
-
+<div class="all-link"><a href="{% url 'person_detail_games' bio.slug %}">all {{ career_stat.games_played }} games &rarr;</a></div>
 
 </div>
 {% endif %}
@@ -89,9 +86,8 @@
 
 {% if refs %}
 <div tab="referee">
-<a href="{% url 'person_detail_referee_games' bio.slug %}">all games refereed</a>
-{# {% games_table games 'round,group,referee' %} #}
 {% include "templatetags/appearances/ref.html" with games=refs %}
+<div class="all-link"><a href="{% url 'person_detail_referee_games' bio.slug %}">all games refereed &rarr;</a></div>
 </div>
 {% endif %}
 
