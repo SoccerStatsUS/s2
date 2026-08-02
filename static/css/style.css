@@ -76,19 +76,23 @@ ul { list-style-type: none; padding-left: 0; }
 #title { white-space: nowrap; }
 
 #maintitle {
-    font-size: 26px;
+    display: inline-block;
+    font-size: 24px;
     font-weight: 400;
     letter-spacing: -0.5px;
-    color: var(--accent);
+    color: #fff;
+    background: var(--accent);
+    padding: 2px 12px 4px;
+    border-radius: 6px;
 }
 
-#maintitle:hover { text-decoration: none; color: var(--accent-dark); }
+#maintitle:hover { text-decoration: none; background: var(--accent-dark); color: #fff; }
 
 #maintitle #tld {
-    font-size: 20px;
+    font-size: 19px;
     font-weight: 700;
     letter-spacing: 0;
-    color: var(--accent-dark);
+    color: #fff;
 }
 
 #subtitle {
