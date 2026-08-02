@@ -484,14 +484,32 @@ table#game_lineup { margin: 20px auto 0; }
 
 /* ---- Awards ---- */
 
-#awards_index .cmp {
-    font-size: 1.4em;
-    margin: 24px 0 8px;
+#awards_index .award-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px 40px;
+    margin-top: 16px;
 }
 
-#awards_index ul {
-    max-width: 640px;
-    margin: 0 auto;
+#awards_index .award-group h3 {
+    margin: 0 0 8px;
+    padding-bottom: 5px;
+    font-size: 16px;
+    border-bottom: 1px solid var(--hairline);
+}
+
+#awards_index .award-group h3 a { color: var(--ink); }
+#awards_index .award-group h3 a:hover { color: var(--accent); text-decoration: none; }
+
+#awards_index .award-group ul { margin: 0; }
+
+#awards_index .award-group li { margin: 0 0 5px; }
+
+#awards_index .award-span {
+    margin-left: 7px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
 }
 
 #award_detail { font-size: 1.2em; }

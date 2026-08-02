@@ -1,3 +1,6 @@
+import re
+
+from django.db.models import Count, Min, Max
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
@@ -11,9 +14,30 @@ def award_index(request):
     """
     A list of all available awards.
     """
-    # Add a paginator.
+    awards = Award.objects.select_related('competition').annotate(
+        item_count=Count('awarditem'),
+        first_season=Min('awarditem__season__name'),
+        last_season=Max('awarditem__season__name'),
+        )
+    awards = sorted(awards, key=lambda a: (
+        a.competition is None,
+        a.competition.name if a.competition else '',
+        a.name,
+        ))
+
+    def year(name):
+        m = re.search(r'\d{4}', name or '')
+        return m.group(0) if m else None
+
+    for award in awards:
+        first, last = year(award.first_season), year(award.last_season)
+        if first and last:
+            award.span = first if first == last else '%s–%s' % (first, last)
+        else:
+            award.span = None
+
     context = {
-        'awards': Award.objects.all(),
+        'awards': awards,
         }
     return render(request, "awards/index.html",
                               context)

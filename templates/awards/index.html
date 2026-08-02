@@ -1,28 +1,35 @@
 {% extends "base.html" %}
 {% block title %}awards{% endblock %}
+{% block metadescription %}Championships, MVPs, best XIs, and the hall of fame across American soccer history{% endblock %}
 
 {% block content %}
 
+<div id="awards_index">
+
+<h2>Awards</h2>
 
 {% regroup awards by competition as ac %}
 
-<div id="awards_index">
+<div class="award-grid">
 {% for competition in ac %}
+  <div class="award-group">
     {% if competition.grouper %}
-<div class="cmp"><a href="{% url 'competition_detail' competition.grouper.slug %}">{{ competition.grouper }}</a></div> 
+    <h3><a href="{% url 'competition_detail' competition.grouper.slug %}">{{ competition.grouper }}</a></h3>
     {% else %}
-    <div class="cmp">None</div>
+    <h3>National</h3>
     {% endif %}
     <ul>
-        {% for item in competition.list %}
-          <li><a href="{% url 'award_detail' item.id %}">{{ item.name }}</a></li>
-        {% endfor %}
+      {% for item in competition.list %}
+      <li>
+        <a href="{% url 'award_detail' item.id %}">{{ item.name }}</a>
+        {% if item.span %}<span class="award-span">{{ item.span }}</span>{% endif %}
+      </li>
+      {% endfor %}
     </ul>
-    </li>
-
+  </div>
 {% endfor %}
 </div>
 
-
+</div>
 
 {% endblock %}
