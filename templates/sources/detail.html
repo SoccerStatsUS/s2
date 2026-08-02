@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load games %}
+{% load stats %}
 
 {% block content %}
 
@@ -40,6 +41,18 @@
 </tr>
 {% endfor %}
 </table>
+
+</div>
+{% endif %}
+
+
+{% if stats_count %}
+<div tab="stats">
+
+<h3>{{ stats_count }} player-season stat line{{ stats_count|pluralize }} from this source
+{% if stats_count > 25 %}&mdash; 25 with the most games below{% endif %}</h3>
+
+{% stats_table top_stats %}
 
 </div>
 {% endif %}
