@@ -1,9 +1,12 @@
 from django.contrib import admin
+from django.contrib.sitemaps import views as sitemap_views
+from django.views.decorators.cache import cache_page
 from django.views.generic import RedirectView, TemplateView
 from django.urls import include
 from django.urls import path
 
 from games import views as games_views
+from sitemaps import SITEMAPS
 
 
 urlpatterns = [
@@ -12,6 +15,11 @@ urlpatterns = [
     path('search/', games_views.search, name="search"),
 
     path('favicon.ico', RedirectView.as_view(url='/static/favicon.svg'), name="favicon"),
+
+    path('sitemap.xml', cache_page(60 * 60 * 12)(sitemap_views.index),
+         {'sitemaps': SITEMAPS}, name='sitemap_index'),
+    path('sitemap-<section>.xml', cache_page(60 * 60 * 12)(sitemap_views.sitemap),
+         {'sitemaps': SITEMAPS}, name='django.contrib.sitemaps.views.sitemap'),
 
     path('everything/', games_views.everything, name='everything_index'),
     path('more/', RedirectView.as_view(url='/everything/', permanent=True)),

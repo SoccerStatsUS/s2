@@ -3,7 +3,7 @@ server {
 
     location = /robots.txt {
         default_type text/plain;
-        return 200 "User-agent: ClaudeBot\nCrawl-delay: 10\n\nUser-agent: GPTBot\nCrawl-delay: 10\n\nUser-agent: *\nDisallow:\n";
+        return 200 "User-agent: ClaudeBot\nCrawl-delay: 10\n\nUser-agent: GPTBot\nCrawl-delay: 10\n\nUser-agent: *\nDisallow:\n\nSitemap: https://soccerstats.us/sitemap.xml\n";
     }
 
     location /static/ {

@@ -74,6 +74,7 @@ def load1():
 
     generate_mongo_indexes()
 
+    load_site()
 
 
     # Non-game data.
@@ -164,6 +165,13 @@ def run(verbose=True):
 
     lm.save(strict=True, verbose=verbose)    
 """
+
+
+def load_site():
+    # The sitemap builds absolute URLs from the sites framework.
+    from django.contrib.sites.models import Site
+    Site.objects.update_or_create(
+        id=1, defaults={'domain': 'soccerstats.us', 'name': 'SoccerStats.us'})
 
 
 def load_sources():
