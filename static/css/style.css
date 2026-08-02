@@ -374,6 +374,14 @@ td.friendly { background-color: transparent; }
 
 #bio_facts strong { color: var(--ink); }
 
+#bio_facts .bio-recorded { margin-top: 10px; }
+
+#bio_facts .bio-caveat {
+    font-size: 12px;
+    font-style: italic;
+    color: #9aa3ab;
+}
+
 .all-link {
     margin: -8px 0 16px;
     font-size: 14px;
