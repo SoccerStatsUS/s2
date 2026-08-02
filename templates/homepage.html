@@ -5,7 +5,7 @@
 {% block content %}
 
 <p id="tagline">A website dedicated to the deep history of American soccer &mdash;
-starting in <a href="{% url 'city_detail' 'waukesha-wi' %}">Waukesha, Wisconsin</a>, in <a href="{% url 'year_detail' 1866 %}">1866</a>.</p>
+starting in <a href="{% url 'city_detail' 'waukesha-wi' %}">Waukesha, Wisconsin</a> in <a href="{% url 'year_detail' 1866 %}">1866</a>.</p>
 
 <form id="home-search" method="get" action="{% url 'search' %}">
   <input name="q" type="text" placeholder="Search players and teams &mdash; try Bethlehem Steel, or Pel&eacute;, or your grandfather">
