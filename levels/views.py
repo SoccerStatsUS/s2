@@ -3,12 +3,14 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
+from collections import OrderedDict
+
 from awards.models import Award
 #from bios.models import Bio
 from games.models import Game
 from competitions.models import Competition, Season
 #from lineups.models import Appearance
-#from places.models import Country
+from places.models import Country
 from standings.models import Standing
 from stats.models import Stat, CompetitionStat, SeasonStat
 
@@ -17,18 +19,21 @@ from stats.models import Stat, CompetitionStat, SeasonStat
 
 @cache_page(60 * 60 * 12)
 def level_index(request):
+    """
+    The tiers of American league soccer, top flight first.
+    """
+    competitions = (Competition.objects
+                    .filter(area='United States', code='soccer', ctype='League')
+                    .exclude(level=None).order_by('level', 'name'))
 
-    ctype = None
-
+    levels = OrderedDict()
+    for competition in competitions:
+        levels.setdefault(competition.level, []).append(competition)
 
     context = {
-        'competitions': competitions.select_related(),
-        'form': form,
-        'ctype': ctype,
-        #'itype': itype,
-        #'valid': form.is_valid(),
-        #'errors': form.errors,
-
+        'country_slug': 'united-states',
+        'levels': list(levels.items()),
+        'competition_count': len(competitions),
         }
     return render(request, "levels/index.html",
                               context)
@@ -39,7 +44,8 @@ def level_index(request):
 @cache_page(60 * 60 * 12)
 def level_detail(request, country_slug, level):
     
-    competitions = Competition.objects.filter(area='United States', code='soccer', level=int(level), ctype='League')
+    country = get_object_or_404(Country, slug=country_slug)
+    competitions = Competition.objects.filter(area=country.name, code='soccer', level=int(level), ctype='League')
     seasons = Season.objects.filter(competition__in=competitions).order_by('name')
     games = Game.objects.filter(competition__in=competitions)
 
@@ -56,6 +62,8 @@ def level_detail(request, country_slug, level):
 
 
     context = {
+        'country': country,
+        'level': int(level),
         'competitions': competitions,
         'seasons': seasons,
         'stats': sx,

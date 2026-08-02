@@ -112,7 +112,6 @@ INSTALLED_APPS = [
     'events',
     'games',
     'goals',
-    'graphs',
     'images',
     'levels',
     'lineups',

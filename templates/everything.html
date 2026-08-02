@@ -13,7 +13,11 @@
 rather than hidden &mdash; they exist in the data, but their pages aren't built yet.</p>
 
 <ul class="more-list">
-  <li><a href="{% url 'competition_index' %}">competitions</a> &mdash; every league and cup, 1884 to present</li>
+  <li><a href="{% url 'competition_index' %}">competitions</a> &mdash; every league and cup, 1884 to present
+    <ul>
+      <li><a href="{% url 'level_index' %}">levels</a> &mdash; the tiers of American league soccer</li>
+    </ul>
+  </li>
   <li><a href="{% url 'team_index' %}">teams</a> &mdash; every team with a game on record
     <ul>
       <li><a href="{% url 'team_standings' %}">all-time club records</a> &mdash; every club's record, most wins first</li>
@@ -66,9 +70,7 @@ rather than hidden &mdash; they exist in the data, but their pages aren't built 
 <h3>Not built yet</h3>
 
 <ul class="more-list more-unbuilt">
-  <li>events</li>
-  <li>graphs</li>
-  <li>levels</li>
+  <li>events <span>(page exists, no data loaded yet)</span></li>
   <li>news</li>
   <li>positions index <span>(individual position pages and the managers index work)</span></li>
   <li>transactions <span>(page exists, no data loaded yet)</span></li>

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}events{% endblock %}
+{% block metadescription %}In-game events other than goals: cards, fouls, and substitutions{% endblock %}
+
+{% block content %}
+
+<h1>Events</h1>
+
+{% if events %}
+
+<p class="dir-note">{{ page.paginator.count|intcomma }} in-game events on record
+&mdash; anything a source pins to a minute other than a goal. Goals have
+<a href="{% url 'goals_index' %}">their own index</a>.</p>
+
+{% include "pagination.html" with noun="events" %}
+
+<table>
+
+<thead>
+  <tr>
+    <th scope="col">date</th>
+    <th scope="col" title="minute">min</th>
+    <th scope="col">event</th>
+    <th scope="col">game</th>
+  </tr>
+</thead>
+
+<tbody>
+{% for event in events %}
+<tr>
+  {% if event.game.date %}
+  <td class="date"><a href="{% url 'date_detail' event.game.date.year event.game.date.month event.game.date.day %}">{{ event.game.date }}</a></td>
+  {% else %}
+  <td class="greybg" title="no record found">&mdash;</td>
+  {% endif %}
+  {% if event.minute == None %}<td class="greybg" title="no record found">&mdash;</td>{% else %}<td>{{ event.minute }}</td>{% endif %}
+  <td>{{ event.description }}</td>
+  {% if event.game_id %}
+  <td><a href="{% url 'game_detail' event.game_id %}">{{ event.game.game_string }}</a></td>
+  {% else %}
+  <td class="greybg" title="no record found">&mdash;</td>
+  {% endif %}
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
+
+{% include "pagination.html" with noun="events" %}
+
+{% else %}
+
+<p class="coverage-note">No in-game events are loaded yet. The database has a
+place for cards, fouls, and substitutions, but nothing has been transcribed into
+it &mdash; the sources that carry them haven't been parsed. Goals are the one
+in-game event that is loaded, and they have
+<a href="{% url 'goals_index' %}">their own index</a>.</p>
+
+<p class="coverage-note">If you have a source with this detail,
+<a href="{% url 'contact_index' %}">get in touch</a>.</p>
+
+{% endif %}
+
+{% endblock %}

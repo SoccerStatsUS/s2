@@ -35,7 +35,6 @@ urlpatterns = [
     path('events/', include('events.urls')),
     path('games/', include('games.urls')),
     path('goals/', include('goals.urls')),
-    path('graphs/', include('graphs.urls')),
     path('levels/', include('levels.urls')),
     path('lineups/', include('lineups.urls')),
     path('salaries/', include('money.urls')),

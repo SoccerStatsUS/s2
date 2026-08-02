@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load standings %}
+{% load stats %}
+{% load games %}
+{% load humanize %}
+
+{% block title %}{{ country.name }} level {{ level }}{% endblock %}
+{% block metadescription %}Level {{ level }} of the {{ country.name }} league pyramid{% endblock %}
+
+{% block content %}
+
+<h1><a href="{% url 'level_index' %}">Level {{ level }}</a> &mdash; {{ country.name }}</h1>
+
+{% if competitions %}
+
+<h3>Leagues at this level</h3>
+<ul class="notfound-links">
+{% for competition in competitions %}
+  <li><a href="{% url 'competition_detail' competition.slug %}">{{ competition.name }}</a></li>
+{% endfor %}
+</ul>
+
+{% if big_winners %}
+<h3>All-time club records at this level</h3>
+{% standings_table big_winners 'season' %}
+{% endif %}
+
+{% if stats %}
+<h3>Career leaders at this level</h3>
+{% stats_table stats 'team,season' %}
+{% endif %}
+
+{% if games %}
+<h3>Most recent games</h3>
+{% games_table games 'referee,attendance' %}
+{% endif %}
+
+{% else %}
+<p class="coverage-note">No {{ country.name }} league is recorded at level
+{{ level }}. Try <a href="{% url 'level_index' %}">the other levels</a>.</p>
+{% endif %}
+
+{% endblock %}
