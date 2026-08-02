@@ -127,6 +127,7 @@ def person_detail_abstract(request, bio):
         'international_stats': international_stats,
         'competition_stats': competition_stats,
         'career_stat': bio.career_stat(),
+        'game_log_count': bio.gamestat_set.count(),
         'team_stats': team_stats,
         'picks': bio.pick_set.exclude(draft__competition=None).order_by('draft__season', 'draft__start'),
         'coach_stats': bio.coachstat_set.order_by('season'),
@@ -174,11 +175,14 @@ def person_detail_games(request, slug):
     
     context = {
         'form': form,
+        'bio': bio,
         'game_stats': game_stats,
+        'game_log_count': bio.gamestat_set.count(),
+        'career_games': bio.career_stat().games_played,
         'stat': AppearanceStat(bio, game_stats),
         }
     return render(request, "bios/detail_games.html",
-                              context)   
+                              context)
 
 
 

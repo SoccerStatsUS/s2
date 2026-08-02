@@ -3,6 +3,14 @@
 
 {% block content %}
 
+<h3><a href="{% url 'person_detail' bio.slug %}">{{ bio.name }}</a> game log</h3>
+
+{% if career_games and game_log_count < career_games %}
+<p class="coverage-note">{{ game_log_count }} games on record here, of the
+{{ career_games }} in the career totals. The rest exist in season stat lines
+but their box scores haven't been transcribed yet.</p>
+{% endif %}
+
 <div id="control-bar">
   <form method="GET" action=".">
     {% csrf_token %}

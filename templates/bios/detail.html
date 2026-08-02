@@ -68,7 +68,13 @@
 
 {% include "templatetags/stats/game_list.html" with stats=recent_game_stats %}
 
-<div class="all-link"><a href="{% url 'person_detail_games' bio.slug %}">all {{ career_stat.games_played }} games &rarr;</a></div>
+<div class="all-link"><a href="{% url 'person_detail_games' bio.slug %}">
+{% if game_log_count and career_stat.games_played and game_log_count < career_stat.games_played %}
+game log: {{ game_log_count }} of {{ career_stat.games_played }} games &rarr;
+{% else %}
+all {{ career_stat.games_played }} games &rarr;
+{% endif %}
+</a></div>
 
 </div>
 {% endif %}

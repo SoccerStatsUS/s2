@@ -350,6 +350,8 @@ table.calendar .count {
 
 .calendar-legend { font-size: 13px; color: var(--ink-soft); max-width: 460px; }
 
+.coverage-note { font-size: 13px; color: var(--ink-soft); }
+
 /* Result cells: soft tints, readable text. */
 td.w, table tbody tr:nth-child(even) td.w, table tbody tr:hover td.w { background-color: var(--win); }
 td.l, table tbody tr:nth-child(even) td.l, table tbody tr:hover td.l { background-color: var(--loss); }
