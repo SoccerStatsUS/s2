@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}stadiums{% endblock %}
+{% block metadescription %}Every stadium with American soccer on record, from Starlight Park to StubHub Center{% endblock %}
+
+{% block content %}
+
+<h2>Stadiums</h2>
+
+<p>{{ stadiums|length }} grounds on record; games counts every match in the
+database played there. A zero is genuine: the ground is in the record, but no
+game in the database is pinned to it yet.</p>
+
+<table>
+
+<thead>
+  <tr>
+    <th scope="col">stadium</th>
+    <th scope="col">city</th>
+    <th scope="col">games</th>
+    <th scope="col">attendance</th>
+  </tr>
+</thead>
+
+<tbody>
+{% for stadium in stadiums %}
+<tr>
+  <td><a href="{% url 'stadium_detail' stadium.slug %}">{{ stadium.name }}</a></td>
+  {% if stadium.city.slug %}
+  <td><a href="{% url 'city_detail' stadium.city.slug %}">{{ stadium.city }}</a></td>
+  {% else %}
+  <td><span title="no record found">&mdash;</span></td>
+  {% endif %}
+  <td>{{ stadium.game_count|intcomma }}</td>
+  {% if stadium.total_attendance == None %}<td class="greybg" title="no record found">&mdash;</td>{% else %}<td>{{ stadium.total_attendance|intcomma }}</td>{% endif %}
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
+
+{% endblock %}

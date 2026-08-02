@@ -35,7 +35,8 @@ rather than hidden &mdash; they exist in the data, but their pages aren't built 
   <li><a href="{% url 'drafts_index' %}">drafts</a> &mdash; every MLS draft since 1996</li>
   <li><a href="{% url 'country_index' %}">places</a> &mdash; the countries American soccer has been played in and against
     <ul>
-      <li class="unbuilt">stadiums, cities, and states indexes <span>(individual pages work)</span></li>
+      <li><a href="{% url 'stadium_index' %}">stadiums</a> &mdash; every ground with a game on record</li>
+      <li class="unbuilt">cities and states indexes <span>(individual pages work)</span></li>
     </ul>
   </li>
   <li><a href="{% url 'organizations_index' %}">organizations</a> &mdash; the six confederations and their member countries</li>

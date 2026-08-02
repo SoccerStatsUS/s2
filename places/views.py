@@ -61,7 +61,7 @@ def city_index(request):
 def stadium_index(request):
 
         context = {
-                'stadiums': Stadium.objects.annotate(game_count=Count('game')).annotate(total_attendance=Sum('game__attendance')).order_by('-game_count')
+                'stadiums': Stadium.objects.select_related('city').annotate(game_count=Count('game')).annotate(total_attendance=Sum('game__attendance')).order_by('-game_count', 'name')
                 }
 
         return render(request, "places/stadium_index.html",

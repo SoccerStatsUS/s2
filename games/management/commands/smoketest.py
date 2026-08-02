@@ -16,7 +16,6 @@ UNBUILT = {
     '/news/',
     '/places/states/',
     '/places/cities/',
-    '/places/stadiums/',
     '/positions/',
     '/stats/',
 }
