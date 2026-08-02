@@ -1,5 +1,5 @@
 from django.core.paginator import Paginator
-from django.db.models import Avg, Count, Sum
+from django.db.models import Avg, Count, F, Sum
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
@@ -127,6 +127,13 @@ def country_detail(request, slug):
         """
 
         country = get_object_or_404(Country, slug=slug)
+
+        # The United States alone is 23k games; rendering every row timed the
+        # worker out. Show the most recent and say how many there are.
+        all_games = country.games()
+        game_count = all_games.count()
+        games = all_games.order_by(F('date').desc(nulls_last=True)).select_related()[:100]
+
         stadiums = Stadium.objects.filter(city__country=country)
         births = Bio.objects.filter(birthplace__country=country).order_by('birthdate')
         competitions = Competition.objects.filter(scope='Country', area=country.name)
@@ -134,6 +141,8 @@ def country_detail(request, slug):
 
         context = {
                 'country': country,
+                'games': games,
+                'game_count': game_count,
                 'births': births,
                 'stadiums': stadiums,
                 'competitions': competitions,
@@ -167,7 +176,7 @@ def city_detail(request, slug):
         """
         """
 
-        city = get_object_or_404(City, slug=slug)
+        city = City.objects.by_slug(slug)
 
         context = {
                 'city': city,
@@ -185,7 +194,7 @@ def stadium_detail(request, slug):
         Stadium detail view.
         """
 
-        stadium = get_object_or_404(Stadium, slug=slug)
+        stadium = Stadium.objects.by_slug(slug)
 
         # Compute average attendance.
         games = stadium.game_set.exclude(attendance=None)
@@ -212,7 +221,7 @@ def stadium_games(request, slug):
         """
         """
 
-        stadium = get_object_or_404(Stadium, slug=slug)
+        stadium = Stadium.objects.by_slug(slug)
 
         # Compute average attendance.
         games = stadium.game_set.exclude(attendance=None)

@@ -3,6 +3,7 @@
 
 {% load datum_or_none %}
 {% load games %}
+{% load humanize %}
 
 {% block content %}
 
@@ -85,10 +86,13 @@
 </div>
 {% endif %}
 
-{% if country.games.exists %}
+{% if games %}
 <div tab="games">
 <h3>Games played in {{ country.name }}</h3>
-{% games_table country.games.all %}
+{% if game_count > 100 %}
+<p class="coverage-note">The 100 most recent, of {{ game_count|intcomma }} on record.</p>
+{% endif %}
+{% games_table games %}
 </div>
 {% endif %}
 

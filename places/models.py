@@ -1,5 +1,6 @@
 #from django.contrib.gis.db import models
 from django.db import models
+from django.http import Http404
 from django.db.models import Q
 from django.template.defaultfilters import slugify
 
@@ -171,6 +172,21 @@ class StatePopulation(models.Model):
 
 class CityManager(models.Manager):
 
+    def by_slug(self, slug):
+        """
+        Look up one city by slug, or raise Http404.
+
+        Slugs are not unique in the data; a plain get() raises
+        MultipleObjectsReturned and the view 500s. Serve the oldest match —
+        the duplicate itself is a data bug to fix upstream.
+        """
+        obj = self.get_queryset().filter(slug=slug).order_by('id').first()
+        if obj is None:
+            raise Http404("No city with slug %r" % slug)
+        return obj
+
+
+
     def duplicate_slugs(self):
         """
         Returns all teams with duplicate slugs.
@@ -209,6 +225,21 @@ class City(models.Model):
 
 
 class StadiumManager(models.Manager):
+
+    def by_slug(self, slug):
+        """
+        Look up one stadium by slug, or raise Http404.
+
+        Slugs are not unique in the data; a plain get() raises
+        MultipleObjectsReturned and the view 500s. Serve the oldest match —
+        the duplicate itself is a data bug to fix upstream.
+        """
+        obj = self.get_queryset().filter(slug=slug).order_by('id').first()
+        if obj is None:
+            raise Http404("No stadium with slug %r" % slug)
+        return obj
+
+
 
     def as_dict(self):
         """
