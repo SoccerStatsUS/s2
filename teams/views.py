@@ -3,7 +3,8 @@ import datetime
 import json
 
 
-from django.db.models import Q, Sum
+from django.db.models import Count, Q, Sum
+from django.db.models.functions import Substr, Upper
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
@@ -77,10 +78,19 @@ def team_index(request):
 
     standings = Standing.objects.filter(competition=None)
 
+    # One query for every letter's total, counting the same all-time standings
+    # rows the name-fragment page lists.
+    totals = dict(standings
+                  .annotate(initial=Upper(Substr('team__name', 1, 1)))
+                  .values('initial')
+                  .annotate(n=Count('id'))
+                  .values_list('initial', 'n'))
+
     for letter in letters:
-        #teams = Team.objects.filter(name__istartswith=letter)[:10]
-        team_standings = standings.filter(team__name__istartswith=letter).order_by('-games')[:10]
-        name_dict[letter] = team_standings
+        name_dict[letter] = {
+            'names': standings.filter(team__name__istartswith=letter).order_by('-games')[:10],
+            'count': totals.get(letter, 0),
+            }
         
     context = {
         'name_dict': name_dict,

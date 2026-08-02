@@ -1,5 +1,6 @@
 from collections import OrderedDict, Counter
-from django.db.models import F, Q, Sum
+from django.db.models import Count, F, Q, Sum
+from django.db.models.functions import Substr, Upper
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
@@ -68,9 +69,20 @@ def person_index(request):
         '-player__hall_of_fame',
         F('games_played').desc(nulls_last=True)).select_related()
 
+    # One query for every letter's total. Counts CareerStat rows, which is what
+    # the name-fragment page lists — not Bio rows, which would overstate it.
+    totals = dict(CareerStat.objects
+                  .annotate(initial=Upper(Substr('player__name', 1, 1)))
+                  .values('initial')
+                  .annotate(n=Count('id'))
+                  .values_list('initial', 'n'))
+
     name_dict = OrderedDict()
     for letter in letters:
-        name_dict[letter] = stats.filter(player__name__istartswith=letter)[:10]
+        name_dict[letter] = {
+            'names': stats.filter(player__name__istartswith=letter)[:10],
+            'count': totals.get(letter, 0),
+            }
 
 
     #most_games = CareerStat.objects.exclude(games_played=None).order_by('-games_played')[:25]

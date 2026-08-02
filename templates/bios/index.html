@@ -1,26 +1,36 @@
 {% extends "base.html" %}
+{% load humanize %}
 {% block title %}player directory{% endblock %}
 
 {% block content %}
 
 <h1>Player directory</h1>
 
+<p class="dir-note">Hall of Famers (&#9733;) first, then the most games played. Pick a
+letter for the full list.</p>
+
+<nav class="dir-az" aria-label="Jump to letter">
+  {% for letter, group in name_dict.items %}
+  {% if group.names %}<a href="#letter-{{ letter }}">{{ letter }}</a>{% else %}<span title="no record found">{{ letter }}</span>{% endif %}
+  {% endfor %}
+</nav>
+
 <div class="directory">
-  {% for letter, stats in name_dict.items %}
-  {% if stats.exists %}
-  <section class="dir-group">
+  {% for letter, group in name_dict.items %}
+  {% if group.names %}
+  <section class="dir-group" id="letter-{{ letter }}">
     <h2 class="dir-letter"><a href="{% url 'bio_name_fragment' letter %}">{{ letter }}</a></h2>
     <ul class="dir-names">
-      {% for stat in stats %}
+      {% for stat in group.names %}
       <li>
         {% if stat.player.hall_of_fame %}
-        <strong><a class="item" href="{% url 'person_detail' stat.player.slug %}">{{ stat.player }}</a></strong>
+        <strong><a class="item" href="{% url 'person_detail' stat.player.slug %}">{{ stat.player }}</a></strong><span class="hof" title="US Soccer Hall of Fame">&#9733;</span>
         {% else %}
         <a class="item" href="{% url 'person_detail' stat.player.slug %}">{{ stat.player }}</a>
         {% endif %}
       </li>
       {% endfor %}
-      <li class="dir-more"><a href="{% url 'bio_name_fragment' letter %}">more &rarr;</a></li>
+      <li class="dir-more"><a href="{% url 'bio_name_fragment' letter %}">all {{ group.count|intcomma }} &rarr;</a></li>
     </ul>
   </section>
   {% endif %}
@@ -28,7 +38,8 @@
 </div>
 
 <p class="dir-legend">
-  <strong>bold</strong> indicates the player is a member of the <a href="">US Soccer Hall of Fame.</a>
+  Bold and &#9733; mark members of the
+  <a href="{% url 'award_detail' 19 %}">US Soccer Hall of Fame</a>.
 </p>
 
 {% endblock %}

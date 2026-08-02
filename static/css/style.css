@@ -644,7 +644,34 @@ td.friendly { background-color: transparent; }
 
 .dir-more { color: var(--ink-soft); font-size: .9em; }
 
-.dir-legend { margin-top: 16px; font-size: .9em; color: var(--ink-soft); }
+.dir-note, .dir-legend { font-size: .9em; color: var(--ink-soft); }
+.dir-legend { margin-top: 16px; }
+
+/* Hall of Fame glyph: a second carrier alongside the bold, per §2. */
+.hof { margin-left: 4px; color: var(--ink-soft); font-size: .8em; }
+
+.dir-az {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 12px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--hairline);
+}
+
+.dir-az a, .dir-az span {
+    min-width: 26px;
+    padding: 6px 4px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.dir-az a, .dir-az a:visited { color: var(--ink); }
+.dir-az a:hover { color: var(--accent); background: var(--fill-hover); text-decoration: none; }
+.dir-az span { color: #9aa3ab; }
+
+/* Anchor targets clear the letter's own top padding when jumped to. */
+.dir-group { scroll-margin-top: 12px; }
 
 
 /* ---- Game detail ---- */

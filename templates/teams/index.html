@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load humanize %}
 
 {% block title %}team directory{% endblock %}
 
@@ -6,16 +7,24 @@
 
 <h1>Team directory</h1>
 
+<p class="dir-note">Most games played first. Pick a letter for the full list.</p>
+
+<nav class="dir-az" aria-label="Jump to letter">
+  {% for letter, group in name_dict.items %}
+  {% if group.names %}<a href="#letter-{{ letter }}">{{ letter }}</a>{% else %}<span title="no record found">{{ letter }}</span>{% endif %}
+  {% endfor %}
+</nav>
+
 <div class="directory">
-  {% for letter, standings in name_dict.items %}
-  {% if standings.exists %}
-  <section class="dir-group">
+  {% for letter, group in name_dict.items %}
+  {% if group.names %}
+  <section class="dir-group" id="letter-{{ letter }}">
     <h2 class="dir-letter"><a href="{% url 'team_name_fragment' letter %}">{{ letter }}</a></h2>
     <ul class="dir-names">
-      {% for standing in standings %}
+      {% for standing in group.names %}
       <li><a class="item" href="{% url 'team_detail' standing.team.slug %}">{{ standing.team }}</a></li>
       {% endfor %}
-      <li class="dir-more"><a href="{% url 'team_name_fragment' letter %}">more &rarr;</a></li>
+      <li class="dir-more"><a href="{% url 'team_name_fragment' letter %}">all {{ group.count|intcomma }} &rarr;</a></li>
     </ul>
   </section>
   {% endif %}
