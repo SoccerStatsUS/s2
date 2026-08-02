@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load stats %}
+{% load humanize %}
+
+{% block title %}stats{% endblock %}
+{% block metadescription %}Every player-season stat line on record in American soccer{% endblock %}
+
+{% block content %}
+
+<h1>Stats</h1>
+
+<p class="dir-note">{{ page.paginator.count|intcomma }} player-season stat lines
+on record, newest first &mdash; one row per player, per team, per season.</p>
+
+{% include "pagination.html" with noun="stat lines" %}
+
+{% stats_table stats %}
+
+{% include "pagination.html" with noun="stat lines" %}
+
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load standings %}
+
+{% block title %}standings that don't add up{% endblock %}
+
+{% block content %}
+
+<h1>Standings that don't add up</h1>
+
+<p class="dir-note">Season standings where games played doesn't equal wins plus
+losses, ties, and shootout results. Each one is a transcription error to chase
+down in the source.</p>
+
+{% if standings %}
+{% standings_table standings %}
+{% else %}
+<p class="coverage-note">Every season standing on record adds up.</p>
+{% endif %}
+
+{% endblock %}

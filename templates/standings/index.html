@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load standings %}
+{% load humanize %}
+
+{% block title %}standings{% endblock %}
+{% block metadescription %}Every season standing on record in American soccer{% endblock %}
+
+{% block content %}
+
+<h1>Standings</h1>
+
+<p class="dir-note">{{ page.paginator.count|intcomma }} season standings on
+record, newest first. For each club's combined record across every competition,
+see <a href="{% url 'team_standings' %}">all-time club records</a>.</p>
+
+{% include "pagination.html" with noun="standings" %}
+
+{% standings_table standings %}
+
+{% include "pagination.html" with noun="standings" %}
+
+{% endblock %}
