@@ -6,7 +6,7 @@ urlpatterns = [
                        path('', views.standings_index,
                            name='standings_index'),
 
-                       path('bad/', views.bad_standings,
-                           name='bad_standings'),
+                       path('qa/', views.standings_qa,
+                           name='standings_qa'),
 
 ]

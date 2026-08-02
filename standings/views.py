@@ -27,7 +27,7 @@ def standings_index(request):
                               context)
 
 
-def bad_standings(request):
+def standings_qa(request):
     """
     Season standings whose results don't sum to their games played.
 
@@ -49,5 +49,5 @@ def bad_standings(request):
         'standings': standings,
         }
 
-    return render(request, "standings/bad.html",
+    return render(request, "standings/qa.html",
                               context)
