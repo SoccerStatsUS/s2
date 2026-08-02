@@ -23,11 +23,7 @@ letter for the full list.</p>
     <ul class="dir-names">
       {% for stat in group.names %}
       <li>
-        {% if stat.player.hall_of_fame %}
-        <strong><a class="item" href="{% url 'person_detail' stat.player.slug %}">{{ stat.player }}</a></strong><span class="hof" title="US Soccer Hall of Fame">&#9733;</span>
-        {% else %}
-        <a class="item" href="{% url 'person_detail' stat.player.slug %}">{{ stat.player }}</a>
-        {% endif %}
+        <a class="item" href="{% url 'person_detail' stat.player.slug %}">{{ stat.player }}</a>{% if stat.player.hall_of_fame %}<span class="hof" title="US Soccer Hall of Fame">&#9733;</span>{% endif %}
       </li>
       {% endfor %}
       <li class="dir-more"><a href="{% url 'bio_name_fragment' letter %}">all {{ group.count|intcomma }} &rarr;</a></li>
@@ -38,7 +34,7 @@ letter for the full list.</p>
 </div>
 
 <p class="dir-legend">
-  Bold and &#9733; mark members of the
+  &#9733; marks members of the
   <a href="{% url 'award_detail' 19 %}">US Soccer Hall of Fame</a>.
 </p>
 
