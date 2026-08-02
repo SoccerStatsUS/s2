@@ -1,5 +1,5 @@
 from collections import OrderedDict, Counter
-from django.db.models import Q, Sum
+from django.db.models import F, Q, Sum
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
@@ -64,7 +64,9 @@ def one_word(request):
 def person_index(request):
 
     letters = 'abcdefghijklmnopqrstuvwxyz'.upper()
-    stats = CareerStat.objects.order_by('-player__hall_of_fame', '-games_played').select_related()
+    stats = CareerStat.objects.order_by(
+        '-player__hall_of_fame',
+        F('games_played').desc(nulls_last=True)).select_related()
 
     name_dict = OrderedDict()
     for letter in letters:

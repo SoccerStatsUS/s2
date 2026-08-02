@@ -79,7 +79,7 @@ def team_index(request):
 
     for letter in letters:
         #teams = Team.objects.filter(name__istartswith=letter)[:10]
-        team_standings = standings.filter(team__name__istartswith=letter)[:10]
+        team_standings = standings.filter(team__name__istartswith=letter).order_by('-games')[:10]
         name_dict[letter] = team_standings
         
     context = {
