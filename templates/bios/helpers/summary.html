@@ -10,11 +10,34 @@
 
 
 <div id="bio_data">
-  
-  <div>{{ bio.name }}</div>
-  {% if bio.position %}
-  <div>position: {{ bio.position }}</div>
+
+  <h2>{{ bio.name }}</h2>
+
+  <div id="bio_facts">
+
+  {% if career_stat.games_played %}
+  <div><strong>{{ career_stat.games_played }}</strong> game{{ career_stat.games_played|pluralize }}, <strong>{{ career_stat.goals|default:0 }}</strong> goal{{ career_stat.goals|pluralize }}</div>
   {% endif %}
+
+  {% if bio.height_display or bio.weight_display %}
+  <div>{{ bio.height_display|default:"" }}{% if bio.height_display and bio.weight_display %}, {% endif %}{{ bio.weight_display|default:"" }}</div>
+  {% endif %}
+
+  {% if bio.birthdate %}
+  <div>born <a href="{% url 'date_detail' bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a>{% if not bio.deathdate %} (age {{ bio.age_years|floatformat:1 }}){% endif %}{% if bio.birthplace %}, <a href="{% url 'city_detail' bio.birthplace.slug %}">{{ bio.birthplace }}</a>{% endif %}</div>
+  {% elif bio.birthplace %}
+  <div>born in <a href="{% url 'city_detail' bio.birthplace.slug %}">{{ bio.birthplace }}</a></div>
+  {% endif %}
+
+  {% if bio.deathdate %}
+  <div>died <a href="{% url 'date_detail' bio.deathdate.year bio.deathdate.month bio.deathdate.day %}">{{ bio.deathdate }}</a>{% if bio.deathplace %}, <a href="{% url 'city_detail' bio.deathplace.slug %}">{{ bio.deathplace }}</a>{% endif %}</div>
+  {% endif %}
+
+  {% if bio.first_game %}
+  <div>first game <a href="{% url 'game_detail' bio.first_game.id %}">{{ bio.first_game.date }}</a>{% if bio.last_game and bio.last_game != bio.first_game %} &middot; last game <a href="{% url 'game_detail' bio.last_game.id %}">{{ bio.last_game.date }}</a>{% endif %}</div>
+  {% endif %}
+
+  </div>
 
 </div>
 

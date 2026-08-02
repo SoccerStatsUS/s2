@@ -163,6 +163,20 @@ class Bio(models.Model):
 
 
 
+    def height_display(self):
+        # Heights are stored as inches or centimeters depending on the source.
+        if not self.height:
+            return None
+        inches = self.height if self.height <= 90 else round(self.height / 2.54)
+        return "%d'%d\"" % divmod(inches, 12)
+
+    def weight_display(self):
+        # Weights are stored as pounds or kilograms depending on the source.
+        if not self.weight:
+            return None
+        pounds = self.weight if self.weight > 100 else round(self.weight * 2.20462)
+        return '%s lbs' % pounds
+
     def first_game(self):
 
         from lineups.models import Appearance

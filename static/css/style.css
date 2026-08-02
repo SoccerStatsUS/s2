@@ -349,16 +349,30 @@ td.friendly { background-color: transparent; }
     font-weight: 300;
 }
 
-#bio_image {
-    float: left;
-    height: 150px;
-    min-width: 120px;
-    margin-right: 16px;
-    background-color: var(--fill);
-    border-radius: 4px;
+#bio_block {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
 }
 
-#bio_data { display: inline-block; }
+#bio_image {
+    min-height: 150px;
+    min-width: 120px;
+    background-color: var(--fill);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+#bio_data h2 { margin: 2px 0 6px; }
+
+#bio_facts {
+    font-size: 14px;
+    color: var(--ink-soft);
+}
+
+#bio_facts div { margin: 2px 0; }
+
+#bio_facts strong { color: var(--ink); }
 
 #team_info h2 { margin: 10px 0 2px; }
 
