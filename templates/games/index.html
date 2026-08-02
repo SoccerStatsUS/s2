@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load games %}
+{% load humanize %}
+
+{% block title %}every game{% endblock %}
+{% block metadescription %}Every American soccer game on record, oldest first{% endblock %}
+
+{% block content %}
+
+<h1>Games</h1>
+
+<p class="dir-note">Every game on record, oldest first. Games whose date is
+unknown sort last.</p>
+
+{% include "pagination.html" with noun="games" %}
+
+{% if games %}
+{% games_table games %}
+{% endif %}
+
+{% include "pagination.html" with noun="games" %}
+
+{% endblock %}

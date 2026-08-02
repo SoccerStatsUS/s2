@@ -1,6 +1,8 @@
 import datetime
 
+from django.core.paginator import Paginator
 from django.db import models
+from django.db.models import F
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
@@ -14,8 +16,7 @@ from standings.models import Standing
 from stats.models import Stat, CareerStat
 from teams.models import Team
 
-from collections import defaultdict, Counter
-import json
+from collections import defaultdict
 
 
 def everything(request):
@@ -156,28 +157,19 @@ def bad_games(request):
 
     
 
+@cache_page(60 * 60 * 12)
 def games_index(request):
-    # Add a paginator.
-    # This is probably unnecesary.
-    # Consider turning into a games analysis page.
-    # Home/Away advantage, graphs, etc.
-    
-    games = Game.objects.order_by("-date").exclude(date=None)
-    game_count = games.count()
-
-    by_year = Counter([e.year for e in games.values_list('date', flat=True)])
-
-    gd = {}
-    #gd = defaultdict(int)
-    #ceiling = 8
-    #for game in games.exclude(home_team=None).exclude(team1_score=None).exclude(team2_score=None):
-    #    gd[(min(game.home_score(), ceiling), min(game.away_score(), ceiling))] += 1
+    """
+    Every game on record, oldest first. Undated games sort last rather than
+    leading the list, so page 1 opens on 1866 instead of on the unknowns.
+    """
+    games = Game.objects.order_by(
+        F('date').asc(nulls_last=True), 'id').select_related().prefetch_related('sources')
+    page = Paginator(games, 100).get_page(request.GET.get('page'))
 
     context = {
-        'games': games,
-        'game_count': game_count,
-        'games_by_year': json.dumps(sorted(by_year.items())),
-        'goal_distribution': json.dumps(gd),
+        'games': page.object_list,
+        'page': page,
         }
 
     return render(request, "games/index.html",
