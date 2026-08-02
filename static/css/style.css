@@ -608,7 +608,43 @@ td.friendly { background-color: transparent; }
     color: var(--ink-soft);
 }
 
-.letter_link { font-size: 1.5em; margin-right: 6px; }
+/* ---- A–Z directories (players, teams) ---- */
+
+.dir-group {
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    gap: 0 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--hairline);
+}
+
+.dir-letter {
+    margin: 0;
+    font-size: 1.4em;
+    line-height: 1.3;
+    color: var(--ink-soft);
+}
+
+.dir-letter a, .dir-letter a:visited { color: inherit; }
+.dir-letter a:hover { color: var(--accent); text-decoration: none; }
+
+/* Auto-fill so the column count follows the viewport with no breakpoint.
+   Grid (not CSS columns) so names read left-to-right in rank order. */
+.dir-names {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 2px 16px;
+    margin: 0;
+    padding: 0;
+}
+
+/* DESIGN.md §2: a list this dense is not a place for the accent. */
+.dir-names a.item, .dir-names a.item:visited { color: var(--ink); }
+.dir-names a.item:hover { color: var(--accent); }
+
+.dir-more { color: var(--ink-soft); font-size: .9em; }
+
+.dir-legend { margin-top: 16px; font-size: .9em; color: var(--ink-soft); }
 
 
 /* ---- Game detail ---- */

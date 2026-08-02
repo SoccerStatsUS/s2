@@ -5,26 +5,30 @@
 
 <h1>Player directory</h1>
 
-<ul>
+<div class="directory">
   {% for letter, stats in name_dict.items %}
   {% if stats.exists %}
-  <li>
-    <a class="letter_link" href="{% url 'bio_name_fragment' letter %}">{{ letter }}: </a>
-    {% for stat in stats %}
-    {% if stat.player.hall_of_fame %}<strong>{% endif %}
-    <a class="item" href="{% url 'person_detail' stat.player.slug %}">{{ stat.player }}</a>{% if stat.player.hall_of_fame %}
-    </strong>{% endif %}
-    {% if forloop.last %}<a href="{% url 'bio_name_fragment' letter %}">...</a>{% else %}|{% endif %}
-    
-    {% endfor %}
-  </li>
+  <section class="dir-group">
+    <h2 class="dir-letter"><a href="{% url 'bio_name_fragment' letter %}">{{ letter }}</a></h2>
+    <ul class="dir-names">
+      {% for stat in stats %}
+      <li>
+        {% if stat.player.hall_of_fame %}
+        <strong><a class="item" href="{% url 'person_detail' stat.player.slug %}">{{ stat.player }}</a></strong>
+        {% else %}
+        <a class="item" href="{% url 'person_detail' stat.player.slug %}">{{ stat.player }}</a>
+        {% endif %}
+      </li>
+      {% endfor %}
+      <li class="dir-more"><a href="{% url 'bio_name_fragment' letter %}">more &rarr;</a></li>
+    </ul>
+  </section>
   {% endif %}
   {% endfor %}
-</ul>
-
-<div>
-  <strong>bold</strong> indicates the player is a member of the <a href="">US Soccer Hall of Fame.</a>
 </div>
 
+<p class="dir-legend">
+  <strong>bold</strong> indicates the player is a member of the <a href="">US Soccer Hall of Fame.</a>
+</p>
 
 {% endblock %}

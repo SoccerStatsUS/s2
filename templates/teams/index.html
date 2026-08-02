@@ -6,33 +6,20 @@
 
 <h1>Team directory</h1>
 
-<ul>
+<div class="directory">
   {% for letter, standings in name_dict.items %}
   {% if standings.exists %}
-  <li>
-    <a class="letter_link" href="{% url 'team_name_fragment' letter %}">{{ letter }}</a>
-    {% for standing in standings %}
-    <a class="item" href="{% url 'team_detail' standing.team.slug %}">{{ standing.team }}</a>{% if forloop.last %}...{% else %} |{% endif %}
-    {% endfor %}
-  </li>
-  {% endif %}
-  {% endfor  %}
-</ul>
-
-{% comment %}
-<ul>
-  {% for letter, teams in name_dict.items %}
-  {% if teams.exists %}
-  <li class="alphabet">
-    <a class="letter_link" href="{% url 'team_name_fragment' letter %}">{{ letter }}</a>
-    {% for team in teams %}
-    <a class="item" href="{% url 'team_detail' team.slug %}">{{ team }}</a>{% if forloop.last %}...{% else %} |{% endif %}
-    {% endfor %}
-  </li>
+  <section class="dir-group">
+    <h2 class="dir-letter"><a href="{% url 'team_name_fragment' letter %}">{{ letter }}</a></h2>
+    <ul class="dir-names">
+      {% for standing in standings %}
+      <li><a class="item" href="{% url 'team_detail' standing.team.slug %}">{{ standing.team }}</a></li>
+      {% endfor %}
+      <li class="dir-more"><a href="{% url 'team_name_fragment' letter %}">more &rarr;</a></li>
+    </ul>
+  </section>
   {% endif %}
   {% endfor %}
-</ul>
-{% endcomment %}
-
+</div>
 
 {% endblock %}
