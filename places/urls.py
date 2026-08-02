@@ -3,7 +3,10 @@ from django.urls import path, re_path
 
 urlpatterns = [ 
 
-                       path('', views.country_index,
+                       path('', views.places_index,
+                           name='places_index'),
+
+                       path('countries/', views.country_index,
                            name='country_index'),
 
                        path('states/', views.state_index,

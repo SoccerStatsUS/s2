@@ -13,6 +13,21 @@ from standings.models import StadiumStanding
 from teams.models import Team
 
 
+@cache_page(60 * 60 * 12)
+def places_index(request):
+        """
+        Landing page for the four kinds of place.
+        """
+        context = {
+                'country_count': Country.objects.count(),
+                'state_count': State.objects.count(),
+                'city_count': City.objects.count(),
+                'stadium_count': Stadium.objects.count(),
+                }
+        return render(request, "places/index.html",
+                                  context)
+
+
 def country_index(request):
         """
         """

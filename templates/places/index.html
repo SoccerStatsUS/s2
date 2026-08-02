@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}places{% endblock %}
+{% block metadescription %}Countries, states, cities, and grounds where American soccer has been played{% endblock %}
+
+{% block content %}
+
+<h1>Places</h1>
+
+<p>Where the games were played, and where the players came from.</p>
+
+<div class="league-grid">
+
+  <div class="league">
+    <h4><a href="{% url 'country_index' %}">Countries</a></h4>
+    <p>{{ country_count|intcomma }} countries American soccer has been played in
+    and against.</p>
+  </div>
+
+  <div class="league">
+    <h4><a href="{% url 'state_index' %}">States</a></h4>
+    <p>{{ state_count|intcomma }} states and provinces, busiest first.</p>
+  </div>
+
+  <div class="league">
+    <h4><a href="{% url 'city_index' %}">Cities</a></h4>
+    <p>{{ city_count|intcomma }} cities, from Waukesha in 1866 to the current
+    season.</p>
+  </div>
+
+  <div class="league">
+    <h4><a href="{% url 'stadium_index' %}">Grounds</a></h4>
+    <p>{{ stadium_count|intcomma }} stadiums, parks, and fields with a game on
+    record.</p>
+  </div>
+
+</div>
+
+{% endblock %}
