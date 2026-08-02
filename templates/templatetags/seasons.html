@@ -1,15 +1,17 @@
 {% with has_mvp=competition.has_mvp %}
 {% if seasons %}
 <table>
+  <thead>
   <tr>
-    <th>season</th>
-    <th>champion</th>
-    {% if has_mvp %}<th>MVP</th>{% endif %}
-    <th>golden boot</th>
-    <th>games</th>
-    <th title="goals per game">gpg</th>
-    {% if has_attendance %}<th title="average attendance">att.</th>{% endif %}
+    <th scope="col">season</th>
+    <th scope="col">champion</th>
+    {% if has_mvp %}<th scope="col">MVP</th>{% endif %}
+    <th scope="col">golden boot</th>
+    <th scope="col">games</th>
+    <th scope="col" title="goals per game">gpg</th>
+    {% if has_attendance %}<th scope="col" title="average attendance">att.</th>{% endif %}
   </tr>
+  </thead>
 
 
   {% for season in seasons %}

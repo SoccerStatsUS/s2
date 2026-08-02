@@ -24,12 +24,12 @@
 
   <thead>
     <tr>
-      <th></th>
-      <th>level</th>
-      <th>type</th>
-      <th>seasons</th>
-      <th>began</th>
-      <th>last</th>
+      <th scope="col">name</th>
+      <th scope="col">level</th>
+      <th scope="col">type</th>
+      <th scope="col">seasons</th>
+      <th scope="col">began</th>
+      <th scope="col">last</th>
     </tr>
   </thead>
 
@@ -63,6 +63,14 @@
 {% if stadiums %}
 <div tab="stadiums">
 <table>
+<thead>
+  <tr>
+    <th scope="col">name</th>
+    <th scope="col">opened</th>
+    <th scope="col">capacity</th>
+    <th scope="col">cost</th>
+  </tr>
+</thead>
 {% for stadium in stadiums %}
 <tr>
   <td><a href="{% url 'stadium_detail' stadium.slug %}">{{ stadium }}</a></td>
@@ -101,11 +109,11 @@
 
   <thead>
     <tr>
-      <th>name</th>
-      <th>birthplace</th>
-      <th>birthdate</th>
-      <th>gp</th>
-      <th>g</th>
+      <th scope="col">name</th>
+      <th scope="col">birthplace</th>
+      <th scope="col">birthdate</th>
+      <th scope="col">gp</th>
+      <th scope="col">g</th>
     </tr>
   </thead>
 

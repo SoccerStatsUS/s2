@@ -22,14 +22,16 @@
 {% if city.stadium_set.exists %}
 <div tab="stadiums">
 <table>
+<thead>
 <tr>
-  <th>name</th>
-  <th>opened</th>
-  <th>capacity</th>
-  <th>cost</th>
-  <th>games</th>
-  <th>attendance</th>
+  <th scope="col">name</th>
+  <th scope="col">opened</th>
+  <th scope="col">capacity</th>
+  <th scope="col">cost</th>
+  <th scope="col">games</th>
+  <th scope="col">attendance</th>
 </tr>
+</thead>
 {% for stadium in stadiums %}
 <tr>
   <td><a href="{% url 'stadium_detail' stadium.slug %}">{{ stadium }}</a></td>
@@ -60,6 +62,7 @@
 {% if teams %}
 <div tab="teams">
   <table>
+    <thead><tr><th scope="col">team</th></tr></thead>
     {% for team in teams %}
     <tr>
       <td><a href="{% url 'team_detail' team.slug %}">{{ team }}</a></td>

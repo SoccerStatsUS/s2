@@ -13,6 +13,12 @@
 
   {% if has_competition %}
 
+  <thead>
+    <tr>
+      <th scope="col">season</th>
+      <th scope="col">recipient</th>
+    </tr>
+  </thead>
 
   {% for item in awarditems %}
   <tr>
@@ -29,13 +35,15 @@
   
   {% else %}
 
+  <thead>
   <tr>
-    <th>Recipient</th>
-    <th>gp</th>
-    <th>goals</th>
-    <th>age</th>
-    <th>birthplace</th>
+    <th scope="col">recipient</th>
+    <th scope="col" title="games played">gp</th>
+    <th scope="col">goals</th>
+    <th scope="col">age</th>
+    <th scope="col">birthplace</th>
   </tr>
+  </thead>
 
 
   {% for recipient in recipients %}

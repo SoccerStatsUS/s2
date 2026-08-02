@@ -7,27 +7,27 @@
 
 <thead>
   <tr>
-    {% if 'player' not in exclude %}<th></th>{% endif %}
-    {% if 'team' not in exclude %}<th></th>{% endif %}
-    {% if 'competition' not in exclude %}<th></th>{% endif %}
-    {% if 'season' not in exclude %}<th></th>{% endif %}
-    <th title="games played" >gp</th>
-    {% if has_games_started %}<th title="games started">gs</th>{% endif %}
-    {% if has_minutes %}<th title="minutes">min</th>{% endif %}
-    <th title="goals">g</th>
-    {% if has_assists %}<th title="assists">a</th>{% endif %}
-    {% if has_shots %}<th title="shots">sh</th>{% endif %}
+    {% if 'player' not in exclude %}<th scope="col">player</th>{% endif %}
+    {% if 'team' not in exclude %}<th scope="col">team</th>{% endif %}
+    {% if 'competition' not in exclude %}<th scope="col">competition</th>{% endif %}
+    {% if 'season' not in exclude %}<th scope="col">season</th>{% endif %}
+    <th scope="col" title="games played" >gp</th>
+    {% if has_games_started %}<th scope="col" title="games started">gs</th>{% endif %}
+    {% if has_minutes %}<th scope="col" title="minutes">min</th>{% endif %}
+    <th scope="col" title="goals">g</th>
+    {% if has_assists %}<th scope="col" title="assists">a</th>{% endif %}
+    {% if has_shots %}<th scope="col" title="shots">sh</th>{% endif %}
 
     {% comment %}
-    <th>w</th>
-    <th>t</th>
-    <th>l</th>
+    <th scope="col">w</th>
+    <th scope="col">t</th>
+    <th scope="col">l</th>
 
-    <th>gf</th>
-    <th>ga</th>
-    <th>+-</th>
-    <th>+-/90</th>
-    <th>ga/90</th>
+    <th scope="col">gf</th>
+    <th scope="col">ga</th>
+    <th scope="col">+-</th>
+    <th scope="col">+-/90</th>
+    <th scope="col">ga/90</th>
     {% endcomment %}
 
   </tr>

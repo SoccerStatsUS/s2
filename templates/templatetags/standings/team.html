@@ -9,13 +9,15 @@
 <div tab="competition">
 <table>
 
+<thead>
 <tr>
-  <th></th>
-  <th>W</th>
-  <th>T</th>
-  <th>L</th>
-  <th>%</th>
+  <th scope="col">competition</th>
+  <th scope="col" title="wins">W</th>
+  <th scope="col" title="ties">T</th>
+  <th scope="col" title="losses">L</th>
+  <th scope="col" title="win percentage, counting a tie as half a win">%</th>
 </tr>
+</thead>
 
 
 {% for standing in competition_standings %}
@@ -37,13 +39,15 @@
 <div tab="league">
 <table>
 
+<thead>
 <tr>
-  <th></th>
-  <th>W</th>
-  <th>T</th>
-  <th>L</th>
-  <th>%</th>
+  <th scope="col">season</th>
+  <th scope="col" title="wins">W</th>
+  <th scope="col" title="ties">T</th>
+  <th scope="col" title="losses">L</th>
+  <th scope="col" title="win percentage, counting a tie as half a win">%</th>
 </tr>
+</thead>
 
 
 {% for standing in league_standings %}

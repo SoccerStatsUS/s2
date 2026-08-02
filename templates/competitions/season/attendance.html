@@ -28,12 +28,14 @@ padding-top: 5%;
 
 <!--summary-->
 
+<thead>
 <tr>
-  <th>games</th>
-  <th>known</th>
-  <th>total</th>
-  <th>average</th>
+  <th scope="col">games</th>
+  <th scope="col" title="games with recorded attendance">known</th>
+  <th scope="col">total</th>
+  <th scope="col">average</th>
 </tr>
+</thead>
 
 <tr>
   <td>{{ season.max_games }}</td>
@@ -48,13 +50,14 @@ padding-top: 5%;
 
 <table>
 
+<thead>
 <tr>
-  <th>team</th>
-  <th>average</th>
-  <th>games</th>
-  <th>total</th>
-
+  <th scope="col">team</th>
+  <th scope="col">average</th>
+  <th scope="col">games</th>
+  <th scope="col">total</th>
 </tr>
+</thead>
 
 {% for team in team_data %}
 <tr>

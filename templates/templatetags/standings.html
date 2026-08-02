@@ -19,24 +19,24 @@
 
 <thead>
 <tr>
-  {% if 'team' not in exclude %}<th></th>{% endif %}
-  {% if 'competition' not in exclude %}<th></th>{% endif %}
-  {% if 'season' not in exclude %}<th></th>{% endif %}
+  {% if 'team' not in exclude %}<th scope="col">team</th>{% endif %}
+  {% if 'competition' not in exclude %}<th scope="col">competition</th>{% endif %}
+  {% if 'season' not in exclude %}<th scope="col">season</th>{% endif %}
 
-  <th>GP</th>
-  <th>W</th>
-  {% if s0.shootout_wins != None %}<th>SOW</th>{% endif %}
-  {% if has_ties %}<th>T</th>{% endif %}
-  {% if s0.shootout_losses != None %}<th>SOL</th>{% endif %}
-  <th>L</th>
+  <th scope="col" title="games played">GP</th>
+  <th scope="col" title="wins">W</th>
+  {% if s0.shootout_wins != None %}<th scope="col" title="shootout wins">SOW</th>{% endif %}
+  {% if has_ties %}<th scope="col" title="ties">T</th>{% endif %}
+  {% if s0.shootout_losses != None %}<th scope="col" title="shootout losses">SOL</th>{% endif %}
+  <th scope="col" title="losses">L</th>
 
-  {% if has_points %}{% if 'pts' not in exclude %}<th>pts</th>{% endif %}{% endif %}
+  {% if has_points %}{% if 'pts' not in exclude %}<th scope="col" title="points">pts</th>{% endif %}{% endif %}
 
-  <th>gf</th>
-  <th>ga</th>
-  
-  {% if has_points %}{% if 'ppg' not in exclude %}<th>ppg</th>{% endif %}{% endif %}
-  <th>gf/ga</th>
+  <th scope="col" title="goals for">gf</th>
+  <th scope="col" title="goals against">ga</th>
+
+  {% if has_points %}{% if 'ppg' not in exclude %}<th scope="col" title="points per game">ppg</th>{% endif %}{% endif %}
+  <th scope="col" title="goals for per goal against">gf/ga</th>
 
 </tr>
 </thead>

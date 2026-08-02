@@ -161,11 +161,18 @@ d3.select(self.frameElement).style("height", "2910px");
 <div tab="news">
 
 <table>
+<thead>
+  <tr>
+    <th scope="col">time</th>
+    <th scope="col">headline</th>
+    <th scope="col">source</th>
+  </tr>
+</thead>
 {% for item in news %}
 <tr>
   <td>{{ item.time }}</td>
   <td><a title="{{ item.title }}" href="{{ item.url }}">{{ item.title|truncatechars:80 }}</a></td>
-  
+
   <td><a href="{% url 'source_detail' item.source.id %}">{{ item.source }}</a></td>
 </tr>
 
@@ -185,9 +192,9 @@ d3.select(self.frameElement).style("height", "2910px");
 
   <thead>
     <tr>
-      <th>name</th>
-      <th>bdate</th>
-      <th>bplace</th>
+      <th scope="col">name</th>
+      <th scope="col">born</th>
+      <th scope="col">birthplace</th>
     </tr>
   </thead>
 
@@ -211,6 +218,12 @@ d3.select(self.frameElement).style("height", "2910px");
 {% if deaths.exists %}
 <div tab="deathss">
 <table>
+<thead>
+  <tr>
+    <th scope="col">name</th>
+    <th scope="col">born</th>
+  </tr>
+</thead>
 {% for bio in deaths %}
 <tr>
   <td><a href="{% url 'person_detail' bio.slug %}">{{ bio.name }}</a></td>
@@ -226,6 +239,15 @@ d3.select(self.frameElement).style("height", "2910px");
 <div tab="transactions">
 
 <table>
+<thead>
+  <tr>
+    <th scope="col">name</th>
+    <th scope="col">team</th>
+    <th scope="col">position</th>
+    <th scope="col">start</th>
+    <th scope="col">end</th>
+  </tr>
+</thead>
 {% for position in hires %}
 <tr>
   <td><a href="{% url 'person_detail' position.person.slug %}">{{ position.person.name }}</a></td>
@@ -240,6 +262,15 @@ d3.select(self.frameElement).style("height", "2910px");
 
 
 <table>
+<thead>
+  <tr>
+    <th scope="col">name</th>
+    <th scope="col">team</th>
+    <th scope="col">position</th>
+    <th scope="col">start</th>
+    <th scope="col">end</th>
+  </tr>
+</thead>
 {% for position in fires %}
 <tr>
   <td><a href="{% url 'person_detail' position.person.slug %}">{{ position.person.name }}</a></td>

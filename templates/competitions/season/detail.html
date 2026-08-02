@@ -62,14 +62,14 @@
 
   {% if season.champion %}
   <tr>
-    <td>champion</td>
+    <th scope="row">champion</th>
     <td><a href="{% url 'team_detail' season.champion.recipient.slug %}">{{ season.champion.recipient }}</a></td>
   </tr>
   {% endif %}
 
   {% if season.mvp %}
   <tr>
-    <td>mvp</td>
+    <th scope="row">mvp</th>
     <td><a href="{% url 'person_detail' season.mvp.recipient.slug %}">{{ season.mvp.recipient }}</a></td>
   </tr>
   {% endif %}
@@ -138,10 +138,12 @@
 {% if awards.exists %}
 <div>
 <table>
+  <thead>
   <tr>
-    <th>Award</th>
-    <th>Winner</th>
+    <th scope="col">award</th>
+    <th scope="col">winner</th>
   </tr>
+  </thead>
 
   {% for a in awards %}
   <tr>

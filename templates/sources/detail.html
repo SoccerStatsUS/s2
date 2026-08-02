@@ -27,10 +27,16 @@
 <div tab="news">
 
 <table>
+<thead>
+  <tr>
+    <th scope="col">headline</th>
+    <th scope="col">date</th>
+  </tr>
+</thead>
 {% for item in feeds %}
 <tr>
   <td><a href="{{ item.url }}">{{ item.title }}</a></td>
-  <td><a href="{% url 'date_detail' item.dt.year item.dt.month item.dt.day %}">{{ item.dt }}</a></a>
+  <td><a href="{% url 'date_detail' item.dt.year item.dt.month item.dt.day %}">{{ item.dt }}</a></td>
 </tr>
 {% endfor %}
 </table>

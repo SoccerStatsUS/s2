@@ -18,6 +18,7 @@
 {% if players %}
 <h3>Players</h3>
 <table>
+<thead><tr><th scope="col">name</th></tr></thead>
 {% for bio in players %}
 <tr><td><a href="{% url 'person_detail' bio.slug %}">{{ bio.name }}</a></td></tr>
 {% endfor %}
@@ -27,6 +28,7 @@
 {% if teams %}
 <h3>Teams</h3>
 <table>
+<thead><tr><th scope="col">name</th></tr></thead>
 {% for team in teams %}
 <tr><td><a href="{% url 'team_detail' team.slug %}">{{ team.name }}</a></td></tr>
 {% endfor %}
@@ -36,6 +38,7 @@
 {% if competitions %}
 <h3>Competitions</h3>
 <table>
+<thead><tr><th scope="col">name</th></tr></thead>
 {% for competition in competitions %}
 <tr><td><a href="{% url 'competition_detail' competition.slug %}">{{ competition.name }}</a></td></tr>
 {% endfor %}

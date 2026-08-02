@@ -1,23 +1,25 @@
 {% load datum_or_none %}
 
 <table id="game_lineup">
+  <thead>
   <tr>
 
-    <th>{{ game.team1_original_name }}</th>
-    <th>g</th>
-    <th>a</th>
-    <th>on</th>
-    <th>off</th>
-    <th>min</th>
+    <th scope="col">{{ game.team1_original_name }}</th>
+    <th scope="col" title="goals">g</th>
+    <th scope="col" title="assists">a</th>
+    <th scope="col" title="minute entered the game">on</th>
+    <th scope="col" title="minute left the game">off</th>
+    <th scope="col" title="minutes played">min</th>
 
-    <th>{{ game.team2_original_name }}</th>
-    <th>g</th>    
-    <th>a</th>    
-    <th>on</th>
-    <th>off</th>
-    <th>min</th>
+    <th scope="col">{{ game.team2_original_name }}</th>
+    <th scope="col" title="goals">g</th>
+    <th scope="col" title="assists">a</th>
+    <th scope="col" title="minute entered the game">on</th>
+    <th scope="col" title="minute left the game">off</th>
+    <th scope="col" title="minutes played">min</th>
 
   </tr>
+  </thead>
 
   {% with minutes=game.minutes %}
 

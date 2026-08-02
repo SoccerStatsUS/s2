@@ -2,6 +2,24 @@
 {% load datum_or_none %}
 <table class="game-list">
 
+  <thead>
+    <tr>
+      {% if 'date' not in exclude %}<th scope="col">date</th>{% endif %}
+      {% if 'competition' not in exclude %}<th scope="col">competition</th>{% endif %}
+      <th scope="col">season</th>
+      {% if 'round' not in exclude %}{% if has_round %}<th scope="col">round</th>{% endif %}{% endif %}
+      {% if 'group' not in exclude %}{% if has_group %}<th scope="col">group</th>{% endif %}{% endif %}
+      <th scope="col" title="listed first in the source; home team when known">team</th>
+      <th scope="col">score</th>
+      <th scope="col">team</th>
+      {% if 'stadium' not in exclude %}<th scope="col">venue</th>{% endif %}
+      {% if 'referee' not in exclude %}<th scope="col">referee</th>{% endif %}
+      {% if 'attendance' not in exclude %}<th scope="col" title="attendance">att.</th>{% endif %}
+      <th scope="col">sources</th>
+    </tr>
+  </thead>
+
+  <tbody>
   {% for game in games %}
   <tr>
     {% comment %}
@@ -61,6 +79,7 @@
 
   </tr>
   {% endfor %}
+  </tbody>
 </table>
 
 

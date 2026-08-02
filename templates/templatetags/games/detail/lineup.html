@@ -1,15 +1,16 @@
 {% load datum_or_none %}
 
 <table id="game_lineup">
-  <tr>
-    <th>on</th>
-    <th>min</th>
-    <th>{{ game.team1_original_name }}</th>
-    <th>{{ game.team2_original_name }}</th>
-    <th>min</th>
-    <th>on</th>
-
-  </tr>
+  <thead>
+    <tr>
+      <th scope="col" title="minute entered the game">on</th>
+      <th scope="col" title="minutes played">min</th>
+      <th scope="col">{{ game.team1_original_name }}</th>
+      <th scope="col">{{ game.team2_original_name }}</th>
+      <th scope="col" title="minutes played">min</th>
+      <th scope="col" title="minute entered the game">on</th>
+    </tr>
+  </thead>
 
 
   {% for a,b in game.zipped_lineups %}

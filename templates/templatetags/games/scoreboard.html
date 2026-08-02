@@ -2,16 +2,19 @@
 <div id="scoreboard">
 <table>
 
-  <tr>
-    {# {{ game.date|date:"F d, Y" }} #}
-    <th><a href="{% url 'date_detail' game.date.year game.date.month game.date.day %}">scoreboard</a></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+  <caption><a href="{% url 'date_detail' game.date.year game.date.month game.date.day %}">scoreboard</a></caption>
 
-      
+  <thead>
+    <tr>
+      <th scope="col">competition</th>
+      <th scope="col" title="listed first in the source; home team when known">team</th>
+      <th scope="col">score</th>
+      <th scope="col">team</th>
+      <th scope="col">venue</th>
+    </tr>
+  </thead>
+
+  <tbody>
   {% for game in games %}
   <tr class="score">
     <td><a href="{% url 'competition_detail' game.competition.slug %}">{{ game.competition.abbreviation }}</a></td>
@@ -40,5 +43,6 @@
     {% endif %}
   </tr>
   {% endfor %}
+  </tbody>
 </table>
 </div>

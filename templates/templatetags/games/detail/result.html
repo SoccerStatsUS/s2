@@ -51,6 +51,14 @@
 
 <table id="goal_list" class="noborder">
 
+  <thead>
+    <tr>
+      <th scope="col">{{ game.team1_original_name }}</th>
+      <th scope="col" title="minute">min</th>
+      <th scope="col">{{ game.team2_original_name }}</th>
+    </tr>
+  </thead>
+
   {% for goal in game.goal_set.all %}
   <tr>
 
@@ -68,6 +76,7 @@
     <td class="right_goal"></td>
     {% endif %}
 
+  </tr>
   {% endfor %}
 </table>
 

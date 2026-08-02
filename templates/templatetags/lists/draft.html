@@ -1,6 +1,17 @@
 {% load datum_or_none %}
 
 <table>
+<thead>
+  <tr>
+    <th scope="col" title="pick number">pick</th>
+    <th scope="col">player</th>
+    <th scope="col" title="position">p</th>
+    <th scope="col" title="drafting team">to</th>
+    <th scope="col">draft</th>
+    <th scope="col">season</th>
+    <th scope="col" title="previous team">from</th>
+  </tr>
+</thead>
 {% for pick in picks %}
 <tr>
 

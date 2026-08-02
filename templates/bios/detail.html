@@ -141,6 +141,13 @@
 {% if bio.awards.exists %}
 <div tab="awards">
 <table>
+<thead>
+  <tr>
+    <th scope="col">season</th>
+    <th scope="col">competition</th>
+    <th scope="col">award</th>
+  </tr>
+</thead>
 {% for award in bio.awards.all %}
 <tr>
   {% if award.season %}
@@ -161,6 +168,13 @@
 {% if picks.exists %}
 <div tab="drafts">
 <table>
+<thead>
+  <tr>
+    <th scope="col" title="pick number">pick</th>
+    <th scope="col">team</th>
+    <th scope="col">draft</th>
+  </tr>
+</thead>
 {% for pick in picks %}
 <tr>
   <td>{{ pick.number }}</td>

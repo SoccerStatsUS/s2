@@ -5,14 +5,19 @@
 
 <table>
 
-  <tr>
-    <th><a href="{% url 'team_versus' game.team1.slug game.team2.slug %}">series</a></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+  <caption><a href="{% url 'team_versus' game.team1.slug game.team2.slug %}">series</a></caption>
 
+  <thead>
+    <tr>
+      <th scope="col">date</th>
+      <th scope="col" title="listed first in the source; home team when known">team</th>
+      <th scope="col">score</th>
+      <th scope="col">team</th>
+      <th scope="col">venue</th>
+    </tr>
+  </thead>
+
+  <tbody>
   {% for game in games %}
   <tr>
 
@@ -49,6 +54,7 @@
 
   </tr>
   {% endfor %}
+  </tbody>
 </table>
 
 </div>

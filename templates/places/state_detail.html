@@ -18,6 +18,12 @@
 
 
 <table>
+<thead>
+  <tr>
+    <th scope="col">year</th>
+    <th scope="col">population</th>
+  </tr>
+</thead>
 {% for pop in state.population_set %}
 <tr>
   <td>{{ pop.year }}</td>
@@ -28,6 +34,14 @@
 
 <div tab="stadiums">
 <table>
+<thead>
+  <tr>
+    <th scope="col">name</th>
+    <th scope="col">opened</th>
+    <th scope="col">capacity</th>
+    <th scope="col">cost</th>
+  </tr>
+</thead>
 {% for stadium in stadiums %}
 <tr>
   <td><a href="{% url 'stadium_detail' stadium.slug %}">{{ stadium }}</a></td>
@@ -50,9 +64,9 @@
 <table>
   <thead>
     <tr>
-      <th>name</th>
-      <th>birthdate</th>
-      <th>birthplace</th>
+      <th scope="col">name</th>
+      <th scope="col">birthdate</th>
+      <th scope="col">birthplace</th>
     </tr>
   </thead>
 

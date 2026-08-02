@@ -2,6 +2,12 @@
 <div tab="salary">
 
 <table>
+  <thead>
+    <tr>
+      <th scope="col">season</th>
+      <th scope="col">salary</th>
+    </tr>
+  </thead>
   {% for salary in bio.salary_set.all %}
   <tr>
     <td>{{ salary.season }}</td>

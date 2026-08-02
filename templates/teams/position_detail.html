@@ -8,6 +8,13 @@
 {% block content %}
 
 <table>
+<thead>
+  <tr>
+    <th scope="col">name</th>
+    <th scope="col">start</th>
+    <th scope="col">end</th>
+  </tr>
+</thead>
 {% for position in positions %}
 <tr>
   <td><a href="{% url 'person_detail' position.person.slug %}">{{ position.person }}</a></td>
