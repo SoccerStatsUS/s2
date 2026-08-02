@@ -116,8 +116,8 @@ def person_detail_abstract(request, bio):
     team_stats = bio.team_stats().order_by('-games_played')
     #league_stats = Stat.objects.filter(player=bio).filter(competition__ctype='League').order_by('season')
     league_stats = Stat.objects.filter(player=bio).order_by('season')
-    domestic_stats = league_stats.filter(team__international=False).reverse()
-    international_stats = league_stats.filter(team__international=True).reverse()
+    domestic_stats = league_stats.filter(team__international=False)
+    international_stats = league_stats.filter(team__international=True)
     
     context = {
         "bio": bio,
