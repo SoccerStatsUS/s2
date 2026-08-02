@@ -28,8 +28,6 @@
       </div>
 
       <nav id="nav">
-        <a href="{% url 'team_index' %}">teams</a>
-        <a href="{% url 'person_index' %}">players</a>
         <div id="nav-comps">
           <a href="{% url 'competition_index' %}">competitions</a>
           <div id="comp-menu">
@@ -41,6 +39,8 @@
             <a title="US Men's National Team" href="{% url 'team_detail' 'united-states' %}">USMNT</a>
           </div>
         </div>
+        <a href="{% url 'team_index' %}">teams</a>
+        <a href="{% url 'person_index' %}">players</a>
         <a href="{% url 'source_index' %}">sources</a>
         <a href="{% url 'about_index' %}">about</a>
         <form id="nav-search" method="get" action="{% url 'search' %}">
