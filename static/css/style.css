@@ -181,7 +181,6 @@ ul { list-style-type: none; padding-left: 0; }
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
-    width: 380px;
     padding: 6px;
     background: #fff;
     border: 1px solid var(--hairline);
@@ -193,28 +192,17 @@ ul { list-style-type: none; padding-left: 0; }
 
 #comp-menu a {
     display: block;
-    padding: 8px 10px;
+    padding: 6px 18px;
     border-radius: 4px;
     color: var(--ink);
+    font-weight: 500;
+    white-space: nowrap;
 }
 
 #comp-menu a:hover {
     background: var(--fill-hover);
+    color: var(--accent);
     text-decoration: none;
-}
-
-#comp-menu .comp-title {
-    display: block;
-    font-size: 14px;
-}
-
-#comp-menu .comp-title strong { font-weight: 600; }
-
-#comp-menu .comp-blurb {
-    display: block;
-    font-size: 13px;
-    line-height: 1.35;
-    color: var(--ink-soft);
 }
 
 
@@ -603,6 +591,26 @@ td.result { width: 70px; }
 #otd .otd-note { color: var(--ink-soft); }
 
 #otd .otd-more { margin-top: 10px; font-size: 14px; }
+
+
+/* ---- Homepage: league blocks ---- */
+
+#leagues .league-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px 32px;
+}
+
+#leagues .league h4 {
+    margin: 0 0 2px;
+    font-size: 15px;
+}
+
+#leagues .league p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink-soft);
+}
 
 
 /* ---- About: prose ---- */
