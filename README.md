@@ -28,6 +28,10 @@ Production runs on the server "bert" at /home/chris/www/s2:
 
 * gunicorn via systemd (etc/systemd/s2.service), bound to 127.0.0.1:8100
 * nginx proxies stats.soccerstats.us to it (etc/nginx/stats.soccerstats.us)
+* AI crawlers (ClaudeBot, GPTBot) are rate-limited to 10 req/min per IP —
+  zone in etc/nginx/conf.d/ai-bot-ratelimit.conf, applied in the vhost's
+  `location /`, which also serves a robots.txt with a Crawl-delay hint.
+  They were doing ~84k req/day combined before this (2026-08-02).
 * secrets live in /home/chris/www/s2/.env (not in git)
 
 To deploy code changes:
