@@ -66,10 +66,10 @@ ul { list-style-type: none; padding-left: 0; }
 .header-inner {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 14px 16px 10px;
+    padding: 12px 16px;
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
+    align-items: center;
     gap: 8px 24px;
 }
 
@@ -80,18 +80,25 @@ ul { list-style-type: none; padding-left: 0; }
     align-items: center;
     justify-content: center;
     aspect-ratio: 105 / 68;
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 400;
     letter-spacing: -0.5px;
     color: #fff;
-    background: var(--accent);
-    padding: 0 10px;
+    background-color: var(--accent);
+    /* Pitch markings: halfway line and center circle behind the wordmark. */
+    background-image:
+        radial-gradient(circle, transparent 11.5px, rgba(255,255,255,0.18) 12px 13px, transparent 13.5px),
+        linear-gradient(rgba(255,255,255,0.18), rgba(255,255,255,0.18));
+    background-size: auto, 1px 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 0 12px;
 }
 
-#maintitle:hover { text-decoration: none; background: var(--accent-dark); color: #fff; }
+#maintitle:hover { text-decoration: none; background-color: var(--accent-dark); color: #fff; }
 
 #maintitle #tld {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
     letter-spacing: 0;
     color: #fff;
