@@ -8,7 +8,7 @@
 starting in <a href="{% url 'city_detail' 'waukesha-wi' %}">Waukesha, Wisconsin</a> in <a href="{% url 'year_detail' 1866 %}">1866</a>.</p>
 
 <form id="home-search" method="get" action="{% url 'search' %}">
-  <input name="q" type="text" placeholder="Search players and teams &mdash; try Bethlehem Steel, or Pel&eacute;, or your grandfather">
+  <input name="q" type="text" placeholder="Search American soccer history">
   <input type="submit" value="search">
 </form>
 
@@ -51,7 +51,8 @@ starting in <a href="{% url 'city_detail' 'waukesha-wi' %}">Waukesha, Wisconsin<
 {% else %}
 <a class="otd-team" href="{% url 'team_detail' crowd.team2.slug %}">{{ crowd.team2_original_name }}</a>
 {% endif %}
-<span class="otd-note">{{ crowd.attendance|intcomma }} in the crowd</span>
+<a class="otd-comp" href="{% url 'competition_detail' crowd.competition.slug %}">{{ crowd.competition }}</a>
+<span class="otd-note">(attendance: {{ crowd.attendance|intcomma }})</span>
 </p>
 {% endif %}
 
