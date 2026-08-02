@@ -1,6 +1,6 @@
 import datetime
 
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 
@@ -9,8 +9,11 @@ from sources.models import Source
 
 def source_index(request):
 
+    sources = Source.objects.annotate(news=Count('feeditem')).filter(
+        Q(total__gt=0) | Q(news__gt=0)).order_by('-total', 'name')
+
     context = {
-        'sources': Source.objects.order_by('-total', 'name')
+        'sources': sources,
         }
     return render(request, "sources/index.html",
                               context)
