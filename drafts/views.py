@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
@@ -13,10 +14,24 @@ def drafts_index(request):
     List all drafts.
     """
 
-    drafts = Draft.objects.order_by('season', 'start').exclude(competition=None)
+    drafts = (Draft.objects.exclude(competition=None)
+              .select_related('competition', 'season')
+              .annotate(pick_count=Count('pick'))
+              .order_by('-season__name', 'name'))
+
+    # No draft in the data carries a start date, so the index doesn't offer a
+    # date column; pick counts are the figure worth showing instead.
+    years = sorted(d.season.name for d in drafts)
+    competitions = sorted({d.competition.abbreviation or d.competition.name
+                           for d in drafts})
 
     context = {
         'drafts': drafts,
+        'draft_count': len(years),
+        'pick_count': sum(d.pick_count for d in drafts),
+        'first_year': years[0] if years else None,
+        'last_year': years[-1] if years else None,
+        'competitions': competitions,
         }
     return render(request, "drafts/index.html",
                               context)
