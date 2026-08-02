@@ -593,6 +593,20 @@ td.result { width: 70px; }
 #otd .otd-more { margin-top: 10px; font-size: 14px; }
 
 
+/* ---- Date pages ---- */
+
+#date_nav {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 14px;
+    margin: 10px 0 6px;
+    font-size: 20px;
+}
+
+#date_nav #specific_date { font-weight: 600; }
+
+
 /* ---- Homepage: league blocks ---- */
 
 #leagues .league-grid {

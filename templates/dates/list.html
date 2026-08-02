@@ -102,17 +102,19 @@ d3.select(self.frameElement).style("height", "2910px");
 <div class="white-title center">
 {% if date %}
 
-{% if previous_date %}<a href="{% url 'date_detail' previous_date.0 previous_date.1 previous_date.2 %}">-</a>{% endif %}
+<div id="date_nav">
+{% if previous_date %}<a href="{% url 'date_detail' previous_date.0 previous_date.1 previous_date.2 %}">&larr;</a>{% endif %}
 <span id="specific_date">{{ date }}</span>
-{% if next_date %}<a href="{% url 'date_detail' next_date.0 next_date.1 next_date.2 %}">+</a>{% endif %}
+{% if next_date %}<a href="{% url 'date_detail' next_date.0 next_date.1 next_date.2 %}">&rarr;</a>{% endif %}
+</div>
 
 {% else %}
 
 {% if previous_day %}
 <div id="date_nav">
-<a href="{% url 'day_detail' previous_day.month previous_day.day %}">←</a>
-<div id="specific_date">{{ day_string }}</div>
-<a href="{% url 'day_detail' next_day.month next_day.day %}">→</a>
+<a href="{% url 'day_detail' previous_day.month previous_day.day %}">&larr;</a>
+<span id="specific_date">{{ day_string }}</span>
+<a href="{% url 'day_detail' next_day.month next_day.day %}">&rarr;</a>
 </div>
 
 {% endif %}
