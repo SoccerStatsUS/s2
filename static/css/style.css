@@ -85,12 +85,10 @@ ul { list-style-type: none; padding-left: 0; }
     letter-spacing: -0.5px;
     color: #fff;
     background-color: var(--accent);
-    /* Pitch markings: halfway line and center circle behind the wordmark. */
-    background-image:
-        radial-gradient(circle, transparent 11.5px, rgba(255,255,255,0.18) 12px 13px, transparent 13.5px),
-        linear-gradient(rgba(255,255,255,0.18), rgba(255,255,255,0.18));
-    background-size: auto, 1px 100%;
-    background-position: center;
+    /* Pitch markings behind the wordmark: halfway line, center circle,
+       penalty areas. Drawn in field meters on the 105x68 viewBox. */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 105 68'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.18)' stroke-width='0.8'%3E%3Cline x1='52.5' y1='0' x2='52.5' y2='68'/%3E%3Ccircle cx='52.5' cy='34' r='9.15'/%3E%3Crect x='0' y='13.85' width='16.5' height='40.3'/%3E%3Crect x='88.5' y='13.85' width='16.5' height='40.3'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 100% 100%;
     background-repeat: no-repeat;
     padding: 0 12px;
 }
