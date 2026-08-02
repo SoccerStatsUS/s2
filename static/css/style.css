@@ -310,6 +310,49 @@ table.game-list td:first-child {
 
 td.date { white-space: nowrap; }
 
+/* ---- Month calendar ---- */
+
+table.calendar {
+    max-width: 460px;
+    table-layout: fixed;
+    text-align: right;
+}
+
+table.calendar caption {
+    text-align: left;
+    font-weight: bold;
+    padding: 4px 0;
+}
+
+table.calendar th { position: static; text-align: right; cursor: default; }
+
+table.calendar td {
+    height: 44px;
+    vertical-align: top;
+    padding: 4px 6px;
+}
+
+table.calendar td:first-child, table.calendar th:first-child { text-align: right; }
+
+table.calendar td.pad { background: none; }
+
+/* Striping and hover tints would blur what grey means here. */
+table.calendar tbody tr:nth-child(even) td,
+table.calendar tbody tr:hover td { background-color: transparent; }
+table.calendar td.greybg,
+table.calendar tbody tr:nth-child(even) td.greybg,
+table.calendar tbody tr:hover td.greybg { background-color: var(--fill); }
+
+table.calendar td a { display: block; text-decoration: none; }
+
+table.calendar .count {
+    display: block;
+    font-size: 11px;
+    color: var(--ink-soft);
+}
+
+.calendar-legend { font-size: 13px; color: var(--ink-soft); max-width: 460px; }
+
 /* Result cells: soft tints, readable text. */
 td.w, table tbody tr:nth-child(even) td.w, table tbody tr:hover td.w { background-color: var(--win); }
 td.l, table tbody tr:nth-child(even) td.l, table tbody tr:hover td.l { background-color: var(--loss); }

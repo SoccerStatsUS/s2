@@ -3,7 +3,6 @@ from django.views.generic import RedirectView, TemplateView
 from django.urls import include
 from django.urls import path
 
-from dates import views as dates_views
 from games import views as games_views
 
 
@@ -20,7 +19,6 @@ urlpatterns = [
     path('about/news/', TemplateView.as_view(template_name='about/news.html'), name='about_news'),
     path('about/build/', TemplateView.as_view(template_name='about/build.html'), name='about_build'),
 
-    path('calendar/', dates_views.calendar, name="calendar_index"),
     path('awards/', include('awards.urls')),
     path('bios/', include('bios.urls')),
     path('c/', include('competitions.urls')),

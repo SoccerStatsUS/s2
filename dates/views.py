@@ -1,3 +1,4 @@
+import calendar
 import datetime
 
 from django.db.models import Avg, Count, Max, Min, Sum
@@ -32,24 +33,6 @@ def dates_index(request):
     return render(request, "dates/index.html",
                               context)
 
-
-
-@cache_page(60 * 60 * 12)
-def calendar(request):
-
-    # All games.
-    games = Game.objects.all()
-    min_date = games.aggregate(Min('date'))['date__min']
-    max_date = games.aggregate(Max('date'))['date__max']
-
-    years = range(min_date.year, max_date.year + 1)
-
-    context = {
-        'years': years,
-        }
-
-    return render(request, "dates/calendar.html",
-                              context)
 
 
 @cache_page(60 * 60 * 12)
@@ -134,15 +117,38 @@ def month_detail(request, year, month):
 
 
 
+    game_counts = {}
+    for d in games.values_list('date', flat=True):
+        game_counts[d.day] = game_counts.get(d.day, 0) + 1
+
+    event_days = set(game_counts)
+    for qs, field in ((births, 'birthdate'), (deaths, 'deathdate'),
+                      (hires, 'start'), (fires, 'end')):
+        event_days.update(d.day for d in qs.values_list(field, flat=True))
+
+    weeks = []
+    for week in calendar.Calendar(firstweekday=6).monthdayscalendar(year, month):
+        weeks.append([
+            {'day': day,
+             'games': game_counts.get(day, 0),
+             'has_events': day in event_days,
+             } if day else None
+            for day in week])
+
     context = {
         'games': games.select_related(),
         'births': births,
+        'deaths': deaths,
         'hires': hires,
         'fires': fires,
         'stadiums': stadiums[:20],
         'date': '%s/%s' % (month, year),
         'previous_date': previous_date_tuple,
         'next_date': next_date_tuple,
+        'weeks': weeks,
+        'month_name': calendar.month_name[month],
+        'year': year,
+        'month': month,
         }
     return render(request, "dates/list.html",
                               context)
