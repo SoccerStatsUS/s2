@@ -12,7 +12,7 @@ urlpatterns = [
 
     path('search/', games_views.search, name="search"),
 
-    path('favicon.ico', RedirectView.as_view(url='http://media.socceroutsider.com/images/favicon.ico'), name="favicon"),
+    path('favicon.ico', RedirectView.as_view(url='/static/favicon.svg'), name="favicon"),
 
     path('about/', TemplateView.as_view(template_name='about/index.html'), name='about_index'),
     path('about/news/', TemplateView.as_view(template_name='about/news.html'), name='about_news'),
