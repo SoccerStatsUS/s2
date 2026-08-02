@@ -35,6 +35,14 @@
 <ul id="subtabs"></ul>
 <div id="subtab_wrapper">
 
+<div tab="by competition">
+{% stats_table competition_stats 'player' %}
+</div>
+
+<div tab="by team">
+{% stats_table team_stats 'player' %}
+</div>
+
 {% if domestic_stats %}
 <div tab="domestic">
 {% stats_table domestic_stats 'player' %}
@@ -46,14 +54,6 @@
 {% stats_table international_stats 'player' %}
 </div>
 {% endif %}
-
-<div tab="team">
-{% stats_table team_stats 'player' %}
-</div>
-
-<div tab="competition">
-{% stats_table competition_stats 'player' %}
-</div>
 
 </div>
 

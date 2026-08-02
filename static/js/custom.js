@@ -66,7 +66,7 @@
               tabWrapper.children("div").each(function() {
                   return $(this).hide();
               });
-              tabWrapper.children("div[tab=" + name + "]").show();
+              tabWrapper.children("div[tab='" + name + "']").show();
               return false;
           });
 
