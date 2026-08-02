@@ -1,12 +1,14 @@
 {% extends "base.html" %}
 {% load datum_or_none %}
 
-{% block title %}{{ award }}{% endblock %}
+{% block title %}{% if award.competition %}{{ award.competition }} {% endif %}{{ award.name }}{% endblock %}
 
 {% block content %}
 
 {% if award.competition %}
 <h3><a href="{% url 'competition_detail' award.competition.slug %}">{{ award.competition }}</a> | {{ award.name }}</h3>
+{% else %}
+<h3>{{ award.name }}</h3>
 {% endif %}
 
 <table id="award_detail">
