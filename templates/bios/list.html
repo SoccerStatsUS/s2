@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 {% load stats %}
 
+{% block title %}players{% endblock %}
+
 {% block content %}
+
+<h1>Players</h1>
 
 {% stats_table stats 'competition,season,team' %}
 

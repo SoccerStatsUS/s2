@@ -6,11 +6,12 @@
 
 <div id="home-intro">
 
-<p id="tagline">A website dedicated to the deep history of American soccer &mdash;
-starting in <a href="{% url 'city_detail' 'waukesha-wi' %}">Waukesha, Wisconsin</a> in <a href="{% url 'year_detail' 1866 %}">1866</a>.</p>
+<h1 id="tagline">A website dedicated to the deep history of American soccer &mdash;
+starting in <a href="{% url 'city_detail' 'waukesha-wi' %}">Waukesha, Wisconsin</a> in <a href="{% url 'year_detail' 1866 %}">1866</a>.</h1>
 
 <form id="home-search" method="get" action="{% url 'search' %}">
-  <input name="q" type="text" placeholder="Search American soccer history">
+  <input name="q" type="text" placeholder="Search American soccer history"
+         aria-label="Search American soccer history">
   <input type="submit" value="search">
 </form>
 

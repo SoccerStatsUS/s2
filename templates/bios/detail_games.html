@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<h3><a href="{% url 'person_detail' bio.slug %}">{{ bio.name }}</a> game log</h3>
+<h1><a href="{% url 'person_detail' bio.slug %}">{{ bio.name }}</a> game log</h1>
 
 {% if career_games and game_log_count < career_games %}
 <p class="coverage-note">{{ game_log_count }} games on record here, of the

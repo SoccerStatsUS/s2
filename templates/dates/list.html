@@ -19,7 +19,7 @@
 
 <div id="date_nav">
 {% if previous_date %}<a href="{% url 'date_detail' previous_date.0 previous_date.1 previous_date.2 %}">&larr;</a>{% endif %}
-<span id="specific_date">{{ date }}</span>
+<h1 id="specific_date">{{ date }}</h1>
 {% if next_date %}<a href="{% url 'date_detail' next_date.0 next_date.1 next_date.2 %}">&rarr;</a>{% endif %}
 </div>
 
@@ -28,7 +28,7 @@
 {% if previous_day %}
 <div id="date_nav">
 <a href="{% url 'day_detail' previous_day.month previous_day.day %}">&larr;</a>
-<span id="specific_date">{{ day_string }}</span>
+<h1 id="specific_date">{{ day_string }}</h1>
 <a href="{% url 'day_detail' next_day.month next_day.day %}">&rarr;</a>
 </div>
 

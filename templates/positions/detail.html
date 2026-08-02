@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% load datum_or_none %}
 
+{% block title %}{{ positions.0.name|default:"positions" }}{% endblock %}
+
 {% block content %}
 
-
+<h1>{{ positions.0.name|default:"Positions" }}</h1>
 
 <table id="position_index" >
 

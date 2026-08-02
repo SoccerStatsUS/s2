@@ -2,12 +2,14 @@
 {% load games %}
 {% load stats %}
 
+{% block title %}{{ source.name }}{% endblock %}
+
 {% block content %}
 
 {% if source.base_url %}
-<h3><a href="{{ source.base_url }}">{{ source }}</a></h3>
+<h1><a href="{{ source.base_url }}">{{ source }}</a></h1>
 {% else %}
-<h3>{{ source.name }}</h3>
+<h1>{{ source.name }}</h1>
 {% endif %}
 
 {% if source.author %}

@@ -6,9 +6,9 @@
 {% block content %}
 
 {% if award.competition %}
-<h3><a href="{% url 'competition_detail' award.competition.slug %}">{{ award.competition }}</a> | {{ award.name }}</h3>
+<h1><a href="{% url 'competition_detail' award.competition.slug %}">{{ award.competition }}</a> | {{ award.name }}</h1>
 {% else %}
-<h3>{{ award.name }}</h3>
+<h1>{{ award.name }}</h1>
 {% endif %}
 
 <table id="award_detail">

@@ -7,7 +7,7 @@
 
 <div id="city_block">
 
-<h3>{{ city.name }}{% if city.state %}, <a href="{% url 'state_detail' city.state.slug %}">{{ city.state.abbreviation }}</a>{% endif %}{% if city.country %}, <a href="{% url 'country_detail' city.country.slug %}">{{ city.country.name }}</a>{% endif %}</h3>
+<h1>{{ city.name }}{% if city.state %}, <a href="{% url 'state_detail' city.state.slug %}">{{ city.state.abbreviation }}</a>{% endif %}{% if city.country %}, <a href="{% url 'country_detail' city.country.slug %}">{{ city.country.name }}</a>{% endif %}</h1>
 
 </div>
 
