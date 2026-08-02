@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load standings %}
+{% load humanize %}
+
+{% block title %}all-time club records{% endblock %}
+{% block metadescription %}Every club's all-time record in American soccer, most wins first{% endblock %}
+
+{% block content %}
+
+<h1>All-time club records</h1>
+
+<p class="dir-note">{{ page.paginator.count|intcomma }} clubs with a record on
+file, most wins first. Each row totals every competition a club has played in,
+as recorded here.</p>
+
+{% include "pagination.html" with noun="clubs" %}
+
+{% standings_table standings 'competition,season' %}
+
+{% include "pagination.html" with noun="clubs" %}
+
+{% endblock %}

@@ -3,6 +3,7 @@ import datetime
 import json
 
 
+from django.core.paginator import Paginator
 from django.db.models import Count, Q, Sum
 from django.db.models.functions import Substr, Upper
 from django.http import Http404
@@ -100,12 +101,18 @@ def team_index(request):
                               context)
 
 
+@cache_page(60 * 60 * 12)
 def team_standings(request):
-
-    standings = Standing.objects.filter(competition=None).order_by('-wins')
+    """
+    All-time club records: one row per team, most wins first.
+    """
+    standings = (Standing.objects.filter(competition=None, season=None)
+                 .select_related('team').order_by('-wins', 'team__name'))
+    page = Paginator(standings, 100).get_page(request.GET.get('page'))
 
     context = {
-        'standings': standings,
+        'standings': page.object_list,
+        'page': page,
         }
 
     return render(request, "teams/standings.html",
@@ -140,14 +147,25 @@ def team_name_fragment(request, fragment):
 
 
 
+@cache_page(60 * 60 * 12)
 def seasons_dashboard(request):
+    """
+    Every season name, newest first, with the competitions that ran under it.
+    """
     season_names = defaultdict(list)
-    for season in Season.objects.all():
+    for season in Season.objects.select_related('competition'):
         season_names[season.name].append(season)
 
+    for seasons in season_names.values():
+        seasons.sort(key=lambda s: s.competition.name if s.competition else '')
+
+    groups = [(name, season_names[name])
+              for name in sorted(season_names, reverse=True)]
+
     context = {
-        'season_dict': season_names,
-        'seasons': sorted(season_names.keys()),
+        'groups': groups,
+        'name_count': len(groups),
+        'season_count': sum(len(v) for v in season_names.values()),
         }
 
     return render(request, "teams/seasons.html",

@@ -673,6 +673,10 @@ td.friendly { background-color: transparent; }
 /* Anchor targets clear the letter's own top padding when jumped to. */
 .dir-group { scroll-margin-top: 12px; }
 
+/* Season names ("1916-1917") need more gutter than a single letter does. */
+.dir-group-wide { grid-template-columns: 6rem 1fr; }
+.dir-season { font-size: 1.1em; white-space: nowrap; }
+
 
 /* ---- Game detail ---- */
 

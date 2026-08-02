@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}seasons{% endblock %}
+{% block metadescription %}Every season on record and the competitions that ran in it{% endblock %}
+
+{% block content %}
+
+<h1>Seasons</h1>
+
+<p class="dir-note">{{ name_count|intcomma }} seasons, newest first, and the
+{{ season_count|intcomma }} competition seasons that ran under them.</p>
+
+<div class="directory">
+  {% for name, seasons in groups %}
+  <section class="dir-group dir-group-wide" id="season-{{ name }}">
+    <h2 class="dir-letter dir-season">{{ name }}</h2>
+    <ul class="dir-names">
+      {% for season in seasons %}
+      <li>
+        {% if season.competition.slug %}
+        <a class="item" title="{{ season.competition.name }}" href="{% url 'season_detail' season.competition.slug season.slug %}">{{ season.competition.abbreviation|default:season.competition.name }}</a>
+        {% else %}
+        <span class="greybg" title="no competition on record">&mdash;</span>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endfor %}
+</div>
+
+{% endblock %}

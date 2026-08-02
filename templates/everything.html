@@ -16,8 +16,9 @@ rather than hidden &mdash; they exist in the data, but their pages aren't built 
   <li><a href="{% url 'competition_index' %}">competitions</a> &mdash; every league and cup, 1884 to present</li>
   <li><a href="{% url 'team_index' %}">teams</a> &mdash; every team with a game on record
     <ul>
+      <li><a href="{% url 'team_standings' %}">all-time club records</a> &mdash; every club's record, most wins first</li>
+      <li><a href="{% url 'seasons_dashboard' %}">seasons</a> &mdash; every season and the competitions that ran in it</li>
       <li><a href="{% url 'random_team_detail' %}">a random team</a></li>
-      <li class="unbuilt">season and standings dashboards</li>
     </ul>
   </li>
   <li><a href="{% url 'person_index' %}">players</a> &mdash; the players, and everyone else in the record
