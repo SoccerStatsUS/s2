@@ -78,8 +78,6 @@ class Command(BaseCommand):
             '/sitemap-static.xml',
             '/sitemap-competitions.xml',
             '/about/',
-            '/about/news/',
-            '/about/build/',
             '/awards/',
             '/contact/',
             '/contact/thanks/',

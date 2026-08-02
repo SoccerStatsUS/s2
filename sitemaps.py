@@ -16,8 +16,8 @@ class StaticSitemap(Sitemap):
     changefreq = 'weekly'
 
     def items(self):
-        return ['home', 'everything_index', 'about_index', 'about_news',
-                'about_build', 'competition_index', 'team_index',
+        return ['home', 'everything_index', 'about_index',
+                'competition_index', 'team_index',
                 'person_index', 'dates_index', 'award_index', 'drafts_index',
                 'country_index', 'stadium_index', 'organizations_index',
                 'source_index', 'manager_index']

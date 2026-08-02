@@ -25,8 +25,6 @@ urlpatterns = [
     path('more/', RedirectView.as_view(url='/everything/', permanent=True)),
 
     path('about/', games_views.about, name='about_index'),
-    path('about/news/', TemplateView.as_view(template_name='about/news.html'), name='about_news'),
-    path('about/build/', TemplateView.as_view(template_name='about/build.html'), name='about_build'),
 
     path('awards/', include('awards.urls')),
     path('bios/', include('bios.urls')),
