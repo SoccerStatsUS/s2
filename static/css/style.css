@@ -357,21 +357,31 @@ table.game-list td:first-child {
 
 td.date { white-space: nowrap; }
 
-/* ---- Month calendar ---- */
+/* ---- Date grids: month calendar, decade table ---- */
 
-table.calendar {
-    max-width: 460px;
+table.calendar, table.decades {
     table-layout: fixed;
     text-align: right;
 }
 
-table.calendar caption {
+table.calendar { max-width: 460px; }
+table.decades { max-width: 780px; }
+
+table.calendar caption, table.decades caption {
     text-align: left;
     font-weight: bold;
     padding: 4px 0;
 }
 
-table.calendar th { position: static; text-align: right; cursor: default; }
+table.calendar th, table.decades th { position: static; text-align: right; cursor: default; }
+
+table.decades th[scope="row"] {
+    width: 56px;
+    text-align: left;
+    vertical-align: top;
+    padding-top: 8px;
+    border-bottom: 1px solid var(--hairline);
+}
 
 table.calendar td {
     height: 44px;
@@ -379,20 +389,32 @@ table.calendar td {
     padding: 4px 6px;
 }
 
-table.calendar td:first-child, table.calendar th:first-child { text-align: right; }
+table.decades td {
+    vertical-align: top;
+    padding: 6px;
+}
 
-table.calendar td.pad { background: none; }
+table.calendar td:first-child, table.calendar th:first-child,
+table.decades td:first-child, table.decades th:first-child { text-align: right; }
+table.decades th:first-child { text-align: left; }
+
+table.calendar td.pad, table.decades td.pad { background: none; }
 
 /* Striping and hover tints would blur what grey means here. */
 table.calendar tbody tr:nth-child(even) td,
-table.calendar tbody tr:hover td { background-color: transparent; }
+table.calendar tbody tr:hover td,
+table.decades tbody tr:nth-child(even) td,
+table.decades tbody tr:hover td { background-color: transparent; }
 table.calendar td.greybg,
 table.calendar tbody tr:nth-child(even) td.greybg,
-table.calendar tbody tr:hover td.greybg { background-color: var(--fill); }
+table.calendar tbody tr:hover td.greybg,
+table.decades td.greybg,
+table.decades tbody tr:nth-child(even) td.greybg,
+table.decades tbody tr:hover td.greybg { background-color: var(--fill); }
 
-table.calendar td a { display: block; text-decoration: none; }
+table.calendar td a, table.decades td a { display: block; text-decoration: none; }
 
-table.calendar .count {
+table.calendar .count, table.decades .count {
     display: block;
     font-size: 11px;
     color: var(--ink-soft);

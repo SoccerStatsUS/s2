@@ -1,15 +1,39 @@
 {% extends "base.html" %}
+{% load humanize %}
 
-{% block title %}Browse by year{% endblock %}
+{% block title %}dates{% endblock %}
+{% block metadescription %}Browse American soccer history by year, {{ first }} to {{ last }}{% endblock %}
 
 {% block content %}
 
-<h3>Browse by year</h3>
+<h2>Dates</h2>
 
-<p>
-{% for year in years %}
-<a href="{% url 'year_detail' year %}">{{ year }}</a>{% if not forloop.last %} &middot;{% endif %}
+<p>Every year of American soccer on record, {{ first }} to {{ last }}. Linked
+years have games; the small number counts them. Grey years have nothing on
+record. Or jump to <a href="{% url 'scoreboard_today' %}">today's scoreboard</a>
+or <a href="{% url 'day_detail' today.month today.day %}">this day in history</a>.</p>
+
+<table class="decades">
+
+<caption>Browse by year</caption>
+
+<tbody>
+{% for decade in decades %}
+<tr>
+  <th scope="row">{{ decade.label }}</th>
+  {% for y in decade.years %}
+  {% if not y.in_range %}
+  <td class="pad"></td>
+  {% elif y.games %}
+  <td><a href="{% url 'year_detail' y.year %}">{{ y.year }}<span class="count">{{ y.games|intcomma }}</span></a></td>
+  {% else %}
+  <td class="greybg" title="no record found">{{ y.year }}</td>
+  {% endif %}
+  {% endfor %}
+</tr>
 {% endfor %}
-</p>
+</tbody>
+
+</table>
 
 {% endblock %}

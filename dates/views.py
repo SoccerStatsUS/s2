@@ -19,15 +19,28 @@ from stats.models import GameStat
 @cache_page(60 * 60 * 12)
 def dates_index(request):
 
-    # All games.
-    games = Game.objects.all()
-    min_date = games.aggregate(Min('date'))['date__min']
-    max_date = games.aggregate(Max('date'))['date__max']
+    counts = {}
+    for row in Game.objects.exclude(date=None).values('date__year').annotate(n=Count('id')):
+        counts[row['date__year']] = row['n']
 
-    years = range(min_date.year, max_date.year + 1)
+    first, last = min(counts), max(counts)
+
+    decades = []
+    for start in range(first - first % 10, last + 1, 10):
+        decades.append({
+            'label': '%ds' % start,
+            'years': [{
+                'year': y,
+                'games': counts.get(y, 0),
+                'in_range': first <= y <= last,
+                } for y in range(start, start + 10)],
+            })
 
     context = {
-        'years': years,
+        'first': first,
+        'last': last,
+        'today': datetime.date.today(),
+        'decades': decades,
         }
 
     return render(request, "dates/index.html",
