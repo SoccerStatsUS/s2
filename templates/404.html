@@ -1,12 +1,35 @@
 {% extends "base.html" %}
-{% block title %}404{% endblock %}
+{% block title %}page not found{% endblock %}
 
 {% block content %}
 
-<p>Oh no! This page doesn't seem to exist.</p>
+<div id="notfound">
 
-<p>Maybe something has moved, or maybe this data isn't on the site anymore.</p>
+<h1>Not found</h1>
 
-<p>You can <a href="{% url 'contact_index' %}">contact us</a> with the error if you want, or maybe try <a href="/search">searching</a> the website.</p>
+<p class="notfound-path">Nothing on the site answers to
+<code>{{ request_path }}</code>. It may never have existed, or it may have moved.</p>
+
+<form method="get" action="{% url 'search' %}">
+  <input name="q" type="text" placeholder="Players, teams, competitions"
+         aria-label="Search players, teams, and competitions" autofocus>
+  <input type="submit" value="search">
+</form>
+
+<h2>Or start here</h2>
+
+<ul class="notfound-links">
+  <li><a href="{% url 'person_index' %}">players</a> &mdash; everyone in the record, A to Z</li>
+  <li><a href="{% url 'team_index' %}">teams</a> &mdash; every team with a game on record</li>
+  <li><a href="{% url 'competition_index' %}">competitions</a> &mdash; every league and cup, 1884 to present</li>
+  <li><a href="{% url 'games_index' %}">games</a> &mdash; every game on record, oldest first</li>
+  <li><a href="{% url 'dates_index' %}">dates</a> &mdash; browse by year, month, or day</li>
+  <li><a href="{% url 'everything_index' %}">everything</a> &mdash; every section of the site</li>
+</ul>
+
+<p class="notfound-report">If a link on this site sent you here, that's a bug worth
+fixing &mdash; <a href="mailto:chris@soccerstats.us?subject=SoccerStats.us%20broken%20link&body={{ request.build_absolute_uri|urlencode:'' }}">report it</a>.</p>
+
+</div>
 
 {% endblock %}

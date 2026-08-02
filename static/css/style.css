@@ -1031,6 +1031,58 @@ td.result { width: 70px; }
 
 /* ---- Search page ---- */
 
+/* ---- 404 ---- */
+
+#notfound { max-width: 68ch; }
+
+#notfound .notfound-path { color: var(--ink-soft); }
+
+#notfound code {
+    padding: 2px 6px;
+    background: var(--fill);
+    border: 1px solid var(--hairline);
+    border-radius: 4px;
+    font-size: .9em;
+    word-break: break-all;
+}
+
+#notfound form {
+    display: flex;
+    gap: 8px;
+    margin: 16px 0 24px;
+}
+
+#notfound input[type="text"] {
+    flex: 1;
+    font-size: 16px;
+    padding: 10px 14px;
+    border: 1px solid var(--hairline);
+    border-radius: 6px;
+    background: var(--fill);
+    color: var(--ink);
+}
+
+#notfound input[type="text"]:focus { border-color: var(--accent); background: #fff; }
+
+#notfound input[type="submit"] {
+    font-size: 15px;
+    padding: 10px 16px;
+    border: 1px solid var(--hairline);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--accent);
+    cursor: pointer;
+}
+
+#notfound input[type="submit"]:hover { border-color: var(--accent); }
+
+#notfound h2 { font-size: 1.1em; color: var(--ink-soft); }
+
+#notfound .notfound-links li { padding: 4px 0; }
+
+#notfound .notfound-report { margin-top: 24px; font-size: .9em; color: var(--ink-soft); }
+
+
 #search-page form {
     display: flex;
     gap: 8px;
