@@ -7,7 +7,8 @@ from django.views.decorators.cache import cache_page
 from competitions.models import Competition
 from bios.models import Bio
 from games.models import Game
-from places.models import Country, City, State, Stadium, game_stats_by_country
+from places.models import (Country, City, State, Stadium,
+                          game_stats_by_country, game_stats_by_place)
 from standings.models import StadiumStanding
 from teams.models import Team
 
@@ -34,22 +35,53 @@ def country_index(request):
 
 
 
+@cache_page(60 * 60 * 12)
 def state_index(request):
         """
+        Every state, busiest first.
         """
+        stats = game_stats_by_place('state')
+
+        states = State.objects.select_related('country').annotate(
+                city_count=Count('city', distinct=True),
+                birth_count=Count('city__birth_set', distinct=True))
+
+        for state in states:
+                row = stats.get(state.id, {})
+                state.game_count = row.get('games', 0)
+                state.total_attendance = row.get('attendance')
+
+        states = sorted(states, key=lambda s: (-s.game_count, s.name))
 
         context = {
-                'states': State.objects.all(),
-
+                'states': states,
+                'state_count': len(states),
                 }
         return render(request, "places/state_index.html",
                                   context)
 
 
+@cache_page(60 * 60 * 12)
 def city_index(request):
+        """
+        Every city, busiest first.
+        """
+        stats = game_stats_by_place('city')
+
+        cities = City.objects.select_related('state', 'country').annotate(
+                birth_count=Count('birth_set', distinct=True))
+
+        for city in cities:
+                row = stats.get(city.id, {})
+                city.game_count = row.get('games', 0)
+                city.total_attendance = row.get('attendance')
+
+        cities = sorted(cities, key=lambda c: (-c.game_count, c.name))
+        page = Paginator(cities, 100).get_page(request.GET.get('page'))
 
         context = {
-                'cities': City.objects.all(),
+                'cities': page.object_list,
+                'page': page,
                 }
 
         return render(request, "places/city_index.html",

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}states{% endblock %}
+{% block metadescription %}Every state and province with American soccer on record, busiest first{% endblock %}
+
+{% block content %}
+
+<h1>States</h1>
+
+<p>{{ state_count|intcomma }} states and provinces on record, the busiest first.
+Games counts every match played in the state; born counts the players whose
+birthplace is recorded in one of its cities.</p>
+
+<table>
+
+<thead>
+  <tr>
+    <th scope="col">state</th>
+    <th scope="col" title="postal abbreviation">abbr.</th>
+    <th scope="col">country</th>
+    <th scope="col">cities</th>
+    <th scope="col">games</th>
+    <th scope="col">attendance</th>
+    <th scope="col" title="players born here">born</th>
+  </tr>
+</thead>
+
+<tbody>
+{% for state in states %}
+<tr>
+  <td><a href="{% url 'state_detail' state.slug %}">{{ state.name }}</a></td>
+
+  {% if state.abbreviation %}
+  <td>{{ state.abbreviation }}</td>
+  {% else %}
+  <td class="greybg" title="no record found">&mdash;</td>
+  {% endif %}
+
+  {% if state.country.slug %}
+  <td><a href="{% url 'country_detail' state.country.slug %}">{{ state.country.name }}</a></td>
+  {% else %}
+  <td class="greybg" title="no record found">&mdash;</td>
+  {% endif %}
+
+  <td>{{ state.city_count|intcomma }}</td>
+  <td>{{ state.game_count|intcomma }}</td>
+
+  {% if state.total_attendance == None %}
+  <td class="greybg" title="no record found">&mdash;</td>
+  {% else %}
+  <td>{{ state.total_attendance|intcomma }}</td>
+  {% endif %}
+
+  <td>{{ state.birth_count|intcomma }}</td>
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
+
+{% endblock %}

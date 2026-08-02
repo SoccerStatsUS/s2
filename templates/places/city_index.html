@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}cities{% endblock %}
+{% block metadescription %}Every city with American soccer on record, busiest first{% endblock %}
+
+{% block content %}
+
+<h1>Cities</h1>
+
+<p>{{ page.paginator.count|intcomma }} cities on record, the busiest first.
+Games counts every match in the database played there; born counts the players
+whose birthplace is recorded as this city. A zero is genuine &mdash; the city is
+in the record, but nothing is pinned to it yet.</p>
+
+{% include "pagination.html" with noun="cities" %}
+
+<table>
+
+<thead>
+  <tr>
+    <th scope="col">city</th>
+    <th scope="col">state</th>
+    <th scope="col">country</th>
+    <th scope="col">games</th>
+    <th scope="col">attendance</th>
+    <th scope="col" title="players born here">born</th>
+  </tr>
+</thead>
+
+<tbody>
+{% for city in cities %}
+<tr>
+  <td><a href="{% url 'city_detail' city.slug %}">{{ city.name }}</a></td>
+
+  {% if city.state.slug %}
+  <td><a href="{% url 'state_detail' city.state.slug %}">{{ city.state.abbreviation|default:city.state.name }}</a></td>
+  {% else %}
+  <td class="greybg" title="no record found">&mdash;</td>
+  {% endif %}
+
+  {% if city.country.slug %}
+  <td><a href="{% url 'country_detail' city.country.slug %}">{{ city.country.name }}</a></td>
+  {% else %}
+  <td class="greybg" title="no record found">&mdash;</td>
+  {% endif %}
+
+  <td>{{ city.game_count|intcomma }}</td>
+
+  {% if city.total_attendance == None %}
+  <td class="greybg" title="no record found">&mdash;</td>
+  {% else %}
+  <td>{{ city.total_attendance|intcomma }}</td>
+  {% endif %}
+
+  <td>{{ city.birth_count|intcomma }}</td>
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
+
+{% include "pagination.html" with noun="cities" %}
+
+{% endblock %}

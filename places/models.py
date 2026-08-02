@@ -36,6 +36,31 @@ class WorldBorder(models.Model):
 """
 
 
+def game_stats_by_place(field):
+    """
+    Games and attendance per city id (field='city') or state id
+    (field='state'), in one query.
+
+    A game counts for its own city when it has one, else its stadium's city —
+    the two never disagree in the data, and the fallback recovers the couple
+    hundred games that record a ground but no city.
+    """
+    from django.db.models import Count, Sum
+    from django.db.models.functions import Coalesce
+    from games.models import Game
+
+    if field == 'city':
+        key = Coalesce('city', 'stadium__city')
+    else:
+        key = Coalesce('city__state', 'stadium__city__state')
+
+    rows = (Game.objects
+        .annotate(pid=key)
+        .values('pid')
+        .annotate(games=Count('id'), attendance=Sum('attendance')))
+    return {row['pid']: row for row in rows if row['pid'] is not None}
+
+
 def game_stats_by_country():
     """
     Games and attendance per country id, in one query. A game counts for its
