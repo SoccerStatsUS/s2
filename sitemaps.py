@@ -67,16 +67,6 @@ class BioSitemap(Sitemap):
         return reverse('person_detail', args=[obj.slug])
 
 
-class GameSitemap(Sitemap):
-    protocol = 'https'
-
-    def items(self):
-        return Game.objects.order_by('id')
-
-    def location(self, obj):
-        return reverse('game_detail', args=[obj.id])
-
-
 class YearSitemap(Sitemap):
     protocol = 'https'
 
@@ -164,7 +154,8 @@ SITEMAPS = {
     'seasons': SeasonSitemap,
     'teams': TeamSitemap,
     'players': BioSitemap,
-    'games': GameSitemap,
+    # No games section: /games/<id>/ is keyed on the auto pk, which is
+    # reassigned every rebuild, so those URLs cannot be submitted as stable.
     'years': YearSitemap,
     'stadiums': StadiumSitemap,
     'cities': CitySitemap,
