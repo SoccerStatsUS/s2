@@ -9,6 +9,33 @@
           $("#search_form").submit();
       });
 
+      var navSearch = $("#nav-search");
+      var navSearchInput = navSearch.find("input");
+
+      navSearch.find("button").click(function(e){
+          if (!navSearch.hasClass("open")) {
+              e.preventDefault();
+              navSearch.addClass("open");
+              navSearchInput.focus();
+          } else if (!$.trim(navSearchInput.val())) {
+              e.preventDefault();
+              navSearch.removeClass("open");
+          }
+      });
+
+      navSearchInput.on("keydown", function(e){
+          if (e.which === 27) {
+              navSearch.removeClass("open");
+              navSearch.find("button").focus();
+          }
+      });
+
+      $(document).on("click", function(e){
+          if (navSearch.hasClass("open") && !$(e.target).closest("#nav-search").length) {
+              navSearch.removeClass("open");
+          }
+      });
+
       var makeTab = function(containerID, wrapperID){
 
           var tabb = $(containerID);

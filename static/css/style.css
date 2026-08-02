@@ -114,6 +114,57 @@ ul { list-style-type: none; padding-left: 0; }
     background: #fff;
 }
 
+#nav-search {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+#nav-search input {
+    width: 0;
+    padding: 4px 0;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background: var(--fill);
+    font-size: 14px;
+    opacity: 0;
+    visibility: hidden;
+    transition: width 0.15s ease, opacity 0.15s ease, visibility 0.15s;
+}
+
+#nav-search.open input {
+    width: 180px;
+    padding: 4px 10px;
+    margin-right: 6px;
+    border-color: var(--hairline);
+    opacity: 1;
+    visibility: visible;
+}
+
+#nav-search input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: #fff;
+}
+
+#nav-search button {
+    display: flex;
+    align-items: center;
+    padding: 6px;
+    border: 0;
+    background: none;
+    color: var(--ink);
+    cursor: pointer;
+}
+
+#nav-search button:hover { color: var(--accent); }
+
+#nav-search button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
 #league-bar {
     margin: 0 0 30px;
     display: flex;
