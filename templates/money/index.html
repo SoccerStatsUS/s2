@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}salaries{% endblock %}
+{% block metadescription %}Every published MLS salary on record, largest first{% endblock %}
+
+{% block content %}
+
+<h1>Salaries</h1>
+
+<p class="dir-note">{{ page.paginator.count|intcomma }} salaries on record,
+{{ first_season }}&ndash;{{ last_season }}, largest first. These are the figures
+published by the players' union; they are base salaries, not total compensation,
+and only the seasons above are covered.</p>
+
+{% include "pagination.html" with noun="salaries" %}
+
+<table>
+
+<thead>
+  <tr>
+    <th scope="col">player</th>
+    <th scope="col">season</th>
+    <th scope="col">salary</th>
+  </tr>
+</thead>
+
+<tbody>
+{% for salary in salaries %}
+<tr>
+  {% if salary.person.slug %}
+  <td><a href="{% url 'person_detail' salary.person.slug %}">{{ salary.person.name }}</a></td>
+  {% else %}
+  <td class="greybg" title="no record found">&mdash;</td>
+  {% endif %}
+  <td>{{ salary.season }}</td>
+  <td>${{ salary.amount|floatformat:0|intcomma }}</td>
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
+
+{% include "pagination.html" with noun="salaries" %}
+
+{% endblock %}

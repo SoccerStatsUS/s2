@@ -21,7 +21,7 @@ class StaticSitemap(Sitemap):
                 'person_index', 'dates_index', 'award_index', 'drafts_index',
                 'team_standings', 'seasons_dashboard',
                 'games_index', 'goals_index', 'lineup_index',
-                'standings_index', 'stats_index',
+                'standings_index', 'stats_index', 'salaries_index',
                 'places_index', 'country_index', 'state_index', 'city_index',
                 'stadium_index', 'organizations_index',
                 'source_index', 'manager_index']

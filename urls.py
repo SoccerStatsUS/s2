@@ -38,7 +38,7 @@ urlpatterns = [
     path('graphs/', include('graphs.urls')),
     path('levels/', include('levels.urls')),
     path('lineups/', include('lineups.urls')),
-    path('money/', include('money.urls')),
+    path('salaries/', include('money.urls')),
     path('news/', include('news.urls')),
     path('organizations/', include('organizations.urls')),
     path('positions/', include('positions.urls')),
