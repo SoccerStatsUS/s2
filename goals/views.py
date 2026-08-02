@@ -1,19 +1,24 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
+from django.views.decorators.cache import cache_page
 from django.template import RequestContext
 
 from goals.models import Goal
 
 
+@cache_page(60 * 60 * 12)
 def goals_index(request):
-    # Turn this into a bunch of cool graphics?
-    # Cache it?
-    
-    
-    goal_minutes = sorted((k, v) for k, v in Goal.objects.frequency().items() if k is not None)
+    """
+    Every goal on record, oldest first.
+    """
+    goals = (Goal.objects
+             .select_related('player', 'team', 'game', 'own_goal_player')
+             .order_by('date', 'minute', 'id'))
+    page = Paginator(goals, 100).get_page(request.GET.get('page'))
 
     context = {
-        'goal_count': Goal.objects.count(),
-        'goal_minutes': goal_minutes,
+        'goals': page.object_list,
+        'page': page,
         }
     return render(request, "goals/index.html",
                               context)

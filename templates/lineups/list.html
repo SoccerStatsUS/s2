@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}lineups{% endblock %}
+{% block metadescription %}Every recorded appearance in American soccer, oldest first{% endblock %}
+
+{% block content %}
+
+<h1>Lineups</h1>
+
+<p class="dir-note">{{ page.paginator.count|intcomma }} appearances on record,
+oldest first &mdash; one row per player per game. On and off are the minutes a
+player entered and left; blank means the game is recorded but the substitution
+detail isn't.</p>
+
+{% include "pagination.html" with noun="appearances" %}
+
+<table>
+
+<thead>
+  <tr>
+    <th scope="col">date</th>
+    <th scope="col">player</th>
+    <th scope="col">team</th>
+    <th scope="col" title="minute entered">on</th>
+    <th scope="col" title="minute left">off</th>
+    <th scope="col" title="minutes played">min</th>
+    <th scope="col">game</th>
+  </tr>
+</thead>
+
+<tbody>
+{% for a in appearances %}
+<tr>
+  {% if a.game.date %}
+  <td class="date"><a href="{% url 'date_detail' a.game.date.year a.game.date.month a.game.date.day %}">{{ a.game.date }}</a></td>
+  {% else %}
+  <td class="greybg" title="no record found">&mdash;</td>
+  {% endif %}
+
+  {% if a.player.slug %}
+  <td><a href="{% url 'person_detail' a.player.slug %}">{{ a.player.name }}</a></td>
+  {% else %}
+  <td class="greybg" title="no record found">&mdash;</td>
+  {% endif %}
+
+  {% if a.team.slug %}
+  <td><a href="{% url 'team_detail' a.team.slug %}">{{ a.team }}</a></td>
+  {% else %}
+  <td class="greybg" title="no record found">&mdash;</td>
+  {% endif %}
+
+  {% if a.on == None %}<td class="greybg" title="no record found">&mdash;</td>{% else %}<td>{{ a.on }}</td>{% endif %}
+  {% if a.off == None %}<td class="greybg" title="no record found">&mdash;</td>{% else %}<td>{{ a.off }}</td>{% endif %}
+  {% if a.minutes == None %}<td class="greybg" title="no record found">&mdash;</td>{% else %}<td>{{ a.minutes }}</td>{% endif %}
+
+  {% if a.game_id %}
+  <td><a href="{% url 'game_detail' a.game_id %}">{{ a.game.game_string }}</a></td>
+  {% else %}
+  <td class="greybg" title="no record found">&mdash;</td>
+  {% endif %}
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
+
+{% include "pagination.html" with noun="appearances" %}
+
+{% endblock %}

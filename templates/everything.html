@@ -28,6 +28,8 @@ rather than hidden &mdash; they exist in the data, but their pages aren't built 
   </li>
   <li><a href="{% url 'games_index' %}">games</a> &mdash; every game on record, oldest first
     <ul>
+      <li><a href="{% url 'goals_index' %}">goals</a> &mdash; every goal on record</li>
+      <li><a href="{% url 'lineup_index' %}">lineups</a> &mdash; every recorded appearance</li>
       <li><a href="{% url 'random_game_detail' %}">a random game</a></li>
     </ul>
   </li>
@@ -62,10 +64,8 @@ rather than hidden &mdash; they exist in the data, but their pages aren't built 
 
 <ul class="more-list more-unbuilt">
   <li>events</li>
-  <li>goals <span>(71,463 on record; they appear on game pages)</span></li>
   <li>graphs</li>
   <li>levels</li>
-  <li>lineups <span>(558,537 appearances on record; they appear on game pages)</span></li>
   <li>news</li>
   <li>positions index <span>(individual position pages and the managers index work)</span></li>
   <li>salaries</li>

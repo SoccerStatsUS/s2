@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}goals{% endblock %}
+{% block metadescription %}Every goal on record in American soccer, oldest first{% endblock %}
+
+{% block content %}
+
+<h1>Goals</h1>
+
+<p class="dir-note">{{ page.paginator.count|intcomma }} goals on record, oldest
+first. A blank minute means the goal is recorded but the time it was scored
+isn't.</p>
+
+{% include "pagination.html" with noun="goals" %}
+
+<table>
+
+<thead>
+  <tr>
+    <th scope="col">date</th>
+    <th scope="col">player</th>
+    <th scope="col">team</th>
+    <th scope="col" title="minute scored">min</th>
+    <th scope="col">game</th>
+    <th scope="col">notes</th>
+  </tr>
+</thead>
+
+<tbody>
+{% for goal in goals %}
+<tr>
+  <td class="date"><a href="{% url 'date_detail' goal.date.year goal.date.month goal.date.day %}">{{ goal.date }}</a></td>
+
+  {% if goal.player.slug %}
+  <td><a href="{% url 'person_detail' goal.player.slug %}">{{ goal.player.name }}</a></td>
+  {% elif goal.own_goal_player.slug %}
+  <td><a href="{% url 'person_detail' goal.own_goal_player.slug %}">{{ goal.own_goal_player.name }}</a></td>
+  {% else %}
+  <td class="greybg" title="no record found">&mdash;</td>
+  {% endif %}
+
+  {% if goal.team.slug %}
+  <td><a href="{% url 'team_detail' goal.team.slug %}">{{ goal.team }}</a></td>
+  {% else %}
+  <td class="greybg" title="no record found">&mdash;</td>
+  {% endif %}
+
+  {% if goal.minute == None %}
+  <td class="greybg" title="no record found">&mdash;</td>
+  {% else %}
+  <td>{{ goal.minute }}</td>
+  {% endif %}
+
+  {% if goal.game_id %}
+  <td><a href="{% url 'game_detail' goal.game_id %}">{{ goal.game.game_string }}</a></td>
+  {% else %}
+  <td class="greybg" title="no record found">&mdash;</td>
+  {% endif %}
+
+  <td>{% if goal.penalty %}pen{% endif %}{% if goal.penalty and goal.own_goal %}, {% endif %}{% if goal.own_goal %}own goal{% endif %}</td>
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
+
+{% include "pagination.html" with noun="goals" %}
+
+{% endblock %}

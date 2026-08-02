@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
@@ -35,14 +36,20 @@ def get_appearances(GET):
 
 
 
+@cache_page(60 * 60 * 12)
 def lineup_index(request):
-    # No reason to set this up a a form.
-    # Just show interesting stuff.
-    appearances = get_appearances(request.GET)
+    """
+    Every appearance on record, oldest first. get_appearances() still honours
+    ?player= and ?team= from the query string; pagination preserves them.
+    """
+    appearances = (get_appearances(request.GET)
+                   .select_related('player', 'team', 'game')
+                   .order_by('game__date', 'game_id', 'order', 'id'))
+    page = Paginator(appearances, 100).get_page(request.GET.get('page'))
 
     context = {
-        'appearances': appearances[:1000],
-        'form': AppearanceForm(),
+        'appearances': page.object_list,
+        'page': page,
         }
     return render(request, "lineups/list.html",
                               context)
