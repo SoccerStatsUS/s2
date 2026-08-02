@@ -5,7 +5,7 @@
 {% block content %}
 
 <p id="tagline">A website dedicated to the deep history of American soccer &mdash;
-starting {% if first_game %}<a href="{% url 'game_detail' first_game.id %}">in Waukesha, Wisconsin, in 1866</a>{% else %}in Waukesha, Wisconsin, in 1866{% endif %}.</p>
+starting in <a href="{% url 'city_detail' 'waukesha-wi' %}">Waukesha, Wisconsin</a>, in <a href="{% url 'year_detail' 1866 %}">1866</a>.</p>
 
 <form id="home-search" method="get" action="{% url 'search' %}">
   <input name="q" type="text" placeholder="Search players and teams &mdash; try Bethlehem Steel, or Pel&eacute;, or your grandfather">
@@ -68,28 +68,16 @@ starting {% if first_game %}<a href="{% url 'game_detail' first_game.id %}">in W
 </div>
 
 
-<div id="featured">
-
-<h3><a href="{% url 'year_detail' 1894 %}">1894</a> &mdash;
-<a href="{% url 'competition_detail' 'american-league-of-professional-football' %}">the American League of Professional Football</a></h3>
-
-<p>In the fall of 1894, the owners of six National League baseball clubs launched
-the first professional soccer league in America. The first ball was kicked on
-October 6; by October 23 the league had played its last game and folded.
-{% if alpf_count %}All {{ alpf_count }} matches anyone has found are
-<a href="{% url 'competition_detail' 'american-league-of-professional-football' %}">here</a>.{% endif %}</p>
-
-<p class="more-links">More:
-<a href="{% url 'competition_index' %}">all competitions &rarr;</a></p>
-
-</div>
-
-
 <div id="leagues">
 
 <h3>The competitions</h3>
 
 <div class="league-grid">
+
+  <div class="league">
+    <h4><a href="{% url 'competition_detail' 'american-league-of-professional-football' %}">ALPF</a> &mdash; American League of Professional Football, 1894</h4>
+    <p>Six baseball owners' six-week experiment &mdash; the first professional soccer league in America.</p>
+  </div>
 
   <div class="league">
     <h4><a href="{% url 'competition_detail' 'american-soccer-league-1921-1933' %}">ASL</a> &mdash; American Soccer League, 1921&ndash;1933</h4>
@@ -117,6 +105,8 @@ October 6; by October 23 the league had played its last game and folded.
   </div>
 
 </div>
+
+<p class="more-links"><a href="{% url 'competition_index' %}">all competitions &rarr;</a></p>
 
 <h3>The teams</h3>
 

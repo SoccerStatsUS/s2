@@ -41,8 +41,6 @@ def homepage(request):
     today = datetime.date.today()
     month, day = today.month, today.day
 
-    first_game = Game.objects.exclude(date=None).order_by('date').first()
-
     games = Game.objects.filter(date__month=month, date__day=day).select_related()
     oldest = games.order_by('date').first()
     crowd = games.exclude(attendance=None).order_by('-attendance').first()
@@ -51,16 +49,11 @@ def homepage(request):
 
     born = Bio.objects.born_on(month, day)
 
-    alpf_count = Game.objects.filter(
-        competition__slug='american-league-of-professional-football').count()
-
     context = {
         'today': today,
-        'first_game': first_game,
         'oldest': oldest,
         'crowd': crowd,
         'born': born,
-        'alpf_count': alpf_count,
         }
 
     return render(request, "homepage.html",
