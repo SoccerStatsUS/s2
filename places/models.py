@@ -36,6 +36,23 @@ class WorldBorder(models.Model):
 """
 
 
+def game_stats_by_country():
+    """
+    Games and attendance per country id, in one query. A game counts for its
+    city's country when it has a city, else its direct country FK (games have
+    one or the other; only a handful set country directly).
+    """
+    from django.db.models import Count, Sum
+    from django.db.models.functions import Coalesce
+    from games.models import Game
+
+    rows = (Game.objects
+        .annotate(cid=Coalesce('city__country', 'country'))
+        .values('cid')
+        .annotate(games=Count('id'), attendance=Sum('attendance')))
+    return {row['cid']: row for row in rows if row['cid'] is not None}
+
+
 class CountryManager(models.Manager):
 
     def find(self, s):

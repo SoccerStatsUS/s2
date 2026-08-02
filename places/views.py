@@ -6,7 +6,7 @@ from django.views.decorators.cache import cache_page
 from competitions.models import Competition
 from bios.models import Bio
 from games.models import Game
-from places.models import Country, City, State, Stadium
+from places.models import Country, City, State, Stadium, game_stats_by_country
 from standings.models import StadiumStanding
 from teams.models import Team
 
@@ -16,8 +16,16 @@ def country_index(request):
         """
 
 
+        stats = game_stats_by_country()
+        countries = list(Country.objects.all())
+        for country in countries:
+            row = stats.get(country.id)
+            country.game_count = row['games'] if row else 0
+            country.total_attendance = row['attendance'] if row else None
+        countries.sort(key=lambda c: (-c.game_count, c.name))
+
         context = {
-                'countries': Country.objects.annotate(game_count=Count('game')).annotate(total_attendance=Sum('game__attendance')).order_by('-game_count'),
+                'countries': countries,
                 }
 
         return render(request, "places/country_index.html",

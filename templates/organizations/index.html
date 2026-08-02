@@ -1,12 +1,42 @@
 {% extends "base.html" %}
-{% block title %}player directory{% endblock %}
+{% load humanize %}
+
+{% block title %}organizations{% endblock %}
+{% block metadescription %}The six continental confederations and their member countries{% endblock %}
 
 {% block content %}
 
-<ul>
-  {% for confederation in confederations %}
-  <li><a href="{% url confederation_detail confederation.slug %}">{{ confederation.name }}</a></li>
-  {% endfor %}
-</ul>
+<h2>Organizations</h2>
+
+<p>The six continental confederations. Games counts every match in the database
+played in one of a confederation's member countries.</p>
+
+<table>
+
+<thead>
+  <tr>
+    <th scope="col">name</th>
+    <th scope="col">full name</th>
+    <th scope="col">region</th>
+    <th scope="col">founded</th>
+    <th scope="col">members</th>
+    <th scope="col">games</th>
+  </tr>
+</thead>
+
+<tbody>
+{% for confederation in confederations %}
+<tr>
+  <td><a href="{% url 'confederation_detail' confederation.slug %}">{{ confederation.name }}</a></td>
+  <td>{{ confederation.full_name }}</td>
+  <td>{{ confederation.region }}</td>
+  <td class="date">{% if confederation.founded %}<time datetime="{{ confederation.founded|date:'Y-m-d' }}">{{ confederation.founded }}</time>{% else %}<span title="no record found">&mdash;</span>{% endif %}</td>
+  <td>{{ confederation.member_count }}</td>
+  <td>{{ confederation.game_count|intcomma }}</td>
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
 
 {% endblock %}

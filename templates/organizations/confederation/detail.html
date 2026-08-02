@@ -1,14 +1,42 @@
 {% extends "base.html" %}
+{% load humanize %}
 
+{% block title %}{{ confederation.name }}{% endblock %}
+{% block metadescription %}{{ confederation.full_name }}: member countries and their games in the database{% endblock %}
 
 {% block content %}
 
-{{ confederation.name }}
+<h2>{{ confederation.name }}</h2>
 
-<ul>
-  {% for country in confederation.country_set.all %}
-  <li><a href="{% url 'country_detail' country.slug %}">{{ country }}</a></li>
-  {% endfor %}
-</ul>
+<p>{{ confederation.full_name }}. {{ confederation.region }};
+founded {% if confederation.founded %}<time datetime="{{ confederation.founded|date:'Y-m-d' }}">{{ confederation.founded }}</time>{% else %}<span title="no record found">&mdash;</span>{% endif %};
+{{ countries|length }} member countries.</p>
+
+<p>Games counts every match in the database played in that country.
+A zero is genuine: no games on record there yet.</p>
+
+<table>
+
+<thead>
+  <tr>
+    <th scope="col">country</th>
+    {% if show_subconfederation %}<th scope="col">subconfederation</th>{% endif %}
+    <th scope="col">games</th>
+    <th scope="col">attendance</th>
+  </tr>
+</thead>
+
+<tbody>
+{% for country in countries %}
+<tr>
+  <td><a href="{% url 'country_detail' country.slug %}">{{ country }}</a></td>
+  {% if show_subconfederation %}<td>{% if country.subconfederation %}{{ country.subconfederation }}{% else %}&mdash;{% endif %}</td>{% endif %}
+  <td>{{ country.game_count|intcomma }}</td>
+  {% if country.total_attendance == None %}<td class="greybg" title="no record found">&mdash;</td>{% else %}<td>{{ country.total_attendance|intcomma }}</td>{% endif %}
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
 
 {% endblock %}

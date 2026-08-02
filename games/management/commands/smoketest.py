@@ -14,7 +14,6 @@ from django.test import Client
 UNBUILT = {
     '/games/',
     '/news/',
-    '/organizations/',
     '/places/states/',
     '/places/cities/',
     '/places/stadiums/',
@@ -45,6 +44,7 @@ class Command(BaseCommand):
         from competitions.models import Competition, Season
         from drafts.models import Draft
         from games.models import Game
+        from organizations.models import Confederation
         from places.models import City, Country, Stadium, State
         from sources.models import Source
         from teams.models import Team
@@ -85,7 +85,6 @@ class Command(BaseCommand):
             '/games/',
             '/news/',
             '/organizations/',
-            '/organizations/confederations/',
             '/places/',
             '/places/states/',
             '/places/cities/',
@@ -147,6 +146,9 @@ class Command(BaseCommand):
             urls.append('/places/states/%s/' % state.slug)
         if country:
             urls.append('/places/countries/%s/' % country.slug)
+
+        for confederation in Confederation.objects.all():
+            urls.append('/organizations/%s/' % confederation.slug)
 
         if team:
             urls += [

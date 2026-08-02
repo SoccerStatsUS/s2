@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load humanize %}
 
 {% block content %}
 
@@ -16,8 +17,8 @@
 {% for country in countries %}
 <tr>
   <td><a href="{% url 'country_detail' country.slug %}">{{ country }}</a></td>
-  <td>{{ country.game_count }}</td>
-  <td>{{ country.total_attendance }}</td>
+  <td>{{ country.game_count|intcomma }}</td>
+  {% if country.total_attendance == None %}<td class="greybg" title="no record found">&mdash;</td>{% else %}<td>{{ country.total_attendance|intcomma }}</td>{% endif %}
   <!--<td>{{ country.population }}</td>-->
 </tr>
 {% endfor %}
