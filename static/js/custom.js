@@ -19,6 +19,10 @@
           }
       });
 
+      $("#competition-filter select").on("change", function(){
+          this.form.submit();
+      });
+
       var makeTab = function(containerID, wrapperID){
 
           var tabb = $(containerID);
