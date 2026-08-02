@@ -14,7 +14,7 @@ urlpatterns = [
 
     path('favicon.ico', RedirectView.as_view(url='/static/favicon.svg'), name="favicon"),
 
-    path('about/', TemplateView.as_view(template_name='about/index.html'), name='about_index'),
+    path('about/', games_views.about, name='about_index'),
     path('about/news/', TemplateView.as_view(template_name='about/news.html'), name='about_news'),
     path('about/build/', TemplateView.as_view(template_name='about/build.html'), name='about_build'),
 

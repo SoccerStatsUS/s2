@@ -8,6 +8,7 @@ from django.views.decorators.cache import cache_page
 from bios.models import Bio
 from competitions.models import Competition
 from games.models import Game, GameSource
+from sources.models import Source
 from goals.models import Goal
 from standings.models import Standing
 from stats.models import Stat, CareerStat
@@ -15,6 +16,23 @@ from teams.models import Team
 
 from collections import defaultdict, Counter
 import json
+
+
+@cache_page(60 * 60)
+def about(request):
+
+    first_game = Game.objects.exclude(date=None).order_by('date').first()
+
+    context = {
+        'first_game': first_game,
+        'games': Game.objects.count(),
+        'players': Bio.objects.count(),
+        'teams': Team.objects.count(),
+        'competitions': Competition.objects.count(),
+        'sources': Source.objects.count(),
+        }
+
+    return render(request, "about/index.html", context)
 
 
 @cache_page(60 * 60)

@@ -605,6 +605,19 @@ td.result { width: 70px; }
 #otd .otd-more { margin-top: 10px; font-size: 14px; }
 
 
+/* ---- About: prose ---- */
+
+#about {
+    max-width: 68ch;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+#about h2 { margin: 18px 0 12px; }
+#about p { margin: 0 0 1em; }
+
+
 /* ---- Homepage: tagline + search ---- */
 
 #tagline {
