@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}everything{% endblock %}
+{% block metadescription %}Every section of SoccerStats.us in one place: competitions, teams, players, dates, awards, drafts, places, and the pages still being built{% endblock %}
+
+{% block content %}
+
+<div id="more">
+
+<h2>Everything</h2>
+
+<p>Every section of the site, in one place. The unfinished ones are marked
+rather than hidden &mdash; they exist in the data, but their pages aren't built yet.</p>
+
+<ul class="more-list">
+  <li><a href="{% url 'competition_index' %}">competitions</a> &mdash; every league and cup, 1884 to present</li>
+  <li><a href="{% url 'team_index' %}">teams</a> &mdash; every team with a game on record
+    <ul>
+      <li><a href="{% url 'random_team_detail' %}">a random team</a></li>
+      <li class="unbuilt">season and standings dashboards</li>
+    </ul>
+  </li>
+  <li><a href="{% url 'person_index' %}">players</a> &mdash; the players, and everyone else in the record
+    <ul>
+      <li><a href="{% url 'random_person_detail' %}">a random player</a></li>
+    </ul>
+  </li>
+  <li><a href="{% url 'dates_index' %}">dates</a> &mdash; browse by year, month calendar, or day, 1866 to present
+    <ul>
+      <li><a href="{% url 'scoreboard_today' %}">today's scoreboard</a></li>
+      <li><a href="{% url 'day_detail' today.month today.day %}">this day in history</a></li>
+    </ul>
+  </li>
+  <li><a href="{% url 'award_index' %}">awards</a> &mdash; championships, MVPs, best XIs, the hall of fame</li>
+  <li><a href="{% url 'drafts_index' %}">drafts</a> &mdash; every MLS draft since 1996</li>
+  <li><a href="{% url 'country_index' %}">places</a> &mdash; the countries American soccer has been played in and against
+    <ul>
+      <li class="unbuilt">stadiums, cities, and states indexes <span>(individual pages work)</span></li>
+    </ul>
+  </li>
+  <li><a href="{% url 'organizations_index' %}">organizations</a> &mdash; the six confederations and their member countries</li>
+  <li><a href="{% url 'manager_index' %}">managers</a> &mdash; who ran the bench, team by team</li>
+  <li><a href="{% url 'source_index' %}">sources</a> &mdash; where the games, stats, and news here come from</li>
+  <li><a href="{% url 'search' %}">search</a> &mdash; players and teams by name</li>
+  <li><a href="{% url 'about_index' %}">about</a> &mdash; what this site is and how big it's gotten
+    <ul>
+      <li><a href="{% url 'about_news' %}">site news</a></li>
+      <li><a href="{% url 'about_build' %}">how it's built</a></li>
+      <li><a href="{% url 'contact_index' %}">contact</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h3>Not built yet</h3>
+
+<ul class="more-list more-unbuilt">
+  <li>events</li>
+  <li>games index <span>(individual game pages work)</span></li>
+  <li>goals</li>
+  <li>graphs</li>
+  <li>levels</li>
+  <li>lineups</li>
+  <li>news</li>
+  <li>positions index <span>(individual position pages and the managers index work)</span></li>
+  <li>salaries</li>
+  <li>standings index <span>(standings appear on team and season pages)</span></li>
+  <li>stats index <span>(stats appear on player, team, and season pages)</span></li>
+  <li>transactions <span>(page exists, no data loaded yet)</span></li>
+  <li>videos</li>
+</ul>
+
+</div>
+
+{% endblock %}

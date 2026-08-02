@@ -9,7 +9,7 @@ from django.core.management.base import BaseCommand
 from django.test import Client
 
 
-# Routes that exist but whose pages aren't built yet (see /more/). They are
+# Routes that exist but whose pages aren't built yet (see /everything/). They are
 # expected to error until built; the smoke test reports but tolerates them.
 UNBUILT = {
     '/games/',
@@ -73,6 +73,7 @@ class Command(BaseCommand):
         urls = [
             '/',
             '/search/?q=donovan',
+            '/everything/',
             '/more/',
             '/about/',
             '/about/news/',
@@ -81,6 +82,9 @@ class Command(BaseCommand):
             '/bios/',
             '/c/',
             '/dates/',
+            '/dates/today/',
+            '/positions/managers/',
+            '/transactions/',
             '/drafts/',
             '/games/',
             '/news/',

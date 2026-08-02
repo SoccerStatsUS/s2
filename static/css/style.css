@@ -765,6 +765,11 @@ td.result { width: 70px; }
 
 #more .more-unbuilt li { color: var(--ink-soft); }
 
+#more .more-list ul { margin: 4px 0 2px 20px; }
+#more .more-list ul li { margin: 0 0 4px; font-size: 14px; }
+#more li.unbuilt { color: var(--ink-soft); }
+#more li.unbuilt span { font-size: 13px; }
+
 #more .more-unbuilt span { font-size: 13px; }
 
 

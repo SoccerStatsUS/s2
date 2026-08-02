@@ -18,6 +18,11 @@ from collections import defaultdict, Counter
 import json
 
 
+def everything(request):
+    return render(request, "everything.html",
+                  {'today': datetime.date.today()})
+
+
 @cache_page(60 * 60)
 def about(request):
 

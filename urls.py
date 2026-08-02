@@ -13,7 +13,8 @@ urlpatterns = [
 
     path('favicon.ico', RedirectView.as_view(url='/static/favicon.svg'), name="favicon"),
 
-    path('more/', TemplateView.as_view(template_name='more.html'), name='more_index'),
+    path('everything/', games_views.everything, name='everything_index'),
+    path('more/', RedirectView.as_view(url='/everything/', permanent=True)),
 
     path('about/', games_views.about, name='about_index'),
     path('about/news/', TemplateView.as_view(template_name='about/news.html'), name='about_news'),
