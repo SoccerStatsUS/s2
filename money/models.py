@@ -18,11 +18,6 @@ class ExchangeValue(models.Model):
 
     
 
-class SalaryManager(models.Manager):
-
-    def get_queryset(self):
-        return super(DraftManager, self).get_queryset().filter(real=True)
-
 class Salary(models.Model):
 
     person = models.ForeignKey(Bio, on_delete=models.CASCADE)
