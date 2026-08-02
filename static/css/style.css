@@ -953,3 +953,67 @@ td.result { width: 70px; }
 }
 
 #home-search input[type="submit"]:hover { border-color: var(--accent); }
+
+
+/* ---- Search page ---- */
+
+#search-page form {
+    display: flex;
+    gap: 8px;
+    margin: 6px 0 10px;
+    max-width: 560px;
+}
+
+#search-page input[type="text"] {
+    flex: 1;
+    font-size: 16px;
+    padding: 10px 14px;
+    border: 1px solid var(--hairline);
+    border-radius: 6px;
+    background: var(--fill);
+    color: var(--ink);
+}
+
+#search-page input[type="text"]:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: #fff;
+}
+
+#search-page input[type="submit"] {
+    font-size: 15px;
+    padding: 10px 16px;
+    border: 1px solid var(--hairline);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--accent);
+    cursor: pointer;
+}
+
+#search-page input[type="submit"]:hover { border-color: var(--accent); }
+
+.search-empty {
+    color: var(--ink-soft);
+    margin-top: 18px;
+}
+
+.search-results {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 40px;
+    align-items: flex-start;
+}
+
+.search-group {
+    flex: 1 1 240px;
+    max-width: 380px;
+}
+
+.search-group table { width: 100%; }
+
+.search-count {
+    font-size: .7em;
+    font-weight: 400;
+    color: var(--ink-soft);
+    margin-left: 4px;
+}

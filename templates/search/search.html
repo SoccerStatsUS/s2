@@ -4,47 +4,67 @@
 
 {% block content %}
 
+<div id="search-page">
+
+<h2>Search</h2>
+
 <form method="get" action="{% url 'search' %}">
-  <input name="q" type="text" size="40" value="{{ query }}" placeholder="search players, teams, competitions">
+  <input name="q" type="text" value="{{ query }}" placeholder="Players, teams, competitions"
+         aria-label="Search players, teams, and competitions"{% if not query %} autofocus{% endif %}>
   <input type="submit" value="search">
 </form>
 
 {% if query %}
 
 {% if not players and not teams and not competitions %}
-<p>No players, teams, or competitions match &ldquo;{{ query }}&rdquo;.</p>
+<p class="search-empty">No players, teams, or competitions match &ldquo;{{ query }}&rdquo;.</p>
 {% endif %}
 
+<div class="search-results">
+
 {% if players %}
-<h3>Players</h3>
+<section class="search-group">
+<h3>Players <span class="search-count">{% if players|length == 30 %}first 30{% else %}{{ players|length }}{% endif %}</span></h3>
 <table>
-<thead><tr><th scope="col">name</th></tr></thead>
+<tbody>
 {% for bio in players %}
 <tr><td><a href="{% url 'person_detail' bio.slug %}">{{ bio.name }}</a></td></tr>
 {% endfor %}
+</tbody>
 </table>
+</section>
 {% endif %}
 
 {% if teams %}
-<h3>Teams</h3>
+<section class="search-group">
+<h3>Teams <span class="search-count">{% if teams|length == 30 %}first 30{% else %}{{ teams|length }}{% endif %}</span></h3>
 <table>
-<thead><tr><th scope="col">name</th></tr></thead>
+<tbody>
 {% for team in teams %}
 <tr><td><a href="{% url 'team_detail' team.slug %}">{{ team.name }}</a></td></tr>
 {% endfor %}
+</tbody>
 </table>
+</section>
 {% endif %}
 
 {% if competitions %}
-<h3>Competitions</h3>
+<section class="search-group">
+<h3>Competitions <span class="search-count">{% if competitions|length == 30 %}first 30{% else %}{{ competitions|length }}{% endif %}</span></h3>
 <table>
-<thead><tr><th scope="col">name</th></tr></thead>
+<tbody>
 {% for competition in competitions %}
 <tr><td><a href="{% url 'competition_detail' competition.slug %}">{{ competition.name }}</a></td></tr>
 {% endfor %}
+</tbody>
 </table>
+</section>
 {% endif %}
 
+</div>
+
 {% endif %}
+
+</div>
 
 {% endblock %}

@@ -70,9 +70,9 @@ def search(request):
 
     players = teams = competitions = []
     if q:
-        players = Bio.objects.filter(name__icontains=q)[:30]
-        teams = Team.objects.filter(name__icontains=q)[:30]
-        competitions = Competition.objects.filter(name__icontains=q)[:30]
+        players = Bio.objects.filter(name__icontains=q).order_by('name')[:30]
+        teams = Team.objects.filter(name__icontains=q).order_by('name')[:30]
+        competitions = Competition.objects.filter(name__icontains=q).order_by('name')[:30]
 
     context = {
         'query': q,
