@@ -55,10 +55,10 @@
     {% datum_or_grey cs.games_played %}
     {% datum_or_grey cs.goals %}
 
-    {% if recipient.age_years %}
-    <td>{{ recipient.age_years|floatformat }}</td>
+    {% if recipient.age_display %}
+    <td>{{ recipient.age_display }}</td>
     {% else %}
-    <td class="grey"></td>
+    <td class="greybg" title="no record found">&mdash;</td>
     {% endif %}
 
     {% if recipient.birthplace %}

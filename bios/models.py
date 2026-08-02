@@ -261,6 +261,20 @@ class Bio(models.Model):
             return None
 
 
+    # Above this, an age computed to today means we are missing a deathdate,
+    # not that the player is still alive.
+    max_plausible_age = 105
+
+    def age_display(self, date=None):
+        """
+        Whole-year age, or None when we can't reasonably claim one.
+        """
+        a = self.age_years(date)
+        if a is None or a > self.max_plausible_age:
+            return None
+        return int(a)
+
+
     def season_stats(self):
         """
         All stats for a player that are for a single season.

@@ -20,7 +20,7 @@
   {% endif %}
 
   {% if bio.birthdate %}
-  <div>born <a href="{% url 'date_detail' bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a>{% if not bio.deathdate %} (age {{ bio.age_years|floatformat:1 }}){% endif %}{% if bio.birthplace %}, <a href="{% url 'city_detail' bio.birthplace.slug %}">{{ bio.birthplace }}</a>{% endif %}</div>
+  <div>born <a href="{% url 'date_detail' bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a>{% if not bio.deathdate %} {% if bio.age_display %} (age {{ bio.age_display }}){% endif %}{% endif %}{% if bio.birthplace %}, <a href="{% url 'city_detail' bio.birthplace.slug %}">{{ bio.birthplace }}</a>{% endif %}</div>
   {% elif bio.birthplace %}
   <div>born in <a href="{% url 'city_detail' bio.birthplace.slug %}">{{ bio.birthplace }}</a></div>
   {% endif %}

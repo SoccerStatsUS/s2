@@ -8,6 +8,7 @@
 {% load standings %}
 {% load stats %}
 {% load games %}
+{% load humanize %}
 
 {% endblock %}
 
@@ -104,7 +105,7 @@
     {% if season.total_attendance %}
     <tr>
       <td>
-        {{ season.average_attendance|floatformat:1 }}
+        {{ season.average_attendance|intcomma }}
         {% if attendance_game_count %}
         <a href="{% url 'season_attendance' season.competition.slug season.slug %}">avg. attendance</a>
         {% endif %}

@@ -1,3 +1,4 @@
+{% load humanize %}
 {% with has_mvp=competition.has_mvp %}
 {% if seasons %}
 <table>
@@ -8,8 +9,8 @@
     {% if has_mvp %}<th scope="col">MVP</th>{% endif %}
     <th scope="col">golden boot</th>
     <th scope="col">games</th>
-    <th scope="col" title="goals per game">gpg</th>
-    {% if has_attendance %}<th scope="col" title="average attendance">att.</th>{% endif %}
+    <th scope="col">goals/game</th>
+    {% if has_attendance %}<th scope="col">avg. attendance</th>{% endif %}
   </tr>
   </thead>
 
@@ -39,7 +40,7 @@
     {% endif %}
 
     {% with vg=season.verified_games %}
-    <td><a href="{% url 'season_games' season.competition.slug season.slug %}">{{ season.max_games }} {% if vg %}<span class="vg"><em>({{ vg|floatformat:2 }})</em></span>{% endif %}</a></td>
+    <td><a href="{% url 'season_games' season.competition.slug season.slug %}">{{ season.max_games|floatformat }} {% if vg %}<span class="vg"><em>({{ vg|floatformat:2 }})</em></span>{% endif %}</a></td>
     {% endwith %}
         
 
@@ -54,7 +55,7 @@
     {% if season.total_attendance %}
 
 
-    <td><a href="{% url 'season_attendance' season.competition.slug season.slug %}">{{ season.average_attendance }}     {% if ag %}<em>({{ ag|floatformat:2 }})</em>{% endif %}</a></td></a></td>
+    <td><a href="{% url 'season_attendance' season.competition.slug season.slug %}">{{ season.average_attendance|intcomma }}     {% if ag %}<em>({{ ag|floatformat:2 }})</em>{% endif %}</a></td></a></td>
       {# ({{ season.games_with_attendance_percentage|floatformat:2 }}) #}
     {% else %}
     <td></td>
