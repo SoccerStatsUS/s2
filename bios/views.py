@@ -116,7 +116,7 @@ def bad_bios(request):
 
 
 def person_detail(request, slug):
-    bio = get_object_or_404(Bio, slug=slug)
+    bio = Bio.objects.by_slug(slug)
     return person_detail_abstract(request, bio)
 
 def person_id_detail(request, pid):
@@ -162,7 +162,8 @@ def random_person_detail(request):
 
 
 def person_detail_games(request, slug):
-    bio = get_object_or_404(Bio, slug=slug)
+    bio = Bio.objects.by_slug(slug)
+    career_stat = bio.career_stat()
     game_stats = bio.gamestat_set.order_by('game')
     
     if request.method == 'GET':
@@ -190,7 +191,9 @@ def person_detail_games(request, slug):
         'bio': bio,
         'game_stats': game_stats,
         'game_log_count': bio.gamestat_set.count(),
-        'career_games': bio.career_stat().games_played,
+        # Plenty of bios have no career stat line at all; the template treats
+        # a missing total as "unknown" rather than zero.
+        'career_games': career_stat.games_played if career_stat else None,
         'stat': AppearanceStat(bio, game_stats),
         }
     return render(request, "bios/detail_games.html",
@@ -200,7 +203,7 @@ def person_detail_games(request, slug):
 
 
 def person_detail_referee_games(request, slug):
-    bio = get_object_or_404(Bio, slug=slug)
+    bio = Bio.objects.by_slug(slug)
     
     query = (Q(referee=bio) | Q(linesman1=bio) | Q(linesman1=bio) | Q(linesman1=bio))
     games = Game.objects.filter(query)
@@ -216,7 +219,7 @@ def person_detail_referee_games(request, slug):
 
 
 def person_detail_goals(request, slug):
-    bio = get_object_or_404(Bio, slug=slug)
+    bio = Bio.objects.by_slug(slug)
 
     context = {
         "goals": bio.goal_set.all(),
@@ -226,7 +229,7 @@ def person_detail_goals(request, slug):
 
 
 def person_detail_stats(request, slug):
-    bio = get_object_or_404(Bio, slug=slug)
+    bio = Bio.objects.by_slug(slug)
 
     context = {
         "stats": bio.stat_set.order_by('season'),

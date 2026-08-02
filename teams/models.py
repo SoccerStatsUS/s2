@@ -4,6 +4,7 @@ import os
 
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.db import models
+from django.http import Http404
 from django.template.defaultfilters import slugify
 
 from places.models import City
@@ -31,6 +32,20 @@ class AbstractTeamManager(models.Manager):
             d[e.name] = e.id
             d[e.short_name] = e.id
         return d
+
+    def by_slug(self, slug):
+        """
+        Look up one team by slug, or raise Http404.
+
+        Slugs are not unique in the data (see duplicate_slugs); a plain get()
+        raises MultipleObjectsReturned and the view 500s. Serve the oldest
+        match instead — the duplicate itself is a data bug to fix upstream.
+        """
+        obj = self.get_queryset().filter(slug=slug).order_by('id').first()
+        if obj is None:
+            raise Http404("No team with slug %r" % slug)
+        return obj
+
 
     def duplicate_slugs(self):
         """

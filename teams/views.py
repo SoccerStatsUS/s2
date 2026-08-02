@@ -157,7 +157,7 @@ def seasons_dashboard(request):
     
 def team_position_detail(request, team_slug, position_slug):
 
-    team = get_object_or_404(Team, slug=team_slug)
+    team = Team.objects.by_slug(team_slug)
     positions = Position.objects.filter(slug=position_slug, team=team)
 
 
@@ -178,7 +178,7 @@ def team_detail(request, team_slug):
     """
     Just about the most important view of all.
     """
-    team = get_object_or_404(Team, slug=team_slug)
+    team = Team.objects.by_slug(team_slug)
     # Add aliases.
 
     today = datetime.date.today()
@@ -238,7 +238,7 @@ def team_detail(request, team_slug):
 
 
 def team_competition_detail(request, team_slug, competition_slug):
-    team = get_object_or_404(Team, slug=team_slug)
+    team = Team.objects.by_slug(team_slug)
     c = get_object_or_404(Competition, slug=competition_slug)
     games = Game.objects.team_filter(team).filter(competition=c)
 
@@ -283,7 +283,7 @@ def team_form(gameset, team):
 
 
 def team_season_detail(request, team_slug, competition_slug, season_slug):
-    team = get_object_or_404(Team, slug=team_slug)
+    team = Team.objects.by_slug(team_slug)
     competition = get_object_or_404(Competition, slug=competition_slug)
     season = get_object_or_404(Season, competition=competition, slug=season_slug)
     games = Game.objects.team_filter(team).filter(season=season)
@@ -328,7 +328,7 @@ def team_stats(request, team_slug):
     """
     Just about the most important view of all.
     """
-    team = get_object_or_404(Team, slug=team_slug)
+    team = Team.objects.by_slug(team_slug)
 
     stats = TeamStat.objects.filter(team=team)
 
@@ -361,7 +361,7 @@ def team_picks(request, team_slug):
     """
     Just about the most important view of all.
     """
-    team = get_object_or_404(Team, slug=team_slug)
+    team = Team.objects.by_slug(team_slug)
 
     picks = team.pick_set.all()
 
@@ -393,7 +393,7 @@ def team_graphs(request, team_slug):
     """
     Just about the most important view of all.
     """
-    team = get_object_or_404(Team, slug=team_slug)
+    team = Team.objects.by_slug(team_slug)
 
     stats = TeamStat.objects.filter(team=team).exclude(games_played=None)
     country_dict = Country.objects.id_dict()
@@ -413,7 +413,7 @@ def team_graphs(request, team_slug):
 
 def team_draftees(request, team_slug):
 
-    team = get_object_or_404(Team, slug=team_slug)
+    team = Team.objects.by_slug(team_slug)
 
     picks = team.former_team_set.all()
 
@@ -438,7 +438,7 @@ def team_games(request, team_slug):
     """
     A filterable table of all games played by a team.
     """
-    team = get_object_or_404(Team, slug=team_slug)
+    team = Team.objects.by_slug(team_slug)
 
     games = Game.objects.team_filter(team)
 
@@ -508,7 +508,7 @@ def team_calendar(request, team_slug):
     """
     A calendar of a team's games.
     """
-    team = get_object_or_404(Team, slug=team_slug)
+    team = Team.objects.by_slug(team_slug)
 
     games = Game.objects.team_filter(team).select_related().order_by('-has_date', '-date', '-season')
 
@@ -526,8 +526,8 @@ def team_versus(request, team1_slug, team2_slug):
     """
     Just about the most important view of all.
     """
-    team1 = get_object_or_404(Team, slug=team1_slug)
-    team2 = get_object_or_404(Team, slug=team2_slug)
+    team1 = Team.objects.by_slug(team1_slug)
+    team2 = Team.objects.by_slug(team2_slug)
 
     context = {
         'team1': team1,
@@ -544,7 +544,7 @@ def team_year_detail(request, team_slug, year):
     """
     Just about the most important view of all.
     """
-    team = get_object_or_404(Team, slug=team_slug)
+    team = Team.objects.by_slug(team_slug)
 
     seasons = Season.objects.filter(name=year)
 

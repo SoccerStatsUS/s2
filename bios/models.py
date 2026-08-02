@@ -1,5 +1,6 @@
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.db import models
+from django.http import Http404
 from django.template.defaultfilters import slugify
 
 from functools import lru_cache
@@ -56,6 +57,20 @@ class BioManager(models.Manager):
             return bios[0]
         else:
             return Bio.objects.create(name=name, hall_of_fame=False)
+
+
+    def by_slug(self, slug):
+        """
+        Look up one bio by slug, or raise Http404.
+
+        Slugs are not unique in the data (see duplicate_slugs); a plain get()
+        raises MultipleObjectsReturned and the view 500s. Serve the oldest
+        match instead — the duplicate itself is a data bug to fix upstream.
+        """
+        obj = self.get_queryset().filter(slug=slug).order_by('id').first()
+        if obj is None:
+            raise Http404("No bio with slug %r" % slug)
+        return obj
 
 
     def duplicate_slugs(self):
