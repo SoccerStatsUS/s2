@@ -402,6 +402,8 @@ table.calendar .count {
 
 .coverage-note { font-size: 13px; color: var(--ink-soft); }
 
+.lineage { margin: -2px 0 12px; font-size: 14px; color: var(--ink-soft); }
+
 /* Result cells: soft tints, readable text. */
 td.w, table tbody tr:nth-child(even) td.w, table tbody tr:hover td.w { background-color: var(--win); }
 td.l, table tbody tr:nth-child(even) td.l, table tbody tr:hover td.l { background-color: var(--loss); }

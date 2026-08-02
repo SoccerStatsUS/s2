@@ -14,12 +14,12 @@
 
   <h3>{{ competition.name }}</h3>
 
-  {% if competition.after.exists %}
-  <p>preceded by {% for item in competition.after.all %}<a href="{% url 'competition_detail' item.before.slug %}">{{ item.before }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-  {% endif %}
-
-  {% if competition.before.exists %}
-  <p>followed by {% for item in competition.before.all %}<a href="{% url 'competition_detail' item.after.slug %}">{{ item.after }}</a>{% endfor %}</p>
+  {% if competition.after.exists or competition.before.exists %}
+  <p class="lineage">
+  {% if competition.after.exists %}preceded by {% for item in competition.after.all %}<a title="{{ item.before.name }}" href="{% url 'competition_detail' item.before.slug %}">{{ item.before.abbreviation|default:item.before.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}
+  {% if competition.after.exists and competition.before.exists %}&middot;{% endif %}
+  {% if competition.before.exists %}followed by {% for item in competition.before.all %}<a title="{{ item.after.name }}" href="{% url 'competition_detail' item.after.slug %}">{{ item.after.abbreviation|default:item.after.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}
+  </p>
   {% endif %}
 
 
