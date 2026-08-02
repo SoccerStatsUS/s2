@@ -620,14 +620,22 @@ def teams_ajax(request):
     
 
 
-def bad_teams(request):
+def teams_qa(request):
+    """
+    Teams sharing a slug. Two teams on one slug means one of them is
+    unreachable: the URL serves whichever has the lower id.
+    """
+    slugs = (Team.objects.values('slug').annotate(n=Count('id'))
+             .filter(n__gt=1).values_list('slug', flat=True))
+    groups = OrderedDict()
+    for team in Team.objects.filter(slug__in=list(slugs)).order_by('slug', 'id'):
+        groups.setdefault(team.slug, []).append(team)
 
-
-    
     context = {
-        'duplicate_slugs': Team.objects.duplicate_slugs(),
+        'groups': list(groups.items()),
+        'slug_count': len(groups),
         }
 
-    return render(request, "teams/bad.html",
-                              context)    
+    return render(request, "teams/qa.html",
+                              context)
                               

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}teams sharing a slug{% endblock %}
+
+{% block content %}
+
+<h1>Teams sharing a slug</h1>
+
+<p class="dir-note">{{ slug_count|intcomma }} slugs belong to more than one team.
+The URL serves whichever has the lower id &mdash; marked <strong>served</strong>
+below &mdash; so every other team on the slug is unreachable. There is no
+id-based team URL to reach them by.</p>
+
+{% if groups %}
+<table>
+
+<thead>
+  <tr>
+    <th scope="col">slug</th>
+    <th scope="col">teams sharing it</th>
+  </tr>
+</thead>
+
+<tbody>
+{% for slug, teams in groups %}
+<tr>
+  <td><a href="{% url 'team_detail' slug %}">{{ slug }}</a></td>
+  <td>
+    {% for team in teams %}{{ team.name }}
+    <span class="grey">#{{ team.id }}{% if forloop.first %} served{% endif %}</span>{% if not forloop.last %} &middot; {% endif %}{% endfor %}
+  </td>
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
+{% else %}
+<p class="coverage-note">Every team has a slug to itself.</p>
+{% endif %}
+
+{% endblock %}

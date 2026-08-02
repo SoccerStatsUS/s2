@@ -9,8 +9,8 @@ urlpatterns = [
                        path('az/<path:fragment>/', views.team_name_fragment,
                            name='team_name_fragment'),
                        
-                       path('bad/', views.bad_teams,
-                           name='bad_teams'),
+                       path('qa/', views.teams_qa,
+                           name='teams_qa'),
 
                        path('seasons/', views.seasons_dashboard,
                            name='seasons_dashboard'),
