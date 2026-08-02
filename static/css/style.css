@@ -360,13 +360,12 @@ td.friendly { background-color: transparent; }
 
 #bio_data { display: inline-block; }
 
-#team_logo {
-    float: left;
-    width: 120px;
-    height: 120px;
-    margin-right: 16px;
-    background-color: var(--fill);
-    border-radius: 4px;
+#team_info h2 { margin: 10px 0 2px; }
+
+#team_facts {
+    margin: 0 0 4px;
+    font-size: 14px;
+    color: var(--ink-soft);
 }
 
 .letter_link { font-size: 1.5em; margin-right: 6px; }

@@ -12,11 +12,14 @@
 
 <div id="team_info">
 
-<div id="team_logo"></div>
+<h2>{{ team.name }}</h2>
 
-<div id="team_data">
-<div>{{ team.name }}</div>
-</div>
+<p id="team_facts">
+{% if alltime %}All-time record: {{ alltime.wins }}W {{ alltime.losses }}L {{ alltime.ties }}T
+in {{ alltime.games }} games &middot;{% endif %}
+{{ games_count }} game{{ games_count|pluralize }} transcribed here{% if first_game %},
+<a href="{% url 'game_detail' first_game.id %}">{{ first_game.date.year }}</a>&ndash;<a href="{% url 'game_detail' last_game.id %}">{{ last_game.date.year }}</a>{% endif %}
+</p>
 
 {% if team.teamalias_set.exists %}
 <p class="small">also known as: 
@@ -45,9 +48,17 @@
 
 {% if competition_standings or league_standings %}
 <div tab="standings">
-{% standings_table competition_standings 'team,season' %}
 
+{% if competition_standings %}
+<h3>All-time, by competition</h3>
+{% standings_table competition_standings 'team,season' %}
+{% endif %}
+
+{% if league_standings %}
+<h3>Season by season</h3>
 {% standings_table league_standings 'team' %}
+{% endif %}
+
 </div>
 {% endif %}
 
@@ -60,14 +71,14 @@
 
 {% if game_leaders %}
 <div class="col">
-<div>game leaders</div>
+<h3>Game leaders</h3>
 {% stats_table game_leaders 'team,competition,season' 15 %}
 </div>
 {% endif %}
 
 {% if goal_leaders %}
 <div class="col">
-<div>goal leaders</div>
+<h3>Goal leaders</h3>
 {% stats_table goal_leaders 'team,competition,season' 15 %}
 </div>
 {% endif %}
@@ -76,7 +87,7 @@
 {% endif %}
 
 <div tab="games">
-<a href="{% url 'team_games' team.slug %}">all games</a>
+<h3>Most recent games &mdash; <a href="{% url 'team_games' team.slug %}">all {{ games_count }} &rarr;</a></h3>
 {% games_table recent_games %}
 </div>
 

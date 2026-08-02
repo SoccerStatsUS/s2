@@ -186,20 +186,16 @@ def team_detail(request, team_slug):
 
     competition_standings = Standing.objects.filter(team=team, season=None).order_by('-wins')
     league_standings = Standing.objects.filter(team=team, season__competition__ctype='League').filter(final=True).reverse()
-    recent_picks = team.pick_set.exclude(player=None).order_by('-draft__season', 'number')[:10]
 
-    draftees = team.former_team_set.exclude(player=None).order_by('-draft__season', 'number')[:10]
+    games_count = team.game_set().count()
+    dated_games = team.game_set().exclude(date=None).order_by('date')
+    first_game = dated_games.first()
+    last_game = dated_games.last()
+    alltime = Standing.objects.filter(team=team, competition=None, season=None).first()
 
     recent_games = team.game_set().filter(date__lt=today).order_by('-date').select_related()[:10]
     if recent_games.count() == 0:
         recent_games = team.game_set().select_related()[:10]
-
-    current_staff = team.position_set.filter(end=None)
-
-    # Get notable positions.
-    positions = team.position_set.filter(name='Head Coach')
-    if positions.count() == 0:
-        positions = team.position_set.exclude(id__in=current_staff)
 
     #awards = team.awards.order_by('-season')
 
@@ -214,16 +210,13 @@ def team_detail(request, team_slug):
 
     context = {
         'team': team,
-        #'awards': awards,
-        #'stats': stats[:15],
-        #'stats': stats,
         'recent_games': recent_games,
         'competition_standings': competition_standings,
         'league_standings': league_standings,
-        'positions': positions,
-        'current_staff': current_staff,
-        'recent_picks': recent_picks,
-        'draftees': draftees,
+        'games_count': games_count,
+        'first_game': first_game,
+        'last_game': last_game,
+        'alltime': alltime,
         'game_leaders': game_leaders,
         'goal_leaders': goal_leaders,
         'gx': True,
