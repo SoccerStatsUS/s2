@@ -107,7 +107,7 @@ ul { list-style-type: none; padding-left: 0; }
     align-items: center;
     flex-wrap: wrap;
     gap: 16px;
-    margin-left: auto;
+    flex: 1;
     font-size: 15px;
 }
 
@@ -132,28 +132,17 @@ ul { list-style-type: none; padding-left: 0; }
 #nav-search {
     display: flex;
     align-items: center;
-    margin: 0;
+    margin: 0 0 0 auto;
 }
 
 #nav-search input {
-    width: 0;
-    padding: 4px 0;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    background: var(--fill);
-    font-size: 14px;
-    opacity: 0;
-    visibility: hidden;
-    transition: width 0.15s ease, opacity 0.15s ease, visibility 0.15s;
-}
-
-#nav-search.open input {
     width: 180px;
     padding: 4px 10px;
     margin-right: 6px;
-    border-color: var(--hairline);
-    opacity: 1;
-    visibility: visible;
+    border: 1px solid var(--hairline);
+    border-radius: 4px;
+    background: var(--fill);
+    font-size: 14px;
 }
 
 #nav-search input:focus {

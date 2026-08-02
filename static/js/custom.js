@@ -12,27 +12,10 @@
       var navSearch = $("#nav-search");
       var navSearchInput = navSearch.find("input");
 
-      navSearch.find("button").click(function(e){
-          if (!navSearch.hasClass("open")) {
+      navSearch.on("submit", function(e){
+          if (!$.trim(navSearchInput.val())) {
               e.preventDefault();
-              navSearch.addClass("open");
               navSearchInput.focus();
-          } else if (!$.trim(navSearchInput.val())) {
-              e.preventDefault();
-              navSearch.removeClass("open");
-          }
-      });
-
-      navSearchInput.on("keydown", function(e){
-          if (e.which === 27) {
-              navSearch.removeClass("open");
-              navSearch.find("button").focus();
-          }
-      });
-
-      $(document).on("click", function(e){
-          if (navSearch.hasClass("open") && !$(e.target).closest("#nav-search").length) {
-              navSearch.removeClass("open");
           }
       });
 
