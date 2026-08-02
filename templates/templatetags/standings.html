@@ -104,7 +104,9 @@
   {% endif %}
   {% endif %}
 
-  <td>{{ standing.goal_ratio|floatformat:2 }}</td>
+  {% with gr=standing.goal_ratio %}
+  <td>{% if gr == None %}<span title="no record found">&mdash;</span>{% else %}{{ gr|floatformat:2 }}{% endif %}</td>
+  {% endwith %}
 
 
 </tr>

@@ -30,10 +30,9 @@ class AbstractStanding(models.Model):
         abstract = True
 
     def goal_ratio(self):
-        try:
-            return float(self.goals_for) / self.goals_against
-        except:
-            return 0.0
+        if self.goals_for is None or not self.goals_against:
+            return None
+        return self.goals_for / float(self.goals_against)
 
 
     def goal_difference(self):

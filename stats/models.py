@@ -80,7 +80,9 @@ class AbstractStat(StandingStat):
 
 
     def shooting_percentage(self):
-        return self.goals / float(self.asists)
+        if self.goals is None or not self.shots:
+            return None
+        return self.goals / float(self.shots)
 
 
     def goals_per_90(self):
@@ -92,7 +94,7 @@ class AbstractStat(StandingStat):
     def assists_per_90(self):
         if self.minutes == 0:
             return 0
-        return 90 * self.goals / float(self.minutes)
+        return 90 * self.assists / float(self.minutes)
 
 
     def goals_assists_per_90(self):

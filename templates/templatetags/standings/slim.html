@@ -33,7 +33,9 @@
     <td>{{ standing.win_percentage_100|floatformat }}</td>
     {% datum_or_grey  standing.goals_for %}
     {% datum_or_grey standing.goals_against %}
-    <td>{{ standing.goal_ratio|floatformat:2 }}</td>
+    {% with gr=standing.goal_ratio %}
+    <td>{% if gr == None %}<span title="no record found">&mdash;</span>{% else %}{{ gr|floatformat:2 }}{% endif %}</td>
+    {% endwith %}
   </tr>
   {% endfor %}
   </tbody>
