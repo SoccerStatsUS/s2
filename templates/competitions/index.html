@@ -8,7 +8,9 @@
 
 <form id="competition-filter" method="GET" action=".">
 
-{{ form.as_table }}
+{% for field in form %}
+<label>{{ field.label|lower }} {{ field }}</label>
+{% endfor %}
 
 <noscript><input type="submit" value="filter"></noscript>
 

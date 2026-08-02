@@ -6,7 +6,7 @@ from competitions.models import Competition
 
 
 LEVELS = [
-    ('', ''),
+    ('', 'all'),
     (1, 1),
     (2, 2),
     (3, 3),
@@ -14,7 +14,7 @@ LEVELS = [
     ]
 
 CTYPES = [
-    ('', ''),
+    ('', 'all'),
     ('Cup', 'Cup'),
     ('League', 'League'),
     ]
@@ -27,14 +27,14 @@ INTERNATIONAL = [
 
 
 CODE = [
+    ('', 'all'),
     ('soccer', 'soccer'),
     ('indoor', 'indoor'),
     ('women', 'women'),
-    ('', ''),
     ]
 
 AREA = [
-    ('', ''),
+    ('', 'all'),
     ('Earth', 'Earth'),
     ('CONCACAF', 'CONCACAF'),
     ('CONMEBOL', 'CONMEBOL'),
@@ -51,7 +51,7 @@ class CompetitionForm(forms.Form):
     #international = forms.ChoiceField(choices=INTERNATIONAL, required=False)
     code = forms.ChoiceField(choices=CODE, required=False)
     level = forms.ChoiceField(choices=LEVELS, required=False)
-    ctype = forms.ChoiceField(choices=CTYPES, required=False)
+    ctype = forms.ChoiceField(choices=CTYPES, required=False, label='type')
     area = forms.ChoiceField(choices=AREA, required=False)
 
 
