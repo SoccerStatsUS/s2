@@ -15,13 +15,7 @@
 {{ competitions|intcomma }} competitions &mdash; from
 {% if first_game %}<a href="{% url 'game_detail' first_game.id %}">the first recorded match</a>,
 in Waukesha, Wisconsin, in 1866,{% else %}the first recorded match, in Waukesha, Wisconsin, in 1866,{% endif %}
-to the current season. It exists for the people who look up the 1924 Fall River roster
-for pleasure.</p>
-
-<p>Every figure here was transcribed from somewhere &mdash; {{ sources|intcomma }} named books,
-newspapers, and archives, listed on <a href="{% url 'source_index' %}">the sources page</a> and
-attached to the games they support. Where the record runs out, the gap is marked rather than
-papered over: a dash means no one has found the figure yet, not that nothing happened.</p>
+to the current season.</p>
 
 <p>The record is nowhere near complete, and some of it is surely wrong. If you catch an error,
 every page carries a link to report it. If you have a season the database is missing,

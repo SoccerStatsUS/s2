@@ -29,7 +29,6 @@ def about(request):
         'players': Bio.objects.count(),
         'teams': Team.objects.count(),
         'competitions': Competition.objects.count(),
-        'sources': Source.objects.count(),
         }
 
     return render(request, "about/index.html", context)
