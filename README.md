@@ -2,7 +2,7 @@
 
 This is the code used to create an integrated, reasonably maintained soccer database, with an ORM layer including models and views written in Django (5.2, Python 3.12).
 
-The site is served at stats.soccerstats.us; the static landing page lives in the soccerstats.us repository.
+The site is served at soccerstats.us (stats.soccerstats.us and www 301 to it as of 2026-08-02).
 
 #### Local setup
 

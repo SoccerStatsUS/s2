@@ -1,41 +1,19 @@
 server {
     server_name stats.soccerstats.us;
-
-    location = /robots.txt {
-        default_type text/plain;
-        return 200 "User-agent: ClaudeBot\nCrawl-delay: 10\n\nUser-agent: GPTBot\nCrawl-delay: 10\n\nUser-agent: *\nDisallow:\n";
-    }
-
-    location /static/ {
-        alias /home/chris/www/s2/staticfiles/;
-    }
-
-    location / {
-        limit_req zone=aibots burst=5 nodelay;
-        limit_req_status 429;
-        proxy_pass http://127.0.0.1:8100;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
+    return 301 https://soccerstats.us$request_uri;
 
     listen 443 ssl; # managed by Certbot
     ssl_certificate /etc/letsencrypt/live/stats.soccerstats.us/fullchain.pem; # managed by Certbot
     ssl_certificate_key /etc/letsencrypt/live/stats.soccerstats.us/privkey.pem; # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
-
 }
 server {
     if ($host = stats.soccerstats.us) {
         return 301 https://$host$request_uri;
     } # managed by Certbot
 
-
     listen 80;
     server_name stats.soccerstats.us;
     return 404; # managed by Certbot
-
-
 }

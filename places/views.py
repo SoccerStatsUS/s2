@@ -62,7 +62,7 @@ def city_index(request):
 def stadium_index(request):
 
         stadiums = Stadium.objects.select_related('city').annotate(game_count=Count('game')).annotate(total_attendance=Sum('game__attendance')).order_by('-game_count', 'name')
-        page = Paginator(stadiums, 500).get_page(request.GET.get('page'))
+        page = Paginator(stadiums, 100).get_page(request.GET.get('page'))
 
         context = {
                 'stadiums': page.object_list,
