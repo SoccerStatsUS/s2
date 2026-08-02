@@ -69,7 +69,6 @@ newspaper *costume*. No sepia, no faux-aged paper, no blackletter.
 
 **Style**
 - Hairline rules between logical groups. No boxes, no full grid.
-- No zebra striping. Striping compensates for ragged row heights; fix the raggedness instead.
 - Row hover highlight for tracking across wide tables.
 - Set a minimum row height. Long names truncate with ellipsis and expose the full value
   on hover/tap rather than wrapping to three lines.
@@ -97,7 +96,6 @@ If a table is genuinely unusable on a phone, the fix is fewer columns in that vi
 Numbers are the product; treat them as typography.
 
 - `font-variant-numeric: tabular-nums` on every table.
-- Right-align or decimal-align numeric columns. Never center them.
 - Counts render as integers. `408.0` games is a formatting bug, not a value.
 - Fractional values that are real (half-games, averages) keep a consistent decimal
   precision within a column.
