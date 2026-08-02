@@ -95,9 +95,12 @@ def make_source_getter():
 
     def get_source(source):
 
+        source = source.strip()
+
         if source.startswith('http'):
+            canonical = source.replace('https://', 'http://', 1)
             for base, source_id in sources.items():
-                if source.startswith(base):
+                if canonical.startswith(base.replace('https://', 'http://', 1)):
                     return source_id
 
             # fallback
