@@ -26,6 +26,9 @@ body {
     line-height: 1.45;
     color: var(--ink);
     background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 a, a:visited {
@@ -208,10 +211,24 @@ ul { list-style-type: none; padding-left: 0; }
 
 #site-footer {
     border-top: 1px solid var(--hairline);
+    font-size: 13px;
+    color: var(--ink-soft);
+}
+
+.footer-inner {
     max-width: 1100px;
     margin: 0 auto;
     padding: 14px 16px 24px;
-    font-size: 13px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+}
+
+.footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
 }
 
 #site-footer a { color: var(--ink-soft); }
@@ -221,8 +238,10 @@ ul { list-style-type: none; padding-left: 0; }
 
 #content {
     max-width: 1100px;
+    width: 100%;
     margin: 0 auto;
     padding: 8px 16px 48px;
+    flex: 1;
 }
 
 .leftcol, .rightcol { width: 48%; }
