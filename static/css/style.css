@@ -300,6 +300,15 @@ table td {
 table tbody tr:nth-child(even) td { background-color: var(--fill); }
 table tbody tr:hover td { background-color: var(--fill-hover); }
 
+/* §2: cells read as ink; the accent appears on hover and keyboard focus only. */
+table td a, table td a:visited { color: var(--ink); }
+table td a:hover { color: var(--accent); }
+table td a:focus-visible {
+    color: var(--accent);
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+}
+
 table td:first-child, table th:first-child { text-align: left; }
 
 table.stats td:first-child,
