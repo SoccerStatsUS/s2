@@ -10,25 +10,13 @@
 
 <h3><a href="{% url 'competition_detail' competition.slug %}">{{ competition }}</a> games</h3>
 
-{% if page.has_other_pages %}
-<p class="pagination">
-{% if page.has_previous %}<a href="?page={{ page.previous_page_number }}">&larr; previous</a>{% endif %}
-page {{ page.number }} of {{ page.paginator.num_pages }} &middot; {{ page.paginator.count|intcomma }} games
-{% if page.has_next %}<a href="?page={{ page.next_page_number }}">next &rarr;</a>{% endif %}
-</p>
-{% endif %}
+{% include "pagination.html" with noun="games" %}
 
 {% if games %}
 {% games_table games %}
 {% endif %}
 
-{% if page.has_other_pages %}
-<p class="pagination">
-{% if page.has_previous %}<a href="?page={{ page.previous_page_number }}">&larr; previous</a>{% endif %}
-page {{ page.number }} of {{ page.paginator.num_pages }} &middot; {{ page.paginator.count|intcomma }} games
-{% if page.has_next %}<a href="?page={{ page.next_page_number }}">next &rarr;</a>{% endif %}
-</p>
-{% endif %}
+{% include "pagination.html" with noun="games" %}
 
 
 {% endblock %}

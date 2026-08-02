@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.db.models import Avg, Count, Sum
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
@@ -60,8 +61,12 @@ def city_index(request):
 
 def stadium_index(request):
 
+        stadiums = Stadium.objects.select_related('city').annotate(game_count=Count('game')).annotate(total_attendance=Sum('game__attendance')).order_by('-game_count', 'name')
+        page = Paginator(stadiums, 500).get_page(request.GET.get('page'))
+
         context = {
-                'stadiums': Stadium.objects.select_related('city').annotate(game_count=Count('game')).annotate(total_attendance=Sum('game__attendance')).order_by('-game_count', 'name')
+                'stadiums': page.object_list,
+                'page': page,
                 }
 
         return render(request, "places/stadium_index.html",

@@ -8,9 +8,11 @@
 
 <h2>Stadiums</h2>
 
-<p>{{ stadiums|length }} grounds on record; games counts every match in the
-database played there. A zero is genuine: the ground is in the record, but no
-game in the database is pinned to it yet.</p>
+<p>{{ page.paginator.count|intcomma }} grounds on record; games counts every
+match in the database played there. A zero is genuine: the ground is in the
+record, but no game in the database is pinned to it yet.</p>
+
+{% include "pagination.html" with noun="grounds" %}
 
 <table>
 
@@ -39,5 +41,7 @@ game in the database is pinned to it yet.</p>
 </tbody>
 
 </table>
+
+{% include "pagination.html" with noun="grounds" %}
 
 {% endblock %}
