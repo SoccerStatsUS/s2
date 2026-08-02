@@ -253,6 +253,66 @@ ul { list-style-type: none; padding-left: 0; }
 }
 
 
+/* ---- Contact ---- */
+
+#contact { max-width: 560px; }
+
+#contact form {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#contact label {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--ink-soft);
+}
+
+#contact input[type="email"],
+#contact textarea {
+    font-size: 14px;
+    font-family: inherit;
+    padding: 8px 10px;
+    border: 1px solid var(--hairline);
+    border-radius: 4px;
+    background: var(--fill);
+    color: var(--ink);
+}
+
+#contact textarea { min-height: 160px; resize: vertical; }
+
+#contact input[type="email"]:focus,
+#contact textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: #fff;
+}
+
+#contact input[type="submit"] {
+    margin-top: 14px;
+    align-self: flex-start;
+    font-size: 14px;
+    padding: 6px 18px;
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+}
+
+#contact input[type="submit"]:hover {
+    background: var(--accent-dark);
+    border-color: var(--accent-dark);
+}
+
+#contact .errorlist {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: #a03d38;
+}
+
+
 #site-footer {
     background: var(--accent);
     font-size: 13px;

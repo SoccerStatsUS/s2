@@ -81,6 +81,8 @@ class Command(BaseCommand):
             '/about/news/',
             '/about/build/',
             '/awards/',
+            '/contact/',
+            '/contact/thanks/',
             '/bios/',
             '/c/',
             '/dates/',

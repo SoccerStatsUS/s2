@@ -1,14 +1,17 @@
 {% extends "base.html" %}
 
+{% block title %}thanks{% endblock %}
+
 {% block content %}
 
-<div id="control-bar">
-  <div class="white-title center">thanks</div>
-</div>
+<div id="contact">
 
-<div id="thanks">
-  <p>Thanks for writing.</p>
-  <a href="{% url 'team_detail' 'kearney-clarks-ont' %}"><img width="300" src="/static/images/field.jpg" /></a>
+<h2>Thanks for writing.</h2>
+
+<p>Replies come from a human, eventually.</p>
+
+<p><a href="{% url 'team_detail' 'kearney-clarks-ont' %}"><img width="300" src="/static/images/field.jpg" alt="An old soccer field"></a></p>
+
 </div>
 
 {% endblock %}

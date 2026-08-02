@@ -1,35 +1,33 @@
 {% extends "base.html" %}
+
 {% block title %}contact{% endblock %}
+{% block metadescription %}Write to SoccerStats.us: corrections, additions, sources, questions{% endblock %}
 
 {% block content %}
 
-<div id="control-bar">
-  <div class="white-title center">contact</div>
+<div id="contact">
+
+<h2>Contact</h2>
+
+<p>Corrections, additions, sources, questions &mdash; all welcome.
+The record improves one email at a time.</p>
+
+<form class="contact" action="{% url 'contact_index' %}" method="POST">
+
+  {{ form.name }}
+
+  <label for="{{ form.email.id_for_label }}">your email</label>
+  {{ form.email }}
+  {{ form.email.errors }}
+
+  <label for="{{ form.message.id_for_label }}">message</label>
+  {{ form.message }}
+  {{ form.message.errors }}
+
+  <input type="submit" value="send">
+
+</form>
+
 </div>
-
-<div id="contact_box">
-  <form class="contact" action="{% url 'contact_index' %}" method="POST">
-
-    {# move this into separate box? #}
-    {{ form.as_p }}
-
-    {% comment %}
-    <div>
-      <input type="text" name="email" id="id_email" />
-    </div>
-
-    <div>
-      <input type="hidden" name="name" id="id_name" />
-    </div>
-
-    <div>
-      <textarea id="id_message" name="message"></textarea>
-      </div>
-    {% endcomment %}
-
-    <input type="submit" value="send" />
-  </form>
-</div>
-
 
 {% endblock %}
