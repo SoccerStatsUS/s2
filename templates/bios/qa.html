@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}bios sharing a slug{% endblock %}
+
+{% block content %}
+
+<h1>Bios sharing a slug</h1>
+
+<p class="dir-note">{{ slug_count|intcomma }} slugs belong to more than one bio.
+The URL serves whichever has the lower id, so every other bio on the slug is
+unreachable &mdash; each group is either two records of one person to merge, or
+two people who need distinct slugs.</p>
+
+{% if groups %}
+<table>
+
+<thead>
+  <tr>
+    <th scope="col">slug</th>
+    <th scope="col">bios sharing it</th>
+  </tr>
+</thead>
+
+<tbody>
+{% for slug, bios in groups %}
+<tr>
+  <td><a href="{% url 'person_detail' slug %}">{{ slug }}</a></td>
+  <td>
+    {% for bio in bios %}<a href="{% url 'person_id_detail' bio.id %}">{{ bio.name }}</a>
+    <span class="grey">#{{ bio.id }}</span>{% if not forloop.last %} &middot; {% endif %}{% endfor %}
+  </td>
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
+{% else %}
+<p class="coverage-note">Every bio has a slug to itself.</p>
+{% endif %}
+
+{% endblock %}

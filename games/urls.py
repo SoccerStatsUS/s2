@@ -5,8 +5,8 @@ urlpatterns = [
                        path('', views.games_index,
                            name='games_index'),
 
-                       path('bad/', views.bad_games,
-                           name='bad_games'),
+                       path('qa/', views.games_qa,
+                           name='games_qa'),
 
 
                        path('r/', views.random_game_detail,

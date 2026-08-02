@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}games that may be duplicates{% endblock %}
+
+{% block content %}
+
+<h1>Games that may be duplicates</h1>
+
+<p class="dir-note">{{ duplicate_games|length|intcomma }} cases where one team
+appears in more than one game on the same date. Some are genuine &mdash;
+doubleheaders and tournament days happen &mdash; so each group is a candidate to
+check against the source, not a confirmed error.</p>
+
+{% if duplicate_games %}
+<table>
+
+<thead>
+  <tr>
+    <th scope="col">date</th>
+    <th scope="col">games on that date</th>
+  </tr>
+</thead>
+
+<tbody>
+{% for group in duplicate_games %}
+<tr>
+  {% with first=group.0 %}
+  {% if first.date %}
+  <td class="date"><a href="{% url 'date_detail' first.date.year first.date.month first.date.day %}">{{ first.date }}</a></td>
+  {% else %}
+  <td class="greybg" title="no record found">&mdash;</td>
+  {% endif %}
+  {% endwith %}
+  <td>
+    {% for game in group %}<a href="{% url 'game_detail' game.id %}">{{ game.game_string }}</a>
+    {% if game.competition %}<span class="grey">{{ game.competition.abbreviation|default:game.competition.name }}</span>{% endif %}{% if not forloop.last %} &middot; {% endif %}{% endfor %}
+  </td>
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
+{% else %}
+<p class="coverage-note">No team appears twice on the same date.</p>
+{% endif %}
+
+{% endblock %}

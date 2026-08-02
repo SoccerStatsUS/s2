@@ -8,8 +8,8 @@ urlpatterns = [
                        path('az/<path:fragment>/', views.bio_name_fragment,
                            name='bio_name_fragment'),
 
-                       path('bad/', views.bad_bios,
-                           name='bad_bios'),
+                       path('qa/', views.bios_qa,
+                           name='bios_qa'),
 
                        re_path(r'^oneword/?$',
                            views.one_word,

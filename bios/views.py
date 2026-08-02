@@ -104,14 +104,24 @@ def bio_name_fragment(request, fragment):
                                Bio.objects.filter(name__istartswith=fragment))
 
 
-def bad_bios(request):
+def bios_qa(request):
+    """
+    Bios sharing a slug. Two bios on one slug means one of them is unreachable:
+    the URL serves whichever has the lower id.
+    """
+    slugs = (Bio.objects.values('slug').annotate(n=Count('id'))
+             .filter(n__gt=1).values_list('slug', flat=True))
+    groups = OrderedDict()
+    for bio in Bio.objects.filter(slug__in=list(slugs)).order_by('slug', 'id'):
+        groups.setdefault(bio.slug, []).append(bio)
 
     context = {
-        'duplicate_slugs': Bio.objects.duplicate_slugs(),
+        'groups': list(groups.items()),
+        'slug_count': len(groups),
         }
 
-    return render(request, "bios/bad.html",
-                              context)    
+    return render(request, "bios/qa.html",
+                              context)
                               
 
 

@@ -146,13 +146,13 @@ def homepage_old(request):
     return render(request, "homepage.html",
                               context)
 
-def bad_games(request):
+def games_qa(request):
     
     context = {
         'duplicate_games': Game.objects.duplicate_games(),
         }
 
-    return render(request, "games/bad.html",
+    return render(request, "games/qa.html",
                               context)    
 
     
