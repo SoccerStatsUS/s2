@@ -36,7 +36,7 @@
   {% if game.forfeit %}<div class="forfeit">Forfeit</div>{% endif %}
 
   <div class="game-meta">
-    {% if game.date %}<span><a href="{% url 'date_detail' game.date.year game.date.month game.date.day %}">{{ game.date|date:"l, F j, Y" }}</a></span>{% endif %}
+    {% if game.date %}<span><a href="{% url 'date_detail' game.date.year game.date.month game.date.day %}">{{ game.date|date:"l, N j, Y" }}</a></span>{% endif %}
     {% if game.stadium.slug %}<span><a href="{% url 'stadium_detail' game.stadium.slug %}">{% if game.stadium.short_name %}{{ game.stadium.short_name }}{% else %}{{ game.stadium.name }}{% endif %}</a></span>{% elif game.location %}<span>{{ game.location }}</span>{% endif %}
     {% if game.round %}<span>round {{ game.round }}</span>{% endif %}
     {% if game.group %}<span>group {{ game.group }}</span>{% endif %}

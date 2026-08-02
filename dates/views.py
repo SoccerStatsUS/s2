@@ -3,6 +3,7 @@ import datetime
 
 from django.db.models import Avg, Count, Max, Min, Sum
 from django.shortcuts import render, get_object_or_404
+from django.utils.formats import date_format
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
@@ -155,7 +156,7 @@ def month_detail(request, year, month):
         'hires': hires,
         'fires': fires,
         'stadiums': stadiums[:20],
-        'date': '%s/%s' % (month, year),
+        'date': '%s %s' % (calendar.month_name[month], year),
         'previous_date': previous_date_tuple,
         'next_date': next_date_tuple,
         'weeks': weeks,
@@ -214,7 +215,7 @@ def date_detail(request, year, month, day):
         'births': births,
         'hires': hires,
         'fires': fires,
-        'date': '%s/%s/%s' % (d.month, d.day, d.year),
+        'date': date_format(d),
         'previous_date': previous_date_tuple,
         'next_date': next_date_tuple,
         'stadiums': stadiums[:20],
