@@ -261,16 +261,12 @@ class Bio(models.Model):
             return None
 
 
-    # Above this, an age computed to today means we are missing a deathdate,
-    # not that the player is still alive.
-    max_plausible_age = 105
-
     def age_display(self, date=None):
         """
-        Whole-year age, or None when we can't reasonably claim one.
+        Returns a player's age in whole years.
         """
         a = self.age_years(date)
-        if a is None or a > self.max_plausible_age:
+        if a is None:
             return None
         return int(a)
 
