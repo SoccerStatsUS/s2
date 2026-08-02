@@ -27,7 +27,8 @@ local postgres and DEBUG on.
 Production runs on the server "bert" at /home/chris/www/s2:
 
 * gunicorn via systemd (etc/systemd/s2.service), bound to 127.0.0.1:8100
-* nginx proxies stats.soccerstats.us to it (etc/nginx/stats.soccerstats.us)
+* nginx proxies soccerstats.us to it (etc/nginx/soccerstats.us);
+  etc/nginx/stats.soccerstats.us is now just the 301 to the apex
 * AI crawlers (ClaudeBot, GPTBot) are rate-limited to 10 req/min per IP —
   zone in etc/nginx/conf.d/ai-bot-ratelimit.conf, applied in the vhost's
   `location /`, which also serves a robots.txt with a Crawl-delay hint.
