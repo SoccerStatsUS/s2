@@ -1,4 +1,5 @@
 
+from django.core.paginator import Paginator
 from django.db.models import Avg, Sum
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
@@ -151,12 +152,17 @@ def competition_stats(request, competition_slug):
 
 
 @cache_page(60 * 60 * 12)
+@cache_page(60 * 60 * 12)
 def competition_games(request, competition_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
+    games = competition.game_set.order_by('season', 'date', 'round') \
+        .select_related().prefetch_related('sources')
+    page = Paginator(games, 500).get_page(request.GET.get('page'))
+
     context = {
         'competition': competition,
-        'games': competition.game_set.order_by('season', 'date', 'round'),
-
+        'games': page.object_list,
+        'page': page,
         }
     return render(request, "competitions/competition/games.html",
                               context)

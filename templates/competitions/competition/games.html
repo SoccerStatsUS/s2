@@ -1,19 +1,33 @@
 {% extends "base.html" %}
-{% load datum_or_none %}
+{% load games %}
+{% load humanize %}
 
-{% block title %}{{ competition.name }} Soccer History {% endblock %}
-{% block metadescription %}{{ competition.name }} soccer stats with standings, results, lineups, awards, all-time stats...{% endblock %}
+{% block title %}{{ competition.name }} games{% endblock %}
+{% block metadescription %}Every {{ competition.name }} game in the database{% endblock %}
 
 {% block content %}
 
 
-<h3><a href="{% url 'competition_detail' competition.slug %}">{{ competition }}</a></h3>
+<h3><a href="{% url 'competition_detail' competition.slug %}">{{ competition }}</a> games</h3>
 
+{% if page.has_other_pages %}
+<p class="pagination">
+{% if page.has_previous %}<a href="?page={{ page.previous_page_number }}">&larr; previous</a>{% endif %}
+page {{ page.number }} of {{ page.paginator.num_pages }} &middot; {{ page.paginator.count|intcomma }} games
+{% if page.has_next %}<a href="?page={{ page.next_page_number }}">next &rarr;</a>{% endif %}
+</p>
+{% endif %}
 
 {% if games %}
-<div tab="games">
-{% include "templatetags/games.html" %}
-</div>
+{% games_table games %}
+{% endif %}
+
+{% if page.has_other_pages %}
+<p class="pagination">
+{% if page.has_previous %}<a href="?page={{ page.previous_page_number }}">&larr; previous</a>{% endif %}
+page {{ page.number }} of {{ page.paginator.num_pages }} &middot; {{ page.paginator.count|intcomma }} games
+{% if page.has_next %}<a href="?page={{ page.next_page_number }}">next &rarr;</a>{% endif %}
+</p>
 {% endif %}
 
 

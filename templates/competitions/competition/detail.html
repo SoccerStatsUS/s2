@@ -39,6 +39,7 @@
 
 <div tab="stats">
 {% stats_table stats 'team,season'%}
+<p class="more-links"><a href="{% url 'competition_stats' competition.slug %}">all {{ competition.abbreviation|default:competition.name }} stats &rarr;</a></p>
 </div>
 
 
@@ -50,6 +51,7 @@
 
 <div tab="games">
 {% games_table games 'competition,referee,attendance' %}
+<p class="more-links"><a href="{% url 'competition_games' competition.slug %}">all {{ competition.abbreviation|default:competition.name }} games &rarr;</a></p>
 </div>
 
 </div>
