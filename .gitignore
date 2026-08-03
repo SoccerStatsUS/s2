@@ -7,4 +7,4 @@ run/*.log
 run/search/
 
 media/images/people
-media/images/bio/
+media/images/bio/#*#
