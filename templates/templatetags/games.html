@@ -15,7 +15,7 @@
       {% if 'stadium' not in exclude %}<th scope="col">venue</th>{% endif %}
       {% if 'referee' not in exclude %}<th scope="col">referee</th>{% endif %}
       {% if 'attendance' not in exclude %}<th scope="col">attendance</th>{% endif %}
-      <th scope="col">sources</th>
+      {% if source_urls %}<th scope="col" title="the page this game was taken from">source page</th>{% else %}<th scope="col">sources</th>{% endif %}
     </tr>
   </thead>
 
@@ -75,7 +75,15 @@
     {% datum_or_grey game.attendance %}
     {% endif %}
 
+    {% if source_urls %}
+    {% if game.source_url %}
+    <td><a href="{{ game.source_url }}" rel="nofollow">page</a></td>
+    {% else %}
+    <td><span class="grey" title="no record found">&mdash;</span></td>
+    {% endif %}
+    {% else %}
     <td>{{ game.sources.count }}</td>
+    {% endif %}
 
   </tr>
   {% endfor %}
