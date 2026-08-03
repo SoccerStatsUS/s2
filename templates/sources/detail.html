@@ -73,12 +73,12 @@
 {% endif %}
 
 
-{% if source.sourceurl_set.exists %}
+{% if urls %}
 <div tab="urls">
-<h3>Base url{{ source.sourceurl_set.count|pluralize }}</h3>
+<h3>Source url{{ urls|pluralize }}</h3>
 <ul class="source-urls">
-{% for surl in source.sourceurl_set.all %}
-  <li><a href="{{ surl.url }}" rel="nofollow">{{ surl.url }}</a></li>
+{% for u in urls %}
+  <li><a href="{{ u.url }}" rel="nofollow">{{ u.label }}</a></li>
 {% endfor %}
 </ul>
 </div>

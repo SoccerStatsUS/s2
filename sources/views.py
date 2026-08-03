@@ -1,4 +1,5 @@
 import datetime
+import re
 
 from django.db.models import Count, F, Q
 from django.shortcuts import render, get_object_or_404
@@ -41,9 +42,28 @@ def source_detail(request, source_id):
         'top_stats': top_stats,
         'games': games,
         'games_count': games.count(),
+        'urls': canonical_urls(source),
         }
     return render(request, "sources/detail.html",
                               context)
+
+
+def canonical_urls(source):
+    """
+    metadata/parse/sources.py emits both a www and a non-www record for every
+    source url so that either form resolves during matching. Collapse them back
+    to one entry each for display, keeping the first url as the link target.
+    """
+    urls = {}
+
+    for surl in source.sourceurl_set.all():
+        label = re.sub(r'^https?://', '', surl.url.strip())
+        label = re.sub(r'^www\.', '', label).rstrip('/')
+
+        if label and label.lower() not in urls:
+            urls[label.lower()] = {'url': surl.url, 'label': label}
+
+    return list(urls.values())
 
 
 
