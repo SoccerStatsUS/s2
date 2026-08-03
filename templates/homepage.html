@@ -36,7 +36,7 @@ starting in <a href="{% url 'city_detail' 'waukesha-wi' %}">Waukesha, Wisconsin<
 {% else %}
 <a class="otd-team" href="{% url 'team_detail' oldest.team2.slug %}">{{ oldest.team2_original_name }}</a>
 {% endif %}
-<a class="otd-comp" href="{% url 'competition_detail' oldest.competition.slug %}">{{ oldest.competition }}</a>
+<a class="otd-comp" title="{{ oldest.competition.name }}" href="{% url 'competition_detail' oldest.competition.slug %}">{{ oldest.competition.abbreviation|default:oldest.competition.name }}</a>
 </p>
 {% else %}
 <p>No recorded match on {{ today|date:"F j" }} &mdash; yet.
@@ -57,7 +57,7 @@ starting in <a href="{% url 'city_detail' 'waukesha-wi' %}">Waukesha, Wisconsin<
 {% else %}
 <a class="otd-team" href="{% url 'team_detail' crowd.team2.slug %}">{{ crowd.team2_original_name }}</a>
 {% endif %}
-<a class="otd-comp" href="{% url 'competition_detail' crowd.competition.slug %}">{{ crowd.competition }}</a>
+<a class="otd-comp" title="{{ crowd.competition.name }}" href="{% url 'competition_detail' crowd.competition.slug %}">{{ crowd.competition.abbreviation|default:crowd.competition.name }}</a>
 <span class="otd-note">(attendance: {{ crowd.attendance|intcomma }})</span>
 </p>
 {% endif %}
