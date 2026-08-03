@@ -5,6 +5,8 @@ report anything that returns a 500. Run before deploying:
     .venv/bin/python manage.py smoketest
 """
 
+from urllib.parse import quote
+
 from django.core.management.base import BaseCommand
 from django.test import Client
 
@@ -149,6 +151,7 @@ class Command(BaseCommand):
 
         if transaction:
             urls.append('/transactions/%s/' % transaction.id)
+            urls.append('/transactions/?ttype=%s&page=2' % quote(transaction.ttype))
 
         if stadium:
             urls += ['/places/stadiums/%s/' % stadium.slug, '/places/stadiums/%s/games' % stadium.slug]

@@ -12,8 +12,8 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    // Competition index: dropdowns filter on change.
-    document.querySelectorAll("#competition-filter select").forEach(function(sel) {
+    // Filter dropdowns submit on change.
+    document.querySelectorAll("#competition-filter select, #transaction-filter select").forEach(function(sel) {
         sel.addEventListener("change", function() { sel.form.submit(); });
     });
 
