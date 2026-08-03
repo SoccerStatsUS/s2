@@ -85,6 +85,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    document.querySelectorAll("table.stats, table.standings").forEach(makeSortable);
+    document.querySelectorAll("table.stats, table.standings, table.transactions").forEach(makeSortable);
 
 });

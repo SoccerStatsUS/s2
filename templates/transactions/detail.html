@@ -1,30 +1,38 @@
 {% extends "base.html" %}
-{% load datum_or_none %}
-{% block title %}{{ transaction.id }}{% endblock %}
+
+{% block title %}{{ transaction.person }} &mdash; {{ transaction.ttype }}{% endblock %}
 
 {% block content %}
 
-<p>
-<a href="{% url 'date_detail' transaction.date.year transaction.date.month transaction.date.day %}">{{ transaction.date }}</a>
-{{ transaction.ttype }}
-<p>
+<h1><a href="{% url 'person_detail' transaction.person.slug %}">{{ transaction.person }}</a></h1>
 
-<p>
-<a href="{% url 'person_detail' transaction.person.slug %}">{{ transaction.person }}</a>
-</p>
+<table class="honors">
+  <caption class="sr-only">Transaction</caption>
 
-<p>
-{% if transaction.team_to %}
-to <a href="{% url 'team_detail' transaction.team_to.slug %}">{{ transaction.team_to }}</a>
-{% endif %}
-</p>
+  <tr>
+    <th scope="row">date</th>
+    {% if transaction.date %}
+    <td><time datetime="{{ transaction.date|date:'Y-m-d' }}"><a href="{% url 'date_detail' transaction.date.year transaction.date.month transaction.date.day %}">{{ transaction.date }}</a></time></td>
+    {% else %}
+    <td><span class="grey" title="no record found">&mdash;</span></td>
+    {% endif %}
+  </tr>
 
-<p>
-{% if transaction.team_from %}
-from: <a href="{% url 'team_detail' transaction.team_from.slug %}">{{ transaction.team_from }}</a>
-{% endif %}
-</p>
+  <tr>
+    <th scope="row">type</th>
+    <td>{{ transaction.ttype }}</td>
+  </tr>
 
+  <tr>
+    <th scope="row">team</th>
+    {% if transaction.team_to %}
+    <td><a href="{% url 'team_detail' transaction.team_to.slug %}">{{ transaction.team_to }}</a></td>
+    {% else %}
+    <td><span class="grey" title="no record found">&mdash;</span></td>
+    {% endif %}
+  </tr>
+</table>
 
+<p class="more-links"><a href="{% url 'transaction_index' %}">all transactions &rarr;</a></p>
 
 {% endblock %}

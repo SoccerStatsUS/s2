@@ -1,13 +1,51 @@
 {% extends "base.html" %}
 
-{% block title %}transactions{% endblock %}
+{% block title %}Transactions{% endblock %}
+{% block metadescription %}Player signings, trades, loans and releases in American soccer{% endblock %}
 
 {% block content %}
 
 <h1>Transactions</h1>
 
-{{ transactions }}
+<p class="coverage-note">
+{{ transaction_count }} transaction{{ transaction_count|pluralize }}, Major League Soccer only.
+{% if first_date and last_date %}
+Coverage runs {{ first_date }} to {{ last_date }} and stops there.
+{% endif %}
+</p>
 
+<table class="transactions">
+  <caption class="sr-only">Transactions</caption>
+  <thead>
+    <tr>
+      <th scope="col">date</th>
+      <th scope="col">type</th>
+      <th scope="col">player</th>
+      <th scope="col">team</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  {% for t in transactions %}
+  <tr>
+    {% if t.date %}
+    <td><time datetime="{{ t.date|date:'Y-m-d' }}"><a href="{% url 'date_detail' t.date.year t.date.month t.date.day %}">{{ t.date }}</a></time></td>
+    {% else %}
+    <td><span class="grey" title="no record found">&mdash;</span></td>
+    {% endif %}
+
+    <td>{{ t.ttype }}</td>
+
+    <td><a href="{% url 'person_detail' t.person.slug %}">{{ t.person }}</a></td>
+
+    {% if t.team_to %}
+    <td><a href="{% url 'team_detail' t.team_to.slug %}">{{ t.team_to }}</a></td>
+    {% else %}
+    <td><span class="grey" title="no record found">&mdash;</span></td>
+    {% endif %}
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
 
 {% endblock %}
-

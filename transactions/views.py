@@ -1,6 +1,7 @@
 import datetime
 
 from django.db import models
+from django.db.models import F
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
@@ -10,9 +11,16 @@ from transactions.models import Transaction
 
 def transaction_index(request):
 
-    transactions = Transaction.objects.all()
+    # nulls_last keeps the 41 undated transactions from heading the table.
+    transactions = Transaction.objects.select_related('person', 'team_to').order_by(
+        F('date').desc(nulls_last=True))
+    dated = transactions.exclude(date=None)
+
     context = {
-        'tranactions': transactions,
+        'transactions': transactions,
+        'transaction_count': transactions.count(),
+        'first_date': dated.last().date if dated.exists() else None,
+        'last_date': dated.first().date if dated.exists() else None,
         }
 
     return render(request, "transactions/index.html",

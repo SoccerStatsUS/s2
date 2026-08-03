@@ -47,6 +47,7 @@ class Command(BaseCommand):
         from places.models import City, Country, Stadium, State
         from sources.models import Source
         from teams.models import Team
+        from transactions.models import Transaction
 
         def first(qs):
             try:
@@ -68,6 +69,8 @@ class Command(BaseCommand):
         city = first(City.objects.exclude(slug=''))
         state = first(State.objects.exclude(slug=''))
         country = first(Country.objects.filter(slug='usa')) or first(Country.objects.exclude(slug=''))
+        # Undated transactions used to 500 on the date link; keep one covered.
+        transaction = first(Transaction.objects.filter(date=None)) or first(Transaction.objects.all())
 
         urls = [
             '/',
@@ -143,6 +146,9 @@ class Command(BaseCommand):
 
         if source:
             urls.append('/sources/%s/' % source.id)
+
+        if transaction:
+            urls.append('/transactions/%s/' % transaction.id)
 
         if stadium:
             urls += ['/places/stadiums/%s/' % stadium.slug, '/places/stadiums/%s/games' % stadium.slug]
