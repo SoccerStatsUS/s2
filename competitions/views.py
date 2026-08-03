@@ -6,6 +6,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
+from awards.models import Award, AwardItem
 from bios.models import Bio
 from competitions.forms import CompetitionForm
 from competitions.models import Competition, SuperSeason, Season
@@ -119,10 +120,39 @@ def competition_detail(request, competition_slug):
         'stats': sx,
         'games': recent_games.select_related()[:25],
         'big_winners': competition.alltime_standings().order_by('-wins')[:50],
+        'awards': competition_awards(competition),
         'goal_data': json.dumps([(season.goals_per_game(), season.name) for season in competition.season_set.all()]),
         }
     return render(request, "competitions/competition/detail.html",
                               context)
+
+
+def competition_awards(competition):
+    """
+    One row per award, oldest season first, with the most recent winner where
+    the award has a single winner per season.
+    """
+    rows = []
+    for award in Award.objects.filter(competition=competition).order_by('name'):
+        items = list(award.awarditem_set.select_related('season'))
+        if not items:
+            continue
+
+        def key(item):
+            return (item.season.order if item.season and item.season.order is not None else -1,
+                    item.year or 0)
+
+        items.sort(key=key)
+        shared = len([item for item in items if key(item) == key(items[-1])]) > 1
+
+        rows.append({
+            'award': award,
+            'count': len(items),
+            'first_season': items[0].season,
+            'last_season': items[-1].season,
+            'latest': None if shared else items[-1],
+            })
+    return rows
 
 
 
@@ -288,12 +318,45 @@ def season_detail(request, competition_slug, season_slug):
         'average_attendance': average_attendance,
         'attendance_game_count': attendance_game_count,
         'recent_games': recent_games[:25],
+        'honors': season_honors(season),
         'awards': season.awarditem_set.order_by('award'),
         'stats_nationality_info': json.dumps(season.stats_nationality_info()),
         
         }
     return render(request, "competitions/season/detail.html",
                               context)
+
+
+def season_honors(season):
+    """
+    Champion, any secondary title (Supporters' Shield and the like), mvp and
+    golden boot, flattened into rows so the template does not have to know that
+    they come from three different places.
+    """
+    rows = []
+
+    def add(label, recipient, note=None):
+        rows.append({'label': label, 'recipient': recipient, 'note': note})
+
+    champion = season.champion()
+    if champion and champion.award.competition_id != season.competition_id:
+        # Decided in a separate playoff competition, so name the trophy.
+        add('champion', champion.recipient, champion.award.name)
+    else:
+        add('champion', champion.recipient if champion else None)
+
+    others = AwardItem.objects.filter(season=season, award__type='champion').select_related('award')
+    for item in others:
+        if champion and item.id == champion.id:
+            continue
+        add(item.award.name.lower(), item.recipient)
+
+    mvp = season.mvp()
+    add('mvp', mvp.recipient if mvp else None)
+
+    add('golden boot', season.golden_boot())
+
+    return rows
 
 
 

@@ -58,6 +58,38 @@
 <p class="more-links"><a href="{% url 'competition_games' competition.slug %}">all {{ competition.abbreviation|default:competition.name }} games &rarr;</a></p>
 </div>
 
+{% if awards %}
+<div tab="awards">
+<h3>Awards</h3>
+<table>
+<thead>
+  <tr>
+    <th scope="col">award</th>
+    <th scope="col">seasons</th>
+    <th scope="col">winners</th>
+    <th scope="col">most recent</th>
+  </tr>
+</thead>
+{% for row in awards %}
+<tr>
+  <td><a href="{% url 'award_detail' row.award.id %}">{{ row.award.name }}</a></td>
+  {% if row.first_season %}
+  <td>{{ row.first_season.name }}{% if row.last_season.name != row.first_season.name %}&ndash;{{ row.last_season.name }}{% endif %}</td>
+  {% else %}
+  <td class="grey"></td>
+  {% endif %}
+  <td>{{ row.count }}</td>
+  {% if row.latest %}
+  <td><a href="{{ row.latest.recipient.get_absolute_url }}">{{ row.latest.recipient }}</a> {{ row.latest.season.name }}</td>
+  {% else %}
+  <td class="grey"></td>
+  {% endif %}
+</tr>
+{% endfor %}
+</table>
+</div>
+{% endif %}
+
 </div>
 
 
