@@ -11,6 +11,14 @@ server {
     }
 
     location / {
+        # Answer the missing trailing slash here instead of paying a gunicorn
+        # round trip for Django's APPEND_SLASH. Crawlers that drop the slash
+        # made 79,354 such requests on 2026-08-03, a third of all traffic.
+        # Excluding paths with a dot leaves files (sitemaps, anything served
+        # by name) alone; a slug containing a dot just falls through to
+        # APPEND_SLASH as before. The query string is re-appended by nginx.
+        rewrite ^([^.]*[^/])$ $1/ permanent;
+
         limit_req zone=aibots burst=5 nodelay;
         limit_req zone=amazonbot burst=2 nodelay;
         limit_req_status 429;

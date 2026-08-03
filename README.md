@@ -33,7 +33,22 @@ Production runs on the server "bert" at /home/chris/www/s2:
   zone in etc/nginx/conf.d/ai-bot-ratelimit.conf, applied in the vhost's
   `location /`, which also serves a robots.txt with a Crawl-delay hint.
   They were doing ~84k req/day combined before this (2026-08-02).
+  That limit only reaches crawlers that identify themselves; scraper farms
+  spoofing browser user-agents are blocked by network instead, in
+  etc/nginx/conf.d/blocked-networks.conf.
 * secrets live in /home/chris/www/s2/.env (not in git)
+
+The files under etc/ are the source of truth, but nothing syncs them — bert
+holds copies. After changing one, deploy it:
+
+    ssh bert 'cd /home/chris/www/s2 && git pull && \
+        sudo cp etc/nginx/conf.d/*.conf /etc/nginx/conf.d/ && \
+        sudo cp etc/nginx/soccerstats.us etc/nginx/stats.soccerstats.us \
+            /etc/nginx/sites-available/ && \
+        sudo nginx -t && sudo systemctl reload nginx'
+
+Certbot edits the live vhosts in place, so copy the live file back into the
+repo after any cert change or the next deploy reverts it.
 
 Before deploying, smoke-test every major URL pattern against the local db:
 
