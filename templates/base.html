@@ -12,6 +12,14 @@
 
   <script src="{{ STATIC_URL }}js/custom.js?v=8" defer></script>
 
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q3Q8SSD26K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-Q3Q8SSD26K');
+  </script>
+
   {% block extrahead %}{% endblock %}
 </head>
 
