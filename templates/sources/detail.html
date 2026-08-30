@@ -67,7 +67,11 @@
 
 <h3>{{ games_count }} game{{ games_count|pluralize }} sourced here</h3>
 
+{% include "pagination.html" with noun="games" %}
+
 {% games_table games source_urls=True %}
+
+{% include "pagination.html" with noun="games" %}
 
 </div>
 {% endif %}

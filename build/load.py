@@ -234,6 +234,8 @@ def load_places():
     city_set = set()
 
     for city in soccer_db.cities.find():
+        if not city['name']:
+            continue
         c = cg(city['name'])
 
         if c['state']:
@@ -243,17 +245,7 @@ def load_places():
         if c['country']:
             c['country'] = Country.objects.get(name=c['country'])
 
-        # Create slugs
-        if c['state']:
-            slug = "{} {}".format(c['name'], c['state'].abbreviation)
-
-        elif c['country']:
-            slug = "{} {}".format(c['name'], c['country'])
-
-        else:
-            slug = c['name']
-
-        c['slug'] = slugify(slug)
+        c['slug'] = city_slug(c['name'], c['state'], c['country'])
 
         city_set.add(tuple(sorted(c.items())))
 
@@ -571,7 +563,7 @@ def load_stadiums():
 
         stadium['slug'] = slugify(stadium['name'])
 
-        stadium['city'] = cg(stadium['location'])
+        stadium['city'] = cg(stadium['location'] or stadium.get('city'))
         
         if 'renovations' in stadium:
             stadium.pop('renovations')

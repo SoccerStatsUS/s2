@@ -18,71 +18,57 @@ from collections import Counter, defaultdict
 import json
 import datetime
 
+DEFAULT_SLUGS = [
+    'american-league-of-professional-football',
+    'american-soccer-league-1921-1933',
+    'concacaf-champions-league',
+    'fifa-club-world-cup',
+    'fifa-world-cup',
+    'major-league-soccer',
+    'north-american-soccer-league',
+    'liga-mx',
+    'copa-america',
+    'mls-cup-playoffs',
+    'copa-libertadores',
+    'us-open-cup',
+    'concacaf-championship',
+    'gold-cup',
+    'national-womens-soccer-league',
+    'olympic-games',
+    'womens-united-soccer-association',
+    'womens-professional-soccer',
+    'premier-league',
+]
+
+
 @cache_page(60 * 60 * 12)
 def competition_index(request):
 
+    form = CompetitionForm(request.GET)
+    competitions = Competition.objects.all()
     ctype = None
 
-    if request.method == 'GET':
-        form = CompetitionForm(request.GET)
+    if form.is_valid():
+        level = form.cleaned_data['level']
+        if level:
+            competitions = competitions.filter(level=level)
 
-        if form.is_valid():
-            competitions = Competition.objects.all()
+        ctype = form.cleaned_data['ctype']
+        if ctype:
+            competitions = competitions.filter(ctype=ctype)
 
-            level = form.cleaned_data['level']
-            if level:
-                competitions = competitions.filter(level=level)
+        area = form.cleaned_data['area']
+        if area:
+            competitions = competitions.filter(area=area)
 
-            ctype = form.cleaned_data['ctype']
-            if ctype:
-                competitions = competitions.filter(ctype=ctype)
+        code = form.cleaned_data['code']
+        if code:
+            competitions = competitions.filter(code=code)
 
-            area = form.cleaned_data['area']
-            if area:
-                competitions = competitions.filter(area=area)
+    # No filter applied (or an invalid one): show the standard set.
+    if competitions.count() == Competition.objects.count():
+        competitions = Competition.objects.filter(slug__in=DEFAULT_SLUGS)
 
-            code = form.cleaned_data['code']
-            if code:
-                competitions = competitions.filter(code=code)
-
-            # No changes have been made; use standard competition filter.
-            # is_valid() method isn't working because all fields are optional.
-            if competitions.count() == Competition.objects.count():
-                #competitions = Competition.objects.filter(level=1)
-                slugs = ['american-league-of-professional-football',
-                         'american-soccer-league-1921-1933',
-                         'concacaf-champions-league',
-                         'fifa-club-world-cup',
-                         'fifa-world-cup',
-                         'major-league-soccer',
-                         'north-american-soccer-league',
-                         'liga-mx',
-                         'copa-america',
-                         'mls-cup-playoffs',
-                         'copa-libertadores',
-                         'us-open-cup',
-                         'concacaf-championship',
-                         'gold-cup',
-                         'national-womens-soccer-league',
-                         'olympic-games',
-                         'womens-united-soccer-association',
-                         'womens-professional-soccer',
-                         'premier-league',
-                         ]
-                competitions = Competition.objects.filter(slug__in=slugs)
-
-            #international = form.cleaned_data['international']
-            #if international is not None:
-            #    competitions = competitions.filter(international=international)
-
-        else:
-            raise
-            form = CompetitionForm()
-    
-    else:
-        raise
-        form = CompetitionForm()
-            
     # Add a paginator.
 
     context = {

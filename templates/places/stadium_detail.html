@@ -24,12 +24,10 @@
 
 <div tab="summary">
 
-{% if stadium.address %}
-<div><a href="{% url 'city_detail' stadium.city.slug %}">{{ stadium.address }}, {{ stadium.city }}</a></div>
-{% else %}
 {% if stadium.city %}
-<div><a href="{% url 'city_detail' stadium.city.slug %}">{{ stadium.city }}</a></div>
-{% endif %}
+<div><a href="{% url 'city_detail' stadium.city.slug %}">{% if stadium.address %}{{ stadium.address }}, {% endif %}{{ stadium.city }}</a></div>
+{% elif stadium.address %}
+<div>{{ stadium.address }}</div>
 {% endif %}
 
 

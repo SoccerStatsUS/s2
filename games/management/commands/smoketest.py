@@ -17,7 +17,6 @@ UNBUILT = {
     '/games/',
     '/news/',
     '/places/states/',
-    '/places/cities/',
     '/positions/',
     '/stats/',
 }
@@ -68,6 +67,7 @@ class Command(BaseCommand):
         source = first(Source.objects.exclude(games=None).order_by('-games'))
         draft = first(Draft.objects.exclude(competition=None))
         stadium = first(Stadium.objects.exclude(slug=''))
+        stadium_no_city = first(Stadium.objects.filter(city=None).exclude(slug=''))
         city = first(City.objects.exclude(slug=''))
         state = first(State.objects.exclude(slug=''))
         country = first(Country.objects.filter(slug='usa')) or first(Country.objects.exclude(slug=''))
@@ -88,6 +88,7 @@ class Command(BaseCommand):
             '/contact/thanks/',
             '/bios/',
             '/c/',
+            '/c/?level=9',
             '/dates/',
             '/dates/today/',
             '/positions/managers/',
@@ -148,6 +149,7 @@ class Command(BaseCommand):
 
         if source:
             urls.append('/sources/%s/' % source.id)
+            urls.append('/sources/%s/?page=2' % source.id)
 
         if transaction:
             urls.append('/transactions/%s/' % transaction.id)
@@ -155,6 +157,8 @@ class Command(BaseCommand):
 
         if stadium:
             urls += ['/places/stadiums/%s/' % stadium.slug, '/places/stadiums/%s/games' % stadium.slug]
+        if stadium_no_city:
+            urls.append('/places/stadiums/%s/' % stadium_no_city.slug)
         if city:
             urls.append('/places/cities/%s/' % city.slug)
         if state:

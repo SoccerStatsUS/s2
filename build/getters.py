@@ -1,6 +1,8 @@
 import pymongo
 import datetime
 
+from django.template.defaultfilters import slugify
+
 from bios.models import Bio
 from competitions.models import Competition, Season
 from games.models import Game
@@ -121,6 +123,14 @@ def make_source_getter():
 
 # This is way too complex.
 # I'm taking a break.
+def city_slug(name, state, country):
+    if state:
+        return slugify("{} {}".format(name, state.abbreviation))
+    if country:
+        return slugify("{} {}".format(name, country))
+    return slugify(name)
+
+
 def make_city_getter():
     """
     
@@ -129,6 +139,8 @@ def make_city_getter():
     cg = make_city_pre_getter()
     
     def get_city(s):
+        if not s:
+            return None
         c = cg(s)
 
         state = country = None
@@ -141,7 +153,8 @@ def make_city_getter():
         try:
             return City.objects.get(name=c['name'], state=state, country=country)
         except:
-            return City.objects.create(name=c['name'], state=state, country=country)
+            return City.objects.create(name=c['name'], state=state, country=country,
+                                       slug=city_slug(c['name'], state, country))
 
     return get_city
 

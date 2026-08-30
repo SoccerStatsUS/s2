@@ -1,6 +1,7 @@
 import datetime
 import re
 
+from django.core.paginator import Paginator
 from django.db.models import Count, F, Q
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
@@ -34,14 +35,16 @@ def source_detail(request, source_id):
     # page it was actually taken from.
     games = Game.objects.filter(gamesource__source=source).annotate(
         source_url=F('gamesource__source_url')).select_related()
+    page = Paginator(games, 100).get_page(request.GET.get('page'))
 
     context = {
         'source': source,
         'feeds': source.feeditem_set.order_by('-dt'),
         'stats_count': stats_count,
         'top_stats': top_stats,
-        'games': games,
-        'games_count': games.count(),
+        'games': page.object_list,
+        'page': page,
+        'games_count': page.paginator.count,
         'urls': canonical_urls(source),
         }
     return render(request, "sources/detail.html",
