@@ -69,6 +69,25 @@ To ship a freshly built database:
 
     ./upload.sh
 
+#### Errors
+
+Request errors go to stderr, so `journalctl -u s2` on bert has every 500 with
+its traceback. `etc/systemd/s2-errordigest.timer` runs `manage.py errordigest`
+each morning to summarize the last day's 500s and worker timeouts by exception
+and path; it is silent when there were none. Until EMAIL_HOST_PASSWORD is in
+.env the digest prints instead of mailing, so read it with
+`journalctl -u s2-errordigest`. To install or update the timer:
+
+    ssh bert 'cd /home/chris/www/s2 && git pull && \
+        sudo cp etc/systemd/s2-errordigest.* /etc/systemd/system/ && \
+        sudo systemctl daemon-reload && \
+        sudo systemctl enable --now s2-errordigest.timer'
+
+To look further back, or at a saved dump:
+
+    .venv/bin/python manage.py errordigest --since 7d
+    .venv/bin/python manage.py errordigest --file journal.txt
+
 #### Dependencies
 
 soccerstatsus/build (mongo database), soccerstatsus/metadata, soccerstatsus/parse, and the data repositories.

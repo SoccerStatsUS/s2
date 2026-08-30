@@ -1,0 +1,10 @@
+[Unit]
+Description=soccerstats s2 daily error digest
+
+[Service]
+Type=oneshot
+User=chris
+Group=chris
+WorkingDirectory=/home/chris/www/s2
+EnvironmentFile=/home/chris/www/s2/.env
+ExecStart=/home/chris/www/s2/.venv/bin/python manage.py errordigest

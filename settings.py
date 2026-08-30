@@ -91,6 +91,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'chris@soccerstats.us'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 
 INSTALLED_APPS = [
     'django.contrib.auth',
