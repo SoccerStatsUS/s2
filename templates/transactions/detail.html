@@ -31,6 +31,15 @@
     <td><span class="grey" title="no record found">&mdash;</span></td>
     {% endif %}
   </tr>
+
+  <tr>
+    <th scope="row">from</th>
+    {% if transaction.team_from %}
+    <td><a href="{% url 'team_detail' transaction.team_from.slug %}">{{ transaction.team_from }}</a></td>
+    {% else %}
+    <td><span class="grey" title="no record found">&mdash;</span></td>
+    {% endif %}
+  </tr>
 </table>
 
 <p class="more-links"><a href="{% url 'transaction_index' %}">all transactions &rarr;</a></p>

@@ -37,6 +37,7 @@ Coverage runs {{ first_date }} to {{ last_date }} and stops there.
       <th scope="col">type</th>
       <th scope="col">player</th>
       <th scope="col">team</th>
+      <th scope="col">from</th>
     </tr>
   </thead>
 
@@ -55,6 +56,12 @@ Coverage runs {{ first_date }} to {{ last_date }} and stops there.
 
     {% if t.team_to %}
     <td><a href="{% url 'team_detail' t.team_to.slug %}">{{ t.team_to }}</a></td>
+    {% else %}
+    <td><span class="grey" title="no record found">&mdash;</span></td>
+    {% endif %}
+
+    {% if t.team_from %}
+    <td><a href="{% url 'team_detail' t.team_from.slug %}">{{ t.team_from }}</a></td>
     {% else %}
     <td><span class="grey" title="no record found">&mdash;</span></td>
     {% endif %}

@@ -14,7 +14,7 @@ from transactions.models import Transaction
 def transaction_index(request):
 
     # nulls_last keeps the undated transactions from heading the table.
-    transactions = Transaction.objects.select_related('person', 'team_to').order_by(
+    transactions = Transaction.objects.select_related('person', 'team_from', 'team_to').order_by(
         F('date').desc(nulls_last=True))
 
     form = TransactionForm(request.GET)
