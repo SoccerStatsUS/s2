@@ -234,8 +234,6 @@ def load_places():
     city_set = set()
 
     for city in soccer_db.cities.find():
-        if not city['name']:
-            continue
         c = cg(city['name'])
 
         if c['state']:
@@ -563,7 +561,7 @@ def load_stadiums():
 
         stadium['slug'] = slugify(stadium['name'])
 
-        stadium['city'] = cg(stadium['location'] or stadium.get('city'))
+        stadium['city'] = cg(stadium['location'])
         
         if 'renovations' in stadium:
             stadium.pop('renovations')
