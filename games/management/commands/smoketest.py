@@ -135,6 +135,20 @@ class Command(BaseCommand):
             urls += [base] + [base + suffix for suffix in
                               ('stats/', 'games/', 'goals/', 'attendance/', 'salaries/')]
 
+        # The historical first divisions loaded back on 2026-09-06: each gets its
+        # competition page and its latest season with stats and games.
+        for slug in ('american-league-of-professional-football',
+                     'american-soccer-league-1921-1933',
+                     'north-american-soccer-league'):
+            old_competition = first(Competition.objects.filter(slug=slug))
+            old_season = old_competition and first(
+                Season.objects.filter(competition=old_competition).order_by('-name'))
+            if old_competition:
+                urls.append('/c/%s/' % slug)
+            if old_season:
+                base = '/c/%s/%s/' % (slug, old_season.slug)
+                urls += [base, base + 'stats/', base + 'games/']
+
         if game and game.date:
             urls += [
                 '/games/%s/' % game.id,
