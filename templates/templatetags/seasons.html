@@ -8,7 +8,6 @@
     <th scope="col">champion</th>
     {% if has_mvp %}<th scope="col">MVP</th>{% endif %}
     <th scope="col">golden boot</th>
-    <th scope="col">games</th>
     <th scope="col">goals/game</th>
     {% if has_attendance %}<th scope="col">avg. attendance</th>{% endif %}
   </tr>
@@ -39,13 +38,8 @@
     <td></td>
     {% endif %}
 
-    {% with vg=season.verified_games %}
-    <td><a href="{% url 'season_games' season.competition.slug season.slug %}">{{ season.max_games|floatformat }} {% if vg %}<span class="vg"><em>({{ vg|floatformat:2 }})</em></span>{% endif %}</a></td>
-    {% endwith %}
-        
-
     {% if season.goals %}
-    <td><a href="{% url 'season_goals' season.competition.slug season.slug %}">{{ season.goals_per_game|floatformat:2 }} <em>({{ season.goals }})</em></a></td>
+    <td><a href="{% url 'season_goals' season.competition.slug season.slug %}">{{ season.goals_per_game|floatformat:2 }}</a></td>
     {% else %}
     <td></td>
     {% endif %}
@@ -55,8 +49,7 @@
     {% if season.total_attendance %}
 
 
-    <td><a href="{% url 'season_attendance' season.competition.slug season.slug %}">{{ season.average_attendance|intcomma }}     {% if ag %}<em>({{ ag|floatformat:2 }})</em>{% endif %}</a></td>
-      {# ({{ season.games_with_attendance_percentage|floatformat:2 }}) #}
+    <td><a href="{% url 'season_attendance' season.competition.slug season.slug %}">{{ season.average_attendance|intcomma }}{% if ag %} <em>({% widthratio ag 1 100 %}%)</em>{% endif %}</a></td>
     {% else %}
     <td></td>
 
@@ -70,5 +63,9 @@
   {% endfor %}
     
 </table>
+{% if has_attendance %}
+<p class="table-legend">The percentage after an attendance average is the share of that
+season's games with a crowd on record. Seasons without one have a crowd for every game.</p>
+{% endif %}
 {% endif %}
 {% endwith %}

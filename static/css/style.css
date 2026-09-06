@@ -711,8 +711,8 @@ table.honors th {
 
 .dir-more { color: var(--ink-soft); font-size: .9em; }
 
-.dir-note, .dir-legend { font-size: .9em; color: var(--ink-soft); }
-.dir-legend { margin-top: 16px; }
+.dir-note, .dir-legend, .table-legend { font-size: .9em; color: var(--ink-soft); }
+.dir-legend, .table-legend { margin-top: 16px; }
 
 /* Hall of Fame glyph: a second carrier alongside the bold, per §2. */
 .hof { margin-left: 4px; color: var(--ink-soft); font-size: .8em; }
