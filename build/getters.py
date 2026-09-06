@@ -1,5 +1,6 @@
 import pymongo
 import datetime
+import unicodedata
 
 from django.template.defaultfilters import slugify
 
@@ -13,6 +14,12 @@ from sources.models import Source
 
 connection = pymongo.MongoClient()
 soccer_db = connection.soccer
+
+
+def person_identity_key(name):
+    name = " ".join(name.split()).casefold()
+    name = unicodedata.normalize("NFKD", name)
+    return "".join(char for char in name if not unicodedata.combining(char))
 
 
 class Getter(object):
@@ -232,15 +239,21 @@ def make_bio_getter():
     """
 
     bios = Bio.objects.bio_dict()
+    identities = {person_identity_key(name): bio_id for name, bio_id in bios.items()}
 
     def get_bio(name):
         name = name.strip()
 
+        key = person_identity_key(name)
+
         if name in bios:
             bio_id = bios[name]
+        elif key in identities:
+            bio_id = identities[key]
         else:
             bio_id = Bio.objects.find(name).id
             bios[name] = bio_id
+            identities[key] = bio_id
 
         return bio_id
 
