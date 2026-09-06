@@ -1,0 +1,20 @@
+{% if svg %}
+<figure class="chart">
+<svg viewBox="0 0 {{ svg.width }} {{ svg.height }}" role="img" aria-label="{{ caption }}">
+  {% for t in ticks %}
+  <line class="grid" x1="{{ svg.left }}" x2="{{ svg.right_edge }}" y1="{{ t.y|floatformat:1 }}" y2="{{ t.y|floatformat:1 }}"/>
+  <text x="{{ svg.left|add:"-8" }}" y="{{ t.y|floatformat:1 }}" dy="4" text-anchor="end">{{ t.text }}</text>
+  {% endfor %}
+  <line class="axis" x1="{{ svg.left }}" x2="{{ svg.right_edge }}" y1="{{ svg.base|floatformat:1 }}" y2="{{ svg.base|floatformat:1 }}"/>
+  {% for c in columns %}
+  {% if c.url %}<a href="{{ c.url }}">{% endif %}<path class="mark{% if c.partial %} partial{% endif %}" d="{{ c.path }}"><title>{{ c.title }}</title></path>{% if c.url %}</a>{% endif %}
+  {% endfor %}
+  <line class="median" x1="{{ svg.left }}" x2="{{ svg.right_edge }}" y1="{{ median.y|floatformat:1 }}" y2="{{ median.y|floatformat:1 }}"/>
+  <text class="median-label" x="{{ svg.right_edge|add:"6" }}" y="{{ median.y|floatformat:1 }}" dy="4">{{ median.text }}</text>
+  {% for l in labels %}
+  <text x="{{ l.x|floatformat:1 }}" y="{{ svg.label_y }}" text-anchor="middle">{{ l.text }}</text>
+  {% endfor %}
+</svg>
+<figcaption>{{ caption }}.{% if any_partial %} Outlined columns are seasons with a crowd on record for fewer than half their games.{% endif %} The labeled line is the median season. Hover or focus a column for its figures; the table below has every season.</figcaption>
+</figure>
+{% endif %}

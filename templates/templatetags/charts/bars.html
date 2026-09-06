@@ -1,0 +1,14 @@
+{% if svg %}
+<figure class="chart">
+<svg viewBox="0 0 {{ svg.width }} {{ svg.height }}" role="img" aria-label="{{ caption }}">
+  <line class="median" x1="{{ median.x|floatformat:1 }}" x2="{{ median.x|floatformat:1 }}" y1="0" y2="{{ svg.base }}"/>
+  <text class="median-label" x="{{ median.x|floatformat:1 }}" y="{{ svg.base|add:"12" }}" text-anchor="middle">{{ median.text }}</text>
+  {% for b in bars %}
+  <text class="label" x="{{ svg.label_x }}" y="{{ b.label_y|floatformat:1 }}" text-anchor="end">{{ b.name }}</text>
+  {% if b.url %}<a href="{{ b.url }}">{% endif %}<path class="mark" d="{{ b.path }}"><title>{{ b.title }}</title></path>{% if b.url %}</a>{% endif %}
+  <text class="value" x="{{ b.value_x|floatformat:1 }}" y="{{ b.label_y|floatformat:1 }}">{{ b.value }}</text>
+  {% endfor %}
+</svg>
+<figcaption>{{ caption }}. The labeled line is the median club. Hover or focus a bar for its figures; the table below has every club.</figcaption>
+</figure>
+{% endif %}

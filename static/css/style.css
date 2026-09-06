@@ -714,6 +714,26 @@ table.honors th {
 .dir-note, .dir-legend, .table-legend { font-size: .9em; color: var(--ink-soft); }
 .dir-legend, .table-legend { margin-top: 16px; }
 
+/* ---- Charts: inline SVG, one series in the accent (DESIGN.md §1, §2) ---- */
+/* Like wide tables (§4), a chart scrolls inside itself on a phone rather than shrinking its text. */
+figure.chart { margin: 8px 0 20px; overflow-x: auto; }
+figure.chart svg { display: block; width: 100%; min-width: 640px; height: auto; font-family: inherit; overflow: visible; }
+figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6px; }
+.chart text { fill: var(--ink-soft); font-size: 11px; font-variant-numeric: tabular-nums; }
+.chart text.label { fill: var(--ink); font-size: 12px; }
+.chart .grid { stroke: var(--hairline); stroke-width: 1; }
+.chart .axis { stroke: var(--ink-soft); stroke-width: 1; }
+.chart .median { stroke: var(--ink); stroke-width: 1; }
+.chart text.median-label { fill: var(--ink); }
+/* A surface halo keeps a value legible where the median line crosses it. */
+.chart text.value { paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round; }
+.chart .mark { fill: var(--accent); }
+.chart .mark.partial { fill: none; stroke: var(--accent); stroke-width: 1.5; }
+.chart a:hover .mark, .chart a:focus-visible .mark { fill: var(--accent-dark); }
+.chart a:hover .mark.partial, .chart a:focus-visible .mark.partial { fill: var(--fill-hover); stroke: var(--accent-dark); }
+.chart a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+table.summary { max-width: 560px; }
+
 /* Hall of Fame glyph: a second carrier alongside the bold, per §2. */
 .hof { margin-left: 4px; color: var(--ink-soft); font-size: .8em; }
 

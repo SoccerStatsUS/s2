@@ -1,74 +1,75 @@
 {% extends "base.html" %}
-{% load datum_or_none %}
+{% load humanize %}
+{% load games %}
+{% load charts %}
 
 {% block title %}{{ season }} {{ competition.name }} attendance{% endblock %}
-{% block metadescription %}{{ competition.name }} soccer stats with standings, results, lineups, awards, all-time stats...{% endblock %}
-
-{% block extrahead %}
-<style>
-#attendance-chart {
-position: fixed;
-margin-left: 5%;
-padding-top: 5%;
-
-}
-</style>
-{% endblock %}
+{% block metadescription %}Crowds at {{ season }} {{ competition.name }} games: by club, and the largest and smallest on record{% endblock %}
 
 {% block content %}
 
-<h3>
-{% if season.previous_season %}<a href="{% url 'season_attendance' season.competition.slug season.previous_season.slug %}">←</a>{% endif %}
-<a href="{% url 'season_detail' season.competition.slug season.slug %}">{{ season }}</a>
-{% if season.next_season %}<a href="{% url 'season_attendance' season.competition.slug season.next_season.slug %}">→</a>{% endif %}
-</h3>
+<h1>
+{% if season.previous_season %}<a href="{% url 'season_attendance' competition.slug season.previous_season.slug %}" title="{{ season.previous_season }}">&larr;</a>{% endif %}
+<a href="{% url 'season_detail' competition.slug season.slug %}">{{ season }}</a>
+{% if season.next_season %}<a href="{% url 'season_attendance' competition.slug season.next_season.slug %}" title="{{ season.next_season }}">&rarr;</a>{% endif %}
+attendance
+</h1>
+<p class="more-links"><a href="{% url 'competition_attendance' competition.slug %}">every {{ competition.abbreviation|default:competition.name }} season &rarr;</a></p>
 
+{% if not known %}
+<p>No crowds on record for {{ season }} {{ competition.name }} games yet.</p>
+{% else %}
 
-<table>
-
-<!--summary-->
-
+<table class="summary">
 <thead>
 <tr>
   <th scope="col">games</th>
-  <th scope="col" title="games with recorded attendance">known</th>
-  <th scope="col">total</th>
+  <th scope="col" title="games with a crowd on record">with a crowd</th>
   <th scope="col">average</th>
+  <th scope="col">total</th>
 </tr>
 </thead>
-
 <tr>
-  <td>{{ season.max_games }}</td>
-  <td>{{ season.attendance_games|floatformat:3 }}</td>
-  <td>{{ season.total_attendance }}</td>
-  <td>{{ season.average_attendance }}</td>
+  <td>{{ games|intcomma }}</td>
+  <td>{{ known|intcomma }} ({% widthratio known games 100 %}%)</td>
+  <td>{{ average|floatformat:"0"|intcomma }}</td>
+  <td>{{ total|intcomma }}</td>
 </tr>
-
 </table>
 
-
+{% if clubs %}
+<h3>By club, home games</h3>
+{% bar_chart charted_clubs "Average home attendance by club" %}
+{% if charted_clubs|length >= 3 and charted_clubs|length != clubs|length %}<p class="table-legend">The chart shows clubs with at least three home games on record; the table has every club.</p>{% endif %}
 
 <table>
-
 <thead>
 <tr>
-  <th scope="col">team</th>
+  <th scope="col">club</th>
+  <th scope="col" title="home games with a crowd on record">home games</th>
   <th scope="col">average</th>
-  <th scope="col">games</th>
   <th scope="col">total</th>
 </tr>
 </thead>
-
-{% for team in team_data %}
+{% for c in clubs %}
 <tr>
-  <td>{{ team.0 }}</td>
-  <td>{{ team.3|floatformat:"0" }}</td>
-  <td>{{ team.2 }}</td>
-  <td>{{ team.1 }}</td>
+  <td><a href="{{ c.url }}">{{ c.name }}</a></td>
+  <td>{{ c.games }}</td>
+  <td>{{ c.average|floatformat:"0"|intcomma }}</td>
+  <td>{{ c.total|intcomma }}</td>
 </tr>
-
 {% endfor %}
 </table>
+{% endif %}
+{% if unattributed %}
+<p class="table-legend">{{ unattributed|intcomma }} of the {{ known|intcomma }} crowds on record {% if clubs %}are not counted above{% else %}cannot be shown by club{% endif %}: the source did not say which side was at home, and listing order is not taken as evidence.</p>
+{% endif %}
 
+<h3>Largest crowds</h3>
+{% games_table largest 'competition,referee' %}
 
+<h3>Smallest crowds</h3>
+{% games_table smallest 'competition,referee' %}
+
+{% endif %}
 {% endblock %}

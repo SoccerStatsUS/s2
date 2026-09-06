@@ -1,9 +1,10 @@
 
 from django.core.paginator import Paginator
-from django.db.models import Avg, Sum
+from django.db.models import Avg, Count, Max, Sum
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template import RequestContext
+from django.urls import reverse
 from django.views.decorators.cache import cache_page
 
 from awards.models import Award, AwardItem
@@ -13,6 +14,7 @@ from competitions.models import Competition, SuperSeason, Season
 from lineups.models import Appearance
 from places.models import Country
 from stats.models import Stat, CompetitionStat, SeasonStat
+from teams.models import Team
 
 from collections import Counter, defaultdict
 import json
@@ -214,33 +216,75 @@ def competition_vs(request, competition_slug, competition2_slug):
 
 
 
+def attendance_by_home_club(crowds):
+    """
+    Average home crowd per club, largest first, over games whose source said
+    who was at home. Games without that are counted and reported as left out,
+    never guessed from listing order.
+    """
+    by_team = defaultdict(lambda: [0, 0])
+    for team_id, attendance in crowds.exclude(neutral=True).exclude(home_team=None).values_list('home_team_id', 'attendance'):
+        by_team[team_id][0] += 1
+        by_team[team_id][1] += attendance
+    teams = {t.id: t for t in Team.objects.filter(id__in=by_team)}
+    clubs = sorted([{
+        'name': teams[tid].name,
+        'url': teams[tid].get_absolute_url(),
+        'games': n,
+        'total': total,
+        'average': total / n,
+    } for tid, (n, total) in by_team.items()], key=lambda r: -r['average'])
+    return clubs, crowds.count() - sum(n for n, total in by_team.values())
+
+
 @cache_page(60 * 60 * 12)
 def competition_attendance(request, competition_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
+    played = competition.game_set.exclude(not_played=True)
+    crowds = played.exclude(attendance=None)
 
-    attendance_data = [(e.name, e.average_attendance(), e.total_attendance()) for e in competition.season_set.all()]
+    # By season, in season order. Seasons without a game are left out; seasons
+    # without a crowd keep their slot so the chart's timeline stays continuous.
+    games_by_season = dict(played.values_list('season_id').annotate(n=Count('id')))
+    crowd_by_season = {r['season_id']: r for r in crowds.values('season_id').annotate(
+        known=Count('id'), average=Avg('attendance'), total=Sum('attendance'), largest=Max('attendance'))}
+    seasons = []
+    for season in competition.season_set.all():
+        games = games_by_season.get(season.id, 0)
+        if not games:
+            continue
+        c = crowd_by_season.get(season.id, {})
+        known = c.get('known', 0)
+        seasons.append({
+            'name': season.name,
+            'url': reverse('season_attendance', args=[competition.slug, season.slug]),
+            'games': games,
+            'known': known,
+            'share': known / games,
+            'partial': known < games / 2,
+            'average': c.get('average'),
+            'total': c.get('total'),
+            'largest': c.get('largest'),
+        })
 
-    attendance = defaultdict(int)
-    agames = defaultdict(int)
-    for t, a in competition.game_set.exclude(home_team=None).exclude(attendance=None).values_list('home_team__name', 'attendance'):
-        attendance[t] += a
-        agames[t] += 1
-
-    team_data = sorted([(k, attendance[k] / agames[k], attendance[k]) for k in agames.keys()])
-
-    games = competition.game_set.exclude(attendance=None)
-    top_attendance_games = games.order_by('-attendance')[:10]
+    clubs, unattributed = attendance_by_home_club(crowds)
+    largest = crowds.order_by('-attendance').select_related()[:10]
+    smallest = crowds.exclude(id__in=largest.values_list('id', flat=True)).order_by('attendance').select_related()[:10]
 
     context = {
         'competition': competition,
-        'attendance_data': json.dumps(attendance_data),
-        'team_data': json.dumps(team_data),
-        'top_attendance_games': top_attendance_games,
-        'worst_attendance_games': games.exclude(id__in=top_attendance_games.values_list('id', flat=True)).order_by('attendance')[:10],
-
-        }
-    return render(request, "competitions/competition/attendance.html",
-                              context)
+        'games': played.count(),
+        'known': crowds.count(),
+        'total': crowds.aggregate(Sum('attendance'))['attendance__sum'],
+        'average': crowds.aggregate(Avg('attendance'))['attendance__avg'],
+        'seasons': seasons,
+        'clubs': clubs,
+        'charted_clubs': [c for c in clubs if c['games'] >= 10],
+        'unattributed': unattributed,
+        'largest': largest,
+        'smallest': smallest,
+    }
+    return render(request, "competitions/competition/attendance.html", context)
 
 
 @cache_page(60 * 60 * 12)
@@ -460,50 +504,31 @@ def season_games(request, competition_slug, season_slug):
                               context)
 
 
-def attendance_data_by_team(game_set):
-
-    # Add year-to-year comparisons
-    # Pull this out into a function.
-    # Include home and away attendances
-    attendance = defaultdict(int)
-    agames = defaultdict(int)
-    
-    for t, a in game_set.values_list('home_team__name', 'attendance'):
-        attendance[t] += a
-        agames[t] += 1
-
-    team_data = [(k, attendance[k], agames[k], attendance[k] / agames[k]) for k in agames.keys()]
-    team_data = sorted(team_data, key=lambda k: k[-1])
-
-    return team_data
-
-
-
 @cache_page(60 * 60 * 12)
 def season_attendance(request, competition_slug, season_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
     season = get_object_or_404(Season, competition=competition, slug=season_slug)
+    played = season.game_set.exclude(not_played=True)
+    crowds = played.exclude(attendance=None)
 
-    games = season.game_set.exclude(attendance=None)
-    top_attendance_games = games.exclude(attendance=None).order_by('-attendance')[:10]
-
-
-    team_data = attendance_data_by_team(season.game_set.exclude(home_team=None).exclude(attendance=None))
+    clubs, unattributed = attendance_by_home_club(crowds)
+    largest = crowds.order_by('-attendance').select_related()[:10]
+    smallest = crowds.exclude(id__in=largest.values_list('id', flat=True)).order_by('attendance').select_related()[:10]
 
     context = {
+        'competition': competition,
         'season': season,
-        'team_data': team_data,
-        'top_attendance_games': top_attendance_games,
-        'worst_attendance_games': games.exclude(attendance=None).exclude(id__in=top_attendance_games.values_list('id', flat=True)).order_by('attendance')[:10],
-        'stadium_attendance': season.stadium_attendance(),
-         }
-
-    return render(request, "competitions/season/attendance.html",
-                              context)
-
-
-
-
+        'games': played.count(),
+        'known': crowds.count(),
+        'total': crowds.aggregate(Sum('attendance'))['attendance__sum'],
+        'average': crowds.aggregate(Avg('attendance'))['attendance__avg'],
+        'clubs': clubs,
+        'charted_clubs': [c for c in clubs if c['games'] >= 3],
+        'unattributed': unattributed,
+        'largest': largest,
+        'smallest': smallest,
+    }
+    return render(request, "competitions/season/attendance.html", context)
 
 
 @cache_page(60 * 60 * 12)
