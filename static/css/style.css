@@ -1223,7 +1223,7 @@ td.result { width: 70px; }
 #search-page form {
     display: flex;
     gap: 8px;
-    margin: 6px 0 10px;
+    margin: 6px auto 10px;
     max-width: 560px;
 }
 
