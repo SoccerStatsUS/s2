@@ -27,5 +27,6 @@ class StandingsTableTests(SimpleTestCase):
 
         html = template.render(Context({'standings': [standing]}))
 
-        self.assertIn('Western Conference', html)
+        self.assertNotIn('Western Conference', html)
+        self.assertEqual(html.count('<table class="standings">'), 1)
         self.assertIn('Dallas Burn', html)

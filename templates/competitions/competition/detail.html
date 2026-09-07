@@ -38,11 +38,13 @@
 {% seasons_table competition.season_set.reverse %}
 </div>
 
+{% if leader_groups %}
 <div tab="stats">
 <h3>Career leaders</h3>
-{% stats_table stats 'team,season'%}
-<p class="more-links"><a href="{% url 'competition_stats' competition.slug %}">all {{ competition.abbreviation|default:competition.name }} stats &rarr;</a></p>
+<div><a href="{% url 'competition_stats' competition.slug %}">complete stats</a></div>
+{% include "competitions/season/leaders.html" %}
 </div>
+{% endif %}
 
 
 {% if big_winners %}

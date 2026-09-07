@@ -2,6 +2,7 @@ from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
 from django.template import Context, Template
+from django.template.loader import render_to_string
 from django.test import SimpleTestCase
 
 from competitions.templatetags.charts import player_goals_chart
@@ -21,7 +22,8 @@ class SeasonStandingsTests(SimpleTestCase):
     def test_uses_most_common_historical_team_name(self):
         standing = SimpleNamespace(team_id=1, team=SimpleNamespace(name='FC Dallas'))
         season = MagicMock()
-        season.standing_set.filter.return_value.select_related.return_value = [standing]
+        standings = season.standing_set.filter.return_value.select_related.return_value
+        standings.order_by.return_value = [standing]
         season.game_set.values_list.return_value = [
             (1, 'Dallas Burn', 2, 'Columbus Crew'),
             (1, 'Dallas Burn', 3, 'D.C. United'),
@@ -29,9 +31,12 @@ class SeasonStandingsTests(SimpleTestCase):
 
         standings = season_standings(season)
 
+        season.standing_set.filter.return_value.select_related.return_value.order_by.assert_called_once_with(
+            '-points', '-wins', 'team__name'
+        )
         self.assertEqual(standings[0].team_display_name, 'Dallas Burn')
 
-    def test_standings_template_groups_conferences_and_uses_historical_name(self):
+    def test_standings_template_ignores_conference_and_uses_historical_name(self):
         team = SimpleNamespace(name='FC Dallas', slug='')
         standing = SimpleNamespace(
             stage='',
@@ -54,7 +59,8 @@ class SeasonStandingsTests(SimpleTestCase):
 
         html = template.render(Context({'standings': QueryRows([standing])}))
 
-        self.assertIn('Western Conference', html)
+        self.assertNotIn('Western Conference', html)
+        self.assertEqual(html.count('<table class="standings">'), 1)
         self.assertIn('Dallas Burn', html)
         self.assertNotIn('FC Dallas', html)
 
@@ -100,6 +106,44 @@ class SeasonLeaderTests(SimpleTestCase):
         self.assertIn('<strong>27</strong>', html)
         self.assertIn('Assists', html)
         self.assertIn('Carlos Valderrama', html)
+
+    def test_competition_detail_uses_compact_leader_groups(self):
+        relation = MagicMock()
+        relation.exists.return_value = False
+        competition = SimpleNamespace(
+            name='Major League Soccer',
+            abbreviation='MLS',
+            slug='major-league-soccer',
+            after=relation,
+            before=relation,
+            season_set=SimpleNamespace(reverse=[]),
+        )
+        leader_groups = [
+            {
+                'label': 'Goals',
+                'rows': [
+                    {'player__name': 'Chris Wondolowski',
+                     'player__slug': 'chris-wondolowski', 'value': 171}
+                ],
+            },
+        ]
+        games = MagicMock()
+        games.values_list.return_value = []
+        games.__iter__.return_value = iter([])
+
+        html = render_to_string('competitions/competition/detail.html', {
+            'competition': competition,
+            'leader_groups': leader_groups,
+            'games': games,
+            'big_winners': [],
+            'awards': [],
+        })
+
+        self.assertIn('Career leaders', html)
+        self.assertIn('Chris Wondolowski', html)
+        self.assertIn('<strong>171</strong>', html)
+        self.assertIn('complete stats', html)
+        self.assertNotIn('<table class="stats">', html)
 
 
 class PlayerGoalsChartTests(SimpleTestCase):

@@ -94,10 +94,6 @@ def competition_detail(request, competition_slug):
     games = competition.game_set.all()
 
     stats = CompetitionStat.objects.filter(competition=competition)
-    if stats.exclude(games_played=None).exists():
-        sx = stats.exclude(games_played=None).order_by('-games_played', '-goals')[:25]
-    else:
-        sx = stats.exclude(games_played=None, goals=None).filter(competition=competition).order_by('-games_played', '-goals')[:25]
 
     recent_games = games.order_by('-date').exclude(date__gte=datetime.date.today()).exclude(date=None)
     if not recent_games.exists():
@@ -105,7 +101,7 @@ def competition_detail(request, competition_slug):
 
     context = {
         'competition': competition,
-        'stats': sx,
+        'leader_groups': player_leader_groups(stats),
         'games': recent_games.select_related()[:25],
         'big_winners': competition.alltime_standings().order_by('-wins')[:50],
         'awards': competition_awards(competition),
@@ -326,7 +322,7 @@ def season_detail(request, competition_slug, season_slug):
     context = {
         'season': season,
         'standings': season_standings(season),
-        'leader_groups': season_leader_groups(stats),
+        'leader_groups': player_leader_groups(stats),
         'average_attendance': average_attendance,
         'attendance_game_count': attendance_game_count,
         'recent_games': recent_games[:25],
@@ -341,7 +337,8 @@ def season_detail(request, competition_slug, season_slug):
 
 
 def season_standings(season):
-    standings = list(season.standing_set.filter(final=True).select_related('team'))
+    standings = list(season.standing_set.filter(final=True).select_related('team')
+                     .order_by('-points', '-wins', 'team__name'))
     team_names = defaultdict(Counter)
 
     for team1_id, team1_name, team2_id, team2_name in season.game_set.values_list(
@@ -358,7 +355,7 @@ def season_standings(season):
     return standings
 
 
-def season_leader_groups(stats):
+def player_leader_groups(stats):
     groups = []
     for label, field in (
             ('Goals', 'goals'),

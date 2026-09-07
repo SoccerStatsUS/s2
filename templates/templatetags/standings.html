@@ -4,24 +4,6 @@
 
 {% with s0=standings.0 %}
 
-
-{% regroup standings by stage as standings_by_stage %}
-
-
-{% for sx in standings_by_stage %} 
-
-{% if sx.grouper %}
-<h4>{{ sx.grouper }}</h4>
-{% endif %}
-
-{% regroup sx.list by group as standings_by_group %}
-
-{% for gx in standings_by_group %}
-
-{% if gx.grouper %}
-<h4>{{ gx.grouper }}</h4>
-{% endif %}
-
 <table class="standings">
 
 <thead>
@@ -52,7 +34,7 @@
 <tbody>
 
 
-{% for standing in gx.list %}
+{% for standing in standings %}
 <tr>
 
 
@@ -126,15 +108,6 @@
 </tbody>
 
 </table>
-
-{% endfor %}
-
-{% endfor %}
-
-
-
-
-
 
 {% endwith %}
 {% endif %}
