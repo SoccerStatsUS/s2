@@ -14,6 +14,9 @@ import datetime
 # keyed by league slug -> playoffs competition slug.
 PLAYOFF_CHAMPIONSHIPS = {
     'major-league-soccer': 'mls-cup-playoffs',
+    'womens-united-soccer-association': 'wusa-playoffs',
+    'womens-professional-soccer': 'wps-playoffs',
+    'national-womens-soccer-league': 'nwsl-playoffs',
 }
 
 
@@ -209,7 +212,7 @@ class AbstractCompetition(models.Model):
 
     def attendance_games(self):
         gg = self.game_set.exclude(attendance=None).count()
-        sg = self.standings_games()
+        sg = self.known_games()
 
         if sg == 0:
             return 0
