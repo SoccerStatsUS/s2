@@ -1,6 +1,9 @@
-from django.test import SimpleTestCase
+from unittest.mock import patch
+
+from django.test import RequestFactory, SimpleTestCase
 
 from games.management.commands.errordigest import format_digest, parse
+from games.views import search
 
 JOURNAL = """\
 2026-08-22T06:25:39+00:00 bert gunicorn[11]: Internal Server Error: /bios/jimmy-drain/
@@ -52,3 +55,17 @@ class ErrorDigestTests(SimpleTestCase):
         self.assertTrue(text.startswith('s2 errors, last 24h: 3 500s, 1 worker timeouts'))
         self.assertIn("   2  AttributeError: 'NoneType'", text)
         self.assertIn('         1  /sources/24/', text)
+
+
+class SearchTests(SimpleTestCase):
+
+    @patch('games.views.render')
+    def test_uses_accent_insensitive_name_matching(self, render):
+        request = RequestFactory().get('/search/', {'q': 'Pele'})
+
+        search(request)
+
+        context = render.call_args.args[2]
+        self.assertIn('UNACCENT(', str(context['players'].query))
+        self.assertIn('UNACCENT(', str(context['teams'].query))
+        self.assertIn('UNACCENT(', str(context['competitions'].query))
