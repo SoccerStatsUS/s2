@@ -33,9 +33,13 @@ Production runs on the server "bert" at /home/chris/www/s2:
   zone in etc/nginx/conf.d/ai-bot-ratelimit.conf, applied in the vhost's
   `location /`, which also serves a robots.txt with a Crawl-delay hint.
   They were doing ~84k req/day combined before this (2026-08-02).
+  Amazonbot, Bytespider/TikTokSpider and PetalBot each crawl from hundreds of
+  IPs, so a per-IP key would not reach them; each gets one bucketed counter at
+  6 req/min in the same file, and robots.txt Disallows the first two outright.
   That limit only reaches crawlers that identify themselves; scraper farms
   spoofing browser user-agents are blocked by network instead, in
-  etc/nginx/conf.d/blocked-networks.conf.
+  etc/nginx/conf.d/blocked-networks.conf (ACEVILLE PTE.LTD. and an Alibaba
+  Cloud operator; a /15 and three /16s between them).
 * secrets live in /home/chris/www/s2/.env (not in git)
 
 The files under etc/ are the source of truth, but nothing syncs them — bert
