@@ -69,6 +69,10 @@ To ship a freshly built database:
 
     ./upload.sh
 
+To do the whole thing in one shot (mongo build -> postgres build -> ship):
+
+    ./deploy.sh
+
 #### Errors
 
 Request errors go to stderr, so `journalctl -u s2` on bert has every 500 with
