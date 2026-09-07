@@ -311,27 +311,11 @@ def season_detail(request, competition_slug, season_slug):
     season = get_object_or_404(Season, competition=competition, slug=season_slug)
 
     stats = Stat.objects.filter(season=season, competition=season.competition)
-    if stats.exclude(minutes=None).exists():
-        stats = stats.exclude(minutes=None).order_by('-minutes')
-    elif stats.exclude(games_played=None).exists():
-        stats = stats.exclude(games_played=None).order_by('-games_played')
-    elif stats.exclude(goals=None).exists():
-        stats = stats.exclude(goals=None).order_by('-goals')
-    else:
-        pass
-
-
-    bios = Bio.objects.filter(id__in=stats.values_list('player'))
-    nationality_count_dict = Counter(bios.exclude(birthplace__country=None).values_list('birthplace__country'))
 
     # Compute average attendance.
     games = season.game_set.exclude(attendance=None)
     attendance_game_count = games.count()
     average_attendance = games.aggregate(Avg('attendance'))['attendance__avg']
-
-    goal_leaders = stats.exclude(goals=None).order_by('-goals')
-    game_leaders = stats.exclude(games_played=None).order_by('-games_played')
-
 
     recent_games = season.game_set.exclude(date__gte=datetime.date.today()).order_by('-date')
     if not recent_games.exists():
@@ -342,9 +326,7 @@ def season_detail(request, competition_slug, season_slug):
     context = {
         'season': season,
         'standings': season_standings(season),
-        'stats': stats[:25],
-        'goal_leaders': goal_leaders[:10],
-        'game_leaders': game_leaders[:10],
+        'leader_groups': season_leader_groups(stats),
         'average_attendance': average_attendance,
         'attendance_game_count': attendance_game_count,
         'recent_games': recent_games[:25],
@@ -373,6 +355,26 @@ def season_standings(season):
         standing.team_display_name = names.most_common(1)[0][0] if names else standing.team.name
 
     return standings
+
+
+def season_leader_groups(stats):
+    groups = []
+    for label, field in (
+            ('Goals', 'goals'),
+            ('Assists', 'assists'),
+            ('Appearances', 'games_played'),
+            ('Minutes', 'minutes')):
+        rows = list(stat_leaders(stats, field))
+        if rows:
+            groups.append({'label': label, 'rows': rows})
+    return groups
+
+
+def stat_leaders(stats, field):
+    return (stats.filter(**{f'{field}__gt': 0})
+            .values('player_id', 'player__name', 'player__slug')
+            .annotate(value=Sum(field))
+            .order_by('-value', 'player__name')[:5])
 
 
 def season_honors(season):
@@ -670,6 +672,5 @@ def season_list(request, season_slug):
 
     return render(request, "competitions/season/list.html",
                               context)
-
 
 

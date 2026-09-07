@@ -1,0 +1,17 @@
+{% load humanize %}
+
+<div class="season-leaders">
+  {% for group in leader_groups %}
+  <section>
+    <h4>{{ group.label }}</h4>
+    <ol>
+      {% for row in group.rows %}
+      <li>
+        {% if row.player__slug %}<a href="{% url 'person_detail' row.player__slug %}">{{ row.player__name }}</a>{% else %}{{ row.player__name }}{% endif %}
+        <strong>{{ row.value|intcomma }}</strong>
+      </li>
+      {% endfor %}
+    </ol>
+  </section>
+  {% endfor %}
+</div>

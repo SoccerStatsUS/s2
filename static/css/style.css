@@ -610,6 +610,30 @@ table.honors th {
     color: var(--hairline);
 }
 
+.season-leaders {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 24px;
+    margin-top: 12px;
+}
+
+.season-leaders h4 { margin: 0 0 4px; }
+
+.season-leaders ol {
+    margin: 0;
+    padding-left: 2rem;
+}
+
+.season-leaders li {
+    padding: 3px 0;
+    font-variant-numeric: tabular-nums;
+}
+
+.season-leaders strong {
+    float: right;
+    margin-left: 12px;
+}
+
 /* Names a table for screen readers where a visible heading would be noise. */
 .sr-only {
     position: absolute;

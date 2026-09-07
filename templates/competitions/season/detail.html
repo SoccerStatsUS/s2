@@ -82,12 +82,12 @@
 
 
 
-{% if stats.exists %}
+{% if leader_groups %}
 <div tab="stats">
 <h3>Season leaders</h3>
 <div><a href="{% url 'season_stats' season.competition.slug season.slug %}">complete stats</a></div>
 
-{% stats_table stats 'competition,season' %}
+{% include "competitions/season/leaders.html" %}
 
 </div>
 
