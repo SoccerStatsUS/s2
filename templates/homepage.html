@@ -6,17 +6,14 @@
 
 <div id="home-intro">
 
-<h1 id="tagline">A website dedicated to the deep history of American soccer &mdash;
-starting in <a href="{% url 'city_detail' 'waukesha-wi' %}">Waukesha, Wisconsin</a> in <a href="{% url 'year_detail' 1866 %}">1866</a>.</h1>
-
 <section id="otd" aria-label="On this day">
   <h2><span class="otd-label-full">On this day &middot; {{ today|date:"F j" }}</span><span class="otd-label-short">Today</span></h2>
   <button class="otd-prev" type="button" aria-label="Previous on-this-day item" hidden>&larr;</button>
   <div class="otd-items" aria-live="polite" aria-atomic="true">
-    {% if oldest %}{% include "homepage/otd_game.html" with game=oldest label="Earliest match" %}{% endif %}
-    {% if crowd %}{% include "homepage/otd_game.html" with game=crowd label="Largest crowd" show_attendance=True %}{% endif %}
+    {% if oldest %}{% include "homepage/otd_game.html" with game=oldest %}{% endif %}
+    {% if crowd %}{% include "homepage/otd_game.html" with game=crowd show_attendance=True %}{% endif %}
     {% if born %}
-    <p class="otd-item"><a href="{% url 'person_detail' born.slug %}"><strong>Birthday</strong> &middot; {{ born.birthdate.year }} &middot; {{ born.name }} was born</a></p>
+    <p class="otd-item"><a href="{% url 'person_detail' born.slug %}">{{ born.birthdate.year }} &middot; {{ born.name }} was born</a></p>
     {% endif %}
     {% if not oldest and not born %}
     <p class="otd-item"><a href="{% url 'dates_index' %}">No match or birthday recorded yet &middot; browse by year</a></p>
@@ -26,6 +23,9 @@ starting in <a href="{% url 'city_detail' 'waukesha-wi' %}">Waukesha, Wisconsin<
   <span class="otd-position" hidden></span>
   <a class="otd-more" href="{% url 'day_detail' today.month today.day %}" aria-label="Everything on record for {{ today|date:"F j" }}">all &rarr;</a>
 </section>
+
+<h1 id="tagline">A website dedicated to the deep history of American soccer &mdash;
+starting in <a href="{% url 'city_detail' 'waukesha-wi' %}">Waukesha, Wisconsin</a> in <a href="{% url 'year_detail' 1866 %}">1866</a>.</h1>
 
 <form id="home-search" method="get" action="{% url 'search' %}">
   <input name="q" type="text" placeholder="Search American soccer history"

@@ -105,11 +105,15 @@ class HomepageOnThisDayTests(SimpleTestCase):
             'born': born,
         })
 
-        self.assertLess(html.index('id="otd"'), html.index('id="home-search"'))
+        self.assertLess(html.index('id="otd"'), html.index('id="tagline"'))
+        self.assertLess(html.index('id="tagline"'), html.index('id="home-search"'))
         self.assertEqual(html.count('class="otd-item"'), 2)
         self.assertIn('class="otd-prev"', html)
         self.assertIn('class="otd-next"', html)
-        self.assertIn('Earliest match', html)
+        self.assertNotIn('Earliest match', html)
+        self.assertNotIn('Largest crowd', html)
+        self.assertNotIn('Birthday', html)
+        self.assertIn('/games/7/">1996 &middot;', html)
         self.assertIn('Player Name was born', html)
 
 
