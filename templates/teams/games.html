@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load datum_or_none %}
 {% load games %}
+{% load result_chart %}
 
 {% block title %}{{ team.name }} All-time Game Results{% endblock %}
 {% block metadescription %}All-time game results for {{ team.name }}{% endblock %}
@@ -26,6 +27,7 @@
 {% if games %}
 <div tab="games">
 <h1>{{ team.name }} games</h1>
+{% recent_results_chart team chart_games %}
 {% include "pagination.html" with noun="games" %}
 {% games_table games %}
 {% include "pagination.html" with noun="games" %}

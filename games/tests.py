@@ -1,8 +1,12 @@
+import datetime
+from types import SimpleNamespace
 from unittest.mock import patch
 
+from django.template.loader import render_to_string
 from django.test import RequestFactory, SimpleTestCase
 
 from games.management.commands.errordigest import format_digest, parse
+from games.templatetags.result_chart import recent_results_chart
 from games.views import search
 
 JOURNAL = """\
@@ -69,3 +73,37 @@ class SearchTests(SimpleTestCase):
         self.assertIn('UNACCENT(', str(context['players'].query))
         self.assertIn('UNACCENT(', str(context['teams'].query))
         self.assertIn('UNACCENT(', str(context['competitions'].query))
+
+
+class RecentResultsChartTests(SimpleTestCase):
+
+    def test_builds_signed_bars_for_wins_losses_and_draws(self):
+        team = SimpleNamespace(id=1)
+        opponent = SimpleNamespace(name='Austin FC')
+        games = [
+            SimpleNamespace(id=1, date=datetime.date(2026, 8, 1),
+                            team1_id=1, team1=team, team2=opponent,
+                            team1_score=3, team2_score=1,
+                            team1_result='w', team2_result='l'),
+            SimpleNamespace(id=2, date=datetime.date(2026, 8, 8),
+                            team1_id=2, team1=opponent, team2=team,
+                            team1_score=4, team2_score=1,
+                            team1_result='w', team2_result='l'),
+            SimpleNamespace(id=3, date=datetime.date(2026, 8, 15),
+                            team1_id=1, team1=team, team2=opponent,
+                            team1_score=2, team2_score=2,
+                            team1_result='t', team2_result='t'),
+        ]
+
+        chart = recent_results_chart(team, games)
+
+        self.assertEqual([bar['result'] for bar in chart['bars']],
+                         ['win', 'loss', 'tie'])
+        self.assertEqual([bar['value'] for bar in chart['bars']],
+                         ['+2', '\N{MINUS SIGN}3', '0'])
+        self.assertLess(chart['bars'][0]['y'], chart['svg']['baseline'])
+        self.assertEqual(chart['bars'][1]['y'], chart['svg']['baseline'])
+        html = render_to_string('templatetags/charts/results.html', chart)
+        self.assertIn('class="mark win"', html)
+        self.assertIn('class="mark loss"', html)
+        self.assertIn('class="mark tie"', html)

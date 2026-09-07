@@ -778,6 +778,12 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
 .chart a:hover .mark, .chart a:focus-visible .mark { fill: var(--accent-dark); }
 .chart a:hover .mark.partial, .chart a:focus-visible .mark.partial { fill: var(--fill-hover); stroke: var(--accent-dark); }
 .chart a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.results-chart .mark.loss { fill: var(--ink-soft); }
+.results-chart svg { min-width: 960px; }
+.results-chart .mark.tie { fill: var(--tie); stroke: var(--ink-soft); stroke-width: 1; }
+.results-chart a:hover .mark.loss, .results-chart a:focus-visible .mark.loss { fill: var(--ink); }
+.results-chart a:hover .mark.tie, .results-chart a:focus-visible .mark.tie { fill: var(--tie); stroke: var(--ink); }
+.results-chart text.value { fill: var(--ink); font-weight: 600; }
 table.summary { max-width: 560px; }
 
 /* Hall of Fame glyph: a second carrier alongside the bold, per §2. */

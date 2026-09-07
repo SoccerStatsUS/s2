@@ -20,12 +20,16 @@ class TeamGamesTests(SimpleTestCase):
         team = team_model.objects.by_slug.return_value
         form_class.return_value.is_valid.return_value = False
         games = game_model.objects.team_filter.return_value.select_related.return_value.order_by.return_value
+        newest = MagicMock()
+        oldest = MagicMock()
+        games.filter.return_value.__getitem__.return_value = [newest, oldest]
         page = MagicMock()
         paginator.return_value.get_page.return_value = page
 
         team_games(request, 'fc-dallas')
 
         standing_class.assert_called_once_with(games, team)
+        self.assertEqual(render.call_args.args[2]['chart_games'], [oldest, newest])
         paginator.assert_called_once_with(games, 100)
         paginator.return_value.get_page.assert_called_once_with('2')
         context = render.call_args.args[2]

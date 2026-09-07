@@ -503,6 +503,14 @@ def team_games(request, team_slug):
     games = games.select_related().order_by('-has_date', '-date', '-season')
     #games = games.select_related().order_by('-date', '-season')
     standings = [TempGameStanding(games, team)]
+    chart_games = list(games.filter(
+        date__lte=datetime.date.today(),
+        team1_score__isnull=False,
+        team2_score__isnull=False,
+        not_played=False,
+        result_unknown=False,
+        )[:20])
+    chart_games.reverse()
     page = Paginator(games, 100).get_page(request.GET.get('page'))
 
 
@@ -512,6 +520,7 @@ def team_games(request, team_slug):
         'form': form,
         'games': page.object_list,
         'page': page,
+        'chart_games': chart_games,
         'standings': standings,
         }
 
