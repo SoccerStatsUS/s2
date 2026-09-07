@@ -503,13 +503,15 @@ def team_games(request, team_slug):
     games = games.select_related().order_by('-has_date', '-date', '-season')
     #games = games.select_related().order_by('-date', '-season')
     standings = [TempGameStanding(games, team)]
+    page = Paginator(games, 100).get_page(request.GET.get('page'))
 
 
 
     context = {
         'team': team,
         'form': form,
-        'games': games,
+        'games': page.object_list,
+        'page': page,
         'standings': standings,
         }
 
