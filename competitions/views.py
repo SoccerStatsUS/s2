@@ -341,7 +341,7 @@ def season_detail(request, competition_slug, season_slug):
 
     context = {
         'season': season,
-        'standings': season.standing_set.filter(final=True),
+        'standings': season_standings(season),
         'stats': stats[:25],
         'goal_leaders': goal_leaders[:10],
         'game_leaders': game_leaders[:10],
@@ -355,6 +355,24 @@ def season_detail(request, competition_slug, season_slug):
         }
     return render(request, "competitions/season/detail.html",
                               context)
+
+
+def season_standings(season):
+    standings = list(season.standing_set.filter(final=True).select_related('team'))
+    team_names = defaultdict(Counter)
+
+    for team1_id, team1_name, team2_id, team2_name in season.game_set.values_list(
+            'team1_id', 'team1_original_name', 'team2_id', 'team2_original_name'):
+        if team1_name:
+            team_names[team1_id][team1_name] += 1
+        if team2_name:
+            team_names[team2_id][team2_name] += 1
+
+    for standing in standings:
+        names = team_names[standing.team_id]
+        standing.team_display_name = names.most_common(1)[0][0] if names else standing.team.name
+
+    return standings
 
 
 def season_honors(season):
@@ -652,7 +670,6 @@ def season_list(request, season_slug):
 
     return render(request, "competitions/season/list.html",
                               context)
-
 
 
 

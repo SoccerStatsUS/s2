@@ -14,6 +14,13 @@
 <h4>{{ sx.grouper }}</h4>
 {% endif %}
 
+{% regroup sx.list by group as standings_by_group %}
+
+{% for gx in standings_by_group %}
+
+{% if gx.grouper %}
+<h4>{{ gx.grouper }}</h4>
+{% endif %}
 
 <table class="standings">
 
@@ -45,15 +52,15 @@
 <tbody>
 
 
-{% for standing in sx.list %}
+{% for standing in gx.list %}
 <tr>
 
 
   {% if 'team' not in exclude %}
   {% if standing.team.slug %}
-  <td><a href="{% url 'team_detail' standing.team.slug %}">{{ standing.team.name }}</a></td>
+  <td><a href="{% url 'team_detail' standing.team.slug %}">{{ standing.team_display_name|default:standing.team.name }}</a></td>
   {% else %}
-  <td>{{ standing.team.name }}</td>
+  <td>{{ standing.team_display_name|default:standing.team.name }}</td>
   {% endif %}
   {% endif %}
 
@@ -119,6 +126,8 @@
 </tbody>
 
 </table>
+
+{% endfor %}
 
 {% endfor %}
 
