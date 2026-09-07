@@ -4,6 +4,7 @@ from unittest.mock import MagicMock, patch
 from django.template import Context, Template
 from django.test import SimpleTestCase
 
+from competitions.templatetags.charts import player_goals_chart
 from competitions.views import season_postseason, season_standings, stat_leaders
 
 
@@ -99,6 +100,26 @@ class SeasonLeaderTests(SimpleTestCase):
         self.assertIn('<strong>27</strong>', html)
         self.assertIn('Assists', html)
         self.assertIn('Carlos Valderrama', html)
+
+
+class PlayerGoalsChartTests(SimpleTestCase):
+
+    def test_renders_season_goal_totals(self):
+        rows = [
+            {'name': '1996', 'goals': 34, 'games': 36},
+            {'name': '1997', 'goals': 10, 'games': 28},
+            {'name': '1998', 'goals': 22, 'games': 36},
+        ]
+
+        chart = player_goals_chart(rows, 'Club goals by season')
+        html = Template(
+            '{% load charts %}{% player_goals_chart rows "Club goals by season" %}'
+        ).render(Context({'rows': rows}))
+
+        self.assertEqual([column['goals'] for column in chart['columns']],
+                         [34, 10, 22])
+        self.assertIn('1996: 34 goals in 36 games', html)
+        self.assertIn('Club goals by season', html)
 
 
 class SeasonPostseasonTests(SimpleTestCase):

@@ -33,10 +33,11 @@ document.addEventListener("DOMContentLoaded", function() {
         var items = [];
         panes.forEach(function(pane) {
             var name = pane.getAttribute("tab");
+            var label = pane.getAttribute("tab-label") || name;
             var a = document.createElement("a");
             a.href = "#" + name;
             var li = document.createElement("li");
-            li.textContent = name;
+            li.textContent = label;
             a.appendChild(li);
             tabs.appendChild(a);
             items.push(li);

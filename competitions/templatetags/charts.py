@@ -111,6 +111,60 @@ def column_chart(rows, caption):
     }
 
 
+@register.inclusion_tag("templatetags/charts/player_goals.html")
+def player_goals_chart(rows, caption):
+    rows = list(rows)
+    values = [row["goals"] for row in rows if row["goals"] is not None]
+    if len(rows) < 2 or not values or max(values) <= 0:
+        return {"svg": None}
+
+    height, left, right, top, bottom = 260, 48, 20, 12, 40
+    plot_w, plot_h = WIDTH - left - right, height - top - bottom
+    step = nice_step(max(values))
+    y_max = step * math.ceil(max(values) / step)
+    if y_max - max(values) < 0.04 * y_max:
+        y_max += step
+    scale = plot_h / y_max
+    slot = plot_w / len(rows)
+    bar_w = min(36, max(8, slot * .65))
+    every = max(1, math.ceil(56 / slot))
+
+    columns = []
+    for index, row in enumerate(rows):
+        goals = row["goals"] or 0
+        x = left + index * slot + (slot - bar_w) / 2
+        bar_h = goals * scale
+        columns.append({
+            "path": cap_path(x, top + plot_h - bar_h, bar_w, bar_h) if goals else None,
+            "x": x + bar_w / 2,
+            "value_y": top + plot_h - bar_h - 5,
+            "goals": goals,
+            "name": row["name"] if index % every == 0 else "",
+            "title": "%s: %s goals in %s games" % (
+                row["name"], comma(goals), comma(row["games"] or 0)),
+        })
+
+    ticks = []
+    value = 0
+    while value <= y_max:
+        ticks.append({"y": top + plot_h - value * scale, "text": comma(value)})
+        value += step
+
+    return {
+        "svg": {
+            "width": WIDTH,
+            "height": height,
+            "left": left,
+            "right_edge": WIDTH - right,
+            "base": top + plot_h,
+            "label_y": top + plot_h + 18,
+        },
+        "columns": columns,
+        "ticks": ticks,
+        "caption": caption,
+    }
+
+
 @register.inclusion_tag("templatetags/charts/bars.html")
 def bar_chart(rows, caption):
     """

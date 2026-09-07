@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load charts %}
 {% load games %}
 {% load stats %}
 
@@ -14,6 +15,27 @@
 
 {% include "bios/helpers/summary.html" %}
 
+{% if awards %}
+<section class="player-honors">
+<h2>Honors</h2>
+<table class="honors">
+<caption class="sr-only">Honors received by {{ bio.name }}</caption>
+<thead>
+  <tr><th scope="col">season</th><th scope="col">competition</th><th scope="col">award</th></tr>
+</thead>
+<tbody>
+{% for item in awards %}
+  <tr>
+    <td>{% if item.season %}<a href="{% url 'season_detail' item.season.competition.slug item.season.slug %}">{{ item.season.name }}</a>{% elif item.year %}{{ item.year }}{% else %}<span class="grey" title="no record found">&mdash;</span>{% endif %}</td>
+    <td>{% if item.award.competition %}<a href="{% url 'competition_detail' item.award.competition.slug %}" title="{{ item.award.competition.name }}">{{ item.award.competition.abbreviation }}</a>{% else %}<span class="grey" title="no record found">&mdash;</span>{% endif %}</td>
+    <td><a href="{% url 'award_detail' item.award.id %}">{{ item.award.name }}</a></td>
+  </tr>
+{% endfor %}
+</tbody>
+</table>
+</section>
+{% endif %}
+
 <div id="tab_block">
 <ul id="tabs"></ul>
 </div>
@@ -24,54 +46,54 @@
 
 
 {% if domestic_stats or international_stats %}
-<div tab="stats">
+<div tab="career">
 
-<ul id="subtabs"></ul>
-<div id="subtab_wrapper">
-
-<div tab="by competition">
-<h3>Career totals by competition</h3>
-{% stats_table competition_stats 'player' %}
-</div>
-
-<div tab="by team">
+<div class="career-breakdowns">
+{% if team_stats %}
+<section>
 <h3>Career totals by team</h3>
 {% stats_table team_stats 'player' %}
+</section>
+{% endif %}
+
+{% if competition_stats %}
+<section>
+<h3>Career totals by competition</h3>
+{% stats_table competition_stats 'player' %}
+</section>
+{% endif %}
 </div>
 
+{% if show_goal_chart %}
+<h3>Goals by season</h3>
+{% player_goals_chart goal_seasons "Club goals by season" %}
+{% endif %}
+
 {% if domestic_stats %}
-<div tab="domestic">
 <h3>Season by season, clubs</h3>
 {% stats_table domestic_stats 'player' %}
-</div>
 {% endif %}
 
 {% if international_stats %}
-<div tab="international">
 <h3>Season by season, international</h3>
 {% stats_table international_stats 'player' %}
-</div>
 {% endif %}
-
-</div>
-
-
 
 </div>
 {% endif %}
 
 
 {% if recent_game_stats %}
-<div tab="games">
+<div tab="games" tab-label="games ({{ game_log_count }})">
 
 <h3>Most recent games</h3>
 {% include "templatetags/stats/game_list.html" with stats=recent_game_stats %}
 
 <div class="all-link"><a href="{% url 'person_detail_games' bio.slug %}">
 {% if game_log_count and career_stat.games_played and game_log_count < career_stat.games_played %}
-game log: {{ game_log_count }} of {{ career_stat.games_played }} games &rarr;
+game log: {{ game_log_count }} of {{ career_stat.games_played }} recorded games &rarr;
 {% else %}
-all {{ career_stat.games_played }} games &rarr;
+all {{ game_log_count }} recorded games &rarr;
 {% endif %}
 </a></div>
 
@@ -95,34 +117,6 @@ all {{ career_stat.games_played }} games &rarr;
 <h3>Most recent games refereed</h3>
 {% include "templatetags/appearances/ref.html" with games=refs %}
 <div class="all-link"><a href="{% url 'person_detail_referee_games' bio.slug %}">all games refereed &rarr;</a></div>
-</div>
-{% endif %}
-
-
-{% if bio.awards.exists %}
-<div tab="awards">
-<h3>Awards</h3>
-<table>
-<thead>
-  <tr>
-    <th scope="col">season</th>
-    <th scope="col">competition</th>
-    <th scope="col">award</th>
-  </tr>
-</thead>
-{% for award in bio.awards.all %}
-<tr>
-  {% if award.season %}
-  <td><a href="{% url 'season_detail' award.season.competition.slug award.season.slug %}">{{ award.season.name }}</a></td>
-  <td><a href="{% url 'competition_detail' award.season.competition.slug %}">{{ award.season.competition.abbreviation }}</a></td>
-  {% else %}
-  <td class="grey"></td>
-  <td class="grey"></td>
-  {% endif %}
-  <td><a href="{% url 'award_detail' award.award.id %}">{{ award.award.name }}</a></td>
-</tr>
-{% endfor %}
-</table>
 </div>
 {% endif %}
 

@@ -140,6 +140,13 @@ def person_detail_abstract(request, bio):
     league_stats = Stat.objects.filter(player=bio).order_by('season')
     domestic_stats = league_stats.filter(team__international=False)
     international_stats = league_stats.filter(team__international=True)
+    goal_seasons = list(domestic_stats.values(name=F('season__name'))
+                        .annotate(goals=Sum('goals'), games=Sum('games_played'))
+                        .order_by('name'))
+    career_stat = bio.career_stat()
+    first_game = bio.first_game()
+    last_game = bio.last_game()
+    awards = bio.awards.select_related('award__competition', 'season__competition')
     
     context = {
         "bio": bio,
@@ -148,7 +155,13 @@ def person_detail_abstract(request, bio):
         'domestic_stats': domestic_stats,
         'international_stats': international_stats,
         'competition_stats': competition_stats,
-        'career_stat': bio.career_stat(),
+        'career_stat': career_stat,
+        'first_game': first_game,
+        'last_game': last_game,
+        'awards': awards,
+        'goal_seasons': goal_seasons,
+        'show_goal_chart': (len(goal_seasons) >= 2 and
+                            any(row['goals'] for row in goal_seasons)),
         'game_log_count': bio.gamestat_set.count(),
         'team_stats': team_stats,
         'picks': bio.pick_set.exclude(draft__competition=None).order_by('draft__season', 'draft__start'),
@@ -247,6 +260,5 @@ def person_detail_stats(request, slug):
         }
     return render(request, "bios/detail_stats.html",
                               context)
-
 
 

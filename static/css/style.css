@@ -675,17 +675,7 @@ table.honors th {
 }
 
 #bio_block {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-}
-
-#bio_image {
-    min-height: 150px;
-    min-width: 120px;
-    background-color: var(--fill);
-    border-radius: 4px;
-    overflow: hidden;
+    margin-bottom: 16px;
 }
 
 #bio_data h1 { margin: 2px 0 6px; }
@@ -695,17 +685,62 @@ table.honors th {
     color: var(--ink-soft);
 }
 
-#bio_facts div { margin: 2px 0; }
+#bio_facts p { margin: 2px 0; }
 
 #bio_facts strong { color: var(--ink); }
 
-#bio_facts .bio-recorded { margin-top: 10px; }
+.bio-vitals span + span::before {
+    content: " · ";
+    color: var(--hairline);
+}
+
+#career-totals {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 32px;
+    margin: 14px 0 8px;
+    padding: 10px 0;
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    font-variant-numeric: tabular-nums;
+}
+
+#career-totals div {
+    display: flex;
+    flex-direction: column;
+    min-width: 72px;
+}
+
+#career-totals dt { font-size: 12px; }
+
+#career-totals dd {
+    order: -1;
+    margin: 0;
+    color: var(--ink);
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.1;
+}
+
+#bio_facts .bio-recorded { margin-top: 8px; }
 
 #bio_facts .bio-caveat {
     font-size: 12px;
     font-style: italic;
     color: #9aa3ab;
 }
+
+.player-honors { margin: 0 0 16px; }
+.player-honors h2 { margin: 0 0 4px; font-size: 1.1em; }
+.player-honors table.honors { margin-bottom: 0; }
+
+.career-breakdowns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.career-breakdowns h3 { margin-top: 0; }
 
 .all-link {
     margin: -8px 0 16px;
@@ -1017,6 +1052,8 @@ td.result { width: 70px; }
         display: block;
         overflow-x: auto;
     }
+
+    .career-breakdowns { grid-template-columns: 1fr; }
 }
 
 
