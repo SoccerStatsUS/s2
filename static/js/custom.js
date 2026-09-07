@@ -12,6 +12,32 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
+    // Homepage history strip: show one editorial pick at a time.
+    var otd = document.getElementById("otd");
+    if (otd) {
+        var otdItems = Array.prototype.slice.call(otd.querySelectorAll(".otd-item"));
+        if (otdItems.length > 1) {
+            var otdIndex = 0;
+            var otdPrevious = otd.querySelector(".otd-prev");
+            var otdNext = otd.querySelector(".otd-next");
+            var otdPosition = otd.querySelector(".otd-position");
+
+            function showOtdItem(index) {
+                otdIndex = (index + otdItems.length) % otdItems.length;
+                otdItems.forEach(function(item, i) { item.hidden = i !== otdIndex; });
+                otdPosition.textContent = (otdIndex + 1) + "/" + otdItems.length;
+            }
+
+            otd.classList.add("is-carousel");
+            otdPrevious.hidden = false;
+            otdNext.hidden = false;
+            otdPosition.hidden = false;
+            showOtdItem(0);
+            otdPrevious.addEventListener("click", function() { showOtdItem(otdIndex - 1); });
+            otdNext.addEventListener("click", function() { showOtdItem(otdIndex + 1); });
+        }
+    }
+
     // Filter dropdowns submit on change.
     document.querySelectorAll("#competition-filter select, #transaction-filter select").forEach(function(sel) {
         sel.addEventListener("change", function() { sel.form.submit(); });

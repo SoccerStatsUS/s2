@@ -75,6 +75,44 @@ class SearchTests(SimpleTestCase):
         self.assertIn('UNACCENT(', str(context['competitions'].query))
 
 
+class HomepageOnThisDayTests(SimpleTestCase):
+
+    def test_places_single_item_history_strip_above_search(self):
+        team1 = SimpleNamespace(name='Home', slug='home')
+        team2 = SimpleNamespace(name='Away', slug='away')
+        competition = SimpleNamespace(name='Major League Soccer', abbreviation='MLS')
+        game = SimpleNamespace(
+            id=7,
+            date=datetime.date(1996, 9, 6),
+            team1=team1,
+            team2=team2,
+            team1_original_name='Home',
+            team2_original_name='Away',
+            winner=team1,
+            score_or_result='2 - 1',
+            competition=competition,
+        )
+        born = SimpleNamespace(
+            name='Player Name',
+            slug='player-name',
+            birthdate=datetime.date(1984, 9, 6),
+        )
+
+        html = render_to_string('homepage.html', {
+            'today': datetime.date(2026, 9, 6),
+            'oldest': game,
+            'crowd': None,
+            'born': born,
+        })
+
+        self.assertLess(html.index('id="otd"'), html.index('id="home-search"'))
+        self.assertEqual(html.count('class="otd-item"'), 2)
+        self.assertIn('class="otd-prev"', html)
+        self.assertIn('class="otd-next"', html)
+        self.assertIn('Earliest match', html)
+        self.assertIn('Player Name was born', html)
+
+
 class RecentResultsChartTests(SimpleTestCase):
 
     def test_builds_signed_bars_for_wins_losses_and_draws(self):

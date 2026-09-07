@@ -9,6 +9,24 @@
 <h1 id="tagline">A website dedicated to the deep history of American soccer &mdash;
 starting in <a href="{% url 'city_detail' 'waukesha-wi' %}">Waukesha, Wisconsin</a> in <a href="{% url 'year_detail' 1866 %}">1866</a>.</h1>
 
+<section id="otd" aria-label="On this day">
+  <h2><span class="otd-label-full">On this day &middot; {{ today|date:"F j" }}</span><span class="otd-label-short">Today</span></h2>
+  <button class="otd-prev" type="button" aria-label="Previous on-this-day item" hidden>&larr;</button>
+  <div class="otd-items" aria-live="polite" aria-atomic="true">
+    {% if oldest %}{% include "homepage/otd_game.html" with game=oldest label="Earliest match" %}{% endif %}
+    {% if crowd %}{% include "homepage/otd_game.html" with game=crowd label="Largest crowd" show_attendance=True %}{% endif %}
+    {% if born %}
+    <p class="otd-item"><a href="{% url 'person_detail' born.slug %}"><strong>Birthday</strong> &middot; {{ born.birthdate.year }} &middot; {{ born.name }} was born</a></p>
+    {% endif %}
+    {% if not oldest and not born %}
+    <p class="otd-item"><a href="{% url 'dates_index' %}">No match or birthday recorded yet &middot; browse by year</a></p>
+    {% endif %}
+  </div>
+  <button class="otd-next" type="button" aria-label="Next on-this-day item" hidden>&rarr;</button>
+  <span class="otd-position" hidden></span>
+  <a class="otd-more" href="{% url 'day_detail' today.month today.day %}" aria-label="Everything on record for {{ today|date:"F j" }}">all &rarr;</a>
+</section>
+
 <form id="home-search" method="get" action="{% url 'search' %}">
   <input name="q" type="text" placeholder="Search American soccer history"
          aria-label="Search American soccer history">
@@ -16,64 +34,6 @@ starting in <a href="{% url 'city_detail' 'waukesha-wi' %}">Waukesha, Wisconsin<
 </form>
 
 </div>
-
-
-<div id="otd">
-
-<h3>On this day &mdash; {{ today|date:"F j" }}</h3>
-
-{% if oldest %}
-<p>
-<a class="otd-year" href="{% url 'date_detail' oldest.date.year oldest.date.month oldest.date.day %}">{{ oldest.date.year }}</a>
-{% if oldest.winner == oldest.team1 %}
-<a class="otd-team" href="{% url 'team_detail' oldest.team1.slug %}"><strong>{{ oldest.team1_original_name }}</strong></a>
-{% else %}
-<a class="otd-team" href="{% url 'team_detail' oldest.team1.slug %}">{{ oldest.team1_original_name }}</a>
-{% endif %}
-<a class="otd-score" href="{% url 'game_detail' oldest.id %}">{{ oldest.score_or_result }}</a>
-{% if oldest.winner == oldest.team2 %}
-<a class="otd-team" href="{% url 'team_detail' oldest.team2.slug %}"><strong>{{ oldest.team2_original_name }}</strong></a>
-{% else %}
-<a class="otd-team" href="{% url 'team_detail' oldest.team2.slug %}">{{ oldest.team2_original_name }}</a>
-{% endif %}
-<a class="otd-comp" title="{{ oldest.competition.name }}" href="{% url 'competition_detail' oldest.competition.slug %}">{{ oldest.competition.abbreviation|default:oldest.competition.name }}</a>
-</p>
-{% else %}
-<p>No recorded match on {{ today|date:"F j" }} &mdash; yet.
-<a href="{% url 'dates_index' %}">Browse by year</a> instead.</p>
-{% endif %}
-
-{% if crowd %}
-<p>
-<a class="otd-year" href="{% url 'date_detail' crowd.date.year crowd.date.month crowd.date.day %}">{{ crowd.date.year }}</a>
-{% if crowd.winner == crowd.team1 %}
-<a class="otd-team" href="{% url 'team_detail' crowd.team1.slug %}"><strong>{{ crowd.team1_original_name }}</strong></a>
-{% else %}
-<a class="otd-team" href="{% url 'team_detail' crowd.team1.slug %}">{{ crowd.team1_original_name }}</a>
-{% endif %}
-<a class="otd-score" href="{% url 'game_detail' crowd.id %}">{{ crowd.score_or_result }}</a>
-{% if crowd.winner == crowd.team2 %}
-<a class="otd-team" href="{% url 'team_detail' crowd.team2.slug %}"><strong>{{ crowd.team2_original_name }}</strong></a>
-{% else %}
-<a class="otd-team" href="{% url 'team_detail' crowd.team2.slug %}">{{ crowd.team2_original_name }}</a>
-{% endif %}
-<a class="otd-comp" title="{{ crowd.competition.name }}" href="{% url 'competition_detail' crowd.competition.slug %}">{{ crowd.competition.abbreviation|default:crowd.competition.name }}</a>
-<span class="otd-note">(attendance: {{ crowd.attendance|intcomma }})</span>
-</p>
-{% endif %}
-
-{% if born %}
-<p>
-<a class="otd-year" href="{% url 'date_detail' born.birthdate.year born.birthdate.month born.birthdate.day %}">{{ born.birthdate.year }}</a>
-<a class="otd-team" href="{% url 'person_detail' born.slug %}">{{ born.name }}</a>
-<span class="otd-note">was born</span>
-</p>
-{% endif %}
-
-<p class="otd-more"><a href="{% url 'day_detail' today.month today.day %}">Everything on record for {{ today|date:"F j" }} &rarr;</a></p>
-
-</div>
-
 
 <div id="leagues">
 
