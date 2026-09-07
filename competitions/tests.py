@@ -1,10 +1,10 @@
 from types import SimpleNamespace
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 from django.template import Context, Template
 from django.test import SimpleTestCase
 
-from competitions.views import season_standings, stat_leaders
+from competitions.views import season_postseason, season_standings, stat_leaders
 
 
 class QueryRows(list):
@@ -99,3 +99,105 @@ class SeasonLeaderTests(SimpleTestCase):
         self.assertIn('<strong>27</strong>', html)
         self.assertIn('Assists', html)
         self.assertIn('Carlos Valderrama', html)
+
+
+class SeasonPostseasonTests(SimpleTestCase):
+    @patch('competitions.views.Season.objects')
+    def test_finds_playoff_season_and_championship_game(self, seasons):
+        season = SimpleNamespace(
+            competition=SimpleNamespace(slug='major-league-soccer'),
+            super_season=object(),
+        )
+        playoff_season = MagicMock()
+        championship_game = MagicMock()
+        seasons.filter.return_value.select_related.return_value.first.return_value = playoff_season
+        games = playoff_season.game_set.filter.return_value
+        games.select_related.return_value.order_by.return_value.first.return_value = championship_game
+
+        postseason = season_postseason(season)
+
+        seasons.filter.assert_called_once_with(
+            super_season=season.super_season,
+            competition__slug='mls-cup-playoffs',
+        )
+        playoff_season.game_set.filter.assert_called_once_with(
+            round__in=('MLS Cup', 'Final', 'Championship'),
+            not_played=False,
+        )
+        self.assertEqual(postseason['season'], playoff_season)
+        self.assertEqual(postseason['championship_game'], championship_game)
+
+    @patch('competitions.views.Season.objects')
+    def test_uses_last_playoff_game_when_rounds_are_missing(self, seasons):
+        season = SimpleNamespace(
+            competition=SimpleNamespace(slug='major-league-soccer'),
+            super_season=object(),
+        )
+        playoff_season = MagicMock()
+        championship_game = MagicMock()
+        playoff_season.champion.return_value = object()
+        seasons.filter.return_value.select_related.return_value.first.return_value = playoff_season
+        labeled_games = playoff_season.game_set.filter.return_value
+        labeled_games.select_related.return_value.order_by.return_value.first.return_value = None
+        dated_games = playoff_season.game_set.exclude.return_value.exclude.return_value
+        dated_games.select_related.return_value.order_by.return_value.first.return_value = championship_game
+
+        postseason = season_postseason(season)
+
+        playoff_season.game_set.exclude.assert_called_once_with(date=None)
+        playoff_season.game_set.exclude.return_value.exclude.assert_called_once_with(
+            not_played=True
+        )
+        self.assertEqual(postseason['championship_game'], championship_game)
+
+    @patch('competitions.views.Season.objects')
+    def test_does_not_infer_championship_before_champion_is_known(self, seasons):
+        season = SimpleNamespace(
+            competition=SimpleNamespace(slug='major-league-soccer'),
+            super_season=object(),
+        )
+        playoff_season = MagicMock()
+        playoff_season.champion.return_value = None
+        seasons.filter.return_value.select_related.return_value.first.return_value = playoff_season
+        labeled_games = playoff_season.game_set.filter.return_value
+        labeled_games.select_related.return_value.order_by.return_value.first.return_value = None
+
+        postseason = season_postseason(season)
+
+        playoff_season.game_set.exclude.assert_not_called()
+        self.assertIsNone(postseason['championship_game'])
+
+    def test_postseason_template_links_playoffs_and_shows_final(self):
+        galaxy = SimpleNamespace(slug='los-angeles-galaxy')
+        united = SimpleNamespace(slug='dc-united')
+        game = SimpleNamespace(
+            id=1,
+            round='MLS Cup',
+            date=None,
+            team1=galaxy,
+            team1_original_name='Los Angeles Galaxy',
+            team2=united,
+            team2_original_name='D.C. United',
+            winner=united,
+            score_or_result='2 - 3',
+        )
+        postseason = {
+            'season': SimpleNamespace(
+                slug='1996',
+                competition=SimpleNamespace(
+                    slug='mls-cup-playoffs', name='MLS Cup Playoffs'
+                ),
+            ),
+            'championship_game': game,
+        }
+        template = Template(
+            '{% include "competitions/season/postseason.html" %}'
+        )
+
+        html = template.render(Context({'postseason': postseason}))
+
+        self.assertIn('/c/mls-cup-playoffs/1996/', html)
+        self.assertIn('MLS Cup', html)
+        self.assertIn('Los Angeles Galaxy', html)
+        self.assertIn('<strong><a href="/teams/dc-united/">D.C. United</a></strong>', html)
+        self.assertIn('2 - 3', html)

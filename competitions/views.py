@@ -10,7 +10,7 @@ from django.views.decorators.cache import cache_page
 from awards.models import Award, AwardItem
 from bios.models import Bio
 from competitions.forms import CompetitionForm
-from competitions.models import Competition, SuperSeason, Season
+from competitions.models import PLAYOFF_CHAMPIONSHIPS, Competition, SuperSeason, Season
 from lineups.models import Appearance
 from places.models import Country
 from stats.models import Stat, CompetitionStat, SeasonStat
@@ -332,6 +332,7 @@ def season_detail(request, competition_slug, season_slug):
         'recent_games': recent_games[:25],
         'honors': season_honors(season),
         'awards': season.awarditem_set.order_by('award'),
+        'postseason': season_postseason(season),
         'stats_nationality_info': json.dumps(season.stats_nationality_info()),
         
         }
@@ -375,6 +376,35 @@ def stat_leaders(stats, field):
             .values('player_id', 'player__name', 'player__slug')
             .annotate(value=Sum(field))
             .order_by('-value', 'player__name')[:5])
+
+
+def season_postseason(season):
+    playoff_slug = PLAYOFF_CHAMPIONSHIPS.get(season.competition.slug)
+    if not playoff_slug:
+        return None
+
+    playoff_season = (Season.objects
+                      .filter(super_season=season.super_season,
+                              competition__slug=playoff_slug)
+                      .select_related('competition')
+                      .first())
+    if not playoff_season:
+        return None
+
+    championship_game = (playoff_season.game_set
+                         .filter(round__in=('MLS Cup', 'Final', 'Championship'),
+                                 not_played=False)
+                         .select_related('team1', 'team2')
+                         .order_by('-date', '-id')
+                         .first())
+    if not championship_game and playoff_season.champion():
+        championship_game = (playoff_season.game_set
+                             .exclude(date=None)
+                             .exclude(not_played=True)
+                             .select_related('team1', 'team2')
+                             .order_by('-date', '-id')
+                             .first())
+    return {'season': playoff_season, 'championship_game': championship_game}
 
 
 def season_honors(season):
@@ -672,5 +702,3 @@ def season_list(request, season_slug):
 
     return render(request, "competitions/season/list.html",
                               context)
-
-
