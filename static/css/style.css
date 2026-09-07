@@ -694,7 +694,7 @@ table.honors th {
     color: var(--hairline);
 }
 
-#career-totals {
+#career-totals, #team-totals {
     display: flex;
     flex-wrap: wrap;
     gap: 8px 32px;
@@ -705,15 +705,15 @@ table.honors th {
     font-variant-numeric: tabular-nums;
 }
 
-#career-totals div {
+#career-totals div, #team-totals div {
     display: flex;
     flex-direction: column;
     min-width: 72px;
 }
 
-#career-totals dt { font-size: 12px; }
+#career-totals dt, #team-totals dt { font-size: 12px; }
 
-#career-totals dd {
+#career-totals dd, #team-totals dd {
     order: -1;
     margin: 0;
     color: var(--ink);
@@ -730,9 +730,9 @@ table.honors th {
     color: #9aa3ab;
 }
 
-.player-honors { margin: 0 0 16px; }
-.player-honors h2 { margin: 0 0 4px; font-size: 1.1em; }
-.player-honors table.honors { margin-bottom: 0; }
+.player-honors, .team-honors { margin: 0 0 16px; }
+.player-honors h2, .team-honors h2 { margin: 0 0 4px; font-size: 1.1em; }
+.player-honors table.honors, .team-honors table.honors { margin-bottom: 0; }
 
 .career-breakdowns {
     display: grid;
@@ -754,6 +754,21 @@ table.honors th {
     margin: 0 0 4px;
     font-size: 14px;
     color: var(--ink-soft);
+}
+
+#team_facts p { margin: 2px 0; }
+
+.team-vitals span + span::before {
+    content: " · ";
+    color: var(--hairline);
+}
+
+#team_facts .team-recorded { margin-top: 8px; }
+
+#team_facts .team-caveat {
+    font-size: 12px;
+    font-style: italic;
+    color: #9aa3ab;
 }
 
 /* ---- A–Z directories (players, teams) ---- */

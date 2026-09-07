@@ -4,6 +4,7 @@
 {% load standings %}
 {% load games %}
 {% load stats %}
+{% load humanize %}
 
 {% block title %}{{ team.name }}{% endblock %}
 {% block metadescription %}Game results, statistics, awards and more for {{ team.name }}{% endblock %}
@@ -14,12 +15,32 @@
 
 <h1>{{ team.name }}</h1>
 
-<p id="team_facts">
-{% if alltime %}All-time record: {{ alltime.wins }}W {{ alltime.losses }}L {{ alltime.ties }}T
-in {{ alltime.games }} games &middot;{% endif %}
-{{ games_count }} game{{ games_count|pluralize }} transcribed here{% if first_game %},
-<a href="{% url 'game_detail' first_game.id %}">{{ first_game.date.year }}</a>&ndash;<a href="{% url 'game_detail' last_game.id %}">{{ last_game.date.year }}</a>{% endif %}
-</p>
+<div id="team_facts">
+  {% if team.founded or team.city or team.dissolved %}
+  <p class="team-vitals">
+    {% if team.founded %}<span>founded <a href="{% url 'year_detail' team.founded.year %}">{{ team.founded.year }}</a></span>{% endif %}
+    {% if team.city %}<span><a href="{% url 'city_detail' team.city.slug %}">{{ team.city }}</a></span>{% endif %}
+    {% if team.dissolved %}<span>dissolved <a href="{% url 'year_detail' team.dissolved.year %}">{{ team.dissolved.year }}</a></span>{% endif %}
+  </p>
+  {% endif %}
+
+  {% if games_count or alltime or awards %}
+  <dl id="team-totals" aria-label="Recorded team totals">
+    {% if games_count %}<div><dt>games</dt><dd>{{ games_count|intcomma }}</dd></div>{% endif %}
+    {% if alltime %}
+    <div><dt>wins</dt><dd>{{ alltime.wins|intcomma }}</dd></div>
+    <div><dt>draws</dt><dd>{{ alltime.ties|default_if_none:0|intcomma }}</dd></div>
+    <div><dt>losses</dt><dd>{{ alltime.losses|intcomma }}</dd></div>
+    {% endif %}
+    {% if awards %}<div><dt>honors</dt><dd>{{ awards|length|intcomma }}</dd></div>{% endif %}
+  </dl>
+  {% endif %}
+
+  {% if first_game %}
+  <p class="team-recorded">first recorded game <a href="{% url 'game_detail' first_game.id %}">{{ first_game.date }}</a>{% if last_game and last_game != first_game %} &middot; latest recorded game <a href="{% url 'game_detail' last_game.id %}">{{ last_game.date }}</a>{% endif %}</p>
+  {% endif %}
+
+  {% if games_count %}<p class="team-caveat">Totals and dates are as recorded here.</p>{% endif %}
 
 {% if team.teamalias_set.exists %}
 <p class="small">also known as: 
@@ -29,8 +50,30 @@ in {{ alltime.games }} games &middot;{% endif %}
 </p>
 {% endif %}
 
+</div>
 
 </div>
+
+{% if awards %}
+<section class="team-honors">
+<h2>Honors</h2>
+<table class="honors">
+<caption class="sr-only">Honors won by {{ team.name }}</caption>
+<thead>
+  <tr><th scope="col">season</th><th scope="col">competition</th><th scope="col">honor</th></tr>
+</thead>
+<tbody>
+{% for item in awards %}
+  <tr>
+    <td>{% if item.season %}<a href="{% url 'season_detail' item.season.competition.slug item.season.slug %}">{{ item.season.name }}</a>{% elif item.year %}{{ item.year }}{% else %}<span class="grey" title="no record found">&mdash;</span>{% endif %}</td>
+    <td>{% if item.award.competition %}<a href="{% url 'competition_detail' item.award.competition.slug %}" title="{{ item.award.competition.name }}">{{ item.award.competition.abbreviation|default:item.award.competition.name }}</a>{% else %}<span class="grey" title="no record found">&mdash;</span>{% endif %}</td>
+    <td><a href="{% url 'award_detail' item.award.id %}">{{ item.award.name }}</a></td>
+  </tr>
+{% endfor %}
+</tbody>
+</table>
+</section>
+{% endif %}
 
 
 <div id="tab_block">

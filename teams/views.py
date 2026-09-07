@@ -220,6 +220,10 @@ def team_detail(request, team_slug):
     first_game = dated_games.first()
     last_game = dated_games.last()
     alltime = Standing.objects.filter(team=team, competition=None, season=None).first()
+    awards = (team.awards
+              .select_related('award', 'award__competition', 'season',
+                              'season__competition')
+              .order_by('-season__order', '-year', 'award__name'))
 
     recent_games = team.game_set().filter(date__lt=today).order_by('-date').select_related()[:10]
     if recent_games.count() == 0:
@@ -245,6 +249,7 @@ def team_detail(request, team_slug):
         'first_game': first_game,
         'last_game': last_game,
         'alltime': alltime,
+        'awards': awards,
         'game_leaders': game_leaders,
         'goal_leaders': goal_leaders,
         'gx': True,
