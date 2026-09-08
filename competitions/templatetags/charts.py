@@ -255,9 +255,9 @@ def player_goals_chart(rows, caption):
 @register.inclusion_tag("templatetags/charts/counts.html")
 def count_chart(rows, caption, noun):
     """
-    One column per row, height = row['count'], every column labeled with its
-    own value. A plain count of things, so no median rule and no scale beyond
-    the axis: the numbers are small enough to read off the marks.
+    One column per row, height = row['count']. A plain count of things, so no
+    median rule; the axis carries the values and the hover title the exact
+    figure, rather than a number stamped on every column.
     """
     rows = list(rows)
     values = [row["count"] for row in rows]
@@ -283,7 +283,6 @@ def count_chart(rows, caption, noun):
         columns.append({
             "path": cap_path(x, base - bar_h, bar_w, bar_h) if row["count"] else None,
             "x": x + bar_w / 2,
-            "value_y": base - bar_h - 5,
             "count": row["count"],
             "name": row["name"] if index % every == 0 else "",
             "title": "%s: %s %s" % (row["name"], comma(row["count"]), noun),

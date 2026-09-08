@@ -379,7 +379,7 @@ class ClubTimelineTests(SimpleTestCase):
 
 class CountChartTests(SimpleTestCase):
 
-    def test_labels_every_column_and_names_the_noun_in_the_title(self):
+    def test_the_count_is_in_the_title_not_stamped_on_the_column(self):
         rows = [{'name': '1968', 'count': 17}, {'name': '1969', 'count': 5},
                 {'name': '1970', 'count': 11}]
 
@@ -389,12 +389,13 @@ class CountChartTests(SimpleTestCase):
 
         self.assertEqual([c['count'] for c in chart['columns']], [17, 5, 11])
         self.assertIn('1969: 5 clubs', html)
+        self.assertNotIn('class="value"', html)
 
-    def test_the_scale_clears_the_tallest_column(self):
+    def test_the_axis_carries_the_values_and_clears_the_tallest_column(self):
         chart = count_chart([{'name': str(y), 'count': 20} for y in range(3)], 'Clubs', 'clubs')
 
-        # The top column must not sit on the top gridline.
-        self.assertLess(chart['ticks'][-1]['y'], chart['columns'][0]['value_y'])
+        self.assertEqual(chart['ticks'][0]['text'], '0')
+        self.assertGreater(int(chart['ticks'][-1]['text']), 20)
 
 
 class CompetitionKindTests(SimpleTestCase):

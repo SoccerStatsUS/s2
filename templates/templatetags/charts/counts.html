@@ -8,7 +8,6 @@
   <line class="axis" x1="{{ svg.left }}" x2="{{ svg.right_edge }}" y1="{{ svg.base }}" y2="{{ svg.base }}"/>
   {% for column in columns %}
   {% if column.path %}<path class="mark" d="{{ column.path }}"><title>{{ column.title }}</title></path>{% endif %}
-  <text class="value" x="{{ column.x|floatformat:1 }}" y="{{ column.value_y|floatformat:1 }}" text-anchor="middle">{{ column.count }}</text>
   {% if column.name %}<text x="{{ column.x|floatformat:1 }}" y="{{ svg.label_y }}" text-anchor="middle">{{ column.name }}</text>{% endif %}
   {% endfor %}
 </svg>
