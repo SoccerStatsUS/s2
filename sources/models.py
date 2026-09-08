@@ -1,4 +1,6 @@
 from django.db import models
+from django.template.defaultfilters import slugify
+from django.urls import reverse
 
 
 class SourceManager(models.Manager):
@@ -33,6 +35,23 @@ class Source(models.Model):
     total = models.IntegerField(null=True)
 
     objects = SourceManager()
+
+
+    @property
+    def slug(self):
+        """
+        Derived rather than stored: source names are unique across all 178 of
+        them and so are their slugs, and a stored slug would be one more thing
+        a rebuild has to get right.
+
+        Ninety-one of those names are domains, and slugify drops a period
+        rather than breaking on it -- newspaperarchivecom. Split there first.
+        """
+        return slugify(self.name.replace('.', ' '))
+
+
+    def get_absolute_url(self):
+        return reverse('source_detail', args=[self.slug])
 
 
     class Meta:

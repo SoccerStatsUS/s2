@@ -20,7 +20,7 @@
   <tbody>
   {% for source in sources %}
   <tr>
-    <td><a href="{% url 'source_detail' source.id %}">{{ source|truncatechars:40 }}</a></td>
+    <td><a href="{{ source.get_absolute_url }}">{{ source|truncatechars:40 }}</a></td>
     <td>{{ source.author }}</td>
     <td>{{ source.games|default_if_none:'' }}</td>
     <td>{{ source.stats|default_if_none:'' }}</td>

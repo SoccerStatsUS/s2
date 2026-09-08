@@ -146,9 +146,6 @@ class SourceSitemap(Sitemap):
     def items(self):
         return Source.objects.order_by('id')
 
-    def location(self, obj):
-        return reverse('source_detail', args=[obj.id])
-
 
 SITEMAPS = {
     'static': StaticSitemap,

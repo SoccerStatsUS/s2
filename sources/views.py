@@ -3,7 +3,8 @@ import re
 
 from django.core.paginator import Paginator
 from django.db.models import Count, F, Q
-from django.shortcuts import render, get_object_or_404
+from django.http import Http404
+from django.shortcuts import render
 from django.template import RequestContext
 
 from games.models import Game
@@ -24,8 +25,20 @@ def source_index(request):
 
 
 
-def source_detail(request, source_id):
-    source = get_object_or_404(Source, id=source_id)
+def get_source(source_slug):
+    """
+    Sources carry no stored slug, so match the derived one -- 178 rows, one
+    query, and no field a rebuild can get wrong.
+    """
+    for source in Source.objects.all():
+        if source.slug == source_slug:
+            return source
+
+    raise Http404("no source %s" % source_slug)
+
+
+def source_detail(request, source_slug):
+    source = get_source(source_slug)
 
     stats = Stat.objects.filter(source=source)
     stats_count = stats.count()
