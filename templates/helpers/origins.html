@@ -1,0 +1,41 @@
+{% load charts %}
+{% load humanize %}
+
+{% comment %}
+Where a squad's playing time came from, by country of birth. Expects `origins`
+from places.playing_time_by_country: a measure and a row per country. Included
+by the team-season and the competition-season pages, which differ only in which
+Stat queryset they hand it.
+{% endcomment %}
+
+{% if origins.rows %}
+<div tab="origins" tab-label="origins">
+<h3>Where the {% if origins.measure == 'games' %}appearances{% else %}minutes{% endif %} came from</h3>
+
+{% if origins.measure == 'games' %}
+{% country_map origins.rows "Games played by country of birth" "games" %}
+{% else %}
+{% country_map origins.rows "Minutes by country of birth" %}
+{% endif %}
+
+<table class="origins">
+<caption class="sr-only">{{ origins.measure }} by country of birth</caption>
+<thead>
+  <tr><th scope="col">country</th><th scope="col">{{ origins.measure }}</th><th scope="col">share</th></tr>
+</thead>
+<tbody>
+{% for row in origins.rows %}
+  <tr>
+    <td>{% if row.country %}<a href="{% url 'country_detail' row.country.slug %}">{{ row.name }}</a>{% else %}<span class="grey" title="no birthplace on record">{{ row.name }}</span>{% endif %}</td>
+    <td>{{ row.value|intcomma }}</td>
+    <td>{{ row.percent|floatformat:1 }}%</td>
+  </tr>
+{% endfor %}
+</tbody>
+</table>
+
+{% if origins.measure == 'games' %}
+<p class="coverage-note">No minutes are recorded here, so the shares are games played.</p>
+{% endif %}
+</div>
+{% endif %}

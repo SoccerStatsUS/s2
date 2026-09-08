@@ -14,7 +14,7 @@ from django.views.decorators.cache import cache_page
 from competitions.models import Season, Competition
 from competitions.views import player_leader_groups
 from games.models import Game
-from places.models import Country
+from places.models import Country, playing_time_by_country
 from positions.models import Position
 from teams.forms import TeamGameForm, TeamStatForm
 from teams.models import Team
@@ -302,6 +302,8 @@ def team_season_detail(request, team_slug, competition_slug, season_slug):
     goal_scorers = list(stats.exclude(goals=0).values_list('player__name', 'goals'))
     assisters = list(stats.exclude(assists=0).values_list('player__name', 'assists'))
 
+    origins = playing_time_by_country(stats)
+
     context = {
         'team': team,
         'season': season,
@@ -316,6 +318,7 @@ def team_season_detail(request, team_slug, competition_slug, season_slug):
         'form_data': json.dumps(form_data),
         'goal_scorers': json.dumps(goal_scorers),        
         'assisters': json.dumps(assisters),
+        'origins': origins,
         }
 
     return render(request, "teams/season_detail.html",

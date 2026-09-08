@@ -896,6 +896,55 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
 .chart a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .results-chart .mark.loss { fill: var(--ink-soft); }
 .results-chart svg { min-width: 960px; }
+
+/* Country map: a single-hue ramp off --accent, five fixed share bands so one
+   season reads against another. Countries with no minutes are the ground the
+   shaded ones sit on, not absent. The table beside the map carries the same
+   numbers, so the ramp is never the only thing saying what happened. */
+.country-map {
+    --band-1: #084c36;
+    --band-2: var(--accent);
+    --band-3: #4f9c7f;
+    --band-4: #a3c9ba;
+    --band-5: #d8e7e0;
+}
+
+.country-map svg { min-width: 0; }
+.country-map .map-ground { fill: var(--fill); stroke: #fff; stroke-width: 0.5; }
+.country-map .map-shade { stroke: #fff; stroke-width: 0.5; }
+.country-map .map-shade-1 { fill: var(--band-1); }
+.country-map .map-shade-2 { fill: var(--band-2); }
+.country-map .map-shade-3 { fill: var(--band-3); }
+.country-map .map-shade-4 { fill: var(--band-4); }
+.country-map .map-shade-5 { fill: var(--band-5); }
+
+/* The key is an HTML span, so it takes the band as a background; the map
+   paths take the same value as an SVG fill. */
+.map-key.map-shade-1 { background: var(--band-1); }
+.map-key.map-shade-2 { background: var(--band-2); }
+.map-key.map-shade-3 { background: var(--band-3); }
+.map-key.map-shade-4 { background: var(--band-4); }
+.map-key.map-shade-5 { background: var(--band-5); }
+
+.map-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: .9em;
+    color: var(--ink-soft);
+}
+
+.map-legend li { display: flex; align-items: center; gap: 5px; }
+
+.map-key {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    border: 1px solid var(--hairline);
+}
 .results-chart .mark.tie { fill: var(--tie); stroke: var(--ink-soft); stroke-width: 1; }
 .results-chart a:hover .mark.loss, .results-chart a:focus-visible .mark.loss { fill: var(--ink); }
 .results-chart a:hover .mark.tie, .results-chart a:focus-visible .mark.tie { fill: var(--tie); stroke: var(--ink); }

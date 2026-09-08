@@ -349,3 +349,66 @@ class StadiumMap(models.Model):
 
     start = models.DateField()
     end = models.DateField()
+
+
+def playing_time_by_country(stats):
+    """
+    Where a squad's playing time came from, biggest share first.
+
+    Measured in minutes where they are recorded and in games played where they
+    are not: the NASL, the ASL and the indoor leagues have appearances for
+    every season and minutes for none. The split is clean enough to decide on
+    a threshold -- of the 4,658 team-seasons with any games played, 949 have
+    no minutes at all and only one sits between a quarter and half covered --
+    so anything in that gap picks the same measure. Returns the measure it
+    used, because a share of games is not a share of minutes and the page has
+    to say which it is showing.
+
+    Country is the birth country, falling back to the country of the
+    birthplace, because some bios carry a city and no explicit country. Time
+    with neither is its own row rather than a silent subtraction from the
+    total.
+
+    Takes any Stat queryset, so a competition or a whole club history groups
+    the same way a single season does.
+    """
+    rows = list(stats.select_related('player__birth_country', 'player__birthplace__country'))
+
+    played = [row for row in rows if row.games_played]
+    covered = [row for row in played if row.minutes]
+    measure = 'minutes' if played and len(covered) >= len(played) / 2 else 'games'
+
+    totals = defaultdict(int)
+    unknown = 0
+
+    for stat in rows:
+        value = (stat.minutes if measure == 'minutes' else stat.games_played) or 0
+        if not value:
+            continue
+
+        player = stat.player
+        country = player.birth_country or (player.birthplace and player.birthplace.country)
+        if country:
+            totals[country] += value
+        else:
+            unknown += value
+
+    # Nothing resolved means nothing to say. Whole competitions have no
+    # birthplaces on record -- no NWSL bio carries one -- and a breakdown that
+    # is one "not recorded" row at 100% is worse than no breakdown.
+    if not totals:
+        return {'measure': None, 'rows': []}
+
+    total = sum(totals.values()) + unknown
+
+    def row(country, name, value):
+        return {'country': country, 'name': name, 'value': value,
+                'share': value / total, 'percent': 100 * value / total}
+
+    country_rows = [row(country, country.name, value) for country, value in totals.items()]
+
+    if unknown:
+        country_rows.append(row(None, 'not recorded', unknown))
+
+    country_rows.sort(key=lambda r: (-r['value'], r['name']))
+    return {'measure': measure, 'rows': country_rows}

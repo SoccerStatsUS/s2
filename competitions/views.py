@@ -14,7 +14,7 @@ from bios.models import Bio
 from competitions.forms import CompetitionForm
 from competitions.models import PLAYOFF_CHAMPIONSHIPS, Competition, SuperSeason, Season
 from lineups.models import Appearance
-from places.models import Country
+from places.models import Country, playing_time_by_country
 from stats.models import Stat, CompetitionStat, SeasonStat
 from teams.models import Team
 
@@ -486,8 +486,7 @@ def season_detail(request, competition_slug, season_slug):
         'honors': season_honors(season),
         'awards': season.awarditem_set.order_by('award'),
         'postseason': season_postseason(season),
-        'stats_nationality_info': json.dumps(season.stats_nationality_info()),
-        
+        'origins': playing_time_by_country(stats),
         }
     return render(request, "competitions/season/detail.html",
                               context)

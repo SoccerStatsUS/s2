@@ -1,0 +1,20 @@
+{% if svg %}
+<figure class="chart country-map">
+<svg viewBox="0 0 {{ svg.width }} {{ svg.height }}" role="img" aria-label="{{ caption }}">
+  {% for d in ground %}<path class="map-ground" d="{{ d }}"/>{% endfor %}
+  {% for m in marks %}{% if m.dot %}<circle class="map-shade map-dot map-shade-{{ m.band }}" cx="{{ m.dot.cx }}" cy="{{ m.dot.cy }}" r="4"><title>{{ m.title }}</title></circle>{% else %}<path class="map-shade map-shade-{{ m.band }}" d="{{ m.d }}"><title>{{ m.title }}</title></path>{% endif %}{% endfor %}
+</svg>
+
+<ul class="map-legend">
+  {% for step in legend %}
+  <li><span class="map-key map-shade-{{ step.band }}"></span>{{ step.label }}</li>
+  {% endfor %}
+</ul>
+
+<figcaption>{{ caption }}. Each country is shaded by its share of the minutes;
+the bands are fixed, so one season can be compared with another. Hover or focus
+a country for its figures, and read the table below for all of them. A country
+too small to draw at this crop is marked with a dot.
+{% if unmapped %}No outline for {{ unmapped|join:", " }}, so {% if unmapped|length == 1 %}it is{% else %}they are{% endif %} in the table only.{% endif %}</figcaption>
+</figure>
+{% endif %}
