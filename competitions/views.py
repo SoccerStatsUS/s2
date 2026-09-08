@@ -1,11 +1,13 @@
 
 from django.core.paginator import Paginator
-from django.db.models import Avg, Count, Max, Sum
+from django.db.models import Avg, Count, Sum
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template import RequestContext
 from django.urls import reverse
 from django.views.decorators.cache import cache_page
+
+from django.contrib.contenttypes.models import ContentType
 
 from awards.models import Award, AwardItem
 from bios.models import Bio
@@ -13,12 +15,14 @@ from competitions.forms import CompetitionForm
 from competitions.models import PLAYOFF_CHAMPIONSHIPS, Competition, SuperSeason, Season
 from lineups.models import Appearance
 from places.models import Country
+from standings.models import Standing
 from stats.models import Stat, CompetitionStat, SeasonStat
 from teams.models import Team
 
 from collections import Counter, defaultdict
 import json
 import datetime
+import statistics
 
 DEFAULT_SLUGS = [
     'american-league-of-professional-football',
@@ -88,6 +92,121 @@ def competition_index(request):
 
 
 
+def most_titled(competition):
+    """
+    The club or country with the most championships and how many, or None where
+    no champion is on record. Leagues whose title is decided in a separate
+    playoffs take their champions from there, matched by season name.
+    """
+    playoff_slug = PLAYOFF_CHAMPIONSHIPS.get(competition.slug)
+    items = AwardItem.objects.filter(award__type='champion')
+    if playoff_slug:
+        items = items.filter(season__competition__slug=playoff_slug,
+                             season__name__in=competition.season_set.values('name'))
+    else:
+        items = items.filter(season__competition=competition)
+
+    top = (items.values('content_type_id', 'object_id')
+           .annotate(titles=Count('id')).order_by('-titles').first())
+    if not top:
+        return None
+
+    content_type = ContentType.objects.get_for_id(top['content_type_id'])
+    try:
+        winner = content_type.get_object_for_this_type(id=top['object_id'])
+    except content_type.model_class().DoesNotExist:
+        return None
+
+    return {'winner': winner, 'titles': top['titles']}
+
+
+# A competition with more clubs than this is a cup that thousands of one-off
+# entrants pass through, not a league with a roll of member clubs. Every League
+# in the database is well under it; the open cups run to 1,384.
+TIMELINE_CLUB_LIMIT = 80
+
+
+def club_seasons(competition):
+    """
+    Which clubs played in which seasons, read off the games rather than the
+    standings so a competition that keeps no table still counts. Returns the
+    season names in season order and a {(name, slug): {season names}} map.
+    """
+    seasons = [season.name for season in competition.season_set.all()]
+    known = set(seasons)
+    clubs = {}
+    for season, home, home_slug, away, away_slug in competition.game_set.exclude(
+            not_played=True).values_list('season__name', 'team1__name', 'team1__slug',
+                                         'team2__name', 'team2__slug'):
+        if season not in known:
+            continue
+        for name, slug in ((home, home_slug), (away, away_slug)):
+            if name:
+                clubs.setdefault((name, slug), set()).add(season)
+    return seasons, clubs
+
+
+def season_club_counts(seasons, clubs):
+    """How many clubs each season fielded, in season order."""
+    counts = Counter()
+    for played in clubs.values():
+        counts.update(played)
+    return [{'name': season, 'count': counts[season]}
+            for season in seasons if counts[season]]
+
+
+def club_timeline(seasons, clubs):
+    """
+    One row per club, earliest arrival first, carrying the seasons it played.
+    Empty for a competition with no season structure, or one too wide to read
+    as a roll of clubs.
+    """
+    if len(seasons) < 2 or not 1 < len(clubs) <= TIMELINE_CLUB_LIMIT:
+        return {'columns': [], 'rows': []}
+
+    order = {name: index for index, name in enumerate(seasons)}
+    rows = []
+    for (name, slug), played in clubs.items():
+        indexes = sorted(order[season] for season in played)
+        rows.append({
+            'name': name,
+            'url': reverse('team_detail', args=[slug]) if slug else None,
+            'seasons': played,
+            'first': seasons[indexes[0]],
+            'last': seasons[indexes[-1]],
+            'played': len(played),
+            })
+
+    rows.sort(key=lambda row: (order[row['first']], -row['played'], row['name']))
+    return {'columns': seasons, 'rows': rows}
+
+
+def competition_summary(competition):
+    """
+    The facts above the fold. Every one is read off the record rather than
+    asserted: what kind of competition this is, the span of seasons on file,
+    and the totals behind the tabs below. A competition counts as still played
+    when a game is on record from last year or later, which keeps a league
+    between seasons out of the past tense.
+    """
+    games = competition.game_set.exclude(date=None)
+    last_game = games.order_by('-date').first()
+    crowds = competition.game_set.exclude(attendance=None)
+
+    return {
+        'kind': competition.kind(),
+        'active': games.filter(date__year__gte=datetime.date.today().year - 1).exists(),
+        'last_year': last_game.date.year if last_game else None,
+        'seasons': competition.season_set.count(),
+        'first_season': competition.first_season(),
+        'last_season': competition.last_season(),
+        'games': competition.game_set.count(),
+        'clubs': Standing.objects.filter(competition=competition).values('team').distinct().count(),
+        'most_titled': most_titled(competition),
+        'attendance': crowds.aggregate(Avg('attendance'))['attendance__avg'],
+        }
+
+
 @cache_page(60 * 60 * 12)
 def competition_detail(request, competition_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
@@ -99,13 +218,18 @@ def competition_detail(request, competition_slug):
     if not recent_games.exists():
         recent_games = games.order_by('-date')
 
+    seasons, clubs = club_seasons(competition)
+
     context = {
         'competition': competition,
+        'summary': competition_summary(competition),
         'leader_groups': player_leader_groups(stats),
         'games': recent_games.select_related()[:25],
         'big_winners': competition.alltime_standings().order_by('-wins')[:50],
         'awards': competition_awards(competition),
-        'goal_data': json.dumps([(season.goals_per_game(), season.name) for season in competition.season_set.all()]),
+        'season_clubs': season_club_counts(seasons, clubs),
+        'club_timeline': club_timeline(seasons, clubs),
+        'club_noun': 'teams' if competition.international else 'clubs',
         }
     return render(request, "competitions/competition/detail.html",
                               context)
@@ -113,8 +237,9 @@ def competition_detail(request, competition_slug):
 
 def competition_awards(competition):
     """
-    One row per award, oldest season first, with the most recent winner where
-    the award has a single winner per season.
+    One row per award, with the most recent winner where the award has a single
+    winner per season. Awards still being given lead: most recent season first,
+    then most winners, then the award's name.
     """
     rows = []
     for award in Award.objects.filter(competition=competition).order_by('name'):
@@ -128,15 +253,16 @@ def competition_awards(competition):
 
         items.sort(key=key)
         shared = len([item for item in items if key(item) == key(items[-1])]) > 1
+        last_order, last_year = key(items[-1])
 
-        rows.append({
+        rows.append(((-last_order, -last_year, -len(items), award.name), {
             'award': award,
             'count': len(items),
             'first_season': items[0].season,
             'last_season': items[-1].season,
             'latest': None if shared else items[-1],
-            })
-    return rows
+            }))
+    return [row for _, row in sorted(rows, key=lambda pair: pair[0])]
 
 
 
@@ -214,23 +340,32 @@ def competition_vs(request, competition_slug, competition2_slug):
 
 def attendance_by_home_club(crowds):
     """
-    Average home crowd per club, largest first, over games whose source said
-    who was at home. Games without that are counted and reported as left out,
-    never guessed from listing order.
+    Average and median home crowd per club, largest average first, over games
+    whose source said who was at home. Games without that are counted and
+    reported as left out, never guessed from listing order.
     """
-    by_team = defaultdict(lambda: [0, 0])
+    by_team = defaultdict(list)
     for team_id, attendance in crowds.exclude(neutral=True).exclude(home_team=None).values_list('home_team_id', 'attendance'):
-        by_team[team_id][0] += 1
-        by_team[team_id][1] += attendance
+        by_team[team_id].append(attendance)
     teams = {t.id: t for t in Team.objects.filter(id__in=by_team)}
     clubs = sorted([{
         'name': teams[tid].name,
         'url': teams[tid].get_absolute_url(),
-        'games': n,
-        'total': total,
-        'average': total / n,
-    } for tid, (n, total) in by_team.items()], key=lambda r: -r['average'])
-    return clubs, crowds.count() - sum(n for n, total in by_team.values())
+        'games': len(crowd),
+        'total': sum(crowd),
+        'average': statistics.fmean(crowd),
+        'median': statistics.median(crowd),
+    } for tid, crowd in by_team.items()], key=lambda r: -r['average'])
+    return clubs, crowds.count() - sum(len(crowd) for crowd in by_team.values())
+
+
+def show_club_table(clubs, charted_clubs):
+    """
+    The club table earns its place only where the chart cannot stand alone:
+    too few clubs for bar_chart to draw one, or clubs it leaves out. Where the
+    chart carries every club the table only repeats it.
+    """
+    return len(charted_clubs) < 3 or len(charted_clubs) != len(clubs)
 
 
 @cache_page(60 * 60 * 12)
@@ -242,28 +377,30 @@ def competition_attendance(request, competition_slug):
     # By season, in season order. Seasons without a game are left out; seasons
     # without a crowd keep their slot so the chart's timeline stays continuous.
     games_by_season = dict(played.values_list('season_id').annotate(n=Count('id')))
-    crowd_by_season = {r['season_id']: r for r in crowds.values('season_id').annotate(
-        known=Count('id'), average=Avg('attendance'), total=Sum('attendance'), largest=Max('attendance'))}
+    crowds_by_season = defaultdict(list)
+    for season_id, attendance in crowds.values_list('season_id', 'attendance'):
+        crowds_by_season[season_id].append(attendance)
+
     seasons = []
     for season in competition.season_set.all():
         games = games_by_season.get(season.id, 0)
         if not games:
             continue
-        c = crowd_by_season.get(season.id, {})
-        known = c.get('known', 0)
+        crowd = crowds_by_season.get(season.id, [])
         seasons.append({
             'name': season.name,
             'url': reverse('season_attendance', args=[competition.slug, season.slug]),
             'games': games,
-            'known': known,
-            'share': known / games,
-            'partial': known < games / 2,
-            'average': c.get('average'),
-            'total': c.get('total'),
-            'largest': c.get('largest'),
+            'known': len(crowd),
+            'partial': len(crowd) < games / 2,
+            'average': statistics.fmean(crowd) if crowd else None,
+            'median': statistics.median(crowd) if crowd else None,
+            'total': sum(crowd) if crowd else None,
+            'largest': max(crowd) if crowd else None,
         })
 
     clubs, unattributed = attendance_by_home_club(crowds)
+    charted_clubs = [c for c in clubs if c['games'] >= 10]
     largest = crowds.order_by('-attendance').select_related()[:10]
     smallest = crowds.exclude(id__in=largest.values_list('id', flat=True)).order_by('attendance').select_related()[:10]
 
@@ -275,7 +412,8 @@ def competition_attendance(request, competition_slug):
         'average': crowds.aggregate(Avg('attendance'))['attendance__avg'],
         'seasons': seasons,
         'clubs': clubs,
-        'charted_clubs': [c for c in clubs if c['games'] >= 10],
+        'charted_clubs': charted_clubs,
+        'show_club_table': show_club_table(clubs, charted_clubs),
         'unattributed': unattributed,
         'largest': largest,
         'smallest': smallest,
@@ -559,6 +697,7 @@ def season_attendance(request, competition_slug, season_slug):
     crowds = played.exclude(attendance=None)
 
     clubs, unattributed = attendance_by_home_club(crowds)
+    charted_clubs = [c for c in clubs if c['games'] >= 3]
     largest = crowds.order_by('-attendance').select_related()[:10]
     smallest = crowds.exclude(id__in=largest.values_list('id', flat=True)).order_by('attendance').select_related()[:10]
 
@@ -570,7 +709,8 @@ def season_attendance(request, competition_slug, season_slug):
         'total': crowds.aggregate(Sum('attendance'))['attendance__sum'],
         'average': crowds.aggregate(Avg('attendance'))['attendance__avg'],
         'clubs': clubs,
-        'charted_clubs': [c for c in clubs if c['games'] >= 3],
+        'charted_clubs': charted_clubs,
+        'show_club_table': show_club_table(clubs, charted_clubs),
         'unattributed': unattributed,
         'largest': largest,
         'smallest': smallest,

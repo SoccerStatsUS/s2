@@ -41,6 +41,7 @@
   <th scope="col">games</th>
   <th scope="col" title="games with a crowd on record">with a crowd</th>
   <th scope="col">average</th>
+  <th scope="col">median</th>
   <th scope="col">total</th>
   <th scope="col">largest</th>
 </tr>
@@ -51,6 +52,7 @@
   <td>{{ s.games }}</td>
   <td>{% if s.known %}{{ s.known }} ({% widthratio s.known s.games 100 %}%){% else %}<span title="no record found">&mdash;</span>{% endif %}</td>
   <td>{% if s.average %}{{ s.average|floatformat:"0"|intcomma }}{% else %}<span title="no record found">&mdash;</span>{% endif %}</td>
+  <td>{% if s.median %}{{ s.median|floatformat:"0"|intcomma }}{% else %}<span title="no record found">&mdash;</span>{% endif %}</td>
   <td>{% if s.total %}{{ s.total|intcomma }}{% else %}<span title="no record found">&mdash;</span>{% endif %}</td>
   <td>{% if s.largest %}{{ s.largest|intcomma }}{% else %}<span title="no record found">&mdash;</span>{% endif %}</td>
 </tr>
@@ -60,7 +62,8 @@
 {% if clubs %}
 <h3>By club, home games</h3>
 {% bar_chart charted_clubs "Average home attendance by club" %}
-{% if charted_clubs|length >= 3 and charted_clubs|length != clubs|length %}<p class="table-legend">The chart shows clubs with at least ten home games on record; the table has every club.</p>{% endif %}
+{% if show_club_table %}
+{% if charted_clubs|length >= 3 %}<p class="table-legend">The chart shows clubs with at least ten home games on record; the table has every club.</p>{% endif %}
 
 <table>
 <thead>
@@ -68,6 +71,7 @@
   <th scope="col">club</th>
   <th scope="col" title="home games with a crowd on record">home games</th>
   <th scope="col">average</th>
+  <th scope="col">median</th>
   <th scope="col">total</th>
 </tr>
 </thead>
@@ -76,10 +80,12 @@
   <td><a href="{{ c.url }}">{{ c.name }}</a></td>
   <td>{{ c.games }}</td>
   <td>{{ c.average|floatformat:"0"|intcomma }}</td>
+  <td>{{ c.median|floatformat:"0"|intcomma }}</td>
   <td>{{ c.total|intcomma }}</td>
 </tr>
 {% endfor %}
 </table>
+{% endif %}
 {% endif %}
 {% if unattributed %}
 <p class="table-legend">{{ unattributed|intcomma }} of the {{ known|intcomma }} crowds on record {% if clubs %}are not counted above{% else %}cannot be shown by club{% endif %}: the source did not say which side was at home, and listing order is not taken as evidence.</p>

@@ -15,9 +15,21 @@
 
 {% include "bios/helpers/summary.html" %}
 
+<div id="tab_block">
+<ul id="tabs"></ul>
+</div>
+
+
+
+<div id="tab_wrapper">
+
+
+{% if awards or team_stats or competition_stats or show_goal_chart %}
+<div tab="summary">
+
 {% if awards %}
 <section class="player-honors">
-<h2>Honors</h2>
+<h3>Honors</h3>
 <table class="honors">
 <caption class="sr-only">Honors received by {{ bio.name }}</caption>
 <thead>
@@ -35,18 +47,6 @@
 </table>
 </section>
 {% endif %}
-
-<div id="tab_block">
-<ul id="tabs"></ul>
-</div>
-
-
-
-<div id="tab_wrapper">
-
-
-{% if domestic_stats or international_stats %}
-<div tab="career">
 
 <div class="career-breakdowns">
 {% if team_stats %}
@@ -66,8 +66,15 @@
 
 {% if show_goal_chart %}
 <h3>Goals by season</h3>
-{% player_goals_chart goal_seasons "Club goals by season" %}
+{% player_goals_chart goal_seasons "Goals by season" %}
 {% endif %}
+
+</div>
+{% endif %}
+
+
+{% if domestic_stats or international_stats %}
+<div tab="stats">
 
 {% if domestic_stats %}
 <h3>Season by season, clubs</h3>

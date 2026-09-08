@@ -1,22 +1,17 @@
 {% if svg %}
-<figure class="chart player-goals-chart">
+<figure class="chart count-chart">
 <svg viewBox="0 0 {{ svg.width }} {{ svg.height }}" role="img" aria-label="{{ caption }}">
-  {% for key in keys %}
-  <rect class="key {{ key.css }}" x="{{ key.x|floatformat:1 }}" y="{{ svg.swatch_y }}" width="11" height="11" rx="2"/>
-  <text x="{{ key.text_x|floatformat:1 }}" y="{{ svg.legend_y }}">{{ key.label }}</text>
-  {% endfor %}
   {% for tick in ticks %}
   <line class="grid" x1="{{ svg.left }}" x2="{{ svg.right_edge }}" y1="{{ tick.y|floatformat:1 }}" y2="{{ tick.y|floatformat:1 }}"/>
   <text x="{{ svg.left|add:"-8" }}" y="{{ tick.y|floatformat:1 }}" dy="4" text-anchor="end">{{ tick.text }}</text>
   {% endfor %}
   <line class="axis" x1="{{ svg.left }}" x2="{{ svg.right_edge }}" y1="{{ svg.base }}" y2="{{ svg.base }}"/>
   {% for column in columns %}
-  {% for segment in column.segments %}
-  <path class="mark {{ segment.css }}" d="{{ segment.path }}"><title>{{ segment.title }}</title></path>
-  {% endfor %}
-  <text class="value" x="{{ column.x|floatformat:1 }}" y="{{ column.value_y|floatformat:1 }}" text-anchor="middle">{{ column.goals }}</text>
+  {% if column.path %}<path class="mark" d="{{ column.path }}"><title>{{ column.title }}</title></path>{% endif %}
+  <text class="value" x="{{ column.x|floatformat:1 }}" y="{{ column.value_y|floatformat:1 }}" text-anchor="middle">{{ column.count }}</text>
   {% if column.name %}<text x="{{ column.x|floatformat:1 }}" y="{{ svg.label_y }}" text-anchor="middle">{{ column.name }}</text>{% endif %}
   {% endfor %}
 </svg>
+<figcaption>{{ caption }}. Counts every club that played at least one recorded game in the season.</figcaption>
 </figure>
 {% endif %}

@@ -680,21 +680,23 @@ table.honors th {
 
 #bio_data h1 { margin: 2px 0 6px; }
 
-#bio_facts {
+#bio_facts, #competition_facts {
     font-size: 14px;
     color: var(--ink-soft);
 }
 
-#bio_facts p { margin: 2px 0; }
+#bio_facts p, #competition_facts p { margin: 2px 0; }
 
-#bio_facts strong { color: var(--ink); }
+#bio_facts strong, #competition_facts strong { color: var(--ink); }
 
-.bio-vitals span + span::before {
+.bio-vitals span + span::before,
+.competition-vitals span + span::before,
+.competition-highlights span + span::before {
     content: " · ";
     color: var(--hairline);
 }
 
-#career-totals, #team-totals {
+#career-totals, #team-totals, #competition-totals {
     display: flex;
     flex-wrap: wrap;
     gap: 8px 32px;
@@ -705,15 +707,15 @@ table.honors th {
     font-variant-numeric: tabular-nums;
 }
 
-#career-totals div, #team-totals div {
+#career-totals div, #team-totals div, #competition-totals div {
     display: flex;
     flex-direction: column;
     min-width: 72px;
 }
 
-#career-totals dt, #team-totals dt { font-size: 12px; }
+#career-totals dt, #team-totals dt, #competition-totals dt { font-size: 12px; }
 
-#career-totals dd, #team-totals dd {
+#career-totals dd, #team-totals dd, #competition-totals dd {
     order: -1;
     margin: 0;
     color: var(--ink);
@@ -722,16 +724,19 @@ table.honors th {
     line-height: 1.1;
 }
 
-#bio_facts .bio-recorded { margin-top: 8px; }
+#bio_facts .bio-recorded, #competition_facts .competition-highlights { margin-top: 8px; }
 
-#bio_facts .bio-caveat {
+#bio_facts .bio-caveat, #competition_facts .competition-caveat {
     font-size: 12px;
     font-style: italic;
     color: #9aa3ab;
 }
 
 .player-honors, .team-honors { margin: 0 0 16px; }
-.player-honors h2, .team-honors h2 { margin: 0 0 4px; font-size: 1.1em; }
+/* Bio honors head the summary tab, so they take the h3 size their siblings there use.
+   Team honors are still a page section and stay at the smaller section size. */
+.player-honors h3 { margin: 0 0 4px; }
+.team-honors h2 { margin: 0 0 4px; font-size: 1.1em; }
 .player-honors table.honors, .team-honors table.honors { margin-bottom: 0; }
 
 .career-breakdowns {
@@ -819,9 +824,14 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
 .chart text.label { fill: var(--ink); font-size: 12px; }
 .chart .grid { stroke: var(--hairline); stroke-width: 1; }
 .chart .axis { stroke: var(--ink-soft); stroke-width: 1; }
-.chart .median { stroke: var(--ink); stroke-width: 1; }
-.chart text.median-label { fill: var(--ink); }
-/* A surface halo keeps a value legible where the median line crosses it. */
+/* The median rule takes its color from what it lands on: a filled mark, the
+   hollow of an outlined one, or bare surface where the median runs past the
+   average and the rule clears the mark entirely. */
+.chart .median { stroke-width: 2; }
+.chart .median.on-fill { stroke: #fff; }
+.chart .median.on-hollow { stroke: var(--accent); }
+.chart .median.on-surface { stroke: var(--ink); }
+/* A surface halo keeps a value legible where a mark or a rule crosses it. */
 .chart text.value { paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round; }
 .chart .mark { fill: var(--accent); }
 .chart .mark.partial { fill: none; stroke: var(--accent); stroke-width: 1.5; }
@@ -834,6 +844,20 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
 .results-chart a:hover .mark.loss, .results-chart a:focus-visible .mark.loss { fill: var(--ink); }
 .results-chart a:hover .mark.tie, .results-chart a:focus-visible .mark.tie { fill: var(--tie); stroke: var(--ink); }
 .results-chart text.value { fill: var(--ink); font-weight: 600; }
+
+/* Goals by season stacks five competition tiers, so it needs a categorical
+   palette rather than the accent. These five clear the CVD, normal-vision and
+   lightness gates on every pair against a white ground, not just adjacent
+   ones; the 2px surface gap between segments carries the identity that the
+   green/orange pair is closest on. Non-D1 sits below 3:1 contrast, which the
+   season tables on the stats tab relieve. Reordering or substituting a hue
+   means re-running the check. */
+.player-goals-chart .us-d1 { fill: #0a7a54; }
+.player-goals-chart .other-d1 { fill: #2a78d6; }
+.player-goals-chart .non-d1 { fill: #1baf7a; }
+.player-goals-chart .cup { fill: #eb6834; }
+.player-goals-chart .international { fill: #4a3aa7; }
+
 table.summary { max-width: 560px; }
 
 /* Hall of Fame glyph: a second carrier alongside the bold, per §2. */

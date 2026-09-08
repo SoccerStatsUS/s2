@@ -125,6 +125,29 @@ def bios_qa(request):
                               
 
 
+def goal_seasons_by_tier(stats):
+    """
+    One row per season name, ordered by name, carrying the season's goals split
+    by Competition.tier(). Club and international play share a column: a season
+    is a season. Feeds the stacked goal chart.
+    """
+    seasons = OrderedDict()
+    for stat in stats.select_related('competition', 'season'):
+        row = seasons.setdefault(stat.season.name, {
+            'name': stat.season.name,
+            'goals': 0,
+            'games': 0,
+            'tiers': {},
+            })
+        goals = stat.goals or 0
+        row['goals'] += goals
+        row['games'] += stat.games_played or 0
+        tier = stat.competition.tier()
+        row['tiers'][tier] = row['tiers'].get(tier, 0) + goals
+
+    return sorted(seasons.values(), key=lambda row: row['name'])
+
+
 def person_detail(request, slug):
     bio = Bio.objects.by_slug(slug)
     return person_detail_abstract(request, bio)
@@ -140,9 +163,7 @@ def person_detail_abstract(request, bio):
     league_stats = Stat.objects.filter(player=bio).order_by('season')
     domestic_stats = league_stats.filter(team__international=False)
     international_stats = league_stats.filter(team__international=True)
-    goal_seasons = list(domestic_stats.values(name=F('season__name'))
-                        .annotate(goals=Sum('goals'), games=Sum('games_played'))
-                        .order_by('name'))
+    goal_seasons = goal_seasons_by_tier(league_stats)
     career_stat = bio.career_stat()
     first_game = bio.first_game()
     last_game = bio.last_game()

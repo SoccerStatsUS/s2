@@ -316,6 +316,59 @@ class Competition(AbstractCompetition):
         super(Competition, self).save(*args, **kwargs)
 
 
+    ORDINALS = {1: 'first', 2: 'second', 3: 'third', 4: 'fourth'}
+
+
+    def kind(self):
+        """
+        What this competition is, in plain English, composed from the recorded
+        ctype, scope and level: 'first-division league', 'cup', 'continental
+        club competition'. None where the record does not say.
+        """
+        if self.international:
+            return 'national-team competition'
+
+        if self.scope == 'Confederation':
+            return 'continental club competition'
+
+        if self.scope == 'World':
+            return 'international club competition'
+
+        if self.ctype == 'Supercup':
+            return 'supercup'
+
+        if self.ctype == 'Cup':
+            return 'cup'
+
+        if self.ctype == 'League':
+            if self.level in self.ORDINALS:
+                return '%s-division league' % self.ORDINALS[self.level]
+            return 'league'
+
+        return None
+
+
+    def tier(self):
+        """
+        Which band of a player's career a competition belongs to, for the
+        season goal chart: us_d1, other_d1, non_d1, cup, international.
+
+        Continental and intercontinental club tournaments land in cup whatever
+        their ctype says -- the CONCACAF Champions League, Leagues Cup, Copa
+        Libertadores and the rest are recorded here as leagues.
+        """
+        if self.international:
+            return "international"
+
+        if self.ctype in ("Cup", "Supercup") or self.scope in ("Confederation", "World"):
+            return "cup"
+
+        if self.ctype == "League" and self.level == 1:
+            return "us_d1" if self.area == "United States" else "other_d1"
+
+        return "non_d1"
+
+
     def category(self):
         if self.international:
             return "international"

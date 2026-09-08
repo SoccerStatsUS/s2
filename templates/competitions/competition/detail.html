@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load charts %}
 {% load datum_or_none %}
 {% load standings %}
 {% load seasons %}
@@ -10,20 +11,7 @@
 
 {% block content %}
 
-<div id="competition_block">
-
-  <h1>{{ competition.name }}</h1>
-
-  {% if competition.after.exists or competition.before.exists %}
-  <p class="lineage">
-  {% if competition.after.exists %}preceded by {% for item in competition.after.all %}<a title="{{ item.before.name }}" href="{% url 'competition_detail' item.before.slug %}">{{ item.before.abbreviation|default:item.before.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}
-  {% if competition.after.exists and competition.before.exists %}&middot;{% endif %}
-  {% if competition.before.exists %}followed by {% for item in competition.before.all %}<a title="{{ item.after.name }}" href="{% url 'competition_detail' item.after.slug %}">{{ item.after.abbreviation|default:item.after.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}
-  </p>
-  {% endif %}
-
-
-</div>
+{% include "competitions/helpers/summary.html" %}
 
 <div id="tab_block">
 <ul id="tabs"></ul>
@@ -34,9 +22,21 @@
 
 
 <div tab="seasons">
+{% if season_clubs %}
+<h3>{{ club_noun|capfirst }} by season</h3>
+{% count_chart season_clubs club_noun|capfirst|add:" by season" club_noun %}
+{% endif %}
+
 <h3>Seasons</h3>
 {% seasons_table competition.season_set.reverse %}
 </div>
+
+{% if club_timeline.rows %}
+<div tab="clubs" tab-label="{{ club_noun }}">
+<h3>{{ club_noun|capfirst }}</h3>
+{% timeline_chart club_timeline club_noun|capfirst|add:" by season" club_noun %}
+</div>
+{% endif %}
 
 {% if leader_groups %}
 <div tab="stats">
@@ -55,7 +55,7 @@
 {% endif %}
 
 <div tab="games">
-<h3>Most recent games</h3>
+<h3>{% if summary.active %}Most recent games{% else %}Final games{% endif %}</h3>
 {% games_table games 'competition,referee,attendance' %}
 <p class="more-links"><a href="{% url 'competition_games' competition.slug %}">all {{ competition.abbreviation|default:competition.name }} games &rarr;</a></p>
 </div>

@@ -1,0 +1,44 @@
+{% load humanize %}
+<div id="competition_block">
+
+  <h1>{{ competition.name }}</h1>
+
+  <div id="competition_facts">
+
+  <p class="competition-vitals">
+  {% if summary.active %}<span>active</span>{% elif summary.last_year %}<span>last played {{ summary.last_year }}</span>{% endif %}
+  {% if competition.area %}<span>{{ competition.area }}</span>{% endif %}
+  {% if summary.kind %}<span>{{ summary.kind }}</span>{% endif %}
+  </p>
+
+  {% if competition.after.exists or competition.before.exists %}
+  <p class="lineage">
+  {% if competition.after.exists %}preceded by {% for item in competition.after.all %}<a title="{{ item.before.name }}" href="{% url 'competition_detail' item.before.slug %}">{{ item.before.abbreviation|default:item.before.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}
+  {% if competition.after.exists and competition.before.exists %}&middot;{% endif %}
+  {% if competition.before.exists %}followed by {% for item in competition.before.all %}<a title="{{ item.after.name }}" href="{% url 'competition_detail' item.after.slug %}">{{ item.after.abbreviation|default:item.after.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}
+  </p>
+  {% endif %}
+
+  {% if summary.seasons %}
+  <dl id="competition-totals" aria-label="Recorded competition totals">
+    <div><dt>seasons</dt><dd>{{ summary.seasons|intcomma }}</dd></div>
+    {% if summary.games %}<div><dt>games</dt><dd>{{ summary.games|intcomma }}</dd></div>{% endif %}
+    {% if summary.clubs %}<div><dt>{% if competition.international %}teams{% else %}clubs{% endif %}</dt><dd>{{ summary.clubs|intcomma }}</dd></div>{% endif %}
+    {% if summary.first_season %}
+    <div><dt>recorded</dt><dd>{{ summary.first_season.name }}{% if summary.last_season.name != summary.first_season.name %}&ndash;{{ summary.last_season.name }}{% endif %}</dd></div>
+    {% endif %}
+  </dl>
+  {% endif %}
+
+  {% if summary.most_titled or summary.attendance %}
+  <p class="competition-highlights">
+  {% if summary.most_titled %}<span>most titles <a href="{{ summary.most_titled.winner.get_absolute_url }}">{{ summary.most_titled.winner }}</a> ({{ summary.most_titled.titles }})</span>{% endif %}
+  {% if summary.attendance %}<span><a href="{% url 'competition_attendance' competition.slug %}">attendance</a> {{ summary.attendance|floatformat:"0"|intcomma }} avg</span>{% endif %}
+  </p>
+  {% endif %}
+
+  {% if summary.seasons %}<p class="competition-caveat">Seasons and totals are as recorded here.</p>{% endif %}
+
+  </div>
+
+</div>

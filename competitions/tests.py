@@ -5,8 +5,12 @@ from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.test import SimpleTestCase
 
-from competitions.templatetags.charts import player_goals_chart
-from competitions.views import season_postseason, season_standings, stat_leaders
+from competitions import views
+from competitions.models import Competition
+from competitions.templatetags.charts import (bar_chart, column_chart, count_chart,
+                                              player_goals_chart, timeline_chart)
+from competitions.views import (competition_awards, season_postseason, season_standings,
+                                show_club_table, stat_leaders)
 
 
 class QueryRows(list):
@@ -146,24 +150,353 @@ class SeasonLeaderTests(SimpleTestCase):
         self.assertNotIn('<table class="stats">', html)
 
 
+class AttendanceChartTests(SimpleTestCase):
+
+    def season(self, name, average, median, known=10, games=10, partial=False):
+        return {'name': name, 'average': average, 'median': median,
+                'known': known, 'games': games, 'partial': partial,
+                'url': '/c/asl/%s/attendance/' % name}
+
+    def test_each_column_carries_its_own_median(self):
+        rows = [self.season('1921', 3000, 2400), self.season('1922', 3100, 3100),
+                self.season('1923', 4000, 2000)]
+
+        chart = column_chart(rows, 'Average attendance by season')
+
+        # A season whose median matches its average puts the rule on the cap;
+        # a right-skewed one puts it well below.
+        base = chart['svg']['base']
+        by_name = [c['median']['y'] for c in chart['columns']]
+        self.assertLess(by_name[1], by_name[0])
+        self.assertLess(by_name[0], by_name[2])
+        self.assertTrue(all(y < base for y in by_name))
+
+    def test_median_is_named_in_the_hover_title(self):
+        rows = [self.season('1921', 3000, 2400)] * 3
+
+        html = Template('{% load charts %}{% column_chart rows "By season" %}').render(
+            Context({'rows': rows}))
+
+        self.assertIn('1921: 3,000 average, 2,400 median, over 10 of 10 games', html)
+
+    def test_a_column_without_a_median_draws_none(self):
+        rows = [self.season('1921', 3000, None), self.season('1922', 3100, 3100),
+                self.season('1923', 4000, 2000)]
+
+        chart = column_chart(rows, 'By season')
+
+        self.assertIsNone(chart['columns'][0]['median'])
+
+    def test_thin_coverage_is_outlined_only_when_it_sets_a_season_apart(self):
+        mixed = [self.season('1921', 3000, 2400, known=9),
+                 self.season('1922', 3100, 3100, known=2, partial=True),
+                 self.season('1923', 4000, 2000, known=8)]
+
+        self.assertEqual([c['partial'] for c in column_chart(mixed, 'By season')['columns']],
+                         [False, True, False])
+
+    def test_a_wholly_thin_chart_fills_rather_than_outlining_everything(self):
+        thin = [self.season('1921', 3000, 2400, known=2, partial=True),
+                self.season('1922', 3100, 3100, known=1, partial=True),
+                self.season('1923', 4000, 2000, known=3, partial=True)]
+
+        chart = column_chart(thin, 'By season')
+
+        self.assertEqual([c['partial'] for c in chart['columns']], [False, False, False])
+        self.assertFalse(chart['any_partial'])
+
+    def test_the_rule_is_colored_for_what_it_lands_on(self):
+        rows = [self.season('1921', 3000, 2400),                       # inside the fill
+                self.season('1922', 3100, 3600),                       # clear of the cap
+                self.season('1923', 4000, 2000, known=1, partial=True),
+                self.season('1924', 1750, 1750)]                       # flush with the cap
+
+        chart = column_chart(rows, 'By season')
+
+        self.assertEqual([c['median']['css'] for c in chart['columns']],
+                         ['on-fill', 'on-surface', 'on-hollow', 'on-surface'])
+
+    def club(self, name, average, median):
+        return {'name': name, 'average': average, 'median': median,
+                'games': 18, 'total': 18 * average, 'url': '/t/%s/' % name}
+
+    def test_bars_carry_a_median_rule_across_the_bar(self):
+        chart = bar_chart([self.club('bethlehem-steel', 4000, 3000),
+                           self.club('fall-river', 3000, 2900),
+                           self.club('new-york-nationals', 2000, 1900)],
+                          'Average home attendance by club')
+        first = chart['bars'][0]
+
+        self.assertEqual(first['median']['css'], 'on-fill')
+        self.assertEqual(first['median']['y2'] - first['median']['y1'], 14)
+
+    def test_a_median_above_the_longest_bar_still_fits_the_plot(self):
+        chart = bar_chart([self.club('brooklyn-wanderers', 4000, 5200),
+                           self.club('fall-river', 3000, 2900),
+                           self.club('new-york-nationals', 2000, 1900)],
+                          'Average home attendance by club')
+        longest = chart['bars'][0]
+
+        self.assertLessEqual(longest['median']['x'], chart['svg']['width'])
+        self.assertLessEqual(longest['value_x'], chart['svg']['width'])
+
+    def test_a_median_above_the_tallest_column_still_fits_the_plot(self):
+        chart = column_chart([self.season('1921', 3000, 5200),
+                              self.season('1922', 3100, 3100),
+                              self.season('1923', 4000, 2000)], 'By season')
+        skewed = chart['columns'][0]
+
+        self.assertGreater(skewed['median']['y'], 0)
+        self.assertGreater(skewed['median']['y'], chart['ticks'][-1]['y'])
+
+    def test_the_value_clears_a_median_that_runs_past_the_bar(self):
+        chart = bar_chart([self.club('bethlehem-steel', 4000, 3000),
+                           self.club('hakoah-all-stars', 3000, 3600),
+                           self.club('new-york-nationals', 2000, 1900)],
+                          'Average home attendance by club')
+        skewed = chart['bars'][1]
+
+        self.assertEqual(skewed['median']['css'], 'on-surface')
+        self.assertLess(skewed['median']['x'], skewed['value_x'])
+
+
+class CompetitionAwardsTests(SimpleTestCase):
+
+    def award(self, name, winners, last=2025):
+        """An award given once a season, `winners` of them, ending in `last`."""
+        items = [SimpleNamespace(season=SimpleNamespace(order=year, name=str(year)),
+                                 year=None)
+                 for year in range(last - winners + 1, last + 1)]
+        award = MagicMock()
+        award.name = name
+        award.awarditem_set.select_related.return_value = items
+        return award
+
+    def order(self, *awards):
+        with patch('competitions.views.Award.objects') as objects:
+            objects.filter.return_value.order_by.return_value = list(awards)
+            return [row['award'].name for row in competition_awards(object())]
+
+    def test_a_retired_award_falls_below_a_live_one_however_many_winners(self):
+        self.assertEqual(
+            self.order(self.award('Best XI', 209, last=2014),
+                       self.award('Young Player of the Year', 6, last=2025)),
+            ['Young Player of the Year', 'Best XI'])
+
+    def test_awards_ending_together_go_by_winners_then_by_name(self):
+        self.assertEqual(
+            self.order(self.award('Rookie of the Year', 12),
+                       self.award('MVP', 30),
+                       self.award('Coach of the Year', 30)),
+            ['Coach of the Year', 'MVP', 'Rookie of the Year'])
+
+    def test_an_award_with_no_winners_is_left_out(self):
+        self.assertEqual(self.order(self.award('Never awarded', 0),
+                                    self.award('MVP', 30)), ['MVP'])
+
+
+class ClubTableTests(SimpleTestCase):
+    """
+    The club table repeats the chart, so it shows only where the chart cannot
+    stand alone.
+    """
+
+    def test_hidden_when_the_chart_carries_every_club(self):
+        clubs = ['cosmos', 'sounders', 'rowdies', 'timbers']
+
+        self.assertFalse(show_club_table(clubs, clubs))
+
+    def test_shown_when_the_chart_leaves_a_club_out(self):
+        clubs = ['cosmos', 'sounders', 'rowdies', 'one-game-wonder']
+
+        self.assertTrue(show_club_table(clubs, clubs[:3]))
+
+    def test_shown_when_there_are_too_few_clubs_to_draw_a_chart(self):
+        # bar_chart returns nothing under three rows, so the table is the page.
+        clubs = ['cosmos', 'sounders']
+
+        self.assertIsNone(bar_chart([{'name': c, 'average': 100, 'median': 90,
+                                      'games': 5, 'total': 500} for c in clubs],
+                                    'By club')['svg'])
+        self.assertTrue(show_club_table(clubs, clubs))
+
+
+class ClubTimelineTests(SimpleTestCase):
+    """Which clubs played which seasons, drawn a block per season."""
+
+    seasons = ['1968', '1969', '1970', '1971']
+
+    def clubs(self, **played):
+        return {(name, name.lower()): set(s) for name, s in played.items()}
+
+    def test_rows_run_earliest_arrival_first_then_longest_lived(self):
+        timeline = views.club_timeline(self.seasons, self.clubs(
+            Cosmos=['1970', '1971'],
+            Tornado=['1968', '1969', '1970', '1971'],
+            Beacons=['1968'],
+            Spurs=['1968', '1969']))
+
+        self.assertEqual([r['name'] for r in timeline['rows']],
+                         ['Tornado', 'Spurs', 'Beacons', 'Cosmos'])
+
+    def test_a_club_that_left_and_came_back_keeps_its_gap(self):
+        timeline = views.club_timeline(self.seasons, self.clubs(
+            Chiefs=['1968', '1971'], Tornado=['1968', '1969']))
+        chiefs = timeline['rows'][0]
+
+        self.assertEqual(chiefs['name'], 'Chiefs')
+        self.assertEqual((chiefs['first'], chiefs['last'], chiefs['played']), ('1968', '1971', 2))
+
+        chart = timeline_chart(timeline, 'Clubs')
+        self.assertEqual(len(chart['marks'][0]['blocks']), 2)  # not a solid 1968-1971 span
+
+    def test_no_timeline_for_a_cup_thousands_of_clubs_pass_through(self):
+        crowd = {('Club %s' % n, 'club-%s' % n): {'1968'} for n in range(200)}
+
+        self.assertEqual(views.club_timeline(self.seasons, crowd)['rows'], [])
+
+    def test_no_timeline_for_a_single_season(self):
+        self.assertEqual(
+            views.club_timeline(['1968'], self.clubs(A=['1968'], B=['1968']))['rows'], [])
+
+    def test_season_counts_skip_seasons_nobody_played(self):
+        counts = views.season_club_counts(self.seasons, self.clubs(
+            Tornado=['1968', '1971'], Spurs=['1968'], Cosmos=['1971']))
+
+        self.assertEqual(counts, [{'name': '1968', 'count': 2}, {'name': '1971', 'count': 2}])
+
+
+class CountChartTests(SimpleTestCase):
+
+    def test_labels_every_column_and_names_the_noun_in_the_title(self):
+        rows = [{'name': '1968', 'count': 17}, {'name': '1969', 'count': 5},
+                {'name': '1970', 'count': 11}]
+
+        chart = count_chart(rows, 'Clubs by season', 'clubs')
+        html = Template('{% load charts %}{% count_chart rows "Clubs by season" "clubs" %}').render(
+            Context({'rows': rows}))
+
+        self.assertEqual([c['count'] for c in chart['columns']], [17, 5, 11])
+        self.assertIn('1969: 5 clubs', html)
+
+    def test_the_scale_clears_the_tallest_column(self):
+        chart = count_chart([{'name': str(y), 'count': 20} for y in range(3)], 'Clubs', 'clubs')
+
+        # The top column must not sit on the top gridline.
+        self.assertLess(chart['ticks'][-1]['y'], chart['columns'][0]['value_y'])
+
+
+class CompetitionKindTests(SimpleTestCase):
+    """The plain-English line under the competition's name."""
+
+    def kind(self, **kwargs):
+        fields = dict(international=False, ctype='League', scope='Country',
+                      level=1, area='United States')
+        fields.update(kwargs)
+        return Competition(**fields).kind()
+
+    def test_divisions_are_named_by_level(self):
+        self.assertEqual(self.kind(), 'first-division league')
+        self.assertEqual(self.kind(level=2), 'second-division league')
+
+    def test_a_league_with_no_level_on_record_is_just_a_league(self):
+        self.assertEqual(self.kind(level=None), 'league')
+        self.assertEqual(self.kind(level=9), 'league')
+
+    def test_cups(self):
+        self.assertEqual(self.kind(ctype='Cup'), 'cup')
+        self.assertEqual(self.kind(ctype='Supercup'), 'supercup')
+
+    def test_club_competitions_above_a_country(self):
+        self.assertEqual(self.kind(scope='Confederation', area='CONCACAF'),
+                         'continental club competition')
+        self.assertEqual(self.kind(scope='World', area='Earth'),
+                         'international club competition')
+
+    def test_national_team_play(self):
+        self.assertEqual(self.kind(international=True, ctype='Cup'),
+                         'national-team competition')
+
+    def test_nothing_claimed_where_the_record_is_silent(self):
+        self.assertIsNone(self.kind(ctype='', scope='', level=None, area=''))
+
+
+class CompetitionTierTests(SimpleTestCase):
+    """The five bands the season goal chart stacks, as the data records them."""
+
+    def tier(self, **kwargs):
+        fields = dict(international=False, ctype='League', scope='Country',
+                      level=1, area='United States')
+        fields.update(kwargs)
+        return Competition(**fields).tier()
+
+    def test_united_states_first_division(self):
+        self.assertEqual(self.tier(), 'us_d1')
+
+    def test_foreign_first_division(self):
+        self.assertEqual(self.tier(area='Costa Rica'), 'other_d1')
+        self.assertEqual(self.tier(area='England'), 'other_d1')
+
+    def test_lower_and_unranked_leagues(self):
+        self.assertEqual(self.tier(level=2), 'non_d1')
+        self.assertEqual(self.tier(level=None), 'non_d1')  # MLS Reserve League
+
+    def test_cups(self):
+        self.assertEqual(self.tier(ctype='Cup'), 'cup')
+        self.assertEqual(self.tier(ctype='Supercup'), 'cup')
+
+    def test_continental_club_tournaments_recorded_as_leagues_are_cups(self):
+        # CONCACAF Champions League, Leagues Cup, North American SuperLiga.
+        self.assertEqual(self.tier(scope='Confederation', area='CONCACAF'), 'cup')
+        self.assertEqual(self.tier(scope='World', area='Earth'), 'cup')
+
+    def test_national_team_play(self):
+        self.assertEqual(self.tier(international=True, ctype='Cup'), 'international')
+        self.assertEqual(self.tier(international=True, ctype='', scope='World',
+                                   level=None, area='Earth'), 'international')
+
+
 class PlayerGoalsChartTests(SimpleTestCase):
 
-    def test_renders_season_goal_totals(self):
-        rows = [
-            {'name': '1996', 'goals': 34, 'games': 36},
-            {'name': '1997', 'goals': 10, 'games': 28},
-            {'name': '1998', 'goals': 22, 'games': 36},
-        ]
+    rows = [
+        {'name': '1996', 'goals': 34, 'games': 36,
+         'tiers': {'us_d1': 27, 'cup': 4, 'international': 3}},
+        {'name': '1997', 'goals': 10, 'games': 28,
+         'tiers': {'other_d1': 8, 'cup': 2}},
+        {'name': '1998', 'goals': 22, 'games': 36,
+         'tiers': {'us_d1': 20, 'non_d1': 2}},
+    ]
 
-        chart = player_goals_chart(rows, 'Club goals by season')
+    def test_renders_season_goal_totals(self):
+        chart = player_goals_chart(self.rows, 'Goals by season')
         html = Template(
-            '{% load charts %}{% player_goals_chart rows "Club goals by season" %}'
-        ).render(Context({'rows': rows}))
+            '{% load charts %}{% player_goals_chart rows "Goals by season" %}'
+        ).render(Context({'rows': self.rows}))
 
         self.assertEqual([column['goals'] for column in chart['columns']],
                          [34, 10, 22])
-        self.assertIn('1996: 34 goals in 36 games', html)
-        self.assertIn('Club goals by season', html)
+        self.assertIn('1996, US D1: 27 goals', html)
+        self.assertIn('1996, international: 3 goals', html)
+        self.assertIn('1998, non-D1 league: 2 goals', html)
+        self.assertIn('Goals by season', html)
+
+    def test_stacks_tiers_from_the_baseline_up(self):
+        chart = player_goals_chart(self.rows, 'Goals by season')
+        column = chart['columns'][0]
+
+        self.assertEqual([segment['css'] for segment in column['segments']],
+                         ['us-d1', 'cup', 'international'])
+
+    def test_legend_lists_only_the_tiers_scored_in(self):
+        chart = player_goals_chart(self.rows, 'Goals by season')
+
+        self.assertEqual([key['label'] for key in chart['keys']],
+                         ['US D1', 'other D1', 'non-D1 league', 'cup', 'international'])
+
+        chart = player_goals_chart(
+            [dict(row, tiers={'us_d1': row['goals']}) for row in self.rows],
+            'Goals by season')
+        self.assertEqual([key['label'] for key in chart['keys']], ['US D1'])
 
 
 class SeasonPostseasonTests(SimpleTestCase):

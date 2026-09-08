@@ -1,0 +1,17 @@
+{% if svg %}
+<figure class="chart timeline-chart">
+<svg viewBox="0 0 {{ svg.width }} {{ svg.height }}" role="img" aria-label="{{ caption }}">
+  {% for label in labels %}
+  <line class="grid" x1="{{ label.x|floatformat:1 }}" x2="{{ label.x|floatformat:1 }}" y1="{{ label.grid_top }}" y2="{{ label.grid_bottom }}"/>
+  <text x="{{ label.x|floatformat:1 }}" y="{{ svg.label_y }}" text-anchor="middle">{{ label.text }}</text>
+  {% endfor %}
+  {% for mark in marks %}
+  {% if mark.url %}<a href="{{ mark.url }}">{% endif %}<text class="label" x="{{ svg.label_x }}" y="{{ mark.label_y|floatformat:1 }}" text-anchor="end">{{ mark.name }}</text>{% if mark.url %}</a>{% endif %}
+  <g><title>{{ mark.title }}</title>
+  {% for block in mark.blocks %}<rect class="mark" x="{{ block.x|floatformat:1 }}" y="{{ block.y|floatformat:1 }}" width="{{ block.width|floatformat:1 }}" height="{{ svg.block_h }}" rx="2"/>{% endfor %}
+  </g>
+  {% endfor %}
+</svg>
+<figcaption>{{ caption }}. A block marks a season the {{ one }} played; a row with gaps is a {{ one }} that left and came back.</figcaption>
+</figure>
+{% endif %}
