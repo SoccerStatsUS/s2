@@ -157,9 +157,9 @@ def season_club_counts(seasons, clubs):
 
 def club_timeline(seasons, clubs):
     """
-    One row per club, earliest arrival first, carrying the seasons it played.
-    Empty for a competition with no season structure, or one too wide to read
-    as a roll of clubs.
+    One row per club, last season first so the clubs that lasted lead, and the
+    longest-lived first among those that left together. Empty for a competition
+    with no season structure, or one too wide to read as a roll of clubs.
     """
     if len(seasons) < 2 or not 1 < len(clubs) <= TIMELINE_CLUB_LIMIT:
         return {'columns': [], 'rows': []}
@@ -177,7 +177,7 @@ def club_timeline(seasons, clubs):
             'played': len(played),
             })
 
-    rows.sort(key=lambda row: (order[row['first']], -row['played'], row['name']))
+    rows.sort(key=lambda row: (-order[row['last']], -row['played'], row['name']))
     return {'columns': seasons, 'rows': rows}
 
 

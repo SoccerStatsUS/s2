@@ -329,15 +329,17 @@ class ClubTimelineTests(SimpleTestCase):
     def clubs(self, **played):
         return {(name, name.lower()): set(s) for name, s in played.items()}
 
-    def test_rows_run_earliest_arrival_first_then_longest_lived(self):
+    def test_rows_run_most_recent_first_then_longest_lived(self):
         timeline = views.club_timeline(self.seasons, self.clubs(
-            Cosmos=['1970', '1971'],
-            Tornado=['1968', '1969', '1970', '1971'],
+            Cosmos=['1971'],
+            Tornado=['1968', '1969', '1970'],
             Beacons=['1968'],
-            Spurs=['1968', '1969']))
+            Spurs=['1969', '1970']))
 
+        # The Cosmos led on one season because it is the only club left in
+        # 1971; the Tornado leads the 1970 leavers on seasons played.
         self.assertEqual([r['name'] for r in timeline['rows']],
-                         ['Tornado', 'Spurs', 'Beacons', 'Cosmos'])
+                         ['Cosmos', 'Tornado', 'Spurs', 'Beacons'])
 
     def test_a_club_that_left_and_came_back_keeps_its_gap(self):
         timeline = views.club_timeline(self.seasons, self.clubs(
