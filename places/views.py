@@ -13,6 +13,15 @@ from standings.models import StadiumStanding
 from teams.models import Team
 
 
+# A place's games tab is a sample, not a log. New York state has 3,015 games on
+# record and the United States 23,000-odd; rendering every row timed the worker
+# out. Twenty-five is what the stadium and competition pages already show.
+RECENT_GAMES = 25
+
+# The same for a country's other lists, which run to four figures.
+PLACE_LIST = 100
+
+
 @cache_page(60 * 60 * 12)
 def places_index(request):
         """
@@ -128,25 +137,42 @@ def country_detail(request, slug):
 
         country = get_object_or_404(Country, slug=slug)
 
-        # The United States alone is 23k games; rendering every row timed the
-        # worker out. Show the most recent and say how many there are.
         all_games = country.games()
         game_count = all_games.count()
-        games = all_games.order_by(F('date').desc(nulls_last=True)).select_related()[:100]
+        games = all_games.order_by(F('date').desc(nulls_last=True)).select_related()[:RECENT_GAMES]
 
-        stadiums = Stadium.objects.filter(city__country=country)
-        births = Bio.objects.filter(birthplace__country=country).order_by('birthdate')
+        # The United States has 1,340 cities, 1,329 players born in it and 659
+        # grounds, and the people table asks for a career stat per row. Each
+        # list is cut to the hundred with the most behind them rather than the
+        # hundred that happen to sort first.
+        all_stadiums = Stadium.objects.filter(city__country=country)
+        stadiums = all_stadiums.annotate(games=Count('game')).order_by('-games', 'name')[:PLACE_LIST]
+
+        all_births = Bio.objects.filter(birthplace__country=country)
+        births = (all_births.select_related('birthplace__state')
+                  .annotate(played=Sum('careerstat__games_played'),
+                            scored=Sum('careerstat__goals'))
+                  .order_by(F('played').desc(nulls_last=True), 'name')[:PLACE_LIST])
+
+        all_cities = City.objects.filter(country=country)
+        cities = (all_cities.select_related('state').annotate(games=Count('game'))
+                  .order_by('-games', 'name')[:PLACE_LIST])
+
         competitions = Competition.objects.filter(scope='Country', area=country.name)
-        cities = City.objects.filter(country=country)
 
         context = {
                 'country': country,
                 'games': games,
                 'game_count': game_count,
+                'game_limit': RECENT_GAMES,
                 'births': births,
+                'birth_count': all_births.count(),
                 'stadiums': stadiums,
+                'stadium_count': all_stadiums.count(),
                 'competitions': competitions,
                 'cities': cities,
+                'city_count': all_cities.count(),
+                'place_limit': PLACE_LIST,
                 }
         return render(request, "places/country_detail.html",
                                   context)
@@ -159,13 +185,17 @@ def state_detail(request, slug):
         state = get_object_or_404(State, slug=slug)
         births = Bio.objects.filter(birthplace__state=state)
         stadiums = Stadium.objects.filter(city__state=state)
-        games = Game.objects.exclude(city=None).filter(city__state=state)
-        
+
+        all_games = Game.objects.exclude(city=None).filter(city__state=state)
+        game_count = all_games.count()
+
         context = {
                 'state': state,
                 'births': births,
                 'stadiums': stadiums,
-                'games': games,
+                'games': all_games.select_related()[:RECENT_GAMES],
+                'game_count': game_count,
+                'game_limit': RECENT_GAMES,
                 }
         return render(request, "places/state_detail.html",
                                   context)
@@ -177,11 +207,14 @@ def city_detail(request, slug):
         """
 
         city = City.objects.by_slug(slug)
+        all_games = Game.objects.filter(city=city)
 
         context = {
                 'city': city,
                 'teams': Team.objects.filter(city=city),
-                'games': Game.objects.filter(city=city),
+                'games': all_games.select_related()[:RECENT_GAMES],
+                'game_count': all_games.count(),
+                'game_limit': RECENT_GAMES,
                 'stadiums': city.stadium_set.annotate(game_count=Count('game')).annotate(total_attendance=Sum('game__attendance')).order_by('-game_count')
                 }
 
@@ -207,7 +240,7 @@ def stadium_detail(request, slug):
                 'average_attendance': average_attendance,
                 'attendance_game_count': attendance_game_count,
                 'standings': standings,
-                'recent_games': stadium.game_set.all()[:25],
+                'recent_games': stadium.game_set.select_related()[:RECENT_GAMES],
                 }
 
         return render(request, "places/stadium_detail.html",

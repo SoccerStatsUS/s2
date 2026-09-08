@@ -14,7 +14,9 @@
 <h4>{{ country.population }}</h4>
 
 
+<div id="tab_block">
 <ul id="tabs"></ul>
+</div>
 
 <div id="tab_wrapper">
 
@@ -65,10 +67,14 @@
 {% if stadiums %}
 <div tab="stadiums">
 <h3>Grounds in {{ country.name }}</h3>
+{% if stadium_count > place_limit %}
+<p class="coverage-note">The {{ place_limit }} with the most games on record, of {{ stadium_count|intcomma }}.</p>
+{% endif %}
 <table>
 <thead>
   <tr>
     <th scope="col">name</th>
+    <th scope="col">games</th>
     <th scope="col">opened</th>
     <th scope="col">capacity</th>
     <th scope="col">cost</th>
@@ -77,6 +83,7 @@
 {% for stadium in stadiums %}
 <tr>
   <td><a href="{% url 'stadium_detail' stadium.slug %}">{{ stadium }}</a></td>
+  {% datum_or_grey stadium.games %}
   {% datum_or_grey stadium.opened %}
   {% datum_or_grey stadium.capacity %}
   {% datum_or_grey stadium.cost %}
@@ -89,8 +96,8 @@
 {% if games %}
 <div tab="games">
 <h3>Games played in {{ country.name }}</h3>
-{% if game_count > 100 %}
-<p class="coverage-note">The 100 most recent, of {{ game_count|intcomma }} on record.</p>
+{% if game_count > game_limit %}
+<p class="coverage-note">The {{ game_limit }} most recent, of {{ game_count|intcomma }} on record.</p>
 {% endif %}
 {% games_table games %}
 </div>
@@ -101,6 +108,9 @@
 {% if country.games.exists %}
 <div tab="cities">
   <h3>Cities in {{ country.name }}</h3>
+  {% if city_count > place_limit %}
+  <p class="coverage-note">The {{ place_limit }} that hosted the most games, of {{ city_count|intcomma }}.</p>
+  {% endif %}
   <ul>
     {% for city in cities %}
     <li><a href="{% url 'city_detail' city.slug %}">{{ city }}</a></li>
@@ -114,6 +124,9 @@
 <div tab="people">
 
 <h3>Players born in {{ country.name }}</h3>
+{% if birth_count > place_limit %}
+<p class="coverage-note">The {{ place_limit }} with the most recorded games, of {{ birth_count|intcomma }}.</p>
+{% endif %}
 <table>
 
   <thead>
@@ -127,7 +140,6 @@
   </thead>
 
 {% for bio in births %}
-{% with cs=bio.career_stat %}
 <tr>
   <td><a href="{% url 'person_detail' bio.slug %}">{{ bio }}</a></td>
   <td><a href="{% url 'city_detail' bio.birthplace.slug %}">{{ bio.birthplace }}</a></td>
@@ -136,11 +148,9 @@
   {% else %}
   <td></td>
   {% endif %}
-  <td>{{ cs.games_played }}</td>
-  <td>{{ cs.goals }}</td>
-
+  {% datum_or_grey bio.played %}
+  {% datum_or_grey bio.scored %}
 </tr>
-{% endwith %}
 {% endfor %}
 </table>
 

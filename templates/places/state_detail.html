@@ -2,6 +2,7 @@
 {% block title %}{{ state }}{% endblock %}
 
 {% load datum_or_none %}
+{% load humanize %}
 
 {% block content %}
 
@@ -12,7 +13,9 @@
 <h4>Country: <a href="{% url 'country_detail' state.country.slug %}">{{ state.country }}</a></h4>
 {% endif %}
 
+<div id="tab_block">
 <ul id="tabs"></ul>
+</div>
 
 <div id="tab_wrapper">
 
@@ -57,6 +60,9 @@
 {% if games %}
 <div tab="games">
 <h3>Games played in {{ state }}</h3>
+{% if game_count > game_limit %}
+<p class="coverage-note">The {{ game_limit }} most recent, of {{ game_count|intcomma }} on record.</p>
+{% endif %}
 {% include "templatetags/games.html" %}
 </div>
 {% endif %}

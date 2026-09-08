@@ -2,6 +2,7 @@
 {% block title %}{{ city }}{% endblock %}
 
 {% load datum_or_none %}
+{% load humanize %}
 
 {% block content %}
 
@@ -78,6 +79,9 @@
 {% if games %}
 <div tab="games">
 <h3>Games played in {{ city.name }}</h3>
+{% if game_count > game_limit %}
+<p class="coverage-note">The {{ game_limit }} most recent, of {{ game_count|intcomma }} on record.</p>
+{% endif %}
 {% include "templatetags/games.html" %}
 </div>
 {% endif %}
