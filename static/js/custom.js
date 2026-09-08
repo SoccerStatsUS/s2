@@ -128,6 +128,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    document.querySelectorAll("table.stats, table.standings, table.transactions").forEach(makeSortable);
+    document.querySelectorAll("table.stats, table.standings, table.transactions, table.sources").forEach(makeSortable);
 
 });

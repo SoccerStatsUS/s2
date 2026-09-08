@@ -6,7 +6,7 @@
 
 <h1>Sources</h1>
 
-<table>
+<table class="sources">
   <thead>
     <tr>
       <th scope="col">name</th>
@@ -16,16 +16,18 @@
       <th scope="col">news</th>
       </tr>
     </thead>
-  
+
+  <tbody>
   {% for source in sources %}
   <tr>
     <td><a href="{% url 'source_detail' source.id %}">{{ source|truncatechars:40 }}</a></td>
     <td>{{ source.author }}</td>
-    <td>{{ source.games }}</td>
-    <td>{{ source.stats }}</td>
+    <td>{{ source.games|default_if_none:'' }}</td>
+    <td>{{ source.stats|default_if_none:'' }}</td>
     <td>{{ source.news }}</td>
   </tr>
   {% endfor %}
+  </tbody>
 </table>
 
 {% endblock %}
