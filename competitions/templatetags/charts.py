@@ -41,6 +41,16 @@ def cap_path(x, y, w, h, r=4):
             f"H{x + w - r:.1f}Q{x + w:.1f},{y:.1f} {x + w:.1f},{y + r:.1f}V{y + h:.1f}Z")
 
 
+def label_step(names, slot):
+    """
+    Label every Nth column, spaced off the longest name rather than a fixed
+    guess: season names run from "1969" to "1921-1922", and the wide ones
+    overprint each other at a spacing the narrow ones are fine with.
+    """
+    widest = max(len(name) for name in names) * 7 + 10
+    return max(1, math.ceil(widest / slot))
+
+
 def rule_ground(median, average, partial=False):
     """
     What the median rule will be drawn on, which is what it has to contrast
@@ -263,7 +273,7 @@ def count_chart(rows, caption, noun):
     scale = plot_h / y_max
     slot = plot_w / len(rows)
     bar_w = min(36, max(6, slot * .7))
-    every = max(1, math.ceil(56 / slot))
+    every = label_step([row["name"] for row in rows], slot)
     base = top + plot_h
 
     columns = []
@@ -307,9 +317,7 @@ def timeline_chart(timeline, caption, noun="clubs"):
     plot_w = WIDTH - left - right
     slot = plot_w / len(columns)
     block_w = max(2, slot - GAP)
-    # Season names here run from "1969" to "1933-1934", so the label spacing has
-    # to come off the longest one rather than a fixed guess.
-    every = max(1, math.ceil((max(len(name) for name in columns) * 7 + 10) / slot))
+    every = label_step(columns, slot)
 
     # The rows run far past the labels at the top, so each labeled season also
     # gets a rule down the chart to track it by.

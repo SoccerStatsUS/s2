@@ -22,19 +22,23 @@
 
 
 <div tab="seasons">
+<h3>Seasons</h3>
+{% seasons_table competition.season_set.reverse %}
+</div>
+
+{% if season_clubs or club_timeline.rows %}
+<div tab="clubs" tab-label="{{ club_noun }}">
+
 {% if season_clubs %}
 <h3>{{ club_noun|capfirst }} by season</h3>
 {% count_chart season_clubs club_noun|capfirst|add:" by season" club_noun %}
 {% endif %}
 
-<h3>Seasons</h3>
-{% seasons_table competition.season_set.reverse %}
-</div>
-
 {% if club_timeline.rows %}
-<div tab="clubs" tab-label="{{ club_noun }}">
-<h3>{{ club_noun|capfirst }}</h3>
+<h3>{{ club_noun|capfirst }}, season by season</h3>
 {% timeline_chart club_timeline club_noun|capfirst|add:" by season" club_noun %}
+{% endif %}
+
 </div>
 {% endif %}
 
