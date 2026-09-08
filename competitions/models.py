@@ -1,5 +1,6 @@
 from django.db.models import Avg, Sum
 from django.db import models
+from django.contrib.contenttypes.fields import GenericRelation
 from django.template.defaultfilters import slugify
 
 from collections import defaultdict
@@ -263,6 +264,7 @@ class Competition(AbstractCompetition):
     area = models.CharField(max_length=255)
 
     relationships = models.ManyToManyField('self',through='CompetitionRelationship',symmetrical=False)
+    blurbs = GenericRelation('blurbs.Blurb')
 
     
     #international = models.BooleanField()
@@ -516,6 +518,7 @@ class Season(AbstractCompetition):
 
     competition = models.ForeignKey(Competition, null=True, on_delete=models.CASCADE)
     competition_original_name = models.CharField(max_length=255)
+    blurbs = GenericRelation('blurbs.Blurb')
 
     objects = SeasonManager()
 

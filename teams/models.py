@@ -180,6 +180,7 @@ class Team(models.Model):
     reals = RealTeamManager()
 
     awards = GenericRelation('awards.AwardItem')
+    blurbs = GenericRelation('blurbs.Blurb')
 
 
     class Meta:
@@ -393,4 +394,3 @@ class TeamAlias(models.Model):
             return self.end
     
             
-

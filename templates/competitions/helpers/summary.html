@@ -3,6 +3,8 @@
 
   <h1>{{ competition.name }}</h1>
 
+  {% include "blurbs/list.html" with blurbs=competition.blurbs.all %}
+
   <div id="competition_facts">
 
   <p class="competition-vitals">

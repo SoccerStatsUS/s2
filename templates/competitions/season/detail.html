@@ -29,6 +29,8 @@
 
 <h1>{{ season.name }}</h1>
 
+{% include "blurbs/list.html" with blurbs=season.blurbs.all %}
+
 <table class="honors">
   <caption class="sr-only">Honors</caption>
   {% for row in honors %}

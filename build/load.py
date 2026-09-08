@@ -17,6 +17,8 @@ from django.template.defaultfilters import slugify
 
 from awards.models import Award, AwardItem
 from bios.models import Bio
+from blurbs.loading import get_blurb_target
+from blurbs.models import Blurb
 from competitions.models import Competition, CompetitionRelationship, Season, SuperSeason
 from drafts.models import Draft, Pick
 from money.models import Salary
@@ -114,6 +116,7 @@ def load1():
     load_events()
 
     load_stadium_maps()
+    load_blurbs()
 
 
 def load2():
@@ -516,9 +519,14 @@ def load_competitions():
 
         a = Competition.objects.get(name=d['after'])
         CompetitionRelationship.objects.create(before=b, after=a)
-        
 
 
+@transaction.atomic
+def load_blurbs():
+    print("loading blurbs")
+    for blurb in soccer_db.blurbs.find():
+        target = get_blurb_target(blurb)
+        Blurb.objects.create(content_object=target, text=blurb["text"])
 
 
 @transaction.atomic

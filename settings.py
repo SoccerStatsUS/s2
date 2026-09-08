@@ -107,6 +107,7 @@ INSTALLED_APPS = [
 
     'awards',
     'bios',
+    'blurbs',
     'competitions',
     'contact',
     'dates',
