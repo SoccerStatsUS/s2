@@ -325,12 +325,16 @@ class ClubTimelineTests(SimpleTestCase):
     """Which clubs played which seasons, drawn a block per season."""
 
     seasons = ['1968', '1969', '1970', '1971']
+    league = Competition(ctype='League')
 
     def clubs(self, **played):
         return {(name, name.lower()): set(s) for name, s in played.items()}
 
+    def timeline(self, seasons, clubs, competition=None):
+        return views.club_timeline(competition or self.league, seasons, clubs)
+
     def test_rows_run_most_recent_first_then_longest_lived(self):
-        timeline = views.club_timeline(self.seasons, self.clubs(
+        timeline = self.timeline(self.seasons, self.clubs(
             Cosmos=['1971'],
             Tornado=['1968', '1969', '1970'],
             Beacons=['1968'],
@@ -342,7 +346,7 @@ class ClubTimelineTests(SimpleTestCase):
                          ['Cosmos', 'Tornado', 'Spurs', 'Beacons'])
 
     def test_a_club_that_left_and_came_back_keeps_its_gap(self):
-        timeline = views.club_timeline(self.seasons, self.clubs(
+        timeline = self.timeline(self.seasons, self.clubs(
             Chiefs=['1968', '1971'], Tornado=['1968', '1969']))
         chiefs = timeline['rows'][0]
 
@@ -352,14 +356,19 @@ class ClubTimelineTests(SimpleTestCase):
         chart = timeline_chart(timeline, 'Clubs')
         self.assertEqual(len(chart['marks'][0]['blocks']), 2)  # not a solid 1968-1971 span
 
-    def test_no_timeline_for_a_cup_thousands_of_clubs_pass_through(self):
-        crowd = {('Club %s' % n, 'club-%s' % n): {'1968'} for n in range(200)}
+    def test_no_timeline_for_a_cup(self):
+        # A cup is a field one-off entrants pass through, not a roll of members.
+        clubs = self.clubs(Tornado=['1968', '1969'], Spurs=['1969', '1970'])
 
-        self.assertEqual(views.club_timeline(self.seasons, crowd)['rows'], [])
+        self.assertTrue(self.timeline(self.seasons, clubs)['rows'])
+        for ctype in ('Cup', 'Supercup', ''):
+            self.assertEqual(
+                self.timeline(self.seasons, clubs, Competition(ctype=ctype))['rows'], [],
+                'ctype %r should draw no timeline' % ctype)
 
     def test_no_timeline_for_a_single_season(self):
         self.assertEqual(
-            views.club_timeline(['1968'], self.clubs(A=['1968'], B=['1968']))['rows'], [])
+            self.timeline(['1968'], self.clubs(A=['1968'], B=['1968']))['rows'], [])
 
     def test_season_counts_skip_seasons_nobody_played(self):
         counts = views.season_club_counts(self.seasons, self.clubs(

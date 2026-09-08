@@ -307,14 +307,19 @@ def timeline_chart(timeline, caption, noun="clubs"):
     plot_w = WIDTH - left - right
     slot = plot_w / len(columns)
     block_w = max(2, slot - GAP)
-    every = max(1, math.ceil(52 / slot))
+    # Season names here run from "1969" to "1933-1934", so the label spacing has
+    # to come off the longest one rather than a fixed guess.
+    every = max(1, math.ceil((max(len(name) for name in columns) * 7 + 10) / slot))
 
     # The rows run far past the labels at the top, so each labeled season also
     # gets a rule down the chart to track it by.
     marks, labels = [], []
+    last_labeled = -every
     for index, name in enumerate(columns):
-        if index % every == 0 or index == len(columns) - 1:
+        # Label every Nth season, and the last one only when it has the room.
+        if index % every == 0 or (index == len(columns) - 1 and index - last_labeled >= every):
             labels.append({"x": left + index * slot + slot / 2, "text": name})
+            last_labeled = index
 
     for position, row in enumerate(rows):
         y = top + position * row_h

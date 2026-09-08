@@ -15,7 +15,6 @@ from competitions.forms import CompetitionForm
 from competitions.models import PLAYOFF_CHAMPIONSHIPS, Competition, SuperSeason, Season
 from lineups.models import Appearance
 from places.models import Country
-from standings.models import Standing
 from stats.models import Stat, CompetitionStat, SeasonStat
 from teams.models import Team
 
@@ -120,12 +119,6 @@ def most_titled(competition):
     return {'winner': winner, 'titles': top['titles']}
 
 
-# A competition with more clubs than this is a cup that thousands of one-off
-# entrants pass through, not a league with a roll of member clubs. Every League
-# in the database is well under it; the open cups run to 1,384.
-TIMELINE_CLUB_LIMIT = 80
-
-
 def club_seasons(competition):
     """
     Which clubs played in which seasons, read off the games rather than the
@@ -155,13 +148,17 @@ def season_club_counts(seasons, clubs):
             for season in seasons if counts[season]]
 
 
-def club_timeline(seasons, clubs):
+def club_timeline(competition, seasons, clubs):
     """
     One row per club, last season first so the clubs that lasted lead, and the
-    longest-lived first among those that left together. Empty for a competition
-    with no season structure, or one too wide to read as a roll of clubs.
+    longest-lived first among those that left together.
+
+    Leagues only. A league has a roll of member clubs that returns year on year,
+    which is the thing the chart draws; a cup is a field that one-off entrants
+    pass through, and the U.S. Open Cup's 1,384 of them would draw a mile of
+    single blocks. Empty, too, for a competition with no season structure.
     """
-    if len(seasons) < 2 or not 1 < len(clubs) <= TIMELINE_CLUB_LIMIT:
+    if competition.ctype != 'League' or len(seasons) < 2 or len(clubs) < 2:
         return {'columns': [], 'rows': []}
 
     order = {name: index for index, name in enumerate(seasons)}
@@ -181,7 +178,7 @@ def club_timeline(seasons, clubs):
     return {'columns': seasons, 'rows': rows}
 
 
-def competition_summary(competition):
+def competition_summary(competition, clubs):
     """
     The facts above the fold. Every one is read off the record rather than
     asserted: what kind of competition this is, the span of seasons on file,
@@ -201,7 +198,9 @@ def competition_summary(competition):
         'first_season': competition.first_season(),
         'last_season': competition.last_season(),
         'games': competition.game_set.count(),
-        'clubs': Standing.objects.filter(competition=competition).values('team').distinct().count(),
+        # Counted off the games, the same way the clubs timeline counts them, so
+        # the header and the chart below it never disagree.
+        'clubs': len(clubs),
         'most_titled': most_titled(competition),
         'attendance': crowds.aggregate(Avg('attendance'))['attendance__avg'],
         }
@@ -222,13 +221,13 @@ def competition_detail(request, competition_slug):
 
     context = {
         'competition': competition,
-        'summary': competition_summary(competition),
+        'summary': competition_summary(competition, clubs),
         'leader_groups': player_leader_groups(stats),
         'games': recent_games.select_related()[:25],
         'big_winners': competition.alltime_standings().order_by('-wins')[:50],
         'awards': competition_awards(competition),
         'season_clubs': season_club_counts(seasons, clubs),
-        'club_timeline': club_timeline(seasons, clubs),
+        'club_timeline': club_timeline(competition, seasons, clubs),
         'club_noun': 'teams' if competition.international else 'clubs',
         }
     return render(request, "competitions/competition/detail.html",
