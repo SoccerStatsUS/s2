@@ -168,7 +168,8 @@ def person_detail_abstract(request, bio):
     first_game = bio.first_game()
     last_game = bio.last_game()
     awards = bio.awards.select_related('award__competition', 'season__competition')
-    
+    honors = group_honors(awards)
+
     context = {
         "bio": bio,
         'recent_game_stats': bio.gamestat_set.exclude(game__date=None).order_by('-game__date')[:10],
@@ -180,6 +181,7 @@ def person_detail_abstract(request, bio):
         'first_game': first_game,
         'last_game': last_game,
         'awards': awards,
+        'honors': honors,
         'goal_seasons': goal_seasons,
         'show_goal_chart': (len(goal_seasons) >= 2 and
                             any(row['goals'] for row in goal_seasons)),
@@ -193,6 +195,48 @@ def person_detail_abstract(request, bio):
 
     return render(request, "bios/detail.html",
                               context)   
+
+
+
+def honor_year(item):
+    """
+    Sortable year for an award item; undated items sort last.
+    """
+    if item.season:
+        return item.season.name
+    if item.year:
+        return str(item.year)
+    return '9999'
+
+
+def group_honors(items):
+    """
+    Collapse award items into one entry per award, so the summary tab reads
+    "Best XI (2003, 2008, ...)" instead of a row per season. The competition is
+    named only when a player holds awards of the same name in more than one,
+    which would otherwise read as a duplicate.
+    """
+    groups = OrderedDict()
+    for item in items:
+        groups.setdefault(item.award_id, []).append(item)
+
+    name_counts = Counter(group[0].award.name for group in groups.values())
+
+    honors = []
+    for group in groups.values():
+        award = group[0].award
+        label = award.name
+        if name_counts[award.name] > 1 and award.competition:
+            label = "%s %s" % (award.competition.abbreviation or award.competition.name, award.name)
+
+        honors.append({
+            'award': award,
+            'label': label,
+            'items': sorted(group, key=honor_year),
+            })
+
+    honors.sort(key=lambda honor: honor_year(honor['items'][0]))
+    return honors
 
 
 def random_person_detail(request):

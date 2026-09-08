@@ -78,7 +78,7 @@ class PlayerTabsTests(SimpleTestCase):
 
     def render(self, **context):
         fields = dict(bio=self.bio, career_stat=None, first_game=None,
-                      last_game=None, awards=[], team_stats=[],
+                      last_game=None, awards=[], honors=[], team_stats=[],
                       competition_stats=[], domestic_stats=[],
                       international_stats=[], show_goal_chart=False,
                       recent_game_stats=[], coach_stats=[], refs=[],
@@ -102,9 +102,10 @@ class PlayerTabsTests(SimpleTestCase):
         self.assertLess(html.index('id="tab_block"'), html.index('<div tab='))
 
     def test_honors_ride_in_the_summary_pane(self):
-        html = self.render(awards=[SimpleNamespace(season=None, year=1996,
-                                                   award=SimpleNamespace(id=1, competition=None,
-                                                                         name='MVP'))])
+        item = SimpleNamespace(season=None, year=1996,
+                               award=SimpleNamespace(id=1, competition=None, name='MVP'))
+        html = self.render(awards=[item],
+                           honors=[{'award': item.award, 'label': 'MVP', 'items': [item]}])
 
         self.assertEqual(self.panes(html), ['summary'])
         self.assertLess(html.index('<div tab="summary"'), html.index('Honors'))
@@ -113,3 +114,56 @@ class PlayerTabsTests(SimpleTestCase):
         html = self.render(domestic_stats=StatRows([SimpleNamespace()]))
 
         self.assertEqual(self.panes(html), ['stats'])
+
+
+def award_item(award, season=None, year=None):
+    return SimpleNamespace(award_id=id(award), award=award, season=season, year=year)
+
+
+def season(name):
+    return SimpleNamespace(name=name, slug=name,
+                           competition=SimpleNamespace(slug='major-league-soccer'))
+
+
+class GroupHonorsTests(SimpleTestCase):
+    """
+    The summary tab wants "Best XI (2003, 2008, ...)", not a row per season.
+    """
+
+    def test_one_entry_per_award_with_its_seasons(self):
+        from bios.views import group_honors
+
+        best_xi = SimpleNamespace(id=1, name='Best XI', competition=None)
+        mvp = SimpleNamespace(id=2, name='MVP', competition=None)
+        honors = group_honors([
+            award_item(best_xi, season('2008')),
+            award_item(mvp, season('2009')),
+            award_item(best_xi, season('2003')),
+            award_item(best_xi, season('2009')),
+        ])
+
+        assert [h['label'] for h in honors] == ['Best XI', 'MVP']
+        assert [i.season.name for i in honors[0]['items']] == ['2003', '2008', '2009']
+
+    def test_competition_named_only_when_the_award_name_repeats(self):
+        from bios.views import group_honors
+
+        misl = SimpleNamespace(slug='misl', abbreviation='MISL', name='MISL')
+        nasl = SimpleNamespace(slug='nasl', abbreviation='NASL', name='NASL')
+        honors = group_honors([
+            award_item(SimpleNamespace(id=1, name='MVP', competition=misl), season('1979')),
+            award_item(SimpleNamespace(id=2, name='MVP', competition=nasl), season('1984')),
+            award_item(SimpleNamespace(id=3, name='Scoring Champion', competition=misl),
+                       season('1980')),
+        ])
+
+        assert [h['label'] for h in honors] == ['MISL MVP', 'Scoring Champion', 'NASL MVP']
+
+    def test_undated_awards_sort_last(self):
+        from bios.views import group_honors
+
+        hall = SimpleNamespace(id=1, name='Hall of Fame', competition=None)
+        roy = SimpleNamespace(id=2, name='Rookie of the Year', competition=None)
+        honors = group_honors([award_item(hall), award_item(roy, season('1968'))])
+
+        assert [h['label'] for h in honors] == ['Rookie of the Year', 'Hall of Fame']

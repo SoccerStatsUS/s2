@@ -774,6 +774,20 @@ table.honors th {
     color: #9aa3ab;
 }
 
+/* Player honors are one line per award -- "Best XI (2003, 2008, ...)" -- so the
+   summary tab opens with a short list rather than a season-by-season table. */
+.honors-list {
+    margin: 0 0 12px;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+}
+
+.honors-list li { padding: 4px 0; }
+
+.honor-years { color: var(--ink-soft); }
+
 .player-honors, .team-honors { margin: 0 0 16px; }
 /* Bio honors head the summary tab, so they take the h3 size their siblings there use.
    Team honors are still a page section and stay at the smaller section size. */

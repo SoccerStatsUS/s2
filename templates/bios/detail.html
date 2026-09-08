@@ -27,24 +27,15 @@
 {% if awards or team_stats or competition_stats or show_goal_chart %}
 <div tab="summary">
 
-{% if awards %}
+{% if honors %}
 <section class="player-honors">
 <h3>Honors</h3>
-<table class="honors">
-<caption class="sr-only">Honors received by {{ bio.name }}</caption>
-<thead>
-  <tr><th scope="col">season</th><th scope="col">competition</th><th scope="col">award</th></tr>
-</thead>
-<tbody>
-{% for item in awards %}
-  <tr>
-    <td>{% if item.season %}<a href="{% url 'season_detail' item.season.competition.slug item.season.slug %}">{{ item.season.name }}</a>{% elif item.year %}{{ item.year }}{% else %}<span class="grey" title="no record found">&mdash;</span>{% endif %}</td>
-    <td>{% if item.award.competition %}<a href="{% url 'competition_detail' item.award.competition.slug %}" title="{{ item.award.competition.name }}">{{ item.award.competition.abbreviation }}</a>{% else %}<span class="grey" title="no record found">&mdash;</span>{% endif %}</td>
-    <td><a href="{% url 'award_detail' item.award.id %}">{{ item.award.name }}</a></td>
-  </tr>
+<ul class="honors-list">
+{% for honor in honors %}
+  <li><a href="{% url 'award_detail' honor.award.id %}">{{ honor.label }}</a>
+    <span class="honor-years">({% for item in honor.items %}{% if item.season %}<a href="{% url 'season_detail' item.season.competition.slug item.season.slug %}">{{ item.season.name }}</a>{% elif item.year %}{{ item.year }}{% else %}<span class="grey" title="no record found">&mdash;</span>{% endif %}{% if not forloop.last %}, {% endif %}{% endfor %})</span></li>
 {% endfor %}
-</tbody>
-</table>
+</ul>
 </section>
 {% endif %}
 
