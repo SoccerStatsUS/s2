@@ -52,14 +52,14 @@
 {% if team_stats %}
 <section>
 <h3>Career totals by team</h3>
-{% stats_table team_stats 'player' %}
+{% stats_table team_stats 'player,competition,season' %}
 </section>
 {% endif %}
 
 {% if competition_stats %}
 <section>
 <h3>Career totals by competition</h3>
-{% stats_table competition_stats 'player' %}
+{% stats_table competition_stats 'player,team,season' %}
 </section>
 {% endif %}
 </div>
