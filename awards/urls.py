@@ -1,11 +1,16 @@
 from awards import views
 from django.urls import path
 
-urlpatterns = [ 
+urlpatterns = [
                        path('', views.award_index,
                            name='award_index'),
 
-                       path('<int:award_id>/', views.award_detail,
+                       path('<slug:competition_slug>/<slug:award_slug>/', views.award_detail,
                            name='award_detail'),
+
+                       # The Hall of Fame belongs to no competition, so it has
+                       # nothing to sit under.
+                       path('<slug:award_slug>/', views.award_detail,
+                           name='award_detail_open'),
 
 ]

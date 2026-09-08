@@ -1,7 +1,8 @@
 import re
 
 from django.db.models import Count, Min, Max
-from django.shortcuts import render, get_object_or_404
+from django.http import Http404
+from django.shortcuts import render
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
@@ -43,12 +44,30 @@ def award_index(request):
                               context)
 
 
+def get_award(competition_slug, award_slug):
+    """
+    Awards carry no stored slug, so match the derived one within the
+    competition -- a handful of rows either way.
+    """
+    awards = Award.objects.select_related('competition')
+    if competition_slug:
+        awards = awards.filter(competition__slug=competition_slug)
+    else:
+        awards = awards.filter(competition=None)
+
+    for award in awards:
+        if award.slug == award_slug:
+            return award
+
+    raise Http404("no award %s" % award_slug)
+
+
 @cache_page(60 * 60 * 12)
-def award_detail(request, award_id):
+def award_detail(request, award_slug, competition_slug=None):
     """
-    Detail for a specific award.
+    Detail for a specific award, over every season it was given.
     """
-    award = get_object_or_404(Award, id=award_id)
+    award = get_award(competition_slug, award_slug)
 
     has_competition = award.competition is not None
 

@@ -1,6 +1,8 @@
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.template.defaultfilters import slugify
+from django.urls import reverse
 
 from competitions.models import Competition, Season
 
@@ -15,6 +17,22 @@ class Award(models.Model):
     # Golden boot / top scorer.
     # Supporters Shield, Champion, etc.
     type = models.CharField(max_length=255)
+
+
+    @property
+    def slug(self):
+        """
+        Derived rather than stored: there are 131 awards, the name and the
+        competition together are unique across all of them, and a stored slug
+        would be one more thing a rebuild has to get right.
+        """
+        return slugify(self.name)
+
+
+    def get_absolute_url(self):
+        if self.competition:
+            return reverse('award_detail', args=[self.competition.slug, self.slug])
+        return reverse('award_detail_open', args=[self.slug])
 
 
     def is_multi(self):

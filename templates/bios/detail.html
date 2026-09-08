@@ -32,7 +32,7 @@
 <h3>Honors</h3>
 <ul class="honors-list">
 {% for honor in honors %}
-  <li><a href="{% url 'award_detail' honor.award.id %}">{{ honor.label }}</a>
+  <li><a href="{{ honor.award.get_absolute_url }}">{{ honor.label }}</a>
     <span class="honor-years">({% for item in honor.items %}{% if item.season %}<a href="{% url 'season_detail' item.season.competition.slug item.season.slug %}">{{ item.season.name }}</a>{% elif item.year %}{{ item.year }}{% else %}<span class="grey" title="no record found">&mdash;</span>{% endif %}{% if not forloop.last %}, {% endif %}{% endfor %})</span></li>
 {% endfor %}
 </ul>

@@ -129,7 +129,7 @@
 
   {% for a in awards %}
   <tr>
-    <td><a href="{% url 'award_detail' a.award.id %}">{{ a.award.name }}</a></td>
+    <td><a href="{{ a.award.get_absolute_url }}">{{ a.award.name }}</a></td>
     <td><a href="{{ a.recipient.get_absolute_url }}">{{ a.recipient }}</a></td>
   </tr>
   {% endfor %}

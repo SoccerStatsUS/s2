@@ -137,10 +137,7 @@ class AwardSitemap(Sitemap):
     protocol = 'https'
 
     def items(self):
-        return Award.objects.order_by('id')
-
-    def location(self, obj):
-        return reverse('award_detail', args=[obj.id])
+        return Award.objects.select_related('competition').order_by('id')
 
 
 class SourceSitemap(Sitemap):
