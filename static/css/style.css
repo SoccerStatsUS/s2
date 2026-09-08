@@ -13,6 +13,7 @@
     --win: #d9f0e1;        /* result semantics: win */
     --loss: #f8dcd9;       /* result semantics: loss */
     --tie: #faf0cf;        /* result semantics: tie */
+    --loss-ink: #7d2820;   /* readable on --loss; the only dark red on the site */
 }
 
 * { box-sizing: border-box; }
@@ -689,6 +690,21 @@ table.honors th {
 
 #bio_facts strong, #competition_facts strong { color: var(--ink); }
 
+/* Whether a competition is still played is a fact about it rather than a
+   result, but it reads in the same green/red register, so it borrows the
+   result tints instead of claiming two more palette entries. Only drawn where
+   the record supports it: a competition with no games on file gets no flag. */
+.status {
+    display: inline-block;
+    padding: 0 7px;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status.active { background: var(--win); color: var(--accent-dark); }
+.status.defunct { background: var(--loss); color: var(--loss-ink); }
+
 .bio-vitals span + span::before,
 .competition-vitals span + span::before,
 .competition-highlights span + span::before {
@@ -722,6 +738,15 @@ table.honors th {
     font-size: 22px;
     font-weight: 600;
     line-height: 1.1;
+}
+
+/* On a bio the totals are the headline and sit inside the block, ruled top and
+   bottom. A competition's counts do not outrank the facts above them, so the
+   row closes the block instead: prose first, figures last, one rule between. */
+#competition-totals {
+    margin-bottom: 4px;
+    padding-bottom: 0;
+    border-bottom: 0;
 }
 
 #bio_facts .bio-recorded, #competition_facts .competition-highlights { margin-top: 8px; }
