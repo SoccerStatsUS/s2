@@ -325,7 +325,8 @@ class ClubTimelineTests(SimpleTestCase):
     """Which clubs played which seasons, drawn a block per season."""
 
     seasons = ['1968', '1969', '1970', '1971']
-    league = Competition(ctype='League')
+    league = Competition(ctype='League', slug='nasl')
+    slugs = {name: name for name in seasons}
 
     def clubs(self, **played):
         return {(name, name.lower()): set(s) for name, s in played.items()}
@@ -371,10 +372,34 @@ class ClubTimelineTests(SimpleTestCase):
             self.timeline(['1968'], self.clubs(A=['1968'], B=['1968']))['rows'], [])
 
     def test_season_counts_skip_seasons_nobody_played(self):
-        counts = views.season_club_counts(self.seasons, self.clubs(
+        counts = views.season_club_counts(self.league, self.seasons, self.clubs(
             Tornado=['1968', '1971'], Spurs=['1968'], Cosmos=['1971']))
 
-        self.assertEqual(counts, [{'name': '1968', 'count': 2}, {'name': '1971', 'count': 2}])
+        self.assertEqual([(c['name'], c['count']) for c in counts],
+                         [('1968', 2), ('1971', 2)])
+
+    def test_each_column_links_to_its_season(self):
+        counts = views.season_club_counts(
+            self.league, self.seasons,
+            self.clubs(Tornado=['1968', '1971'], Spurs=['1968']), self.slugs)
+
+        self.assertEqual(counts[0]['url'], '/c/nasl/1968/')
+
+    def test_each_block_links_to_that_club_in_that_season(self):
+        timeline = views.club_timeline(
+            self.league, self.seasons,
+            self.clubs(Tornado=['1968', '1971'], Spurs=['1968']), self.slugs)
+        tornado = next(r for r in timeline['rows'] if r['name'] == 'Tornado')
+
+        self.assertEqual(tornado['urls']['1971'], '/teams/tornado/c/nasl/1971/')
+        self.assertEqual(sorted(tornado['urls']), ['1968', '1971'])
+
+    def test_a_club_with_no_slug_gets_no_block_links(self):
+        clubs = {('Tornado', ''): {'1968', '1971'}, ('Spurs', 'spurs'): {'1968'}}
+        timeline = views.club_timeline(self.league, self.seasons, clubs, self.slugs)
+        tornado = next(r for r in timeline['rows'] if r['name'] == 'Tornado')
+
+        self.assertEqual(tornado['urls'], {})
 
 
 class CountChartTests(SimpleTestCase):

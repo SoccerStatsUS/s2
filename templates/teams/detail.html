@@ -105,27 +105,11 @@
 </div>
 {% endif %}
 
-{% if game_leaders or goal_leaders %}
+{% if leader_groups %}
 <div tab="stats">
-
-<div>
-<a href="{% url 'team_stats' team.slug %}">all stats</a>
-</div>
-
-{% if game_leaders %}
-<div class="col">
-<h3>Game leaders</h3>
-{% stats_table game_leaders 'team,competition,season' 15 %}
-</div>
-{% endif %}
-
-{% if goal_leaders %}
-<div class="col">
-<h3>Goal leaders</h3>
-{% stats_table goal_leaders 'team,competition,season' 15 %}
-</div>
-{% endif %}
-
+<h3>Career leaders</h3>
+<div><a href="{% url 'team_stats' team.slug %}">complete stats</a></div>
+{% include "competitions/season/leaders.html" %}
 </div>
 {% endif %}
 

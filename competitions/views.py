@@ -139,16 +139,28 @@ def club_seasons(competition):
     return seasons, clubs
 
 
-def season_club_counts(seasons, clubs):
-    """How many clubs each season fielded, in season order."""
+def season_club_counts(competition, seasons, clubs, slugs=None):
+    """
+    How many clubs each season fielded, in season order, each linking to the
+    season it counts.
+    """
+    slugs = slugs or {}
     counts = Counter()
     for played in clubs.values():
         counts.update(played)
-    return [{'name': season, 'count': counts[season]}
-            for season in seasons if counts[season]]
+
+    rows = []
+    for season in seasons:
+        if not counts[season]:
+            continue
+        url = None
+        if season in slugs:
+            url = reverse('season_detail', args=[competition.slug, slugs[season]])
+        rows.append({'name': season, 'count': counts[season], 'url': url})
+    return rows
 
 
-def club_timeline(competition, seasons, clubs):
+def club_timeline(competition, seasons, clubs, slugs=None):
     """
     One row per club, last season first so the clubs that lasted lead, and the
     longest-lived first among those that left together.
@@ -161,14 +173,21 @@ def club_timeline(competition, seasons, clubs):
     if competition.ctype != 'League' or len(seasons) < 2 or len(clubs) < 2:
         return {'columns': [], 'rows': []}
 
+    slugs = slugs or {}
     order = {name: index for index, name in enumerate(seasons)}
     rows = []
     for (name, slug), played in clubs.items():
         indexes = sorted(order[season] for season in played)
+        # A block links to that club's season in this competition, where there
+        # is a slug for both ends of it to build the URL from.
+        urls = {season: reverse('team_season_detail',
+                                args=[slug, competition.slug, slugs[season]])
+                for season in played if slug and season in slugs}
         rows.append({
             'name': name,
             'url': reverse('team_detail', args=[slug]) if slug else None,
             'seasons': played,
+            'urls': urls,
             'first': seasons[indexes[0]],
             'last': seasons[indexes[-1]],
             'played': len(played),
@@ -218,6 +237,7 @@ def competition_detail(request, competition_slug):
         recent_games = games.order_by('-date')
 
     seasons, clubs = club_seasons(competition)
+    season_slugs = dict(competition.season_set.values_list('name', 'slug'))
 
     context = {
         'competition': competition,
@@ -226,8 +246,8 @@ def competition_detail(request, competition_slug):
         'games': recent_games.select_related()[:25],
         'big_winners': competition.alltime_standings().order_by('-wins')[:50],
         'awards': competition_awards(competition),
-        'season_clubs': season_club_counts(seasons, clubs),
-        'club_timeline': club_timeline(competition, seasons, clubs),
+        'season_clubs': season_club_counts(competition, seasons, clubs, season_slugs),
+        'club_timeline': club_timeline(competition, seasons, clubs, season_slugs),
         'club_noun': 'teams' if competition.international else 'clubs',
         }
     return render(request, "competitions/competition/detail.html",
@@ -492,13 +512,24 @@ def season_standings(season):
     return standings
 
 
+# Goals, assists and appearances. Minutes ranks the same players as
+# appearances and reads as a bigger number for it, so it earns no column.
+LEADER_CATEGORIES = (
+    ('Goals', 'goals'),
+    ('Assists', 'assists'),
+    ('Appearances', 'games_played'),
+)
+
+LEADER_DEPTH = 10
+
+
 def player_leader_groups(stats):
+    """
+    Career leaders for a competition or a club, the same shape either way so
+    the two stats tabs read alike.
+    """
     groups = []
-    for label, field in (
-            ('Goals', 'goals'),
-            ('Assists', 'assists'),
-            ('Appearances', 'games_played'),
-            ('Minutes', 'minutes')):
+    for label, field in LEADER_CATEGORIES:
         rows = list(stat_leaders(stats, field))
         if rows:
             groups.append({'label': label, 'rows': rows})
@@ -509,7 +540,7 @@ def stat_leaders(stats, field):
     return (stats.filter(**{f'{field}__gt': 0})
             .values('player_id', 'player__name', 'player__slug')
             .annotate(value=Sum(field))
-            .order_by('-value', 'player__name')[:5])
+            .order_by('-value', 'player__name')[:LEADER_DEPTH])
 
 
 def season_postseason(season):

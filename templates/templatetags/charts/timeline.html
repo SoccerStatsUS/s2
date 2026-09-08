@@ -6,10 +6,8 @@
   <text x="{{ label.x|floatformat:1 }}" y="{{ svg.label_y }}" text-anchor="middle">{{ label.text }}</text>
   {% endfor %}
   {% for mark in marks %}
-  {% if mark.url %}<a href="{{ mark.url }}">{% endif %}<text class="label" x="{{ svg.label_x }}" y="{{ mark.label_y|floatformat:1 }}" text-anchor="end">{{ mark.name }}</text>{% if mark.url %}</a>{% endif %}
-  <g><title>{{ mark.title }}</title>
-  {% for block in mark.blocks %}<rect class="mark" x="{{ block.x|floatformat:1 }}" y="{{ block.y|floatformat:1 }}" width="{{ block.width|floatformat:1 }}" height="{{ svg.block_h }}" rx="2"/>{% endfor %}
-  </g>
+  {% if mark.url %}<a href="{{ mark.url }}">{% endif %}<text class="label" x="{{ svg.label_x }}" y="{{ mark.label_y|floatformat:1 }}" text-anchor="end">{{ mark.name }}<title>{{ mark.title }}</title></text>{% if mark.url %}</a>{% endif %}
+  {% for block in mark.blocks %}{% if block.url %}<a href="{{ block.url }}">{% endif %}<rect class="mark" x="{{ block.x|floatformat:1 }}" y="{{ block.y|floatformat:1 }}" width="{{ block.width|floatformat:1 }}" height="{{ svg.block_h }}" rx="2"><title>{{ block.title }}</title></rect>{% if block.url %}</a>{% endif %}{% endfor %}
   {% endfor %}
 </svg>
 <figcaption>{{ caption }}. Ordered by last season, then by seasons played. A block marks a season the {{ one }} played; a row with gaps is a {{ one }} that left and came back.</figcaption>

@@ -7,7 +7,7 @@
   {% endfor %}
   <line class="axis" x1="{{ svg.left }}" x2="{{ svg.right_edge }}" y1="{{ svg.base }}" y2="{{ svg.base }}"/>
   {% for column in columns %}
-  {% if column.path %}<path class="mark" d="{{ column.path }}"><title>{{ column.title }}</title></path>{% endif %}
+  {% if column.path %}{% if column.url %}<a href="{{ column.url }}">{% endif %}<path class="mark" d="{{ column.path }}"><title>{{ column.title }}</title></path>{% if column.url %}</a>{% endif %}{% endif %}
   {% if column.name %}<text x="{{ column.x|floatformat:1 }}" y="{{ svg.label_y }}" text-anchor="middle">{{ column.name }}</text>{% endif %}
   {% endfor %}
 </svg>

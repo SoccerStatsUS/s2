@@ -883,6 +883,33 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
 .player-goals-chart .cup { fill: #eb6834; }
 .player-goals-chart .international { fill: #4a3aa7; }
 
+/* Picks which of two prerendered charts is on screen. Reads as a smaller,
+   quieter relative of the tab strip, since it does the same kind of job. */
+.chart-switch {
+    display: flex;
+    gap: 4px;
+    margin: 0 0 4px;
+}
+
+.chart-switch button {
+    padding: 3px 12px;
+    border: 1px solid var(--hairline);
+    border-radius: 4px;
+    background: #fff;
+    color: var(--ink-soft);
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.chart-switch button:hover { background: var(--fill); }
+
+.chart-switch button.active {
+    color: var(--accent);
+    border-color: var(--accent);
+    font-weight: 500;
+}
+
 table.summary { max-width: 560px; }
 
 /* Hall of Fame glyph: a second carrier alongside the bold, per §2. */

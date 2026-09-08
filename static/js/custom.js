@@ -80,6 +80,22 @@ document.addEventListener("DOMContentLoaded", function() {
         tabs.querySelector("a").click();
     }
 
+    // Chart switches: both charts are rendered, the control shows one of them.
+    // Without JS the first panel stands and the buttons do nothing visible.
+    document.querySelectorAll(".chart-switcher").forEach(function(switcher) {
+        var buttons = switcher.querySelectorAll(".chart-switch button");
+        var panels = switcher.querySelectorAll("[data-chart-panel]");
+        buttons.forEach(function(button) {
+            button.addEventListener("click", function() {
+                buttons.forEach(function(b) { b.classList.remove("active"); });
+                button.classList.add("active");
+                panels.forEach(function(panel) {
+                    panel.hidden = panel.dataset.chartPanel !== button.dataset.chart;
+                });
+            });
+        });
+    });
+
     makeTabs("tabs", "tab_wrapper");
     makeTabs("subtabs", "subtab_wrapper");
     makeTabs("subtabs2", "subtab_wrapper2");

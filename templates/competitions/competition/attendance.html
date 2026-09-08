@@ -32,7 +32,14 @@
 </table>
 
 <h3>By season</h3>
-{% column_chart seasons "Average attendance by season" %}
+<div class="chart-switcher">
+  <div class="chart-switch" role="group" aria-label="Attendance measure">
+    <button type="button" class="active" data-chart="average">average</button>
+    <button type="button" data-chart="total">total</button>
+  </div>
+  <div data-chart-panel="average">{% column_chart seasons "Average attendance by season" %}</div>
+  <div data-chart-panel="total" hidden>{% column_chart seasons "Total attendance by season" "total" %}</div>
+</div>
 
 <table>
 <thead>

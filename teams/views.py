@@ -12,6 +12,7 @@ from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
 from competitions.models import Season, Competition
+from competitions.views import player_leader_groups
 from games.models import Game
 from places.models import Country
 from positions.models import Position
@@ -201,15 +202,7 @@ def team_detail(request, team_slug):
 
     today = datetime.date.today()
 
-    stats = TeamStat.objects.filter(team=team)
-    goal_leaders = game_leaders = None
-    if stats.exclude(games_played=None).exists():
-        stats = game_leaders = stats.exclude(games_played=None).order_by('-games_played')
-        goal_leaders = stats.exclude(goals=None).order_by('-goals')
-    elif stats.exclude(goals=None).exists():
-        stats = goal_leaders = stats.exclude(goals=None).order_by('-goals')
-    else:
-        pass
+    leader_groups = player_leader_groups(TeamStat.objects.filter(team=team))
 
 
     competition_standings = Standing.objects.filter(team=team, season=None).order_by('-wins')
@@ -229,17 +222,6 @@ def team_detail(request, team_slug):
     if recent_games.count() == 0:
         recent_games = team.game_set().select_related()[:10]
 
-    #awards = team.awards.order_by('-season')
-
-    """
-    if game_leaders:
-        game_leaders = game_leaders[:15]
-
-    if goal_leaders:
-        goal_leaders = goal_leaders[:15]
-    """
-
-
     context = {
         'team': team,
         'recent_games': recent_games,
@@ -250,8 +232,7 @@ def team_detail(request, team_slug):
         'last_game': last_game,
         'alltime': alltime,
         'awards': awards,
-        'game_leaders': game_leaders,
-        'goal_leaders': goal_leaders,
+        'leader_groups': leader_groups,
         'gx': True,
         }
 
@@ -324,6 +305,10 @@ def team_season_detail(request, team_slug, competition_slug, season_slug):
     context = {
         'team': team,
         'season': season,
+        'competition': competition,
+        # Standings are stored rolling, a row per matchday; only the last one
+        # is the season's record.
+        'standings': Standing.objects.filter(team=team, season=season, final=True),
         'points': json.dumps(points),
         'stats': stats,
         'games': games,

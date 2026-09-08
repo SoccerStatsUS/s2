@@ -73,37 +73,45 @@ def tip_path(x, y, w, h, r=4):
 
 
 @register.inclusion_tag("templatetags/charts/columns.html")
-def column_chart(rows, caption):
+def column_chart(rows, caption, metric="average"):
     """
-    One column per row, in the order given, height = row['average'], with a
-    rule across it at row['median'] so the gap between the two shows how far a
-    few big crowds carried the average. Rows without an average keep their slot
-    so the timeline stays continuous. Rows with row['partial'] draw outlined
-    rather than filled -- unless every column is partial, when the outline
-    distinguishes nothing and the chart fills instead. Each row carries name,
-    url, average, median, known, games.
+    One column per row, in the order given, height = row[metric]. Rows without
+    a value keep their slot so the timeline stays continuous. Rows with
+    row['partial'] draw outlined rather than filled -- unless every column is
+    partial, when the outline distinguishes nothing and the chart fills
+    instead. Each row carries name, url, average, total, median, known, games.
+
+    The median rule is drawn against the average only. A season's median crowd
+    says how far a few big games carried its average; set beside the season's
+    total it would be comparing a game to a year.
     """
     rows = list(rows)
-    values = [r["average"] for r in rows if r.get("average")]
+    values = [r[metric] for r in rows if r.get(metric)]
     if len(values) < 3:
         return {"svg": None}
+    medians = metric == "average"
 
-    height, left, right, top, bottom = 300, 60, 20, 12, 40
-    plot_w, plot_h = WIDTH - left - right, height - top - bottom
+    height, right, top, bottom = 300, 20, 12, 40
+    plot_h = height - top - bottom
     # A median above its average puts its rule above the cap, so the scale has
     # to hold the medians too, not just the columns.
-    ceiling = max(values + [r["median"] for r in rows if r.get("median")])
+    ceiling = max(values + [r["median"] for r in rows if medians and r.get("median")])
     step = nice_step(ceiling)
     y_max = step * math.ceil(ceiling / step)
     if y_max - ceiling < 0.04 * y_max:  # keep the tallest cap off the top gridline
         y_max += step
     scale = plot_h / y_max
 
+    # The gutter holds the widest tick label: a season total runs to
+    # "12,500,000" where an average stops at "25,000".
+    left = max(60, len(comma(y_max)) * 7 + 16)
+    plot_w = WIDTH - left - right
+
     slot = plot_w / len(rows)
     bar_w = min(24, max(2, slot - 2))
     every = max(1, math.ceil(64 / slot))  # label spacing so 9-character names never touch
 
-    plotted = [r for r in rows if r.get("average")]
+    plotted = [r for r in rows if r.get(metric)]
     outline = not all(r.get("partial") for r in plotted)
 
     columns, labels = [], []
@@ -114,20 +122,26 @@ def column_chart(rows, caption):
         if i % every == 0 or (i == len(rows) - 1 and i - last_labeled >= every):
             labels.append({"x": x + bar_w / 2, "text": r["name"]})
             last_labeled = i
-        if not r.get("average"):
+        if not r.get(metric):
             continue
-        h = r["average"] * scale
-        median = r.get("median")
+        h = r[metric] * scale
+        median = r.get("median") if medians else None
         partial = outline and r.get("partial", False)
+        if median:
+            title = "%s: %s average, %s median, over %s of %s games" % (
+                r["name"], comma(r["average"]), comma(median),
+                comma(r["known"]), comma(r["games"]))
+        else:
+            title = "%s: %s %s over %s of %s games" % (
+                r["name"], comma(r[metric]), metric,
+                comma(r["known"]), comma(r["games"]))
         columns.append({
             "path": cap_path(x, top + plot_h - h, bar_w, h),
             "partial": partial,
             "median": {"x1": x, "x2": x + bar_w, "y": top + plot_h - median * scale,
                        "css": rule_ground(median, r["average"], partial)} if median else None,
             "url": r.get("url"),
-            "title": "%s: %s average, %s median, over %s of %s games" % (
-                r["name"], comma(r["average"]), comma(median or 0),
-                comma(r["known"]), comma(r["games"])),
+            "title": title,
         })
 
     ticks = []
@@ -143,6 +157,7 @@ def column_chart(rows, caption):
         "columns": columns, "labels": labels, "ticks": ticks,
         "caption": caption,
         "any_partial": any(c["partial"] for c in columns),
+        "any_median": any(c["median"] for c in columns),
     }
 
 
@@ -284,6 +299,7 @@ def count_chart(rows, caption, noun):
             "path": cap_path(x, base - bar_h, bar_w, bar_h) if row["count"] else None,
             "x": x + bar_w / 2,
             "count": row["count"],
+            "url": row.get("url"),
             "name": row["name"] if index % every == 0 else "",
             "title": "%s: %s %s" % (row["name"], comma(row["count"]), noun),
         })
@@ -331,10 +347,13 @@ def timeline_chart(timeline, caption, noun="clubs"):
     for position, row in enumerate(rows):
         y = top + position * row_h
         span = "%s%s" % (row["first"], "" if row["last"] == row["first"] else "-%s" % row["last"])
+        urls = row.get("urls") or {}
         blocks = [{
             "x": left + index * slot + (slot - block_w) / 2,
             "y": y + (row_h - block_h) / 2,
             "width": block_w,
+            "url": urls.get(name),
+            "title": "%s, %s" % (row["name"], name),
         } for index, name in enumerate(columns) if name in row["seasons"]]
         marks.append({
             "blocks": blocks,

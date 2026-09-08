@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% load stats %}
+{% load games %}
+{% load standings %}
+
+{% block title %}{{ team.name }} {{ season.name }} {{ competition.name }}{% endblock %}
+{% block metadescription %}{{ team.name }}'s {{ season.name }} {{ competition.name }} season: results, standings and player statistics{% endblock %}
+
+{% block content %}
+
+<div id="team_info">
+
+  <p class="lineage"><a href="{% url 'team_detail' team.slug %}">{{ team.name }}</a> &middot;
+  <a href="{% url 'season_detail' competition.slug season.slug %}">{{ season.name }} {{ competition.abbreviation|default:competition.name }}</a></p>
+
+  <h1>{{ team.name }}, {{ season.name }}</h1>
+
+</div>
+
+<div id="tab_block">
+<ul id="tabs"></ul>
+</div>
+
+<div id="tab_wrapper">
+
+{% if standings %}
+<div tab="summary">
+<h3>Record</h3>
+{% standings_table standings 'competition,season' %}
+</div>
+{% endif %}
+
+{% if games %}
+<div tab="games" tab-label="games ({{ games|length }})">
+<h3>Games</h3>
+{% games_table games 'competition,season' %}
+</div>
+{% endif %}
+
+{% if stats %}
+<div tab="stats">
+<h3>Player statistics</h3>
+{% stats_table stats 'team,competition,season' %}
+</div>
+{% endif %}
+
+</div>
+
+{% if not standings and not games and not stats %}
+<p class="coverage-note">Nothing on record for {{ team.name }} in {{ season.name }} {{ competition.name }}.</p>
+{% endif %}
+
+{% endblock %}
