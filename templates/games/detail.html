@@ -10,10 +10,10 @@
 <div id="game_block">
 
   <h1>
-    {% if game.season_previous_game %}<a href="{% url 'game_detail' game.season_previous_game.id %}">←</a>{% endif %}
+    {% if game.season_previous_game %}<a href="{{ game.season_previous_game.get_absolute_url }}">←</a>{% endif %}
     <a href="{% url 'competition_detail' game.competition.slug %}">{{ game.competition }}</a> - 
     <a href="{% url 'season_detail' game.competition.slug game.season.slug %}">{{ game.season.name }}</a>
-    {% if game.season_next_game %}<a href="{% url 'game_detail' game.season_next_game.id %}">→</a>{% endif %}
+    {% if game.season_next_game %}<a href="{{ game.season_next_game.get_absolute_url }}">→</a>{% endif %}
   </h1>
     
 </div>

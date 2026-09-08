@@ -33,7 +33,7 @@ check against the source, not a confirmed error.</p>
   {% endif %}
   {% endwith %}
   <td>
-    {% for game in group %}<a href="{% url 'game_detail' game.id %}">{{ game.game_string }}</a>
+    {% for game in group %}<a href="{{ game.get_absolute_url }}">{{ game.game_string }}</a>
     {% if game.competition %}<span class="grey">{{ game.competition.abbreviation|default:game.competition.name }}</span>{% endif %}{% if not forloop.last %} &middot; {% endif %}{% endfor %}
   </td>
 </tr>

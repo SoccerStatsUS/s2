@@ -196,7 +196,8 @@ class Bio(models.Model):
 
         from lineups.models import Appearance
         try:
-            return Appearance.objects.filter(player=self).exclude(game__date=None).order_by('game__date')[0].game
+            return Appearance.objects.filter(player=self).exclude(game__date=None).select_related(
+                'game__team1', 'game__team2', 'game__competition').order_by('game__date')[0].game
         except:
             return None
 
@@ -204,7 +205,8 @@ class Bio(models.Model):
     def last_game(self):        
         from lineups.models import Appearance
         try:
-            return Appearance.objects.filter(player=self).exclude(game__date=None).order_by('-game__date')[0].game
+            return Appearance.objects.filter(player=self).exclude(game__date=None).select_related(
+                'game__team1', 'game__team2', 'game__competition').order_by('-game__date')[0].game
         except: 
             return None
 

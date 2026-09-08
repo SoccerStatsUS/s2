@@ -66,8 +66,12 @@ class TeamDetailTests(SimpleTestCase):
         )
         awards = [SimpleNamespace(season=season, year=None, award=award)]
         alltime = SimpleNamespace(wins=333, ties=163, losses=243)
-        first_game = SimpleNamespace(id=1, date=datetime.date(1996, 4, 13))
-        last_game = SimpleNamespace(id=2, date=datetime.date(2026, 9, 5))
+        first_game = SimpleNamespace(
+            id=1, date=datetime.date(1996, 4, 13),
+            get_absolute_url=lambda: '/games/1996-04-13/major-league-soccer/a-v-b/')
+        last_game = SimpleNamespace(
+            id=2, date=datetime.date(2026, 9, 5),
+            get_absolute_url=lambda: '/games/2026-09-05/major-league-soccer/a-v-b/')
         recent_games = MagicMock()
         recent_games.values_list.return_value = []
         recent_games.__iter__.return_value = iter([])

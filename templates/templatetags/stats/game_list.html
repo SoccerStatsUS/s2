@@ -31,7 +31,7 @@
     {% endif %}
 
     <td class="{{ gs.result }}">&nbsp;</td>
-    <td><a href="{% url 'game_detail' gs.game.id %}">{{ gs.game.score_or_result }}</a></td>
+    <td><a href="{{ gs.game.get_absolute_url }}">{{ gs.game.score_or_result }}</a></td>
 
 
 

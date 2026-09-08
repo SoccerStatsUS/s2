@@ -5,9 +5,12 @@ from unittest.mock import patch
 from django.template.loader import render_to_string
 from django.test import RequestFactory, SimpleTestCase
 
+from competitions.models import Competition
 from games.management.commands.errordigest import format_digest, parse
+from games.models import Game
 from games.templatetags.result_chart import recent_results_chart
 from games.views import search
+from teams.models import Team
 
 JOURNAL = """\
 2026-08-22T06:25:39+00:00 bert gunicorn[11]: Internal Server Error: /bios/jimmy-drain/
@@ -83,6 +86,7 @@ class HomepageOnThisDayTests(SimpleTestCase):
         competition = SimpleNamespace(name='Major League Soccer', abbreviation='MLS')
         game = SimpleNamespace(
             id=7,
+            get_absolute_url=lambda: '/games/1996-09-06/major-league-soccer/home-v-away/',
             date=datetime.date(1996, 9, 6),
             team1=team1,
             team2=team2,
@@ -113,7 +117,7 @@ class HomepageOnThisDayTests(SimpleTestCase):
         self.assertNotIn('Earliest match', html)
         self.assertNotIn('Largest crowd', html)
         self.assertNotIn('Birthday', html)
-        self.assertIn('/games/7/">1996 &middot;', html)
+        self.assertIn('/games/1996-09-06/major-league-soccer/home-v-away/">1996 &middot;', html)
         self.assertIn('Player Name was born', html)
 
 
@@ -124,14 +128,17 @@ class RecentResultsChartTests(SimpleTestCase):
         opponent = SimpleNamespace(name='Austin FC')
         games = [
             SimpleNamespace(id=1, date=datetime.date(2026, 8, 1),
+                            get_absolute_url=lambda: '/games/2026-08-01/mls/a-v-austin-fc/',
                             team1_id=1, team1=team, team2=opponent,
                             team1_score=3, team2_score=1,
                             team1_result='w', team2_result='l'),
             SimpleNamespace(id=2, date=datetime.date(2026, 8, 8),
+                            get_absolute_url=lambda: '/games/2026-08-08/mls/austin-fc-v-a/',
                             team1_id=2, team1=opponent, team2=team,
                             team1_score=4, team2_score=1,
                             team1_result='w', team2_result='l'),
             SimpleNamespace(id=3, date=datetime.date(2026, 8, 15),
+                            get_absolute_url=lambda: '/games/2026-08-15/mls/a-v-austin-fc/',
                             team1_id=1, team1=team, team2=opponent,
                             team1_score=2, team2_score=2,
                             team1_result='t', team2_result='t'),
@@ -149,3 +156,47 @@ class RecentResultsChartTests(SimpleTestCase):
         self.assertIn('class="mark win"', html)
         self.assertIn('class="mark loss"', html)
         self.assertIn('class="mark tie"', html)
+
+
+class GameUrlTests(SimpleTestCase):
+
+    def game(self, date, competition, team1, team2):
+        # Unsaved instances: get_absolute_url only reads the date and three
+        # slugs, and the assertions are about the urls.
+        return Game(date=date,
+                    competition=Competition(slug=competition),
+                    team1=Team(slug=team1), team2=Team(slug=team2))
+
+    def test_a_game_is_addressed_by_date_competition_and_teams(self):
+        url = self.game(datetime.date(2015, 9, 13), 'national-womens-soccer-league',
+                        'chicago-red-stars', 'fc-kansas-city').get_absolute_url()
+
+        assert url == ('/games/2015-09-13/national-womens-soccer-league/'
+                       'chicago-red-stars-v-fc-kansas-city/')
+
+    def test_the_competition_separates_a_fixture_filed_twice(self):
+        """
+        Twenty-four fixtures sit under two competitions apiece -- Bethlehem
+        Steel v Philadelphia Field Club on 1926-04-17 is both a league game
+        and a Lewis Cup tie.
+        """
+        league = self.game(datetime.date(1926, 4, 17), 'american-soccer-league-1921-1933',
+                           'bethlehem-steel', 'philadelphia-field-club').get_absolute_url()
+        cup = self.game(datetime.date(1926, 4, 17), 'lewis-cup',
+                        'bethlehem-steel', 'philadelphia-field-club').get_absolute_url()
+
+        assert league != cup
+
+    def test_a_game_with_no_date_still_has_an_address(self):
+        """Three games are on record with no date at all."""
+        url = self.game(None, 'concacaf-champions-cup',
+                        'aigle-noir', 'veendam').get_absolute_url()
+
+        assert url == '/games/no-date/concacaf-champions-cup/aigle-noir-v-veendam/'
+
+    def test_the_home_side_leads_the_slug(self):
+        """team1 v team2, so the same pairing reversed is a different url."""
+        a = self.game(datetime.date(2026, 8, 1), 'mls', 'austin-fc', 'fc-dallas')
+        b = self.game(datetime.date(2026, 8, 1), 'mls', 'fc-dallas', 'austin-fc')
+
+        assert a.get_absolute_url() != b.get_absolute_url()

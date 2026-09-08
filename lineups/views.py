@@ -43,7 +43,8 @@ def lineup_index(request):
     ?player= and ?team= from the query string; pagination preserves them.
     """
     appearances = (get_appearances(request.GET)
-                   .select_related('player', 'team', 'game')
+                   .select_related('player', 'team',
+                                   'game__team1', 'game__team2', 'game__competition')
                    .order_by('game__date', 'game_id', 'order', 'id'))
     page = Paginator(appearances, 100).get_page(request.GET.get('page'))
 

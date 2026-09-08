@@ -140,6 +140,16 @@ class AwardSitemap(Sitemap):
         return Award.objects.select_related('competition').order_by('id')
 
 
+class GameSitemap(Sitemap):
+    protocol = 'https'
+
+    def items(self):
+        # get_absolute_url reads both teams and the competition, so fetch them
+        # with the game rather than three queries per url across 31,990 rows.
+        return Game.objects.select_related(
+            'team1', 'team2', 'competition').order_by('id')
+
+
 class SourceSitemap(Sitemap):
     protocol = 'https'
 
@@ -153,8 +163,7 @@ SITEMAPS = {
     'seasons': SeasonSitemap,
     'teams': TeamSitemap,
     'players': BioSitemap,
-    # No games section: /games/<id>/ is keyed on the auto pk, which is
-    # reassigned every rebuild, so those URLs cannot be submitted as stable.
+    'games': GameSitemap,
     'years': YearSitemap,
     'stadiums': StadiumSitemap,
     'cities': CitySitemap,

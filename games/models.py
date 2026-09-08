@@ -5,6 +5,7 @@ import random
 
 
 from django.db import models
+from django.urls import reverse
 
 from bios.models import Bio
 from competitions.models import Competition, Season
@@ -251,6 +252,35 @@ class Game(models.Model):
 
         # This no longer seems to be true.
         # unique_together = [('team1', 'date', 'minigame'), ('team2', 'date', 'minigame')]
+
+    @property
+    def date_slug(self):
+        """
+        Three games are on record with no date at all, and they still need an
+        address.
+        """
+        return self.date.isoformat() if self.date else 'no-date'
+
+
+    @property
+    def slug(self):
+        """
+        Derived rather than stored: a game is identified by its date, its
+        competition and its two teams, and a stored slug would be one more
+        thing a rebuild has to get right.
+
+        The competition is not decoration. Twenty-four fixtures are filed
+        under two competitions apiece -- a league game that was also a cup
+        tie, or an NWSL game recorded again under the playoffs -- so the date
+        and the teams alone leave 48 games sharing 24 urls.
+        """
+        return "%s-v-%s" % (self.team1.slug, self.team2.slug)
+
+
+    def get_absolute_url(self):
+        return reverse('game_detail',
+                       args=[self.date_slug, self.competition.slug, self.slug])
+
 
     def __str__(self):
         return u"%s: %s v %s" % (self.date, self.team1, self.team2)

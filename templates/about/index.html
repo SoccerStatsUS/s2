@@ -13,7 +13,7 @@
 <p>SoccerStats.us is a reference work on American soccer: {{ games|intcomma }} games,
 {{ players|intcomma }} players, and {{ teams|intcomma }} teams across
 {{ competitions|intcomma }} competitions &mdash; from
-{% if first_game %}<a href="{% url 'game_detail' first_game.id %}">the first recorded match</a>,
+{% if first_game %}<a href="{{ first_game.get_absolute_url }}">the first recorded match</a>,
 in Waukesha, Wisconsin, in 1866,{% else %}the first recorded match, in Waukesha, Wisconsin, in 1866,{% endif %}
 to the current season.</p>
 

@@ -1,7 +1,6 @@
 import math
 
 from django import template
-from django.urls import reverse
 
 register = template.Library()
 
@@ -81,7 +80,7 @@ def recent_results_chart(team, games):
             'date': (f'{game.date.month}/{game.date.day}/{str(game.date.year)[2:]}'
                      if (len(rows) - 1 - index) % label_every == 0 else ''),
             'result': result_classes[result],
-            'url': reverse('game_detail', args=[game.id]),
+            'url': game.get_absolute_url(),
             'title': (f'{date_text} vs. {opponent.name}: '
                       f'{goals_for}\N{EN DASH}{goals_against} '
                       f'{result_names[result]} ({value})'),

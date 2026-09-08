@@ -7,7 +7,7 @@
   <p class="championship-result">
     <span>{{ game.round|default:"Championship" }}{% if game.date %} · {{ game.date }}{% endif %}</span>
     {% if game.winner == game.team1 %}<strong><a href="{% url 'team_detail' game.team1.slug %}">{{ game.team1_original_name }}</a></strong>{% else %}<a href="{% url 'team_detail' game.team1.slug %}">{{ game.team1_original_name }}</a>{% endif %}
-    <a class="result" href="{% url 'game_detail' game.id %}">{{ game.score_or_result }}</a>
+    <a class="result" href="{{ game.get_absolute_url }}">{{ game.score_or_result }}</a>
     {% if game.winner == game.team2 %}<strong><a href="{% url 'team_detail' game.team2.slug %}">{{ game.team2_original_name }}</a></strong>{% else %}<a href="{% url 'team_detail' game.team2.slug %}">{{ game.team2_original_name }}</a>{% endif %}
   </p>
   {% endif %}

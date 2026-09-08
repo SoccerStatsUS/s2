@@ -9,9 +9,9 @@
       <div class="team"><a href="{% url 'team_detail' game.team1.slug %}">{{ game.team1_original_name }}</a></div>
       {% if game.home_standings_string %}
       <div class="team-nav">
-        {% if game.team1_previous_game %}<a href="{% url 'game_detail' game.team1_previous_game.id %}">←</a>{% endif %}
+        {% if game.team1_previous_game %}<a href="{{ game.team1_previous_game.get_absolute_url }}">←</a>{% endif %}
         <a href="{% url 'season_detail' game.competition.slug game.season.slug %}">{{ game.home_standings_string }}</a>
-        {% if game.team1_next_game %}<a href="{% url 'game_detail' game.team1_next_game.id %}">→</a>{% endif %}
+        {% if game.team1_next_game %}<a href="{{ game.team1_next_game.get_absolute_url }}">→</a>{% endif %}
       </div>
       {% endif %}
     </div>
@@ -24,9 +24,9 @@
       <div class="team"><a href="{% url 'team_detail' game.team2.slug %}">{{ game.team2_original_name }}</a></div>
       {% if game.away_standings_string %}
       <div class="team-nav">
-        {% if game.team2_previous_game %}<a href="{% url 'game_detail' game.team2_previous_game.id %}">←</a>{% endif %}
+        {% if game.team2_previous_game %}<a href="{{ game.team2_previous_game.get_absolute_url }}">←</a>{% endif %}
         <a href="{% url 'season_detail' game.competition.slug game.season.slug %}">{{ game.away_standings_string }}</a>
-        {% if game.team2_next_game %}<a href="{% url 'game_detail' game.team2_next_game.id %}">→</a>{% endif %}
+        {% if game.team2_next_game %}<a href="{{ game.team2_next_game.get_absolute_url }}">→</a>{% endif %}
       </div>
       {% endif %}
     </div>

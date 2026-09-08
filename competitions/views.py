@@ -558,14 +558,14 @@ def season_postseason(season):
     championship_game = (playoff_season.game_set
                          .filter(round__in=('MLS Cup', 'Final', 'Championship'),
                                  not_played=False)
-                         .select_related('team1', 'team2')
+                         .select_related('team1', 'team2', 'competition')
                          .order_by('-date', '-id')
                          .first())
     if not championship_game and playoff_season.champion():
         championship_game = (playoff_season.game_set
                              .exclude(date=None)
                              .exclude(not_played=True)
-                             .select_related('team1', 'team2')
+                             .select_related('team1', 'team2', 'competition')
                              .order_by('-date', '-id')
                              .first())
     return {'season': playoff_season, 'championship_game': championship_game}

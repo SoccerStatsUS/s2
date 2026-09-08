@@ -3,7 +3,8 @@ import datetime
 from django.core.paginator import Paginator
 from django.db import models
 from django.db.models import F
-from django.shortcuts import render, get_object_or_404
+from django.http import Http404
+from django.shortcuts import redirect, render
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
@@ -27,7 +28,8 @@ def everything(request):
 @cache_page(60 * 60)
 def about(request):
 
-    first_game = Game.objects.exclude(date=None).order_by('date').first()
+    first_game = Game.objects.exclude(date=None).select_related(
+        'team1', 'team2', 'competition').order_by('date').first()
 
     context = {
         'first_game': first_game,
@@ -216,8 +218,32 @@ def games_index(request):
         }"""
 
 
-def game_detail(request, game_id):
-    game = get_object_or_404(Game, id=game_id)
+def get_game(date_slug, competition_slug, teams_slug):
+    """
+    Games carry no stored slug, so match the derived one within the date and
+    the competition -- three games on an average date, thirty-seven on the
+    busiest.
+    """
+    games = Game.objects.filter(competition__slug=competition_slug).select_related(
+        'team1', 'team2', 'competition')
+
+    if date_slug == 'no-date':
+        games = games.filter(date=None)
+    else:
+        try:
+            games = games.filter(date=datetime.date.fromisoformat(date_slug))
+        except ValueError:
+            raise Http404("no game dated %s" % date_slug)
+
+    for game in games:
+        if game.slug == teams_slug:
+            return game
+
+    raise Http404("no game %s" % teams_slug)
+
+
+def game_detail(request, date_slug, competition_slug, teams_slug):
+    game = get_game(date_slug, competition_slug, teams_slug)
     context = {
         'game': game,
         'goals': game.goal_set.order_by('minute'),
@@ -231,9 +257,11 @@ def game_detail(request, game_id):
 
 
 def random_game_detail(request):
-    import random
-    games = Game.objects.count()
-    game_id = random.randint(1, games)
-    return game_detail(request, game_id)
+    """
+    Redirect rather than render, so the reader lands on the game's own url and
+    can link to what they got.
+    """
+    return redirect(Game.objects.select_related(
+        'team1', 'team2', 'competition').order_by('?').first())
 
 

@@ -12,7 +12,8 @@ def goals_index(request):
     Every goal on record, oldest first.
     """
     goals = (Goal.objects
-             .select_related('player', 'team', 'game', 'own_goal_player')
+             .select_related('player', 'team', 'own_goal_player',
+                             'game__team1', 'game__team2', 'game__competition')
              .order_by('date', 'minute', 'id'))
     page = Paginator(goals, 100).get_page(request.GET.get('page'))
 

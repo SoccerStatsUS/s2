@@ -24,7 +24,7 @@
     {% else %}
     <td><a href="{% url 'team_detail' game.team1.slug %}">{{ game.team1_original_name }}</a></td>
     {% endif %}
-    <td><a href="{% url 'game_detail' game.id %}">{{ game.score_or_result }}</a></td>
+    <td><a href="{{ game.get_absolute_url }}">{{ game.score_or_result }}</a></td>
     {% if game.winner == game.team2 %}
     <td><a href="{% url 'team_detail' game.team2.slug %}"><strong>{{ game.team2_original_name|truncatechars:"25" }}</strong></a></td>
     {% else %}

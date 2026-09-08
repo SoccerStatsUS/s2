@@ -209,7 +209,8 @@ def team_detail(request, team_slug):
     league_standings = Standing.objects.filter(team=team, season__competition__ctype='League').filter(final=True).reverse()
 
     games_count = team.game_set().count()
-    dated_games = team.game_set().exclude(date=None).order_by('date')
+    dated_games = team.game_set().exclude(date=None).select_related(
+        'team1', 'team2', 'competition').order_by('date')
     first_game = dated_games.first()
     last_game = dated_games.last()
     alltime = Standing.objects.filter(team=team, competition=None, season=None).first()

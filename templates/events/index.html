@@ -38,7 +38,7 @@
   {% if event.minute == None %}<td class="greybg" title="no record found">&mdash;</td>{% else %}<td>{{ event.minute }}</td>{% endif %}
   <td>{{ event.description }}</td>
   {% if event.game_id %}
-  <td><a href="{% url 'game_detail' event.game_id %}">{{ event.game.game_string }}</a></td>
+  <td><a href="{{ event.game.get_absolute_url }}">{{ event.game.game_string }}</a></td>
   {% else %}
   <td class="greybg" title="no record found">&mdash;</td>
   {% endif %}

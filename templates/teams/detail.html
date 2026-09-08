@@ -39,7 +39,7 @@
   {% endif %}
 
   {% if first_game %}
-  <p class="team-recorded">first recorded game <a href="{% url 'game_detail' first_game.id %}">{{ first_game.date }}</a>{% if last_game and last_game != first_game %} &middot; latest recorded game <a href="{% url 'game_detail' last_game.id %}">{{ last_game.date }}</a>{% endif %}</p>
+  <p class="team-recorded">first recorded game <a href="{{ first_game.get_absolute_url }}">{{ first_game.date }}</a>{% if last_game and last_game != first_game %} &middot; latest recorded game <a href="{{ last_game.get_absolute_url }}">{{ last_game.date }}</a>{% endif %}</p>
   {% endif %}
 
   {% if games_count %}<p class="team-caveat">Totals and dates are as recorded here.</p>{% endif %}

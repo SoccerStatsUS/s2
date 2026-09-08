@@ -55,7 +55,7 @@ detail isn't.</p>
   {% if a.minutes == None %}<td class="greybg" title="no record found">&mdash;</td>{% else %}<td>{{ a.minutes }}</td>{% endif %}
 
   {% if a.game_id %}
-  <td><a href="{% url 'game_detail' a.game_id %}">{{ a.game.game_string }}</a></td>
+  <td><a href="{{ a.game.get_absolute_url }}">{{ a.game.game_string }}</a></td>
   {% else %}
   <td class="greybg" title="no record found">&mdash;</td>
   {% endif %}

@@ -13,7 +13,8 @@ urlpatterns = [
                            name='random_game_detail'),
 
                        
-                       path('<int:game_id>/', views.game_detail,
+                       path('<slug:date_slug>/<slug:competition_slug>/<slug:teams_slug>/',
+                           views.game_detail,
                            name='game_detail'),
 
                        ]

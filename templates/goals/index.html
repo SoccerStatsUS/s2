@@ -53,7 +53,7 @@ isn't.</p>
   {% endif %}
 
   {% if goal.game_id %}
-  <td><a href="{% url 'game_detail' goal.game_id %}">{{ goal.game.game_string }}</a></td>
+  <td><a href="{{ goal.game.get_absolute_url }}">{{ goal.game.game_string }}</a></td>
   {% else %}
   <td class="greybg" title="no record found">&mdash;</td>
   {% endif %}
