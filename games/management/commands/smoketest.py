@@ -44,6 +44,7 @@ class Command(BaseCommand):
         from competitions.models import Competition, Season
         from drafts.models import Draft
         from games.models import Game
+        from news.models import FeedItem
         from organizations.models import Confederation
         from places.models import City, Country, Stadium, State
         from sources.models import Source
@@ -64,6 +65,7 @@ class Command(BaseCommand):
         team2 = first(Team.objects.filter(slug='la-galaxy')) or first(Team.objects.exclude(id=team.id if team else None))
         game = first(Game.objects.exclude(date=None).order_by('-date'))
         award = first(Award.objects.all())
+        item = first(FeedItem.objects.order_by('-dt'))
         source = first(Source.objects.exclude(games=None).order_by('-games'))
         draft = first(Draft.objects.exclude(competition=None))
         stadium = first(Stadium.objects.exclude(slug=''))
@@ -103,6 +105,7 @@ class Command(BaseCommand):
             '/places/stadiums/',
             '/positions/',
             '/sources/',
+            '/news/',
             '/stats/',
             '/teams/',
         ]
@@ -164,8 +167,11 @@ class Command(BaseCommand):
             urls.append('/drafts/%s/%s/%s/' % (draft.competition.slug, draft.slug, draft.season.name))
 
         if source:
-            urls.append('/sources/%s/' % source.id)
-            urls.append('/sources/%s/?page=2' % source.id)
+            urls.append('/sources/%s/' % source.slug)
+            urls.append('/sources/%s/?page=2' % source.slug)
+
+        if item:
+            urls.append(item.get_absolute_url())
 
         if transaction:
             urls.append('/transactions/%s/' % transaction.id)
