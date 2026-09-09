@@ -21,10 +21,6 @@ Open work only; completed items are removed as they land (see git history).
   names at build time so a story about Landon Donovan shows on his page and a 2010
   du Nord roundup on the 2010 season page. That turns the news section from a feed
   on the side into part of the reference.
-- [ ] News detail urls are `/news/<id>/` and the ids change with every rebuild.
-  Every other entity here has a stable address. Use the archive's item id (the
-  first twelve hex digits of the url's SHA-1, `oneonta.archive.item_id`) as the
-  key instead; it would need a field on `FeedItem` and both loaders to set it.
 
 ## Deferred
 

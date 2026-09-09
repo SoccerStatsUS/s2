@@ -11,7 +11,7 @@ application = get_wsgi_application()
 
 from django.db import transaction
 
-from news.models import NewsSource, FeedItem
+from news.models import NewsSource, FeedItem, archive_id
 
 connection = pymongo.MongoClient()
 soccer_db = connection.soccer
@@ -40,6 +40,7 @@ def update_news():
             e.pop('_id')
             source_id = source_getter(e.pop('source'))
             e['source_id'] = source_id
+            e['archive_id'] = archive_id(e['url'])
             FeedItem.objects.create(**e)
             i += 1
 

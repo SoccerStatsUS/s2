@@ -28,6 +28,6 @@ def news_index(request):
     return render(request, "news/index.html", context)
 
 
-def news_detail(request, item_id):
-    item = get_object_or_404(FeedItem.objects.select_related('source'), id=item_id)
+def news_detail(request, archive_id):
+    item = get_object_or_404(FeedItem.objects.select_related('source'), archive_id=archive_id)
     return render(request, "news/detail.html", {'item': item})

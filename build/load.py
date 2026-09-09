@@ -22,7 +22,7 @@ from blurbs.models import Blurb
 from competitions.models import Competition, CompetitionRelationship, Season, SuperSeason
 from drafts.models import Draft, Pick
 from money.models import Salary
-from news.models import NewsSource, FeedItem
+from news.models import NewsSource, FeedItem, archive_id
 from organizations.models import Confederation
 from places.models import Country, State, City, Stadium, StadiumMap
 from positions.models import Position
@@ -430,6 +430,7 @@ def load_news():
         e.pop('_id')
         source_id = source_getter(e.pop('source'))
         e['source_id'] = source_id
+        e['archive_id'] = archive_id(e['url'])
         FeedItem.objects.create(**e)
 
 

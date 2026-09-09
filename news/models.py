@@ -1,3 +1,5 @@
+import hashlib
+
 from django.db import models
 from django.urls import reverse
 
@@ -33,11 +35,20 @@ class NewsSource(models.Model):
 
 
 
+def archive_id(url):
+    """
+    The oneonta archive's item id: the first twelve hex digits of the url's SHA-1.
+    Computed here too so a rebuild can't change a story's address.
+    """
+    return hashlib.sha1(url.encode()).hexdigest()[:12]
+
+
 class FeedItem(models.Model):
     """
     A single rss item.
     """
 
+    archive_id = models.CharField(max_length=12, unique=True)
     title = models.CharField(max_length=1023)
     dt = models.DateTimeField()
     summary = models.CharField(max_length=1023) 
@@ -48,7 +59,7 @@ class FeedItem(models.Model):
         return self.dt.strftime("%I:%M %p")
 
     def get_absolute_url(self):
-        return reverse('news_detail', args=[self.id])
+        return reverse('news_detail', args=[self.archive_id])
 
     class Meta:
         pass
