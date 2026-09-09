@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{ item.title }}{% endblock %}
+{% block metadescription %}{{ item.summary|default:item.title }}{% endblock %}
+
+{% block content %}
+
+<h1>{{ item.title }}</h1>
+
+<h4><a href="{{ item.source.get_absolute_url }}">{{ item.source }}</a>,
+<a href="{% url 'date_detail' item.dt.year item.dt.month item.dt.day %}">{{ item.dt|date:"F j, Y" }}</a></h4>
+
+{% if item.summary %}
+<p>{{ item.summary }}</p>
+{% endif %}
+
+<p><a href="{{ item.url }}" rel="nofollow">Read the story at {{ item.source }}</a></p>
+
+<p><a href="{% url 'news_index' %}">All news</a></p>
+
+{% endblock %}

@@ -19,6 +19,7 @@ headline links to the story on the source's own site.</p>
       <th scope="col">headline</th>
       <th scope="col">source</th>
       <th scope="col">date</th>
+      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
@@ -27,6 +28,7 @@ headline links to the story on the source's own site.</p>
     <td><a href="{{ item.url }}" rel="nofollow">{{ item.title }}</a></td>
     <td><a href="{{ item.source.get_absolute_url }}">{{ item.source }}</a></td>
     <td><a href="{% url 'date_detail' item.dt.year item.dt.month item.dt.day %}">{{ item.dt|date:"Y-m-d" }}</a></td>
+    <td><a href="{{ item.get_absolute_url }}">detail</a></td>
   </tr>
   {% endfor %}
   </tbody>

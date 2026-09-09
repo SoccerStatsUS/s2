@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 from sources.models import Source
 
@@ -45,6 +46,9 @@ class FeedItem(models.Model):
 
     def time(self):
         return self.dt.strftime("%I:%M %p")
+
+    def get_absolute_url(self):
+        return reverse('news_detail', args=[self.id])
 
     class Meta:
         pass
