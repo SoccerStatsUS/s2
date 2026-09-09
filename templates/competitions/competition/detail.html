@@ -31,7 +31,7 @@
 
 {% if season_clubs %}
 <h3>{{ club_noun|capfirst }} by season</h3>
-{% count_chart season_clubs club_noun|capfirst|add:" by season" club_noun %}
+{% count_chart season_clubs club_noun|capfirst|add:" by season" club_noun note="Counts every club that played at least one recorded game in the season." %}
 {% endif %}
 
 {% if club_timeline.rows %}

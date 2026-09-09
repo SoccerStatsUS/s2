@@ -729,7 +729,7 @@ table.honors th {
     color: var(--hairline);
 }
 
-#career-totals, #team-totals, #competition-totals {
+#career-totals, #team-totals, #competition-totals, #home-totals {
     display: flex;
     flex-wrap: wrap;
     gap: 8px 32px;
@@ -740,15 +740,15 @@ table.honors th {
     font-variant-numeric: tabular-nums;
 }
 
-#career-totals div, #team-totals div, #competition-totals div {
+#career-totals div, #team-totals div, #competition-totals div, #home-totals div {
     display: flex;
     flex-direction: column;
     min-width: 72px;
 }
 
-#career-totals dt, #team-totals dt, #competition-totals dt { font-size: 12px; }
+#career-totals dt, #team-totals dt, #competition-totals dt, #home-totals dt { font-size: 12px; }
 
-#career-totals dd, #team-totals dd, #competition-totals dd {
+#career-totals dd, #team-totals dd, #competition-totals dd, #home-totals dd {
     order: -1;
     margin: 0;
     color: var(--ink);
@@ -1230,23 +1230,19 @@ td.result { width: 70px; }
 
 /* ---- Homepage: on this day ---- */
 
+/* The day's picks stand as a short list, not a one-at-a-time strip: there are
+   never more than three, and a reader who has to click an arrow to find the
+   third will not. */
 #otd {
     display: grid;
-    grid-template-columns: max-content minmax(0, 1fr) max-content;
-    grid-template-areas: "heading items more";
-    align-items: center;
-    gap: 0 4px;
-    max-width: 860px;
-    min-height: 44px;
-    margin: 0 auto 14px;
+    grid-template-columns: minmax(0, 1fr) max-content;
+    grid-template-areas: "heading more" "items items";
+    align-items: baseline;
+    gap: 6px 12px;
+    margin: 24px 0 0;
+    padding-top: 14px;
     border-top: 1px solid var(--hairline);
-    border-bottom: 1px solid var(--hairline);
-    font-size: 13px;
-}
-
-#otd.is-carousel {
-    grid-template-columns: max-content 44px minmax(0, 1fr) 44px max-content max-content;
-    grid-template-areas: "heading previous items next position more";
+    font-size: 14px;
 }
 
 #otd h2 {
@@ -1256,22 +1252,16 @@ td.result { width: 70px; }
     white-space: nowrap;
 }
 
-.otd-label-short { display: none; }
-
 .otd-items {
     grid-area: items;
     min-width: 0;
 }
 
 .otd-item {
-    display: none;
-    margin: 0;
+    margin: 0 0 4px;
 }
 
-.otd-item:first-child,
-#otd.is-carousel .otd-item:not([hidden]) { display: block; }
-
-#otd.is-carousel .otd-item[hidden] { display: none; }
+.otd-item:last-child { margin-bottom: 0; }
 
 .otd-item a {
     display: block;
@@ -1286,40 +1276,7 @@ td.result { width: 70px; }
 .otd-score { font-weight: 700; white-space: nowrap; }
 .otd-note { color: var(--ink-soft); }
 
-.otd-prev, .otd-next {
-    width: 44px;
-    height: 44px;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: var(--ink-soft);
-    cursor: pointer;
-    font-size: 18px;
-}
-
-.otd-prev { grid-area: previous; }
-.otd-next { grid-area: next; }
-.otd-prev:hover, .otd-next:hover { color: var(--accent); background: var(--fill); }
-
-.otd-position {
-    grid-area: position;
-    min-width: 28px;
-    color: var(--ink-soft);
-    font-variant-numeric: tabular-nums;
-    text-align: center;
-}
-
 .otd-more { grid-area: more; white-space: nowrap; }
-
-@media (max-width: 760px) {
-    #otd.is-carousel {
-        grid-template-columns: max-content 44px minmax(0, 1fr) 44px max-content;
-        grid-template-areas: "heading previous items next more";
-    }
-
-    .otd-label-full, .otd-position { display: none; }
-    .otd-label-short { display: inline; }
-}
 
 
 /* ---- More page ---- */
@@ -1399,6 +1356,18 @@ td.result { width: 70px; }
     text-align: center;
     font-size: 16px;
 }
+
+/* The totals sit directly above the year chart, which is the same figure
+   broken out: how many games, then where in 160 years they fall. Centered to
+   hold the line the tagline and the search box set. */
+#home-totals {
+    justify-content: center;
+    margin: 24px 0 0;
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+#home-intro .chart { margin: 4px 0 0; }
 
 #home-search {
     margin: 0;

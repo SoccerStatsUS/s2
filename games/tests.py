@@ -78,9 +78,9 @@ class SearchTests(SimpleTestCase):
         self.assertIn('UNACCENT(', str(context['competitions'].query))
 
 
-class HomepageOnThisDayTests(SimpleTestCase):
+class HomepageTests(SimpleTestCase):
 
-    def test_places_single_item_history_strip_above_search(self):
+    def render(self, **extra):
         team1 = SimpleNamespace(name='Home', slug='home')
         team2 = SimpleNamespace(name='Away', slug='away')
         competition = SimpleNamespace(name='Major League Soccer', abbreviation='MLS')
@@ -102,23 +102,58 @@ class HomepageOnThisDayTests(SimpleTestCase):
             birthdate=datetime.date(1984, 9, 6),
         )
 
-        html = render_to_string('homepage.html', {
+        context = {
             'today': datetime.date(2026, 9, 6),
             'oldest': game,
             'crowd': None,
             'born': born,
-        })
+            'game_years': [{'name': str(1866 + i), 'count': 100,
+                            'url': '/dates/%d/' % (1866 + i)} for i in range(161)],
+            'games': 31277,
+            'players': 43354,
+            'teams': 6128,
+            'competitions': 228,
+        }
+        context.update(extra)
+        return render_to_string('homepage.html', context)
 
-        self.assertLess(html.index('id="otd"'), html.index('id="tagline"'))
+    def test_opens_on_the_tagline_then_the_record_it_describes(self):
+        html = self.render()
+
         self.assertLess(html.index('id="tagline"'), html.index('id="home-search"'))
+        self.assertLess(html.index('id="home-search"'), html.index('id="home-totals"'))
+        self.assertLess(html.index('id="home-totals"'), html.index('count-chart'))
+        self.assertLess(html.index('count-chart'), html.index('id="otd"'))
+
+    def test_totals_carry_the_size_of_the_record(self):
+        html = self.render()
+
+        self.assertIn('<dt>games</dt><dd>31,277</dd>', html)
+        self.assertIn('<dt>players</dt><dd>43,354</dd>', html)
+        self.assertIn('<dt>teams</dt><dd>6,128</dd>', html)
+        self.assertIn('<dt>competitions</dt><dd>228</dd>', html)
+
+    def test_every_year_is_a_column_linking_to_that_year(self):
+        html = self.render()
+
+        self.assertEqual(html.count('<path class="mark"'), 161)
+        self.assertIn('<title>1866: 100 games</title>', html)
+        self.assertIn('href="/dates/1925/"', html)
+
+    def test_the_days_picks_all_stand_at_once(self):
+        html = self.render()
+
         self.assertEqual(html.count('class="otd-item"'), 2)
-        self.assertIn('class="otd-prev"', html)
-        self.assertIn('class="otd-next"', html)
-        self.assertNotIn('Earliest match', html)
-        self.assertNotIn('Largest crowd', html)
-        self.assertNotIn('Birthday', html)
+        self.assertNotIn('class="otd-prev"', html)
+        self.assertNotIn('class="otd-next"', html)
         self.assertIn('/games/1996-09-06/major-league-soccer/home-v-away/">1996 &middot;', html)
         self.assertIn('Player Name was born', html)
+
+    def test_a_day_with_nothing_on_record_says_so(self):
+        html = self.render(oldest=None, born=None)
+
+        self.assertEqual(html.count('class="otd-item"'), 1)
+        self.assertIn('No match or birthday recorded yet', html)
 
 
 class RecentResultsChartTests(SimpleTestCase):

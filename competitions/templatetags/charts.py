@@ -271,11 +271,14 @@ def player_goals_chart(rows, caption):
 
 
 @register.inclusion_tag("templatetags/charts/counts.html")
-def count_chart(rows, caption, noun):
+def count_chart(rows, caption, noun, note=""):
     """
     One column per row, height = row['count']. A plain count of things, so no
     median rule; the axis carries the values and the hover title the exact
     figure, rather than a number stamped on every column.
+
+    The note is the sentence under the caption saying what a column counts.
+    Every caller has a different answer, so there is no default worth having.
     """
     rows = list(rows)
     values = [row["count"] for row in rows]
@@ -290,7 +293,11 @@ def count_chart(rows, caption, noun):
         y_max += step
     scale = plot_h / y_max
     slot = plot_w / len(rows)
-    bar_w = min(36, max(6, slot * .7))
+    # The floor is 2 rather than a comfortable 6: past about a hundred columns
+    # -- a league with a century of seasons, or a year per season of American
+    # soccer -- a 6px bar is wider than its own slot and the columns merge into
+    # a solid block.
+    bar_w = min(36, max(2, slot * .7))
     every = label_step([row["name"] for row in rows], slot)
     base = top + plot_h
 
@@ -316,7 +323,7 @@ def count_chart(rows, caption, noun):
     return {
         "svg": {"width": WIDTH, "height": height, "left": left,
                 "right_edge": WIDTH - right, "base": base, "label_y": base + 18},
-        "columns": columns, "ticks": ticks, "caption": caption,
+        "columns": columns, "ticks": ticks, "caption": caption, "note": note,
     }
 
 

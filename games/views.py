@@ -2,10 +2,11 @@ import datetime
 
 from django.core.paginator import Paginator
 from django.db import models
-from django.db.models import F
+from django.db.models import Count, F
 from django.http import Http404
 from django.shortcuts import redirect, render
 from django.template import RequestContext
+from django.urls import reverse
 from django.views.decorators.cache import cache_page
 
 from bios.models import Bio
@@ -48,9 +49,9 @@ def homepage(request):
     today = datetime.date.today()
     month, day = today.month, today.day
 
-    games = Game.objects.filter(date__month=month, date__day=day).select_related()
-    oldest = games.order_by('date').first()
-    crowd = games.exclude(attendance=None).order_by('-attendance').first()
+    todays_games = Game.objects.filter(date__month=month, date__day=day).select_related()
+    oldest = todays_games.order_by('date').first()
+    crowd = todays_games.exclude(attendance=None).order_by('-attendance').first()
     if crowd is not None and oldest is not None and crowd.pk == oldest.pk:
         crowd = None
 
@@ -61,10 +62,33 @@ def homepage(request):
         'oldest': oldest,
         'crowd': crowd,
         'born': born,
+        'game_years': game_years(),
+        'games': Game.objects.count(),
+        'players': Bio.objects.count(),
+        'teams': Team.objects.count(),
+        'competitions': Competition.objects.count(),
         }
 
     return render(request, "homepage.html",
                               context)
+
+
+def game_years():
+    """
+    A row per year from the first recorded game to the last, for the homepage
+    chart. Years inside the range with nothing on record keep their slot and
+    count zero -- the empty columns are the point, since they are where the
+    record thins out rather than where the soccer stopped.
+    """
+    counts = {row['date__year']: row['n'] for row in
+              Game.objects.exclude(date=None).values('date__year').annotate(n=Count('id'))}
+    if not counts:
+        return []
+
+    return [{'name': str(year),
+             'count': counts.get(year, 0),
+             'url': reverse('year_detail', args=[year]) if counts.get(year) else None}
+            for year in range(min(counts), max(counts) + 1)]
 
 
 def search(request):

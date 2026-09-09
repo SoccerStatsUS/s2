@@ -11,6 +11,6 @@
   {% if column.name %}<text x="{{ column.x|floatformat:1 }}" y="{{ svg.label_y }}" text-anchor="middle">{{ column.name }}</text>{% endif %}
   {% endfor %}
 </svg>
-<figcaption>{{ caption }}. Counts every club that played at least one recorded game in the season.</figcaption>
+<figcaption>{{ caption }}.{% if note %} {{ note }}{% endif %}</figcaption>
 </figure>
 {% endif %}

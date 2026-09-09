@@ -404,6 +404,19 @@ class ClubTimelineTests(SimpleTestCase):
 
 class CountChartTests(SimpleTestCase):
 
+    def counts(self, n):
+        """Every column the same height, so each one draws as a full cap."""
+        return [{'name': str(1866 + i), 'count': 100} for i in range(n)]
+
+    def bar_width(self, column):
+        """
+        Read a bar's width back off its cap_path: it opens at x and runs to
+        x + width - 4, the corner radius, before the closing curve.
+        """
+        left = float(column['path'].split('M')[1].split(',')[0])
+        right = float(column['path'].split('H')[1].split('Q')[0])
+        return right - left + 4
+
     def test_the_count_is_in_the_title_not_stamped_on_the_column(self):
         rows = [{'name': '1968', 'count': 17}, {'name': '1969', 'count': 5},
                 {'name': '1970', 'count': 11}]
@@ -421,6 +434,32 @@ class CountChartTests(SimpleTestCase):
 
         self.assertEqual(chart['ticks'][0]['text'], '0')
         self.assertGreater(int(chart['ticks'][-1]['text']), 20)
+
+    def test_columns_stay_inside_their_slots(self):
+        """
+        A century and a half of years is more columns than this chart was first
+        written for. A bar wider than its own slot overlaps its neighbours and
+        the series renders as one solid block.
+        """
+        chart = count_chart(self.counts(161), 'Games by year', 'games')
+        slot = (chart['svg']['right_edge'] - chart['svg']['left']) / 161
+
+        self.assertLess(slot, 6)  # the case the old 6px floor got wrong
+        self.assertLessEqual(max(self.bar_width(c) for c in chart['columns']), slot)
+
+    def test_a_short_series_keeps_its_comfortable_bars(self):
+        chart = count_chart(self.counts(31), 'Clubs by season', 'clubs')
+
+        self.assertEqual(round(self.bar_width(chart['columns'][0])), 20)
+
+    def test_the_note_says_what_a_column_counts(self):
+        chart = count_chart(self.counts(5), 'Games by year', 'games', note='One a year.')
+
+        self.assertEqual(chart['note'], 'One a year.')
+        self.assertEqual(count_chart(self.counts(5), 'c', 'games')['note'], '')
+
+    def test_too_few_to_chart(self):
+        self.assertIsNone(count_chart(self.counts(2), 'c', 'games')['svg'])
 
 
 class CompetitionKindTests(SimpleTestCase):
