@@ -115,10 +115,47 @@
 </div>
 {% endif %}
 
+{% if games_count %}
 <div tab="games">
 <h3>Most recent games &mdash; <a href="{% url 'team_games' team.slug %}">all {{ games_count }} &rarr;</a></h3>
 {% games_table recent_games %}
 </div>
+{% endif %}
+
+{% if draftees %}
+<div tab="draftees">
+<h3>Players drafted from {{ team.name }}</h3>
+<table>
+<caption class="sr-only">Players drafted out of {{ team.name }}</caption>
+<thead>
+  <tr>
+    <th scope="col">season</th>
+    <th scope="col">draft</th>
+    <th scope="col" title="pick number">pick</th>
+    <th scope="col">player</th>
+    <th scope="col" title="position">p</th>
+    <th scope="col" title="drafting team">to</th>
+  </tr>
+</thead>
+<tbody>
+{% for pick in draftees %}
+  <tr>
+    <td><a href="{% url 'season_detail' pick.draft.competition.slug pick.draft.season.slug %}">{{ pick.draft.season.name }}</a></td>
+    <td><a href="{% url 'draft_detail' pick.draft.competition.slug pick.draft.slug pick.draft.season.slug %}">{{ pick.draft.name }}</a></td>
+    <td>{{ pick.number }}</td>
+    {% if pick.player %}
+    <td><a href="{% url 'person_detail' pick.player.slug %}">{{ pick.player }}</a></td>
+    {% else %}
+    <td><span class="grey" title="no record found">&mdash;</span></td>
+    {% endif %}
+    {% datum_or_grey pick.position %}
+    <td><a href="{% url 'team_detail' pick.team.slug %}">{{ pick.team }}</a></td>
+  </tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% endif %}
 
 </div>
 

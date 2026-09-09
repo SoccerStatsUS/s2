@@ -219,6 +219,11 @@ def team_detail(request, team_slug):
                               'season__competition')
               .order_by('-season__order', '-year', 'award__name'))
 
+    draftees = (team.former_team_set
+                .select_related('player', 'team', 'draft', 'draft__competition',
+                                'draft__season')
+                .order_by('-draft__season__order', 'number'))
+
     recent_games = team.game_set().filter(date__lt=today).order_by('-date').select_related()[:10]
     if recent_games.count() == 0:
         recent_games = team.game_set().select_related()[:10]
@@ -234,6 +239,7 @@ def team_detail(request, team_slug):
         'alltime': alltime,
         'awards': awards,
         'leader_groups': leader_groups,
+        'draftees': draftees,
         'gx': True,
         }
 
