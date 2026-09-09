@@ -52,7 +52,8 @@ def source_detail(request, source_slug):
 
     context = {
         'source': source,
-        'feeds': source.feeditem_set.order_by('-dt'),
+        'feeds': source.feeditem_set.order_by('-dt')[:100],
+        'feeds_count': source.feeditem_set.count(),
         'stats_count': stats_count,
         'top_stats': top_stats,
         'games': page.object_list,

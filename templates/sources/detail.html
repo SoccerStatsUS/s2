@@ -28,8 +28,11 @@
 <div id="tab_wrapper">
 
 
-{% if feeds.exists %}
+{% if feeds_count %}
 <div tab="news">
+
+<h3>{{ feeds_count }} stor{{ feeds_count|pluralize:"y,ies" }} from this source
+{% if feeds_count > 100 %}&mdash; the newest 100 below, the rest on the <a href="{% url 'news_index' %}">news</a> page{% endif %}</h3>
 
 <table>
 <thead>

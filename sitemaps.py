@@ -25,7 +25,7 @@ class StaticSitemap(Sitemap):
                 'level_index',
                 'places_index', 'country_index', 'state_index', 'city_index',
                 'stadium_index', 'organizations_index',
-                'source_index', 'manager_index']
+                'source_index', 'manager_index', 'news_index']
 
     def location(self, item):
         return reverse(item)

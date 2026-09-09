@@ -1,22 +1,18 @@
-from django.shortcuts import render, get_object_or_404
-from django.template import RequestContext
+from django.core.paginator import Paginator
+from django.shortcuts import render
 
-from news.models import NewsSource, FeedItem
+from news.models import FeedItem
+
 
 def news_index(request):
     """
+    Every feed item on record, newest first.
     """
-    # Use djangoproject.com's feed aggregator to build this.
+    items = FeedItem.objects.order_by('-dt', '-id').select_related('source')
+    page = Paginator(items, 100).get_page(request.GET.get('page'))
 
     context = {
-        'items': FeedItem.objects.order_by('-dt')[:25]
+        'items': page.object_list,
+        'page': page,
         }
-    return render(request, "news/index.html",
-                              context)
-
-
-
-
-
-def feed_detail(request, feed):
-    pass
+    return render(request, "news/index.html", context)
