@@ -1,77 +1,56 @@
 {% extends "base.html" %}
-{% load datum_or_none %}
+{% load charts %}
+{% load humanize %}
 
-{% block title %}{{ season }} {{ competition.name }} goals{% endblock %}
-{% block metadescription %}{{ competition.name }} soccer stats with standings, results, lineups, awards, all-time stats...{% endblock %}
-
-{% block extrahead %}
-<style>
-.background {
-  fill: #eee;
-}
-
-line {
-  stroke: #fff;
-}
-
-.red {
-  fill: red;
-}
-</style>
-{% endblock %}
+{% block title %}{{ season }} goals{% endblock %}
+{% block metadescription %}Scorelines and goals per game for the {{ season }} season of the {{ season.competition.name }}.{% endblock %}
 
 {% block content %}
 
 <h2 class="headline">
-{% if season.previous_season %}<a href="{% url 'season_goals' season.competition.slug season.previous_season.slug %}">←</a>{% endif %}
-<a href="{% url 'season_detail' season.competition.slug season.slug %}">{{ season }}</a>
-{% if season.next_season %}<a href="{% url 'season_goals' season.competition.slug season.next_season.slug %}">→</a>{% endif %}
+{% if season.previous_season %}<a href="{% url 'season_goals' season.competition.slug season.previous_season.slug %}">&larr;</a>{% endif %}
+<a href="{% url 'season_detail' season.competition.slug season.slug %}">{{ season }}</a> goals
+{% if season.next_season %}<a href="{% url 'season_goals' season.competition.slug season.next_season.slug %}">&rarr;</a>{% endif %}
 </h2>
 
+<dl id="competition-totals" aria-label="Recorded season totals">
+  <div><dt>games</dt><dd>{{ games|intcomma }}</dd></div>
+  {% if season.goals %}<div><dt>goals</dt><dd>{{ season.goals|intcomma }}</dd></div>{% endif %}
+  {% if season.goals_per_game %}<div><dt>per game</dt><dd>{{ season.goals_per_game|floatformat:2 }}</dd></div>{% endif %}
+</dl>
 
+{% if scorelines %}
 
-<ul id="tabs"></ul>
+<h3>Scorelines</h3>
 
-<div id="tab_wrapper">
+{% count_chart charted_scorelines "Commonest scorelines" "games" note="Home score first. Games at a neutral site have no home side and are left out, as are games missing half a score. Every scoreline is in the table below." %}
 
+<table class="stats scorelines">
+<caption>Every scoreline in the season, commonest first</caption>
+<thead>
+<tr>
+  <th scope="col">score</th>
+  <th scope="col">games</th>
+  <th scope="col">share</th>
+</tr>
+</thead>
+<tbody>
+{% for row in scorelines %}
+<tr>
+  <td>{{ row.name }}</td>
+  <td>{{ row.count|intcomma }}</td>
+  <td>{{ row.percent|floatformat:1 }}%</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
 
+<p class="coverage-note">Read from {{ scored_games|intcomma }} of the season's {{ games|intcomma }} games. A score of 5 or more counts as 5+.</p>
 
-{% comment %}
+{% else %}
 
-{% if goals %}
-<div tab="list">
-{% include "templatetags/goals/goals.html" %}
-</div>
+<p>No scoreline is readable for this season yet: a scoreline needs both halves of the score and a home side on record. If you have this season's results, <a href="{% url 'contact_index' %}">get in touch</a>.</p>
+
 {% endif %}
-
-{% endcomment %}
-
-<div tab="charts">
-
-
-
-<div id="goal_distribution">
-</div>
-
-
-<script type="text/javascript">
-
-goalDistribution("#goal_distribution", {{ goal_distribution|safe }})
-
-
-
-
-
-
-
-
-</script>
-
-
-</div>
-
-
-</div>
-
 
 {% endblock %}

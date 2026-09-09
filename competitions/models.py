@@ -699,12 +699,19 @@ class Season(AbstractCompetition):
 
 
     def goal_distribution(self, ceiling=5):
-        d = defaultdict(int)
-        for game in self.game_set.exclude(home_team=None).exclude(team1_score=None):
-            if game.home_score() == None:
-                import pdb; pdb.set_trace()
-            d[(min(game.home_score(), ceiling), min(game.away_score(), ceiling))] += 1
-        return d
+        """
+        How often each scoreline came up, home score first, with anything at or
+        above the ceiling folded into one bucket. A game at a neutral site has
+        no home side to put first and is left out, as is a game missing either
+        half of its score.
+        """
+        counts = defaultdict(int)
+        for game in self.game_set.exclude(home_team=None):
+            home, away = game.home_score(), game.away_score()
+            if home is None or away is None:
+                continue
+            counts[(min(home, ceiling), min(away, ceiling))] += 1
+        return counts
 
 
     def goal_distribution2(self, ceiling=5):

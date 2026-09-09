@@ -6,13 +6,6 @@ urlpatterns = [
                            name='competition_index'),
 
 
-                       path('s/names/', views.season_names,
-                           name='season_names'),
-
-
-                       re_path(r'^s/(?P<season_slug>[a-z0-9-]+)/$',
-                           views.season_list,
-                           name='season_list'),
 
 
                        re_path(r'^level/(?P<level_slug>[a-z0-9-]+)/$',
@@ -76,15 +69,6 @@ urlpatterns = [
                            name='season_attendance'),
 
 
-                       re_path(r'^(?P<competition_slug>[a-z0-9-]+)/(?P<season_slug>[a-z0-9-]+)/salaries/$',
-                           views.season_salaries,
-                           name='season_salaries'),
-
-
-
-                       re_path(r'^(?P<competition_slug>[a-z0-9-]+)/(?P<season_slug>[a-z0-9-]+)/graphs/$',
-                           views.season_graphs,
-                           name='season_graphs'),
 
 
                        ]

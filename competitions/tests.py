@@ -9,8 +9,8 @@ from competitions import views
 from competitions.models import Competition
 from competitions.templatetags.charts import (bar_chart, column_chart, count_chart,
                                               player_goals_chart, timeline_chart)
-from competitions.views import (competition_awards, season_postseason, season_standings,
-                                show_club_table, stat_leaders)
+from competitions.views import (competition_awards, scoreline_rows, season_postseason,
+                                season_standings, show_club_table, stat_leaders)
 
 
 class QueryRows(list):
@@ -675,3 +675,31 @@ class SeasonPostseasonTests(SimpleTestCase):
         self.assertIn('Los Angeles Galaxy', html)
         self.assertIn('<strong><a href="/teams/dc-united/">D.C. United</a></strong>', html)
         self.assertIn('2 - 3', html)
+
+
+class ScorelineTests(SimpleTestCase):
+    """The season goals page, read off Season.goal_distribution()."""
+
+    def season(self, distribution):
+        return SimpleNamespace(goal_distribution=lambda ceiling: dict(distribution))
+
+    def test_commonest_first_home_score_leading(self):
+        rows, total = scoreline_rows(self.season({(1, 0): 5, (2, 1): 9, (0, 1): 9}))
+
+        self.assertEqual([row['name'] for row in rows], ['0-1', '2-1', '1-0'])
+        self.assertEqual(total, 23)
+
+    def test_a_rout_lands_in_the_top_bucket(self):
+        rows, _ = scoreline_rows(self.season({(5, 0): 1, (2, 2): 1, (0, 5): 1}))
+
+        self.assertIn('5+-0', [row['name'] for row in rows])
+        self.assertIn('0-5+', [row['name'] for row in rows])
+
+    def test_share_is_of_the_games_the_distribution_could_read(self):
+        rows, total = scoreline_rows(self.season({(1, 0): 3, (0, 0): 1}))
+
+        self.assertEqual(total, 4)
+        self.assertAlmostEqual(rows[0]['percent'], 75.0)
+
+    def test_a_season_with_no_readable_score(self):
+        self.assertEqual(scoreline_rows(self.season({})), ([], 0))

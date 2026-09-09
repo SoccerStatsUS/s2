@@ -438,6 +438,10 @@ table.game-list td:first-child {
 
 td.date { white-space: nowrap; }
 
+/* Three columns do not need the full width the wide stat tables take;
+   at 100% the score drifts away from the figures it belongs to. */
+table.scorelines { max-width: 520px; }
+
 /* ---- Date grids: month calendar, decade table ---- */
 
 table.calendar, table.decades {

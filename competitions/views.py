@@ -747,124 +747,47 @@ def season_attendance(request, competition_slug, season_slug):
     return render(request, "competitions/season/attendance.html", context)
 
 
+CEILING = 5  # scores at or above this share a bucket, rendered "5+"
+
+
+def scoreline_rows(season):
+    """
+    Every scoreline the season produced, commonest first, home score leading.
+    The share is of the games the distribution could read, not of the season --
+    neutral-site games have no home side and are not in either figure.
+    """
+    counts = season.goal_distribution(CEILING)
+    total = sum(counts.values())
+    if not total:
+        return [], 0
+
+    def label(score):
+        return "%d+" % score if score >= CEILING else str(score)
+
+    rows = [{'name': "%s-%s" % (label(home), label(away)),
+             'count': n,
+             'percent': 100.0 * n / total}
+            for (home, away), n in counts.items()]
+    rows.sort(key=lambda row: (-row['count'], row['name']))
+    return rows, total
+
+
 @cache_page(60 * 60 * 12)
 def season_goals(request, competition_slug, season_slug):
     competition = get_object_or_404(Competition, slug=competition_slug)
     season = get_object_or_404(Season, competition=competition, slug=season_slug)
 
-    from goals.models import Goal
+    rows, read = scoreline_rows(season)
 
     context = {
         'season': season,
-        'goals': Goal.objects.filter(game__season=season).order_by('date', 'team', 'minute'),
-        'goal_distribution': json.dumps(tuple(season.goal_distribution().items())),
+        'scorelines': rows,
+        # The chart labels every column, so it takes only as many as it can
+        # label; the table under it carries the rest.
+        'charted_scorelines': rows[:12],
+        'scored_games': read,
+        'games': season.game_set.count(),
         }
 
     return render(request, "competitions/season/goals.html",
-                              context)
-
-
-
-
-
-@cache_page(60 * 60 * 12)
-def season_salaries(request, competition_slug, season_slug):
-    competition = get_object_or_404(Competition, slug=competition_slug)
-    season = get_object_or_404(Season, competition=competition, slug=season_slug)
-    
-    player_ids = season.stat_set.values_list('player', flat=True)
-
-    from money.models import Salary
-    salaries = Salary.objects.filter(season=season.name).filter(person__in=player_ids)
-
-    context = {
-        'season': season,
-        'salary_data': salaries.values_list('person__name', 'amount'),
-        }
-
-    return render(request, "competitions/season/salaries.html",
-                              context)
-
-
-
-
-def get_confederation_distribution(stat_qs):
-    d = defaultdict(int)
-    for gp, country in stat_qs.exclude(player__birthplace__country=None).values_list('games_played', 'player__birthplace__country__confederation'):
-        d[country] += gp
-    return sorted(d.items(), key=lambda e: -e[1])
-        
-    
-def get_age_counts(l):
-    total = 0
-    d = defaultdict(int)
-    for e in l:
-        d[round(e)] += 1
-        total += 1
-
-    ftotal = float(total)
-    return sorted([(e[0], e[1] / ftotal) for e in d.items()])
-    
-
-
-@cache_page(60 * 60 * 12)
-def season_graphs(request, competition_slug, season_slug):
-    competition = get_object_or_404(Competition, slug=competition_slug)
-    season = get_object_or_404(Season, competition=competition, slug=season_slug)
-
-    stats = Stat.objects.filter(season=season).exclude(games_played=None)
-    #country_dict = Country.objects.id_dict()
-    nationality_map = get_confederation_distribution(stats)    
-    #nationality_map = [(country_dict[a], b) for (a, b) in nationality_id_map]
-
-    appearance_ages = Appearance.objects.filter(game__season=season).exclude(age=None).values_list('age', 'game__date')
-    earliest_date = min([e[1] for e in appearance_ages])
-
-    age_counts = get_age_counts([e[0] for e in appearance_ages])
-
-    
-    
-    context = {
-        'season': season,
-        'nationality_map': json.dumps(nationality_map),
-        'appearance_ages': json.dumps([(a, (b - earliest_date).days) for (a, b) in appearance_ages]),
-        'age_counts': json.dumps(age_counts),
-
-        }
-    return render(request, "competitions/season/graphs.html",
-                              context)
-
-
-
-
-def season_names(request):
-    """
-    Show the set of all distinct season names.
-    """
-    
-    names = [e[0] for e in Season.objects.values_list('name')]
-    names = sorted(set(names))
-
-    context = {
-        'names': names,
-        }
-    
-    return render(request, "competitions/season/names.html",
-                              context)
-
-    
-
-def season_list(request, season_slug):
-    """
-    List all seasons of with a given slug.
-    """
-
-    seasons = Season.objects.filter(slug=season_slug)
-
-    context = {
-        'season_exists': seasons.exists(),
-        'seasons': seasons,
-        }
-
-    return render(request, "competitions/season/list.html",
                               context)
