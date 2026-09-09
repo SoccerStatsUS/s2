@@ -526,6 +526,8 @@ def load_blurbs():
     print("loading blurbs")
     for blurb in soccer_db.blurbs.find():
         target = get_blurb_target(blurb)
+        if target is None:
+            continue
         Blurb.objects.create(content_object=target, text=blurb["text"])
 
 
