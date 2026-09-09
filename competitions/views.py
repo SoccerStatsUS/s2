@@ -1,6 +1,6 @@
 
 from django.core.paginator import Paginator
-from django.db.models import Avg, Count, Sum
+from django.db.models import Avg, Count, Q, Sum
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template import RequestContext
@@ -13,9 +13,11 @@ from awards.models import Award, AwardItem
 from bios.models import Bio
 from competitions.forms import CompetitionForm
 from competitions.models import PLAYOFF_CHAMPIONSHIPS, Competition, SuperSeason, Season
+from goals.models import Goal
 from lineups.models import Appearance
 from places.models import Country, playing_time_by_country
-from stats.models import Stat, CompetitionStat, SeasonStat
+from standings.models import Standing
+from stats.models import Stat, CompetitionStat, GameStat, SeasonStat
 from teams.models import Team
 
 from collections import Counter, defaultdict
@@ -438,6 +440,167 @@ def competition_attendance(request, competition_slug):
         'smallest': smallest,
     }
     return render(request, "competitions/competition/attendance.html", context)
+
+
+# The coverage columns, in table order. Each is a share of the season's played
+# games except goals, which is a share of the goals those games are recorded as
+# having produced. 'view' names the season page that shows the data itself; the
+# key doubles as the column heading.
+COVERAGE_FACETS = [
+    {'key': 'results', 'view': 'season_games'},
+    {'key': 'goals', 'view': 'season_goals'},
+    {'key': 'lineups', 'view': 'season_detail'},
+    {'key': 'stats', 'view': 'season_stats'},
+    {'key': 'attendance', 'view': 'season_attendance'},
+    {'key': 'venue', 'view': 'season_games'},
+    {'key': 'referee', 'view': 'season_games'},
+]
+
+
+def coverage_counts(competition):
+    """
+    What the database holds for each season of a competition, counted in five
+    aggregate passes rather than a query per season per facet. Keyed by season
+    id; a season with nothing on record is absent from every dict.
+
+    Games not played are left out of every count. They are a recorded fact, not
+    a gap, and counting them would make a cancelled season look unsourced.
+    """
+    played = Q(not_played=False)
+
+    games = {row.pop('season_id'): row for row in competition.game_set.values('season_id').annotate(
+        played=Count('id', filter=played),
+        results=Count('id', filter=played & ~Q(team1_result='')),
+        attendance=Count('id', filter=played & Q(attendance__isnull=False)),
+        venue=Count('id', filter=played & Q(stadium__isnull=False)),
+        referee=Count('id', filter=played & Q(referee__isnull=False)),
+        scored=Sum('goals', filter=played),
+    )}
+
+    # Lineups and stats are per player, so count the distinct games they cover;
+    # goals are the itemized total to set against the goals the games scored.
+    lineups = dict(Appearance.objects.filter(game__competition=competition)
+                   .values_list('game__season_id').annotate(n=Count('game_id', distinct=True)))
+    stats = dict(GameStat.objects.filter(game__competition=competition)
+                 .values_list('game__season_id').annotate(n=Count('game_id', distinct=True)))
+    goals = dict(Goal.objects.filter(game__competition=competition)
+                 .values_list('game__season_id').annotate(n=Count('id')))
+
+    # A season's standings are held either as the final table or as dated
+    # in-season snapshots, and the two are worth telling apart: most seasons
+    # here have the running tables but never had a final one transcribed, and
+    # reporting that as "no standings" would understate what is on file.
+    tables = {}
+    for season_id, final in Standing.objects.filter(
+            season__competition=competition).values_list('season_id', 'final').distinct():
+        if final or season_id not in tables:
+            tables[season_id] = 'final' if final else 'dated'
+
+    return {'games': games, 'lineups': lineups, 'stats': stats,
+            'goals': goals, 'tables': tables}
+
+
+def coverage_cell(known, total, url=None):
+    """
+    One cell of the coverage table, in the three states DESIGN.md §9 asks to be
+    told apart: a figure, nothing on record, and nothing to have a record of.
+    A cell with nothing in it carries no link, only the marker.
+    """
+    if not total:
+        return {'state': 'no-games', 'share': None, 'known': known, 'total': total, 'url': None}
+    if not known:
+        return {'state': 'none', 'share': 0, 'known': 0, 'total': total, 'url': None}
+
+    # A game whose goals are itemized more completely than its score was
+    # recorded would read as more than complete; report it as complete. At the
+    # other end, a share that rounds to nothing is not nothing -- MLS 2012 has
+    # one refereed game in 323 -- so it keeps its own reading rather than
+    # rendering as the 0% that a reader would take for a gap.
+    share = min(100, round(100 * known / total))
+    return {'state': 'have', 'share': share, 'known': known, 'total': total,
+            'url': url, 'trace': share == 0}
+
+
+def coverage_rows(competition, seasons, counts):
+    """
+    A row per season, newest first, and a totals row across all of them.
+    """
+    rows = []
+    totals = defaultdict(int)
+    for season in seasons:
+        games = counts['games'].get(season.id, {})
+        played = games.get('played', 0)
+        scored = games.get('scored') or 0
+        known = {
+            'results': (games.get('results', 0), played),
+            'goals': (counts['goals'].get(season.id, 0), scored),
+            'lineups': (counts['lineups'].get(season.id, 0), played),
+            'stats': (counts['stats'].get(season.id, 0), played),
+            'attendance': (games.get('attendance', 0), played),
+            'venue': (games.get('venue', 0), played),
+            'referee': (games.get('referee', 0), played),
+        }
+
+        cells = []
+        for facet in COVERAGE_FACETS:
+            have, total = known[facet['key']]
+            url = reverse(facet['view'], args=[competition.slug, season.slug]) if have else None
+            cells.append(coverage_cell(have, total, url))
+            totals[facet['key']] += have
+            totals[facet['key'] + '_total'] += total
+
+        totals['played'] += played
+        rows.append({
+            'name': season.name,
+            'url': reverse('season_detail', args=[competition.slug, season.slug]),
+            'played': played,
+            'cells': cells,
+            'table': counts['tables'].get(season.id),
+            })
+
+    total_row = {
+        'played': totals['played'],
+        'cells': [coverage_cell(totals[f['key']], totals[f['key'] + '_total'])
+                  for f in COVERAGE_FACETS],
+        'finals': len([kind for kind in counts['tables'].values() if kind == 'final']),
+        'seasons': len(rows),
+        }
+    rows.reverse()
+    return rows, total_row
+
+
+def missing_years(seasons):
+    """
+    Years inside the recorded span with no season on file — the NWSL's 2020,
+    whose regular season was never played. Only competitions whose seasons are
+    all named for a single year can be read this way; a split-year league gets
+    nothing rather than a wrong answer.
+    """
+    years = []
+    for season in seasons:
+        if not season.name.isdigit() or len(season.name) != 4:
+            return []
+        years.append(int(season.name))
+
+    if len(years) < 2:
+        return []
+    return [year for year in range(min(years), max(years) + 1) if year not in set(years)]
+
+
+@cache_page(60 * 60 * 12)
+def competition_coverage(request, competition_slug):
+    competition = get_object_or_404(Competition, slug=competition_slug)
+    seasons = list(competition.season_set.all())
+    rows, totals = coverage_rows(competition, seasons, coverage_counts(competition))
+
+    context = {
+        'competition': competition,
+        'facets': COVERAGE_FACETS,
+        'rows': rows,
+        'totals': totals,
+        'missing_years': missing_years(seasons),
+        }
+    return render(request, "competitions/competition/coverage.html", context)
 
 
 @cache_page(60 * 60 * 12)

@@ -1524,3 +1524,44 @@ td.result { width: 70px; }
     color: var(--ink-soft);
     margin-left: 4px;
 }
+
+
+/* ---- Competition data coverage ---- */
+
+/* Nine columns of shares under one heading. The figures carry the meaning on
+   their own, so nothing here colors a cell by how complete it is: DESIGN.md §2
+   keeps the accent scarce, and a green ramp across every column would leave a
+   wall of color saying nothing the number doesn't. The gaps read as gaps
+   because they are dashes among percentages (§9). */
+
+/* DESIGN.md §6: the table takes the full width, the prose around it does not.
+   This legend defines nine columns and runs long enough to need the measure. */
+.coverage-intro, .coverage-legend { max-width: 68ch; }
+.coverage-legend + .coverage-legend { margin-top: 8px; }
+
+/* The header is sticky sitewide but not sortable here, so drop the hand. */
+.coverage th { cursor: default; }
+
+/* DESIGN.md §4: below the breakpoint the table scrolls inside itself rather
+   than reflowing. Without this the "in-season" table cell wraps and every row
+   it appears in stands at double height, which breaks the scan down a column. */
+.coverage td, .coverage th { white-space: nowrap; }
+
+/* The totals row is a summary, not another season: ruled off above, and it
+   holds its ground when the body scrolls under it on a narrow screen. */
+.coverage tfoot td,
+.coverage tfoot th {
+    border-top: 2px solid var(--ink);
+    border-bottom: none;
+    font-weight: bold;
+    background: #fff;
+}
+
+.coverage tfoot th {
+    position: static;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 14px;
+    color: var(--ink);
+    cursor: default;
+}

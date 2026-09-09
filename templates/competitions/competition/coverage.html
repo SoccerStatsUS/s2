@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}{{ competition.name }} data coverage{% endblock %}
+{% block metadescription %}What this database holds for each {{ competition.name }} season: results, goals, lineups, stats, attendance, venues, and referees{% endblock %}
+
+{% block content %}
+
+<h1><a href="{% url 'competition_detail' competition.slug %}">{{ competition }}</a> data coverage</h1>
+
+{% if not rows %}
+<p>No seasons on record for {{ competition.name }} yet.</p>
+{% else %}
+
+<p class="coverage-intro">What this database holds for each season, and what it doesn&rsquo;t.
+Every figure is counted off the record itself rather than declared.{% if missing_years %}
+No season on record for {% for year in missing_years %}{{ year }}{% if not forloop.last %}, {% endif %}{% endfor %}.{% endif %}</p>
+
+<h2>Coverage by season</h2>
+
+<table class="coverage">
+<thead>
+<tr>
+  <th scope="col">season</th>
+  <th scope="col" title="games played and recorded">games</th>
+  {% for facet in facets %}<th scope="col">{{ facet.key }}</th>{% endfor %}
+  <th scope="col" title="the standings on record for the season">table</th>
+</tr>
+</thead>
+<tbody>
+{% for row in rows %}
+<tr>
+  <td><a href="{{ row.url }}">{{ row.name }}</a></td>
+  {% if row.played %}<td>{{ row.played|intcomma }}</td>{% else %}<td class="grey" title="no games on record">&mdash;</td>{% endif %}
+  {% for cell in row.cells %}
+  {% if cell.state == 'have' %}
+  <td><a href="{{ cell.url }}" title="{{ cell.known|intcomma }} of {{ cell.total|intcomma }}">{% if cell.trace %}&lt;1{% else %}{{ cell.share }}{% endif %}%</a></td>
+  {% elif cell.state == 'none' %}
+  <td class="grey" title="no record found">&mdash;</td>
+  {% else %}
+  <td class="grey" title="no games on record">&mdash;</td>
+  {% endif %}
+  {% endfor %}
+  {% if row.table == 'final' %}<td>final</td>
+  {% elif row.table == 'dated' %}<td title="dated in-season tables only; no final table transcribed">in-season</td>
+  {% else %}<td class="grey" title="no record found">&mdash;</td>{% endif %}
+</tr>
+{% endfor %}
+</tbody>
+<tfoot>
+<tr>
+  <th scope="row">{{ totals.seasons|intcomma }} season{{ totals.seasons|pluralize }}</th>
+  <td>{{ totals.played|intcomma }}</td>
+  {% for cell in totals.cells %}
+  {% if cell.state == 'have' %}
+  <td title="{{ cell.known|intcomma }} of {{ cell.total|intcomma }}">{% if cell.trace %}&lt;1{% else %}{{ cell.share }}{% endif %}%</td>
+  {% else %}
+  <td class="grey" title="no record found">&mdash;</td>
+  {% endif %}
+  {% endfor %}
+  <td title="seasons with a final table">{{ totals.finals|intcomma }}</td>
+</tr>
+</tfoot>
+</table>
+
+<p class="table-legend coverage-legend"><strong>games</strong> is the games played and recorded in that
+season; games on record as not played are left out of it and of every share beside it.
+<strong>results</strong>, <strong>lineups</strong>, <strong>stats</strong>,
+<strong>attendance</strong>, <strong>venue</strong> and <strong>referee</strong> are the
+share of those games carrying a result, at least one recorded appearance, at least one
+player stat line, a crowd, a ground, and a referee.</p>
+
+<p class="table-legend coverage-legend"><strong>goals</strong> is different: it is the share of the goals
+those games are recorded as having scored that are itemized as individual goals, so a
+season with every score but no scorers reads 0%. <strong>table</strong> is the standings
+held for the season &mdash; <em>final</em> where the closing table was transcribed,
+<em>in-season</em> where only dated tables from during the season are.</p>
+
+<p class="table-legend coverage-legend">A dash means nothing on record, not zero; &lt;1% means a handful of
+games rather than none. Hover any share for the counts behind it.</p>
+
+{% endif %}
+
+{% endblock %}

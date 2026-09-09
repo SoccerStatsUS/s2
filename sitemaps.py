@@ -41,6 +41,16 @@ class CompetitionSitemap(Sitemap):
         return reverse('competition_detail', args=[obj.slug])
 
 
+class CompetitionCoverageSitemap(Sitemap):
+    protocol = 'https'
+
+    def items(self):
+        return Competition.objects.exclude(slug='').order_by('id')
+
+    def location(self, obj):
+        return reverse('competition_coverage', args=[obj.slug])
+
+
 class SeasonSitemap(Sitemap):
     protocol = 'https'
 
@@ -160,6 +170,7 @@ class SourceSitemap(Sitemap):
 SITEMAPS = {
     'static': StaticSitemap,
     'competitions': CompetitionSitemap,
+    'coverage': CompetitionCoverageSitemap,
     'seasons': SeasonSitemap,
     'teams': TeamSitemap,
     'players': BioSitemap,

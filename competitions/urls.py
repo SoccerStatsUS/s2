@@ -34,6 +34,12 @@ urlpatterns = [
                            views.competition_games,
                            name='competition_games'),
 
+                       # Must stay ahead of the season pattern below, which
+                       # would otherwise read "coverage" as a season slug.
+                       re_path(r'^(?P<competition_slug>[a-z0-9-]+)/coverage/$',
+                           views.competition_coverage,
+                           name='competition_coverage'),
+
                        re_path(r'^(?P<competition_slug>[a-z0-9-]+)/v/(?P<competition2_slug>[a-z0-9-]+)/$',
                            views.competition_vs,
                            name='competition_vs'),

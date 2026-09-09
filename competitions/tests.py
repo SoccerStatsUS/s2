@@ -9,7 +9,8 @@ from competitions import views
 from competitions.models import Competition
 from competitions.templatetags.charts import (bar_chart, column_chart, count_chart,
                                               player_goals_chart, rate_chart, timeline_chart)
-from competitions.views import (competition_awards, scoreline_rows, season_postseason,
+from competitions.views import (COVERAGE_FACETS, competition_awards, coverage_rows,
+                                missing_years, scoreline_rows, season_postseason,
                                 season_standings, show_club_table, stat_leaders)
 
 
@@ -743,3 +744,152 @@ class RateChartTests(SimpleTestCase):
 
     def test_too_few_to_chart(self):
         self.assertIsNone(rate_chart(self.rows(1.5, 2.0), 'c', '', 'ppg')['svg'])
+
+
+class CoverageRowsTests(SimpleTestCase):
+    """
+    The season coverage table: what the database holds, season by season.
+    """
+
+    def season(self, id, name):
+        return SimpleNamespace(id=id, name=name, slug=name)
+
+    def counts(self, games=None, **kwargs):
+        return {
+            'games': games or {},
+            'lineups': kwargs.get('lineups', {}),
+            'stats': kwargs.get('stats', {}),
+            'goals': kwargs.get('goals', {}),
+            'tables': kwargs.get('tables', {}),
+            }
+
+    def rows(self, counts, *names):
+        competition = SimpleNamespace(slug='major-league-soccer')
+        seasons = [self.season(i + 1, name) for i, name in enumerate(names)]
+        return coverage_rows(competition, seasons, counts)
+
+    def cell(self, row, key):
+        index = [f['key'] for f in COVERAGE_FACETS].index(key)
+        return row['cells'][index]
+
+    def test_a_share_is_of_the_games_actually_played(self):
+        counts = self.counts({1: {'played': 100, 'results': 100, 'attendance': 62,
+                                  'venue': 0, 'referee': 0, 'scored': 200}})
+
+        rows, _ = self.rows(counts, '2022')
+
+        self.assertEqual(rows[0]['played'], 100)
+        self.assertEqual(self.cell(rows[0], 'attendance')['share'], 62)
+        self.assertEqual(self.cell(rows[0], 'results')['share'], 100)
+
+    def test_nothing_on_record_is_marked_not_zeroed(self):
+        counts = self.counts({1: {'played': 100, 'results': 100, 'attendance': 0,
+                                  'venue': 0, 'referee': 0, 'scored': 200}})
+
+        rows, _ = self.rows(counts, '2022')
+        attendance = self.cell(rows[0], 'attendance')
+
+        self.assertEqual(attendance['state'], 'none')
+        self.assertIsNone(attendance['url'])
+
+    def test_a_season_with_no_games_is_told_from_one_with_no_crowds(self):
+        rows, _ = self.rows(self.counts(), '2020')
+
+        self.assertEqual(rows[0]['played'], 0)
+        self.assertEqual(self.cell(rows[0], 'attendance')['state'], 'no-games')
+
+    def test_goals_are_a_share_of_the_goals_scored_not_the_games(self):
+        counts = self.counts({1: {'played': 100, 'results': 100, 'attendance': 0,
+                                  'venue': 0, 'referee': 0, 'scored': 250}},
+                             goals={1: 125})
+
+        rows, _ = self.rows(counts, '2022')
+
+        self.assertEqual(self.cell(rows[0], 'goals')['share'], 50)
+
+    def test_more_goals_itemized_than_scored_reads_as_complete(self):
+        # Game.goals can understate a game whose scorers were all transcribed.
+        counts = self.counts({1: {'played': 10, 'results': 10, 'attendance': 0,
+                                  'venue': 0, 'referee': 0, 'scored': 20}},
+                             goals={1: 23})
+
+        rows, _ = self.rows(counts, '2022')
+
+        self.assertEqual(self.cell(rows[0], 'goals')['share'], 100)
+
+    def test_a_share_that_rounds_to_nothing_is_not_nothing(self):
+        # One refereed game in 323 is a record, not a gap.
+        counts = self.counts({1: {'played': 323, 'results': 323, 'attendance': 0,
+                                  'venue': 0, 'referee': 1, 'scored': 0}})
+
+        rows, _ = self.rows(counts, '2012')
+        referee = self.cell(rows[0], 'referee')
+
+        self.assertEqual(referee['state'], 'have')
+        self.assertTrue(referee['trace'])
+
+    def test_an_ordinary_share_is_not_marked_as_a_trace(self):
+        counts = self.counts({1: {'played': 100, 'results': 100, 'attendance': 0,
+                                  'venue': 0, 'referee': 5, 'scored': 0}})
+
+        rows, _ = self.rows(counts, '2012')
+
+        self.assertFalse(self.cell(rows[0], 'referee')['trace'])
+
+    def test_newest_season_leads(self):
+        counts = self.counts({
+            1: {'played': 10, 'results': 10, 'attendance': 0, 'venue': 0, 'referee': 0, 'scored': 20},
+            2: {'played': 20, 'results': 20, 'attendance': 0, 'venue': 0, 'referee': 0, 'scored': 40},
+            })
+
+        rows, _ = self.rows(counts, '2021', '2022')
+
+        self.assertEqual([row['name'] for row in rows], ['2022', '2021'])
+
+    def test_the_totals_row_shares_across_every_season(self):
+        counts = self.counts({
+            1: {'played': 100, 'results': 100, 'attendance': 100, 'venue': 0, 'referee': 0, 'scored': 0},
+            2: {'played': 100, 'results': 100, 'attendance': 0, 'venue': 0, 'referee': 0, 'scored': 0},
+            }, tables={1: 'final'})
+
+        _, totals = self.rows(counts, '2021', '2022')
+        index = [f['key'] for f in COVERAGE_FACETS].index('attendance')
+
+        self.assertEqual(totals['played'], 200)
+        self.assertEqual(totals['seasons'], 2)
+        self.assertEqual(totals['cells'][index]['share'], 50)
+        self.assertEqual(totals['finals'], 1)
+
+    def test_a_final_table_is_told_from_in_season_tables_and_from_none(self):
+        counts = self.counts({
+            1: {'played': 10, 'results': 10, 'attendance': 0, 'venue': 0, 'referee': 0, 'scored': 0},
+            2: {'played': 10, 'results': 10, 'attendance': 0, 'venue': 0, 'referee': 0, 'scored': 0},
+            3: {'played': 10, 'results': 10, 'attendance': 0, 'venue': 0, 'referee': 0, 'scored': 0},
+            }, tables={2: 'final', 3: 'dated'})
+
+        rows, totals = self.rows(counts, '2021', '2022', '2023')
+
+        self.assertEqual([row['table'] for row in rows], ['dated', 'final', None])
+        self.assertEqual(totals['finals'], 1)
+
+
+class MissingYearsTests(SimpleTestCase):
+
+    def seasons(self, *names):
+        return [SimpleNamespace(name=name) for name in names]
+
+    def test_a_year_with_no_season_is_named(self):
+        seasons = self.seasons('2018', '2019', '2021', '2022')
+
+        self.assertEqual(missing_years(seasons), [2020])
+
+    def test_an_unbroken_run_has_no_gaps(self):
+        self.assertEqual(missing_years(self.seasons('2021', '2022', '2023')), [])
+
+    def test_split_year_seasons_are_not_read_as_years(self):
+        # 1921-1922 spans two years; guessing which one it belongs to would put
+        # a gap on the page that isn't there.
+        self.assertEqual(missing_years(self.seasons('1921-1922', '1922-1923')), [])
+
+    def test_a_single_season_spans_nothing(self):
+        self.assertEqual(missing_years(self.seasons('1996')), [])

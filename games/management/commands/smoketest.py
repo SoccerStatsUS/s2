@@ -127,6 +127,7 @@ class Command(BaseCommand):
                 '/c/%s/' % competition.slug,
                 '/c/%s/stats/' % competition.slug,
                 '/c/%s/games/' % competition.slug,
+                '/c/%s/coverage/' % competition.slug,
                 '/c/%s/attendance/' % competition.slug,
             ]
 
@@ -144,7 +145,8 @@ class Command(BaseCommand):
             old_season = old_competition and first(
                 Season.objects.filter(competition=old_competition).order_by('-name'))
             if old_competition:
-                urls += ['/c/%s/' % slug, '/c/%s/attendance/' % slug]
+                urls += ['/c/%s/' % slug, '/c/%s/attendance/' % slug,
+                         '/c/%s/coverage/' % slug]
             if old_season:
                 base = '/c/%s/%s/' % (slug, old_season.slug)
                 urls += [base, base + 'stats/', base + 'games/']
