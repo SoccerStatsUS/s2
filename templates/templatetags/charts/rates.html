@@ -1,0 +1,20 @@
+{% if svg %}
+<figure class="chart rate-chart">
+<svg viewBox="0 0 {{ svg.width }} {{ svg.height }}" role="img" aria-label="{{ caption }}">
+  {% for tick in ticks %}
+  <line class="grid" x1="{{ svg.left }}" x2="{{ svg.right_edge }}" y1="{{ tick.y|floatformat:1 }}" y2="{{ tick.y|floatformat:1 }}"/>
+  <text x="{{ svg.left|add:"-8" }}" y="{{ tick.y|floatformat:1 }}" dy="4" text-anchor="end">{{ tick.text }}</text>
+  {% endfor %}
+  <line class="axis" x1="{{ svg.left }}" x2="{{ svg.right_edge }}" y1="{{ svg.base }}" y2="{{ svg.base }}"/>
+  {% for column in columns %}
+  {% if column.path %}{% if column.url %}<a href="{{ column.url }}">{% endif %}<path class="mark" d="{{ column.path }}"><title>{{ column.title }}</title></path>{% if column.url %}</a>{% endif %}{% endif %}
+  {% if column.name %}<text x="{{ column.x|floatformat:1 }}" y="{{ svg.label_y }}" text-anchor="middle">{{ column.name }}</text>{% endif %}
+  {% endfor %}
+  {% if reference %}
+  <line class="reference" x1="{{ svg.left }}" x2="{{ svg.right_edge }}" y1="{{ reference.y|floatformat:1 }}" y2="{{ reference.y|floatformat:1 }}"/>
+  <text class="reference-label" x="{{ svg.right_edge|add:"-2" }}" y="{{ reference.y|floatformat:1 }}" dy="-5" text-anchor="end">{{ reference.label }} {{ reference.value }}</text>
+  {% endif %}
+</svg>
+<figcaption>{{ caption }}.{% if note %} {{ note }}{% endif %}</figcaption>
+</figure>
+{% endif %}

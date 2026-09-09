@@ -891,6 +891,11 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
 .chart .median.on-fill { stroke: #fff; }
 .chart .median.on-hollow { stroke: var(--accent); }
 .chart .median.on-surface { stroke: var(--ink); }
+
+/* One rule across the whole plot, not per-mark: a career or league average a
+   column is read against. Dashed so it never reads as a bar of its own. */
+.chart .reference { stroke: var(--ink); stroke-width: 1; stroke-dasharray: 4 3; }
+.chart text.reference-label { fill: var(--ink); font-size: 11px; }
 /* A surface halo keeps a value legible where a mark or a rule crosses it. */
 .chart text.value { paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round; }
 .chart .mark { fill: var(--accent); }

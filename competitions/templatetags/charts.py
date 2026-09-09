@@ -387,6 +387,66 @@ def timeline_chart(timeline, caption, noun="clubs"):
     }
 
 
+@register.inclusion_tag("templatetags/charts/rates.html")
+def rate_chart(rows, caption, note, unit, reference=None, reference_label=""):
+    """
+    One column per row, height = row['value']. A rate rather than a count, so
+    the figures keep two decimals where the other charts round to whole things.
+    Each row carries name, value, url, games and a context line for the title.
+
+    The optional reference runs as one rule the width of the plot -- a career
+    average, a league average -- so a column reads as above or below the mark
+    the reader came for, not only against the axis.
+    """
+    rows = list(rows)
+    values = [row["value"] for row in rows if row.get("value") is not None]
+    if len(rows) < 3 or not values:
+        return {"svg": None}
+
+    height, left, right, top, bottom = 240, 44, 20, 16, 40
+    plot_w, plot_h = WIDTH - left - right, height - top - bottom
+    ceiling = max(values + ([reference] if reference else []))
+    step = nice_step(ceiling, target_ticks=4)
+    y_max = step * math.ceil(ceiling / step)
+    if y_max <= ceiling:
+        y_max += step
+    scale = plot_h / y_max
+    slot = plot_w / len(rows)
+    bar_w = min(36, max(2, slot * .7))
+    every = label_step([row["name"] for row in rows], slot)
+    base = top + plot_h
+
+    columns = []
+    for index, row in enumerate(rows):
+        x = left + index * slot + (slot - bar_w) / 2
+        value = row.get("value")
+        bar_h = value * scale if value is not None else 0
+        columns.append({
+            "path": cap_path(x, base - bar_h, bar_w, bar_h) if bar_h else None,
+            "x": x + bar_w / 2,
+            "url": row.get("url"),
+            "name": row["name"] if index % every == 0 else "",
+            "title": "%s: %.2f %s%s" % (row["name"], value, unit,
+                                        row.get("context", "")) if value is not None
+                     else "%s: no %s on record" % (row["name"], unit),
+        })
+
+    ticks = []
+    value = 0
+    while value <= y_max:
+        ticks.append({"y": base - value * scale, "text": "%g" % value})
+        value += step
+
+    return {
+        "svg": {"width": WIDTH, "height": height, "left": left,
+                "right_edge": WIDTH - right, "base": base, "label_y": base + 18},
+        "columns": columns, "ticks": ticks, "caption": caption, "note": note,
+        "reference": {"y": base - reference * scale,
+                      "label": reference_label,
+                      "value": "%.2f" % reference} if reference else None,
+    }
+
+
 @register.inclusion_tag("templatetags/charts/bars.html")
 def bar_chart(rows, caption):
     """

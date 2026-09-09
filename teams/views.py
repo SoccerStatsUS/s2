@@ -9,6 +9,7 @@ from django.db.models.functions import Substr, Upper
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
+from django.urls import reverse
 from django.views.decorators.cache import cache_page
 
 from competitions.models import Season, Competition
@@ -193,6 +194,42 @@ def team_position_detail(request, team_slug, position_slug):
 
     
 
+def season_points_per_game(team):
+    """
+    A club's league seasons in order with the points per game each returned,
+    and the rate across all of them to draw the reference rule at.
+
+    Points per game rather than points: seasons run from 20 games to 34 here,
+    and a 1996 points total set beside a 2019 one compares schedule lengths as
+    much as it compares teams. Leagues only -- a cup run has no table and no
+    points to divide.
+    """
+    standings = (Standing.objects
+                 .filter(team=team, season__competition__ctype='League', final=True)
+                 .exclude(points=None).exclude(games=None).exclude(games=0)
+                 .select_related('season', 'season__competition')
+                 .order_by('season__order'))
+
+    rows, points, games = [], 0, 0
+    for standing in standings:
+        rate = standing.points_per_game()
+        if rate is None:
+            continue
+        points += standing.points
+        games += standing.games
+        season = standing.season
+        rows.append({
+            'name': season.name,
+            'value': rate,
+            'url': reverse('team_season_detail',
+                           args=[team.slug, season.competition.slug, season.slug]),
+            'context': ' in %d %s games' % (
+                standing.games, season.competition.abbreviation or season.competition.name),
+            })
+
+    return rows, (points / games if games else None)
+
+
 def team_detail(request, team_slug):
     """
     Just about the most important view of all.
@@ -228,11 +265,15 @@ def team_detail(request, team_slug):
     if recent_games.count() == 0:
         recent_games = team.game_set().select_related()[:10]
 
+    season_rates, career_rate = season_points_per_game(team)
+
     context = {
         'team': team,
         'recent_games': recent_games,
         'competition_standings': competition_standings,
         'league_standings': league_standings,
+        'season_rates': season_rates,
+        'career_rate': career_rate,
         'games_count': games_count,
         'first_game': first_game,
         'last_game': last_game,

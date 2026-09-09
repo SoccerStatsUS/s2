@@ -8,7 +8,7 @@ from django.test import SimpleTestCase
 from competitions import views
 from competitions.models import Competition
 from competitions.templatetags.charts import (bar_chart, column_chart, count_chart,
-                                              player_goals_chart, timeline_chart)
+                                              player_goals_chart, rate_chart, timeline_chart)
 from competitions.views import (competition_awards, scoreline_rows, season_postseason,
                                 season_standings, show_club_table, stat_leaders)
 
@@ -703,3 +703,43 @@ class ScorelineTests(SimpleTestCase):
 
     def test_a_season_with_no_readable_score(self):
         self.assertEqual(scoreline_rows(self.season({})), ([], 0))
+
+
+class RateChartTests(SimpleTestCase):
+    """Points per game and the like: fractions, where the other charts round."""
+
+    def rows(self, *values):
+        return [{'name': str(1996 + i), 'value': v, 'context': ' in 34 games'}
+                for i, v in enumerate(values)]
+
+    def test_the_figures_keep_two_decimals(self):
+        chart = rate_chart(self.rows(1.53, 2.13, 0.94), 'Points per game', '', 'points per game')
+
+        self.assertEqual(chart['columns'][1]['title'],
+                         '1997: 2.13 points per game in 34 games')
+
+    def test_the_reference_rule_runs_the_width_of_the_plot(self):
+        chart = rate_chart(self.rows(1.0, 2.0, 1.5), 'Points per game', '', 'ppg',
+                           reference=1.5, reference_label='all-time')
+
+        self.assertEqual(chart['reference']['value'], '1.50')
+        self.assertEqual(chart['reference']['label'], 'all-time')
+        self.assertLess(chart['reference']['y'], chart['svg']['base'])
+
+    def test_no_rule_without_a_reference(self):
+        self.assertIsNone(rate_chart(self.rows(1.0, 2.0, 1.5), 'c', '', 'ppg')['reference'])
+
+    def test_the_scale_holds_a_reference_above_every_column(self):
+        chart = rate_chart(self.rows(1.0, 1.1, 1.2), 'c', '', 'ppg', reference=2.8)
+
+        self.assertGreater(chart['reference']['y'], 0)
+
+    def test_a_season_with_no_rate_leaves_its_slot_empty(self):
+        chart = rate_chart(self.rows(1.5, None, 2.0), 'c', '', 'points per game')
+
+        self.assertIsNone(chart['columns'][1]['path'])
+        self.assertEqual(chart['columns'][1]['title'],
+                         '1997: no points per game on record')
+
+    def test_too_few_to_chart(self):
+        self.assertIsNone(rate_chart(self.rows(1.5, 2.0), 'c', '', 'ppg')['svg'])
