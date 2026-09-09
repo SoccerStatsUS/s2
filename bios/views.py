@@ -190,7 +190,9 @@ def person_detail_abstract(request, bio):
         'picks': bio.pick_set.exclude(draft__competition=None).order_by('draft__season', 'draft__start'),
         'coach_stats': bio.coachstat_set.order_by('season'),
         'positions': bio.position_set.order_by('start'),
-        'refs': bio.ref_set()[:10]
+        'refs': bio.ref_set()[:10],
+        'news': bio.news.select_related('source').order_by('-dt')[:10],
+        'news_count': bio.news.count(),
         }
 
     return render(request, "bios/detail.html",
@@ -288,6 +290,15 @@ def person_detail_games(request, slug):
                               context)
 
 
+
+
+def person_detail_news(request, slug):
+    bio = Bio.objects.by_slug(slug)
+    context = {
+        'bio': bio,
+        'items': bio.news.select_related('source').order_by('-dt'),
+        }
+    return render(request, "bios/detail_news.html", context)
 
 
 def person_detail_referee_games(request, slug):

@@ -11,7 +11,8 @@ application = get_wsgi_application()
 
 from django.db import transaction
 
-from news.models import NewsSource, FeedItem, archive_id
+from bios.models import Bio
+from news.models import NewsSource, FeedItem, archive_id, mentions, name_lookup
 
 connection = pymongo.MongoClient()
 soccer_db = connection.soccer
@@ -28,20 +29,19 @@ def update_news():
     print(soccer_db.news.estimated_document_count())
 
     source_getter = make_source_getter()
+    people = name_lookup(Bio.objects.bio_dict())
 
     i = 0
 
     for e in soccer_db.news.find():
-        #if e['dt'] > datetime.datetime(2013, 8, 4):
-        #    print(e)
-
-
         if e['url'] not in urls and keep_news_item(e):
             e.pop('_id')
+            text = e.pop('text', '')
             source_id = source_getter(e.pop('source'))
             e['source_id'] = source_id
             e['archive_id'] = archive_id(e['url'])
-            FeedItem.objects.create(**e)
+            item = FeedItem.objects.create(**e)
+            item.people.set(mentions('. '.join([e['title'], e['summary'], text]), people))
             i += 1
 
     print(i)

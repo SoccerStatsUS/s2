@@ -12,15 +12,22 @@ Open work only; completed items are removed as they land (see git history).
 
 ## Bios
 
+- [ ] Things that aren't people are filed as bios and now surface on the news pages
+  as the most-mentioned "people": `Red card:` (634 stories, 76 game stat lines),
+  `Minnesota Thunder` (348, no stats or games at all), `free kick` (259), `Red
+  cards:` (106). They come from parse failures upstream and belong to no player;
+  find where each is minted (`parse/`, the lineup and event parsers most likely)
+  and fix it at the source rather than filtering them out here.
 - [ ] The season goal chart groups by season *name* (`goal_seasons_by_tier`, `bios/views.py`), so a career mixing split-year club seasons with calendar-year caps splits across columns — `2013-2014`, `2013` and `2014` each get their own. Wondolowski's two CONCACAF Champions League seasons sit as 1- and 2-goal columns between the calendar years. Folding split-year seasons into their start year would misrepresent European careers, so this needs a decision about what a column means before it can be fixed.
 
 ## News
 
-- [ ] Connect news to the record. The oneonta archive holds every story and its
-  text; match headlines and bodies against player, team, competition and season
-  names at build time so a story about Landon Donovan shows on his page and a 2010
-  du Nord roundup on the 2010 season page. That turns the news section from a feed
-  on the side into part of the reference.
+- [ ] Connect news to the rest of the record. People are done: `load_news()`
+  matches each story's title, summary and archived text against every multi-word
+  name in `Bio` and links it (`FeedItem.people`), so a story about Landon Donovan
+  shows on his page. Teams, competitions and seasons are still unlinked; a 2010 du
+  Nord roundup should show on the 2010 season page. Team names need aliasing the
+  way the build already does it, and a season is a competition name plus a year.
 
 ## Deferred
 

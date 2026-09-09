@@ -35,6 +35,10 @@ urlpatterns = [
                            views.person_detail_games,
                            name='person_detail_games'),
 
+                       re_path(r'^(?P<slug>[a-z0-9-]+)/news/$',
+                           views.person_detail_news,
+                           name='person_detail_news'),
+
                        re_path(r'^(?P<slug>[a-z0-9-]+)/referee/$',
                            views.person_detail_referee_games,
                            name='person_detail_referee_games'),

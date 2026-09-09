@@ -1,0 +1,20 @@
+<table class="news">
+  <thead>
+    <tr>
+      <th scope="col">headline</th>
+      <th scope="col">source</th>
+      <th scope="col">date</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for item in items %}
+  <tr>
+    <td><a href="{{ item.url }}" rel="nofollow">{{ item.title }}</a></td>
+    <td><a href="{{ item.source.get_absolute_url }}">{{ item.source }}</a></td>
+    <td class="date"><a href="{% url 'date_detail' item.dt.year item.dt.month item.dt.day %}">{{ item.dt|date:"Y-m-d" }}</a></td>
+    <td><a href="{{ item.get_absolute_url }}">detail</a></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>

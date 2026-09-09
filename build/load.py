@@ -22,7 +22,7 @@ from blurbs.models import Blurb
 from competitions.models import Competition, CompetitionRelationship, Season, SuperSeason
 from drafts.models import Draft, Pick
 from money.models import Salary
-from news.models import NewsSource, FeedItem, archive_id
+from news.models import NewsSource, FeedItem, archive_id, mentions, name_lookup
 from organizations.models import Confederation
 from places.models import Country, State, City, Stadium, StadiumMap
 from positions.models import Position
@@ -423,15 +423,23 @@ def load_news():
     print("loading news")
 
     source_getter = make_source_getter()
+    people = name_lookup(Bio.objects.bio_dict())
+    links = []
 
     for e in soccer_db.news.find():
         if not keep_news_item(e):
             continue
         e.pop('_id')
+        text = e.pop('text', '')
         source_id = source_getter(e.pop('source'))
         e['source_id'] = source_id
         e['archive_id'] = archive_id(e['url'])
-        FeedItem.objects.create(**e)
+        item = FeedItem.objects.create(**e)
+        for bio_id in mentions('. '.join([e['title'], e['summary'], text]), people):
+            links.append(FeedItem.people.through(feeditem_id=item.id, bio_id=bio_id))
+
+    FeedItem.people.through.objects.bulk_create(links)
+    print("linked {} people to {} news items".format(len(links), FeedItem.objects.count()))
 
 
 

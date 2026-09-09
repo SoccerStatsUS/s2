@@ -119,6 +119,14 @@ all {{ game_log_count }} recorded games &rarr;
 {% endif %}
 
 
+{% if news %}
+<div tab="news" tab-label="news ({{ news_count }})">
+<h3>In the news</h3>
+{% include "news/table.html" with items=news %}
+<div class="all-link"><a href="{% url 'person_detail_news' bio.slug %}">all {{ news_count }} stories &rarr;</a></div>
+</div>
+{% endif %}
+
 {% if picks.exists %}
 <div tab="drafts">
 <h3>Draft picks</h3>

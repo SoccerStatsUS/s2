@@ -117,6 +117,7 @@ class Command(BaseCommand):
             urls += [
                 '/bios/%s/' % bio.slug,
                 '/bios/%s/games/' % bio.slug,
+                '/bios/%s/news/' % bio.slug,
                 '/bios/%s/goals/' % bio.slug,
                 '/bios/%s/stats/' % bio.slug,
                 '/bios/id/%s/' % bio.id,

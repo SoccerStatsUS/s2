@@ -30,4 +30,8 @@ def news_index(request):
 
 def news_detail(request, archive_id):
     item = get_object_or_404(FeedItem.objects.select_related('source'), archive_id=archive_id)
-    return render(request, "news/detail.html", {'item': item})
+    context = {
+        'item': item,
+        'people': item.people.order_by('name'),
+        }
+    return render(request, "news/detail.html", context)

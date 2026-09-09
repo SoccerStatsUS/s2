@@ -16,6 +16,15 @@
 
 <p><a href="{{ item.url }}" rel="nofollow">Read the story at {{ item.source }}</a></p>
 
+{% if people %}
+<h3>People mentioned</h3>
+<ul>
+{% for person in people %}
+<li><a href="{% url 'person_detail' person.slug %}">{{ person.name }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
 <p><a href="{% url 'news_index' %}">All news</a></p>
 
 {% endblock %}

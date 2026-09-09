@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{ bio.name }} in the news{% endblock %}
+
+{% block content %}
+
+<h1><a href="{% url 'person_detail' bio.slug %}">{{ bio.name }}</a> in the news</h1>
+
+<p class="coverage-note">Stories that name {{ bio.name }} in the headline, summary or
+text, newest first. A story is linked on its name alone, so a namesake outside
+the game can slip in.</p>
+
+{% include "news/table.html" %}
+
+{% endblock %}
