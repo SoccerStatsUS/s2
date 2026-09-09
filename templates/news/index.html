@@ -1,14 +1,19 @@
 {% extends "base.html" %}
 
-{% block title %}news{% endblock %}
-{% block metadescription %}American soccer news, newest first, from the sources this site draws on{% endblock %}
+{% load humanize %}
+
+{% block title %}{% if source %}{{ source.name }} news{% else %}news{% endif %}{% endblock %}
+{% block metadescription %}American soccer news{% if source %} from {{ source.name }}{% endif %}, newest first{% endblock %}
 
 {% block content %}
 
-<h1>News</h1>
+<h1>News{% if source %}: {{ source.name }}{% endif %}</h1>
 
 <p class="dir-note">Headlines from the feeds this site follows, newest first. Each
 headline links to the story on the source's own site.</p>
+
+<p class="dir-note">{% if source %}<a href="{% url 'news_index' %}">all sources</a>{% else %}all sources{% endif %}
+{% for s in sources %} &middot; {% if s == source %}{{ s.name }}{% else %}<a href="?source={{ s.slug }}">{{ s.name }}</a>{% endif %} ({{ s.n|intcomma }}){% endfor %}</p>
 
 {% include "pagination.html" with noun="stories" %}
 
@@ -27,7 +32,7 @@ headline links to the story on the source's own site.</p>
   <tr>
     <td><a href="{{ item.url }}" rel="nofollow">{{ item.title }}</a></td>
     <td><a href="{{ item.source.get_absolute_url }}">{{ item.source }}</a></td>
-    <td><a href="{% url 'date_detail' item.dt.year item.dt.month item.dt.day %}">{{ item.dt|date:"Y-m-d" }}</a></td>
+    <td class="date"><a href="{% url 'date_detail' item.dt.year item.dt.month item.dt.day %}">{{ item.dt|date:"Y-m-d" }}</a></td>
     <td><a href="{{ item.get_absolute_url }}">detail</a></td>
   </tr>
   {% endfor %}

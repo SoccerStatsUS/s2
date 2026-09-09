@@ -16,7 +16,7 @@ from news.models import NewsSource, FeedItem
 connection = pymongo.MongoClient()
 soccer_db = connection.soccer
 
-from getters import make_source_getter
+from getters import keep_news_item, make_source_getter
 
 @transaction.atomic
 def update_news():
@@ -36,7 +36,7 @@ def update_news():
         #    print(e)
 
 
-        if e['url'] not in urls:
+        if e['url'] not in urls and keep_news_item(e):
             e.pop('_id')
             source_id = source_getter(e.pop('source'))
             e['source_id'] = source_id

@@ -425,8 +425,9 @@ def load_news():
     source_getter = make_source_getter()
 
     for e in soccer_db.news.find():
+        if not keep_news_item(e):
+            continue
         e.pop('_id')
-        #NewsSource.objects.create(**e)
         source_id = source_getter(e.pop('source'))
         e['source_id'] = source_id
         FeedItem.objects.create(**e)

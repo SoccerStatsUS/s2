@@ -14,6 +14,18 @@ Open work only; completed items are removed as they land (see git history).
 
 - [ ] The season goal chart groups by season *name* (`goal_seasons_by_tier`, `bios/views.py`), so a career mixing split-year club seasons with calendar-year caps splits across columns — `2013-2014`, `2013` and `2014` each get their own. Wondolowski's two CONCACAF Champions League seasons sit as 1- and 2-goal columns between the calendar years. Folding split-year seasons into their start year would misrepresent European careers, so this needs a decision about what a column means before it can be fixed.
 
+## News
+
+- [ ] Connect news to the record. The oneonta archive holds every story and its
+  text; match headlines and bodies against player, team, competition and season
+  names at build time so a story about Landon Donovan shows on his page and a 2010
+  du Nord roundup on the 2010 season page. That turns the news section from a feed
+  on the side into part of the reference.
+- [ ] News detail urls are `/news/<id>/` and the ids change with every rebuild.
+  Every other entity here has a stable address. Use the archive's item id (the
+  first twelve hex digits of the url's SHA-1, `oneonta.archive.item_id`) as the
+  key instead; it would need a field on `FeedItem` and both loaders to set it.
+
 ## Deferred
 
 - Competition headquarters, commissioner, and founding/folding dates on the competition header. `Competition` has no such fields and `organizations.Organization` is commented out, so this is a migration plus sourcing across ~229 competitions; the recorded season span is coverage, not a founding date. The header ships with recorded facts only.

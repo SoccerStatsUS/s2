@@ -1,5 +1,6 @@
 import pymongo
 import datetime
+import re
 import unicodedata
 
 from django.template.defaultfilters import slugify
@@ -410,3 +411,18 @@ def make_goal_getter():
         return gid
 
     return getter
+
+
+# ESPN's feed is world soccer. Only its American stories belong on the site;
+# the oneonta archive keeps the rest.
+AMERICAN = re.compile(r"\b(MLS|NWSL|USL|USMNT|USWNT|United States|American|Open Cup|"
+                      r"Leagues Cup|Concacaf|CONCACAF)\b|\bU\.S\.")
+
+WORLD_FEEDS = {'ESPN.com'}
+
+
+def keep_news_item(row):
+    """Whether a feed row from mongo belongs on the news page."""
+    if row['source'] not in WORLD_FEEDS:
+        return True
+    return bool(AMERICAN.search(row['title'] + ' ' + row['summary']))
