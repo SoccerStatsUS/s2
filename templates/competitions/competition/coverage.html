@@ -24,7 +24,7 @@ No season on record for {% for year in missing_years %}{{ year }}{% if not forlo
   <th scope="col">season</th>
   <th scope="col" title="games played and recorded">games</th>
   {% for facet in facets %}<th scope="col">{{ facet.key }}</th>{% endfor %}
-  <th scope="col" title="the standings on record for the season">table</th>
+  <th scope="col" title="the standings on record for the season">standings</th>
 </tr>
 </thead>
 <tbody>
@@ -41,8 +41,8 @@ No season on record for {% for year in missing_years %}{{ year }}{% if not forlo
   <td class="grey" title="no games on record">&mdash;</td>
   {% endif %}
   {% endfor %}
-  {% if row.table == 'final' %}<td>final</td>
-  {% elif row.table == 'dated' %}<td title="dated in-season tables only; no final table transcribed">in-season</td>
+  {% if row.table.kind == 'final' %}<td>final</td>
+  {% elif row.table.kind == 'dated' %}<td title="no final table on record; dated tables run to {{ row.table.last|date:'j M Y' }}">dated</td>
   {% else %}<td class="grey" title="no record found">&mdash;</td>{% endif %}
 </tr>
 {% endfor %}
@@ -72,9 +72,10 @@ player stat line, a crowd, a ground, and a referee.</p>
 
 <p class="table-legend coverage-legend"><strong>goals</strong> is different: it is the share of the goals
 those games are recorded as having scored that are itemized as individual goals, so a
-season with every score but no scorers reads 0%. <strong>table</strong> is the standings
-held for the season &mdash; <em>final</em> where the closing table was transcribed,
-<em>in-season</em> where only dated tables from during the season are.</p>
+season with every score but no scorers reads 0%. <strong>standings</strong> is the tables
+held for the season &mdash; <em>final</em> where a closing table is on record,
+<em>dated</em> where only tables taken during the season are. Hover a
+<em>dated</em> cell for the last date they reach.</p>
 
 <p class="table-legend coverage-legend">A dash means nothing on record, not zero; &lt;1% means a handful of
 games rather than none. Hover any share for the counts behind it.</p>

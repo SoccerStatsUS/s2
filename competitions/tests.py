@@ -850,7 +850,7 @@ class CoverageRowsTests(SimpleTestCase):
         counts = self.counts({
             1: {'played': 100, 'results': 100, 'attendance': 100, 'venue': 0, 'referee': 0, 'scored': 0},
             2: {'played': 100, 'results': 100, 'attendance': 0, 'venue': 0, 'referee': 0, 'scored': 0},
-            }, tables={1: 'final'})
+            }, tables={1: {'kind': 'final', 'last': None}})
 
         _, totals = self.rows(counts, '2021', '2022')
         index = [f['key'] for f in COVERAGE_FACETS].index('attendance')
@@ -865,11 +865,13 @@ class CoverageRowsTests(SimpleTestCase):
             1: {'played': 10, 'results': 10, 'attendance': 0, 'venue': 0, 'referee': 0, 'scored': 0},
             2: {'played': 10, 'results': 10, 'attendance': 0, 'venue': 0, 'referee': 0, 'scored': 0},
             3: {'played': 10, 'results': 10, 'attendance': 0, 'venue': 0, 'referee': 0, 'scored': 0},
-            }, tables={2: 'final', 3: 'dated'})
+            }, tables={2: {'kind': 'final', 'last': None},
+                        3: {'kind': 'dated', 'last': None}})
 
         rows, totals = self.rows(counts, '2021', '2022', '2023')
 
-        self.assertEqual([row['table'] for row in rows], ['dated', 'final', None])
+        self.assertEqual([(row['table'] or {}).get('kind') for row in rows],
+                         ['dated', 'final', None])
         self.assertEqual(totals['finals'], 1)
 
 

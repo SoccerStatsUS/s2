@@ -1,6 +1,6 @@
 
 from django.core.paginator import Paginator
-from django.db.models import Avg, Count, Q, Sum
+from django.db.models import Avg, Count, Max, Q, Sum
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template import RequestContext
@@ -487,14 +487,18 @@ def coverage_counts(competition):
                  .values_list('game__season_id').annotate(n=Count('id')))
 
     # A season's standings are held either as the final table or as dated
-    # in-season snapshots, and the two are worth telling apart: most seasons
-    # here have the running tables but never had a final one transcribed, and
-    # reporting that as "no standings" would understate what is on file.
+    # snapshots taken through the season, and the two are worth telling apart:
+    # most seasons here have the running tables but no final one flagged, and
+    # reporting that as "no standings" would understate what is on file. The
+    # last date carries the rest of the answer -- tables that stop in July are
+    # a different thing from tables that run to the closing weekend.
     tables = {}
-    for season_id, final in Standing.objects.filter(
-            season__competition=competition).values_list('season_id', 'final').distinct():
-        if final or season_id not in tables:
-            tables[season_id] = 'final' if final else 'dated'
+    for row in Standing.objects.filter(season__competition=competition).values(
+            'season_id').annotate(final=Count('id', filter=Q(final=True)), last=Max('date')):
+        tables[row['season_id']] = {
+            'kind': 'final' if row['final'] else 'dated',
+            'last': row['last'],
+            }
 
     return {'games': games, 'lineups': lineups, 'stats': stats,
             'goals': goals, 'tables': tables}
@@ -562,7 +566,7 @@ def coverage_rows(competition, seasons, counts):
         'played': totals['played'],
         'cells': [coverage_cell(totals[f['key']], totals[f['key'] + '_total'])
                   for f in COVERAGE_FACETS],
-        'finals': len([kind for kind in counts['tables'].values() if kind == 'final']),
+        'finals': len([t for t in counts['tables'].values() if t['kind'] == 'final']),
         'seasons': len(rows),
         }
     rows.reverse()
