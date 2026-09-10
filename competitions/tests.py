@@ -895,3 +895,25 @@ class MissingYearsTests(SimpleTestCase):
 
     def test_a_single_season_spans_nothing(self):
         self.assertEqual(missing_years(self.seasons('1996')), [])
+
+
+class CompetitionStatusTests(SimpleTestCase):
+    def render(self, active, last_year):
+        competition = MagicMock(name='competition', active=active, area='', after=MagicMock(), before=MagicMock())
+        competition.name = 'Cup'
+        competition.after.exists.return_value = False
+        competition.before.exists.return_value = False
+        competition.blurbs.all.return_value = []
+        summary = {'active': active, 'last_year': last_year, 'kind': None, 'seasons': 0,
+                   'first_season': None, 'most_titled': None, 'attendance': None}
+        return render_to_string('competitions/helpers/summary.html',
+                                {'competition': competition, 'summary': summary})
+
+    def test_a_curated_competition_is_active_however_old_its_games(self):
+        self.assertIn('status active', self.render(True, 2013))
+
+    def test_an_uncurated_competition_with_games_is_defunct(self):
+        self.assertIn('status defunct', self.render(False, 2013))
+
+    def test_no_badge_without_games_on_record(self):
+        self.assertNotIn('class="status', self.render(False, None))

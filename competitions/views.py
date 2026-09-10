@@ -203,9 +203,8 @@ def competition_summary(competition, clubs):
     """
     The facts above the fold. Every one is read off the record rather than
     asserted: what kind of competition this is, the span of seasons on file,
-    and the totals behind the tabs below. A competition counts as still played
-    when a game is on record from last year or later, which keeps a league
-    between seasons out of the past tense.
+    and the totals behind the tabs below. Whether a competition is still played
+    is curated in metadata rather than inferred from the dates on file.
     """
     games = competition.game_set.exclude(date=None)
     last_game = games.order_by('-date').first()
@@ -213,7 +212,7 @@ def competition_summary(competition, clubs):
 
     return {
         'kind': competition.kind(),
-        'active': games.filter(date__year__gte=datetime.date.today().year - 1).exists(),
+        'active': competition.active,
         'last_year': last_game.date.year if last_game else None,
         'seasons': competition.season_set.count(),
         'first_season': competition.first_season(),

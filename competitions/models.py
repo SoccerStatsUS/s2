@@ -256,6 +256,7 @@ class Competition(AbstractCompetition):
     slug = models.SlugField(max_length=150)
 
     international = models.BooleanField(default=False)
+    active = models.BooleanField(default=False) # Still being played; curated in metadata.
     ctype = models.CharField(max_length=255) # Competition type - cup, league, etc.
     code = models.CharField(max_length=255) # Code: soccer, indoor, Boston game, etc.
     level = models.IntegerField(null=True, blank=True) # 1st Divison, 2nd Vision, etc.
