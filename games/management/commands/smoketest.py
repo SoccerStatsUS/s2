@@ -18,7 +18,6 @@ UNBUILT = {
     '/news/',
     '/places/states/',
     '/positions/',
-    '/stats/',
 }
 
 # Unlinked, half-built detail routes: nothing links to them and their
