@@ -1,4 +1,7 @@
+from urllib.parse import urlencode
+
 from django.core.paginator import Paginator
+from django.db.models import Count, Sum
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
 
@@ -47,11 +50,23 @@ def stats_index(request):
             .order_by('-season__name', 'competition__name', '-games_played'))
     page = Paginator(rows, 100).get_page(request.GET.get('page'))
 
+    totals = stats.aggregate(players=Count('player', distinct=True), teams=Count('team', distinct=True),
+                             goals=Sum('goals'), minutes=Sum('minutes'))
+
+    # A column a season for the current filter, each linking to that season's lines.
+    others = {k: v for k, v in picked.items() if v and k != 'season'}
+    by_season = [
+        {'name': row['season__name'], 'count': row['n'],
+         'url': '?' + urlencode({**others, 'season': row['season__name']})}
+        for row in stats.values('season__name').annotate(n=Count('id')).order_by('season__name')]
+
     context = {
         'stats': page.object_list,
         'page': page,
         'picked': picked,
         'filtered': any(picked.values()),
+        'totals': totals,
+        'by_season': by_season,
         'competitions': competitions,
         'seasons': seasons,
         'teams': teams,

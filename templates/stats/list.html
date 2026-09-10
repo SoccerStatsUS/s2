@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load stats %}
+{% load charts %}
 {% load humanize %}
 
 {% block title %}stats{% endblock %}
@@ -10,7 +11,8 @@
 <h1>Stats</h1>
 
 <p class="dir-note">{{ page.paginator.count|intcomma }} player-season stat lines
-{% if filtered %}match &mdash; <a href="{% url 'stats_index' %}">all stat lines</a>{% else %}on record, newest first &mdash; one row per player, per team, per season{% endif %}.</p>
+{% if filtered %}match &mdash; <a href="{% url 'stats_index' %}">all stat lines</a>{% else %}on record, newest first &mdash; one row per player, per team, per season{% endif %}.
+{% if page.paginator.count %}{{ totals.players|intcomma }} player{{ totals.players|pluralize }}, {{ totals.teams|intcomma }} team{{ totals.teams|pluralize }}{% if totals.goals %}, {{ totals.goals|intcomma }} goals{% endif %}{% if totals.minutes %}, {{ totals.minutes|intcomma }} minutes{% endif %}.{% endif %}</p>
 
 <div id="control-bar">
   <form method="get" action="{% url 'stats_index' %}">
@@ -32,6 +34,10 @@
     <input type="submit" value="filter" />
   </form>
 </div>
+
+{% if filtered %}
+{% count_chart by_season "Stat lines by season" "stat lines" note="One column a season for the current filter. Select a column for that season's lines." %}
+{% endif %}
 
 {% include "pagination.html" with noun="stat lines" %}
 

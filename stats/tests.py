@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.test import TestCase
 
 from bios.models import Bio
@@ -25,6 +26,9 @@ class StatsIndexFilterTests(TestCase):
         Stat.objects.create(player=b, competition=mls, season=mls20, team=fire, games_played=10)
         Stat.objects.create(player=c, competition=nwsl, season=nwsl19, team=thorns, games_played=5)
 
+    def setUp(self):
+        cache.clear()  # the view is behind cache_page
+
     def get(self, **params):
         return self.client.get('/stats/', params, HTTP_HOST='localhost')
 
@@ -49,6 +53,14 @@ class StatsIndexFilterTests(TestCase):
         assert list(r.context['seasons']) == ['2019']
         # The competition list is never narrowed by itself.
         assert [c.name for c in r.context['competitions']] == ['Major League Soccer', "National Women's Soccer League"]
+
+    def test_totals_and_the_season_columns_follow_the_filter(self):
+        r = self.get(competition='major-league-soccer')
+        assert r.context['totals'] == {'players': 2, 'teams': 2, 'goals': None, 'minutes': None}
+        assert r.context['by_season'] == [
+            {'name': '2019', 'count': 2, 'url': '?competition=major-league-soccer&season=2019'},
+            {'name': '2020', 'count': 1, 'url': '?competition=major-league-soccer&season=2020'},
+        ]
 
     def test_an_unknown_slug_matches_nothing(self):
         r = self.get(team='no-such-team')
