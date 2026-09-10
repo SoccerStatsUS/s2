@@ -12,12 +12,37 @@ Open work only; completed items are removed as they land (see git history).
 
 ## Bios
 
-- [ ] Things that aren't people are filed as bios and now surface on the news pages
-  as the most-mentioned "people": `Red card:` (634 stories, 76 game stat lines),
-  `Minnesota Thunder` (348, no stats or games at all), `free kick` (259), `Red
-  cards:` (106). They come from parse failures upstream and belong to no player;
-  find where each is minted (`parse/`, the lineup and event parsers most likely)
-  and fix it at the source rather than filtering them out here.
+Things that aren't people are filed as bios, and the news pages now surface them
+as the most-mentioned "people" (`Red card:` on 634 stories). Four classes, each
+minted by a different loader; fix each at its source rather than filtering here.
+
+- [ ] Transactions: `load_transactions()` (`build/load.py`) calls `Bio.objects.find`
+  on every `person` field, so draft picks, allocation money and cash become bios —
+  `#14 2014 MLS SuperDraft pick`, `conditional 2013 draft pick`, `allocation
+  ranking`, `cash`, ~170 in all, each holding exactly one transaction. Skip the
+  bio when the text is a pick, allocation or cash; the transaction row can keep
+  the text.
+- [ ] Team awards: ten team names hold awards as bios — `North Carolina Courage`
+  (3), `Portland Thorns`, `Seattle Reign`, `Richmond Kickers` (2 each), `Minnesota
+  Thunder`, `Orlando Pride`, `Kansas City Current`, `Western New York Flash`,
+  `Central Coast Roadrunners`, `Harrisburg City Islanders`. The awards loader needs
+  to tell a team award from a player award and file it against the team.
+- [ ] Lineup labels: `Red card:` (76 game stat lines), `Red cards:` (8), `ref:` and
+  `free kick` (3) are trailing label lines read as players, nearly all in the USL
+  First Division 1998–2002 lineup files (`parse/`), `free kick` in three scattered
+  Open Cup and ASL games.
+- [ ] Malformed names, ~300, mostly real people badly transcribed and holding real
+  stats: leading colons (`: Ashlyn Harris`), parentheticals (`(Ray or Stan?)
+  Morrison`, `(Dennis Chin 46 Alex Shinsky`), quoted nicknames (`"Flash" Gordon`,
+  `"deactivated"Colmán`), digits. Source-file fixes, one at a time.
+- [ ] Put a "Not people" section on `/bios/qa/` running these checks on every build
+  (characters no name has, names matching a team, lowercase names, bios referenced
+  only by a transaction), so the classes above stay at zero once fixed.
+- [ ] 5,353 bios appear in nothing at all — no stats, games, lineups, awards, picks,
+  coaching, positions, refereeing or transactions — about half with a birthdate, so
+  real people from a bios source with thin holdings. Not wrong, but empty pages;
+  decide whether the directory should show them, and mark on the page that the
+  record holds nothing for them yet.
 - [ ] The season goal chart groups by season *name* (`goal_seasons_by_tier`, `bios/views.py`), so a career mixing split-year club seasons with calendar-year caps splits across columns — `2013-2014`, `2013` and `2014` each get their own. Wondolowski's two CONCACAF Champions League seasons sit as 1- and 2-goal columns between the calendar years. Folding split-year seasons into their start year would misrepresent European careers, so this needs a decision about what a column means before it can be fixed.
 
 ## News
