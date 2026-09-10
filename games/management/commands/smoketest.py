@@ -106,6 +106,7 @@ class Command(BaseCommand):
             '/sources/',
             '/news/',
             '/stats/',
+            '/stats/?competition=major-league-soccer&season=2019',
             '/teams/',
         ]
 

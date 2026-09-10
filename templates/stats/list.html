@@ -10,11 +10,36 @@
 <h1>Stats</h1>
 
 <p class="dir-note">{{ page.paginator.count|intcomma }} player-season stat lines
-on record, newest first &mdash; one row per player, per team, per season.</p>
+{% if filtered %}match &mdash; <a href="{% url 'stats_index' %}">all stat lines</a>{% else %}on record, newest first &mdash; one row per player, per team, per season{% endif %}.</p>
+
+<div id="control-bar">
+  <form method="get" action="{% url 'stats_index' %}">
+    <label for="competition">competition</label>
+    <select name="competition" id="competition">
+      <option value="">all</option>
+      {% for c in competitions %}<option value="{{ c.slug }}"{% if c.slug == picked.competition %} selected{% endif %}>{{ c.name }}</option>{% endfor %}
+    </select>
+    <label for="season">season</label>
+    <select name="season" id="season">
+      <option value="">all</option>
+      {% for s in seasons %}<option value="{{ s }}"{% if s == picked.season %} selected{% endif %}>{{ s }}</option>{% endfor %}
+    </select>
+    <label for="team">team</label>
+    <select name="team" id="team">
+      <option value="">all</option>
+      {% for t in teams %}<option value="{{ t.slug }}"{% if t.slug == picked.team %} selected{% endif %}>{{ t.name }}</option>{% endfor %}
+    </select>
+    <input type="submit" value="filter" />
+  </form>
+</div>
 
 {% include "pagination.html" with noun="stat lines" %}
 
+{% if stats %}
 {% stats_table stats %}
+{% else %}
+<p class="coverage-note">No stat lines match.</p>
+{% endif %}
 
 {% include "pagination.html" with noun="stat lines" %}
 
