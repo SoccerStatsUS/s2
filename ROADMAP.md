@@ -10,6 +10,24 @@ Open work only; completed items are removed as they land (see git history).
 - [ ] Nine foreign guest clubs are recorded as NASL participants — Coventry City, Hertha BSC, Hapoel Tel Aviv, CF Monterrey and Varzim S.C. in 1970; Apollon Limassol, Bangu, Heart of Midlothian and Vicenza Calcio in 1971. They are the touring sides of the NASL's International Cup, filed under the league competition with no `round` to separate them: 24 games in 1970 and 32 in 1971. They inflate the competition header's club count (67 rather than 58) and give the clubs timeline nine one-season rows that were never NASL members. Same shape as the postseason item above — the games need their own competition or a round that marks them.
 - [ ] Move the league -> playoffs-competition mapping (`PLAYOFF_CHAMPIONSHIPS` in `competitions/models.py`) out of s2 code and into data (metadata), the way competition definitions and aliases already work. It's data, not logic, and it'll only grow as more leagues (WUSA, WPS, NWSL, ...) get their postseasons split out. Two readers now: `Season.champion()` and `most_titled()` in `competitions/views.py`.
 
+## United States
+
+- [ ] The USMNT results held do not align with the USSF's official record. The
+  year-by-year table in `usmnt_data/doc/ussoccer/2013_media.pdf` (p.112, full
+  internationals only) counts 586 games through 2012; the files in
+  `usmnt_data/games` hold 572 for the same span once the `Unofficial Friendly`
+  games are set aside, and the difference is not one-directional. Short: 1936 (1
+  missing), 1949, 1952, 1956, 1979 (2), 1991 (5), 1992 (3), 1993 (5), 1994 (2),
+  1996, 1998 (4), 1999 (2). Over: 1935 (2 games the USSF does not count), 1984
+  (2), 1987 (7), 1988, 1990, 1995. Every other year matches. The guide's all-time
+  results list (p.75, one line per game 1916–2012) names the missing games; the
+  surplus years need each game checked against it and either labelled
+  `Unofficial Friendly` or kept with a source. Nothing after July 1, 2017 is held
+  at all. Caps and goals are summed from lineups, so every gap here, and the 17
+  games of 1991–2000 recorded without a US lineup, undercounts them (Cobi Jones
+  138 caps against the USSF's 164). The USSF per-season player stats for
+  1991–2011 sit unread in `usmnt_data/doc/ussoccer/stats.pdf`.
+
 ## Bios
 
 Things that aren't people are filed as bios, and the news pages now surface them
