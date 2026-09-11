@@ -503,45 +503,58 @@ class CompetitionTierTests(SimpleTestCase):
 
     def tier(self, **kwargs):
         fields = dict(international=False, ctype='League', scope='Country',
-                      level=1, area='United States')
+                      level=1, area='United States', code='soccer', name='')
         fields.update(kwargs)
         return Competition(**fields).tier()
 
-    def test_united_states_first_division(self):
-        self.assertEqual(self.tier(), 'us_d1')
+    def test_top_flight_anywhere(self):
+        self.assertEqual(self.tier(), 'top_flight')
+        self.assertEqual(self.tier(area='Costa Rica'), 'top_flight')
+        self.assertEqual(self.tier(area='England'), 'top_flight')
+        self.assertEqual(self.tier(code='women'), 'top_flight')
 
-    def test_foreign_first_division(self):
-        self.assertEqual(self.tier(area='Costa Rica'), 'other_d1')
-        self.assertEqual(self.tier(area='England'), 'other_d1')
+    def test_lower_leagues(self):
+        self.assertEqual(self.tier(level=2), 'league')
+        self.assertEqual(self.tier(level=4), 'league')
 
-    def test_lower_and_unranked_leagues(self):
-        self.assertEqual(self.tier(level=2), 'non_d1')
-        self.assertEqual(self.tier(level=None), 'non_d1')  # MLS Reserve League
+    def test_playoffs_stack_with_their_league(self):
+        self.assertEqual(self.tier(ctype='Cup', name='MLS Cup Playoffs'), 'top_flight')
+        self.assertEqual(self.tier(ctype='Cup', scope='League', level=2,
+                                   name='American Professional Soccer League Playoffs'),
+                         'league')
 
     def test_cups(self):
-        self.assertEqual(self.tier(ctype='Cup'), 'cup')
+        self.assertEqual(self.tier(ctype='Cup', name='U.S. Open Cup'), 'cup')
         self.assertEqual(self.tier(ctype='Supercup'), 'cup')
 
-    def test_continental_club_tournaments_recorded_as_leagues_are_cups(self):
-        # CONCACAF Champions League, Leagues Cup, North American SuperLiga.
-        self.assertEqual(self.tier(scope='Confederation', area='CONCACAF'), 'cup')
-        self.assertEqual(self.tier(scope='World', area='Earth'), 'cup')
+    def test_continental_club_tournaments_whatever_their_ctype(self):
+        # CONCACAF Champions League, Leagues Cup, ISL, FIFA Club World Cup.
+        self.assertEqual(self.tier(scope='Confederation', area='CONCACAF'), 'continental')
+        self.assertEqual(self.tier(scope='World', area='Earth', level=2), 'continental')
+        self.assertEqual(self.tier(ctype='Cup', scope='World', area='Earth'), 'continental')
 
     def test_national_team_play(self):
         self.assertEqual(self.tier(international=True, ctype='Cup'), 'international')
         self.assertEqual(self.tier(international=True, ctype='', scope='World',
                                    level=None, area='Earth'), 'international')
 
+    def test_play_the_chart_leaves_out(self):
+        self.assertIsNone(self.tier(code='indoor'))  # MISL
+        self.assertIsNone(self.tier(level=None))  # MLS Reserve League
+        self.assertIsNone(self.tier(level=0))  # NCAA
+        self.assertIsNone(self.tier(ctype='Cup', level=0))  # NCAA tournaments
+        self.assertIsNone(self.tier(ctype='', scope='World', level=None))  # club friendlies
+
 
 class PlayerGoalsChartTests(SimpleTestCase):
 
     rows = [
         {'name': '1996', 'goals': 34, 'games': 36,
-         'tiers': {'us_d1': 27, 'cup': 4, 'international': 3}},
+         'tiers': {'top_flight': 27, 'cup': 4, 'international': 3}},
         {'name': '1997', 'goals': 10, 'games': 28,
-         'tiers': {'other_d1': 8, 'cup': 2}},
+         'tiers': {'continental': 8, 'cup': 2}},
         {'name': '1998', 'goals': 22, 'games': 36,
-         'tiers': {'us_d1': 20, 'non_d1': 2}},
+         'tiers': {'top_flight': 20, 'league': 2}},
     ]
 
     def test_renders_season_goal_totals(self):
@@ -552,9 +565,9 @@ class PlayerGoalsChartTests(SimpleTestCase):
 
         self.assertEqual([column['goals'] for column in chart['columns']],
                          [34, 10, 22])
-        self.assertIn('1996, US D1: 27 goals', html)
+        self.assertIn('1996, top flight: 27 goals', html)
         self.assertIn('1996, international: 3 goals', html)
-        self.assertIn('1998, non-D1 league: 2 goals', html)
+        self.assertIn('1998, lower league: 2 goals', html)
         self.assertIn('Goals by season', html)
 
     def test_stacks_tiers_from_the_baseline_up(self):
@@ -562,18 +575,18 @@ class PlayerGoalsChartTests(SimpleTestCase):
         column = chart['columns'][0]
 
         self.assertEqual([segment['css'] for segment in column['segments']],
-                         ['us-d1', 'cup', 'international'])
+                         ['top-flight', 'cup', 'international'])
 
     def test_legend_lists_only_the_tiers_scored_in(self):
         chart = player_goals_chart(self.rows, 'Goals by season')
 
         self.assertEqual([key['label'] for key in chart['keys']],
-                         ['US D1', 'other D1', 'non-D1 league', 'cup', 'international'])
+                         ['top flight', 'lower league', 'cup', 'continental', 'international'])
 
         chart = player_goals_chart(
-            [dict(row, tiers={'us_d1': row['goals']}) for row in self.rows],
+            [dict(row, tiers={'top_flight': row['goals']}) for row in self.rows],
             'Goals by season')
-        self.assertEqual([key['label'] for key in chart['keys']], ['US D1'])
+        self.assertEqual([key['label'] for key in chart['keys']], ['top flight'])
 
 
 class SeasonPostseasonTests(SimpleTestCase):

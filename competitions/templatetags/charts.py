@@ -167,10 +167,10 @@ def column_chart(rows, caption, metric="average"):
 # The stack, bottom to top, with the class the stylesheet colors it by. The
 # order is also the legend order and the order the palette was validated in.
 GOAL_TIERS = (
-    ("us_d1", "us-d1", "US D1"),
-    ("other_d1", "other-d1", "other D1"),
-    ("non_d1", "non-d1", "non-D1 league"),
+    ("top_flight", "top-flight", "top flight"),
+    ("league", "league", "lower league"),
     ("cup", "cup", "cup"),
+    ("continental", "continental", "continental"),
     ("international", "international", "international"),
 )
 

@@ -129,10 +129,14 @@ def goal_seasons_by_tier(stats):
     """
     One row per season name, ordered by name, carrying the season's goals split
     by Competition.tier(). Club and international play share a column: a season
-    is a season. Feeds the stacked goal chart.
+    is a season. Play with no tier (indoor, reserves, college, club friendlies)
+    is left out. Feeds the stacked goal chart.
     """
     seasons = OrderedDict()
     for stat in stats.select_related('competition', 'season'):
+        tier = stat.competition.tier()
+        if tier is None:
+            continue
         row = seasons.setdefault(stat.season.name, {
             'name': stat.season.name,
             'goals': 0,
@@ -142,7 +146,6 @@ def goal_seasons_by_tier(stats):
         goals = stat.goals or 0
         row['goals'] += goals
         row['games'] += stat.games_played or 0
-        tier = stat.competition.tier()
         row['tiers'][tier] = row['tiers'].get(tier, 0) + goals
 
     return sorted(seasons.values(), key=lambda row: row['name'])

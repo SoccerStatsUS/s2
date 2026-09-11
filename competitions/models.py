@@ -354,22 +354,33 @@ class Competition(AbstractCompetition):
     def tier(self):
         """
         Which band of a player's career a competition belongs to, for the
-        season goal chart: us_d1, other_d1, non_d1, cup, international.
+        season goal chart: top_flight, league, cup, continental, international.
+        None for play the chart leaves out: indoor, reserve and college
+        leagues, and club friendlies.
 
-        Continental and intercontinental club tournaments land in cup whatever
-        their ctype says -- the CONCACAF Champions League, Leagues Cup, Copa
-        Libertadores and the rest are recorded here as leagues.
+        Continental and intercontinental club tournaments are continental
+        whatever their ctype says -- the CONCACAF Champions League, Leagues
+        Cup, ISL and the rest are recorded here as leagues. Playoffs are the
+        league's own season, so they stack with the league by level.
         """
         if self.international:
             return "international"
 
-        if self.ctype in ("Cup", "Supercup") or self.scope in ("Confederation", "World"):
+        if self.code == "indoor" or not self.ctype or self.level == 0:
+            return None
+
+        if self.scope in ("Confederation", "World"):
+            return "continental"
+
+        if self.ctype in ("Cup", "Supercup") and not self.name.endswith(" Playoffs"):
             return "cup"
 
-        if self.ctype == "League" and self.level == 1:
-            return "us_d1" if self.area == "United States" else "other_d1"
+        if self.level == 1:
+            return "top_flight"
+        if self.level and self.level > 1:
+            return "league"
 
-        return "non_d1"
+        return None
 
 
     def category(self):

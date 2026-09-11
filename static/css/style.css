@@ -963,13 +963,13 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
    palette rather than the accent. These five clear the CVD, normal-vision and
    lightness gates on every pair against a white ground, not just adjacent
    ones; the 2px surface gap between segments carries the identity that the
-   green/orange pair is closest on. Non-D1 sits below 3:1 contrast, which the
-   season tables on the stats tab relieve. Reordering or substituting a hue
-   means re-running the check. */
-.player-goals-chart .us-d1 { fill: #0a7a54; }
-.player-goals-chart .other-d1 { fill: #2a78d6; }
-.player-goals-chart .non-d1 { fill: #1baf7a; }
+   green/orange pair is closest on. Lower league sits below 3:1 contrast,
+   which the season tables on the stats tab relieve. Substituting a hue means
+   re-running the check. */
+.player-goals-chart .top-flight { fill: #0a7a54; }
+.player-goals-chart .league { fill: #1baf7a; }
 .player-goals-chart .cup { fill: #eb6834; }
+.player-goals-chart .continental { fill: #2a78d6; }
 .player-goals-chart .international { fill: #4a3aa7; }
 
 /* Picks which of two prerendered charts is on screen. Reads as a smaller,
