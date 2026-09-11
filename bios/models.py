@@ -132,6 +132,7 @@ class Bio(models.Model):
 
     awards = GenericRelation('awards.AwardItem')
     images = GenericRelation('images.Image')
+    blurbs = GenericRelation('blurbs.Blurb')
 
     #position = models.CharField(max_length=20)
 

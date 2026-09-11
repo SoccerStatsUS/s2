@@ -5,6 +5,8 @@
 
   <h1>{{ bio.name }}</h1>
 
+  {% include "blurbs/list.html" with blurbs=bio.blurbs.all %}
+
   <div id="bio_facts">
 
   <p class="bio-vitals">

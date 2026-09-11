@@ -1,3 +1,4 @@
+from bios.models import Bio
 from competitions.models import Competition, Season
 from teams.models import Team
 
@@ -15,7 +16,14 @@ def get_blurb_target(blurb):
             )
         if blurb["kind"] == "team":
             return Team.objects.get(name=blurb["team"])
-    except (Competition.DoesNotExist, Season.DoesNotExist, Team.DoesNotExist):
+        if blurb["kind"] == "player":
+            return Bio.objects.get(name=blurb["player"])
+    except (
+        Bio.DoesNotExist,
+        Competition.DoesNotExist,
+        Season.DoesNotExist,
+        Team.DoesNotExist,
+    ):
         return None
 
     raise ValueError("unknown blurb kind: %s" % blurb["kind"])

@@ -5,14 +5,15 @@ from django.template.loader import render_to_string
 from django.test import SimpleTestCase, TestCase
 
 from blurbs.loading import get_blurb_target
+from bios.models import Bio
 from blurbs.models import Blurb
 from competitions.models import Competition, Season, SuperSeason
 from teams.models import Team
 
 
 class BlurbTests(SimpleTestCase):
-    def test_competitions_seasons_and_teams_expose_blurbs(self):
-        for model in (Competition, Season, Team):
+    def test_competitions_seasons_teams_and_bios_expose_blurbs(self):
+        for model in (Competition, Season, Team, Bio):
             relation = model._meta.get_field("blurbs")
             self.assertIs(relation.remote_field.model, Blurb)
 
@@ -24,10 +25,11 @@ class BlurbTests(SimpleTestCase):
 
         self.assertEqual(html, '<p class="blurb">A short piece of history.</p>\n')
 
+    @patch("blurbs.loading.Bio")
     @patch("blurbs.loading.Team")
     @patch("blurbs.loading.Season")
     @patch("blurbs.loading.Competition")
-    def test_resolves_each_supported_target(self, competition, season, team):
+    def test_resolves_each_supported_target(self, competition, season, team, bio):
         competition_target = get_blurb_target(
             {"kind": "competition", "competition": "Major League Soccer"}
         )
@@ -39,6 +41,7 @@ class BlurbTests(SimpleTestCase):
             }
         )
         team_target = get_blurb_target({"kind": "team", "team": "Fall River Marksmen"})
+        player_target = get_blurb_target({"kind": "player", "player": "Archie Stark"})
 
         self.assertIs(competition_target, competition.objects.get.return_value)
         competition.objects.get.assert_called_once_with(name="Major League Soccer")
@@ -49,10 +52,12 @@ class BlurbTests(SimpleTestCase):
         )
         self.assertIs(team_target, team.objects.get.return_value)
         team.objects.get.assert_called_once_with(name="Fall River Marksmen")
+        self.assertIs(player_target, bio.objects.get.return_value)
+        bio.objects.get.assert_called_once_with(name="Archie Stark")
 
     def test_rejects_unknown_target_kind(self):
-        with self.assertRaisesMessage(ValueError, "unknown blurb kind: player"):
-            get_blurb_target({"kind": "player"})
+        with self.assertRaisesMessage(ValueError, "unknown blurb kind: stadium"):
+            get_blurb_target({"kind": "stadium"})
 
 
 class BlurbDatabaseTests(TestCase):
@@ -65,7 +70,8 @@ class BlurbDatabaseTests(TestCase):
             super_season=super_season,
         )
         team = Team.objects.create(name="Dallas Burn", short_name="Dallas Burn")
+        bio = Bio.objects.create(name="Archie Stark", slug="archie-stark", hall_of_fame=False)
 
-        for target in (competition, season, team):
+        for target in (competition, season, team, bio):
             Blurb.objects.create(content_object=target, text="A short piece of history.")
             self.assertEqual(target.blurbs.get().text, "A short piece of history.")
