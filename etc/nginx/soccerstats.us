@@ -3,7 +3,7 @@ server {
 
     location = /robots.txt {
         default_type text/plain;
-        return 200 "User-agent: Amazonbot\nDisallow: /\n\nUser-agent: Bytespider\nDisallow: /\n\nUser-agent: TikTokSpider\nDisallow: /\n\nUser-agent: SemrushBot\nDisallow: /\n\nUser-agent: PetalBot\nCrawl-delay: 10\nDisallow: /games/\n\nUser-agent: ClaudeBot\nCrawl-delay: 10\nDisallow: /games/\n\nUser-agent: GPTBot\nCrawl-delay: 10\nDisallow: /games/\n\nUser-agent: *\nDisallow: /games/\n\nSitemap: https://soccerstats.us/sitemap.xml\n";
+        return 200 "User-agent: Amazonbot\nDisallow: /\n\nUser-agent: Amzn-SearchBot\nDisallow: /\n\nUser-agent: Bytespider\nDisallow: /\n\nUser-agent: TikTokSpider\nDisallow: /\n\nUser-agent: SemrushBot\nDisallow: /\n\nUser-agent: PetalBot\nCrawl-delay: 10\nDisallow: /games/\n\nUser-agent: ClaudeBot\nCrawl-delay: 10\nDisallow: /games/\n\nUser-agent: GPTBot\nCrawl-delay: 10\nDisallow: /games/\n\nUser-agent: *\nDisallow: /games/\n\nSitemap: https://soccerstats.us/sitemap.xml\n";
     }
 
     location /static/ {
