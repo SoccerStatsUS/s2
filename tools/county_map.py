@@ -1,8 +1,9 @@
 """
-Build places/counties.json, the US counties and Canadian census divisions the
-closest-club territory map colors in.
+Build places/counties.json, the county-grain units the closest-club territory
+map colors in: US counties, Canadian census divisions, and Europe's NUTS 3
+regions. Each unit carries the country code the map filters on.
 
-Sources, both public domain:
+Sources, all public domain or open with attribution:
 
   US Census Bureau, cartographic boundary file, counties, 2020, 1:20m.
   https://www2.census.gov/geo/tiger/GENZ2020/shp/cb_2020_us_county_20m.zip
@@ -16,12 +17,23 @@ Sources, both public domain:
   Delivered in Statistics Canada's Lambert projection, so it is unprojected
   here; the .prj file carries the parameters below.
 
-Both are shapefiles, which need a reader the site does not otherwise want:
+  Eurostat GISCO, NUTS 2021, level 3, 1:3M, WGS84 GeoJSON. (c) EuroGeographics
+  for the administrative boundaries.
+  https://gisco-services.ec.europa.eu/distribution/v2/nuts/geojson/NUTS_RG_03M_2021_4326_LEVL_3.geojson
+  NUTS 3 is the county analogue across Europe: Kreise, provinces,
+  departements, UK counties and unitary authorities. The whole file is kept,
+  every country, so any European league can draw a map. The 2021 edition is
+  the last with the United Kingdom in it, which the map splits into its four
+  football countries by NUTS 1 code, as places/world.json does.
+
+The two shapefiles need a reader the site does not otherwise want:
 
     uv pip install -p .venv/bin/python pyshp
-    .venv/bin/python tools/county_map.py cb_2020_us_county_20m.shp lcd_000b21a_e.shp
+    .venv/bin/python tools/county_map.py --us cb_2020_us_county_20m.shp \\
+        --ca lcd_000b21a_e.shp --eu NUTS_RG_03M_2021_4326_LEVL_3.geojson
 """
 
+import argparse
 import json
 import math
 import os
@@ -36,13 +48,13 @@ from world_map import extent, rings, simplify  # noqa: E402
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, 'places', 'counties.json')
 
-# Degrees. About a pixel when the continent fills a thousand of them; finer
-# than that is coastline the map cannot draw, and there are 3,400 units.
+# Degrees. About a pixel when a continent fills a thousand of them; finer
+# than that is coastline the map cannot draw, and there are 5,000 units.
 TOLERANCE = 0.012
 
 # Units centred north of 60 degrees -- the three territories -- are outside
-# the map's frame, so they are kept for the table and thinned to a sketch.
-# Nunavut alone was a third of the file at the finer tolerance.
+# any frame the map draws, so they are kept for the table and thinned to a
+# sketch. Nunavut alone was a third of the file at the finer tolerance.
 NORTH = 60.0
 NORTH_TOLERANCE = 0.08
 
@@ -53,11 +65,18 @@ MIN_RING = 0.08
 # Puerto Rico and the island territories: in the county file, in no MLS map.
 SKIP_STATES = {'60', '66', '69', '72', '78'}
 
+# France's overseas departements sit in the Caribbean, South America and the
+# Indian Ocean; a Ligue 1 map would count them and never draw them.
+SKIP_NUTS = ('FRY',)
+
 PROVINCES = {
     '10': 'NL', '11': 'PE', '12': 'NS', '13': 'NB', '24': 'QC', '35': 'ON',
     '46': 'MB', '47': 'SK', '48': 'AB', '59': 'BC', '60': 'YT', '61': 'NT',
     '62': 'NU',
 }
+
+# NUTS 1 codes of the United Kingdom, by football country.
+HOME_NATIONS = {'UKL': 'WLS', 'UKM': 'SCT', 'UKN': 'NIR'}
 
 
 # ---- Statistics Canada Lambert, inverse ---------------------------------
@@ -147,33 +166,69 @@ def unit(name, state, country, geometry, transform=None):
             'lon': round(lon, 4), 'lat': round(lat, 4), 'rings': kept}
 
 
-def build(us_path, ca_path):
-    units = {}
+# ---- Sources ------------------------------------------------------------
+#
+# Each yields (id, unit). Ids carry the source's prefix so no two can meet.
 
-    for sr in shapefile.Reader(us_path).iterShapeRecords():
+def census_counties(path):
+    for sr in shapefile.Reader(path).iterShapeRecords():
         props = sr.record.as_dict()
         if props['STATEFP'] in SKIP_STATES:
             continue
         u = unit(props['NAME'], props['STUSPS'], 'US', sr.shape.__geo_interface__)
         if u:
-            units[props['GEOID']] = u
+            yield 'US' + props['GEOID'], u
 
-    for sr in shapefile.Reader(ca_path, encoding='latin-1').iterShapeRecords():
+
+def statcan_divisions(path):
+    for sr in shapefile.Reader(path, encoding='latin-1').iterShapeRecords():
         props = sr.record.as_dict()
         u = unit(' '.join(props['CDNAME'].split()), PROVINCES[props['PRUID']], 'CA',
                  sr.shape.__geo_interface__, transform=unproject)
         if u:
-            units['CA' + props['CDUID']] = u
+            yield 'CA' + props['CDUID'], u
+
+
+def gisco_nuts3(path):
+    with open(path, encoding='utf-8') as f:
+        features = json.load(f)['features']
+
+    for feature in features:
+        props = feature['properties']
+        code = props['NUTS_ID']
+        if code.startswith(SKIP_NUTS):
+            continue
+        country = props['CNTR_CODE']
+        if country == 'UK':
+            country = HOME_NATIONS.get(code[:3], 'ENG')
+        # The NUTS 1 code stands where a state or province would: a German
+        # Land, a French region, an English region.
+        u = unit(props['NAME_LATN'], code[:3], country, feature['geometry'])
+        if u:
+            yield 'EU' + code, u
+
+
+def build(sources):
+    units = {}
+    for reader, path in sources:
+        for uid, u in reader(path):
+            units[uid] = u
 
     with open(OUT, 'w', encoding='utf-8') as f:
         json.dump({'units': units}, f, separators=(',', ':'))
 
+    by_country = {}
+    for u in units.values():
+        by_country[u['country']] = by_country.get(u['country'], 0) + 1
     points = sum(len(r) for u in units.values() for r in u['rings'])
-    print('%s units (%s US, %s CA), %s points, %.0f KB' % (
-        len(units), sum(u['country'] == 'US' for u in units.values()),
-        sum(u['country'] == 'CA' for u in units.values()), points,
-        os.path.getsize(OUT) / 1024))
+    print('%s units, %s points, %.0f KB' % (len(units), points, os.path.getsize(OUT) / 1024))
+    print(' '.join('%s:%s' % kv for kv in sorted(by_country.items())))
 
 
 if __name__ == '__main__':
-    build(sys.argv[1], sys.argv[2])
+    parser = argparse.ArgumentParser(description=__doc__.split('\n\n')[0])
+    parser.add_argument('--us', required=True, help='Census cb_2020_us_county_20m.shp')
+    parser.add_argument('--ca', required=True, help='Statistics Canada lcd_000b21a_e.shp')
+    parser.add_argument('--eu', required=True, help='GISCO NUTS_RG_03M_2021_4326_LEVL_3.geojson')
+    args = parser.parse_args()
+    build([(census_counties, args.us), (statcan_divisions, args.ca), (gisco_nuts3, args.eu)])
