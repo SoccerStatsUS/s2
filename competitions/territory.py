@@ -79,6 +79,9 @@ COUNTRY_CODES = {
     'Slovakia': 'SK', 'Turkey': 'TR',
 }
 
+COUNTRY_NAMES = {code: name for name, code in COUNTRY_CODES.items()}
+COUNTRY_NAMES.update({'CZ': 'Czech Republic', 'MK': 'North Macedonia'})
+
 # What the units are called, for the caption and the table.
 UNIT_NOUNS = {'US': 'counties', 'CA': 'census divisions', 'MX': 'municipios'}
 DEFAULT_NOUN = 'NUTS 3 regions'
@@ -638,7 +641,10 @@ def season_map(clubs):
         "stripes": [m for m in marks if len(m["colors"]) > 1],
         "cities": cities,
         "ground": " ".join(ground),
-        "countries": [{"code": code, "noun": unit_noun(code)} for code in countries],
+        "countries": [{"code": code, "name": COUNTRY_NAMES.get(code, code),
+                       "noun": unit_noun(code)} for code in countries],
+        # England and Wales share a noun; the caption says it once.
+        "nouns": sorted({unit_noun(code) for code in countries}),
         "units": len(units),
         "undrawn": undrawn,
         "insets": sorted(name for name in fits if name != "main"),

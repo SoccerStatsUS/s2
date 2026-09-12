@@ -28,7 +28,7 @@
   {% for c in map.cities %}<circle class="city" cx="{{ c.cx }}" cy="{{ c.cy }}" r="2.5"><title>{{ c.name }}</title></circle>{% endfor %}
   {% for m in map.marks %}{% if m.label %}<text class="territory-label" x="{{ m.label.x }}" y="{{ m.label.y }}">{{ m.name }}</text>{% endif %}{% endfor %}
 </svg>
-<figcaption>Each of the {% for c in map.countries %}{{ c.noun }}{% if not forloop.last %}{% if forloop.revcounter == 2 %} and {% else %}, {% endif %}{% endif %}{% endfor %}
+<figcaption>Each of the {% for noun in map.nouns %}{{ noun }}{% if not forloop.last %}{% if forloop.revcounter == 2 %} and {% else %}, {% endif %}{% endif %}{% endfor %}
 takes the color of the club nearest its centre, by great-circle distance from the club's home
 city (the dots). Clubs sharing a city share a striped territory.
 {% if map.insets %}Alaska and Hawaii are inset.{% endif %}
@@ -43,7 +43,7 @@ Hover a territory for its count.{% if unlocated %} No coordinates on record for 
 <thead>
 <tr>
   <th scope="col">club</th>
-  {% if map.countries|length > 1 %}{% for c in map.countries %}<th scope="col">{{ c.noun }}</th>{% endfor %}{% endif %}
+  {% if map.countries|length > 1 %}{% for c in map.countries %}<th scope="col" title="{{ c.noun }}">{{ c.name }}</th>{% endfor %}{% endif %}
   <th scope="col">{% if map.countries|length > 1 %}total{% else %}{{ map.countries.0.noun }}{% endif %}</th>
   <th scope="col">share</th>
 </tr>
