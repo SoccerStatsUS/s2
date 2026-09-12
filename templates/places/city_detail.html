@@ -57,8 +57,8 @@
 </div>
 {% endif %}
 
-{% if city.birth_set.exists %}
-{% include "templatetags/lists/born.html" %} 
+{% if births.count %}
+{% include "places/births.html" with roll=births place=city.name %}
 {% endif %}
 
 {% if teams %}

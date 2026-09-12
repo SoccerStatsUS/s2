@@ -1,0 +1,76 @@
+{% load datum_or_none %}
+{% load humanize %}
+
+{% comment %}
+The roll of players born in a place, busiest career first.
+
+Expects `roll` from places.views.birth_roll and `place` for the heading. Set
+`show_birthplace` where the place is bigger than a city, so the row says which
+one. The three birthplace pages — city, state, country — differ only in that.
+{% endcomment %}
+
+<div tab="births">
+
+<h3>Players born in {{ place }}</h3>
+
+<p class="dir-note">{{ roll.count|intcomma }} born here.
+{% if roll.players %}{{ roll.players|intcomma }} of them
+{% if roll.players == 1 %}has{% else %}have{% endif %} an appearance on record,
+{{ roll.games|intcomma }} games{% if roll.minutes %} and
+{{ roll.minutes|intcomma }} minutes{% endif %} between them.{% else %}None of
+them has an appearance on record yet.{% endif %}</p>
+
+{% if roll.limit and roll.count > roll.limit %}
+<p class="coverage-note">The {{ roll.limit }} with the most games on record, of {{ roll.count|intcomma }}.</p>
+{% endif %}
+
+<table>
+  <caption class="sr-only">Players born in {{ place }}, most games played first</caption>
+  <thead>
+    <tr>
+      <th scope="col" title="rank by games played">#</th>
+      <th scope="col">name</th>
+      <th scope="col">born</th>
+      {% if show_birthplace %}<th scope="col">birthplace</th>{% endif %}
+      <th scope="col" title="games played">gp</th>
+      <th scope="col" title="minutes played">min</th>
+      <th scope="col" title="goals">g</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  {% for bio in roll.rows %}
+  <tr>
+    <td>{{ forloop.counter }}</td>
+    <td><a href="{% url 'person_detail' bio.slug %}">{{ bio }}</a></td>
+
+    {% if bio.birthdate %}
+    <td><time datetime="{{ bio.birthdate|date:'Y-m-d' }}"><a href="{% url 'date_detail' bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a></time></td>
+    {% else %}
+    <td class="greybg" title="no record found">&mdash;</td>
+    {% endif %}
+
+    {% if show_birthplace %}
+      {% if bio.birthplace.slug %}
+      <td><a href="{% url 'city_detail' bio.birthplace.slug %}">{{ bio.birthplace }}</a></td>
+      {% else %}
+      <td class="greybg" title="no record found">&mdash;</td>
+      {% endif %}
+    {% endif %}
+
+    {% datum_or_grey bio.played %}
+    {% datum_or_grey bio.minutes %}
+    {% datum_or_grey bio.scored %}
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<p class="table-legend"><strong>gp</strong> games played &middot;
+<strong>min</strong> minutes played &middot; <strong>g</strong> goals. All three
+are career totals across every competition on record, not just the ones played
+near here.</p>
+
+{% include "helpers/coverage.html" with note="Minutes were not recorded at all in the ASL, the original NASL or the indoor leagues, so a career spent there shows games and no minutes." %}
+
+</div>

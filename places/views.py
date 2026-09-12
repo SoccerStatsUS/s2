@@ -22,6 +22,66 @@ RECENT_GAMES = 25
 PLACE_LIST = 100
 
 
+def minutes_worth_reporting(players, timed, minutes):
+    """
+    A summed minutes total, or None when too few of the careers behind it
+    recorded any.
+
+    `players` is how many have an appearance on record and `timed` how many of
+    those also have minutes. Below half, the total lands absurdly under its own
+    games played -- 13,000 games and 6,000 minutes -- and reads as broken
+    rather than as partial, so the page says nothing about minutes instead.
+    Half is the threshold playing_time_by_country already uses to pick between
+    the two measures.
+    """
+    if not players or timed < players / 2:
+        return None
+    return minutes
+
+
+def birth_roll(births, limit=None):
+    """
+    The players born in a place, the busiest career first, with the counts the
+    page states above them.
+
+    Career totals come from CareerStat, so a player the database holds a bio
+    for and no appearance for sorts last carrying a marked gap rather than a
+    zero -- there is a difference between playing no games and having none on
+    record, and half of these rows are the second kind.
+
+    The summed minutes are reported only when most of these careers have them
+    -- see minutes_worth_reporting. The ASL, the original NASL and the indoor
+    leagues kept lineups without minutes, so a roll drawn mostly from those
+    years would otherwise state a total far smaller than its own games played.
+    The per-player column still shows whatever minutes a career has, marked
+    where it has none.
+    """
+    from stats.models import CareerStat
+
+    rows = (births.select_related('birthplace', 'birthplace__state')
+            .annotate(played=Sum('careerstat__games_played'),
+                      minutes=Sum('careerstat__minutes'),
+                      scored=Sum('careerstat__goals'))
+            .order_by(F('played').desc(nulls_last=True), 'name'))
+
+    played = CareerStat.objects.filter(player__in=births, games_played__gt=0)
+    totals = played.aggregate(players=Count('player', distinct=True),
+                              games=Sum('games_played'),
+                              minutes=Sum('minutes'))
+
+    players = totals['players'] or 0
+    timed = played.exclude(minutes=None).count()
+
+    return {
+        'rows': rows[:limit] if limit else rows,
+        'count': births.count(),
+        'players': players,
+        'games': totals['games'] or 0,
+        'minutes': minutes_worth_reporting(players, timed, totals['minutes']),
+        'limit': limit,
+        }
+
+
 @cache_page(60 * 60 * 12)
 def places_index(request):
         """
@@ -148,11 +208,8 @@ def country_detail(request, slug):
         all_stadiums = Stadium.objects.filter(city__country=country)
         stadiums = all_stadiums.annotate(games=Count('game')).order_by('-games', 'name')[:PLACE_LIST]
 
-        all_births = Bio.objects.filter(birthplace__country=country)
-        births = (all_births.select_related('birthplace__state')
-                  .annotate(played=Sum('careerstat__games_played'),
-                            scored=Sum('careerstat__goals'))
-                  .order_by(F('played').desc(nulls_last=True), 'name')[:PLACE_LIST])
+        births = birth_roll(Bio.objects.filter(birthplace__country=country),
+                            limit=PLACE_LIST)
 
         all_cities = City.objects.filter(country=country)
         cities = (all_cities.select_related('state').annotate(games=Count('game'))
@@ -166,7 +223,6 @@ def country_detail(request, slug):
                 'game_count': game_count,
                 'game_limit': RECENT_GAMES,
                 'births': births,
-                'birth_count': all_births.count(),
                 'stadiums': stadiums,
                 'stadium_count': all_stadiums.count(),
                 'competitions': competitions,
@@ -183,7 +239,8 @@ def state_detail(request, slug):
         """
 
         state = get_object_or_404(State, slug=slug)
-        births = Bio.objects.filter(birthplace__state=state)
+        births = birth_roll(Bio.objects.filter(birthplace__state=state),
+                            limit=PLACE_LIST)
         stadiums = Stadium.objects.filter(city__state=state)
 
         all_games = Game.objects.exclude(city=None).filter(city__state=state)
@@ -211,6 +268,7 @@ def city_detail(request, slug):
 
         context = {
                 'city': city,
+                'births': birth_roll(city.birth_set.all()),
                 'teams': Team.objects.filter(city=city),
                 'games': all_games.select_related()[:RECENT_GAMES],
                 'game_count': all_games.count(),

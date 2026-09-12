@@ -3,6 +3,7 @@ from types import SimpleNamespace
 from django.test import SimpleTestCase
 
 from places.models import playing_time_by_country
+from places.views import minutes_worth_reporting
 
 
 class StatRows(list):
@@ -94,3 +95,19 @@ class MeasureTests(SimpleTestCase):
 
         assert result['measure'] == 'games'
         assert [r['name'] for r in result['rows']] == ['Peru', 'Chile', 'Brazil']
+
+
+class MinutesWorthReportingTests(SimpleTestCase):
+
+    def test_reports_the_total_when_most_careers_are_timed(self):
+        assert minutes_worth_reporting(10, 8, 45000) == 45000
+
+    def test_half_is_enough(self):
+        assert minutes_worth_reporting(10, 5, 45000) == 45000
+
+    def test_withholds_the_total_when_few_careers_are_timed(self):
+        # 13,091 games against 6,556 minutes reads as broken, not as partial.
+        assert minutes_worth_reporting(333, 40, 6556) is None
+
+    def test_no_one_has_played_at_all(self):
+        assert minutes_worth_reporting(0, 0, None) is None

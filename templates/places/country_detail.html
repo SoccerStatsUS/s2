@@ -120,41 +120,8 @@
 {% endif %}
 
 
-{% if births %}
-<div tab="people">
-
-<h3>Players born in {{ country.name }}</h3>
-{% if birth_count > place_limit %}
-<p class="coverage-note">The {{ place_limit }} with the most recorded games, of {{ birth_count|intcomma }}.</p>
-{% endif %}
-<table>
-
-  <thead>
-    <tr>
-      <th scope="col">name</th>
-      <th scope="col">birthplace</th>
-      <th scope="col">birthdate</th>
-      <th scope="col">gp</th>
-      <th scope="col">g</th>
-    </tr>
-  </thead>
-
-{% for bio in births %}
-<tr>
-  <td><a href="{% url 'person_detail' bio.slug %}">{{ bio }}</a></td>
-  <td><a href="{% url 'city_detail' bio.birthplace.slug %}">{{ bio.birthplace }}</a></td>
-  {% if bio.birthdate %}
-  <td><a href="{% url 'date_detail' bio.birthdate.year bio.birthdate.month bio.birthdate.day %}">{{ bio.birthdate }}</a></td>
-  {% else %}
-  <td></td>
-  {% endif %}
-  {% datum_or_grey bio.played %}
-  {% datum_or_grey bio.scored %}
-</tr>
-{% endfor %}
-</table>
-
-</div>
+{% if births.count %}
+{% include "places/births.html" with roll=births place=country.name show_birthplace=True %}
 {% endif %}
 
 {% endblock %}
