@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}{{ season }} closest-club map{% endblock %}
+{% block metadescription %}Every US county and Canadian census division colored by the nearest {{ season.competition.name }} club in {{ season }}.{% endblock %}
+
+{% block content %}
+
+<h2 class="headline">
+{% if season.previous_season %}<a href="{% url 'season_map' season.competition.slug season.previous_season.slug %}" title="{{ season.previous_season }}">&larr;</a>{% endif %}
+<a href="{% url 'season_detail' season.competition.slug season.slug %}">{{ season }}</a> closest club
+{% if season.next_season %}<a href="{% url 'season_map' season.competition.slug season.next_season.slug %}" title="{{ season.next_season }}">&rarr;</a>{% endif %}
+</h2>
+
+{% if not map %}
+<p>No {{ season.competition.name }} club has a home city on record with coordinates for {{ season }}, so there is no map to draw.
+{% if clubs %}The season's clubs: {% for c in clubs %}<a href="{{ c.team.get_absolute_url }}">{{ c.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}.{% endif %}</p>
+{% else %}
+
+<figure class="chart territory-map">
+<svg viewBox="0 0 {{ map.svg.width }} {{ map.svg.height }}" role="img" aria-label="Closest {{ season.competition.name }} club to every US county and Canadian census division, {{ season }}">
+  {% if map.stripes %}<defs>
+  {% for m in map.stripes %}<pattern id="stripe-{{ m.index }}" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">{% for color in m.colors %}<rect x="{% widthratio forloop.counter0 m.colors|length 8 %}" y="0" width="{% widthratio 1 m.colors|length 8 %}" height="8" fill="{{ color }}"/>{% endfor %}</pattern>{% endfor %}
+  </defs>{% endif %}
+  {% for m in map.marks %}<path class="territory" fill="{{ m.fill }}" d="{{ m.d }}"><title>{{ m.name }}: {{ m.total|intcomma }} of {{ map.units|intcomma }}</title></path>
+  {% endfor %}
+  {% for c in map.cities %}<circle class="city" cx="{{ c.cx }}" cy="{{ c.cy }}" r="2.5"><title>{{ c.name }}</title></circle>{% endfor %}
+  {% for m in map.marks %}{% if m.label %}<text class="territory-label" x="{{ m.label.x }}" y="{{ m.label.y }}">{{ m.name }}</text>{% endif %}{% endfor %}
+</svg>
+<figcaption>Each county and census division takes the color of the club nearest its centre, by
+great-circle distance from the club's home city (the dots). Clubs sharing a city share a striped
+territory. Boundaries are the 2020 US counties and the 2021 Canadian census divisions; Yukon, the
+Northwest Territories and Nunavut are counted below but sit outside the frame. Hover a territory
+for its count.{% if unlocated %} No coordinates on record for {% for c in unlocated %}{{ c.name }}{% if not forloop.last %}, {% endif %}{% endfor %}, so {% if unlocated|length == 1 %}it is{% else %}they are{% endif %} left off the map.{% endif %}</figcaption>
+</figure>
+
+<table class="territories">
+<caption>Territories, largest first: counties and divisions nearer to each club than to any other</caption>
+<thead>
+<tr>
+  <th scope="col">club</th>
+  <th scope="col" title="US counties">counties</th>
+  <th scope="col" title="Canadian census divisions">divisions</th>
+  <th scope="col">total</th>
+  <th scope="col">share</th>
+</tr>
+</thead>
+<tbody>
+{% for m in map.marks %}
+<tr>
+  <td>{% for color in m.colors %}<span class="swatch" style="background:{{ color }}"></span>{% endfor %}{% for c in m.clubs %}<a href="{{ c.team.get_absolute_url }}">{{ c.name }}</a>{% if not forloop.last %} / {% endif %}{% endfor %}</td>
+  <td>{{ m.us|intcomma }}</td>
+  <td>{{ m.ca|intcomma }}</td>
+  <td>{{ m.total|intcomma }}</td>
+  <td>{{ m.share|floatformat:1 }}%</td>
+</tr>
+{% endfor %}
+{% if unlocated %}
+{% for c in unlocated %}
+<tr>
+  <td><a href="{{ c.team.get_absolute_url }}">{{ c.name }}</a></td>
+  <td colspan="4"><span class="grey" title="no coordinates on record for the home city">no home city on record</span></td>
+</tr>
+{% endfor %}
+{% endif %}
+</tbody>
+</table>
+
+{% endif %}
+
+{% endblock %}

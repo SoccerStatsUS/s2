@@ -74,6 +74,10 @@ urlpatterns = [
                            views.season_attendance,
                            name='season_attendance'),
 
+                       re_path(r'^(?P<competition_slug>[a-z0-9-]+)/(?P<season_slug>[a-z0-9-]+)/map/$',
+                           views.season_map,
+                           name='season_map'),
+
 
 
 

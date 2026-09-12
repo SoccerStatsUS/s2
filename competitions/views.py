@@ -11,6 +11,7 @@ from django.contrib.contenttypes.models import ContentType
 
 from awards.models import Award, AwardItem
 from bios.models import Bio
+from competitions import territory
 from competitions.forms import CompetitionForm
 from competitions.models import PLAYOFF_CHAMPIONSHIPS, Competition, SuperSeason, Season
 from goals.models import Goal
@@ -653,14 +654,17 @@ def season_detail(request, competition_slug, season_slug):
         'awards': season.awarditem_set.order_by('award'),
         'postseason': season_postseason(season),
         'origins': playing_time_by_country(stats),
+        'has_map': season.standing_set.filter(team__city__lat__isnull=False).exists(),
         }
     return render(request, "competitions/season/detail.html",
                               context)
 
 
-def season_standings(season):
-    standings = list(season.standing_set.filter(final=True).select_related('team')
-                     .order_by('-points', '-wins', 'team__name'))
+def season_team_names(season):
+    """
+    What each club was called that season: the name the game records used
+    most often, by team id. The club's current name is the fallback.
+    """
     team_names = defaultdict(Counter)
 
     for team1_id, team1_name, team2_id, team2_name in season.game_set.values_list(
@@ -670,11 +674,63 @@ def season_standings(season):
         if team2_name:
             team_names[team2_id][team2_name] += 1
 
+    return {team_id: names.most_common(1)[0][0] for team_id, names in team_names.items() if names}
+
+
+def season_standings(season):
+    standings = list(season.standing_set.filter(final=True).select_related('team')
+                     .order_by('-points', '-wins', 'team__name'))
+    team_names = season_team_names(season)
+
     for standing in standings:
-        names = team_names[standing.team_id]
-        standing.team_display_name = names.most_common(1)[0][0] if names else standing.team.name
+        standing.team_display_name = team_names.get(standing.team_id, standing.team.name)
 
     return standings
+
+
+def season_clubs(season):
+    """
+    The clubs in a season, one row each, under the names they used that
+    season. Final standings when there are any; every standing row otherwise,
+    so a season still in progress has its clubs too.
+    """
+    rows = season.standing_set.filter(final=True)
+    if not rows.exists():
+        rows = season.standing_set.all()
+
+    team_names = season_team_names(season)
+    clubs = {}
+    for team in Team.objects.filter(id__in=rows.values('team')).select_related('city'):
+        clubs[team.id] = {
+            'team': team,
+            'name': team_names.get(team.id, team.name),
+            'slug': team.slug,
+            'lat': team.city.lat if team.city else None,
+            'lon': team.city.lon if team.city else None,
+        }
+
+    return sorted(clubs.values(), key=lambda c: c['name'])
+
+
+def season_map(request, competition_slug, season_slug):
+    """
+    The closest-club map: every US county and Canadian census division
+    colored by the club nearest its centre that season.
+    """
+    competition = get_object_or_404(Competition, slug=competition_slug)
+    season = get_object_or_404(Season, competition=competition, slug=season_slug)
+
+    clubs = season_clubs(season)
+    located = [c for c in clubs if c['lat'] is not None and c['lon'] is not None]
+    unlocated = [c for c in clubs if c not in located]
+
+    context = {
+        'season': season,
+        'map': territory.season_map(located),
+        'clubs': clubs,
+        'unlocated': unlocated,
+    }
+    return render(request, "competitions/season/map.html", context)
 
 
 # Goals, assists and appearances. Minutes ranks the same players as

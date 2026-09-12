@@ -56,6 +56,9 @@
   {% if season.total_attendance and attendance_game_count %}
   <span>{{ season.average_attendance|intcomma }} <a href="{% url 'season_attendance' season.competition.slug season.slug %}">avg. attendance</a></span>
   {% endif %}
+  {% if has_map %}
+  <span><a href="{% url 'season_map' season.competition.slug season.slug %}">closest-club map</a></span>
+  {% endif %}
 </p>
 {% endif %}
 

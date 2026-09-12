@@ -935,6 +935,17 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
 .map-key.map-shade-4 { background: var(--band-4); }
 .map-key.map-shade-5 { background: var(--band-5); }
 
+/* The closest-club territory map. Fills are set inline per territory --
+   they are club colors, data, not the palette (DESIGN.md section 2) -- and
+   every territory also carries its name. */
+.territory-map svg { min-width: 0; }
+.territory-map .territory { stroke: #fff; stroke-width: 0.35; stroke-linejoin: round; }
+.territory-map .territory:hover, .territory-map .territory:focus-visible { stroke: var(--ink); stroke-width: 0.8; }
+.territory-map .city { fill: var(--ink); stroke: #fff; stroke-width: 1; }
+.territory-map text.territory-label { fill: var(--ink); font-size: 12px; paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round; text-anchor: middle; }
+.territory-map .frame-note { fill: var(--ink-soft); font-size: 11px; }
+table.territories .swatch { display: inline-block; width: 12px; height: 12px; vertical-align: -2px; margin-right: 6px; border: 1px solid rgba(0,0,0,.15); }
+
 .map-legend {
     display: flex;
     flex-wrap: wrap;

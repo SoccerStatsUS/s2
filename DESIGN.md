@@ -53,6 +53,10 @@ Green is a scarce semantic resource. It is not the "link color."
 Reserve remaining accent capacity for data semantics (result, provenance, marked absence),
 not for chrome.
 
+The one exception is the closest-club map (`competitions/territory.py`), which fills each
+club's territory with a color of that club's own. Those are data, not palette: they appear
+nowhere else, every territory also carries its name, and the table repeats the assignment.
+
 ---
 
 ## 3. Tables
