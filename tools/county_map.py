@@ -91,7 +91,7 @@ def unproject(x, y):
     x -= FALSE_EASTING
     y = RHO_0 - (y - FALSE_NORTHING)
     rho = math.copysign(math.hypot(x, y), N)
-    theta = math.atan2(math.copysign(x, N), math.copysign(y, N))
+    theta = math.atan2(x, y) if N > 0 else math.atan2(-x, -y)
     t = (rho / (A * F)) ** (1 / N)
 
     lat = math.pi / 2 - 2 * math.atan(t)
