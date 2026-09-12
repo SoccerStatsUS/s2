@@ -446,8 +446,8 @@ def path(points):
 # Label metrics, in pixels: the em box the CSS gives the text, and an average
 # glyph width for a sans-serif at that size, which is what the collision pass
 # has to go on without a font in reach.
-LABEL_HEIGHT = 10
-LABEL_GLYPH = 4.3
+LABEL_HEIGHT = 8
+LABEL_GLYPH = 3.2
 
 
 def place_labels(marks, width):

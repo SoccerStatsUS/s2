@@ -943,7 +943,7 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
 .territory-map .map-ground { fill: var(--fill); stroke: #fff; stroke-width: 0.35; }
 .territory-map .territory:hover, .territory-map .territory:focus-visible { stroke: var(--ink); stroke-width: 0.8; }
 .territory-map .city { fill: var(--ink); stroke: #fff; stroke-width: 1; }
-.territory-map text.territory-label { fill: var(--ink); font-size: 8px; paint-order: stroke; stroke: #fff; stroke-width: 2px; stroke-linejoin: round; text-anchor: middle; }
+.territory-map text.territory-label { fill: var(--ink); font-size: 6px; paint-order: stroke; stroke: #fff; stroke-width: 1.5px; stroke-linejoin: round; text-anchor: middle; }
 .territory-map .frame-note { fill: var(--ink-soft); font-size: 11px; }
 table.territories .swatch { display: inline-block; width: 12px; height: 12px; vertical-align: -2px; margin-right: 6px; border: 1px solid rgba(0,0,0,.15); }
 
