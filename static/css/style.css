@@ -945,7 +945,6 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
 .territory-map .city { fill: var(--ink); stroke: #fff; stroke-width: 1; }
 .territory-map text.territory-label { fill: var(--ink); font-size: 6px; paint-order: stroke; stroke: #fff; stroke-width: 1.5px; stroke-linejoin: round; text-anchor: middle; }
 .territory-map .frame-note { fill: var(--ink-soft); font-size: 11px; }
-table.territories .swatch { display: inline-block; width: 12px; height: 12px; vertical-align: -2px; margin-right: 6px; border: 1px solid rgba(0,0,0,.15); }
 
 .map-legend {
     display: flex;

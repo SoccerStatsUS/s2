@@ -51,7 +51,7 @@ Hover a territory for its count.{% if unlocated %} No coordinates on record for 
 <tbody>
 {% for m in map.marks %}
 <tr>
-  <td>{% for color in m.colors %}<span class="swatch" style="background:{{ color }}"></span>{% endfor %}{% for c in m.clubs %}<a href="{{ c.team.get_absolute_url }}">{{ c.name }}</a>{% if not forloop.last %} / {% endif %}{% endfor %}</td>
+  <td>{% for c in m.clubs %}<a href="{{ c.team.get_absolute_url }}">{{ c.name }}</a>{% if not forloop.last %} / {% endif %}{% endfor %}</td>
   {% if map.countries|length > 1 %}{% for n in m.by_country %}<td>{{ n|intcomma }}</td>{% endfor %}{% endif %}
   <td>{{ m.total|intcomma }}</td>
   <td>{{ m.share|floatformat:1 }}%</td>
