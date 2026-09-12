@@ -170,6 +170,18 @@ def unit(name, state, country, geometry, transform=None):
         simplified = [[round(x, 3), round(y, 3)] for x, y in simplify(ring, tolerance)]
         if len(simplified) >= 3:
             kept.append(simplified)
+        elif not i:
+            # A caye or islet smaller than the tolerance: keep the unit as
+            # its bounding rectangle so it still counts and draws as a speck.
+            xs = [p[0] for p in ring]
+            ys = [p[1] for p in ring]
+            x0, x1 = round(min(xs), 3), round(max(xs), 3)
+            y0, y1 = round(min(ys), 3), round(max(ys), 3)
+            if x1 - x0 < 0.001:
+                x1 = x0 + 0.001
+            if y1 - y0 < 0.001:
+                y1 = y0 + 0.001
+            kept.append([[x0, y0], [x1, y0], [x1, y1], [x0, y1]])
 
     if not kept:
         return None
