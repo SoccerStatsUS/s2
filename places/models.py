@@ -205,7 +205,10 @@ class City(models.Model):
     country = models.ForeignKey(Country, null=True, blank=True, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=100)
 
-    #geometry = models.PointField(srid=4326)
+    # Decimal degrees, from metadata/data/places/cities; null for the many
+    # cities that string holds no point for.
+    lat = models.FloatField(null=True)
+    lon = models.FloatField(null=True)
 
     objects = CityManager()
 

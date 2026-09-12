@@ -234,10 +234,18 @@ def load_places():
 
     cg = make_city_pre_getter()
 
+    # Coordinates are keyed by location string; resolve them the same way the
+    # cities are so "Dallas, TX" and "Dallas, Texas" land on one point.
+    coordinates = {}
+    for e in soccer_db.city_coordinates.find():
+        c = cg(e['location'])
+        coordinates[(c['name'], c['state'], c['country'])] = (e['lat'], e['lon'])
+
     city_set = set()
 
     for city in soccer_db.cities.find():
         c = cg(city['name'])
+        c['lat'], c['lon'] = coordinates.get((c['name'], c['state'], c['country']), (None, None))
 
         if c['state']:
             c['state'] = State.objects.get(name=c['state'])
