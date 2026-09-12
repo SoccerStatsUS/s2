@@ -26,11 +26,20 @@ Sources, all public domain or open with attribution:
   the last with the United Kingdom in it, which the map splits into its four
   football countries by NUTS 1 code, as places/world.json does.
 
+  geoBoundaries (William & Mary geoLab), gbOpen release, ADM2, simplified
+  GeoJSON, CC BY 4.0. One file per country; the API at
+  https://www.geoboundaries.org/api/current/gbOpen/<ISO3>/ADM2/ names the
+  current download under simplifiedGeometryGeoJSON. Mexico's municipios come
+  from here (2,457, the World Bank's 2012 set), and the rest of Latin America
+  can follow the same way: pass --adm2 once per country as CODE=path, where
+  CODE is the atlas country code the map filters on.
+
 The two shapefiles need a reader the site does not otherwise want:
 
     uv pip install -p .venv/bin/python pyshp
     .venv/bin/python tools/county_map.py --us cb_2020_us_county_20m.shp \\
-        --ca lcd_000b21a_e.shp --eu NUTS_RG_03M_2021_4326_LEVL_3.geojson
+        --ca lcd_000b21a_e.shp --eu NUTS_RG_03M_2021_4326_LEVL_3.geojson \\
+        --adm2 MX=geoBoundaries-MEX-ADM2_simplified.geojson
 """
 
 import argparse
@@ -162,6 +171,14 @@ def unit(name, state, country, geometry, transform=None):
     if not kept:
         return None
 
+    # A unit a couple of kilometres across simplifies to a sliver whose
+    # rounded outline can miss the true centroid by metres; keep the point
+    # inside what is drawn.
+    xs = [p[0] for ring in kept for p in ring]
+    ys = [p[1] for ring in kept for p in ring]
+    lon = min(max(lon, min(xs)), max(xs))
+    lat = min(max(lat, min(ys)), max(ys))
+
     return {'name': name, 'state': state, 'country': country,
             'lon': round(lon, 4), 'lat': round(lat, 4), 'rings': kept}
 
@@ -208,6 +225,22 @@ def gisco_nuts3(path):
             yield 'EU' + code, u
 
 
+def geoboundaries_adm2(path, country):
+    """
+    A geoBoundaries ADM2 file for one country. The features carry no parent
+    unit, so state is left blank; ids are the country code and the
+    boundary's own shapeID.
+    """
+    with open(path, encoding='utf-8') as f:
+        features = json.load(f)['features']
+
+    for feature in features:
+        props = feature['properties']
+        u = unit(props['shapeName'], '', country, feature['geometry'])
+        if u:
+            yield country + props['shapeID'], u
+
+
 def build(sources):
     units = {}
     for reader, path in sources:
@@ -230,5 +263,12 @@ if __name__ == '__main__':
     parser.add_argument('--us', required=True, help='Census cb_2020_us_county_20m.shp')
     parser.add_argument('--ca', required=True, help='Statistics Canada lcd_000b21a_e.shp')
     parser.add_argument('--eu', required=True, help='GISCO NUTS_RG_03M_2021_4326_LEVL_3.geojson')
+    parser.add_argument('--adm2', action='append', default=[], metavar='CODE=PATH',
+                        help='a geoBoundaries ADM2 simplified GeoJSON, e.g. MX=...MEX-ADM2_simplified.geojson')
     args = parser.parse_args()
-    build([(census_counties, args.us), (statcan_divisions, args.ca), (gisco_nuts3, args.eu)])
+
+    sources = [(census_counties, args.us), (statcan_divisions, args.ca), (gisco_nuts3, args.eu)]
+    for spec in args.adm2:
+        code, path = spec.split('=', 1)
+        sources.append((lambda p, code=code: geoboundaries_adm2(p, code), path))
+    build(sources)

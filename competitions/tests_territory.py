@@ -48,6 +48,7 @@ class CountyAtlasTests(SimpleTestCase):
         assert by['CA'] == 293
         assert by['DE'] == 401 and by['ES'] == 59 and by['IT'] == 107 and by['FR'] == 96
         assert by['ENG'] + by['WLS'] + by['SCT'] + by['NIR'] == 179
+        assert by['MX'] == 2457  # geoBoundaries ADM2, the World Bank's 2012 municipios
         assert len({u['state'] for u in units.values() if u['country'] == 'US'}) == 51
 
     def test_ids_carry_their_source(self):
@@ -122,7 +123,8 @@ class AssignmentTests(SimpleTestCase):
         units = atlas()
         assert {u['country'] for u in in_play(units, ['US', 'CA']).values()} == {'US', 'CA'}
         assert len(in_play(units, ['ENG'])) == 133
-        assert in_play(units, ['MX']) == {}
+        assert len(in_play(units, ['MX'])) == 2457
+        assert in_play(units, ['BR']) == {}
 
     def test_country_codes(self):
         assert country_code('United States') == 'US'
@@ -176,7 +178,7 @@ class SeasonMapTests(SimpleTestCase):
         assert season_map([]) is None
 
     def test_a_country_the_atlas_lacks_gives_no_map(self):
-        assert season_map([club('Club America', 19.43, -99.13, 'club-america', 'MX')]) is None
+        assert season_map([club('Flamengo', -22.91, -43.17, 'flamengo', 'BR')]) is None
 
     def test_two_clubs_split_the_continent(self):
         result = season_map([DALLAS, TORONTO])
