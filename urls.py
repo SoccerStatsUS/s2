@@ -26,6 +26,8 @@ urlpatterns = [
 
     path('about/', games_views.about, name='about_index'),
 
+    path('about/coverage/', games_views.coverage, name='coverage_note'),
+
     path('awards/', include('awards.urls')),
     path('bios/', include('bios.urls')),
     path('c/', include('competitions.urls')),

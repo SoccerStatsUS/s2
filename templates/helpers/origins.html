@@ -35,7 +35,9 @@ Stat queryset they hand it.
 </table>
 
 {% if origins.measure == 'games' %}
-<p class="coverage-note">No minutes are recorded here, so the shares are games played.</p>
+{% include "helpers/coverage.html" with note="No minutes are recorded here, so the shares are games played." %}
+{% else %}
+{% include "helpers/coverage.html" %}
 {% endif %}
 </div>
 {% endif %}

@@ -43,6 +43,97 @@ def about(request):
     return render(request, "about/index.html", context)
 
 
+def coverage_by_decade():
+    """
+    The shape of the record itself: how many games are on file per decade, and
+    how much is known about them.
+
+    A sketch, and deliberately coarse. Four questions per decade -- is there a
+    date, a lineup, a named scorer, a crowd figure -- because those are the
+    four things a reader asks of an old game and the four the database answers
+    separately. The share is of the decade's own games, so a thin decade and a
+    fat one can be compared on how well each is known rather than on how big
+    it is.
+
+    Decades with no games at all are still returned. A gap in the middle of the
+    record is a fact about the record.
+    """
+    from django.db.models.functions import ExtractYear
+    from lineups.models import Appearance
+
+    dated = Game.objects.exclude(date=None)
+    first = dated.order_by('date').values_list('date', flat=True).first()
+    last = dated.order_by('-date').values_list('date', flat=True).first()
+    if first is None:
+        return []
+
+    def by_decade(queryset):
+        rows = (queryset.annotate(year=ExtractYear('date')).values('year')
+                .annotate(n=models.Count('id', distinct=True)))
+        totals = defaultdict(int)
+        for row in rows:
+            if row['year']:
+                totals[row['year'] // 10 * 10] += row['n']
+        return totals
+
+    games = by_decade(dated)
+    attended = by_decade(dated.exclude(attendance=None))
+    scored = by_decade(dated.filter(goal__isnull=False))
+    lineups = by_decade(dated.filter(
+        id__in=Appearance.objects.values('game_id')))
+
+    rows = []
+    for decade in range(first.year // 10 * 10, last.year // 10 * 10 + 10, 10):
+        total = games.get(decade, 0)
+        share = (lambda n: 100.0 * n / total if total else None)
+        rows.append({
+            'name': "%ds" % decade,
+            'count': total,
+            'lineups': lineups.get(decade, 0),
+            'lineup_share': share(lineups.get(decade, 0)),
+            'scored': scored.get(decade, 0),
+            'scored_share': share(scored.get(decade, 0)),
+            'attended': attended.get(decade, 0),
+            'attended_share': share(attended.get(decade, 0)),
+            })
+    return rows
+
+
+@cache_page(60 * 60 * 12)
+def coverage(request):
+    """
+    The one coverage note.
+
+    Every page that shows a summed total links here rather than restating in
+    prose what it does and doesn't include. The numbers are counted live so the
+    page can't drift from the database the way a hand-written paragraph would.
+    """
+    from events.models import Event
+    from lineups.models import Appearance
+
+    games = Game.objects.count()
+    goals = Goal.objects.count()
+    stat_lines = Stat.objects.count()
+
+    context = {
+        'games': games,
+        'games_dated': Game.objects.exclude(date=None).count(),
+        'games_with_attendance': Game.objects.exclude(attendance=None).count(),
+        'goals': goals,
+        'goals_with_minute': Goal.objects.exclude(minute=None).count(),
+        'appearances': Appearance.objects.count(),
+        'appearances_with_minutes': Appearance.objects.exclude(minutes=None).count(),
+        'stat_lines': stat_lines,
+        'stat_lines_with_minutes': Stat.objects.exclude(minutes=None).count(),
+        'events': Event.objects.count(),
+        'bios': Bio.objects.count(),
+        'bios_with_birthdate': Bio.objects.exclude(birthdate=None).count(),
+        'decades': coverage_by_decade(),
+        }
+
+    return render(request, "about/coverage.html", context)
+
+
 @cache_page(60 * 30)
 def homepage(request):
 

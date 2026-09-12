@@ -10,6 +10,7 @@
 
 {% if stats %}
 {% stats_table stats 'player' %}
+{% include "helpers/coverage.html" with note="A season with no stat line on file is absent from this table, not zero." %}
 {% else %}
 <p class="coverage-note">No season stat lines on record for {{ bio.name }} yet.
 <a href="{% url 'contact_index' %}">Tell us</a> if you have a source for them.</p>

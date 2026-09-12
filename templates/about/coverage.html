@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load charts %}
+{% load humanize %}
+
+{% block title %}coverage{% endblock %}
+{% block metadescription %}What the SoccerStats.us record holds, where it stops, and what that means for any total on the site{% endblock %}
+
+{% block content %}
+
+<div id="about">
+
+<h1>Coverage</h1>
+
+<p>Every total on this site is a sum of what the database holds, not of what
+happened. The record runs from 1866 and it thins as it goes back; a career
+total, a season total and a league total are all floors. This page says what is
+actually on file, so that pages showing a sum can point here instead of
+repeating the caveat.</p>
+
+<h2>Games</h2>
+
+<p>{{ games|intcomma }} games are on record. {{ games_dated|intcomma }} of them
+carry a date, and {{ games_with_attendance|intcomma }} an attendance figure. A
+competition's season is loaded whole or not at all, so a missing season is
+missing entirely rather than half-present &mdash; but many seasons are missing,
+and the per-competition pages say which.</p>
+
+{% if decades %}
+<h2>The shape of the record</h2>
+
+<p>How much is on file, decade by decade, and how much is known about it. The
+early decades are thin and the recent ones are dense; that is a fact about
+what survives and what has been transcribed, not about how much soccer was
+played.</p>
+
+{% count_chart decades "Dated games on record by decade" "games" "A column counts the games with a date on record in that decade. Undated games are left out, since they cannot be placed." %}
+
+<table>
+<caption>What is known about the games of each decade</caption>
+<thead>
+<tr>
+  <th scope="col">decade</th>
+  <th scope="col" title="games with a date on record">games</th>
+  <th scope="col" title="share of the decade's games with at least one appearance recorded">lineup</th>
+  <th scope="col" title="share of the decade's games with at least one goal attributed to a player">scorers</th>
+  <th scope="col" title="share of the decade's games with a crowd figure">crowd</th>
+</tr>
+</thead>
+<tbody>
+{% for row in decades %}
+<tr>
+  <td>{{ row.name }}</td>
+  <td>{{ row.count|intcomma }}</td>
+  {% if row.count %}
+  <td>{{ row.lineup_share|floatformat:0 }}%</td>
+  <td>{{ row.scored_share|floatformat:0 }}%</td>
+  <td>{{ row.attended_share|floatformat:0 }}%</td>
+  {% else %}
+  <td class="greybg" title="no games on record for this decade">&mdash;</td>
+  <td class="greybg" title="no games on record for this decade">&mdash;</td>
+  <td class="greybg" title="no games on record for this decade">&mdash;</td>
+  {% endif %}
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+<p class="table-legend">A share is of that decade's own dated games, so a thin
+decade and a fat one can be compared on how well each is known rather than on
+how big it is. <strong>lineup</strong> counts a game with at least one
+appearance on record, not a complete eleven.</p>
+{% endif %}
+
+<h2>Goals</h2>
+
+<p>{{ goals|intcomma }} goals name a scorer. {{ goals_with_minute|intcomma }} of
+those also carry a minute. A game whose final score is known but whose scorers
+are not contributes to standings and to nobody's goal total, which is why a
+league's goals-per-game figure and the sum of its players' goals do not
+agree.</p>
+
+<h2>Appearances and minutes</h2>
+
+<p>{{ appearances|intcomma }} appearances are on record, of which
+{{ appearances_with_minutes|intcomma }} carry minutes played. The split is by
+era rather than at random: the ASL, the original NASL and the indoor leagues
+recorded lineups without minutes, so a career crossing those years has games
+played and no minutes at all. Where a page can only measure playing time in
+games, it says so.</p>
+
+<p>Season stat lines are thinner still &mdash; {{ stat_lines|intcomma }} on
+record, {{ stat_lines_with_minutes|intcomma }} of them with minutes.</p>
+
+<h2>Cards, fouls, substitutions</h2>
+
+<p>{% if events %}{{ events|intcomma }} in-game events other than goals are on
+record.{% else %}None. The database has a place for cards, fouls and
+substitutions, and nothing has been transcribed into it &mdash; no parsed
+source carries them. Goals are the only in-game event loaded.{% endif %} See
+the <a href="{% url 'events_index' %}">events index</a>.</p>
+
+<h2>People</h2>
+
+<p>{{ bios|intcomma }} people are on record and
+{{ bios_with_birthdate|intcomma }} of them have a birthdate. Birthplaces are
+thinner still, and unevenly so: whole competitions carry none. Any count of
+players by birthplace is a count of the ones whose birthplace is known, and the
+pages that break playing time down by country carry a row for the time that
+can't be attributed rather than quietly dropping it.</p>
+
+<h2>Caps</h2>
+
+<p>National-team caps and international goals are summed from lineups, so every
+game missing a lineup undercounts them. The USMNT record here is short of the
+US Soccer Federation's official count, and not by a constant &mdash; some years
+match, some are missing games, and a few hold games the federation does not
+count. Cobi Jones won 164 caps by the federation's reckoning; the figure on his
+page is what the lineups on file add up to. Treat any cap total here as what
+this database can prove, not as the official number.</p>
+
+<h2>Errors</h2>
+
+<p>Some of the record is simply wrong. Every page carries a link to report an
+error, and the <a href="{% url 'source_index' %}">sources</a> behind each game
+are listed on it, so a figure can be checked rather than taken on trust. If you
+have a season the database is missing,
+<a href="{% url 'contact_index' %}">get in touch</a>.</p>
+
+</div>
+
+{% endblock %}

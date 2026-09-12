@@ -1,0 +1,13 @@
+{% comment %}
+The one coverage marker.
+
+Totals here are sums of what the database holds, and the holdings are uneven by
+era. Rather than restate that in prose under every table, a partial figure
+carries this line and links to /about/coverage/, which says what is actually on
+file.
+
+Pass `note` to name what is partial about this particular table; the link is
+always the same. Include it under a table, not above it — the reader needs the
+numbers first.
+{% endcomment %}
+<p class="coverage-note">{% if note %}{{ note }} {% endif %}Totals are summed from what the record holds &mdash; see the <a href="{% url 'coverage_note' %}">coverage note</a>.</p>
