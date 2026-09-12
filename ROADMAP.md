@@ -9,6 +9,28 @@ Open work only; completed items are removed as they land (see git history).
 - [ ] Normalize original NASL postseason data: connect playoff seasons in the UI, move playoff games out of the main league seasons, and resolve the incomplete 1975–1983 split (including the extra 1976 and 1981 games). The 1968, 1970–1974, and 1984 playoffs are currently stored entirely in the league season; 1969 had no playoffs.
 - [ ] Nine foreign guest clubs are recorded as NASL participants — Coventry City, Hertha BSC, Hapoel Tel Aviv, CF Monterrey and Varzim S.C. in 1970; Apollon Limassol, Bangu, Heart of Midlothian and Vicenza Calcio in 1971. They are the touring sides of the NASL's International Cup, filed under the league competition with no `round` to separate them: 24 games in 1970 and 32 in 1971. They inflate the competition header's club count (67 rather than 58) and give the clubs timeline nine one-season rows that were never NASL members. Same shape as the postseason item above — the games need their own competition or a round that marks them.
 - [ ] Move the league -> playoffs-competition mapping (`PLAYOFF_CHAMPIONSHIPS` in `competitions/models.py`) out of s2 code and into data (metadata), the way competition definitions and aliases already work. It's data, not logic, and it'll only grow as more leagues (WUSA, WPS, NWSL, ...) get their postseasons split out. Two readers now: `Season.champion()` and `most_titled()` in `competitions/views.py`.
+- [ ] Carry the competition's name *at the time* on season rows, the way games
+  already carry `team1_original_name`. A seasons table that renders 1921–1933
+  as "American Soccer League" throughout hides the renames, and the ASL, NASL
+  and USL families all changed names mid-run. `Competition` has no
+  original-name field and `Season` has no override, so this is a data question
+  first — where the per-season name is recorded in `metadata` — then a column
+  in `{% seasons_table %}` (`templates/templatetags/seasons.html`) and in the
+  competition-history table.
+
+## Games
+
+- [ ] Replace the goals-only grid on the game page
+  (`templates/templatetags/games/detail/result.html`) with one chronological
+  event spine: minute and the running score down the middle, home events left
+  and away right, a half-time divider, and a glyph per event. Goals and own
+  goals are loaded and the running score is derivable from them, so that much
+  can ship now; substitutions are partly recoverable from `Appearance.on`.
+  Cards and fouls cannot — `events.Event` and `events.Foul` are empty tables
+  (see `/events/`), because no parsed source carries them. So the spine should
+  be built to take event types it doesn't yet have rows for, and the page
+  should say which kinds of event are on record rather than implying a
+  complete timeline.
 
 ## United States
 
@@ -61,6 +83,13 @@ minted by a different loader; fix each at its source rather than filtering here.
   real people from a bios source with thin holdings. Not wrong, but empty pages;
   decide whether the directory should show them, and mark on the page that the
   record holds nothing for them yet.
+- [ ] Split a career page's season table by kind of competition — league, cup,
+  international club, national team — the way a US career actually divides
+  (MLS plus Open Cup plus CONCACAF plus caps all run down one column now).
+  `Competition.ctype` and `scope` already carry enough to bucket them. The
+  filter has to be a real navigable state, not a tab that hides rows from
+  Ctrl-F, and "all competitions" stays the default so nothing is hidden by
+  accident.
 - [ ] The season goal chart groups by season *name* (`goal_seasons_by_tier`, `bios/views.py`), so a career mixing split-year club seasons with calendar-year caps splits across columns — `2013-2014`, `2013` and `2014` each get their own. Wondolowski's two CONCACAF Champions League seasons sit as 1- and 2-goal columns between the calendar years. Folding split-year seasons into their start year would misrepresent European careers, so this needs a decision about what a column means before it can be fixed.
 
 ## News
@@ -71,6 +100,37 @@ minted by a different loader; fix each at its source rather than filtering here.
   shows on his page. Teams, competitions and seasons are still unlinked; a 2010 du
   Nord roundup should show on the 2010 season page. Team names need aliasing the
   way the build already does it, and a season is a competition name plus a year.
+
+## Teams
+
+- [ ] Franchise lineage: relocations, renames, mergers, folds and revivals as
+  one graph, so a reader landing on the Kansas City Wizards can see they are
+  Sporting Kansas City, and the two Washington Diplomats, the three separate
+  Chicago Sting eras and the many clubs that share a name with a dead one can
+  be told apart. Nothing on the site currently connects two team rows at all:
+  `Team` has no relation to another `Team`, so this is a model change plus the
+  sourcing, and the sourcing is the hard half — a relocation is a fact
+  somebody has to assert and cite, unlike a rename that shows up in the data.
+  It belongs in `metadata` as curated data, the way competition definitions
+  and aliases already do, not in s2 code. Two relations, at least: succeeds
+  (one club continues another) and merged-into. Draw it on the team page as a
+  short chain, not a diagram.
+- [ ] "Most often alongside" (`teammates()`, `bios/views.py`) reads every
+  appearance for the player's clubs on each of their game ids. It is fast for
+  one player, but it is the same join a club-to-club player-movement graph or
+  a full teammate network would need at scale, and that would want a
+  materialized table built at load time rather than a live query.
+
+## Site
+
+- [ ] Render an age as years and days — `33-362`, not `33` — wherever a page
+  shows one against a date: game lineups, season rosters, draft classes,
+  award winners. A career that spans a 150-year record is full of
+  youngest/oldest claims that a whole number can't settle. Needs a birthdate,
+  which about half of bios have; the rest take the §9 marker, not a blank.
+- [ ] Keyboard shortcuts, printed on the page rather than hidden: `/` to focus
+  the header search, `?` for the list. Small addition to
+  `static/js/custom.js`, must not swallow the key while a field has focus.
 
 ## Deferred
 
