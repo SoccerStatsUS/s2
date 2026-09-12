@@ -159,6 +159,42 @@ def person_id_detail(request, pid):
     bio = get_object_or_404(Bio, id=pid)
     return person_detail_abstract(request, bio)
 
+TEAMMATE_LIMIT = 12
+
+
+def teammates(bio, limit=TEAMMATE_LIMIT):
+    """
+    The players who took the field alongside this one most often.
+
+    Two players are teammates in a game when both have an appearance in it for
+    the same club, so this is the record's own answer rather than a roster
+    lookup: a signing who never played with someone does not appear, and a
+    loanee who played four games does.
+
+    It reads only appearances, so it is as complete as the lineups are and no
+    more -- a career played in a league that recorded no lineups has no
+    teammates here at all, which is a gap in the record and not a solitary
+    career. The page says so rather than showing an empty list.
+    """
+    from lineups.models import Appearance
+
+    mine = list(Appearance.objects.filter(player=bio).values_list('game_id', 'team_id'))
+    if not mine:
+        return {'rows': [], 'games': 0}
+
+    games = {game for game, _ in mine}
+    teams = {team for _, team in mine}
+
+    rows = (Appearance.objects
+            .filter(game_id__in=games, team_id__in=teams)
+            .exclude(player=bio)
+            .values('player__name', 'player__slug')
+            .annotate(together=Count('game_id', distinct=True))
+            .order_by('-together', 'player__name')[:limit])
+
+    return {'rows': list(rows), 'games': len(games), 'limit': limit}
+
+
 def person_detail_abstract(request, bio):
     competition_stats = bio.competition_stats().order_by('competition__international', '-games_played')
     team_stats = bio.team_stats().order_by('-games_played')
@@ -196,6 +232,7 @@ def person_detail_abstract(request, bio):
         'refs': bio.ref_set()[:10],
         'news': bio.news.select_related('source').order_by('-dt')[:10],
         'news_count': bio.news.count(),
+        'teammates': teammates(bio),
         }
 
     return render(request, "bios/detail.html",

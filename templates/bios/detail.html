@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load charts %}
 {% load games %}
+{% load humanize %}
 {% load stats %}
 
 {% block title %}{{ bio.name }}{% endblock %}
@@ -108,6 +109,37 @@ all {{ game_log_count }} recorded games &rarr;
 
 </div>
 
+{% endif %}
+
+{% if teammates.rows %}
+<div tab="teammates">
+<h3>Most often alongside</h3>
+<table>
+  <caption class="sr-only">Players who appeared in the most games alongside {{ bio.name }}</caption>
+  <thead>
+    <tr>
+      <th scope="col">player</th>
+      <th scope="col" title="games the two appeared in for the same club">together</th>
+      <th scope="col" title="share of this player's own recorded appearances">share</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for row in teammates.rows %}
+  <tr>
+    <td><a href="{% url 'person_detail' row.player__slug %}">{{ row.player__name }}</a></td>
+    <td>{{ row.together|intcomma }}</td>
+    <td>{% widthratio row.together teammates.games 100 %}%</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<p class="table-legend">The {{ teammates.limit }} most frequent, of the
+{{ teammates.games|intcomma }} game{{ teammates.games|pluralize }} {{ bio.name }} has an
+appearance on record for. Two players count as teammates in a game when both have an
+appearance in it for the same club, so this is drawn from lineups rather than from
+rosters &mdash; and it is only as complete as the lineups are. Whole leagues here
+recorded none.</p>
+</div>
 {% endif %}
 
 {% if refs %}
