@@ -13,7 +13,7 @@
 </h2>
 
 {% if not map %}
-<p>No {{ season.competition.name }} club has a home city on record with coordinates for {{ season }}, so there is no map to draw.
+<p>No club in {{ season }} has a home city with coordinates on record, so there is no map to draw.
 {% if clubs %}The season's clubs: {% for c in clubs %}<a href="{{ c.team.get_absolute_url }}">{{ c.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}.{% endif %}</p>
 {% else %}
 
