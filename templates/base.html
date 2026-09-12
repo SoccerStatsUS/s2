@@ -8,7 +8,7 @@
   <meta name="description" content="{% block metadescription %}American soccer statistics from 1866 to today{% endblock %}">
 
   <link rel="icon" type="image/svg+xml" href="{{ STATIC_URL }}favicon.svg">
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css?v=55" media="screen">
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css?v=56" media="screen">
 
   <script src="{{ STATIC_URL }}js/custom.js?v=11" defer></script>
 
@@ -80,6 +80,7 @@
       <span class="footer-tag">SoccerStats.us &mdash; American soccer history, 1866&ndash;present</span>
       <nav class="footer-links">
         <a href="{% url 'about_index' %}">about</a>
+        <a href="{% url 'coverage_note' %}">coverage</a>
         <a href="{% url 'source_index' %}">sources</a>
         <a href="{% url 'random_person_detail' %}">random player</a>
         <a href="mailto:chris@soccerstats.us?subject=SoccerStats.us%20error%20report&body={{ request.build_absolute_uri|urlencode:'' }}">report an error on this page</a>
