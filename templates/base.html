@@ -12,12 +12,27 @@
 
   <script src="{{ STATIC_URL }}js/custom.js?v=11" defer></script>
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q3Q8SSD26K"></script>
   <script>
+    // Analytics only after the first sign of a person. A scraper's headless
+    // renderer runs page JS and was the bulk of Analytics traffic (it reports
+    // from Singapore); it never moves a pointer, scrolls, or types, and
+    // automated Chrome flags itself with navigator.webdriver. The cost is a
+    // visitor who reads without scrolling and leaves, who goes uncounted.
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-Q3Q8SSD26K');
+    if (!navigator.webdriver) {
+      var gaEvents = ['pointermove', 'scroll', 'touchstart', 'keydown'];
+      var gaStart = function () {
+        gaEvents.forEach(function (e) { window.removeEventListener(e, gaStart); });
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-Q3Q8SSD26K';
+        document.head.appendChild(s);
+        gtag('js', new Date());
+        gtag('config', 'G-Q3Q8SSD26K');
+      };
+      gaEvents.forEach(function (e) { window.addEventListener(e, gaStart, { passive: true }); });
+    }
   </script>
 
   {% block extrahead %}{% endblock %}
