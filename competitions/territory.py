@@ -77,13 +77,17 @@ COUNTRY_CODES = {
     'Macedonia': 'MK', 'Malta': 'MT', 'Netherlands': 'NL', 'Norway': 'NO', 'Poland': 'PL',
     'Portugal': 'PT', 'Romania': 'RO', 'Serbia': 'RS', 'Sweden': 'SE', 'Slovenia': 'SI',
     'Slovakia': 'SK', 'Turkey': 'TR',
+    'Guatemala': 'GT', 'Belize': 'BZ', 'Honduras': 'HN', 'El Salvador': 'SV',
+    'Nicaragua': 'NI', 'Costa Rica': 'CR', 'Panama': 'PA',
 }
 
 COUNTRY_NAMES = {code: name for name, code in COUNTRY_CODES.items()}
 COUNTRY_NAMES.update({'CZ': 'Czech Republic', 'MK': 'North Macedonia'})
 
 # What the units are called, for the caption and the table.
-UNIT_NOUNS = {'US': 'counties', 'CA': 'census divisions', 'MX': 'municipios'}
+UNIT_NOUNS = {'US': 'counties', 'CA': 'census divisions', 'MX': 'municipios',
+              'GT': 'municipios', 'HN': 'municipios', 'SV': 'municipios', 'NI': 'municipios',
+              'CR': 'cantones', 'PA': 'distritos', 'BZ': 'constituencies'}
 DEFAULT_NOUN = 'NUTS 3 regions'
 
 # One color per club, keyed by team slug. These are data encodings on one

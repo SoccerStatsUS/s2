@@ -49,6 +49,9 @@ class CountyAtlasTests(SimpleTestCase):
         assert by['DE'] == 401 and by['ES'] == 59 and by['IT'] == 107 and by['FR'] == 96
         assert by['ENG'] + by['WLS'] + by['SCT'] + by['NIR'] == 179
         assert by['MX'] == 2457  # geoBoundaries ADM2, the World Bank's 2012 municipios
+        # Central America, geoBoundaries ADM2 throughout.
+        assert (by['GT'], by['BZ'], by['HN'], by['SV'], by['NI'], by['CR'], by['PA']) == \
+            (342, 31, 298, 272, 153, 83, 76)
         assert len({u['state'] for u in units.values() if u['country'] == 'US'}) == 51
 
     def test_ids_carry_their_source(self):

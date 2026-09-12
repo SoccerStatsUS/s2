@@ -30,7 +30,10 @@ Sources, all public domain or open with attribution:
   GeoJSON, CC BY 4.0. One file per country; the API at
   https://www.geoboundaries.org/api/current/gbOpen/<ISO3>/ADM2/ names the
   current download under simplifiedGeometryGeoJSON. Mexico's municipios come
-  from here (2,457, the World Bank's 2012 set), and the rest of Latin America
+  from here (2,457, the World Bank's 2012 set), as do the seven Central
+  American countries (Guatemala, Belize, Honduras, El Salvador, Nicaragua,
+  Costa Rica, Panama; the sources behind each are named in the API record,
+  Nicaragua's being OpenStreetMap under the ODbL). The rest of Latin America
   can follow the same way: pass --adm2 once per country as CODE=path, where
   CODE is the atlas country code the map filters on.
 
