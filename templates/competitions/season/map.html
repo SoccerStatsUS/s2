@@ -59,7 +59,7 @@ for its count.{% if unlocated %} No coordinates on record for {% for c in unloca
 {% for c in unlocated %}
 <tr>
   <td><a href="{{ c.team.get_absolute_url }}">{{ c.name }}</a></td>
-  <td colspan="4"><span class="grey" title="no coordinates on record for the home city">no home city on record</span></td>
+  <td colspan="4"><span class="grey" title="the club's home city has no coordinates on record">{% if c.team.city %}{{ c.team.city }}, no coordinates on record{% else %}no home city on record{% endif %}</span></td>
 </tr>
 {% endfor %}
 {% endif %}
