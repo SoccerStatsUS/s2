@@ -100,6 +100,11 @@
 {% standings_table competition_standings 'team,season' %}
 {% endif %}
 
+{% if ladder %}
+<h3>Division, year by year</h3>
+{% ladder_chart ladder "Where "|add:team.name|add:" sat in the pyramid" %}
+{% endif %}
+
 {% if season_rates %}
 <h3>Points per game, season by season</h3>
 {% rate_chart season_rates "Points per game by season" "A league season only, oldest first. Points per game rather than points, because the schedule has run anywhere from 20 games to 34. Points are as the league awarded them, which has not always been three for a win. Select a column for that season; the table below carries every figure." "points per game" career_rate "all-time" %}

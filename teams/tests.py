@@ -5,7 +5,8 @@ from unittest.mock import MagicMock, patch
 from django.template.loader import render_to_string
 from django.test import RequestFactory, SimpleTestCase
 
-from teams.views import team_games
+from competitions.templatetags.charts import ladder_chart
+from teams.views import season_year, team_games
 
 
 class TeamGamesTests(SimpleTestCase):
@@ -98,3 +99,47 @@ class TeamDetailTests(SimpleTestCase):
         self.assertIn('latest recorded game', html)
         self.assertIn('<h2>Honors</h2>', html)
         self.assertIn('MLS Cup', html)
+
+
+class SeasonYearTests(SimpleTestCase):
+
+    def test_split_year_season_lands_on_the_year_it_began(self):
+        assert season_year('1924-1925') == 1924
+
+    def test_calendar_year_season(self):
+        assert season_year('2004') == 2004
+
+    def test_a_season_named_something_else_has_no_year(self):
+        # Better no block than a block on the wrong year.
+        assert season_year('Spring') is None
+        assert season_year('') is None
+        assert season_year(None) is None
+
+
+class ClubLadderChartTests(SimpleTestCase):
+
+    def entry(self, year, level):
+        return {'year': year, 'level': level, 'season': str(year),
+                'competition': 'A League', 'url': '/x/'}
+
+    def test_years_run_unbroken_so_a_gap_stays_visible(self):
+        chart = ladder_chart([self.entry(1970, 1), self.entry(1975, 1)], 'c')
+
+        assert chart['first'] == 1970 and chart['last'] == 1975
+        # One row, two blocks, four empty years between them.
+        assert [row['count'] for row in chart['rows']] == [2]
+
+    def test_only_the_levels_used_get_a_row(self):
+        chart = ladder_chart([self.entry(1970, 1), self.entry(1971, 4)], 'c')
+
+        assert [row['name'] for row in chart['rows']] == ['1st division', '4th division']
+
+    def test_a_league_with_no_level_keeps_its_seasons_in_a_band_of_its_own(self):
+        chart = ladder_chart([self.entry(1970, 1), self.entry(1971, None)], 'c')
+
+        assert chart['unplaced'] is True
+        assert [row['name'] for row in chart['rows']] == ['1st division', 'level not recorded']
+        assert [row['placed'] for row in chart['rows']] == [True, False]
+
+    def test_one_season_is_not_a_chart(self):
+        assert ladder_chart([self.entry(1970, 1)], 'c')['svg'] is None

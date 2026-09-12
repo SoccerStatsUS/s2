@@ -230,6 +230,63 @@ def season_points_per_game(team):
     return rows, (points / games if games else None)
 
 
+def season_year(name):
+    """
+    The year a season began, off its name.
+
+    A season is named "1924-1925" or "2004", so the first four digits are the
+    starting year. Split-year and calendar-year leagues then land on the same
+    axis, which is the only way a club that moved between the two can be drawn
+    as one career.
+    """
+    head = (name or '')[:4]
+    return int(head) if head.isdigit() else None
+
+
+def club_ladder(team):
+    """
+    Which tier of the pyramid a club sat in, year by year.
+
+    Leagues only. A cup has no tier and a cup run says nothing about where a
+    club sat; the U.S. Open Cup would otherwise put every amateur side that
+    ever entered onto the same line as MLS.
+
+    A league with no level on record keeps its seasons rather than losing
+    them: they come back with a level of None and the chart gives them a band
+    of their own. Dropping them would open a hole in a career that the club
+    did not actually have, which is the failure DESIGN.md §9 is about.
+    """
+    standings = (Standing.objects
+                 .filter(team=team, season__competition__ctype='League')
+                 .exclude(season=None)
+                 .select_related('season', 'season__competition')
+                 .order_by('season__order'))
+
+    entries, seen = [], set()
+    for standing in standings:
+        season = standing.season
+        competition = season.competition
+        year = season_year(season.name)
+        if year is None or competition is None:
+            continue
+
+        key = (year, competition.id)
+        if key in seen:
+            continue
+        seen.add(key)
+
+        entries.append({
+            'year': year,
+            'level': competition.level,
+            'season': season.name,
+            'competition': competition.name,
+            'url': reverse('team_season_detail',
+                           args=[team.slug, competition.slug, season.slug]),
+            })
+
+    return entries
+
+
 def team_detail(request, team_slug):
     """
     Just about the most important view of all.
@@ -272,6 +329,7 @@ def team_detail(request, team_slug):
         'recent_games': recent_games,
         'competition_standings': competition_standings,
         'league_standings': league_standings,
+        'ladder': club_ladder(team),
         'season_rates': season_rates,
         'career_rate': career_rate,
         'games_count': games_count,

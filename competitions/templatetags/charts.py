@@ -387,6 +387,99 @@ def timeline_chart(timeline, caption, noun="clubs"):
     }
 
 
+def ordinal(n):
+    """1 -> 1st. Used for division names, which never run past a handful."""
+    if 10 <= n % 100 <= 20:
+        suffix = "th"
+    else:
+        suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+    return "%d%s" % (n, suffix)
+
+
+# A row per division and the block sitting inside it, in pixels.
+LADDER_ROW = 22
+LADDER_BLOCK = 12
+
+
+@register.inclusion_tag("templatetags/charts/ladder.html")
+def ladder_chart(entries, caption):
+    """
+    A club's place in the pyramid year by year: a column a year, a row a
+    division, a block where the club played.
+
+    Years run unbroken from the first on record to the last, so a year the club
+    did not play is an empty column rather than a missing one. On a 150-year
+    record the gaps are most of the story -- a club that folded and reformed,
+    or sat out a war -- and a chart that closed them would be claiming a
+    continuity nobody has.
+
+    Divisions are only the levels actually used, so a club that has never left
+    the top flight draws one row rather than four empty ones. A league with no
+    level on record gets a band of its own at the foot, drawn as an outline
+    rather than a fill: it is a season the club certainly played, at a tier the
+    record does not state, and those are different absences.
+    """
+    entries = [e for e in entries or [] if e.get("year") is not None]
+    if len(entries) < 2:
+        return {"svg": None}
+
+    years = list(range(min(e["year"] for e in entries),
+                       max(e["year"] for e in entries) + 1))
+    levels = sorted({e["level"] for e in entries if e["level"] is not None})
+    unplaced = any(e["level"] is None for e in entries)
+    bands = levels + ([None] if unplaced else [])
+    if not bands:
+        return {"svg": None}
+
+    row_of = {level: index for index, level in enumerate(bands)}
+
+    left, right, top = 130, 20, 26
+    plot_w = WIDTH - left - right
+    slot = plot_w / len(years)
+    block_w = max(2, slot - GAP)
+    every = label_step([str(y) for y in years], slot)
+
+    height = top + len(bands) * LADDER_ROW + 6
+
+    labels, last_labeled = [], -every
+    for index, year in enumerate(years):
+        if index % every == 0 or (index == len(years) - 1 and index - last_labeled >= every):
+            labels.append({"x": left + index * slot + slot / 2, "text": str(year),
+                           "grid_top": top - 6, "grid_bottom": height})
+            last_labeled = index
+
+    rows = []
+    for level in bands:
+        y = top + row_of[level] * LADDER_ROW
+        blocks = []
+        for entry in entries:
+            if entry["level"] != level:
+                continue
+            index = entry["year"] - years[0]
+            blocks.append({
+                "x": left + index * slot + (slot - block_w) / 2,
+                "y": y + (LADDER_ROW - LADDER_BLOCK) / 2,
+                "width": block_w,
+                "url": entry["url"],
+                "title": "%s, %s" % (entry["competition"], entry["season"]),
+            })
+        rows.append({
+            "name": ordinal(level) + " division" if level is not None else "level not recorded",
+            "placed": level is not None,
+            "blocks": blocks,
+            "label_y": y + LADDER_ROW / 2 + 4,
+            "count": len(blocks),
+        })
+
+    return {
+        "svg": {"width": WIDTH, "height": height, "left": left, "label_x": left - 10,
+                "block_h": LADDER_BLOCK, "label_y": top - 12},
+        "rows": rows, "labels": labels, "caption": caption,
+        "first": years[0], "last": years[-1], "unplaced": unplaced,
+        "seasons": len(entries),
+    }
+
+
 @register.inclusion_tag("templatetags/charts/rates.html")
 def rate_chart(rows, caption, note, unit, reference=None, reference_label=""):
     """

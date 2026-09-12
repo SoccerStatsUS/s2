@@ -1,0 +1,20 @@
+{% if svg %}
+<figure class="chart ladder-chart">
+<svg viewBox="0 0 {{ svg.width }} {{ svg.height }}" role="img" aria-label="{{ caption }}">
+  {% for label in labels %}
+  <line class="grid" x1="{{ label.x|floatformat:1 }}" x2="{{ label.x|floatformat:1 }}" y1="{{ label.grid_top }}" y2="{{ label.grid_bottom }}"/>
+  <text x="{{ label.x|floatformat:1 }}" y="{{ svg.label_y }}" text-anchor="middle">{{ label.text }}</text>
+  {% endfor %}
+  {% for row in rows %}
+  <text class="label" x="{{ svg.label_x }}" y="{{ row.label_y|floatformat:1 }}" text-anchor="end">{{ row.name }}<title>{{ row.count }} season{{ row.count|pluralize }}</title></text>
+  {% for block in row.blocks %}<a href="{{ block.url }}"><rect class="mark{% if not row.placed %} partial{% endif %}" x="{{ block.x|floatformat:1 }}" y="{{ block.y|floatformat:1 }}" width="{{ block.width|floatformat:1 }}" height="{{ svg.block_h }}" rx="2"><title>{{ block.title }}</title></rect></a>{% endfor %}
+  {% endfor %}
+</svg>
+<figcaption>{{ caption }}, {{ first }} to {{ last }}. A block marks a league season,
+placed on the year the season began and the division its league is recorded at;
+select one for that season. An empty column is a year with no league season on
+record.{% if unplaced %} The outlined band holds seasons the club certainly played in a
+league whose division is not recorded &mdash; a gap in the record, not a year out of
+football.{% endif %} Cups are left out: a cup has no division.</figcaption>
+</figure>
+{% endif %}
