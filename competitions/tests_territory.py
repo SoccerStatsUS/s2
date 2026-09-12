@@ -1,19 +1,32 @@
 from django.test import SimpleTestCase
 
 from competitions import territory
-from competitions.territory import (COLORS, MAIN, NORTH, assign, atlas, distance_km,
-                                    frame_of, place_labels, season_map, territories)
+from competitions.territory import (COLORS, FALLBACK, NORTH, Frame, assign, atlas,
+                                    country_code, distance_km, far_north, in_play,
+                                    place_labels, season_map, territories)
 
 
-def club(name, lat, lon, slug=None):
-    return {'name': name, 'slug': slug or name.lower().replace(' ', '-'), 'lat': lat, 'lon': lon}
+def club(name, lat, lon, slug=None, country='US'):
+    return {'name': name, 'slug': slug or name.lower().replace(' ', '-'),
+            'lat': lat, 'lon': lon, 'country': country}
 
 
 DALLAS = club('FC Dallas', 32.7767, -96.7970, 'fc-dallas')
 HOUSTON = club('Houston Dynamo', 29.7604, -95.3698, 'houston-dynamo')
 GALAXY = club('LA Galaxy', 34.0522, -118.2437, 'la-galaxy')
 CHIVAS = club('Chivas USA', 34.0522, -118.2437, 'chivas-usa')
-TORONTO = club('Toronto FC', 43.6532, -79.3832, 'toronto-fc')
+TORONTO = club('Toronto FC', 43.6532, -79.3832, 'toronto-fc', 'CA')
+SEATTLE = club('Seattle Sounders', 47.6062, -122.3321, 'seattle-sounders')
+
+# The 1920s American Soccer League, more or less: a cluster between Boston
+# and Philadelphia, none of them in the palette.
+ASL = [club('Fall River Marksmen', 41.70, -71.16), club('Bethlehem Steel', 40.63, -75.37),
+       club('New Bedford Whalers', 41.64, -70.93), club('Brooklyn Wanderers', 40.68, -73.94),
+       club('Boston Wonder Workers', 42.36, -71.06)]
+
+ENGLAND = [club('Arsenal', 51.5549, -0.1084, 'arsenal', 'ENG'),
+           club('Manchester United', 53.4631, -2.2913, 'manchester-united', 'ENG'),
+           club('Newcastle United', 54.9756, -1.6218, 'newcastle-united', 'ENG')]
 
 
 class CountyAtlasTests(SimpleTestCase):
@@ -22,17 +35,29 @@ class CountyAtlasTests(SimpleTestCase):
     properties the map depends on, not the file's contents.
     """
 
-    def test_holds_the_counties_and_the_census_divisions(self):
+    def test_holds_the_counties_divisions_and_nuts_regions(self):
         units = atlas()
-        us = [u for u in units.values() if u['country'] == 'US']
-        ca = [u for u in units.values() if u['country'] == 'CA']
+        by = {}
+        for u in units.values():
+            by[u['country']] = by.get(u['country'], 0) + 1
 
         # 3,143 counties and equivalents in 2020, once Puerto Rico and the
-        # island territories are set aside; 293 census divisions in 2021.
-        assert len(us) == 3143
-        assert len(ca) == 293
-        assert len({u['state'] for u in us}) == 51  # fifty states and DC
-        assert len({u['state'] for u in ca}) == 13  # ten provinces, three territories
+        # island territories are set aside; 293 census divisions in 2021;
+        # NUTS 3 as of 2021, less France's overseas departements.
+        assert by['US'] == 3143
+        assert by['CA'] == 293
+        assert by['DE'] == 401 and by['ES'] == 59 and by['IT'] == 107 and by['FR'] == 96
+        assert by['ENG'] + by['WLS'] + by['SCT'] + by['NIR'] == 179
+        assert len({u['state'] for u in units.values() if u['country'] == 'US'}) == 51
+
+    def test_ids_carry_their_source(self):
+        units = atlas()
+        assert units['US48113']['name'] == 'Dallas'
+        assert units['CA3520']['name'] == 'Toronto'
+        assert units['EUUKI31']['country'] == 'ENG'
+        assert units['EUUKM75']['country'] == 'SCT'  # Edinburgh
+        assert units['EUUKL22']['country'] == 'WLS'  # Cardiff
+        assert 'EUFRY10' not in units  # Guadeloupe
 
     def test_leaves_out_puerto_rico(self):
         assert not any(u['state'] == 'PR' for u in atlas().values())
@@ -44,17 +69,13 @@ class CountyAtlasTests(SimpleTestCase):
             assert min(lons) <= unit['lon'] <= max(lons), uid
             assert min(lats) <= unit['lat'] <= max(lats), uid
 
-    def test_the_far_north_is_kept_but_not_drawn(self):
+    def test_the_far_north_is_kept_but_never_drawn(self):
         units = atlas()
-        north = [u for u in units.values() if u['lat'] > NORTH]
+        north = [u for u in units.values() if far_north(u)]
 
-        assert north, 'the territories are missing'
-        # Alaska is north of 60 too, but it has an inset of its own.
         assert {u['state'] for u in north} == {'AK', 'YT', 'NT', 'NU'}
-        assert all(frame_of(u) is None for u in north if u['state'] != 'AK')
-        assert frame_of(units['48113']) == 'main'  # Dallas County
-        assert frame_of(units['02020']) == 'alaska'  # Anchorage
-        assert frame_of(units['15003']) == 'hawaii'  # Honolulu
+        assert not far_north(units['EUNO074'])  # Troms og Finnmark, north of 60 but Norway
+        assert units['EUNO074']['lat'] > NORTH
 
     def test_western_canada_lands_west(self):
         # The Statistics Canada file is in a Lambert projection; a sign slip
@@ -91,21 +112,50 @@ class AssignmentTests(SimpleTestCase):
         assert la['colors'] == [COLORS['chivas-usa'], COLORS['la-galaxy']]
         assert [c['name'] for c in la['clubs']] == ['Chivas USA', 'LA Galaxy']
 
-    def test_unknown_club_gets_the_neutral_grey(self):
-        terrs = territories([club('Rochester Rhinos', 43.16, -77.61)])
-        assert terrs[0]['color'] == territory.UNASSIGNED
+    def test_unknown_clubs_cycle_the_fallback_set_and_say_so(self):
+        terrs = territories(ASL)
+        assert [t['color'] for t in terrs] == list(FALLBACK[:len(ASL)])
+        assert all(t['generic'] for t in terrs)
+        assert 'generic' not in territories([DALLAS])[0]
+
+    def test_only_the_clubs_countries_are_in_play(self):
+        units = atlas()
+        assert {u['country'] for u in in_play(units, ['US', 'CA']).values()} == {'US', 'CA'}
+        assert len(in_play(units, ['ENG'])) == 133
+        assert in_play(units, ['MX']) == {}
+
+    def test_country_codes(self):
+        assert country_code('United States') == 'US'
+        assert country_code('England') == 'ENG'
+        assert country_code('Germany') == 'DE'
+        assert country_code(None) is None
+        assert country_code('Narnia') is None
 
 
-class ProjectionTests(SimpleTestCase):
-    def test_albers_keeps_east_and_west_apart_and_north_up(self):
-        seattle = MAIN(-122.33, 47.61)
-        miami = MAIN(-80.19, 25.76)
-        toronto = MAIN(-79.38, 43.65)
+class FrameTests(SimpleTestCase):
+    def test_the_frame_follows_the_clubs(self):
+        units = atlas()
+        northeast = Frame(ASL, in_play(units, ['US']))
+        continent = Frame([SEATTLE, DALLAS, TORONTO], in_play(units, ['US', 'CA']))
 
-        assert seattle[0] < toronto[0]
-        assert miami[0] > seattle[0]
-        assert seattle[1] > miami[1]
-        assert toronto[1] > miami[1]
+        assert northeast.east - northeast.west < 12
+        assert northeast.north - northeast.south < 10
+        assert northeast.holds(-74.0, 40.7)  # New York
+        assert not northeast.holds(-87.6, 41.9)  # Chicago
+        assert continent.holds(-87.6, 41.9)
+        assert continent.holds(-122.3, 47.6)
+
+    def test_the_frame_holds_the_padded_club_box_and_a_little_more(self):
+        units = atlas()
+        frame = Frame(ASL, in_play(units, ['US']))
+        lons = [c['lon'] for c in ASL]
+        lats = [c['lat'] for c in ASL]
+        pad = territory.PADDING_FLOOR  # the ASL box is under 4 degrees across
+
+        assert frame.west <= min(lons) - pad and frame.east >= max(lons) + pad
+        assert frame.south <= min(lats) - pad and frame.north >= max(lats) + pad
+        # Widened to whole units at the edge, but only one pass' worth.
+        assert frame.east - frame.west < (max(lons) - min(lons)) + 2 * pad + 3
 
     def test_labels_stay_in_the_frame_and_off_each_other(self):
         marks = [
@@ -125,23 +175,52 @@ class SeasonMapTests(SimpleTestCase):
     def test_no_clubs_no_map(self):
         assert season_map([]) is None
 
+    def test_a_country_the_atlas_lacks_gives_no_map(self):
+        assert season_map([club('Club America', 19.43, -99.13, 'club-america', 'MX')]) is None
+
     def test_two_clubs_split_the_continent(self):
         result = season_map([DALLAS, TORONTO])
         marks = {m['name']: m for m in result['marks']}
 
         assert set(marks) == {'FC Dallas', 'Toronto FC'}
+        assert [c['code'] for c in result['countries']] == ['CA', 'US']
         assert marks['FC Dallas']['total'] + marks['Toronto FC']['total'] == result['units']
-        assert marks['Toronto FC']['ca'] > marks['FC Dallas']['ca']
-        assert marks['FC Dallas']['us'] > marks['Toronto FC']['us']
-        assert result['north'] == sum(m['north'] for m in result['marks'])
+        assert result['units'] == 3143 + 293
+        assert marks['Toronto FC']['by_country'][0] > marks['FC Dallas']['by_country'][0]
+        assert marks['FC Dallas']['by_country'][1] > marks['Toronto FC']['by_country'][1]
         assert abs(sum(m['share'] for m in result['marks']) - 100) < 0.01
+        assert result['insets'] == ['alaska', 'hawaii']
+        assert result['undrawn'] >= 10  # the three territories, at least
+        assert not result['generic']
+        assert not result['ground']
 
         # One path per territory, drawn as many subpaths.
         assert marks['FC Dallas']['d'].startswith('M')
         assert marks['FC Dallas']['d'].count('Z') > 1000
         assert marks['FC Dallas']['fill'] == COLORS['fc-dallas']
-        assert result['svg']['width'] == territory.WIDTH
+        assert result['svg']['width'] <= territory.WIDTH and result['svg']['height'] <= territory.MAX_HEIGHT
+
+    def test_the_asl_is_a_map_of_the_northeast_with_canada_as_ground(self):
+        result = season_map(ASL)
+
+        assert [c['code'] for c in result['countries']] == ['US']
+        assert result['units'] == 3143
+        assert result['insets'] == []
+        assert result['generic']
+        assert result['ground']  # Ontario and Quebec, drawn but not in play
+        assert result['undrawn'] > 2500  # most of the country is off the frame
+        assert len(result['cities']) == len(ASL)
         assert result['svg']['height'] < territory.WIDTH
+
+    def test_england_alone(self):
+        result = season_map(ENGLAND)
+
+        assert [c['code'] for c in result['countries']] == ['ENG']
+        assert result['countries'][0]['noun'] == 'NUTS 3 regions'
+        assert result['units'] == 133
+        assert result['insets'] == []
+        assert result['ground']  # Wales and Scotland
+        assert sum(m['total'] for m in result['marks']) == 133
 
     def test_shared_city_draws_a_stripe_pattern(self):
         result = season_map([GALAXY, CHIVAS, DALLAS])
@@ -152,11 +231,13 @@ class SeasonMapTests(SimpleTestCase):
 
 
 class PaletteTests(SimpleTestCase):
-    def test_every_club_the_league_has_had_is_colored(self):
+    def test_every_club_the_leagues_have_had_is_colored(self):
         for slug in ('tampa-bay-mutiny', 'miami-fusion', 'chivas-usa', 'san-diego-fc',
-                     'sporting-kansas-city', 'minnesota-united-fc'):
+                     'sporting-kansas-city', 'minnesota-united-fc', 'new-york-cosmos',
+                     'tampa-bay-rowdies', 'forge-fc', 'hfx-wanderers'):
             assert slug in COLORS, slug
 
     def test_colors_are_hex_and_distinct(self):
         assert all(len(c) == 7 and c.startswith('#') for c in COLORS.values())
         assert len(set(COLORS.values())) == len(COLORS)
+        assert not set(FALLBACK) & set(COLORS.values())

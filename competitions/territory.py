@@ -1,20 +1,27 @@
 """
-The closest-club map: every US county and Canadian census division colored by
+The closest-club map: every county-grain unit of a league's country colored by
 the club nearest its centre, for one season of a competition.
 
-The units are places/counties.json, built by tools/county_map.py. A club is
-placed at its home city's coordinates (places.City.lat/lon, from
-metadata/data/places/cities), and a unit goes to the club with the shortest
-great-circle distance from the unit's centroid. Clubs that share a city are one
-territory -- Los Angeles has held three at once -- drawn in stripes of their
-colors, since the point they share cannot be split by distance.
+The units are places/counties.json, built by tools/county_map.py: US counties,
+Canadian census divisions and Europe's NUTS 3 regions, each tagged with a
+country code. A club is placed at its home city's coordinates (places.City
+lat/lon, from metadata/data/places/cities). The units in play are those of
+the countries the season's clubs are in -- MLS competes for the US and Canada,
+the CPL for Canada alone, the Premier League for England -- and each goes to
+the club with the shortest great-circle distance from its centroid. Clubs that
+share a city are one territory, drawn in stripes of their colors, since the
+point they share cannot be split by distance.
 
-Everything is drawn in one Albers equal-area conic frame covering the lower 48
-and the ten provinces, with Alaska and Hawaii inset below it. The three
-territories north of 60 degrees are counted in the table but not drawn.
+The frame follows the clubs: their bounding box, padded, widened to take in
+whole units at the edge, drawn in an Albers equal-area conic centred on it.
+The ASL is a map of the Northeast; MLS is a map of the continent. Units of
+countries not in play that fall inside the frame are drawn as neutral ground,
+so the coast and the border still read. Alaska and Hawaii get insets when the
+US is in play and the frame leaves them out; the three Canadian territories
+are counted but never drawn.
 
-The page is heavy for this site -- about 3,400 outlines -- so each territory is
-a single path of many subpaths rather than a path per unit.
+The page is heavy for this site -- thousands of outlines -- so each territory
+is a single path of many subpaths rather than a path per unit.
 """
 
 import json
@@ -22,15 +29,31 @@ import math
 import os
 from collections import defaultdict
 
-from competitions.templatetags.charts import ring_bounds, thin
+from competitions.templatetags.charts import thin
 
 ATLAS_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                           "places", "counties.json")
 
 WIDTH = 960
 
-# Units centred north of this are outside the frame: Yukon, the Northwest
-# Territories and Nunavut. tools/county_map.py thins them on the same line.
+# A tall frame -- England, Italy -- fits to this height instead and comes
+# out narrower than the column.
+MAX_HEIGHT = 720
+
+# The frame around the clubs: this share of the larger side of their bounding
+# box on every edge, and never less than the floor in degrees, so two clubs in
+# one city still get a map.
+PADDING = 0.15
+PADDING_FLOOR = 1.5
+
+# A unit at the frame's edge pulls the frame out to its own extent, unless it
+# is bigger than this many degrees across -- Nord-du-Quebec would otherwise
+# stretch every map that reaches Montreal.
+EDGE_UNIT_LIMIT = 6.0
+
+# Units of the US and Canada centred north of this -- Yukon, the Northwest
+# Territories and Nunavut -- are never drawn. tools/county_map.py thins them
+# on the same line.
 NORTH = 60.0
 
 # Inset widths in pixels, and their padding from the frame's bottom-left.
@@ -39,6 +62,26 @@ HAWAII_WIDTH = 110
 INSET_GAP = 12
 
 EARTH_RADIUS_KM = 6371.0
+
+# How the database names a country, and the code the atlas files it under.
+# The four home nations are their own countries here, as in football.
+COUNTRY_CODES = {
+    'United States': 'US', 'Canada': 'CA', 'Mexico': 'MX',
+    'England': 'ENG', 'Wales': 'WLS', 'Scotland': 'SCT', 'Northern Ireland': 'NIR',
+    'Albania': 'AL', 'Austria': 'AT', 'Belgium': 'BE', 'Bulgaria': 'BG',
+    'Switzerland': 'CH', 'Cyprus': 'CY', 'Czech Republic': 'CZ', 'Czechia': 'CZ',
+    'Germany': 'DE', 'Denmark': 'DK', 'Estonia': 'EE', 'Greece': 'EL', 'Spain': 'ES',
+    'Finland': 'FI', 'France': 'FR', 'Croatia': 'HR', 'Hungary': 'HU', 'Ireland': 'IE',
+    'Iceland': 'IS', 'Italy': 'IT', 'Liechtenstein': 'LI', 'Lithuania': 'LT',
+    'Luxembourg': 'LU', 'Latvia': 'LV', 'Montenegro': 'ME', 'North Macedonia': 'MK',
+    'Macedonia': 'MK', 'Malta': 'MT', 'Netherlands': 'NL', 'Norway': 'NO', 'Poland': 'PL',
+    'Portugal': 'PT', 'Romania': 'RO', 'Serbia': 'RS', 'Sweden': 'SE', 'Slovenia': 'SI',
+    'Slovakia': 'SK', 'Turkey': 'TR',
+}
+
+# What the units are called, for the caption and the table.
+UNIT_NOUNS = {'US': 'counties', 'CA': 'census divisions', 'MX': 'municipios'}
+DEFAULT_NOUN = 'NUTS 3 regions'
 
 # One color per club, keyed by team slug. These are data encodings on one
 # page, never the site palette (DESIGN.md section 2): every territory also
@@ -84,10 +127,10 @@ COLORS = {
     # NASL, 1968-1984. Kit colors where they are on record (nasljerseys.com,
     # funwhileitlasted.net, sportslogos.net); the rest are chosen to stand
     # apart from the neighbors of their years. The touring guest clubs of
-    # 1970-71 -- Coventry, Hertha, Bangu and the rest -- are left grey on
-    # purpose: they hold no ground here, and the ROADMAP has them leaving the
-    # league table altogether. Portland, San Jose, Seattle and Vancouver are
-    # the same team rows as the MLS clubs and keep their colors above.
+    # 1970-71 -- Coventry, Hertha, Bangu and the rest -- are left to the
+    # fallback on purpose: they hold no ground here, and the ROADMAP has them
+    # leaving the league table altogether. Portland, San Jose, Seattle and
+    # Vancouver are the same team rows as the MLS clubs and keep their colors.
     'atlanta-chiefs': '#5e2b97',
     'baltimore-bays': '#f0b323',
     'baltimore-comets': '#7b3f9e',
@@ -155,7 +198,11 @@ COLORS = {
     'vancouver-fc': '#d64541',
 }
 
-UNASSIGNED = '#9a9a9a'
+# Clubs with no color of their own cycle through these, in name order, so a
+# league nobody has researched yet still draws legibly. Muted on purpose:
+# the caption says they are not club colors.
+FALLBACK = ('#8c9bab', '#b08968', '#7fa27a', '#a98ab0', '#c2a26a',
+            '#79a3b5', '#b58a8a', '#8fa66f')
 
 _atlas = None
 
@@ -166,6 +213,14 @@ def atlas():
         with open(ATLAS_PATH, encoding="utf-8") as f:
             _atlas = json.load(f)["units"]
     return _atlas
+
+
+def country_code(name):
+    return COUNTRY_CODES.get(name or '')
+
+
+def unit_noun(code):
+    return UNIT_NOUNS.get(code, DEFAULT_NOUN)
 
 
 # ---- Assignment ---------------------------------------------------------
@@ -184,7 +239,8 @@ def territories(clubs):
     Group clubs by location. Each club is a dict with name, slug, lat and lon;
     each territory carries its clubs, its point, and a color -- one club's
     own, or a stripe of several. Ordered by name so the table and the stripe
-    patterns are stable between renders.
+    patterns are stable between renders. Clubs without a color of their own
+    take the fallback set in turn, and the territory says so.
     """
     by_point = defaultdict(list)
     for club in clubs:
@@ -193,19 +249,32 @@ def territories(clubs):
     out = []
     for (lat, lon), members in by_point.items():
         members.sort(key=lambda c: c["name"])
-        colors = [COLORS.get(c["slug"], UNASSIGNED) for c in members]
         out.append({
             "clubs": members,
             "name": " / ".join(c["name"] for c in members),
             "lat": lat, "lon": lon,
-            "colors": colors,
-            "color": colors[0],
         })
 
     out.sort(key=lambda t: t["name"])
+    generic = 0
     for i, t in enumerate(out):
         t["index"] = i
+        colors = []
+        for c in t["clubs"]:
+            color = COLORS.get(c["slug"])
+            if color is None:
+                color = FALLBACK[generic % len(FALLBACK)]
+                generic += 1
+                t["generic"] = True
+            colors.append(color)
+        t["colors"] = colors
+        t["color"] = colors[0]
     return out
+
+
+def in_play(units, countries):
+    """The units of the given country codes."""
+    return {uid: u for uid, u in units.items() if u["country"] in countries}
 
 
 def assign(units, territories_):
@@ -243,20 +312,77 @@ def albers(lon0, lat0, lat1, lat2):
     return project
 
 
-MAIN = albers(-96, 40, 33, 55)
 ALASKA = albers(-154, 50, 55, 65)
 HAWAII = albers(-157, 13, 8, 18)
 
 
-def frame_of(unit):
-    """Which projection a unit belongs to, or None if it is not drawn."""
-    if unit["state"] == "AK":
-        return "alaska"
-    if unit["state"] == "HI":
-        return "hawaii"
-    if unit["lat"] > NORTH:
-        return None
-    return "main"
+class Frame:
+    """
+    The window the map shows, in degrees: the clubs' bounding box padded, then
+    widened to whole units at the edge. Carries the projection for it.
+    """
+
+    def __init__(self, clubs, units):
+        lons = [c["lon"] for c in clubs]
+        lats = [c["lat"] for c in clubs]
+        span = max(max(lons) - min(lons), max(lats) - min(lats))
+        pad = max(PADDING * span, PADDING_FLOOR)
+        self.west, self.east = min(lons) - pad, max(lons) + pad
+        self.south, self.north = min(lats) - pad, max(lats) + pad
+
+        # One pass only: widening lets in new centroids, and going round again
+        # creeps along the coast until a Northeast map is half the continent.
+        # Units let in by the widening are clipped at the edge, which reads
+        # fine.
+        box = (self.west, self.east, self.south, self.north)
+        for unit in units.values():
+            if box[0] <= unit["lon"] <= box[1] and box[2] <= unit["lat"] <= box[3]:
+                x0, y0, x1, y1 = unit_bounds(unit)
+                if max(x1 - x0, y1 - y0) <= EDGE_UNIT_LIMIT:
+                    self.west, self.east = min(self.west, x0), max(self.east, x1)
+                    self.south, self.north = min(self.south, y0), max(self.north, y1)
+
+        self.south, self.north = max(self.south, -89.0), min(self.north, 89.0)
+        sixth = (self.north - self.south) / 6
+        self.project = albers((self.west + self.east) / 2, (self.south + self.north) / 2,
+                              self.south + sixth, self.north - sixth)
+
+    def holds(self, lon, lat):
+        return self.west <= lon <= self.east and self.south <= lat <= self.north
+
+    def touches(self, unit):
+        x0, y0, x1, y1 = unit_bounds(unit)
+        return x1 >= self.west and x0 <= self.east and y1 >= self.south and y0 <= self.north
+
+    def outline(self, step=0.5):
+        """The frame's edges as a ring of points, for fitting."""
+        points = []
+        lon, lat = self.west, self.south
+        while lon < self.east:
+            points.append((lon, self.south))
+            lon += step
+        while lat < self.north:
+            points.append((self.east, lat))
+            lat += step
+        while lon > self.west:
+            points.append((lon, self.north))
+            lon -= step
+        while lat > self.south:
+            points.append((self.west, lat))
+            lat -= step
+        return points
+
+
+def unit_bounds(unit):
+    if "bounds" not in unit:
+        xs = [p[0] for ring in unit["rings"] for p in ring]
+        ys = [p[1] for ring in unit["rings"] for p in ring]
+        unit["bounds"] = (min(xs), min(ys), max(xs), max(ys))
+    return unit["bounds"]
+
+
+def far_north(unit):
+    return unit["country"] in ("US", "CA") and unit["lat"] > NORTH
 
 
 class Fit:
@@ -285,6 +411,9 @@ class Fit:
 
     def ring(self, ring):
         return [self.point(lon, lat) for lon, lat in ring]
+
+    def inside(self, x, y):
+        return self.dx <= x <= self.dx + self.width and self.dy <= y <= self.dy + self.height
 
 
 def area_and_centroid(points):
@@ -350,75 +479,137 @@ def place_labels(marks, width):
 def season_map(clubs):
     """
     Everything the template needs for one season: the SVG frame, a path and a
-    label per territory, stripe patterns for shared cities, and the table rows.
-    Clubs are dicts with name, slug, lat and lon; the caller has already set
-    aside any without coordinates.
+    label per territory, stripe patterns for shared cities, neutral ground,
+    and the table rows. Clubs are dicts with name, slug, lat, lon and country
+    (the atlas code); the caller has already set aside any without
+    coordinates. Clubs whose country the atlas does not hold still get a
+    territory -- but there is nothing for them to claim, so they are reported
+    rather than drawn.
     """
-    units = atlas()
+    all_units = atlas()
     terrs = territories(clubs)
     if not terrs:
         return None
 
+    # A club whose city has no country on record -- Washington D.C. is one --
+    # is in whatever country the nearest unit is.
+    for c in clubs:
+        if c.get("country") is None:
+            nearest = min(all_units.values(),
+                          key=lambda u: distance_km(c["lat"], c["lon"], u["lat"], u["lon"]))
+            c["country"] = nearest["country"]
+
+    # Countries in play, the one with the most clubs first: that order runs
+    # the caption and the table columns.
+    tally = defaultdict(int)
+    for c in clubs:
+        tally[c["country"]] += 1
+    countries = sorted(tally, key=lambda code: (-tally[code], code))
+    units = in_play(all_units, countries)
+    if not units:
+        return None
+
     assigned = assign(units, terrs)
+    frame = Frame(clubs, units)
 
-    by_frame = defaultdict(list)
+    # Where each unit is drawn: the frame, an inset, or nowhere. Alaska and
+    # Hawaii are inset only on a map of the country -- one that frames at
+    # least half of the counties -- not on a map of the Northeast.
+    us_units = [u for u in units.values() if u["country"] == "US"]
+    national = us_units and (
+        sum(frame.holds(u["lon"], u["lat"]) for u in us_units) >= len(us_units) / 2)
+    where = {}
     for uid, unit in units.items():
-        frame = frame_of(unit)
-        if frame:
-            by_frame[frame].append(uid)
+        if far_north(unit):
+            where[uid] = None
+        elif frame.touches(unit):
+            # Anything reaching into the frame is drawn and clipped at the
+            # edge, so the frame fills to its corners.
+            where[uid] = "main"
+        elif national and unit["country"] == "US" and unit["state"] == "AK":
+            where[uid] = "alaska"
+        elif national and unit["country"] == "US" and unit["state"] == "HI":
+            where[uid] = "hawaii"
+        else:
+            where[uid] = None
 
-    main = Fit(MAIN, [r for uid in by_frame["main"] for r in units[uid]["rings"]], WIDTH)
-    alaska = Fit(ALASKA, [r for uid in by_frame["alaska"] for r in units[uid]["rings"]], ALASKA_WIDTH)
-    hawaii = Fit(HAWAII, [r for uid in by_frame["hawaii"] for r in units[uid]["rings"]], HAWAII_WIDTH)
+    ground_ids = [uid for uid, unit in all_units.items()
+                  if unit["country"] not in countries and not far_north(unit)
+                  and frame.touches(unit)]
 
-    # Insets sit in the frame's bottom-left corner, side by side: the Pacific
-    # off Baja California, which the projection leaves empty because Mexico
-    # is not drawn. The frame keeps the main map's height.
-    height = main.height
-    alaska.dx, alaska.dy = INSET_GAP, height - alaska.height - INSET_GAP
-    hawaii.dx, hawaii.dy = INSET_GAP * 2 + alaska.width, height - hawaii.height - INSET_GAP
-    fits = {"main": main, "alaska": alaska, "hawaii": hawaii}
+    # Fit the pixel box to the frame itself, not to the units in it: ground
+    # at the edge would otherwise drag the box out to its own extent. The
+    # conic bends the frame's edges, so they are walked rather than cornered;
+    # whatever falls outside is clipped by the SVG.
+    main = Fit(frame.project, [frame.outline()], WIDTH, MAX_HEIGHT)
+    width, height = main.width, main.height
+    fits = {"main": main}
+
+    inset_ids = defaultdict(list)
+    for uid, w in where.items():
+        if w in ("alaska", "hawaii"):
+            inset_ids[w].append(uid)
+    # Insets sit in the frame's bottom-left corner, side by side, where a
+    # North American frame is empty Pacific.
+    x = INSET_GAP
+    for name, project, inset_width in (("alaska", ALASKA, ALASKA_WIDTH),
+                                       ("hawaii", HAWAII, HAWAII_WIDTH)):
+        if inset_ids[name]:
+            fit = Fit(project, [r for uid in inset_ids[name] for r in units[uid]["rings"]],
+                      inset_width)
+            fit.dx, fit.dy = x, height - fit.height - INSET_GAP
+            fits[name] = fit
+            x += fit.width + INSET_GAP
 
     paths = defaultdict(list)
     weight = defaultdict(float)
     moment = defaultdict(lambda: [0.0, 0.0])
     counts = defaultdict(lambda: defaultdict(int))
+    undrawn = 0
     for uid, unit in units.items():
         t = assigned[uid]
         counts[t][unit["country"]] += 1
-        frame = frame_of(unit)
-        if not frame:
-            counts[t]["north"] += 1
+        w = where[uid]
+        if not w:
+            undrawn += 1
             continue
-        fit = fits[frame]
+        fit = fits[w]
         for ring in unit["rings"]:
             points = fit.ring(ring)
             d = path(points)
             if d:
                 paths[t].append(d)
-            if frame == "main":
+            if w == "main":
                 area, (cx, cy) = area_and_centroid(points)
                 area = abs(area)
                 weight[t] += area
                 moment[t][0] += cx * area
                 moment[t][1] += cy * area
 
+    ground = []
+    for uid in ground_ids:
+        for ring in all_units[uid]["rings"]:
+            d = path(main.ring(ring))
+            if d:
+                ground.append(d)
+
     marks = []
     for t in terrs:
         i = t["index"]
+        by_country = {code: counts[i][code] for code in countries}
+        total = sum(by_country.values())
         mark = {
             "d": " ".join(paths[i]),
             "fill": ("url(#stripe-%d)" % i) if len(t["colors"]) > 1 else t["color"],
             "colors": t["colors"],
+            "generic": t.get("generic", False),
             "index": i,
             "name": t["name"],
             "clubs": t["clubs"],
-            "us": counts[i]["US"],
-            "ca": counts[i]["CA"],
-            "north": counts[i]["north"],
+            "by_country": [by_country[code] for code in countries],
+            "total": total,
+            "share": 100.0 * total / len(units),
         }
-        mark["total"] = mark["us"] + mark["ca"]
-        mark["share"] = 100.0 * mark["total"] / len(units)
         if weight[i]:
             mark["label"] = {"x": round(moment[i][0] / weight[i]),
                              "y": round(moment[i][1] / weight[i])}
@@ -426,26 +617,32 @@ def season_map(clubs):
             # A territory that only holds insets or the far north is labelled
             # at its own city if that is in the frame.
             x, y = main.point(t["lon"], t["lat"])
-            if 0 <= x <= main.width and 0 <= y <= main.height:
+            if main.inside(x, y):
                 mark["label"] = {"x": round(x), "y": round(y)}
         marks.append(mark)
 
     marks.sort(key=lambda m: -m["total"])
-    place_labels(marks, WIDTH)
+    place_labels(marks, width)
 
     # Every city as a dot, so the reader can see the point each territory is
     # measured from.
     cities = []
     for t in terrs:
         x, y = main.point(t["lon"], t["lat"])
-        if 0 <= x <= main.width and 0 <= y <= main.height:
+        if main.inside(x, y):
             cities.append({"cx": round(x), "cy": round(y), "name": t["name"]})
 
     return {
-        "svg": {"width": round(WIDTH), "height": round(height)},
+        "svg": {"width": round(width), "height": round(height)},
         "marks": marks,
         "stripes": [m for m in marks if len(m["colors"]) > 1],
         "cities": cities,
+        "ground": " ".join(ground),
+        "countries": [{"code": code, "noun": unit_noun(code)} for code in countries],
         "units": len(units),
-        "north": sum(counts[i]["north"] for i in counts),
+        "undrawn": undrawn,
+        "insets": sorted(name for name in fits if name != "main"),
+        "generic": any(m["generic"] for m in marks),
+        "unmapped": [t["name"] for t in terrs
+                     if all(c["country"] not in countries for c in t["clubs"])],
     }

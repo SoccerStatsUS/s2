@@ -707,6 +707,8 @@ def season_clubs(season):
             'slug': team.slug,
             'lat': team.city.lat if team.city else None,
             'lon': team.city.lon if team.city else None,
+            'country': territory.country_code(team.city.country.name
+                                              if team.city and team.city.country else None),
         }
 
     return sorted(clubs.values(), key=lambda c: c['name'])
@@ -728,6 +730,7 @@ def season_map(request, competition_slug, season_slug):
         'season': season,
         'map': territory.season_map(located),
         'clubs': clubs,
+        'located': located,
         'unlocated': unlocated,
     }
     return render(request, "competitions/season/map.html", context)

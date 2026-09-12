@@ -940,6 +940,7 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
    every territory also carries its name. */
 .territory-map svg { min-width: 0; }
 .territory-map .territory { stroke: #fff; stroke-width: 0.35; stroke-linejoin: round; }
+.territory-map .map-ground { fill: var(--fill); stroke: #fff; stroke-width: 0.35; }
 .territory-map .territory:hover, .territory-map .territory:focus-visible { stroke: var(--ink); stroke-width: 0.8; }
 .territory-map .city { fill: var(--ink); stroke: #fff; stroke-width: 1; }
 .territory-map text.territory-label { fill: var(--ink); font-size: 12px; paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round; text-anchor: middle; }
