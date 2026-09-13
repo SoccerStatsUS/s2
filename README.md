@@ -40,6 +40,9 @@ Production runs on the server "bert" at /home/chris/www/s2:
   spoofing browser user-agents are blocked by network instead, in
   etc/nginx/conf.d/blocked-networks.conf (ACEVILLE PTE.LTD. and an Alibaba
   Cloud operator; a /15 and three /16s between them).
+  A scraper on residential proxies (one request per IP, ~95k IPs/day) is out
+  of reach of both; etc/nginx/conf.d/fake-chrome.conf 403s it on the one
+  header it gets wrong, a Chrome user-agent with no Accept-Language.
 * secrets live in /home/chris/www/s2/.env (not in git)
 
 The files under etc/ are the source of truth, but nothing syncs them — bert
