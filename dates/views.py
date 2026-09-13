@@ -35,6 +35,7 @@ def dates_index(request):
 
 
 @cache_page(60 * 60 * 12)
+@cache_page(60 * 60 * 12)
 def year_detail(request, year):
     """
     Summarize the events of the year.

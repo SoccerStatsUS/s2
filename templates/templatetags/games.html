@@ -82,7 +82,7 @@
     <td><span class="grey" title="no record found">&mdash;</span></td>
     {% endif %}
     {% else %}
-    <td>{{ game.sources.count }}</td>
+    <td>{{ game.sources.all|length }}</td>
     {% endif %}
 
   </tr>

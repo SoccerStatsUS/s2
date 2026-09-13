@@ -27,12 +27,8 @@ def pad_list(l, length):
 class GameManager(models.Manager):
 
 
-    def games(self):
-        l = [e['date'] for e in Game.objects.values("date").distinct()]
-        return [e for e in l if e is not None]
-
     def game_years(self):
-        return sorted(set([e.year for e in Game.objects.games()]))
+        return sorted(self.exclude(date=None).values_list('date__year', flat=True).distinct())
 
     def count_by_year(self):
         """Games on record per year, {year: count}, for the year grid."""
@@ -537,13 +533,14 @@ class Game(models.Model):
             return zip(l1, l2)
 
     def goal_string(self):
-        from goals.models import Goal
-        goals = Goal.objects.filter(game=self).order_by('minute', 'team')
+        # games_table prefetches goals onto prefetched_goals; one game at a
+        # time falls back to the query.
+        goals = getattr(self, 'prefetched_goals', None)
+        if goals is None:
+            from goals.models import Goal
+            goals = Goal.objects.filter(game=self).select_related('team', 'player').order_by('minute', 'team')
         fmt = lambda g: "%s: %s %s" % (g.team, g.player, g.minute) if g.minute else "%s: %s" % (g.team, g.player)
-        if goals.exists():
-            return "\n".join([fmt(goal) for goal in goals])
-        else:
-            return ""
+        return "\n".join(fmt(goal) for goal in goals)
 
     # These should hang off of Team, not Game.
     def previous_games(self, team):

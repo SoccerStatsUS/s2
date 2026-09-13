@@ -392,3 +392,18 @@ class EventSpineTests(SimpleTestCase):
         self.assertIn('<td class="minute greybg" title="no record found">&mdash;</td>', html)
         self.assertIn('Not on record for this game: substitutions.', html)
         self.assertIn('1 goal has no recorded minute and is listed last. Running score not shown.', html)
+
+
+class GoalStringTests(SimpleTestCase):
+    def test_uses_the_goals_games_table_prefetched_instead_of_querying(self):
+        game = Game()
+        game.prefetched_goals = [
+            SimpleNamespace(team='Fire', player='Nowak', minute=12),
+            SimpleNamespace(team='Crew', player='McBride', minute=None),
+        ]
+        self.assertEqual(game.goal_string(), "Fire: Nowak 12\nCrew: McBride")
+
+    def test_a_game_with_no_goals_is_an_empty_tooltip(self):
+        game = Game()
+        game.prefetched_goals = []
+        self.assertEqual(game.goal_string(), "")
