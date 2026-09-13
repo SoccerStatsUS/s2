@@ -8,6 +8,7 @@ from django.test import RequestFactory, SimpleTestCase
 from competitions.models import Competition
 from games.management.commands.errordigest import format_digest, parse
 from games.models import Game
+from games.spine import build_spine
 from games.templatetags.result_chart import recent_results_chart
 from games.views import search
 from teams.models import Team
@@ -234,3 +235,127 @@ class GameUrlTests(SimpleTestCase):
         b = self.game(datetime.date(2026, 8, 1), 'mls', 'fc-dallas', 'austin-fc')
 
         assert a.get_absolute_url() != b.get_absolute_url()
+
+
+class EventSpineTests(SimpleTestCase):
+
+    home = SimpleNamespace(id=1, slug='home')
+    away = SimpleNamespace(id=2, slug='away')
+
+    def game(self, **extra):
+        fields = dict(team1_id=1, team2_id=2, team1=self.home, team2=self.away,
+                      team1_original_name='Home', team2_original_name='Away',
+                      team1_score=2, team2_score=1, minutes=90)
+        fields.update(extra)
+        return SimpleNamespace(**fields)
+
+    def goal(self, team_id, minute, name='Scorer', penalty=False, own_goal=False,
+             assists=()):
+        player = SimpleNamespace(name=name, slug=name.lower()) if name else None
+        return SimpleNamespace(
+            team_id=team_id, minute=minute, penalty=penalty, own_goal=own_goal,
+            player=None if own_goal else player,
+            own_goal_player=player if own_goal else None,
+            assists=lambda: [SimpleNamespace(player=SimpleNamespace(name=a, slug=a.lower()))
+                             for a in assists])
+
+    def lineup(self, team_id, name, on=0, off=90):
+        return SimpleNamespace(team_id=team_id, on=on, off=off,
+                               player=SimpleNamespace(name=name, slug=name.lower()))
+
+    def events(self, spine):
+        return [(r.get('divider') or r['minute'], r.get('score'),
+                 [e['kind'] for e in r.get('home', [])],
+                 [e['kind'] for e in r.get('away', [])]) for r in spine['rows']]
+
+    def test_running_score_sits_on_goal_rows_and_credits_own_goals_to_the_beneficiary(self):
+        spine = build_spine(self.game(), [
+            self.goal(1, 12), self.goal(2, 50, own_goal=True, name='Defender'),
+            self.goal(1, 88, penalty=True)], [
+            self.lineup(1, 'A', off=60), self.lineup(1, 'B', on=60)])
+
+        self.assertTrue(spine['show_score'])
+        self.assertEqual(self.events(spine), [
+            (12, '1–0', ['goal'], []),
+            ('half-time', None, [], []),
+            (50, '1–1', [], ['own_goal']),
+            (60, None, ['substitution'], []),
+            (88, '2–1', ['penalty'], []),
+        ])
+        self.assertEqual(spine['rows'][2]['away'][0]['player'].name, 'Defender')
+        self.assertEqual(spine['present'], ['goals', 'substitutions'])
+        self.assertEqual(spine['missing'], [])
+        self.assertEqual(spine['unheld'], ['cards', 'fouls'])
+        self.assertEqual(spine['notes'], [])
+
+    def test_unplaced_goals_go_last_and_switch_the_score_off(self):
+        spine = build_spine(self.game(), [
+            self.goal(1, None), self.goal(1, 30), self.goal(2, 70)], [])
+
+        self.assertFalse(spine['show_score'])
+        self.assertEqual(self.events(spine), [
+            (30, None, ['goal'], []),
+            ('half-time', None, [], []),
+            (70, None, [], ['goal']),
+            (None, None, ['goal'], []),
+        ])
+        self.assertEqual(spine['notes'], [
+            '1 goal has no recorded minute and is listed last.',
+            'Running score not shown.'])
+
+    def test_score_hidden_when_goals_on_record_do_not_add_up(self):
+        spine = build_spine(self.game(team1_score=3), [self.goal(1, 10), self.goal(1, 20)], [])
+
+        self.assertFalse(spine['show_score'])
+        self.assertEqual(spine['notes'],
+                         ['Running score not shown: 2 goals on record against a final score of 4.'])
+
+        spine = build_spine(self.game(team1_score=None, team2_score=None), [self.goal(1, 10)], [])
+        self.assertEqual(spine['notes'],
+                         ['Running score not shown: the final score is not on record.'])
+
+    def test_same_minute_substitutions_are_grouped_not_paired(self):
+        spine = build_spine(self.game(), [], [
+            self.lineup(1, 'Starter A', off=75), self.lineup(1, 'Starter B', off=75),
+            self.lineup(1, 'Sub A', on=75), self.lineup(1, 'Sub B', on=75),
+            self.lineup(1, 'Keeper'), self.lineup(2, 'Injured', off=30)])
+
+        subs = [r for r in spine['rows'] if 'divider' not in r]
+        self.assertEqual([r['minute'] for r in subs], [30, 75])
+        away = subs[0]['away'][0]
+        self.assertEqual(([p.name for p in away['on']], [p.name for p in away['off']]),
+                         ([], ['Injured']))
+        home = subs[1]['home'][0]
+        self.assertEqual(sorted(p.name for p in home['on']), ['Sub A', 'Sub B'])
+        self.assertEqual(sorted(p.name for p in home['off']), ['Starter A', 'Starter B'])
+        self.assertEqual(spine['present'], ['substitutions'])
+        self.assertEqual(spine['missing'], ['goals'])
+
+    def test_finishers_are_not_substituted_off_but_a_sub_at_ninety_in_extra_time_is(self):
+        lineups = [self.lineup(1, 'Finisher', off=90), self.lineup(1, 'Tired', off=90),
+                   self.lineup(1, 'Fresh', on=90), self.lineup(2, 'Full', off=120)]
+        spine = build_spine(self.game(minutes=120, team1_score=0, team2_score=0), [], lineups)
+
+        self.assertEqual(self.events(spine), [
+            ('half-time', None, [], []),
+            (90, None, ['substitution'], []),
+            ('full time', None, [], []),
+        ])
+        self.assertEqual(
+            sorted(p.name for p in spine['rows'][1]['home'][0]['off']), ['Finisher', 'Tired'])
+
+        spine = build_spine(self.game(), [], [self.lineup(1, 'Finisher', off=90)])
+        self.assertEqual(spine['rows'], [])
+        self.assertEqual(spine['present'], [])
+
+    def test_dividers_follow_the_length_of_the_game(self):
+        goals = [self.goal(1, 44), self.goal(1, 46), self.goal(2, 100)]
+        spine = build_spine(self.game(minutes=120, team1_score=2, team2_score=1), goals, [])
+        self.assertEqual([e[0] for e in self.events(spine)],
+                         [44, 'half-time', 46, 'full time', 100])
+
+        spine = build_spine(self.game(team1_score=1, team2_score=0), [self.goal(1, 93)], [])
+        self.assertEqual([e[0] for e in self.events(spine)], ['half-time', 93])
+
+        spine = build_spine(self.game(minutes=60, team1_score=1, team2_score=0), [self.goal(1, 31)], [])
+        self.assertEqual([e[0] for e in self.events(spine)], ['half-time', 31])
