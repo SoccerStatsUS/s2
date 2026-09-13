@@ -342,7 +342,6 @@ def game_detail(request, date_slug, competition_slug, teams_slug):
     game = get_game(date_slug, competition_slug, teams_slug)
     context = {
         'game': game,
-        'goals': game.goal_set.order_by('minute'),
         'game_sources': GameSource.objects.filter(game=game),
 
         }

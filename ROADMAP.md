@@ -18,20 +18,6 @@ Open work only; completed items are removed as they land (see git history).
   in `{% seasons_table %}` (`templates/templatetags/seasons.html`) and in the
   competition-history table.
 
-## Games
-
-- [ ] Replace the goals-only grid on the game page
-  (`templates/templatetags/games/detail/result.html`) with one chronological
-  event spine: minute and the running score down the middle, home events left
-  and away right, a half-time divider, and a glyph per event. Goals and own
-  goals are loaded and the running score is derivable from them, so that much
-  can ship now; substitutions are partly recoverable from `Appearance.on`.
-  Cards and fouls cannot — `events.Event` and `events.Foul` are empty tables
-  (see `/events/`), because no parsed source carries them. So the spine should
-  be built to take event types it doesn't yet have rows for, and the page
-  should say which kinds of event are on record rather than implying a
-  complete timeline.
-
 ## United States
 
 - [ ] The USMNT results held do not align with the USSF's official record. The
