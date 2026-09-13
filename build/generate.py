@@ -431,23 +431,26 @@ def generate_competition_standings():
 @timer
 def generate_team_standings():
     print("generating team standings")
-    for team in Team.objects.all():
-        standings = Standing.objects.filter(team=team).exclude(season=None)
-        make_key = lambda s: s['team_id']
-        update = {'season_id': None, 'competition_id': None }
-        generate_standings_generic(standings, make_key, update)
+    standings = Standing.objects.exclude(team=None).exclude(season=None)
+    make_key = lambda s: s['team_id']
+    update = {'season_id': None, 'competition_id': None }
+    generate_standings_generic(standings, make_key, update)
 
 
-@timer
-def generate_stadium_standings():
+def stadium_standings(games):
+    """
+    One record per (stadium, team) from rows of
+    (stadium_id, team1_id, team2_id, team1_result, team2_result, team1_score, team2_score).
+    A game without a result still puts both teams on the board with zero games.
+    """
     standings = {}
 
-    def update_standing(game, team, stadium):
-        key = (stadium, team)
+    def update_standing(stadium_id, team_id, result, gf, ga):
+        key = (stadium_id, team_id)
         if key not in standings:
             standings[key] = {
-                'team': team,
-                'stadium': stadium,
+                'team_id': team_id,
+                'stadium_id': stadium_id,
                 'games': 0,
                 'wins': 0,
                 'losses': 0,
@@ -455,15 +458,6 @@ def generate_stadium_standings():
                 'goals_for': 0,
                 'goals_against': 0,
                 }
-
-        if team == game.team1:
-            result = game.team1_result
-            gf, ga = game.team1_score, game.team2_score
-        elif team == game.team2:
-            result = game.team2_result
-            gf, ga = game.team2_score, game.team1_score
-        else:
-            import pdb; pdb.set_trace()
 
         if not result:
             return
@@ -486,16 +480,20 @@ def generate_stadium_standings():
         if ga:
             s['goals_against'] += ga
 
+    for stadium_id, team1_id, team2_id, result1, result2, score1, score2 in games:
+        update_standing(stadium_id, team1_id, result1, score1, score2)
+        update_standing(stadium_id, team2_id, result2, score2, score1)
 
-    for stadium in Stadium.objects.all():
-        games = Game.objects.filter(stadium=stadium)
+    return list(standings.values())
 
-        for game in games:
-            update_standing(game, game.team1, stadium)
-            update_standing(game, game.team2, stadium)
 
-    for e in standings.values():
-        StadiumStanding.objects.create(**e)
+@timer
+def generate_stadium_standings():
+    games = Game.objects.exclude(stadium=None).values_list(
+        'stadium_id', 'team1_id', 'team2_id',
+        'team1_result', 'team2_result', 'team1_score', 'team2_score')
+    StadiumStanding.objects.bulk_create(
+        [StadiumStanding(**e) for e in stadium_standings(games.iterator())])
         
 
 @timer

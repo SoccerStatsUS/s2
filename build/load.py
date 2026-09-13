@@ -826,6 +826,9 @@ def load_games():
     games = []
     game_sources = []
 
+    # The stadium getter creates stadiums it doesn't know, with no city.
+    stadium_city = dict(Stadium.objects.values_list('id', 'city_id'))
+
     for game in soccer_db.games.find().sort('date', 1):
 
         # Apply stadium / state / country information.
@@ -833,11 +836,9 @@ def load_games():
         stadium_id = city_id = country_id = None
         if game.get('stadium'):
             stadium_id = stadium_getter(game['stadium'])
-            s = Stadium.objects.get(id=stadium_id)
-            if s.city:
-                city_id = s.city.id
-            else:
-                city_id = None
+            if stadium_id not in stadium_city:
+                stadium_city[stadium_id] = Stadium.objects.get(id=stadium_id).city_id
+            city_id = stadium_city[stadium_id]
 
         elif game.get('city'):
             city_id = city_getter(game['city']).id

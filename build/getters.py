@@ -141,14 +141,18 @@ def city_slug(name, state, country):
 
 def make_city_getter():
     """
-    
+    Location string -> City, created if missing. Cached per string: the same
+    location parses the same way every time, and each lookup is three queries.
     """
 
     cg = make_city_pre_getter()
-    
+    cache = {}
+
     def get_city(s):
         if not s:
             return None
+        if s in cache:
+            return cache[s]
         c = cg(s)
 
         state = country = None
@@ -159,10 +163,12 @@ def make_city_getter():
             country = Country.objects.get(name=c['country'])
         
         try:
-            return City.objects.get(name=c['name'], state=state, country=country)
+            city = City.objects.get(name=c['name'], state=state, country=country)
         except:
-            return City.objects.create(name=c['name'], state=state, country=country,
+            city = City.objects.create(name=c['name'], state=state, country=country,
                                        slug=city_slug(c['name'], state, country))
+        cache[s] = city
+        return city
 
     return get_city
 
@@ -252,7 +258,11 @@ def make_bio_getter():
         elif key in identities:
             bio_id = identities[key]
         else:
-            bio_id = Bio.objects.find(name).id
+            # Not Bio.objects.find: its filter(name=name) is a full scan of an
+            # unindexed column, and the dict above already covers every bio in
+            # the table. This only stays true while nothing else creates bios
+            # during the getter's lifetime -- keep the loaders that way.
+            bio_id = Bio.objects.create(name=name, hall_of_fame=False).id
             bios[name] = bio_id
             identities[key] = bio_id
 
