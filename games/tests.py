@@ -359,3 +359,36 @@ class EventSpineTests(SimpleTestCase):
 
         spine = build_spine(self.game(minutes=60, team1_score=1, team2_score=0), [self.goal(1, 31)], [])
         self.assertEqual([e[0] for e in self.events(spine)], ['half-time', 31])
+
+    def test_template_marks_each_kind_and_says_what_is_held(self):
+        spine = build_spine(self.game(), [
+            self.goal(1, 12, assists=('Helper',)), self.goal(2, 50, own_goal=True, name='Defender'),
+            self.goal(1, 88, penalty=True)], [
+            self.lineup(1, 'A', off=60), self.lineup(1, 'B', on=60)])
+        html = render_to_string('templatetags/games/detail/spine.html',
+                                {'game': self.game(), 'spine': spine})
+
+        self.assertIn('<caption>events</caption>', html)
+        self.assertIn('title="score after the goal"', html)
+        self.assertIn('<td class="score">1–0</td>', html)
+        self.assertIn('<tr class="divider"><td colspan="4">half-time</td></tr>', html)
+        self.assertIn('title="penalty">pen</span>', html)
+        self.assertIn('title="own goal">og</span>', html)
+        self.assertIn('/bios/defender/">Defender</a>', html)
+        self.assertIn('<div class="assist"><a href="/bios/helper/">Helper</a></div>', html)
+        self.assertIn('title="came on">', html)
+        self.assertIn('title="went off">', html)
+        self.assertIn('On record for this game: goals, substitutions.', html)
+        self.assertIn('Not held for any game yet: cards, fouls.', html)
+        self.assertNotIn('Not on record for this game', html)
+
+    def test_template_hides_the_score_column_and_marks_unplaced_goals(self):
+        spine = build_spine(self.game(), [self.goal(1, None), self.goal(1, 30), self.goal(2, 70)], [])
+        html = render_to_string('templatetags/games/detail/spine.html',
+                                {'game': self.game(), 'spine': spine})
+
+        self.assertNotIn('class="score"', html)
+        self.assertIn('<td colspan="3">half-time</td>', html)
+        self.assertIn('<td class="minute greybg" title="no record found">&mdash;</td>', html)
+        self.assertIn('Not on record for this game: substitutions.', html)
+        self.assertIn('1 goal has no recorded minute and is listed last. Running score not shown.', html)

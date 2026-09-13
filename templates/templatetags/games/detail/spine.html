@@ -1,0 +1,39 @@
+{% if spine.rows %}
+<table id="event_spine" class="noborder">
+  <caption>events</caption>
+  <thead>
+    <tr>
+      <th scope="col">{{ game.team1_original_name }}</th>
+      <th scope="col" title="minute">min</th>
+      {% if spine.show_score %}<th scope="col" title="score after the goal">score</th>{% endif %}
+      <th scope="col">{{ game.team2_original_name }}</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for row in spine.rows %}
+    {% if row.divider %}
+    <tr class="divider"><td colspan="{% if spine.show_score %}4{% else %}3{% endif %}">{{ row.divider }}</td></tr>
+    {% else %}
+    <tr>
+      <td class="home">{% for event in row.home %}{% include "templatetags/games/detail/spine_event.html" %}{% endfor %}</td>
+      {% if row.minute is None %}
+      <td class="minute greybg" title="no record found">&mdash;</td>
+      {% else %}
+      <td class="minute">{{ row.minute }}</td>
+      {% endif %}
+      {% if spine.show_score %}<td class="score">{{ row.score|default_if_none:'' }}</td>{% endif %}
+      <td class="away">{% for event in row.away %}{% include "templatetags/games/detail/spine_event.html" %}{% endfor %}</td>
+    </tr>
+    {% endif %}
+  {% endfor %}
+  </tbody>
+</table>
+
+<p class="spine-note">
+  <span class="legend"><span class="glyph">&#9679;</span> goal &middot; <span class="tag">pen</span> penalty &middot; <span class="tag">og</span> own goal &middot; <span class="glyph">&#9650;</span> came on &middot; <span class="glyph">&#9660;</span> went off</span><br>
+  On record for this game: {{ spine.present|join:", " }}.
+  {% if spine.missing %}Not on record for this game: {{ spine.missing|join:", " }}.{% endif %}
+  Not held for any game yet: {{ spine.unheld|join:", " }}.
+  {% for note in spine.notes %}{{ note }} {% endfor %}
+</p>
+{% endif %}

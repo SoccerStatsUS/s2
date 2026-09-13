@@ -1,5 +1,6 @@
 {% load datum_or_none %}
 {% load humanize %}
+{% load games %}
 
 <div id="game_score">
 
@@ -47,40 +48,7 @@
 </div>
 
 
-{% if game.goal_set.exists %}
-
-<table id="goal_list" class="noborder">
-
-  <thead>
-    <tr>
-      <th scope="col">{{ game.team1_original_name }}</th>
-      <th scope="col" title="minute">min</th>
-      <th scope="col">{{ game.team2_original_name }}</th>
-    </tr>
-  </thead>
-
-  {% for goal in game.goal_set.all %}
-  <tr>
-
-    {% if goal.team == game.team1 %}
-    <td class="left_goal">{% include "templatetags/fragments/goal.html"  %}</td>
-    {% else %}
-    <td class="left_goal"></td>
-    {% endif %}
-
-    {% datum_or_grey goal.minute %}
-
-    {% if goal.team == game.team2 %}
-    <td class="right_goal">{% include "templatetags/fragments/goal.html"  %}</td>
-    {% else %}
-    <td class="right_goal"></td>
-    {% endif %}
-
-  </tr>
-  {% endfor %}
-</table>
-
-{% endif %}
+{% event_spine game %}
 
 
 {% if game.gamestat_set.exists %}

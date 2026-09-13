@@ -1,5 +1,7 @@
 from django import template
 
+from games.spine import build_spine
+
 register = template.Library()
 
 @register.inclusion_tag('templatetags/games.html')
@@ -20,3 +22,15 @@ def games_table(games, exclude='', source_urls=False):
         'has_group': len(groups - set(['', None])) > 0,
         'source_urls': source_urls,
         }
+
+
+@register.inclusion_tag('templatetags/games/detail/spine.html')
+def event_spine(game):
+    goals = game.goal_set.select_related('player', 'own_goal_player')
+    lineups = game.gamestat_set.all()
+    if not lineups.exists():
+        lineups = game.appearance_set.all()
+    return {
+        'game': game,
+        'spine': build_spine(game, goals, lineups.select_related('player')),
+    }
