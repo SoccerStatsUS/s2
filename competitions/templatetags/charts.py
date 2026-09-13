@@ -14,6 +14,7 @@ import os
 import unicodedata
 
 from django import template
+from django.urls import reverse
 
 register = template.Library()
 
@@ -793,3 +794,53 @@ def country_map(rows, caption, noun="minutes"):
         "unmapped": unmapped,
         "caption": caption,
     }
+
+
+# Games-per-year bands, darkest first. Roughly log10 steps, so the four games
+# of 1866 and the five thousand of 2013 both show, and fixed so the homepage
+# and the dates page always mean the same thing by a shade.
+COUNT_BANDS = ((3000, 1), (1000, 2), (100, 3), (10, 4), (1, 5))
+
+
+def count_band(n):
+    for floor, band in COUNT_BANDS:
+        if n >= floor:
+            return band
+    return None
+
+
+@register.inclusion_tag("templatetags/charts/year_grid.html")
+def year_grid(counts, caption, noun="games", note="", show_counts=False):
+    """
+    A cell per year and a row per decade, from the first year with a count to
+    the last, each cell tinted by its count. Years in the range with nothing
+    on record keep their slot in grey: they are where the record thins out,
+    not where the soccer stopped. counts maps year -> count.
+    """
+    counts = {year: n for year, n in counts.items() if n}
+    if not counts:
+        return {"decades": []}
+    first, last = min(counts), max(counts)
+
+    decades = []
+    for start in range(first - first % 10, last + 1, 10):
+        years = []
+        for year in range(start, start + 10):
+            n = counts.get(year, 0)
+            years.append({
+                "year": year,
+                "count": n,
+                "band": count_band(n),
+                "in_range": first <= year <= last,
+                "url": reverse("year_detail", args=[year]) if n else None,
+                "title": "%s: %s %s" % (year, comma(n), noun),
+            })
+        decades.append({"label": "%ds" % start, "years": years})
+
+    key = []
+    for (floor, band), (ceiling, _) in zip(reversed(COUNT_BANDS), reversed(COUNT_BANDS[:-1])):
+        key.append({"band": band, "label": "%s to %s" % (comma(floor), comma(ceiling - 1))})
+    key.append({"band": COUNT_BANDS[0][1], "label": "%s and up" % comma(COUNT_BANDS[0][0])})
+
+    return {"decades": decades, "key": key, "caption": caption, "note": note,
+            "show_counts": show_counts, "first": first, "last": last}

@@ -7,7 +7,7 @@ from django.test import SimpleTestCase
 
 from competitions import views
 from competitions.models import Competition
-from competitions.templatetags.charts import (bar_chart, column_chart, count_chart,
+from competitions.templatetags.charts import (bar_chart, column_chart, count_band, count_chart, year_grid,
                                               player_goals_chart, rate_chart, timeline_chart)
 from competitions.views import (COVERAGE_FACETS, competition_awards, coverage_rows,
                                 missing_years, scoreline_rows, season_postseason,
@@ -930,3 +930,24 @@ class CompetitionStatusTests(SimpleTestCase):
 
     def test_no_badge_without_games_on_record(self):
         self.assertNotIn('class="status', self.render(False, None))
+
+
+class YearGridTests(SimpleTestCase):
+    def test_bands_step_by_powers_of_ten(self):
+        self.assertEqual([count_band(n) for n in (0, 1, 9, 10, 99, 100, 999, 1000, 2999, 3000, 5279)],
+                         [None, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1])
+
+    def test_decades_are_padded_and_empty_years_keep_their_slot(self):
+        grid = year_grid({1866: 4, 1868: 0, 1869: 6, 1871: 3200}, "Games")
+
+        self.assertEqual([d['label'] for d in grid['decades']], ['1860s', '1870s'])
+        sixties = grid['decades'][0]['years']
+        self.assertFalse(sixties[5]['in_range'])
+        self.assertEqual((sixties[6]['band'], sixties[6]['url']), (5, '/dates/1866/'))
+        self.assertEqual((sixties[7]['band'], sixties[7]['url'], sixties[7]['in_range']), (None, None, True))
+        self.assertEqual(grid['decades'][1]['years'][1]['title'], '1871: 3,200 games')
+        self.assertEqual([k['label'] for k in grid['key']],
+                         ['1 to 9', '10 to 99', '100 to 999', '1,000 to 2,999', '3,000 and up'])
+
+    def test_no_counts_no_grid(self):
+        self.assertEqual(year_grid({}, "Games"), {"decades": []})

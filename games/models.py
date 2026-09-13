@@ -34,6 +34,12 @@ class GameManager(models.Manager):
     def game_years(self):
         return sorted(set([e.year for e in Game.objects.games()]))
 
+    def count_by_year(self):
+        """Games on record per year, {year: count}, for the year grid."""
+        from django.db.models import Count
+        return {row['date__year']: row['n'] for row in
+                self.exclude(date=None).values('date__year').annotate(n=Count('id'))}
+
 
 
     def with_lineups(self):

@@ -23,7 +23,7 @@ starting in <a href="{% url 'city_detail' 'waukesha-wi' %}">Waukesha, Wisconsin<
   <div><dt>competitions</dt><dd>{{ competitions|intcomma }}</dd></div>
 </dl>
 
-{% count_chart game_years "Games on record by year" "games" note="One column a year, from the first game on record to the current season. A year inside the range with nothing on record keeps its slot and draws nothing. Select a column for that year; the dates page carries every count." %}
+{% year_grid game_counts "Games on record by year" note="A cell a year, from the first game on record to the current season, shaded by how many games that year has. A grey year inside the range has nothing on record. Select a year for its games; the dates page carries every count." %}
 
 <section id="otd" aria-label="On this day">
   <h2>On this day &middot; {{ today|date:"F j" }}</h2>

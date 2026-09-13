@@ -6,7 +6,6 @@ from django.db.models import Count, F
 from django.http import Http404
 from django.shortcuts import redirect, render
 from django.template import RequestContext
-from django.urls import reverse
 from django.views.decorators.cache import cache_page
 
 from bios.models import Bio
@@ -153,7 +152,7 @@ def homepage(request):
         'oldest': oldest,
         'crowd': crowd,
         'born': born,
-        'game_years': game_years(),
+        'game_counts': Game.objects.count_by_year(),
         'games': Game.objects.count(),
         'players': Bio.objects.count(),
         'teams': Team.objects.count(),
@@ -162,24 +161,6 @@ def homepage(request):
 
     return render(request, "homepage.html",
                               context)
-
-
-def game_years():
-    """
-    A row per year from the first recorded game to the last, for the homepage
-    chart. Years inside the range with nothing on record keep their slot and
-    count zero -- the empty columns are the point, since they are where the
-    record thins out rather than where the soccer stopped.
-    """
-    counts = {row['date__year']: row['n'] for row in
-              Game.objects.exclude(date=None).values('date__year').annotate(n=Count('id'))}
-    if not counts:
-        return []
-
-    return [{'name': str(year),
-             'count': counts.get(year, 0),
-             'url': reverse('year_detail', args=[year]) if counts.get(year) else None}
-            for year in range(min(counts), max(counts) + 1)]
 
 
 def search(request):

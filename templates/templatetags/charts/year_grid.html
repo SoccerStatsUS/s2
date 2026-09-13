@@ -1,0 +1,30 @@
+{% load humanize %}
+{% if decades %}
+<figure class="chart year-grid">
+<table class="decades">
+{% if caption %}<caption>{{ caption }}</caption>{% endif %}
+<tbody>
+{% for decade in decades %}
+<tr>
+  <th scope="row">{{ decade.label }}</th>
+  {% for y in decade.years %}
+  {% if not y.in_range %}
+  <td class="pad"></td>
+  {% elif y.count %}
+  <td class="band-{{ y.band }}"><a href="{{ y.url }}" title="{{ y.title }}">{{ y.year }}{% if show_counts %}<span class="count">{{ y.count|intcomma }}</span>{% endif %}</a></td>
+  {% else %}
+  <td class="greybg" title="no record found">{{ y.year }}</td>
+  {% endif %}
+  {% endfor %}
+</tr>
+{% endfor %}
+</tbody>
+</table>
+<ul class="map-legend" aria-label="Games on record">
+  {% for step in key %}
+  <li><span class="map-key map-shade-{{ step.band }}"></span>{{ step.label }}</li>
+  {% endfor %}
+</ul>
+{% if note %}<figcaption>{{ note }}</figcaption>{% endif %}
+</figure>
+{% endif %}

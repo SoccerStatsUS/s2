@@ -107,8 +107,7 @@ class HomepageTests(SimpleTestCase):
             'oldest': game,
             'crowd': None,
             'born': born,
-            'game_years': [{'name': str(1866 + i), 'count': 100,
-                            'url': '/dates/%d/' % (1866 + i)} for i in range(161)],
+            'game_counts': {1866 + i: 100 for i in range(161)},
             'games': 31277,
             'players': 43354,
             'teams': 6128,
@@ -122,8 +121,8 @@ class HomepageTests(SimpleTestCase):
 
         self.assertLess(html.index('id="tagline"'), html.index('id="home-search"'))
         self.assertLess(html.index('id="home-search"'), html.index('id="home-totals"'))
-        self.assertLess(html.index('id="home-totals"'), html.index('count-chart'))
-        self.assertLess(html.index('count-chart'), html.index('id="otd"'))
+        self.assertLess(html.index('id="home-totals"'), html.index('year-grid'))
+        self.assertLess(html.index('year-grid'), html.index('id="otd"'))
 
     def test_totals_carry_the_size_of_the_record(self):
         html = self.render()
@@ -133,11 +132,11 @@ class HomepageTests(SimpleTestCase):
         self.assertIn('<dt>teams</dt><dd>6,128</dd>', html)
         self.assertIn('<dt>competitions</dt><dd>228</dd>', html)
 
-    def test_every_year_is_a_column_linking_to_that_year(self):
+    def test_every_year_is_a_cell_linking_to_that_year(self):
         html = self.render()
 
-        self.assertEqual(html.count('<path class="mark"'), 161)
-        self.assertIn('<title>1866: 100 games</title>', html)
+        self.assertEqual(html.count('<td class="band-'), 161)
+        self.assertIn('title="1866: 100 games"', html)
         self.assertIn('href="/dates/1925/"', html)
 
     def test_the_days_picks_all_stand_at_once(self):

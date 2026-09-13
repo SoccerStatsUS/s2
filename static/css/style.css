@@ -505,6 +505,32 @@ table.calendar .count, table.decades .count {
     color: var(--ink-soft);
 }
 
+/* Year grid: the decade table tinted by how many games a year has on record,
+   in the same five accent bands as the country map. The row-hover and
+   striping resets above are matched selector for selector so a band wins.
+   Ink goes white on the two dark bands (10:1 and 6.3:1) and stays ink on the
+   light three (5.3:1 and better); the count inherits so it never drops to
+   ink-soft on a shade it can't be read on. */
+table.decades td.band-1, table.decades tbody tr:nth-child(even) td.band-1, table.decades tbody tr:hover td.band-1 { background-color: var(--band-1); }
+table.decades td.band-2, table.decades tbody tr:nth-child(even) td.band-2, table.decades tbody tr:hover td.band-2 { background-color: var(--band-2); }
+table.decades td.band-3, table.decades tbody tr:nth-child(even) td.band-3, table.decades tbody tr:hover td.band-3 { background-color: var(--band-3); }
+table.decades td.band-4, table.decades tbody tr:nth-child(even) td.band-4, table.decades tbody tr:hover td.band-4 { background-color: var(--band-4); }
+table.decades td.band-5, table.decades tbody tr:nth-child(even) td.band-5, table.decades tbody tr:hover td.band-5 { background-color: var(--band-5); }
+table.decades td[class^="band-"] a { color: var(--ink); }
+table.decades td.band-1 a, table.decades td.band-2 a { color: #fff; }
+table.decades td[class^="band-"] .count { color: inherit; }
+table.decades td[class^="band-"] a:hover, table.decades td[class^="band-"] a:focus-visible {
+    outline: 2px solid var(--accent-dark);
+    outline-offset: -2px;
+    transform: scale(1.12);
+    position: relative;
+    z-index: 1;
+}
+figure.year-grid { max-width: 780px; }
+/* A surface gap between shaded cells, as between any adjacent fills. */
+figure.year-grid table.decades { border-collapse: separate; border-spacing: 2px; }
+figure.year-grid .map-legend { font-size: 13px; color: var(--ink-soft); }
+
 .calendar-legend { font-size: 13px; color: var(--ink-soft); max-width: 460px; }
 
 .coverage-note { font-size: 13px; color: var(--ink-soft); }
@@ -910,7 +936,7 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
    season reads against another. Countries with no minutes are the ground the
    shaded ones sit on, not absent. The table beside the map carries the same
    numbers, so the ramp is never the only thing saying what happened. */
-.country-map {
+:root {
     --band-1: #084c36;
     --band-2: var(--accent);
     --band-3: #4f9c7f;
