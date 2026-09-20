@@ -1266,9 +1266,8 @@ table.summary { max-width: 560px; }
 #event_spine td.home .ev { flex-direction: row-reverse; }
 #event_spine .glyph { font-size: 10px; color: var(--ink-soft); }
 
-/* Going off reads in the site's one dark red; the ▼ glyph carries it too. */
-#event_spine .ev.off .glyph,
-#event_spine .ev.off a { color: var(--loss-ink); }
+/* The went-off arrow reads in the site's one dark red; the name stays a plain link. */
+#event_spine .ev.off .glyph { color: var(--loss-ink); }
 
 #event_spine .tag {
     font-size: 11px;
