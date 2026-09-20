@@ -76,7 +76,8 @@ To ship a freshly built database:
 
     ./upload.sh
 
-To do the whole thing in one shot (mongo build -> postgres build -> ship):
+To do the whole thing in one shot (mongo build -> postgres build -> ship db ->
+push and deploy code):
 
     ./deploy.sh
 
