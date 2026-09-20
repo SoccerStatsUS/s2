@@ -946,6 +946,10 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
 .position-chart .club:hover path, .position-chart .club:focus-within path { stroke: var(--club, var(--accent)); stroke-width: 3; opacity: 1; }
 .position-chart .club:hover circle, .position-chart .club:focus-within circle { stroke: var(--club, var(--accent)); opacity: 1; }
 .position-chart .club:hover text.label, .position-chart .club:focus-within text.label { fill: var(--ink); font-weight: 500; opacity: 1; }
+/* A dashed stroke only catches the pointer on its dashes, so each line also
+   carries a wide, solid, invisible twin that takes the hover for it. */
+.position-chart .club path.hit, .position-chart .club:hover path.hit, .position-chart .club:focus-within path.hit,
+.position-chart svg:has(.club:hover) .club:not(:hover) path.hit { stroke: transparent; stroke-width: 7; stroke-dasharray: none; opacity: 1; pointer-events: stroke; }
 .position-chart svg:has(.club:hover) .club:not(:hover) path,
 .position-chart svg:has(.club:focus-within) .club:not(:focus-within) path { opacity: .1; }
 .position-chart svg:has(.club:hover) .club:not(:hover) text.label,

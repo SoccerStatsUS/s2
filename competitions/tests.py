@@ -219,6 +219,7 @@ class PositionChartTests(SimpleTestCase):
         self.assertIn('<g class="club pattern-0" style="--club: #123456">', html)
         self.assertIn('<g class="club pattern-1">', html)
         self.assertEqual(html.count('<circle'), 5)
+        self.assertEqual(html.count('<path class="hit"'), html.count('<path d='))
         self.assertIn('<th scope="col">1997</th>', html)
         self.assertIn('<td class="grey"></td>', html)
 
