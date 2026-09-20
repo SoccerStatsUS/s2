@@ -85,12 +85,12 @@ def insert_sql(table, dict_list):
     field_string = "%s" % ", ".join(['"%s"' % e for e in fields])
 
     # Placeholders for values.
-    values = [list(e.values()) for e in dict_list]
+    values = [[row[field] for field in fields] for row in dict_list]
     value_string = ', '.join(['%s'] * len(values[0]))
 
-    cursor = connection.cursor()
     command = "INSERT INTO {} ({}) VALUES ({});".format(table, field_string, value_string)
-    cursor.executemany(command, values)
+    with connection.cursor() as cursor:
+        cursor.executemany(command, values)
 
 
 # This should be eliminated. Replace with functools.lru_cache

@@ -4,6 +4,30 @@ from django.test import SimpleTestCase
 
 from build.generate import stadium_standings
 from build.getters import keep_news_item, make_bio_getter, make_city_getter, make_nationality_getter
+from utils import insert_sql
+
+
+class InsertSqlTests(SimpleTestCase):
+    @patch('utils.connection')
+    def test_aligns_values_with_columns_when_row_keys_have_different_order(self, connection):
+        cursor = connection.cursor.return_value
+        cursor.__enter__.return_value = cursor
+
+        insert_sql('example', [
+            {'name': 'first', 'count': 1},
+            {'count': 2, 'name': 'second'},
+        ])
+
+        cursor.executemany.assert_called_once_with(
+            'INSERT INTO example ("name", "count") VALUES (%s, %s);',
+            [['first', 1], ['second', 2]],
+        )
+
+    @patch('utils.connection')
+    def test_empty_input_does_not_open_a_cursor(self, connection):
+        insert_sql('example', [])
+
+        connection.cursor.assert_not_called()
 
 
 class BioGetterTests(SimpleTestCase):
