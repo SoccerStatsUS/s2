@@ -3,13 +3,43 @@ from pathlib import Path
 import shutil
 import subprocess
 import tempfile
-from unittest.mock import patch
+from unittest.mock import DEFAULT, patch
 
 from django.test import SimpleTestCase
 
 from build.generate import stadium_standings
 from build.getters import keep_news_item, make_bio_getter, make_city_getter, make_nationality_getter
 from utils import insert_sql
+
+
+class LoadCommandTests(SimpleTestCase):
+    def test_named_stages_and_numeric_aliases_select_one_loader(self):
+        from build import load
+
+        stages = ('base', 'lineups', 'game-stats', 'news-stats')
+        for number, stage in enumerate(stages, start=1):
+            for argument in (stage, str(number)):
+                with self.subTest(argument=argument), patch.multiple(
+                    load, load1=DEFAULT, load2=DEFAULT, load3=DEFAULT, load4=DEFAULT,
+                ) as loaders:
+                    load.main([argument])
+
+                    for name, loader in loaders.items():
+                        if name == f'load{number}':
+                            loader.assert_called_once_with()
+                        else:
+                            loader.assert_not_called()
+
+    def test_missing_and_unknown_stages_report_usage(self):
+        from build import load
+
+        for arguments in ([], ['5'], ['unknown']):
+            with self.subTest(arguments=arguments), patch('sys.stderr') as stderr:
+                with self.assertRaises(SystemExit) as error:
+                    load.main(arguments)
+
+                self.assertEqual(error.exception.code, 2)
+                self.assertIn('usage:', ''.join(call.args[0] for call in stderr.write.call_args_list))
 
 
 class InsertSqlTests(SimpleTestCase):

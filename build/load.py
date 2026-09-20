@@ -1,3 +1,4 @@
+import argparse
 from collections import Counter, defaultdict
 import datetime
 import hashlib
@@ -33,7 +34,7 @@ from transactions.models import Transaction
 
 from utils import insert_sql, timer
 
-from getters import *
+from build.getters import *
 
 #from guppy import hpy
 
@@ -1493,6 +1494,20 @@ def load_lineups():
 
 
 
+def main(argv=None):
+    stages = {
+        'base': load1,
+        'lineups': load2,
+        'game-stats': load3,
+        'news-stats': load4,
+    }
+    aliases = dict(zip(('1', '2', '3', '4'), stages))
+    parser = argparse.ArgumentParser(description='Load a stage of the Mongo → Postgres build.')
+    parser.add_argument('stage', choices=(*stages, *aliases))
+    args = parser.parse_args(argv)
+    stages[aliases.get(args.stage, args.stage)]()
+
+
 if __name__ == "__main__":
     # The loaders drop into pdb when data looks wrong; with no terminal
     # attached, fail loudly instead of hanging on a dead debugger.
@@ -1503,16 +1518,4 @@ if __name__ == "__main__":
             raise RuntimeError("pdb.set_trace() hit in non-interactive load")
         pdb.set_trace = _fail_set_trace
 
-    if sys.argv[1] == '1':
-        load1()
-    elif sys.argv[1] == '2':
-        load2()
-    elif sys.argv[1] == '3':
-        load3()
-    elif sys.argv[1] == '4':
-        load4()
-    elif sys.argv[1] == '5':
-        update()
-
-    else:
-        raise
+    main()
