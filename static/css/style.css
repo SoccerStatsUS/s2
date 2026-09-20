@@ -1394,19 +1394,23 @@ td.result { width: 70px; }
 
 /* ---- Homepage: on this day ---- */
 
-/* The day's picks stand as a short list, not a one-at-a-time strip: there are
-   never more than three, and a reader who has to click an arrow to find the
-   third will not. */
+/* A strip directly under the nav, one pick at a time with arrows to step
+   through the day's two or three; without JS the first pick stands alone. */
 #otd {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) max-content;
-    grid-template-areas: "heading more" "items items";
-    align-items: baseline;
-    gap: 6px 12px;
-    margin: 24px 0 0;
-    padding-top: 14px;
-    border-top: 1px solid var(--hairline);
-    font-size: 14px;
+    grid-template-columns: max-content minmax(0, 1fr) max-content;
+    grid-template-areas: "heading items more";
+    align-items: center;
+    gap: 0 4px;
+    min-height: 44px;
+    margin: 0 0 8px;
+    border-bottom: 1px solid var(--hairline);
+    font-size: 13px;
+}
+
+#otd.is-carousel {
+    grid-template-columns: max-content 44px minmax(0, 1fr) 44px max-content max-content;
+    grid-template-areas: "heading previous items next position more";
 }
 
 #otd h2 {
@@ -1416,16 +1420,22 @@ td.result { width: 70px; }
     white-space: nowrap;
 }
 
+.otd-label-short { display: none; }
+
 .otd-items {
     grid-area: items;
     min-width: 0;
 }
 
 .otd-item {
-    margin: 0 0 4px;
+    display: none;
+    margin: 0;
 }
 
-.otd-item:last-child { margin-bottom: 0; }
+.otd-item:first-child,
+#otd.is-carousel .otd-item:not([hidden]) { display: block; }
+
+#otd.is-carousel .otd-item[hidden] { display: none; }
 
 .otd-item a {
     display: block;
@@ -1440,7 +1450,40 @@ td.result { width: 70px; }
 .otd-score { font-weight: 700; white-space: nowrap; }
 .otd-note { color: var(--ink-soft); }
 
+.otd-prev, .otd-next {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.otd-prev { grid-area: previous; }
+.otd-next { grid-area: next; }
+.otd-prev:hover, .otd-next:hover { color: var(--accent); background: var(--fill); }
+
+.otd-position {
+    grid-area: position;
+    min-width: 28px;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+}
+
 .otd-more { grid-area: more; white-space: nowrap; }
+
+@media (max-width: 760px) {
+    #otd.is-carousel {
+        grid-template-columns: max-content 44px minmax(0, 1fr) 44px max-content;
+        grid-template-areas: "heading previous items next more";
+    }
+
+    .otd-label-full, .otd-position { display: none; }
+    .otd-label-short { display: inline; }
+}
 
 
 /* ---- More page ---- */

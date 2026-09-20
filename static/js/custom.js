@@ -1,5 +1,29 @@
 document.addEventListener("DOMContentLoaded", function() {
 
+    // On this day: the strip shows one pick at a time, stepped by its arrows.
+    var otd = document.getElementById("otd");
+    if (otd) {
+        var otdItems = Array.prototype.slice.call(otd.querySelectorAll(".otd-item"));
+        if (otdItems.length > 1) {
+            var otdIndex = 0;
+            var otdPrevious = otd.querySelector(".otd-prev");
+            var otdNext = otd.querySelector(".otd-next");
+            var otdPosition = otd.querySelector(".otd-position");
+            var showOtdItem = function(index) {
+                otdIndex = (index + otdItems.length) % otdItems.length;
+                otdItems.forEach(function(item, i) { item.hidden = i !== otdIndex; });
+                otdPosition.textContent = (otdIndex + 1) + "/" + otdItems.length;
+            };
+            otd.classList.add("is-carousel");
+            otdPrevious.hidden = false;
+            otdNext.hidden = false;
+            otdPosition.hidden = false;
+            showOtdItem(0);
+            otdPrevious.addEventListener("click", function() { showOtdItem(otdIndex - 1); });
+            otdNext.addEventListener("click", function() { showOtdItem(otdIndex + 1); });
+        }
+    }
+
     // Header search: don't submit empty queries.
     var navSearch = document.getElementById("nav-search");
     if (navSearch) {

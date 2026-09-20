@@ -117,13 +117,13 @@ class HomepageTests(SimpleTestCase):
         context.update(extra)
         return render_to_string('homepage.html', context)
 
-    def test_opens_on_the_tagline_then_the_record_it_describes(self):
+    def test_opens_on_the_day_then_the_tagline_then_the_record_it_describes(self):
         html = self.render()
 
+        self.assertLess(html.index('id="otd"'), html.index('id="tagline"'))
         self.assertLess(html.index('id="tagline"'), html.index('id="home-search"'))
         self.assertLess(html.index('id="home-search"'), html.index('id="home-totals"'))
         self.assertLess(html.index('id="home-totals"'), html.index('year-grid'))
-        self.assertLess(html.index('year-grid'), html.index('id="otd"'))
 
     def test_totals_carry_the_size_of_the_record(self):
         html = self.render()
@@ -140,12 +140,12 @@ class HomepageTests(SimpleTestCase):
         self.assertIn('title="1866: 100 games"', html)
         self.assertIn('href="/dates/1925/"', html)
 
-    def test_the_days_picks_all_stand_at_once(self):
+    def test_the_days_picks_are_a_strip_stepped_by_arrows(self):
         html = self.render()
 
         self.assertEqual(html.count('class="otd-item"'), 2)
-        self.assertNotIn('class="otd-prev"', html)
-        self.assertNotIn('class="otd-next"', html)
+        self.assertIn('class="otd-prev"', html)
+        self.assertIn('class="otd-next"', html)
         self.assertIn('/games/1996-09-06/major-league-soccer/home-v-away/">1996 &middot;', html)
         self.assertIn('Player Name was born', html)
 
