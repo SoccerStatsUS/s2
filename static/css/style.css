@@ -960,13 +960,13 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
 .results-chart .mark.loss { fill: var(--ink-soft); }
 
 /* Clubs timeline: a block shaded by where the club finished, in fifths of the
-   table. A bright green for the best, greens dulling towards the middle,
-   then reds deepening to --loss-ink for the worst. Lightness falls the whole
-   way (CIE L* 62, 59, 56, 44, 29), so a reader who cannot tell the hues
-   apart still has the order from that. */
-.timeline-chart .mark.finish-0 { fill: #2aab6e; }
-.timeline-chart .mark.finish-1 { fill: #5f9a7d; }
-.timeline-chart .mark.finish-2 { fill: #78877f; }
+   table. A bright green for the best, greens dulling to a sage in the
+   middle, then reds deepening to --loss-ink for the worst. Lightness falls
+   the whole way (CIE L* 70, 66, 58, 44, 29), so a reader who cannot tell the
+   hues apart still has the order from that. */
+.timeline-chart .mark.finish-0 { fill: #1fc46f; }
+.timeline-chart .mark.finish-1 { fill: #4fb27f; }
+.timeline-chart .mark.finish-2 { fill: #7f9070; }
 .timeline-chart .mark.finish-3 { fill: #b0483a; }
 .timeline-chart .mark.finish-4 { fill: var(--loss-ink); }
 /* Outlined in ink rather than the accent here, so a block with no table on

@@ -26,24 +26,20 @@
 {% seasons_table competition.season_set.reverse %}
 </div>
 
-{% if season_clubs or club_timeline.rows %}
-<div tab="clubs" tab-label="{{ club_noun }}">
-
-{% if season_clubs %}
-<h3>{{ club_noun|capfirst }} by season</h3>
-{% count_chart season_clubs club_noun|capfirst|add:" by season" club_noun note="Counts every club that played at least one recorded game in the season." %}
-{% endif %}
+{% if season_clubs or club_timeline.rows or league_positions.rows %}
+<div tab="charts">
 
 {% if club_timeline.rows %}
 <h3>{{ club_noun|capfirst }}, season by season</h3>
 {% timeline_chart club_timeline club_noun|capfirst|add:" by season" club_noun %}
 {% endif %}
 
-</div>
+{% if season_clubs %}
+<h3>{{ club_noun|capfirst }} by season</h3>
+{% count_chart season_clubs club_noun|capfirst|add:" by season" club_noun note="Counts every club that played at least one recorded game in the season." %}
 {% endif %}
 
 {% if league_positions.rows %}
-<div tab="positions">
 <h3>League positions</h3>
 <div class="chart-switcher">
   <div class="chart-switch" role="group" aria-label="Position measure">
@@ -53,6 +49,8 @@
   <div data-chart-panel="rolling">{% position_chart league_positions "League position by season, averaged over three seasons" smooth=True %}</div>
   <div data-chart-panel="final" hidden>{% position_chart league_positions "Final league position by season" %}</div>
 </div>
+{% endif %}
+
 </div>
 {% endif %}
 
