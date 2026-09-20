@@ -456,9 +456,8 @@ def position_chart(positions, caption):
     faint, in one of five stroke patterns dealt round in list order; hovering
     one lifts it, in the club's own color where the closest-club map has one
     and the accent otherwise, and fades the rest; only then do its points
-    show. Names
-    sit in a column at the right: the clubs in the last table on
-    the row they finished in, then the clubs that have left, most recent
+    show. Names sit in a column at the right: the clubs in the last table in
+    the order their lines end, then the clubs that have left, most recent
     first. The table below carries the finishes themselves.
     """
     columns, rows = positions.get("columns") or [], positions.get("rows") or []
@@ -497,6 +496,17 @@ def position_chart(positions, caption):
     # Five stroke patterns, dealt round the clubs in list order so that
     # neighbours in the last table draw differently and a line can be
     # followed through a crossing. Five is as many as stay distinct at 1px.
+    # The clubs in the last table are labeled in the order their lines end,
+    # which is the averaged finish rather than the finish itself, so the
+    # names read straight off the ends of the lines.
+    current = [row for row in rows if row not in gone]
+    ends = {}
+    for row in current:
+        played = [(index, name) for index, name in enumerate(columns) if name in row["positions"]]
+        ends[row["name"]] = rolling_positions(played, row["positions"])[columns[-1]][0]
+    current.sort(key=lambda row: (ends[row["name"]], row["positions"][columns[-1]]))
+    label_rows = {row["name"]: number + 1 for number, row in enumerate(current)}
+
     clubs = []
     for number, row in enumerate(rows):
         played = [(index, name) for index, name in enumerate(columns) if name in row["positions"]]
@@ -531,7 +541,7 @@ def position_chart(positions, caption):
         if row in gone:
             label_y = y_of(depth + gone.index(row) + 1)
         else:
-            label_y = y_of(row["positions"][columns[-1]])
+            label_y = y_of(label_rows[row["name"]])
         clubs.append({
             "name": row["name"], "url": row.get("url"), "paths": paths, "points": points,
             "pattern": number % 5, "color": row.get("color"),

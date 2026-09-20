@@ -154,14 +154,23 @@ class PositionChartTests(SimpleTestCase):
         self.assertEqual([point['lone'] for point in b['points']], [True, True])
         self.assertEqual([point['lone'] for point in a['points']], [False, False, False])
 
-    def test_a_current_club_is_labeled_on_its_last_row(self):
-        chart = position_chart(self.positions(), 'Positions')
+    def test_current_clubs_are_labeled_in_the_order_their_lines_end(self):
+        positions = self.positions()
+        # A finished 1st in 1998 and averages 1.3; B finished 2nd and averages
+        # 2.0. C, 3rd in 1998 but 1st the two seasons before, averages 1.7 and
+        # so takes the second row from B.
+        positions['sizes'] = {'1996': 3, '1997': 3, '1998': 3}
+        positions['rows'].append({'name': 'C', 'url': None, 'positions': {'1996': 1, '1997': 1, '1998': 3},
+                                  'urls': {}, 'first': '1996', 'last': '1998'})
+        chart = position_chart(positions, 'Positions')
 
-        a = chart['clubs'][0]
+        a, b, c = chart['clubs']
         self.assertEqual(a['label_x'], chart['svg']['width'] - 150 + 7)
         row_h = chart['ranks'][1]['y'] - chart['ranks'][0]['y']
-        self.assertEqual(chart['labels'][0]['grid_bottom'], chart['ranks'][1]['y'] + row_h / 2)
+        self.assertEqual(chart['labels'][0]['grid_bottom'], chart['ranks'][2]['y'] + row_h / 2)
         self.assertEqual(a['label_y'], chart['ranks'][0]['y'] + 4)
+        self.assertEqual(c['label_y'], chart['ranks'][1]['y'] + 4)
+        self.assertEqual(b['label_y'], chart['ranks'][2]['y'] + 4)
         self.assertIsNone(a['gone'])
 
     def test_departed_clubs_are_listed_below_the_table_in_the_order_given(self):
