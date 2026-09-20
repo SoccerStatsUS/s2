@@ -231,7 +231,8 @@ def league_positions(competition, seasons, slugs=None):
     overall table where the two meet. Keyed by club, not by name, so a club
     that changed its name draws one line under the name it uses now. Leagues
     only, like the clubs timeline. Rows lead with the clubs in the last table,
-    in the order they finished.
+    in the order they finished. A club's color is the one the closest-club map
+    gives it, where it has one.
     """
     if competition.ctype != 'League' or len(seasons) < 2:
         return {'columns': [], 'sizes': {}, 'rows': []}
@@ -259,6 +260,7 @@ def league_positions(competition, seasons, slugs=None):
         rows.append({
             'name': club['name'],
             'url': reverse('team_detail', args=[club['slug']]) if club['slug'] else None,
+            'color': territory.COLORS.get(club['slug']),
             'positions': club['positions'],
             'urls': club['urls'],
             'first': played[0],

@@ -54,8 +54,10 @@ Reserve remaining accent capacity for data semantics (result, provenance, marked
 not for chrome.
 
 The one exception is the closest-club map (`competitions/territory.py`), which fills each
-club's territory with a color of that club's own. Those are data, not palette: they appear
-nowhere else, every territory also carries its name, and the table repeats the assignment.
+club's territory with a color of that club's own. Those are data, not palette: every
+territory also carries its name, and the table repeats the assignment. The league position
+chart borrows the same table for one line at a time: a club's line takes its color only
+while it is lifted on hover, beside its name, and rests in ink like every other.
 
 ---
 

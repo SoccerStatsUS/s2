@@ -105,7 +105,8 @@ class SeasonPositionsTests(SimpleTestCase):
             ('1997', 2, 'Tampa Bay Mutiny', 'tb', 39, 11),
             ('1998', 1, 'New York Red Bulls', 'rb', 30, 8),
         ]
-        with patch('competitions.views.Standing') as standing:
+        with patch('competitions.views.Standing') as standing, \
+                patch.dict('competitions.territory.COLORS', {'rb': '#c8102e'}, clear=True):
             standing.objects.filter.return_value.values_list.return_value = rows
             with patch('competitions.views.reverse', side_effect=lambda name, args: '/%s/%s' % (name, '/'.join(args))):
                 positions = views.league_positions(competition, ['1996', '1997', '1998'],
@@ -119,6 +120,7 @@ class SeasonPositionsTests(SimpleTestCase):
         self.assertEqual(red_bulls['urls'], {'1996': '/team_season_detail/rb/mls/1996',
                                              '1998': '/team_season_detail/rb/mls/1998'})
         self.assertEqual((mutiny['first'], mutiny['last']), ('1996', '1997'))
+        self.assertEqual((red_bulls['color'], mutiny['color']), ('#c8102e', None))
 
     def test_league_positions_is_empty_for_a_cup(self):
         competition = SimpleNamespace(ctype='Cup', slug='cup')
@@ -132,7 +134,7 @@ class PositionChartTests(SimpleTestCase):
             'columns': ['1996', '1997', '1998'],
             'sizes': {'1996': 2, '1997': 2, '1998': 2},
             'rows': [
-                {'name': 'A', 'url': '/a', 'positions': {'1996': 1, '1997': 2, '1998': 1},
+                {'name': 'A', 'url': '/a', 'color': '#123456', 'positions': {'1996': 1, '1997': 2, '1998': 1},
                  'urls': {}, 'first': '1996', 'last': '1998'},
                 {'name': 'B', 'url': None, 'positions': {'1996': 2, '1998': 2},
                  'urls': {'1998': '/b/1998'}, 'first': '1996', 'last': '1998'},
@@ -214,7 +216,7 @@ class PositionChartTests(SimpleTestCase):
         html = render_to_string('templatetags/charts/positions.html',
                                 position_chart(self.positions(), 'Positions'))
 
-        self.assertIn('<g class="club pattern-0">', html)
+        self.assertIn('<g class="club pattern-0" style="--club: #123456">', html)
         self.assertIn('<g class="club pattern-1">', html)
         self.assertEqual(html.count('<circle'), 5)
         self.assertIn('<th scope="col">1997</th>', html)

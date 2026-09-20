@@ -454,7 +454,9 @@ def position_chart(positions, caption):
     lets an era of a club's form read. The line breaks where a club sat out a
     season rather than bridging the gap. Every line is drawn alike, thin and
     faint, in one of five stroke patterns dealt round in list order; hovering
-    one lifts it and fades the rest, and only then do its points show. Names
+    one lifts it, in the club's own color where the closest-club map has one
+    and the accent otherwise, and fades the rest; only then do its points
+    show. Names
     sit in a column at the right: the clubs in the last table on
     the row they finished in, then the clubs that have left, most recent
     first. The table below carries the finishes themselves.
@@ -532,7 +534,7 @@ def position_chart(positions, caption):
             label_y = y_of(row["positions"][columns[-1]])
         clubs.append({
             "name": row["name"], "url": row.get("url"), "paths": paths, "points": points,
-            "pattern": number % 5,
+            "pattern": number % 5, "color": row.get("color"),
             "label_x": WIDTH - right + 7, "label_y": label_y + 4,
             "gone": row["last"] if row in gone else None,
             "cells": [row["positions"].get(name) for name in columns],
