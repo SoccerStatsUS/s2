@@ -621,6 +621,14 @@ td.friendly { background-color: transparent; }
     line-height: 1.55;
 }
 
+/* On a season page the honors are the point; the blurb is a footnote to them,
+   so it sits under the table at the figures' size and ink. */
+#season_block .blurb {
+    margin: 0 0 12px;
+    font-size: 15px;
+    color: var(--ink-soft);
+}
+
 /* Honors: the reason the page exists, so it sits above the tab bar. Hairlines
    top and bottom, no box. DESIGN.md §3. */
 table.honors {
