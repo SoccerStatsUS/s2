@@ -149,7 +149,7 @@ class PositionChartTests(SimpleTestCase):
         self.assertEqual(b['paths'], [])
         self.assertEqual(len(b['points']), 2)
         self.assertEqual(b['points'][1]['url'], '/b/1998')
-        self.assertEqual(b['points'][1]['title'], 'B, 1998: 2nd of 2; 2.0 over 1998')
+        self.assertEqual(b['points'][1]['title'], 'B, 1998: 2nd of 2')
         self.assertEqual(b['cells'], [2, None, 2])
         self.assertEqual([point['lone'] for point in b['points']], [True, True])
         self.assertEqual([point['lone'] for point in a['points']], [False, False, False])
@@ -162,7 +162,7 @@ class PositionChartTests(SimpleTestCase):
         positions['sizes'] = {'1996': 3, '1997': 3, '1998': 3}
         positions['rows'].append({'name': 'C', 'url': None, 'positions': {'1996': 1, '1997': 1, '1998': 3},
                                   'urls': {}, 'first': '1996', 'last': '1998'})
-        chart = position_chart(positions, 'Positions')
+        chart = position_chart(positions, 'Positions', smooth=True)
 
         a, b, c = chart['clubs']
         self.assertEqual(a['label_x'], chart['svg']['width'] - 150 + 7)
@@ -172,6 +172,11 @@ class PositionChartTests(SimpleTestCase):
         self.assertEqual(c['label_y'], chart['ranks'][1]['y'] + 4)
         self.assertEqual(b['label_y'], chart['ranks'][2]['y'] + 4)
         self.assertIsNone(a['gone'])
+
+        plain = position_chart(positions, 'Positions')
+        self.assertEqual([club['label_y'] for club in plain['clubs']],
+                         [rank['y'] + 4 for rank in plain['ranks']])
+        self.assertEqual(plain['clubs'][0]['points'][1]['y'], plain['ranks'][1]['y'])
 
     def test_departed_clubs_are_listed_below_the_table_in_the_order_given(self):
         positions = self.positions()
@@ -214,12 +219,13 @@ class PositionChartTests(SimpleTestCase):
             '1996': (1, '1996'), '1997': (2, '1996'), '1998': (4, '1996'),
             '1999': (5, '1997'), '2001': (10, '2001')})
 
-    def test_points_sit_at_the_rolling_average(self):
-        chart = position_chart(self.positions(), 'Positions')
+    def test_smoothed_points_sit_at_the_rolling_average_and_leave_the_table_out(self):
+        chart = position_chart(self.positions(), 'Positions', smooth=True)
 
         a = chart['clubs'][0]
         self.assertEqual(a['points'][1]['y'], (chart['ranks'][0]['y'] + chart['ranks'][1]['y']) / 2)
         self.assertEqual(a['points'][2]['title'], 'A, 1998: 1st of 2; 1.3 over 1996-1998')
+        self.assertNotIn('<table>', render_to_string('templatetags/charts/positions.html', chart))
 
     def test_renders_chart_and_table(self):
         html = render_to_string('templatetags/charts/positions.html',

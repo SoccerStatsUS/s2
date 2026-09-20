@@ -445,13 +445,15 @@ def monotone_path(points):
 
 
 @register.inclusion_tag("templatetags/charts/positions.html")
-def position_chart(positions, caption):
+def position_chart(positions, caption, smooth=False):
     """
     A bump chart: a season per column, a place in the table per row, one line
-    per club threading its finishes. Each point is the club's mean finish over
-    its last three seasons rather than the finish itself; season by season a
-    league of twenty is a thicket of crossing lines, and the average is what
-    lets an era of a club's form read. The line breaks where a club sat out a
+    per club threading its finishes. Smoothed, each point is the club's mean
+    finish over its last three seasons rather than the finish itself; season
+    by season a league of twenty is a thicket of crossing lines, and the
+    average is what lets an era of a club's form read. The two are rendered
+    side by side behind a switch, and the table sits with the plain one. The
+    line breaks where a club sat out a
     season rather than bridging the gap. Every line is drawn alike, thin and
     faint, in one of five stroke patterns dealt round in list order; hovering
     one lifts it, in the club's own color where the closest-club map has one
@@ -503,7 +505,8 @@ def position_chart(positions, caption):
     ends = {}
     for row in current:
         played = [(index, name) for index, name in enumerate(columns) if name in row["positions"]]
-        ends[row["name"]] = rolling_positions(played, row["positions"])[columns[-1]][0]
+        ends[row["name"]] = (rolling_positions(played, row["positions"])[columns[-1]][0]
+                             if smooth else row["positions"][columns[-1]])
     current.sort(key=lambda row: (ends[row["name"]], row["positions"][columns[-1]]))
     label_rows = {row["name"]: number + 1 for number, row in enumerate(current)}
 
@@ -511,7 +514,10 @@ def position_chart(positions, caption):
     for number, row in enumerate(rows):
         played = [(index, name) for index, name in enumerate(columns) if name in row["positions"]]
         smoothed = rolling_positions(played, row["positions"])
-        values = {name: value for name, (value, _) in smoothed.items()}
+        if smooth:
+            values = {name: value for name, (value, _) in smoothed.items()}
+        else:
+            values = row["positions"]
         segments, run, previous = [], [], None
         for index, name in played:
             point = (x_of(index), y_of(values[name]))
@@ -529,13 +535,15 @@ def position_chart(positions, caption):
         points = []
         for index, name in played:
             position = row["positions"][name]
-            value, since = smoothed[name]
+            title = "%s, %s: %s of %s" % (row["name"], name, ordinal(position), sizes[name])
+            if smooth:
+                value, since = smoothed[name]
+                title += "; %.1f over %s" % (value, name if since == name else "%s-%s" % (since, name))
             points.append({
-                "x": x_of(index), "y": y_of(value), "lone": (x_of(index), y_of(value)) in lone,
+                "x": x_of(index), "y": y_of(values[name]),
+                "lone": (x_of(index), y_of(values[name])) in lone,
                 "url": (row.get("urls") or {}).get(name),
-                "title": "%s, %s: %s of %s; %.1f over %s" % (
-                    row["name"], name, ordinal(position), sizes[name], value,
-                    name if since == name else "%s-%s" % (since, name)),
+                "title": title,
             })
 
         if row in gone:
@@ -554,7 +562,7 @@ def position_chart(positions, caption):
         "svg": {"width": WIDTH, "height": height, "left": left, "label_y": top - 12,
                 "rank_x": left - 8},
         "clubs": clubs, "labels": labels, "ranks": ranks, "caption": caption,
-        "columns": columns, "rows": rows,
+        "columns": columns, "rows": rows, "smooth": smooth,
         "first": columns[0], "last": columns[-1],
     }
 
