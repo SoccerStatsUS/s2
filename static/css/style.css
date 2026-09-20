@@ -932,6 +932,8 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
 .position-chart .club path { fill: none; stroke: var(--ink-soft); stroke-width: 1.5; stroke-linejoin: round; opacity: .45; }
 .position-chart .club circle { fill: #fff; stroke: var(--ink-soft); stroke-width: 1.5; opacity: .6; }
 .position-chart .club text.label { font-size: 11px; opacity: .8; }
+.position-chart .club text.label.gone { fill: var(--ink-soft); }
+.position-chart .club text.label .since { font-size: 10px; }
 .position-chart .club:hover path, .position-chart .club:focus-within path { stroke: var(--accent); stroke-width: 2.5; opacity: 1; }
 .position-chart .club:hover circle, .position-chart .club:focus-within circle { stroke: var(--accent); opacity: 1; }
 .position-chart .club:hover text.label, .position-chart .club:focus-within text.label { fill: var(--accent-dark); opacity: 1; }

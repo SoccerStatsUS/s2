@@ -413,8 +413,9 @@ def position_chart(positions, caption, smooth=False):
     A bump chart: a season per column, a place in the table per row, one line
     per club threading its finishes. The line breaks where a club sat out a
     season rather than bridging the gap. Every line is drawn alike and lifts on
-    hover; the club's name sits at the end of its line, and the table below
-    carries every number. Smoothed, each point is the club's mean finish over
+    hover. Names sit in a column at the right: the clubs in the last table on
+    the row they finished in, then the clubs that have left, most recent
+    first. The table below carries every number. Smoothed, each point is the club's mean finish over
     its last three seasons, and the table is left to the plain chart.
     """
     columns, rows = positions.get("columns") or [], positions.get("rows") or []
@@ -422,12 +423,17 @@ def position_chart(positions, caption, smooth=False):
     if len(columns) < 2 or len(rows) < 2:
         return {"svg": None}
 
-    row_h, left, right, top = 14, 40, 150, 26
+    # The label column holds the clubs in the last table on their own rows,
+    # then the clubs that have left, most recent first, in rows below them
+    # with the season they left after. It is as wide as its longest entry.
+    gone = [row for row in rows if row["last"] != columns[-1]]
+    widest = max(len(row["name"]) + (len(row["last"]) + 1 if row in gone else 0) for row in rows)
+    row_h, left, right, top = 14, 40, min(280, max(150, widest * 6 + 16)), 26
     depth = max(sizes.values())
     plot_w = WIDTH - left - right
     slot = plot_w / len(columns)
     every = label_step(columns, slot)
-    height = top + depth * row_h + 6
+    height = top + (depth + len(gone)) * row_h + 6
 
     def x_of(index):
         return left + index * slot + slot / 2
@@ -440,7 +446,7 @@ def position_chart(positions, caption, smooth=False):
     for index, name in enumerate(columns):
         if index % every == 0 or (index == len(columns) - 1 and index - last_labeled >= every):
             labels.append({"x": x_of(index), "text": name,
-                           "grid_top": top - 6, "grid_bottom": height})
+                           "grid_top": top - 6, "grid_bottom": top + depth * row_h})
             last_labeled = index
 
     ranks = [{"y": y_of(position), "text": position} for position in range(1, depth + 1)]
@@ -481,10 +487,14 @@ def position_chart(positions, caption, smooth=False):
                 "title": title,
             })
 
-        end = points[-1]
+        if row in gone:
+            label_y = y_of(depth + gone.index(row) + 1)
+        else:
+            label_y = points[-1]["y"]
         clubs.append({
             "name": row["name"], "url": row.get("url"), "paths": paths, "points": points,
-            "label_x": end["x"] + 7, "label_y": end["y"] + 4,
+            "label_x": WIDTH - right + 7, "label_y": label_y + 4,
+            "gone": row["last"] if row in gone else None,
             "cells": [row["positions"].get(name) for name in columns],
         })
 

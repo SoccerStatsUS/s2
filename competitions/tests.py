@@ -149,13 +149,30 @@ class PositionChartTests(SimpleTestCase):
         self.assertEqual(b['points'][1]['title'], 'B, 1998: 2nd of 2')
         self.assertEqual(b['cells'], [2, None, 2])
 
-    def test_the_label_sits_past_the_last_point(self):
+    def test_a_current_club_is_labeled_on_its_last_row(self):
         chart = position_chart(self.positions(), 'Positions')
 
         a = chart['clubs'][0]
-        self.assertEqual(a['label_x'], a['points'][-1]['x'] + 7)
+        self.assertEqual(a['label_x'], chart['svg']['width'] - 150 + 7)
+        self.assertEqual(chart['labels'][0]['grid_bottom'], chart['ranks'][1]['y'] + 7)
         self.assertEqual(a['label_y'], a['points'][-1]['y'] + 4)
         self.assertEqual(a['points'][-1]['y'], chart['ranks'][0]['y'])
+        self.assertIsNone(a['gone'])
+
+    def test_departed_clubs_are_listed_below_the_table_in_the_order_given(self):
+        positions = self.positions()
+        positions['rows'].extend([
+            {'name': 'C', 'url': None, 'positions': {'1996': 2}, 'urls': {}, 'first': '1996', 'last': '1996'},
+            {'name': 'D', 'url': None, 'positions': {'1997': 1}, 'urls': {}, 'first': '1997', 'last': '1997'},
+        ])
+        chart = position_chart(positions, 'Positions')
+
+        a, b, c, d = chart['clubs']
+        row_h = chart['ranks'][1]['y'] - chart['ranks'][0]['y']
+        self.assertEqual(c['label_y'], chart['ranks'][1]['y'] + row_h + 4)
+        self.assertEqual(d['label_y'], chart['ranks'][1]['y'] + 2 * row_h + 4)
+        self.assertEqual((c['gone'], d['gone']), ('1996', '1997'))
+        self.assertEqual(chart['svg']['height'], chart['ranks'][1]['y'] + row_h * 2.5 + 6)
 
     def test_nothing_to_draw(self):
         self.assertEqual(position_chart({'columns': ['1996'], 'rows': []}, 'x'), {'svg': None})
