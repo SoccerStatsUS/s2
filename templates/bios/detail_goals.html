@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}{{ bio.name }} goal log{% endblock %}
+{% block metadescription %}Recorded goals and match details for {{ bio.name }}.{% endblock %}
+
+{% block content %}
+
+<h1><a href="{% url 'person_detail' bio.slug %}">{{ bio.name }}</a> goal log</h1>
+
+{% if goals %}
+<p class="coverage-note">{{ page.paginator.count|intcomma }} goals on record, newest first.
+This log may be incomplete; season totals can include goals whose match details haven't been recorded.</p>
+
+{% include "pagination.html" with noun="goals" %}
+<table>
+<thead>
+  <tr>
+    <th scope="col">date</th>
+    <th scope="col">team</th>
+    <th scope="col" title="minute scored">min</th>
+    <th scope="col">game</th>
+    <th scope="col">notes</th>
+  </tr>
+</thead>
+<tbody>
+{% for goal in goals %}
+  <tr>
+    <td class="date"><a href="{% url 'date_detail' goal.date.year goal.date.month goal.date.day %}">{{ goal.date }}</a></td>
+    <td><a href="{% url 'team_detail' goal.team.slug %}">{% if goal.game_id %}{{ goal.team_original_name|default:goal.team.name }}{% else %}{{ goal.team.name }}{% endif %}</a></td>
+    <td>{% if goal.minute == None %}<span title="minute not recorded">&mdash;</span>{% else %}{{ goal.minute }}{% endif %}</td>
+    <td>{% if goal.game_id %}<a href="{{ goal.game.get_absolute_url }}">{{ goal.game.game_string }}</a>{% else %}<span title="match not recorded">&mdash;</span>{% endif %}</td>
+    <td>{% if goal.penalty %}penalty{% endif %}{% if goal.penalty and goal.own_goal %}, {% endif %}{% if goal.own_goal %}own goal{% endif %}</td>
+  </tr>
+{% endfor %}
+</tbody>
+</table>
+{% include "pagination.html" with noun="goals" %}
+{% else %}
+<p class="coverage-note">No individual goals on record for {{ bio.name }} yet. Season totals may still be available on the player page.</p>
+{% endif %}
+
+{% endblock %}

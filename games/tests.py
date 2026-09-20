@@ -7,11 +7,21 @@ from django.test import RequestFactory, SimpleTestCase
 
 from competitions.models import Competition
 from games.management.commands.errordigest import format_digest, parse
+from games.management.commands.smoketest import is_unbuilt
 from games.models import Game
 from games.spine import build_spine
 from games.templatetags.result_chart import recent_results_chart
 from games.views import search
 from teams.models import Team
+
+
+class BuiltPageSmokeTests(SimpleTestCase):
+
+    def test_restored_pages_are_not_allowed_to_fail(self):
+        for url in ('/positions/', '/bios/sol-prediger/goals/',
+                    '/teams/brooklyn-wanderers/c/asl/'):
+            with self.subTest(url=url):
+                self.assertFalse(is_unbuilt(url))
 
 
 class DuplicateGamesTests(SimpleTestCase):

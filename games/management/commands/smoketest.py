@@ -17,7 +17,6 @@ UNBUILT = {
     '/games/',
     '/news/',
     '/places/states/',
-    '/positions/',
 }
 
 # Unlinked, half-built detail routes: nothing links to them and their
@@ -25,11 +24,9 @@ UNBUILT = {
 def is_unbuilt(url):
     if url in UNBUILT:
         return True
-    if url.startswith('/bios/') and url.endswith(('/goals/', '/stats/')):
+    if url.startswith('/bios/') and url.endswith('/stats/'):
         return True
     if url.startswith('/c/') and url.endswith('/salaries/'):
-        return True
-    if url.startswith('/teams/') and url.count('/') == 5 and url.split('/')[3] == 'c':
         return True
     return False
 

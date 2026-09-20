@@ -1,8 +1,66 @@
+import datetime
 import re
 from types import SimpleNamespace
+from unittest.mock import MagicMock, patch
 
 from django.template.loader import render_to_string
-from django.test import SimpleTestCase
+from django.test import RequestFactory, SimpleTestCase
+
+from bios.views import person_detail_goals
+from competitions.models import Competition
+from games.models import Game
+from goals.models import Goal
+from teams.models import Team
+
+
+class PlayerGoalsTests(SimpleTestCase):
+
+    def response(self, goals, query=None):
+        goal_set = MagicMock()
+        goal_set.select_related.return_value.order_by.return_value = goals
+        bio = SimpleNamespace(name='Sol Prediger', slug='sol-prediger', goal_set=goal_set)
+        request = RequestFactory().get('/bios/sol-prediger/goals/', query or {})
+        with patch('bios.views.Bio.objects.by_slug', return_value=bio):
+            return person_detail_goals(request, bio.slug)
+
+    def test_empty_log_keeps_player_identity_and_explains_coverage(self):
+        response = self.response([])
+
+        self.assertContains(response, 'Sol Prediger')
+        self.assertContains(response, 'No individual goals on record')
+        self.assertContains(response, 'href="/bios/sol-prediger/"')
+
+    def test_goal_details_and_missing_match_or_minute_render(self):
+        team = Team(id=1, name='Brooklyn Wanderers', slug='brooklyn-wanderers')
+        opponent = Team(id=2, name='Fall River Marksmen', slug='fall-river-marksmen')
+        competition = Competition(id=1, name='ASL', slug='asl')
+        date = datetime.date(1930, 12, 14)
+        game = Game(id=1, date=date, team1=team, team2=opponent,
+                    team1_original_name='Brooklyn', team2_original_name='Fall River',
+                    team1_score=2, team2_score=3, competition=competition)
+        goals = [
+            Goal(team=team, game=game, date=date, minute=0, penalty=True),
+            Goal(team=team, date=date, minute=None),
+        ]
+
+        response = self.response(goals)
+
+        self.assertContains(response, '2 goals on record')
+        self.assertContains(response, '<td>0</td>', html=True)
+        self.assertContains(response, 'penalty')
+        self.assertContains(response, 'href="%s"' % game.get_absolute_url())
+        self.assertContains(response, 'minute not recorded')
+        self.assertContains(response, 'match not recorded')
+
+    def test_goal_log_paginates(self):
+        team = Team(id=1, name='Brooklyn Wanderers', slug='brooklyn-wanderers')
+        goal = Goal(team=team, date=datetime.date(1930, 12, 14))
+
+        response = self.response([goal] * 101, {'page': '2'})
+
+        self.assertContains(response, '101 goals on record')
+        self.assertContains(response, 'page 2 of 2')
+        self.assertContains(response, 'match not recorded', count=1)
 
 
 class PlayerSummaryTests(SimpleTestCase):

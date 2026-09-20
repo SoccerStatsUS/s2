@@ -6,7 +6,83 @@ from django.template.loader import render_to_string
 from django.test import RequestFactory, SimpleTestCase
 
 from competitions.templatetags.charts import ladder_chart
-from teams.views import season_year, team_games
+from competitions.models import Competition, Season
+from games.models import Game
+from standings.models import Standing
+from teams.models import Team
+from teams.views import season_year, team_competition_detail, team_games
+
+
+class TeamCompetitionTests(SimpleTestCase):
+
+    def test_empty_competition_page_renders(self):
+        team = Team(id=1, name='Brooklyn Wanderers', slug='brooklyn-wanderers')
+        competition = Competition(id=1, name='ASL', slug='asl')
+        request = RequestFactory().get('/teams/brooklyn-wanderers/c/asl/')
+        with (
+            patch('teams.views.Team.objects.by_slug', return_value=team),
+            patch('teams.views.get_object_or_404', return_value=competition),
+            patch('teams.views.Game.objects.team_filter', return_value=Game.objects.none()),
+            patch('teams.views.Standing.objects.filter', return_value=Standing.objects.none()),
+        ):
+            response = team_competition_detail(request, team.slug, competition.slug)
+
+        self.assertContains(response, 'Brooklyn Wanderers in ASL')
+        self.assertContains(response, 'No games on record')
+        self.assertContains(response, 'href="/c/asl/"')
+
+    def test_season_records_and_results_render(self):
+        team = Team(id=1, name='Brooklyn Wanderers', slug='brooklyn-wanderers')
+        opponent = Team(id=2, name='Fall River Marksmen', slug='fall-river-marksmen')
+        competition = Competition(id=1, name='ASL', slug='asl')
+        season = Season(id=1, name='1930 Fall', slug='1930-fall', competition=competition)
+        standing = Standing(team=team, competition=competition, season=season,
+                            games=30, wins=10, ties=7, losses=13)
+        game = Game(id=1, date=datetime.date(1930, 12, 14), competition=competition,
+                    season=season, team1=team, team2=opponent,
+                    team1_original_name='Brooklyn Wanderers',
+                    team2_original_name='Fall River Marksmen',
+                    team1_score=2, team2_score=3)
+        game.prefetched_goals = []
+        game._prefetched_objects_cache = {'sources': []}
+        games = MagicMock()
+        games.values_list.return_value = []
+        games.select_related.return_value.prefetch_related.return_value = [game]
+
+        html = render_to_string('teams/competition_detail.html', {
+            'team': team, 'competition': competition,
+            'standings': [standing], 'games': games,
+            'page': SimpleNamespace(paginator=SimpleNamespace(count=1)),
+        })
+
+        self.assertIn('Season records', html)
+        self.assertIn('1930 Fall', html)
+        self.assertIn('Fall River Marksmen', html)
+        self.assertIn('href="%s"' % game.get_absolute_url(), html)
+
+    @patch('teams.views.render')
+    @patch('teams.views.Paginator')
+    @patch('teams.views.Standing')
+    @patch('teams.views.Game')
+    @patch('teams.views.get_object_or_404')
+    @patch('teams.views.Team')
+    def test_scopes_records_and_games_to_competition_and_paginates(
+            self, team_model, get_competition, game_model, standing_model,
+            paginator, render):
+        request = RequestFactory().get('/teams/brooklyn-wanderers/c/asl/', {'page': '2'})
+        team = team_model.objects.by_slug.return_value
+        competition = get_competition.return_value
+
+        team_competition_detail(request, 'brooklyn-wanderers', 'asl')
+
+        game_model.objects.team_filter.assert_called_once_with(team)
+        game_model.objects.team_filter.return_value.filter.assert_called_once_with(
+            competition=competition)
+        standing_model.objects.filter.assert_called_once_with(
+            team=team, competition=competition, final=True)
+        paginator.return_value.get_page.assert_called_once_with('2')
+        context = render.call_args.args[2]
+        self.assertIs(context['games'], paginator.return_value.get_page.return_value.object_list)
 
 
 class TeamGamesTests(SimpleTestCase):

@@ -1,4 +1,5 @@
 from collections import OrderedDict, Counter
+from django.core.paginator import Paginator
 from django.db.models import Count, F, Q, Sum
 from django.db.models.functions import Substr, Upper
 from django.shortcuts import render, get_object_or_404
@@ -359,9 +360,15 @@ def person_detail_referee_games(request, slug):
 
 def person_detail_goals(request, slug):
     bio = Bio.objects.by_slug(slug)
+    goals = (bio.goal_set.select_related(
+        'team', 'game__team1', 'game__team2', 'game__competition')
+        .order_by('-date', '-id'))
+    page = Paginator(goals, 100).get_page(request.GET.get('page'))
 
     context = {
-        "goals": bio.goal_set.all(),
+        'bio': bio,
+        'goals': page.object_list,
+        'page': page,
         }
     return render(request, "bios/detail_goals.html",
                               context)   
@@ -376,5 +383,4 @@ def person_detail_stats(request, slug):
         }
     return render(request, "bios/detail_stats.html",
                               context)
-
 

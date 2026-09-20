@@ -355,15 +355,20 @@ def team_detail(request, team_slug):
 def team_competition_detail(request, team_slug, competition_slug):
     team = Team.objects.by_slug(team_slug)
     c = get_object_or_404(Competition, slug=competition_slug)
-    games = Game.objects.team_filter(team).filter(competition=c)
-
+    games = (Game.objects.team_filter(team).filter(competition=c)
+             .order_by('-date', '-id'))
+    page = Paginator(games, 100).get_page(request.GET.get('page'))
+    standings = (Standing.objects.filter(team=team, competition=c, final=True)
+                 .exclude(season=None)
+                 .select_related('team', 'competition', 'season')
+                 .order_by('-season__order', '-season__name'))
 
     context = {
         'team': team,
         'competition': c,
-        'stats': TeamStat.objects.filter(team=team), # Wrong stat for the time being.
-        'games': games,
-        'result_json': json.dumps([e.result(team) for e in games]), # Probably need to format better than this.
+        'standings': standings,
+        'games': page.object_list,
+        'page': page,
         }
 
     return render(request, "teams/competition_detail.html",

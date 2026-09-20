@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load games standings humanize %}
+
+{% block title %}{{ team.name }} in {{ competition.name }}{% endblock %}
+{% block metadescription %}Season records and game results for {{ team.name }} in {{ competition.name }}.{% endblock %}
+
+{% block content %}
+
+<p class="lineage"><a href="{% url 'team_detail' team.slug %}">{{ team.name }}</a> &middot;
+<a href="{% url 'competition_detail' competition.slug %}">{{ competition.name }}</a></p>
+<h1>{{ team.name }} in {{ competition.name }}</h1>
+
+{% if standings %}
+<h2>Season records</h2>
+{% standings_table standings 'team,competition' %}
+{% endif %}
+
+<h2>Games</h2>
+{% if games %}
+<p class="coverage-note">{{ page.paginator.count|intcomma }} games on record, newest first. Coverage may be incomplete.</p>
+{% include "pagination.html" with noun="games" %}
+{% games_table games 'competition' %}
+{% include "pagination.html" with noun="games" %}
+{% else %}
+<p class="coverage-note">No games on record for {{ team.name }} in {{ competition.name }} yet.</p>
+{% endif %}
+
+{% endblock %}
