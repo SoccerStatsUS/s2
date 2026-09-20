@@ -1587,7 +1587,9 @@ td.result { width: 70px; }
     padding-bottom: 0;
 }
 
-#home-intro .chart { margin: 4px 0 0; }
+/* The year grid holds the same centre line as the totals above it; caption,
+   legend and note stay flush with the table's left edge. */
+#home-intro .chart { margin: 4px auto 0; }
 
 #home-search {
     margin: 0;
