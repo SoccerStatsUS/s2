@@ -1238,9 +1238,8 @@ table.summary { max-width: 560px; }
 #event_spine td.home { width: 42%; text-align: right; }
 #event_spine td.away { width: 42%; text-align: left; }
 
-#event_spine td.minute,
-#event_spine td.score {
-    width: 8%;
+#event_spine td.minute {
+    width: 16%;
     text-align: center;
     color: var(--ink-soft);
     font-size: 13px;
@@ -1248,7 +1247,13 @@ table.summary { max-width: 560px; }
 }
 
 #event_spine td.minute.greybg { background: none; }
-#event_spine td.score { color: var(--ink); font-weight: 600; }
+
+/* The running score sits under the minute, in the same cell. */
+#event_spine .score {
+    display: block;
+    color: var(--ink);
+    font-weight: 600;
+}
 
 /* One line per event: glyph, then name; the home side reads mirrored so the
    glyphs sit against the spine on both sides. */
@@ -1261,8 +1266,11 @@ table.summary { max-width: 560px; }
 #event_spine td.home .ev { flex-direction: row-reverse; }
 #event_spine .glyph { font-size: 10px; color: var(--ink-soft); }
 
-#event_spine .tag,
-.spine-note .tag {
+/* Going off reads in the site's one dark red; the ▼ glyph carries it too. */
+#event_spine .ev.off .glyph,
+#event_spine .ev.off a { color: var(--loss-ink); }
+
+#event_spine .tag {
     font-size: 11px;
     color: var(--ink-soft);
     text-transform: uppercase;
@@ -1292,8 +1300,6 @@ table.summary { max-width: 560px; }
     color: var(--ink-soft);
     text-align: center;
 }
-
-.spine-note .glyph { font-size: 10px; }
 
 table#game_lineup { margin: 20px auto 0; }
 

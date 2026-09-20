@@ -1,6 +1,6 @@
 {% if event.kind == 'substitution' %}
 {% if event.on %}<div class="ev sub"><span class="glyph" title="came on">&#9650;</span><span>{% for p in event.on %}<a href="{% url 'person_detail' p.slug %}">{{ p.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</span></div>{% endif %}
-{% if event.off %}<div class="ev sub"><span class="glyph" title="went off">&#9660;</span><span>{% for p in event.off %}<a href="{% url 'person_detail' p.slug %}">{{ p.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</span></div>{% endif %}
+{% if event.off %}<div class="ev sub off"><span class="glyph" title="went off">&#9660;</span><span>{% for p in event.off %}<a href="{% url 'person_detail' p.slug %}">{{ p.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</span></div>{% endif %}
 {% else %}
 <div class="ev goal"><span class="glyph" title="goal">&#9679;</span><span>{% if event.player %}<a href="{% url 'person_detail' event.player.slug %}">{{ event.player.name }}</a>{% else %}<span class="grey" title="scorer not recorded">&mdash;</span>{% endif %}</span>{% if event.kind == 'penalty' %}<span class="tag" title="penalty">pen</span>{% elif event.kind == 'own_goal' %}<span class="tag" title="own goal">og</span>{% endif %}</div>
 {% for p in event.assists %}<div class="assist"><a href="{% url 'person_detail' p.slug %}">{{ p.name }}</a></div>{% endfor %}
