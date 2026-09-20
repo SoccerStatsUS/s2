@@ -1,11 +1,11 @@
 from collections import defaultdict, Counter
 import datetime
-import os
 import sys
 
-from django.core.wsgi import get_wsgi_application
-os.environ['DJANGO_SETTINGS_MODULE'] = 'build_settings'
-application = get_wsgi_application()
+if __name__ == '__main__':
+    from build.__main__ import main
+    main(['generate', *sys.argv[1:]])
+    raise SystemExit
 
 from django.db import transaction
 from django.db.models import Count
@@ -757,17 +757,3 @@ def generate_top_attendances(qs=None):
                 gids.append(gid)
 
     return Game.objects.filter(id__in=gids).order_by('date')
-    
-            
-                        
-if __name__ == "__main__":
-    if not sys.stdin.isatty():
-        import pdb
-
-        def _fail_set_trace(*args, **kwargs):
-            raise RuntimeError("pdb.set_trace() hit in non-interactive generate")
-        pdb.set_trace = _fail_set_trace
-
-    generate()
-
-

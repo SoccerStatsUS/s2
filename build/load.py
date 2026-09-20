@@ -1,15 +1,13 @@
-import argparse
 from collections import Counter, defaultdict
 import datetime
 import hashlib
-import os
 import pymongo
-import sys
 import time
 
-from django.core.wsgi import get_wsgi_application
-os.environ['DJANGO_SETTINGS_MODULE'] = 'build_settings'
-application = get_wsgi_application()
+if __name__ == '__main__':
+    from build.__main__ import main
+    main()
+    raise SystemExit
 
 from django.contrib.contenttypes.models import ContentType
 from django.db import transaction
@@ -1490,32 +1488,3 @@ def load_lineups():
     print(i)
     print("Creating lineups")
     insert_sql('lineups_appearance', l)
-
-
-
-
-def main(argv=None):
-    stages = {
-        'base': load1,
-        'lineups': load2,
-        'game-stats': load3,
-        'news-stats': load4,
-    }
-    aliases = dict(zip(('1', '2', '3', '4'), stages))
-    parser = argparse.ArgumentParser(description='Load a stage of the Mongo → Postgres build.')
-    parser.add_argument('stage', choices=(*stages, *aliases))
-    args = parser.parse_args(argv)
-    stages[aliases.get(args.stage, args.stage)]()
-
-
-if __name__ == "__main__":
-    # The loaders drop into pdb when data looks wrong; with no terminal
-    # attached, fail loudly instead of hanging on a dead debugger.
-    if not sys.stdin.isatty():
-        import pdb
-
-        def _fail_set_trace(*args, **kwargs):
-            raise RuntimeError("pdb.set_trace() hit in non-interactive load")
-        pdb.set_trace = _fail_set_trace
-
-    main()

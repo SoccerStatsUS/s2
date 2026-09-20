@@ -15,11 +15,11 @@ dropdb --if-exists soccerstats_build
 createdb soccerstats_build --owner=soccerstats
 
 .venv/bin/python manage.py migrate --noinput --settings=build_settings
-PYTHONPATH=$PWD .venv/bin/python build/load.py base
-PYTHONPATH=$PWD .venv/bin/python build/load.py lineups
-PYTHONPATH=$PWD .venv/bin/python build/load.py game-stats
-PYTHONPATH=$PWD .venv/bin/python build/load.py news-stats
-PYTHONPATH=$PWD .venv/bin/python build/generate.py
+.venv/bin/python -m build base
+.venv/bin/python -m build lineups
+.venv/bin/python -m build game-stats
+.venv/bin/python -m build news-stats
+.venv/bin/python -m build generate
 .venv/bin/python manage.py smoketest --settings=build_settings
 
 dropdb --if-exists soccerstats_backup

@@ -2,17 +2,25 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
+import textwrap
 from unittest.mock import DEFAULT, patch
 
 from django.test import SimpleTestCase
 
+from build.__main__ import main
 from build.generate import stadium_standings
 from build.getters import keep_news_item, make_bio_getter, make_city_getter, make_nationality_getter
 from utils import insert_sql
 
 
 class LoadCommandTests(SimpleTestCase):
+    def setUp(self):
+        self.enterContext(patch.dict(os.environ))
+        self.setup_django = self.enterContext(patch('build.__main__.django.setup'))
+        self.enterContext(patch('sys.stdin.isatty', return_value=True))
+
     def test_named_stages_and_numeric_aliases_select_one_loader(self):
         from build import load
 
@@ -22,7 +30,7 @@ class LoadCommandTests(SimpleTestCase):
                 with self.subTest(argument=argument), patch.multiple(
                     load, load1=DEFAULT, load2=DEFAULT, load3=DEFAULT, load4=DEFAULT,
                 ) as loaders:
-                    load.main([argument])
+                    main([argument])
 
                     for name, loader in loaders.items():
                         if name == f'load{number}':
@@ -31,15 +39,54 @@ class LoadCommandTests(SimpleTestCase):
                             loader.assert_not_called()
 
     def test_missing_and_unknown_stages_report_usage(self):
-        from build import load
-
         for arguments in ([], ['5'], ['unknown']):
             with self.subTest(arguments=arguments), patch('sys.stderr') as stderr:
                 with self.assertRaises(SystemExit) as error:
-                    load.main(arguments)
+                    main(arguments)
 
                 self.assertEqual(error.exception.code, 2)
                 self.assertIn('usage:', ''.join(call.args[0] for call in stderr.write.call_args_list))
+        self.setup_django.assert_not_called()
+
+    @patch('build.generate.generate')
+    def test_generation_uses_the_requested_settings(self, generate):
+        main(['generate', '--settings=settings'])
+
+        self.assertEqual(os.environ['DJANGO_SETTINGS_MODULE'], 'settings')
+        self.setup_django.assert_called_once_with()
+        generate.assert_called_once_with()
+
+    @patch('build.load.load1')
+    def test_load_defaults_to_build_settings(self, load):
+        main(['base'])
+
+        self.assertEqual(os.environ['DJANGO_SETTINGS_MODULE'], 'build_settings')
+        self.setup_django.assert_called_once_with()
+        load.assert_called_once_with()
+
+
+class BuildImportTests(SimpleTestCase):
+    def test_imports_preserve_settings_without_initializing_django(self):
+        result = subprocess.run(
+            [sys.executable, '-c', textwrap.dedent('''
+                import os
+                from unittest.mock import patch
+                import django
+
+                os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+                django.setup()
+                with patch('django.setup') as setup, patch('pymongo.MongoClient'):
+                    import build.load
+                    import build.generate
+                    import utils
+                setup.assert_not_called()
+                assert os.environ['DJANGO_SETTINGS_MODULE'] == 'settings'
+            ''')],
+            cwd=Path(__file__).resolve().parents[1],
+            capture_output=True, text=True, timeout=15,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
 
 class InsertSqlTests(SimpleTestCase):

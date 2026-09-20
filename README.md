@@ -22,6 +22,16 @@ Settings are env-driven (see settings.py): DJANGO_SECRET_KEY, DJANGO_DEBUG,
 DB_NAME, DB_USER, DB_PASSWORD, DB_HOST. Local defaults work with a trusting
 local postgres and DEBUG on.
 
+`build.sh` loads a fresh `soccerstats_build`, generates derived stats, and runs
+the URL smoke test before replacing `soccerstats_dev`. A failed smoke test
+leaves the previous dev and backup databases in place.
+
+Individual stages run with `.venv/bin/python -m build STAGE`: `base`, `lineups`,
+`game-stats`, `news-stats`, then `generate`, in that order. These insert data;
+they are not safe to repeat against an already populated stage. The old stage
+numbers `1`–`4` still work. Stages default to `build_settings`; use
+`--settings=MODULE` to select another settings module.
+
 #### Deploy
 
 Production runs on the server "bert" at /home/chris/www/s2:
