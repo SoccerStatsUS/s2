@@ -2,8 +2,10 @@
 {% load humanize %}
 
 {% comment %}
-Where a squad's playing time came from, by country of birth. Expects `origins`
-from places.playing_time_by_country: a measure and a row per country. Included
+Where a squad's playing time came from, by country of birth, or by recorded
+nationality where no birthplace is on file. Expects `origins` from
+places.playing_time_by_country: a measure, a row per country, and how much of
+the time went by nationality, which the note under the table owns up to. Included
 by the team-season and the competition-season pages, which differ only in which
 Stat queryset they hand it.
 {% endcomment %}
@@ -13,26 +15,30 @@ Stat queryset they hand it.
 <h3>Where the {% if origins.measure == 'games' %}appearances{% else %}minutes{% endif %} came from</h3>
 
 {% if origins.measure == 'games' %}
-{% country_map origins.rows "Games played by country of birth" "games" %}
+{% country_map origins.rows "Games played by country of origin" "games" %}
 {% else %}
-{% country_map origins.rows "Minutes by country of birth" %}
+{% country_map origins.rows "Minutes by country of origin" %}
 {% endif %}
 
 <table class="origins">
-<caption class="sr-only">{{ origins.measure }} by country of birth</caption>
+<caption class="sr-only">{{ origins.measure }} by country of origin</caption>
 <thead>
   <tr><th scope="col">country</th><th scope="col">{{ origins.measure }}</th><th scope="col">share</th></tr>
 </thead>
 <tbody>
 {% for row in origins.rows %}
   <tr>
-    <td>{% if row.country %}<a href="{% url 'country_detail' row.country.slug %}">{{ row.name }}</a>{% else %}<span class="grey" title="no birthplace on record">{{ row.name }}</span>{% endif %}</td>
+    <td>{% if row.country %}<a href="{% url 'country_detail' row.country.slug %}">{{ row.name }}</a>{% else %}<span class="grey" title="no birthplace or nationality on record">{{ row.name }}</span>{% endif %}</td>
     <td>{{ row.value|intcomma }}</td>
     <td>{{ row.percent|floatformat:1 }}%</td>
   </tr>
 {% endfor %}
 </tbody>
 </table>
+
+{% if origins.by_nationality %}
+<p class="dir-note">No birthplace is on record for {{ origins.by_nationality|intcomma }} of these {{ origins.measure }}, so they go by the player's recorded nationality instead.</p>
+{% endif %}
 
 {% if origins.measure == 'games' %}
 {% include "helpers/coverage.html" with note="No minutes are recorded here, so the shares are games played." %}

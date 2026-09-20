@@ -123,6 +123,9 @@ class Bio(models.Model):
     birthdate = models.DateField(null=True, blank=True)
     birthplace = models.ForeignKey('places.City', null=True, blank=True, related_name='birth_set', on_delete=models.CASCADE)
     birth_country = models.ForeignKey('places.Country', null=True, blank=True, related_name='citizen_set', on_delete=models.CASCADE)
+    # From the hand-kept MLS and USL bio files, which record a nationality and
+    # no birthplace. Stands in for the birth country where there is none.
+    nationality = models.ForeignKey('places.Country', null=True, blank=True, related_name='national_set', on_delete=models.CASCADE)
 
     deathdate = models.DateField(null=True, blank=True)
     deathplace = models.ForeignKey('places.City', null=True, blank=True, related_name='death_set', on_delete=models.CASCADE)

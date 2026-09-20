@@ -3,7 +3,7 @@ from unittest.mock import patch
 from django.test import SimpleTestCase
 
 from build.generate import stadium_standings
-from build.getters import keep_news_item, make_bio_getter, make_city_getter
+from build.getters import keep_news_item, make_bio_getter, make_city_getter, make_nationality_getter
 
 
 class BioGetterTests(SimpleTestCase):
@@ -26,6 +26,20 @@ class BioGetterTests(SimpleTestCase):
         self.assertEqual(get_bio('John\N{NO-BREAK SPACE}McGuire'), 8)
         self.assertEqual(get_bio('john mcguire'), 8)
         bio.objects.create.assert_called_once_with(name='John\N{NO-BREAK SPACE}McGuire', hall_of_fame=False)
+
+
+class NationalityGetterTests(SimpleTestCase):
+    @patch('build.getters.Country')
+    def test_maps_the_bio_files_spellings_to_countries(self, country):
+        country.objects.country_dict.return_value = {
+            'United States': 1, 'Trinidad and Tobago': 2, 'Bolivia': 3}
+
+        get_nationality = make_nationality_getter()
+
+        self.assertEqual(get_nationality('USA'), 1)
+        self.assertEqual(get_nationality('Trinidad'), 2)
+        self.assertEqual(get_nationality('Bolivia'), 3)
+        self.assertIsNone(get_nationality('?'))
 
 
 class NewsFilterTests(SimpleTestCase):

@@ -724,6 +724,8 @@ def load_bios():
     print("loading bios")
 
     cg = make_city_getter()
+    ng = make_nationality_getter()
+    unmatched = Counter()
 
 
     # Find which names are used so we can only load these bios.
@@ -749,11 +751,12 @@ def load_bios():
             print("NO BIO: %s" % str(bio))
             continue
 
-        # nationality should be many-to-many
-        if 'nationality' in bio:
-            bio.pop('nationality')
-
         bd = {}
+
+        if bio.get('nationality'):
+            bd['nationality_id'] = ng(bio['nationality'])
+            if bd['nationality_id'] is None:
+                unmatched[bio['nationality']] += 1
 
         for key in 'name', 'height', 'birthdate', 'height', 'weight':
             if key in bio:
@@ -771,6 +774,9 @@ def load_bios():
             bd['hall_of_fame'] = False
 
         Bio.objects.create(**bd)
+
+    for nationality, n in unmatched.most_common():
+        print("No country for nationality %r (%d bios)" % (nationality, n))
 
     bio_getter = make_bio_getter()
     bio_ct_id = ContentType.objects.get(app_label='bios', model='bio').id

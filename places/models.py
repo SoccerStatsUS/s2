@@ -368,20 +368,26 @@ def playing_time_by_country(stats):
     to say which it is showing.
 
     Country is the birth country, falling back to the country of the
-    birthplace, because some bios carry a city and no explicit country. Time
-    with neither is its own row rather than a silent subtraction from the
-    total.
+    birthplace, because some bios carry a city and no explicit country, and
+    then to the recorded nationality, because the hand-kept MLS and USL bios
+    carry that and no birthplace at all. Nationality is not birth country --
+    a naturalised player counts for the country he played for -- so the time
+    that went by it is returned as well, for the page to say so. Time with
+    none of the three is its own row rather than a silent subtraction from
+    the total.
 
     Takes any Stat queryset, so a competition or a whole club history groups
     the same way a single season does.
     """
-    rows = list(stats.select_related('player__birth_country', 'player__birthplace__country'))
+    rows = list(stats.select_related(
+        'player__birth_country', 'player__birthplace__country', 'player__nationality'))
 
     played = [row for row in rows if row.games_played]
     covered = [row for row in played if row.minutes]
     measure = 'minutes' if played and len(covered) >= len(played) / 2 else 'games'
 
     totals = defaultdict(int)
+    by_nationality = 0
     unknown = 0
 
     for stat in rows:
@@ -393,6 +399,9 @@ def playing_time_by_country(stats):
         country = player.birth_country or (player.birthplace and player.birthplace.country)
         if country:
             totals[country] += value
+        elif player.nationality:
+            totals[player.nationality] += value
+            by_nationality += value
         else:
             unknown += value
 
@@ -400,7 +409,7 @@ def playing_time_by_country(stats):
     # birthplaces on record -- no NWSL bio carries one -- and a breakdown that
     # is one "not recorded" row at 100% is worse than no breakdown.
     if not totals:
-        return {'measure': None, 'rows': []}
+        return {'measure': None, 'rows': [], 'by_nationality': 0}
 
     total = sum(totals.values()) + unknown
 
@@ -414,4 +423,4 @@ def playing_time_by_country(stats):
         country_rows.append(row(None, 'not recorded', unknown))
 
     country_rows.sort(key=lambda r: (-r['value'], r['name']))
-    return {'measure': measure, 'rows': country_rows}
+    return {'measure': measure, 'rows': country_rows, 'by_nationality': by_nationality}

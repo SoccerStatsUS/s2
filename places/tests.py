@@ -13,10 +13,11 @@ class StatRows(list):
         return self
 
 
-def stat(minutes, country=None, city_country=None, games=1):
+def stat(minutes, country=None, city_country=None, games=1, nationality=None):
     player = SimpleNamespace(
         birth_country=country,
         birthplace=SimpleNamespace(country=city_country) if city_country else None,
+        nationality=nationality,
     )
     return SimpleNamespace(minutes=minutes, games_played=games, player=player)
 
@@ -46,12 +47,25 @@ class MinutesByCountryTests(SimpleTestCase):
 
         assert [r['name'] for r in rows] == ['Ireland']
 
+    def test_nationality_stands_in_where_no_birthplace_is_on_record(self):
+        result = playing_time_by_country(StatRows([
+            stat(900, nationality=country('Bolivia')),
+            stat(100, country('Mexico'), nationality=country('United States')),
+        ]))
+
+        assert [(r['name'], r['value']) for r in result['rows']] == [
+            ('Bolivia', 900), ('Mexico', 100)]
+        assert result['by_nationality'] == 900
+
     def test_unattributed_minutes_get_their_own_row(self):
         rows = playing_time_by_country(StatRows([stat(750, country('Jamaica')), stat(250)]))['rows']
 
         assert rows[-1]['name'] == 'not recorded'
         assert rows[-1]['country'] is None
         assert rows[-1]['percent'] == 25.0
+
+    def test_nothing_went_by_nationality_when_every_minute_has_a_birthplace(self):
+        assert playing_time_by_country(StatRows([stat(90, country('Peru'))]))['by_nationality'] == 0
 
     def test_nothing_to_say_when_no_minute_resolves(self):
         """A single 'not recorded' row at 100% is worse than no breakdown."""

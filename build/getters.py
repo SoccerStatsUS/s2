@@ -94,7 +94,39 @@ def make_country_getter():
         return None
 
     return get_country
-    
+
+
+# Spellings in the hand-kept bio files that are not a Country name. "Korea" is
+# taken as South Korea; the few players so recorded were.
+NATIONALITY_ALIASES = {
+    'USA': 'United States',
+    'USa': 'United States',
+    'Trinidad': 'Trinidad and Tobago',
+    'Bosnia': 'Bosnia and Herzegovina',
+    'Holland': 'Netherlands',
+    'Korea': 'South Korea',
+    'St. Lucia': 'Saint Lucia',
+    'St. V & Gr.': 'Saint Vincent and the Grenadines',
+    'Antigua': 'Antigua and Barbuda',
+    'Ivory Coast': "Côte d'Ivoire (Ivory Coast)",
+    'UAE': 'United Arab Emirates',
+    'China': 'China PR',
+    'Turks and Caicos': 'Turks and Caicos Islands',
+}
+
+
+def make_nationality_getter():
+    """
+    Nationality string from a bio -> Country id, or None where it names no
+    country ("?", "Britain").
+    """
+    get_country = make_country_getter()
+
+    def get_nationality(s):
+        return get_country(NATIONALITY_ALIASES.get(s, s))
+
+    return get_nationality
+
 
 def make_source_getter():
     """
