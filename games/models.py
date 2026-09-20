@@ -153,13 +153,14 @@ class GameManager(models.Manager):
         Get a list of games where a team plays twice on the same day.
         """
         d = defaultdict(list)
-        for e in self.get_queryset().select_related('team1', 'team2', 'competition'):
+        games = self.get_queryset().filter(date__isnull=False).order_by('-date', 'id')
+        for e in games.select_related('team1', 'team2', 'competition'):
             d[(e.team1_id, e.date)].append(e)
             d[(e.team2_id, e.date)].append(e)
 
         # Sort by date, not by Game: two Games can't be compared with <.
         groups = [g for g in d.values() if len(g) > 1]
-        return sorted(groups, key=lambda g: (g[0].date is None, g[0].date, g[0].id))
+        return sorted(groups, key=lambda g: g[0].date, reverse=True)
             
 
 class Game(models.Model):

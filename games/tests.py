@@ -13,6 +13,37 @@ from games.templatetags.result_chart import recent_results_chart
 from games.views import search
 from teams.models import Team
 
+
+class DuplicateGamesTests(SimpleTestCase):
+
+    @patch('django.db.models.query.QuerySet.__iter__', autospec=True)
+    def test_search_excludes_undated_games(self, iterate):
+        iterate.return_value = iter([])
+
+        self.assertEqual(Game.objects.duplicate_games(), [])
+
+        query = iterate.call_args.args[0].query
+        self.assertIn('"games_game"."date" IS NOT NULL', str(query))
+
+    @patch('django.db.models.query.QuerySet.__iter__', autospec=True)
+    def test_groups_home_and_away_appearances_newest_first(self, iterate):
+        older = datetime.date(1920, 1, 1)
+        newer = datetime.date(2020, 1, 1)
+        games = [
+            Game(id=1, date=newer, team1_id=1, team2_id=2),
+            Game(id=2, date=newer, team1_id=3, team2_id=1),
+            Game(id=3, date=older, team1_id=1, team2_id=2),
+            Game(id=4, date=older, team1_id=3, team2_id=1),
+            Game(id=5, date=older, team1_id=4, team2_id=5),
+        ]
+        iterate.return_value = iter(reversed(games))
+
+        groups = Game.objects.duplicate_games()
+
+        self.assertEqual([[game.id for game in group] for group in groups],
+                         [[2, 1], [4, 3]])
+
+
 JOURNAL = """\
 2026-08-22T06:25:39+00:00 bert gunicorn[11]: Internal Server Error: /bios/jimmy-drain/
 2026-08-22T06:25:39+00:00 bert gunicorn[11]: Traceback (most recent call last):
