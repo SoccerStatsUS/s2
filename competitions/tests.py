@@ -146,7 +146,7 @@ class PositionChartTests(SimpleTestCase):
         self.assertEqual(b['paths'], [])
         self.assertEqual(len(b['points']), 2)
         self.assertEqual(b['points'][1]['url'], '/b/1998')
-        self.assertEqual(b['points'][1]['title'], 'B, 1998: 2nd of 2')
+        self.assertEqual(b['points'][1]['title'], 'B, 1998: 2nd of 2; 2.0 over 1998')
         self.assertEqual(b['cells'], [2, None, 2])
 
     def test_a_current_club_is_labeled_on_its_last_row(self):
@@ -155,8 +155,7 @@ class PositionChartTests(SimpleTestCase):
         a = chart['clubs'][0]
         self.assertEqual(a['label_x'], chart['svg']['width'] - 150 + 7)
         self.assertEqual(chart['labels'][0]['grid_bottom'], chart['ranks'][1]['y'] + 7)
-        self.assertEqual(a['label_y'], a['points'][-1]['y'] + 4)
-        self.assertEqual(a['points'][-1]['y'], chart['ranks'][0]['y'])
+        self.assertEqual(a['label_y'], chart['ranks'][0]['y'] + 4)
         self.assertIsNone(a['gone'])
 
     def test_departed_clubs_are_listed_below_the_table_in_the_order_given(self):
@@ -185,15 +184,12 @@ class PositionChartTests(SimpleTestCase):
             '1996': (1, '1996'), '1997': (2, '1996'), '1998': (4, '1996'),
             '1999': (5, '1997'), '2001': (10, '2001')})
 
-    def test_smoothed_chart_plots_the_average_and_keeps_the_table_off(self):
-        chart = position_chart(self.positions(), 'Positions', smooth=True)
+    def test_points_sit_at_the_rolling_average(self):
+        chart = position_chart(self.positions(), 'Positions')
 
         a = chart['clubs'][0]
         self.assertEqual(a['points'][1]['y'], (chart['ranks'][0]['y'] + chart['ranks'][1]['y']) / 2)
         self.assertEqual(a['points'][2]['title'], 'A, 1998: 1st of 2; 1.3 over 1996-1998')
-        self.assertTrue(chart['smooth'])
-        html = render_to_string('templatetags/charts/positions.html', chart)
-        self.assertNotIn('<table>', html)
 
     def test_renders_chart_and_table(self):
         html = render_to_string('templatetags/charts/positions.html',

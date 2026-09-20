@@ -16,14 +16,13 @@
   </g>
   {% endfor %}
 </svg>
-<figcaption>{{ caption }}, {{ first }} to {{ last }}. Order is the overall table: points,
-then wins.{% if smooth %} Each point is the club's mean finish over that season and
-the two before it; the first season back after a break starts the count again.{% endif %}
-A break in a line is a season out of the league; a season with no final
-table on file is left out. Clubs no longer in the league are listed below the
-current ones with their last season, most recent first.</figcaption>
+<figcaption>{{ caption }}, {{ first }} to {{ last }}. Each point is the club's mean
+finish over that season and the two before it, in the overall table: points, then
+wins. A break in a line is a season out of the league, and the count starts again
+after it; a season with no final table on file is left out. Clubs no longer in the
+league are listed below the current ones with their last season, most recent
+first. The table gives each season's finish itself.</figcaption>
 </figure>
-{% if not smooth %}
 <div class="position-table">
 <table>
 <thead>
@@ -40,5 +39,4 @@ current ones with their last season, most recent first.</figcaption>
 {% endfor %}
 </table>
 </div>
-{% endif %}
 {% endif %}
