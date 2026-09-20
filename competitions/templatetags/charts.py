@@ -453,8 +453,9 @@ def position_chart(positions, caption):
     league of twenty is a thicket of crossing lines, and the average is what
     lets an era of a club's form read. The line breaks where a club sat out a
     season rather than bridging the gap. Every line is drawn alike, thin and
-    faint; hovering one lifts it and fades the rest, and only then do its
-    points show. Names sit in a column at the right: the clubs in the last table on
+    faint, in one of five stroke patterns dealt round in list order; hovering
+    one lifts it and fades the rest, and only then do its points show. Names
+    sit in a column at the right: the clubs in the last table on
     the row they finished in, then the clubs that have left, most recent
     first. The table below carries the finishes themselves.
     """
@@ -491,8 +492,11 @@ def position_chart(positions, caption):
 
     ranks = [{"y": y_of(position), "text": position} for position in range(1, depth + 1)]
 
+    # Five stroke patterns, dealt round the clubs in list order so that
+    # neighbours in the last table draw differently and a line can be
+    # followed through a crossing. Five is as many as stay distinct at 1px.
     clubs = []
-    for row in rows:
+    for number, row in enumerate(rows):
         played = [(index, name) for index, name in enumerate(columns) if name in row["positions"]]
         smoothed = rolling_positions(played, row["positions"])
         values = {name: value for name, (value, _) in smoothed.items()}
@@ -528,6 +532,7 @@ def position_chart(positions, caption):
             label_y = y_of(row["positions"][columns[-1]])
         clubs.append({
             "name": row["name"], "url": row.get("url"), "paths": paths, "points": points,
+            "pattern": number % 5,
             "label_x": WIDTH - right + 7, "label_y": label_y + 4,
             "gone": row["last"] if row in gone else None,
             "cells": [row["positions"].get(name) for name in columns],

@@ -175,6 +175,7 @@ class PositionChartTests(SimpleTestCase):
         self.assertEqual(c['label_y'], chart['ranks'][1]['y'] + row_h + 4)
         self.assertEqual(d['label_y'], chart['ranks'][1]['y'] + 2 * row_h + 4)
         self.assertEqual((c['gone'], d['gone']), ('1996', '1997'))
+        self.assertEqual([club['pattern'] for club in chart['clubs']], [0, 1, 2, 3])
         self.assertEqual(chart['svg']['height'], chart['ranks'][1]['y'] + row_h * 2.5 + 6)
 
     def test_nothing_to_draw(self):
@@ -213,7 +214,8 @@ class PositionChartTests(SimpleTestCase):
         html = render_to_string('templatetags/charts/positions.html',
                                 position_chart(self.positions(), 'Positions'))
 
-        self.assertIn('<g class="club">', html)
+        self.assertIn('<g class="club pattern-0">', html)
+        self.assertIn('<g class="club pattern-1">', html)
         self.assertEqual(html.count('<circle'), 5)
         self.assertIn('<th scope="col">1997</th>', html)
         self.assertIn('<td class="grey"></td>', html)

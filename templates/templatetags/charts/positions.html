@@ -9,7 +9,7 @@
   <text x="{{ svg.rank_x }}" y="{{ rank.y|floatformat:1 }}" dy="4" text-anchor="end">{{ rank.text }}</text>
   {% endfor %}
   {% for club in clubs %}
-  <g class="club">
+  <g class="club pattern-{{ club.pattern }}">
   {% for path in club.paths %}<path d="{{ path }}"/>{% endfor %}
   {% for point in club.points %}{% if point.url %}<a href="{{ point.url }}">{% endif %}<circle{% if point.lone %} class="lone"{% endif %} cx="{{ point.x|floatformat:1 }}" cy="{{ point.y|floatformat:1 }}" r="4"><title>{{ point.title }}</title></circle>{% if point.url %}</a>{% endif %}{% endfor %}
   {% if club.url %}<a href="{{ club.url }}">{% endif %}<text class="label{% if club.gone %} gone{% endif %}" x="{{ club.label_x|floatformat:1 }}" y="{{ club.label_y|floatformat:1 }}">{{ club.name }}{% if club.gone %} <tspan class="since">{{ club.gone }}</tspan>{% endif %}</text>{% if club.url %}</a>{% endif %}
@@ -21,7 +21,8 @@ finish over that season and the two before it, in the overall table: points, the
 wins. A break in a line is a season out of the league, and the count starts again
 after it; a season with no final table on file is left out. Clubs no longer in the
 league are listed below the current ones with their last season, most recent
-first. The table gives each season's finish itself.</figcaption>
+first. Line patterns repeat every five clubs and only tell neighbours apart. The
+table gives each season's finish itself.</figcaption>
 </figure>
 <div class="position-table">
 <table>
