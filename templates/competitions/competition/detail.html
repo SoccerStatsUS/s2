@@ -45,7 +45,14 @@
 {% if league_positions.rows %}
 <div tab="positions">
 <h3>League positions</h3>
-{% position_chart league_positions "Final league position by season" %}
+<div class="chart-switcher">
+  <div class="chart-switch" role="group" aria-label="Position measure">
+    <button type="button" class="active" data-chart="final">final</button>
+    <button type="button" data-chart="rolling">3-season average</button>
+  </div>
+  <div data-chart-panel="final">{% position_chart league_positions "Final league position by season" %}</div>
+  <div data-chart-panel="rolling" hidden>{% position_chart league_positions "League position by season, averaged over three seasons" smooth=True %}</div>
+</div>
 </div>
 {% endif %}
 

@@ -388,14 +388,34 @@ def timeline_chart(timeline, caption, noun="clubs"):
     }
 
 
+def rolling_positions(played, positions, window=3):
+    """
+    Each season's finish smoothed over the club's last few seasons: the mean
+    of its positions in this season and the two before it, within an unbroken
+    run. The first season of a run stands alone, the second averages two. Takes
+    the (column index, season) pairs the club played, in order, and returns
+    {season: (value, first season in the window)}.
+    """
+    smoothed, run = {}, []
+    previous = None
+    for index, name in played:
+        if previous is not None and index != previous + 1:
+            run = []
+        run = (run + [name])[-window:]
+        smoothed[name] = (sum(positions[season] for season in run) / len(run), run[0])
+        previous = index
+    return smoothed
+
+
 @register.inclusion_tag("templatetags/charts/positions.html")
-def position_chart(positions, caption):
+def position_chart(positions, caption, smooth=False):
     """
     A bump chart: a season per column, a place in the table per row, one line
     per club threading its finishes. The line breaks where a club sat out a
     season rather than bridging the gap. Every line is drawn alike and lifts on
     hover; the club's name sits at the end of its line, and the table below
-    carries every number.
+    carries every number. Smoothed, each point is the club's mean finish over
+    its last three seasons, and the table is left to the plain chart.
     """
     columns, rows = positions.get("columns") or [], positions.get("rows") or []
     sizes = positions.get("sizes") or {}
@@ -428,9 +448,14 @@ def position_chart(positions, caption):
     clubs = []
     for row in rows:
         played = [(index, name) for index, name in enumerate(columns) if name in row["positions"]]
+        if smooth:
+            smoothed = rolling_positions(played, row["positions"])
+            values = {name: value for name, (value, _) in smoothed.items()}
+        else:
+            values = row["positions"]
         segments, run, previous = [], [], None
         for index, name in played:
-            point = (x_of(index), y_of(row["positions"][name]))
+            point = (x_of(index), y_of(values[name]))
             if previous is not None and index != previous + 1:
                 segments.append(run)
                 run = []
@@ -443,10 +468,17 @@ def position_chart(positions, caption):
         points = []
         for index, name in played:
             position = row["positions"][name]
+            if smooth:
+                value, since = smoothed[name]
+                title = "%s, %s: %s of %s; %.1f over %s" % (
+                    row["name"], name, ordinal(position), sizes[name], value,
+                    name if since == name else "%s-%s" % (since, name))
+            else:
+                title = "%s, %s: %s of %s" % (row["name"], name, ordinal(position), sizes[name])
             points.append({
-                "x": x_of(index), "y": y_of(position),
+                "x": x_of(index), "y": y_of(values[name]),
                 "url": (row.get("urls") or {}).get(name),
-                "title": "%s, %s: %s of %s" % (row["name"], name, ordinal(position), sizes[name]),
+                "title": title,
             })
 
         end = points[-1]
@@ -460,7 +492,7 @@ def position_chart(positions, caption):
         "svg": {"width": WIDTH, "height": height, "left": left, "label_y": top - 12,
                 "rank_x": left - 8},
         "clubs": clubs, "labels": labels, "ranks": ranks, "caption": caption,
-        "columns": columns, "rows": rows,
+        "columns": columns, "rows": rows, "smooth": smooth,
         "first": columns[0], "last": columns[-1],
     }
 

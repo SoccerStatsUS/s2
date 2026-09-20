@@ -17,9 +17,12 @@
   {% endfor %}
 </svg>
 <figcaption>{{ caption }}, {{ first }} to {{ last }}. Order is the overall table: points,
-then wins. A break in a line is a season out of the league; a season with no final
+then wins.{% if smooth %} Each point is the club's mean finish over that season and
+the two before it; the first season back after a break starts the count again.{% endif %}
+A break in a line is a season out of the league; a season with no final
 table on file is left out.</figcaption>
 </figure>
+{% if not smooth %}
 <div class="position-table">
 <table>
 <thead>
@@ -36,4 +39,5 @@ table on file is left out.</figcaption>
 {% endfor %}
 </table>
 </div>
+{% endif %}
 {% endif %}

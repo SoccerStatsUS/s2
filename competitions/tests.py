@@ -8,7 +8,8 @@ from django.test import SimpleTestCase
 from competitions import views
 from competitions.models import Competition
 from competitions.templatetags.charts import (bar_chart, column_chart, count_band, count_chart, year_grid,
-                                              player_goals_chart, position_chart, rate_chart, timeline_chart)
+                                              player_goals_chart, position_chart, rate_chart, rolling_positions,
+                                              timeline_chart)
 from competitions.views import (COVERAGE_FACETS, competition_awards, coverage_rows,
                                 missing_years, scoreline_rows, season_positions, season_postseason,
                                 season_standings, show_club_table, stat_leaders)
@@ -158,6 +159,24 @@ class PositionChartTests(SimpleTestCase):
 
     def test_nothing_to_draw(self):
         self.assertEqual(position_chart({'columns': ['1996'], 'rows': []}, 'x'), {'svg': None})
+
+    def test_rolling_average_restarts_after_a_break(self):
+        played = [(0, '1996'), (1, '1997'), (2, '1998'), (3, '1999'), (5, '2001')]
+        positions = {'1996': 1, '1997': 3, '1998': 8, '1999': 4, '2001': 10}
+
+        self.assertEqual(rolling_positions(played, positions), {
+            '1996': (1, '1996'), '1997': (2, '1996'), '1998': (4, '1996'),
+            '1999': (5, '1997'), '2001': (10, '2001')})
+
+    def test_smoothed_chart_plots_the_average_and_keeps_the_table_off(self):
+        chart = position_chart(self.positions(), 'Positions', smooth=True)
+
+        a = chart['clubs'][0]
+        self.assertEqual(a['points'][1]['y'], (chart['ranks'][0]['y'] + chart['ranks'][1]['y']) / 2)
+        self.assertEqual(a['points'][2]['title'], 'A, 1998: 1st of 2; 1.3 over 1996-1998')
+        self.assertTrue(chart['smooth'])
+        html = render_to_string('templatetags/charts/positions.html', chart)
+        self.assertNotIn('<table>', html)
 
     def test_renders_chart_and_table(self):
         html = render_to_string('templatetags/charts/positions.html',
