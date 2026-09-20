@@ -64,8 +64,10 @@ class TeamDetailTests(SimpleTestCase):
             id=1,
             name='MLS Cup',
             competition=competition,
+            get_absolute_url=lambda: '/awards/1/',
         )
         awards = [SimpleNamespace(season=season, year=None, award=award)]
+        honors = [{'award': award, 'label': 'MLS Cup', 'items': awards}]
         alltime = SimpleNamespace(wins=333, ties=163, losses=243)
         first_game = SimpleNamespace(
             id=1, date=datetime.date(1996, 4, 13),
@@ -82,6 +84,7 @@ class TeamDetailTests(SimpleTestCase):
             'games_count': 1147,
             'alltime': alltime,
             'awards': awards,
+            'honors': honors,
             'first_game': first_game,
             'last_game': last_game,
             'competition_standings': [],
@@ -98,7 +101,9 @@ class TeamDetailTests(SimpleTestCase):
         self.assertIn('first recorded game', html)
         self.assertIn('latest recorded game', html)
         self.assertIn('<h2>Honors</h2>', html)
-        self.assertIn('MLS Cup', html)
+        self.assertIn('<ul class="honors-list">', html)
+        self.assertIn('<a href="/awards/1/">MLS Cup</a>', html)
+        self.assertIn('<span class="honor-years">(<a href="/c/mls-cup-playoffs/2024/">2024</a>)</span>', html)
 
 
 class SeasonYearTests(SimpleTestCase):

@@ -13,6 +13,7 @@ from django.urls import reverse
 from django.views.decorators.cache import cache_page
 
 from competitions.models import Season, Competition
+from bios.views import group_honors
 from competitions.views import player_leader_groups
 from games.models import Game
 from places.models import Country, playing_time_by_country
@@ -312,6 +313,7 @@ def team_detail(request, team_slug):
               .select_related('award', 'award__competition', 'season',
                               'season__competition')
               .order_by('-season__order', '-year', 'award__name'))
+    honors = group_honors(awards)
 
     draftees = (team.former_team_set
                 .select_related('player', 'team', 'draft', 'draft__competition',
@@ -337,6 +339,7 @@ def team_detail(request, team_slug):
         'last_game': last_game,
         'alltime': alltime,
         'awards': awards,
+        'honors': honors,
         'leader_groups': leader_groups,
         'draftees': draftees,
         'gx': True,
