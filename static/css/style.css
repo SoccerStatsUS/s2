@@ -960,16 +960,15 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
 .results-chart .mark.loss { fill: var(--ink-soft); }
 
 /* Clubs timeline: a block shaded by where the club finished, in fifths of the
-   table. Hue runs green to red, the win/loss semantics, and lightness runs
-   one way with it, dark at the top of the table to pale at the bottom
-   (CIE L* 41, 61, 79, 81, 90), so a reader who cannot tell the two hues
-   apart still has the order. A ramp dark at both ends would not give them
-   that. The accent at the top, the --loss cell fill at the bottom. */
-.timeline-chart .mark.finish-0 { fill: var(--accent); }
-.timeline-chart .mark.finish-1 { fill: #58a07d; }
-.timeline-chart .mark.finish-2 { fill: #a3ccb4; }
-.timeline-chart .mark.finish-3 { fill: #efbfb5; }
-.timeline-chart .mark.finish-4 { fill: var(--loss); }
+   table. A bright green for the best, greens dulling towards the middle,
+   then reds deepening to --loss-ink for the worst. Lightness falls the whole
+   way (CIE L* 62, 59, 56, 44, 29), so a reader who cannot tell the hues
+   apart still has the order from that. */
+.timeline-chart .mark.finish-0 { fill: #2aab6e; }
+.timeline-chart .mark.finish-1 { fill: #5f9a7d; }
+.timeline-chart .mark.finish-2 { fill: #78877f; }
+.timeline-chart .mark.finish-3 { fill: #b0483a; }
+.timeline-chart .mark.finish-4 { fill: var(--loss-ink); }
 /* Outlined in ink rather than the accent here, so a block with no table on
    file is not read as a top-fifth finish. */
 .timeline-chart .mark.partial { stroke: var(--ink-soft); }
