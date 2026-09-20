@@ -18,6 +18,31 @@ Open work only; completed items are removed as they land (see git history).
   in `{% seasons_table %}` (`templates/templatetags/seasons.html`) and in the
   competition-history table.
 
+## Standings
+
+- [ ] Audit all standings at the season level: check each row's games against
+  wins, draws, and losses; points against the season's scoring rules; and
+  derived figures such as points per game and goal ratio. Within each matching
+  stage/group, reconcile total wins and losses, draw counts, team-games, and
+  goals for and against. Rebuild standings from match results where coverage
+  permits, checking for missing or duplicate fixtures and team aliases.
+  Account for shootouts, bonus points, deductions, forfeits, withdrawn clubs,
+  interleague games, and separate playoff records. Distinguish confirmed errors
+  from incomplete or conflicting historical sources; record unresolved
+  discrepancies rather than changing data solely to force a balance.
+- [ ] Audit standings across the site for column-order errors. In the
+  [1972 ASL II standings](https://soccerstats.us/c/american-soccer-league-1933-1983/1972/),
+  the Midwest rows map the [RSSSF source](https://rsssf.org/usadave/aslii.html)
+  columns `GF, GA, PTS` into the site's `PTS, GF, GA` fields: Cincinnati's
+  19 GF, 7 GA, and 13 points appear as 19 points, 7 GF, and 13 GA. Cleveland,
+  Detroit, Pittsburgh, and St. Louis have the same rotation. Trace the source
+  data, parser, and build pipeline, then check other seasons and competitions;
+  the scope and cause are not yet established. Verify candidate corrections
+  against source headings and the season's scoring rules, including bonus
+  points and deductions. RSSSF marks Detroit, Pittsburgh, and St. Louis's
+  1972 goal totals as incomplete, so restoring column order alone does not
+  verify those totals.
+
 ## United States
 
 - [ ] The USMNT results held do not align with the USSF's official record. The
