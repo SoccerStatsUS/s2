@@ -1,10 +1,12 @@
 from collections import defaultdict, OrderedDict, Counter
 import datetime
 import json
+import re
+import unicodedata
 
 
 from django.core.paginator import Paginator
-from django.db.models import Count, Q, Sum
+from django.db.models import Count, Max, Min, Q, Sum
 from django.db.models.functions import Substr, Upper
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404
@@ -733,10 +735,58 @@ def teams_ajax(request):
     
 
 
+# Words that tell club names apart on paper but not in fact: "Aston Villa" and
+# "Aston Villa FC" are one club entered twice.
+NAME_FILLER = {'fc', 'sc', 'ac', 'cf', 'afc', 'club', 'de', 'the', 'sv', 'cd',
+               'ca', 'fk', 'sk', 'sports', 'soccer', 'football'}
+
+
+def name_key(name):
+    """
+    A team name reduced to the words that identify the club: accents and
+    punctuation gone, filler like FC dropped, the rest sorted so "AC St. Louis"
+    and "St. Louis AC" meet.
+    """
+    flat = unicodedata.normalize('NFKD', name).encode('ascii', 'ignore').decode().lower()
+    words = re.sub(r'[^a-z0-9]+', ' ', flat).split()
+    return ' '.join(sorted(w for w in words if w not in NAME_FILLER))
+
+
+def name_groups(teams):
+    """
+    Teams whose names collapse to the same key, skipping groups the slug table
+    already shows and names that were nothing but filler.
+    """
+    groups = OrderedDict()
+    for team in teams:
+        key = name_key(team.name)
+        if key:
+            groups.setdefault(key, []).append(team)
+    return [(key, group) for key, group in groups.items()
+            if len(group) > 1 and len({team.slug for team in group}) > 1]
+
+
+def team_span(team):
+    """
+    Game count and first and last year, enough to tell a typo of a big club
+    from a small club that shares its name.
+    """
+    games = team.game_set()
+    dates = games.exclude(date=None).aggregate(first=Min('date'), last=Max('date'))
+    return {
+        'team': team,
+        'games': games.count(),
+        'first': dates['first'] and dates['first'].year,
+        'last': dates['last'] and dates['last'].year,
+        }
+
+
 def teams_qa(request):
     """
-    Teams sharing a slug. Two teams on one slug means one of them is
-    unreachable: the URL serves whichever has the lower id.
+    Teams sharing a slug, then teams whose names differ only by filler. Two
+    teams on one slug means one of them is unreachable: the URL serves
+    whichever has the lower id. Two teams on one name key are probably one
+    club entered twice.
     """
     slugs = (Team.objects.values('slug').annotate(n=Count('id'))
              .filter(n__gt=1).values_list('slug', flat=True))
@@ -744,9 +794,13 @@ def teams_qa(request):
     for team in Team.objects.filter(slug__in=list(slugs)).order_by('slug', 'id'):
         groups.setdefault(team.slug, []).append(team)
 
+    names = [(key, [team_span(team) for team in group])
+             for key, group in name_groups(Team.objects.order_by('name'))]
+
     context = {
         'groups': list(groups.items()),
         'slug_count': len(groups),
+        'names': names,
         }
 
     return render(request, "teams/qa.html",

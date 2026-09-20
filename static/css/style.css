@@ -907,6 +907,9 @@ table.honors th {
 .dir-more { color: var(--ink-soft); font-size: .9em; }
 
 .dir-note, .dir-legend, .table-legend { font-size: .9em; color: var(--ink-soft); }
+
+/* Teams QA: a hairline between name groups, since each group spans several rows. */
+tr.group-start td { border-top: 1px solid var(--hairline); }
 .dir-legend, .table-legend { margin-top: 16px; }
 
 /* ---- Charts: inline SVG, one series in the accent (DESIGN.md §1, §2) ---- */

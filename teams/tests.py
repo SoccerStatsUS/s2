@@ -148,3 +148,38 @@ class ClubLadderChartTests(SimpleTestCase):
 
     def test_one_season_is_not_a_chart(self):
         assert ladder_chart([self.entry(1970, 1)], 'c')['svg'] is None
+
+
+class NameKeyTests(SimpleTestCase):
+    """
+    The QA page groups names that differ only by filler, accents, punctuation
+    or word order.
+    """
+
+    def test_filler_accents_and_order_fall_away(self):
+        from teams.views import name_key
+
+        assert name_key('Aston Villa FC') == name_key('Aston Villa')
+        assert name_key('Club Atlético de Madrid') == name_key('Atletico Madrid')
+        assert name_key('AC St. Louis') == name_key('St. Louis AC')
+
+    def test_distinct_clubs_keep_distinct_keys(self):
+        from teams.views import name_key
+
+        assert name_key('Portland Timbers') != name_key('Portland Timbers 2')
+        assert name_key('United States U-20') != name_key('United States U-23')
+
+    def test_groups_skip_singletons_and_shared_slugs(self):
+        from teams.views import name_groups
+
+        teams = [
+            SimpleNamespace(name='Aston Villa', slug='aston-villa'),
+            SimpleNamespace(name='Aston Villa FC', slug='aston-villa-fc'),
+            SimpleNamespace(name='Barnsley', slug='barnsley'),
+            SimpleNamespace(name='Central Cordoba', slug='central-cordoba'),
+            SimpleNamespace(name='Central Córdoba', slug='central-cordoba'),
+        ]
+
+        groups = name_groups(teams)
+
+        assert [[t.name for t in group] for _, group in groups] == [['Aston Villa', 'Aston Villa FC']]

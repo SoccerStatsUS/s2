@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% load humanize %}
 
-{% block title %}teams sharing a slug{% endblock %}
+{% block title %}teams QA{% endblock %}
 
 {% block content %}
 
-<h1>Teams sharing a slug</h1>
+<h1>Teams QA</h1>
+
+<h2>Teams sharing a slug</h2>
 
 <p class="dir-note">{{ slug_count|intcomma }} slugs belong to more than one team.
 The URL serves whichever has the lower id &mdash; marked <strong>served</strong>
@@ -37,6 +39,41 @@ id-based team URL to reach them by.</p>
 </table>
 {% else %}
 <p class="coverage-note">Every team has a slug to itself.</p>
+{% endif %}
+
+<h2>Teams whose names differ only by filler</h2>
+
+<p class="dir-note">{{ names|length|intcomma }} names match once accents, punctuation,
+word order and filler like FC, SC and Club are set aside. Most are one club entered
+twice; a few are different clubs that happen to share a name, which the game counts
+and years should tell apart.</p>
+
+{% if names %}
+<table>
+
+<thead>
+  <tr>
+    <th scope="col">name</th>
+    <th scope="col">games</th>
+    <th scope="col">years</th>
+  </tr>
+</thead>
+
+<tbody>
+{% for key, spans in names %}
+{% for span in spans %}
+<tr{% if forloop.first %} class="group-start"{% endif %}>
+  <td><a href="{% url 'team_detail' span.team.slug %}">{{ span.team.name }}</a> <span class="grey">#{{ span.team.id }}</span></td>
+  <td>{{ span.games|intcomma }}</td>
+  <td>{% if span.first %}{{ span.first }}{% if span.last != span.first %}&ndash;{{ span.last }}{% endif %}{% else %}<span class="grey">&mdash;</span>{% endif %}</td>
+</tr>
+{% endfor %}
+{% endfor %}
+</tbody>
+
+</table>
+{% else %}
+<p class="coverage-note">No two names collapse to the same key.</p>
 {% endif %}
 
 {% endblock %}
