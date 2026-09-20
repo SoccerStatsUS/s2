@@ -72,12 +72,11 @@ To deploy code changes:
 Sourcing .env is not optional: without it manage.py falls back to settings.py's
 dev defaults and migrate fails on Postgres peer auth as "soccerstats".
 
-To ship a freshly built database:
+To ship a freshly built database along with the current master:
 
     ./upload.sh
 
-To do the whole thing in one shot (mongo build -> postgres build -> ship db ->
-push and deploy code):
+To do the whole thing in one shot (mongo build -> postgres build -> ship):
 
     ./deploy.sh
 
