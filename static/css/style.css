@@ -960,15 +960,16 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
 .results-chart .mark.loss { fill: var(--ink-soft); }
 
 /* Clubs timeline: a block shaded by where the club finished, in fifths of the
-   table. A diverging ramp with a light middle, so lightness carries it as
-   well as hue: the accent at the top, --loss-ink at the bottom, and the same
-   result semantics as the win/loss cells. The middle keeps a green tint;
-   a neutral grey read as an empty block. */
+   table. Hue runs green to red, the win/loss semantics, and lightness runs
+   one way with it, dark at the top of the table to pale at the bottom
+   (CIE L* 41, 61, 79, 81, 90), so a reader who cannot tell the two hues
+   apart still has the order. A ramp dark at both ends would not give them
+   that. The accent at the top, the --loss cell fill at the bottom. */
 .timeline-chart .mark.finish-0 { fill: var(--accent); }
-.timeline-chart .mark.finish-1 { fill: #7fbc9f; }
-.timeline-chart .mark.finish-2 { fill: #cfe6d9; }
-.timeline-chart .mark.finish-3 { fill: #d4877a; }
-.timeline-chart .mark.finish-4 { fill: var(--loss-ink); }
+.timeline-chart .mark.finish-1 { fill: #58a07d; }
+.timeline-chart .mark.finish-2 { fill: #a3ccb4; }
+.timeline-chart .mark.finish-3 { fill: #efbfb5; }
+.timeline-chart .mark.finish-4 { fill: var(--loss); }
 /* Outlined in ink rather than the accent here, so a block with no table on
    file is not read as a top-fifth finish. */
 .timeline-chart .mark.partial { stroke: var(--ink-soft); }
