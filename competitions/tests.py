@@ -1,3 +1,4 @@
+import re
 from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
@@ -8,8 +9,8 @@ from django.test import SimpleTestCase
 from competitions import views
 from competitions.models import Competition
 from competitions.templatetags.charts import (bar_chart, column_chart, count_band, count_chart, year_grid,
-                                              player_goals_chart, position_chart, rate_chart, rolling_positions,
-                                              timeline_chart)
+                                              monotone_path, player_goals_chart, position_chart, rate_chart,
+                                              rolling_positions, timeline_chart)
 from competitions.views import (COVERAGE_FACETS, competition_awards, coverage_rows,
                                 missing_years, scoreline_rows, season_positions, season_postseason,
                                 season_standings, show_club_table, stat_leaders)
@@ -148,13 +149,16 @@ class PositionChartTests(SimpleTestCase):
         self.assertEqual(b['points'][1]['url'], '/b/1998')
         self.assertEqual(b['points'][1]['title'], 'B, 1998: 2nd of 2; 2.0 over 1998')
         self.assertEqual(b['cells'], [2, None, 2])
+        self.assertEqual([point['lone'] for point in b['points']], [True, True])
+        self.assertEqual([point['lone'] for point in a['points']], [False, False, False])
 
     def test_a_current_club_is_labeled_on_its_last_row(self):
         chart = position_chart(self.positions(), 'Positions')
 
         a = chart['clubs'][0]
         self.assertEqual(a['label_x'], chart['svg']['width'] - 150 + 7)
-        self.assertEqual(chart['labels'][0]['grid_bottom'], chart['ranks'][1]['y'] + 7)
+        row_h = chart['ranks'][1]['y'] - chart['ranks'][0]['y']
+        self.assertEqual(chart['labels'][0]['grid_bottom'], chart['ranks'][1]['y'] + row_h / 2)
         self.assertEqual(a['label_y'], chart['ranks'][0]['y'] + 4)
         self.assertIsNone(a['gone'])
 
@@ -175,6 +179,20 @@ class PositionChartTests(SimpleTestCase):
 
     def test_nothing_to_draw(self):
         self.assertEqual(position_chart({'columns': ['1996'], 'rows': []}, 'x'), {'svg': None})
+
+    def test_curve_is_straight_for_two_points_and_flat_along_a_level_run(self):
+        self.assertEqual(monotone_path([(0, 10), (30, 20)]), 'M0.0 10.0 L30.0 20.0')
+
+        path = monotone_path([(0, 10), (30, 10), (60, 10), (90, 10)])
+        self.assertTrue(path.startswith('M0.0 10.0 C'))
+        self.assertEqual(set(re.findall(r'[\d.]+ ([\d.]+)', path)), {'10.0'})
+
+    def test_curve_does_not_overshoot_a_peak(self):
+        path = monotone_path([(0, 40), (30, 10), (60, 40)])
+
+        ys = [float(y) for y in re.findall(r'[\d.]+ ([\d.]+)', path)]
+        self.assertTrue(all(10 <= y <= 40 for y in ys), ys)
+        self.assertIn('20.0 10.0, 30.0 10.0 C40.0 10.0', path)  # level through the peak
 
     def test_rolling_average_restarts_after_a_break(self):
         played = [(0, '1996'), (1, '1997'), (2, '1998'), (3, '1999'), (5, '2001')]

@@ -407,6 +407,43 @@ def rolling_positions(played, positions, window=3):
     return smoothed
 
 
+def sign(v):
+    return (v > 0) - (v < 0)
+
+
+def monotone_path(points):
+    """
+    A cubic curve through the points that never overshoots them (d3's
+    curveMonotoneX): a line that rises between two seasons rises the whole
+    way, so a club's swing reads as one motion rather than a sawtooth. Two
+    points are a straight line.
+    """
+    if len(points) == 2:
+        return "M%.1f %.1f L%.1f %.1f" % (*points[0], *points[1])
+
+    def slope3(p0, p1, p2):
+        h0, h1 = p1[0] - p0[0], p2[0] - p1[0]
+        s0, s1 = (p1[1] - p0[1]) / h0, (p2[1] - p1[1]) / h1
+        p = (s0 * h1 + s1 * h0) / (h0 + h1)
+        return (sign(s0) + sign(s1)) * min(abs(s0), abs(s1), 0.5 * abs(p)) or 0
+
+    def slope2(p0, p1, t):
+        return (3 * (p1[1] - p0[1]) / (p1[0] - p0[0]) - t) / 2
+
+    def bezier(p0, p1, t0, t1):
+        dx = (p1[0] - p0[0]) / 3
+        return " C%.1f %.1f, %.1f %.1f, %.1f %.1f" % (
+            p0[0] + dx, p0[1] + dx * t0, p1[0] - dx, p1[1] - dx * t1, p1[0], p1[1])
+
+    tangents = [slope3(points[i - 1], points[i], points[i + 1]) for i in range(1, len(points) - 1)]
+    tangents = ([slope2(points[0], points[1], tangents[0])] + tangents
+                + [slope2(points[-2], points[-1], tangents[-1])])
+    path = "M%.1f %.1f" % points[0]
+    for i in range(len(points) - 1):
+        path += bezier(points[i], points[i + 1], tangents[i], tangents[i + 1])
+    return path
+
+
 @register.inclusion_tag("templatetags/charts/positions.html")
 def position_chart(positions, caption):
     """
@@ -415,8 +452,9 @@ def position_chart(positions, caption):
     its last three seasons rather than the finish itself; season by season a
     league of twenty is a thicket of crossing lines, and the average is what
     lets an era of a club's form read. The line breaks where a club sat out a
-    season rather than bridging the gap. Every line is drawn alike and lifts on
-    hover. Names sit in a column at the right: the clubs in the last table on
+    season rather than bridging the gap. Every line is drawn alike, thin and
+    faint; hovering one lifts it and fades the rest, and only then do its
+    points show. Names sit in a column at the right: the clubs in the last table on
     the row they finished in, then the clubs that have left, most recent
     first. The table below carries the finishes themselves.
     """
@@ -430,7 +468,7 @@ def position_chart(positions, caption):
     # with the season they left after. It is as wide as its longest entry.
     gone = [row for row in rows if row["last"] != columns[-1]]
     widest = max(len(row["name"]) + (len(row["last"]) + 1 if row in gone else 0) for row in rows)
-    row_h, left, right, top = 14, 40, min(280, max(150, widest * 6 + 16)), 26
+    row_h, left, right, top = 20, 40, min(280, max(150, widest * 6 + 16)), 26
     depth = max(sizes.values())
     plot_w = WIDTH - left - right
     slot = plot_w / len(columns)
@@ -467,15 +505,17 @@ def position_chart(positions, caption):
             run.append(point)
             previous = index
         segments.append(run)
-        paths = ["M" + " L".join("%.1f %.1f" % point for point in run)
-                 for run in segments if len(run) > 1]
+        paths = [monotone_path(run) for run in segments if len(run) > 1]
+        # A season with no neighbour has no line to stand in for it, so its
+        # point shows at rest where the others wait for a hover.
+        lone = {run[0] for run in segments if len(run) == 1}
 
         points = []
         for index, name in played:
             position = row["positions"][name]
             value, since = smoothed[name]
             points.append({
-                "x": x_of(index), "y": y_of(value),
+                "x": x_of(index), "y": y_of(value), "lone": (x_of(index), y_of(value)) in lone,
                 "url": (row.get("urls") or {}).get(name),
                 "title": "%s, %s: %s of %s; %.1f over %s" % (
                     row["name"], name, ordinal(position), sizes[name], value,

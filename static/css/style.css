@@ -929,14 +929,22 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
 .chart a:hover .mark, .chart a:focus-visible .mark { fill: var(--accent-dark); }
 .chart a:hover .mark.partial, .chart a:focus-visible .mark.partial { fill: var(--fill-hover); stroke: var(--accent-dark); }
 .chart a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.position-chart .club path { fill: none; stroke: var(--ink-soft); stroke-width: 1.5; stroke-linejoin: round; opacity: .45; }
-.position-chart .club circle { fill: #fff; stroke: var(--ink-soft); stroke-width: 1.5; opacity: .6; }
+/* Position chart: every club thin and faint, the hovered one lifted in the
+   accent while the rest fall back further. Points exist only as hit targets
+   until their club is lifted. */
+.position-chart .club path { fill: none; stroke: var(--ink-soft); stroke-width: 1; stroke-linejoin: round; opacity: .4; }
+.position-chart .club circle { fill: #fff; stroke: var(--accent); stroke-width: 1.5; opacity: 0; }
+.position-chart .club circle.lone { stroke: var(--ink-soft); stroke-width: 1; opacity: .4; }
 .position-chart .club text.label { font-size: 11px; opacity: .8; }
 .position-chart .club text.label.gone { fill: var(--ink-soft); }
 .position-chart .club text.label .since { font-size: 10px; }
 .position-chart .club:hover path, .position-chart .club:focus-within path { stroke: var(--accent); stroke-width: 2.5; opacity: 1; }
-.position-chart .club:hover circle, .position-chart .club:focus-within circle { stroke: var(--accent); opacity: 1; }
+.position-chart .club:hover circle, .position-chart .club:focus-within circle { opacity: 1; }
 .position-chart .club:hover text.label, .position-chart .club:focus-within text.label { fill: var(--accent-dark); opacity: 1; }
+.position-chart svg:has(.club:hover) .club:not(:hover) path,
+.position-chart svg:has(.club:focus-within) .club:not(:focus-within) path { opacity: .1; }
+.position-chart svg:has(.club:hover) .club:not(:hover) text.label,
+.position-chart svg:has(.club:focus-within) .club:not(:focus-within) text.label { opacity: .3; }
 .position-table { overflow-x: auto; }
 .position-table td { text-align: right; font-variant-numeric: tabular-nums; }
 .position-table td:first-child { text-align: left; white-space: nowrap; }

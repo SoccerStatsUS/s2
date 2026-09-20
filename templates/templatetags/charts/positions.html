@@ -11,7 +11,7 @@
   {% for club in clubs %}
   <g class="club">
   {% for path in club.paths %}<path d="{{ path }}"/>{% endfor %}
-  {% for point in club.points %}{% if point.url %}<a href="{{ point.url }}">{% endif %}<circle cx="{{ point.x|floatformat:1 }}" cy="{{ point.y|floatformat:1 }}" r="3"><title>{{ point.title }}</title></circle>{% if point.url %}</a>{% endif %}{% endfor %}
+  {% for point in club.points %}{% if point.url %}<a href="{{ point.url }}">{% endif %}<circle{% if point.lone %} class="lone"{% endif %} cx="{{ point.x|floatformat:1 }}" cy="{{ point.y|floatformat:1 }}" r="4"><title>{{ point.title }}</title></circle>{% if point.url %}</a>{% endif %}{% endfor %}
   {% if club.url %}<a href="{{ club.url }}">{% endif %}<text class="label{% if club.gone %} gone{% endif %}" x="{{ club.label_x|floatformat:1 }}" y="{{ club.label_y|floatformat:1 }}">{{ club.name }}{% if club.gone %} <tspan class="since">{{ club.gone }}</tspan>{% endif %}</text>{% if club.url %}</a>{% endif %}
   </g>
   {% endfor %}
