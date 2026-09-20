@@ -962,10 +962,11 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
 /* Clubs timeline: a block shaded by where the club finished, in fifths of the
    table. A diverging ramp with a light middle, so lightness carries it as
    well as hue: the accent at the top, --loss-ink at the bottom, and the same
-   result semantics as the win/loss cells. */
+   result semantics as the win/loss cells. The middle keeps a green tint;
+   a neutral grey read as an empty block. */
 .timeline-chart .mark.finish-0 { fill: var(--accent); }
 .timeline-chart .mark.finish-1 { fill: #7fbc9f; }
-.timeline-chart .mark.finish-2 { fill: #d3d7da; }
+.timeline-chart .mark.finish-2 { fill: #cfe6d9; }
 .timeline-chart .mark.finish-3 { fill: #d4877a; }
 .timeline-chart .mark.finish-4 { fill: var(--loss-ink); }
 /* Outlined in ink rather than the accent here, so a block with no table on
