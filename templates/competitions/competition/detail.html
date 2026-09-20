@@ -42,6 +42,13 @@
 </div>
 {% endif %}
 
+{% if league_positions.rows %}
+<div tab="positions">
+<h3>League positions</h3>
+{% position_chart league_positions "Final league position by season" %}
+</div>
+{% endif %}
+
 {% if leader_groups %}
 <div tab="stats">
 <h3>Career leaders</h3>

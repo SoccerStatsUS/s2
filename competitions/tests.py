@@ -8,9 +8,9 @@ from django.test import SimpleTestCase
 from competitions import views
 from competitions.models import Competition
 from competitions.templatetags.charts import (bar_chart, column_chart, count_band, count_chart, year_grid,
-                                              player_goals_chart, rate_chart, timeline_chart)
+                                              player_goals_chart, position_chart, rate_chart, timeline_chart)
 from competitions.views import (COVERAGE_FACETS, competition_awards, coverage_rows,
-                                missing_years, scoreline_rows, season_postseason,
+                                missing_years, scoreline_rows, season_positions, season_postseason,
                                 season_standings, show_club_table, stat_leaders)
 
 
@@ -68,6 +68,105 @@ class SeasonStandingsTests(SimpleTestCase):
         self.assertEqual(html.count('<table class="standings">'), 1)
         self.assertIn('Dallas Burn', html)
         self.assertNotIn('FC Dallas', html)
+
+
+class SeasonPositionsTests(SimpleTestCase):
+    def test_orders_by_points_then_wins_then_name(self):
+        tables = season_positions([
+            ('1999', 1, 'D.C. United', 'dc', 57, 23),
+            ('1999', 2, 'Los Angeles Galaxy', 'la', 54, 20),
+            ('1999', 3, 'Columbus Crew', 'crew', 54, 19),
+            ('1999', 4, 'Chicago Fire', 'fire', 54, 20),
+        ])
+
+        self.assertEqual([name for _, name, _ in tables['1999']],
+                         ['D.C. United', 'Chicago Fire', 'Los Angeles Galaxy', 'Columbus Crew'])
+
+    def test_drops_a_split_season_and_rows_without_a_season(self):
+        tables = season_positions([
+            ('2001', 1, 'A', 'a', 10, 3),
+            ('2001', 2, 'B', 'b', 8, 2),
+            ('2002', 1, 'A', 'a', 10, 3),
+            ('2002', 1, 'A', 'a', 12, 4),
+            ('2002', 2, 'B', 'b', 8, 2),
+            (None, 1, 'A', 'a', 40, 12),
+        ])
+
+        self.assertEqual(list(tables), ['2001'])
+
+    def test_league_positions_keys_by_club_and_breaks_at_a_missed_season(self):
+        competition = SimpleNamespace(ctype='League', slug='mls')
+        rows = [
+            ('1996', 1, 'New York Red Bulls', 'rb', 40, 12),
+            ('1996', 2, 'Tampa Bay Mutiny', 'tb', 58, 20),
+            ('1997', 1, 'New York Red Bulls', 'rb', 41, 12),
+            ('1997', 2, 'Tampa Bay Mutiny', 'tb', 39, 11),
+            ('1998', 1, 'New York Red Bulls', 'rb', 30, 8),
+        ]
+        with patch('competitions.views.Standing') as standing:
+            standing.objects.filter.return_value.values_list.return_value = rows
+            with patch('competitions.views.reverse', side_effect=lambda name, args: '/%s/%s' % (name, '/'.join(args))):
+                positions = views.league_positions(competition, ['1996', '1997', '1998'],
+                                                   {'1996': '1996', '1998': '1998'})
+
+        self.assertEqual(positions['columns'], ['1996', '1997', '1998'])
+        self.assertEqual(positions['sizes'], {'1996': 2, '1997': 2, '1998': 1})
+        red_bulls, mutiny = positions['rows']
+        self.assertEqual(red_bulls['name'], 'New York Red Bulls')
+        self.assertEqual(red_bulls['positions'], {'1996': 2, '1997': 1, '1998': 1})
+        self.assertEqual(red_bulls['urls'], {'1996': '/team_season_detail/rb/mls/1996',
+                                             '1998': '/team_season_detail/rb/mls/1998'})
+        self.assertEqual((mutiny['first'], mutiny['last']), ('1996', '1997'))
+
+    def test_league_positions_is_empty_for_a_cup(self):
+        competition = SimpleNamespace(ctype='Cup', slug='cup')
+
+        self.assertEqual(views.league_positions(competition, ['1', '2'])['rows'], [])
+
+
+class PositionChartTests(SimpleTestCase):
+    def positions(self):
+        return {
+            'columns': ['1996', '1997', '1998'],
+            'sizes': {'1996': 2, '1997': 2, '1998': 2},
+            'rows': [
+                {'name': 'A', 'url': '/a', 'positions': {'1996': 1, '1997': 2, '1998': 1},
+                 'urls': {}, 'first': '1996', 'last': '1998'},
+                {'name': 'B', 'url': None, 'positions': {'1996': 2, '1998': 2},
+                 'urls': {'1998': '/b/1998'}, 'first': '1996', 'last': '1998'},
+            ],
+        }
+
+    def test_a_missed_season_breaks_the_line(self):
+        chart = position_chart(self.positions(), 'Positions')
+
+        a, b = chart['clubs']
+        self.assertEqual(len(a['paths']), 1)
+        self.assertEqual(b['paths'], [])
+        self.assertEqual(len(b['points']), 2)
+        self.assertEqual(b['points'][1]['url'], '/b/1998')
+        self.assertEqual(b['points'][1]['title'], 'B, 1998: 2nd of 2')
+        self.assertEqual(b['cells'], [2, None, 2])
+
+    def test_the_label_sits_past_the_last_point(self):
+        chart = position_chart(self.positions(), 'Positions')
+
+        a = chart['clubs'][0]
+        self.assertEqual(a['label_x'], a['points'][-1]['x'] + 7)
+        self.assertEqual(a['label_y'], a['points'][-1]['y'] + 4)
+        self.assertEqual(a['points'][-1]['y'], chart['ranks'][0]['y'])
+
+    def test_nothing_to_draw(self):
+        self.assertEqual(position_chart({'columns': ['1996'], 'rows': []}, 'x'), {'svg': None})
+
+    def test_renders_chart_and_table(self):
+        html = render_to_string('templatetags/charts/positions.html',
+                                position_chart(self.positions(), 'Positions'))
+
+        self.assertIn('<g class="club">', html)
+        self.assertEqual(html.count('<circle'), 5)
+        self.assertIn('<th scope="col">1997</th>', html)
+        self.assertIn('<td class="grey"></td>', html)
 
 
 class SeasonLeaderTests(SimpleTestCase):

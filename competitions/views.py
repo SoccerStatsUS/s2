@@ -200,6 +200,77 @@ def club_timeline(competition, seasons, clubs, slugs=None):
     return {'columns': seasons, 'rows': rows}
 
 
+def season_positions(rows):
+    """
+    Each season's final table as one ranking, from plain standing rows of
+    (season, team id, name, slug, points, wins): {season: [(team id, name,
+    slug), ...]} in finishing order. The order is the season page's -- points,
+    then wins, then name -- so the two never disagree.
+
+    A season is left out when it has no final rows, or when a club has more
+    than one (a split season, apertura and clausura, whose halves have no
+    single table to rank).
+    """
+    by_season = defaultdict(list)
+    for season, team_id, name, slug, points, wins in rows:
+        if season is not None:
+            by_season[season].append((team_id, name, slug, points or 0, wins or 0))
+
+    tables = {}
+    for season, entries in by_season.items():
+        if len(entries) != len({team_id for team_id, *_ in entries}):
+            continue
+        entries.sort(key=lambda entry: (-entry[3], -entry[4], entry[1]))
+        tables[season] = [(team_id, name, slug) for team_id, name, slug, _, _ in entries]
+    return tables
+
+
+def league_positions(competition, seasons, slugs=None):
+    """
+    A club per row, a season per column, the club's place in that season's
+    overall table where the two meet. Keyed by club, not by name, so a club
+    that changed its name draws one line under the name it uses now. Leagues
+    only, like the clubs timeline. Rows lead with the clubs in the last table,
+    in the order they finished.
+    """
+    if competition.ctype != 'League' or len(seasons) < 2:
+        return {'columns': [], 'sizes': {}, 'rows': []}
+
+    slugs = slugs or {}
+    tables = season_positions(Standing.objects.filter(
+        competition=competition, final=True, player=None).values_list(
+        'season__name', 'team_id', 'team__name', 'team__slug', 'points', 'wins'))
+    columns = [season for season in seasons if season in tables]
+    order = {name: index for index, name in enumerate(columns)}
+
+    clubs = {}
+    for season in columns:
+        for position, (team_id, name, slug) in enumerate(tables[season], 1):
+            club = clubs.setdefault(team_id, {'name': name, 'slug': slug,
+                                              'positions': {}, 'urls': {}})
+            club['positions'][season] = position
+            if slug and season in slugs:
+                club['urls'][season] = reverse('team_season_detail',
+                                               args=[slug, competition.slug, slugs[season]])
+
+    rows = []
+    for club in clubs.values():
+        played = sorted(club['positions'], key=order.get)
+        rows.append({
+            'name': club['name'],
+            'url': reverse('team_detail', args=[club['slug']]) if club['slug'] else None,
+            'positions': club['positions'],
+            'urls': club['urls'],
+            'first': played[0],
+            'last': played[-1],
+            })
+    rows.sort(key=lambda row: (-order[row['last']], row['positions'][row['last']], row['name']))
+
+    return {'columns': columns,
+            'sizes': {season: len(tables[season]) for season in columns},
+            'rows': rows}
+
+
 def competition_summary(competition, clubs):
     """
     The facts above the fold. Every one is read off the record rather than
@@ -250,6 +321,7 @@ def competition_detail(request, competition_slug):
         'awards': competition_awards(competition),
         'season_clubs': season_club_counts(competition, seasons, clubs, season_slugs),
         'club_timeline': club_timeline(competition, seasons, clubs, season_slugs),
+        'league_positions': league_positions(competition, seasons, season_slugs),
         'club_noun': 'teams' if competition.international else 'clubs',
         }
     return render(request, "competitions/competition/detail.html",

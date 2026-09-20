@@ -388,6 +388,83 @@ def timeline_chart(timeline, caption, noun="clubs"):
     }
 
 
+@register.inclusion_tag("templatetags/charts/positions.html")
+def position_chart(positions, caption):
+    """
+    A bump chart: a season per column, a place in the table per row, one line
+    per club threading its finishes. The line breaks where a club sat out a
+    season rather than bridging the gap. Every line is drawn alike and lifts on
+    hover; the club's name sits at the end of its line, and the table below
+    carries every number.
+    """
+    columns, rows = positions.get("columns") or [], positions.get("rows") or []
+    sizes = positions.get("sizes") or {}
+    if len(columns) < 2 or len(rows) < 2:
+        return {"svg": None}
+
+    row_h, left, right, top = 14, 40, 150, 26
+    depth = max(sizes.values())
+    plot_w = WIDTH - left - right
+    slot = plot_w / len(columns)
+    every = label_step(columns, slot)
+    height = top + depth * row_h + 6
+
+    def x_of(index):
+        return left + index * slot + slot / 2
+
+    def y_of(position):
+        return top + (position - 0.5) * row_h
+
+    labels = []
+    last_labeled = -every
+    for index, name in enumerate(columns):
+        if index % every == 0 or (index == len(columns) - 1 and index - last_labeled >= every):
+            labels.append({"x": x_of(index), "text": name,
+                           "grid_top": top - 6, "grid_bottom": height})
+            last_labeled = index
+
+    ranks = [{"y": y_of(position), "text": position} for position in range(1, depth + 1)]
+
+    clubs = []
+    for row in rows:
+        played = [(index, name) for index, name in enumerate(columns) if name in row["positions"]]
+        segments, run, previous = [], [], None
+        for index, name in played:
+            point = (x_of(index), y_of(row["positions"][name]))
+            if previous is not None and index != previous + 1:
+                segments.append(run)
+                run = []
+            run.append(point)
+            previous = index
+        segments.append(run)
+        paths = ["M" + " L".join("%.1f %.1f" % point for point in run)
+                 for run in segments if len(run) > 1]
+
+        points = []
+        for index, name in played:
+            position = row["positions"][name]
+            points.append({
+                "x": x_of(index), "y": y_of(position),
+                "url": (row.get("urls") or {}).get(name),
+                "title": "%s, %s: %s of %s" % (row["name"], name, ordinal(position), sizes[name]),
+            })
+
+        end = points[-1]
+        clubs.append({
+            "name": row["name"], "url": row.get("url"), "paths": paths, "points": points,
+            "label_x": end["x"] + 7, "label_y": end["y"] + 4,
+            "cells": [row["positions"].get(name) for name in columns],
+        })
+
+    return {
+        "svg": {"width": WIDTH, "height": height, "left": left, "label_y": top - 12,
+                "rank_x": left - 8},
+        "clubs": clubs, "labels": labels, "ranks": ranks, "caption": caption,
+        "columns": columns, "rows": rows,
+        "first": columns[0], "last": columns[-1],
+    }
+
+
 def ordinal(n):
     """1 -> 1st. Used for division names, which never run past a handful."""
     if 10 <= n % 100 <= 20:

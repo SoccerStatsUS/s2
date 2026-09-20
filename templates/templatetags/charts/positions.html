@@ -1,0 +1,39 @@
+{% if svg %}
+<figure class="chart position-chart">
+<svg viewBox="0 0 {{ svg.width }} {{ svg.height }}" role="img" aria-label="{{ caption }}">
+  {% for label in labels %}
+  <line class="grid" x1="{{ label.x|floatformat:1 }}" x2="{{ label.x|floatformat:1 }}" y1="{{ label.grid_top }}" y2="{{ label.grid_bottom }}"/>
+  <text x="{{ label.x|floatformat:1 }}" y="{{ svg.label_y }}" text-anchor="middle">{{ label.text }}</text>
+  {% endfor %}
+  {% for rank in ranks %}
+  <text x="{{ svg.rank_x }}" y="{{ rank.y|floatformat:1 }}" dy="4" text-anchor="end">{{ rank.text }}</text>
+  {% endfor %}
+  {% for club in clubs %}
+  <g class="club">
+  {% for path in club.paths %}<path d="{{ path }}"/>{% endfor %}
+  {% for point in club.points %}{% if point.url %}<a href="{{ point.url }}">{% endif %}<circle cx="{{ point.x|floatformat:1 }}" cy="{{ point.y|floatformat:1 }}" r="3"><title>{{ point.title }}</title></circle>{% if point.url %}</a>{% endif %}{% endfor %}
+  {% if club.url %}<a href="{{ club.url }}">{% endif %}<text class="label" x="{{ club.label_x|floatformat:1 }}" y="{{ club.label_y|floatformat:1 }}">{{ club.name }}</text>{% if club.url %}</a>{% endif %}
+  </g>
+  {% endfor %}
+</svg>
+<figcaption>{{ caption }}, {{ first }} to {{ last }}. Order is the overall table: points,
+then wins. A break in a line is a season out of the league; a season with no final
+table on file is left out.</figcaption>
+</figure>
+<div class="position-table">
+<table>
+<thead>
+  <tr>
+    <th scope="col">club</th>
+    {% for season in columns %}<th scope="col">{{ season }}</th>{% endfor %}
+  </tr>
+</thead>
+{% for club in clubs %}
+<tr>
+  <td>{% if club.url %}<a href="{{ club.url }}">{{ club.name }}</a>{% else %}{{ club.name }}{% endif %}</td>
+  {% for cell in club.cells %}<td class="{% if not cell %}grey{% endif %}">{{ cell|default_if_none:"" }}</td>{% endfor %}
+</tr>
+{% endfor %}
+</table>
+</div>
+{% endif %}
