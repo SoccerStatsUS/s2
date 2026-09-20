@@ -20,6 +20,7 @@ PYTHONPATH=$PWD .venv/bin/python build/load.py 2
 PYTHONPATH=$PWD .venv/bin/python build/load.py 3
 PYTHONPATH=$PWD .venv/bin/python build/load.py 4
 PYTHONPATH=$PWD .venv/bin/python build/generate.py
+.venv/bin/python manage.py smoketest --settings=build_settings
 
 dropdb --if-exists soccerstats_backup
 psql -d postgres -c 'ALTER DATABASE soccerstats_dev RENAME TO soccerstats_backup' || true

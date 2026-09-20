@@ -1,3 +1,8 @@
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import tempfile
 from unittest.mock import patch
 
 from django.test import SimpleTestCase
@@ -28,6 +33,48 @@ class InsertSqlTests(SimpleTestCase):
         insert_sql('example', [])
 
         connection.cursor.assert_not_called()
+
+
+class BuildScriptTests(SimpleTestCase):
+    def run_build(self, smoke_exit):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shutil.copyfile(Path(__file__).resolve().parents[1] / 'build.sh', root / 'build.sh')
+            (root / '.venv/bin').mkdir(parents=True)
+            stub = root / '.venv/bin/python'
+            stub.write_text(
+                '#!/bin/sh\n'
+                'printf "%s\\n" "$(basename "$0") $*" >> "$BUILD_TEST_LOG"\n'
+                'case "$*" in *smoketest*) exit "$SMOKE_EXIT";; esac\n'
+            )
+            stub.chmod(0o755)
+            for command in ('dropdb', 'createdb', 'psql'):
+                (stub.parent / command).symlink_to(stub)
+            log = root / 'commands.log'
+            result = subprocess.run(
+                ['bash', str(root / 'build.sh')],
+                env={**os.environ, 'PATH': f'{stub.parent}:{os.environ["PATH"]}',
+                     'BUILD_TEST_LOG': str(log), 'SMOKE_EXIT': str(smoke_exit)},
+                capture_output=True, text=True, timeout=15,
+            )
+            self.assertTrue(log.exists(), result.stdout + result.stderr)
+            return result, log.read_text().splitlines()
+
+    def test_failed_smoke_test_preserves_existing_databases(self):
+        result, commands = self.run_build(smoke_exit=1)
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(commands[-1], 'python manage.py smoketest --settings=build_settings')
+        self.assertFalse(any('soccerstats_backup' in command for command in commands))
+        self.assertFalse(any('ALTER DATABASE' in command for command in commands))
+
+    def test_successful_smoke_test_precedes_database_promotion(self):
+        result, commands = self.run_build(smoke_exit=0)
+
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        smoke = commands.index('python manage.py smoketest --settings=build_settings')
+        backup = commands.index('dropdb --if-exists soccerstats_backup')
+        self.assertLess(smoke, backup)
 
 
 class BioGetterTests(SimpleTestCase):
