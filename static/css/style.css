@@ -973,6 +973,12 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
 .timeline-chart .mark.partial { stroke: var(--ink-soft); }
 .timeline-chart a:hover .mark[class*="finish-"], .timeline-chart a:focus-visible .mark[class*="finish-"] { stroke: var(--ink); stroke-width: 1.5; }
 
+/* Column heads: invisible click targets over the season labels that re-rank
+   the rows by that season; the label of the season in force goes to ink. */
+.timeline-chart .head { fill: transparent; cursor: pointer; }
+.timeline-chart text.season.sorted { fill: var(--ink); font-weight: 500; }
+.timeline-chart .row { transition: transform .4s ease; }
+
 /* The hover capsule a [data-tip] mark shows, built by custom.js: a few lines
    of text in a bordered box, no shadow, following the pointer. */
 .chart-tip {

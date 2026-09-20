@@ -161,11 +161,15 @@ class FinishShadingTests(SimpleTestCase):
         first, second = chart['marks'][0]['blocks']
         self.assertEqual((first['band'], first['tip']), (4, 'A, 1996|10th of 10, 1-2-7, 5 pts, 0.50 ppg'))
         self.assertEqual((second['band'], second['tip']), (None, None))
+        self.assertEqual((first['season'], first['place'], second['place']), ('1996', 10, None))
+        self.assertEqual([head['name'] for head in chart['heads']], ['1996', '1997'])
         html = render_to_string('templatetags/charts/timeline.html', chart)
-        self.assertIn('class="mark finish-4"', html)
+        self.assertIn('class="mark finish-4" data-season="1996" data-place="10"', html)
+        self.assertEqual(html.count('<g class="row" data-index='), 2)
+        self.assertEqual(html.count('<rect class="head"'), 2)
         self.assertIn('data-tip="A, 1996|10th of 10, 1-2-7, 5 pts, 0.50 ppg"', html)
         self.assertEqual(html.count('class="mark partial"'), 2)
-        self.assertEqual(html.count('<title>'), 2 + 2)  # two unshaded blocks, two row labels
+        self.assertEqual(html.count('<title>'), 2 + 2 + 2)  # unshaded blocks, row labels, column heads
 
     def test_club_finishes_ranks_each_season_and_skips_split_ones(self):
         rows = [

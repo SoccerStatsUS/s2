@@ -364,7 +364,9 @@ def timeline_chart(timeline, caption, noun="clubs"):
     from first to last, so a club that left and came back shows the gap. A
     block with a final-table finish on record is shaded by it, top of the
     table to bottom, and carries the capsule finish_tip builds; one without is
-    outlined.
+    outlined. Each row is a group with its index, and each block carries its
+    season and place, so custom.js can re-rank the rows by a season when its
+    column head is clicked.
     """
     columns, rows = timeline.get("columns") or [], timeline.get("rows") or []
     if len(columns) < 2 or len(rows) < 2:
@@ -378,13 +380,16 @@ def timeline_chart(timeline, caption, noun="clubs"):
 
     # The rows run far past the labels at the top, so each labeled season also
     # gets a rule down the chart to track it by.
-    marks, labels = [], []
+    marks, labels, heads = [], [], []
     last_labeled = -every
     for index, name in enumerate(columns):
         # Label every Nth season, and the last one only when it has the room.
         if index % every == 0 or (index == len(columns) - 1 and index - last_labeled >= every):
             labels.append({"x": left + index * slot + slot / 2, "text": name})
             last_labeled = index
+        # Every column has a head to click, labeled or not, that re-ranks the
+        # rows by that season's finishes.
+        heads.append({"x": left + index * slot, "width": slot, "name": name})
 
     for position, row in enumerate(rows):
         y = top + position * row_h
@@ -404,6 +409,8 @@ def timeline_chart(timeline, caption, noun="clubs"):
                 "title": "%s, %s" % (row["name"], name),
                 "band": finish_band(finish["position"], finish["size"]) if finish else None,
                 "tip": finish_tip(row["name"], name, finish) if finish else None,
+                "season": name,
+                "place": finish["position"] if finish else None,
             })
         marks.append({
             "blocks": blocks,
@@ -421,8 +428,9 @@ def timeline_chart(timeline, caption, noun="clubs"):
 
     return {
         "svg": {"width": WIDTH, "height": height, "left": left, "label_x": left - 10,
-                "block_h": block_h, "label_y": top - 12, "base": height},
-        "marks": marks, "labels": labels, "caption": caption,
+                "block_h": block_h, "label_y": top - 12, "base": height,
+                "row_h": row_h, "head_top": top - 24, "head_h": 20},
+        "marks": marks, "labels": labels, "heads": heads, "caption": caption,
         "one": noun[:-1] if noun.endswith("s") else noun,
         "shaded": any(block["band"] is not None for mark in marks for block in mark["blocks"]),
     }

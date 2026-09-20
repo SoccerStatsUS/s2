@@ -104,6 +104,38 @@ document.addEventListener("DOMContentLoaded", function() {
 
     document.querySelectorAll("table.stats, table.standings, table.transactions, table.sources").forEach(makeSortable);
 
+    // Clubs timeline: clicking a season's column head re-ranks the rows by
+    // that season's finishes, clubs without one keeping their place below;
+    // clicking the season in force restores the order the chart came in.
+    document.querySelectorAll(".timeline-chart svg").forEach(function(svg) {
+        var rows = Array.prototype.slice.call(svg.querySelectorAll(".row"));
+        var rowH = parseFloat(svg.dataset.rowH);
+        var sorted = null;
+        var rank = function(season) {
+            var keys = rows.map(function(row, index) {
+                var key = Infinity;
+                if (season) {
+                    var block = row.querySelector('.mark[data-season="' + season + '"]');
+                    if (block && block.dataset.place) key = parseInt(block.dataset.place, 10);
+                }
+                return {index: index, key: key};
+            });
+            keys.sort(function(a, b) { return (a.key - b.key) || (a.index - b.index); });
+            keys.forEach(function(entry, position) {
+                rows[entry.index].style.transform = "translateY(" + ((position - entry.index) * rowH) + "px)";
+            });
+            svg.querySelectorAll("text.season").forEach(function(label) {
+                label.classList.toggle("sorted", label.dataset.season === season);
+            });
+        };
+        svg.querySelectorAll(".head").forEach(function(head) {
+            head.addEventListener("click", function() {
+                sorted = sorted === head.dataset.season ? null : head.dataset.season;
+                rank(sorted);
+            });
+        });
+    });
+
     // Hover capsules: a mark with data-tip shows its lines, split on "|", in
     // one shared box that follows the pointer.
     var tipMarks = document.querySelectorAll("[data-tip]");
