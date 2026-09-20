@@ -20,6 +20,7 @@ from blurbs.loading import get_blurb_target
 from blurbs.models import Blurb
 from competitions.models import Competition, CompetitionRelationship, Season, SuperSeason
 from drafts.models import Draft, Pick
+from games.models import Game
 from money.models import Salary
 from news.models import NewsSource, FeedItem, archive_id, mentions, name_lookup
 from organizations.models import Confederation
@@ -886,6 +887,9 @@ def load_games():
             linesman3_id = bio_getter(game['linesman3'])
 
 
+        if 'gid' not in game:
+            game['gid'] = get_id_by_time()
+
         if game.get('sources'):
             sources = sorted(set(game.get('sources')))
         elif game.get('source'):
@@ -902,8 +906,7 @@ def load_games():
             else:
                 source_url = ''
             source_id = source_getter(source)
-            t = (game['date'], team1_id, source_id, source_url)
-            game_sources.append(t)
+            game_sources.append((game['gid'], source_id, source_url))
 
         result_unknown = game.get('result_unknown') or False
         not_played = game.get('not_played') or False
@@ -933,10 +936,6 @@ def load_games():
         location = game.get('location', '')
 
         location = location or ''
-
-
-        if 'gid' not in game:
-            game['gid'] = get_id_by_time()
 
 
         games.append({
@@ -1001,20 +1000,15 @@ def load_games():
     insert_sql("games_game", games)
 
     print("Inserting games sources.")
-    game_getter = make_game_getter()
-    
-    l = []
-    for date, team_id, source_id, source_url in game_sources:
-
-        # Don't call game_getter without date. Need to give games unique id's.
-        if date:
-            game_id = game_getter(team_id, date)
-            if game_id:
-                l.append({
-                        'game_id': game_id,
-                        'source_id': source_id,
-                        'source_url': source_url,
-                        })
+    # Keyed by gid, not (team, date): two loads of the same game that did not
+    # merge share a team and a date, and the source lookup used to hand both
+    # sources to whichever copy was inserted last.
+    game_ids = dict(Game.objects.values_list('gid', 'id'))
+    l = [{
+            'game_id': game_ids[gid],
+            'source_id': source_id,
+            'source_url': source_url,
+            } for gid, source_id, source_url in game_sources]
 
     insert_sql("games_gamesource", l)
             
