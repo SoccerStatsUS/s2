@@ -7,9 +7,9 @@
   {% endfor %}
   {% for mark in marks %}
   {% if mark.url %}<a href="{{ mark.url }}">{% endif %}<text class="label" x="{{ svg.label_x }}" y="{{ mark.label_y|floatformat:1 }}" text-anchor="end">{{ mark.name }}<title>{{ mark.title }}</title></text>{% if mark.url %}</a>{% endif %}
-  {% for block in mark.blocks %}{% if block.url %}<a href="{{ block.url }}">{% endif %}<rect class="mark" x="{{ block.x|floatformat:1 }}" y="{{ block.y|floatformat:1 }}" width="{{ block.width|floatformat:1 }}" height="{{ svg.block_h }}" rx="2"><title>{{ block.title }}</title></rect>{% if block.url %}</a>{% endif %}{% endfor %}
+  {% for block in mark.blocks %}{% if block.url %}<a href="{{ block.url }}">{% endif %}<rect class="mark{% if block.band != None %} finish-{{ block.band }}{% elif shaded %} partial{% endif %}" x="{{ block.x|floatformat:1 }}" y="{{ block.y|floatformat:1 }}" width="{{ block.width|floatformat:1 }}" height="{{ svg.block_h }}" rx="2"{% if block.tip %} data-tip="{{ block.tip }}"{% endif %}>{% if not block.tip %}<title>{{ block.title }}</title>{% endif %}</rect>{% if block.url %}</a>{% endif %}{% endfor %}
   {% endfor %}
 </svg>
-<figcaption>{{ caption }}. Ordered by last season, then by seasons played. A block marks a season the {{ one }} played; a row with gaps is a {{ one }} that left and came back.</figcaption>
+<figcaption>{{ caption }}. Ordered by last season, then by seasons played. A block marks a season the {{ one }} played; a row with gaps is a {{ one }} that left and came back.{% if shaded %} Where a final table is on record the block is shaded by the finish, green at the top of the table through pale in the middle to red at the bottom, and shows the record on hover; an outlined block is a season with no final table on file.{% endif %}</figcaption>
 </figure>
 {% endif %}

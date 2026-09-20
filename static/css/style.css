@@ -958,6 +958,37 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
 .position-table td { text-align: right; font-variant-numeric: tabular-nums; }
 .position-table td:first-child { text-align: left; white-space: nowrap; }
 .results-chart .mark.loss { fill: var(--ink-soft); }
+
+/* Clubs timeline: a block shaded by where the club finished, in fifths of the
+   table. A diverging ramp with a light middle, so lightness carries it as
+   well as hue: the accent at the top, --loss-ink at the bottom, and the same
+   result semantics as the win/loss cells. */
+.timeline-chart .mark.finish-0 { fill: var(--accent); }
+.timeline-chart .mark.finish-1 { fill: #7fbc9f; }
+.timeline-chart .mark.finish-2 { fill: #d3d7da; }
+.timeline-chart .mark.finish-3 { fill: #d4877a; }
+.timeline-chart .mark.finish-4 { fill: var(--loss-ink); }
+/* Outlined in ink rather than the accent here, so a block with no table on
+   file is not read as a top-fifth finish. */
+.timeline-chart .mark.partial { stroke: var(--ink-soft); }
+.timeline-chart a:hover .mark[class*="finish-"], .timeline-chart a:focus-visible .mark[class*="finish-"] { stroke: var(--ink); stroke-width: 1.5; }
+
+/* The hover capsule a [data-tip] mark shows, built by custom.js: a few lines
+   of text in a bordered box, no shadow, following the pointer. */
+.chart-tip {
+    position: absolute;
+    z-index: 10;
+    padding: 5px 8px;
+    border: 1px solid var(--hairline);
+    background: #fff;
+    color: var(--ink);
+    font-size: 12px;
+    line-height: 1.4;
+    white-space: nowrap;
+    pointer-events: none;
+    font-variant-numeric: tabular-nums;
+}
+.chart-tip .tip-head { font-weight: 500; }
 .results-chart svg { min-width: 960px; }
 
 /* Country map: a single-hue ramp off --accent, five fixed share bands so one

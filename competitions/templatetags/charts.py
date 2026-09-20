@@ -328,12 +328,43 @@ def count_chart(rows, caption, noun, note=""):
     }
 
 
+def finish_band(position, size):
+    """
+    0 to 4, top of the table to bottom, by where a finish falls as a share of
+    the table: 1st of 12 and 1st of 24 both band 0, and a lone club bands 0.
+    """
+    if size < 2:
+        return 0
+    return min(4, int(5 * (position - 1) / (size - 1)))
+
+
+def finish_tip(name, season, finish):
+    """
+    The capsule a block shows on hover, as lines split by '|': the club and
+    season, then its place, record, points and points per game.
+    """
+    if finish.get("ties") is None:
+        record = "%d-%d" % (finish["wins"], finish["losses"])
+    else:
+        record = "%d-%d-%d" % (finish["wins"], finish["ties"], finish["losses"])
+    if finish.get("shootout"):
+        record += " (%d-%d in shootouts)" % finish["shootout"]
+    line = "%s of %s, %s, %s pts" % (
+        ordinal(finish["position"]), finish["size"], record, finish["points"])
+    if finish.get("ppg") is not None:
+        line += ", %.2f ppg" % finish["ppg"]
+    return "%s, %s|%s" % (name, season, line)
+
+
 @register.inclusion_tag("templatetags/charts/timeline.html")
 def timeline_chart(timeline, caption, noun="clubs"):
     """
     A club per row, a season per column, a block where the two meet. Rows come
     in the order given; the blocks are drawn per season rather than as one span
-    from first to last, so a club that left and came back shows the gap.
+    from first to last, so a club that left and came back shows the gap. A
+    block with a final-table finish on record is shaded by it, top of the
+    table to bottom, and carries the capsule finish_tip builds; one without is
+    outlined.
     """
     columns, rows = timeline.get("columns") or [], timeline.get("rows") or []
     if len(columns) < 2 or len(rows) < 2:
@@ -359,13 +390,21 @@ def timeline_chart(timeline, caption, noun="clubs"):
         y = top + position * row_h
         span = "%s%s" % (row["first"], "" if row["last"] == row["first"] else "-%s" % row["last"])
         urls = row.get("urls") or {}
-        blocks = [{
-            "x": left + index * slot + (slot - block_w) / 2,
-            "y": y + (row_h - block_h) / 2,
-            "width": block_w,
-            "url": urls.get(name),
-            "title": "%s, %s" % (row["name"], name),
-        } for index, name in enumerate(columns) if name in row["seasons"]]
+        finishes = row.get("finishes") or {}
+        blocks = []
+        for index, name in enumerate(columns):
+            if name not in row["seasons"]:
+                continue
+            finish = finishes.get(name)
+            blocks.append({
+                "x": left + index * slot + (slot - block_w) / 2,
+                "y": y + (row_h - block_h) / 2,
+                "width": block_w,
+                "url": urls.get(name),
+                "title": "%s, %s" % (row["name"], name),
+                "band": finish_band(finish["position"], finish["size"]) if finish else None,
+                "tip": finish_tip(row["name"], name, finish) if finish else None,
+            })
         marks.append({
             "blocks": blocks,
             "label_y": y + row_h / 2 + 4,
@@ -385,6 +424,7 @@ def timeline_chart(timeline, caption, noun="clubs"):
                 "block_h": block_h, "label_y": top - 12, "base": height},
         "marks": marks, "labels": labels, "caption": caption,
         "one": noun[:-1] if noun.endswith("s") else noun,
+        "shaded": any(block["band"] is not None for mark in marks for block in mark["blocks"]),
     }
 
 

@@ -9,6 +9,7 @@ from django.test import SimpleTestCase
 from competitions import views
 from competitions.models import Competition
 from competitions.templatetags.charts import (bar_chart, column_chart, count_band, count_chart, year_grid,
+                                              finish_band, finish_tip,
                                               monotone_path, player_goals_chart, position_chart, rate_chart,
                                               rolling_positions, timeline_chart)
 from competitions.views import (COVERAGE_FACETS, competition_awards, coverage_rows,
@@ -126,6 +127,61 @@ class SeasonPositionsTests(SimpleTestCase):
         competition = SimpleNamespace(ctype='Cup', slug='cup')
 
         self.assertEqual(views.league_positions(competition, ['1', '2'])['rows'], [])
+
+
+class FinishShadingTests(SimpleTestCase):
+    def test_bands_run_in_fifths_of_the_table(self):
+        self.assertEqual([finish_band(p, 10) for p in range(1, 11)], [0, 0, 1, 1, 2, 2, 3, 3, 4, 4])
+        self.assertEqual((finish_band(1, 24), finish_band(24, 24), finish_band(1, 1)), (0, 4, 0))
+
+    def test_capsule_lines(self):
+        finish = {'position': 1, 'size': 12, 'wins': 23, 'ties': 0, 'losses': 9, 'points': 57, 'ppg': 57 / 32}
+        self.assertEqual(finish_tip('D.C. United', '1999', finish),
+                         'D.C. United, 1999|1st of 12, 23-0-9, 57 pts, 1.78 ppg')
+
+        finish = {'position': 1, 'size': 12, 'wins': 17, 'ties': None, 'losses': 6, 'shootout': (6, 3),
+                  'points': 57, 'ppg': 57 / 32}
+        self.assertEqual(finish_tip('D.C. United', '1999', finish),
+                         'D.C. United, 1999|1st of 12, 17-6 (6-3 in shootouts), 57 pts, 1.78 ppg')
+
+    def test_timeline_blocks_carry_the_finish(self):
+        timeline = {
+            'columns': ['1996', '1997'],
+            'rows': [
+                {'name': 'A', 'url': None, 'seasons': {'1996', '1997'}, 'urls': {}, 'first': '1996',
+                 'last': '1997', 'played': 2,
+                 'finishes': {'1996': {'position': 10, 'size': 10, 'wins': 1, 'ties': 2, 'losses': 7,
+                                       'points': 5, 'ppg': 0.5}}},
+                {'name': 'B', 'url': None, 'seasons': {'1996'}, 'urls': {}, 'first': '1996',
+                 'last': '1996', 'played': 1},
+            ],
+        }
+        chart = timeline_chart(timeline, 'Clubs')
+
+        first, second = chart['marks'][0]['blocks']
+        self.assertEqual((first['band'], first['tip']), (4, 'A, 1996|10th of 10, 1-2-7, 5 pts, 0.50 ppg'))
+        self.assertEqual((second['band'], second['tip']), (None, None))
+        html = render_to_string('templatetags/charts/timeline.html', chart)
+        self.assertIn('class="mark finish-4"', html)
+        self.assertIn('data-tip="A, 1996|10th of 10, 1-2-7, 5 pts, 0.50 ppg"', html)
+        self.assertEqual(html.count('class="mark partial"'), 2)
+        self.assertEqual(html.count('<title>'), 2 + 2)  # two unshaded blocks, two row labels
+
+    def test_club_finishes_ranks_each_season_and_skips_split_ones(self):
+        rows = [
+            ('1999', 1, 'D.C. United', 'dc', 57, 17, None, 6, 32, 6, 3),
+            ('1999', 2, 'Columbus Crew', 'crew', 45, 15, None, 13, 32, 4, 0),
+            ('2000', 1, 'D.C. United', 'dc', 30, 8, 6, 18, 32, None, None),
+            ('2000', 1, 'D.C. United', 'dc', 31, 9, 4, 19, 32, None, None),
+        ]
+        with patch('competitions.views.Standing') as standing:
+            standing.objects.filter.return_value.values_list.return_value = rows
+            finishes = views.club_finishes(SimpleNamespace())
+
+        self.assertEqual(sorted(finishes), [('crew', '1999'), ('dc', '1999')])
+        self.assertEqual(finishes[('dc', '1999')],
+                         {'position': 1, 'size': 2, 'wins': 17, 'ties': None, 'losses': 6, 'shootout': (6, 3),
+                          'points': 57, 'ppg': 57 / 32})
 
 
 class PositionChartTests(SimpleTestCase):

@@ -163,10 +163,11 @@ def season_club_counts(competition, seasons, clubs, slugs=None):
     return rows
 
 
-def club_timeline(competition, seasons, clubs, slugs=None):
+def club_timeline(competition, seasons, clubs, slugs=None, finishes=None):
     """
     One row per club, last season first so the clubs that lasted lead, and the
-    longest-lived first among those that left together.
+    longest-lived first among those that left together. Each row carries the
+    club's finishes, from club_finishes, for the seasons that have one.
 
     Leagues only. A league has a roll of member clubs that returns year on year,
     which is the thing the chart draws; a cup is a field that one-off entrants
@@ -177,6 +178,7 @@ def club_timeline(competition, seasons, clubs, slugs=None):
         return {'columns': [], 'rows': []}
 
     slugs = slugs or {}
+    finishes = finishes or {}
     order = {name: index for index, name in enumerate(seasons)}
     rows = []
     for (name, slug), played in clubs.items():
@@ -191,6 +193,8 @@ def club_timeline(competition, seasons, clubs, slugs=None):
             'url': reverse('team_detail', args=[slug]) if slug else None,
             'seasons': played,
             'urls': urls,
+            'finishes': {season: finishes[(slug, season)] for season in played
+                         if (slug, season) in finishes},
             'first': seasons[indexes[0]],
             'last': seasons[indexes[-1]],
             'played': len(played),
@@ -223,6 +227,38 @@ def season_positions(rows):
         entries.sort(key=lambda entry: (-entry[3], -entry[4], entry[1]))
         tables[season] = [(team_id, name, slug) for team_id, name, slug, _, _ in entries]
     return tables
+
+
+def club_finishes(competition):
+    """
+    Every club's final-table finish in every season that has one, keyed by
+    (club slug, season name): its place and the size of the table, its record,
+    points and points per game. The place is the overall one, ranked the way
+    the position chart ranks it; a split season has no single table and so no
+    finish.
+    """
+    rows = list(Standing.objects.filter(competition=competition, final=True, player=None)
+                .values_list('season__name', 'team_id', 'team__name', 'team__slug',
+                             'points', 'wins', 'ties', 'losses', 'games',
+                             'shootout_wins', 'shootout_losses'))
+    tables = season_positions([row[:6] for row in rows])
+    places = {(season, team_id): place
+              for season, table in tables.items()
+              for place, (team_id, _, _) in enumerate(table, 1)}
+
+    finishes = {}
+    for season, team_id, _, slug, points, wins, ties, losses, games, so_wins, so_losses in rows:
+        if (season, team_id) not in places:
+            continue
+        finishes[(slug, season)] = {
+            'position': places[(season, team_id)], 'size': len(tables[season]),
+            'wins': wins or 0, 'ties': ties, 'losses': losses or 0,
+            # A season that settled draws by shootout keeps no ties; the
+            # shootout results stand in for them.
+            'shootout': (so_wins or 0, so_losses or 0) if so_wins is not None or so_losses is not None else None,
+            'points': points or 0, 'ppg': (points or 0) / games if games else None,
+            }
+    return finishes
 
 
 def league_positions(competition, seasons, slugs=None):
@@ -322,7 +358,8 @@ def competition_detail(request, competition_slug):
         'big_winners': competition.alltime_standings().order_by('-wins')[:50],
         'awards': competition_awards(competition),
         'season_clubs': season_club_counts(competition, seasons, clubs, season_slugs),
-        'club_timeline': club_timeline(competition, seasons, clubs, season_slugs),
+        'club_timeline': club_timeline(competition, seasons, clubs, season_slugs,
+                                       club_finishes(competition)),
         'league_positions': league_positions(competition, seasons, season_slugs),
         'club_noun': 'teams' if competition.international else 'clubs',
         }

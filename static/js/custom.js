@@ -104,4 +104,33 @@ document.addEventListener("DOMContentLoaded", function() {
 
     document.querySelectorAll("table.stats, table.standings, table.transactions, table.sources").forEach(makeSortable);
 
+    // Hover capsules: a mark with data-tip shows its lines, split on "|", in
+    // one shared box that follows the pointer.
+    var tipMarks = document.querySelectorAll("[data-tip]");
+    if (tipMarks.length) {
+        var tip = document.createElement("div");
+        tip.className = "chart-tip";
+        tip.hidden = true;
+        document.body.appendChild(tip);
+        var placeTip = function(e) {
+            tip.style.left = (e.pageX + 14) + "px";
+            tip.style.top = (e.pageY + 14) + "px";
+        };
+        tipMarks.forEach(function(mark) {
+            mark.addEventListener("mouseenter", function(e) {
+                tip.textContent = "";
+                mark.dataset.tip.split("|").forEach(function(line, i) {
+                    var div = document.createElement("div");
+                    if (i === 0) div.className = "tip-head";
+                    div.textContent = line;
+                    tip.appendChild(div);
+                });
+                tip.hidden = false;
+                placeTip(e);
+            });
+            mark.addEventListener("mousemove", placeTip);
+            mark.addEventListener("mouseleave", function() { tip.hidden = true; });
+        });
+    }
+
 });
