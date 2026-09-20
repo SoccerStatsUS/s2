@@ -29,20 +29,20 @@ Production runs on the server "bert" at /home/chris/www/s2:
 * gunicorn via systemd (etc/systemd/s2.service), bound to 127.0.0.1:8100
 * nginx proxies soccerstats.us to it (etc/nginx/soccerstats.us);
   etc/nginx/stats.soccerstats.us is now just the 301 to the apex
-* AI crawlers (ClaudeBot, GPTBot) are rate-limited to 10 req/min per IP —
-  zone in etc/nginx/conf.d/ai-bot-ratelimit.conf, applied in the vhost's
-  `location /`, which also serves a robots.txt with a Crawl-delay hint.
-  They were doing ~84k req/day combined before this (2026-08-02).
-  Amazonbot, Bytespider/TikTokSpider and PetalBot each crawl from hundreds of
-  IPs, so a per-IP key would not reach them; each gets one bucketed counter at
-  6 req/min in the same file, and robots.txt Disallows the first two outright.
-  That limit only reaches crawlers that identify themselves; scraper farms
-  spoofing browser user-agents are blocked by network instead, in
-  etc/nginx/conf.d/blocked-networks.conf (ACEVILLE PTE.LTD. and an Alibaba
-  Cloud operator; a /15 and three /16s between them).
-  A scraper on residential proxies (one request per IP, ~95k IPs/day) is out
-  of reach of both; etc/nginx/conf.d/fake-chrome.conf 403s it on the one
-  header it gets wrong, a Chrome user-agent with no Accept-Language.
+* Crawler defenses, all in etc/nginx/conf.d/ and applied in the vhost's
+  `location /`, which also serves robots.txt:
+  - ai-bot-ratelimit.conf: AI crawlers that identify themselves (ClaudeBot,
+    GPTBot, OAI-SearchBot, ExaSearchBot, ...) get 10 req/min per IP. Crawlers
+    that spread across hundreds of IPs — Amazonbot, Bytespider/TikTokSpider,
+    PetalBot, ShapBot, meta-externalagent, and the SEO bots DataForSeoBot,
+    AhrefsBot, MJ12bot — each get one bucketed counter at 6 req/min, and
+    robots.txt Disallows all of those except PetalBot.
+  - blocked-networks.conf: scraper farms spoofing browser user-agents are
+    blocked by network (ACEVILLE PTE.LTD. and an Alibaba Cloud operator).
+  - fake-chrome.conf: scrapers on residential proxies (one request per IP,
+    ~100k IPs/day) are out of reach of both; this 403s a Chrome user-agent
+    that is missing either Accept-Language or Sec-CH-UA, one header each of
+    the two seen so far gets wrong. Real Chrome sends both on every request.
 * secrets live in /home/chris/www/s2/.env (not in git)
 
 The files under etc/ are the source of truth, but nothing syncs them — bert

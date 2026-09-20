@@ -8,7 +8,7 @@ server {
 
     location = /robots.txt {
         default_type text/plain;
-        return 200 "User-agent: Amazonbot\nDisallow: /\n\nUser-agent: Amzn-SearchBot\nDisallow: /\n\nUser-agent: Bytespider\nDisallow: /\n\nUser-agent: TikTokSpider\nDisallow: /\n\nUser-agent: SemrushBot\nDisallow: /\n\nUser-agent: PetalBot\nCrawl-delay: 10\nDisallow: /games/\n\nUser-agent: ClaudeBot\nCrawl-delay: 10\nDisallow: /games/\n\nUser-agent: GPTBot\nCrawl-delay: 10\nDisallow: /games/\n\nUser-agent: *\nDisallow: /games/\n\nSitemap: https://soccerstats.us/sitemap.xml\n";
+        return 200 "User-agent: Amazonbot\nDisallow: /\n\nUser-agent: Amzn-SearchBot\nDisallow: /\n\nUser-agent: Bytespider\nDisallow: /\n\nUser-agent: TikTokSpider\nDisallow: /\n\nUser-agent: SemrushBot\nDisallow: /\n\nUser-agent: ShapBot\nDisallow: /\n\nUser-agent: meta-externalagent\nDisallow: /\n\nUser-agent: DataForSeoBot\nDisallow: /\n\nUser-agent: AhrefsBot\nDisallow: /\n\nUser-agent: MJ12bot\nDisallow: /\n\nUser-agent: PetalBot\nCrawl-delay: 10\nDisallow: /games/\n\nUser-agent: ClaudeBot\nCrawl-delay: 10\nDisallow: /games/\n\nUser-agent: GPTBot\nCrawl-delay: 10\nDisallow: /games/\n\nUser-agent: *\nDisallow: /games/\n\nSitemap: https://soccerstats.us/sitemap.xml\n";
     }
 
     location /static/ {
@@ -28,6 +28,9 @@ server {
         limit_req zone=amazonbot burst=2 nodelay;
         limit_req zone=bytedance burst=2 nodelay;
         limit_req zone=petalbot burst=2 nodelay;
+        limit_req zone=shapbot burst=2 nodelay;
+        limit_req zone=metabot burst=2 nodelay;
+        limit_req zone=seobot burst=2 nodelay;
         limit_req_status 429;
         proxy_pass http://127.0.0.1:8100;
         proxy_set_header Host $host;
