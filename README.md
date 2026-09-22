@@ -44,11 +44,13 @@ Production runs on the server "bert" at /home/chris/www/s2:
   - ai-bot-ratelimit.conf: AI crawlers that identify themselves (ClaudeBot,
     GPTBot, OAI-SearchBot, ExaSearchBot, ...) get 10 req/min per IP. Crawlers
     that spread across hundreds of IPs — Amazonbot, Bytespider/TikTokSpider,
-    PetalBot, ShapBot, meta-externalagent, and the SEO bots DataForSeoBot,
-    AhrefsBot, MJ12bot — each get one bucketed counter at 6 req/min, and
-    robots.txt Disallows all of those except PetalBot.
+    PetalBot, ShapBot, meta-externalagent, PerplexityBot, Reflectionbot, and
+    the SEO bots DataForSeoBot, AhrefsBot, MJ12bot — each get one bucketed
+    counter at 6 req/min, and robots.txt Disallows all of those except
+    PetalBot, PerplexityBot and Reflectionbot, which get a Crawl-delay.
   - blocked-networks.conf: scraper farms spoofing browser user-agents are
-    blocked by network (ACEVILLE PTE.LTD. and an Alibaba Cloud operator).
+    blocked by network (ACEVILLE PTE.LTD., an Alibaba Cloud operator, and a
+    headless-Chrome proxy farm across twelve /24s), as are two scanner /24s.
   - fake-chrome.conf: scrapers on residential proxies (one request per IP,
     ~100k IPs/day) are out of reach of both; this 403s a Chrome user-agent
     that is missing either Accept-Language or Sec-CH-UA, one header each of
