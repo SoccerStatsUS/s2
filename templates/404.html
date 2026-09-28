@@ -5,10 +5,11 @@
 
 <div id="notfound">
 
-<h1>Not found</h1>
+<h1>Sorry, that page isn't here</h1>
 
 <p class="notfound-path">Nothing on the site answers to
-<code>{{ request_path }}</code>. It may never have existed, or it may have moved.</p>
+<code>{{ request_path }}</code>. The site is under active development, and URLs aren't fully stable yet &mdash;
+what you're looking for may have moved.</p>
 
 <form method="get" action="{% url 'search' %}">
   <input name="q" type="text" placeholder="Players, teams, competitions"
