@@ -150,10 +150,6 @@ class HomepageTests(SimpleTestCase):
             'crowd': None,
             'born': born,
             'game_counts': {1866 + i: 100 for i in range(161)},
-            'games': 31277,
-            'players': 43354,
-            'teams': 6128,
-            'competitions': 228,
         }
         context.update(extra)
         return render_to_string('homepage.html', context)
@@ -163,16 +159,7 @@ class HomepageTests(SimpleTestCase):
 
         self.assertLess(html.index('id="otd"'), html.index('id="tagline"'))
         self.assertLess(html.index('id="tagline"'), html.index('id="home-search"'))
-        self.assertLess(html.index('id="home-search"'), html.index('id="home-totals"'))
-        self.assertLess(html.index('id="home-totals"'), html.index('year-grid'))
-
-    def test_totals_carry_the_size_of_the_record(self):
-        html = self.render()
-
-        self.assertIn('<dt>games</dt><dd>31,277</dd>', html)
-        self.assertIn('<dt>players</dt><dd>43,354</dd>', html)
-        self.assertIn('<dt>teams</dt><dd>6,128</dd>', html)
-        self.assertIn('<dt>competitions</dt><dd>228</dd>', html)
+        self.assertLess(html.index('id="home-search"'), html.index('year-grid'))
 
     def test_every_year_is_a_cell_linking_to_that_year(self):
         html = self.render()

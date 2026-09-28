@@ -153,10 +153,6 @@ def homepage(request):
         'crowd': crowd,
         'born': born,
         'game_counts': Game.objects.count_by_year(),
-        'games': Game.objects.count(),
-        'players': Bio.objects.count(),
-        'teams': Team.objects.count(),
-        'competitions': Competition.objects.count(),
         }
 
     return render(request, "homepage.html",

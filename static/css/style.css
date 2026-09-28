@@ -767,7 +767,7 @@ table.honors th {
     color: var(--hairline);
 }
 
-#career-totals, #team-totals, #competition-totals, #home-totals {
+#career-totals, #team-totals, #competition-totals {
     display: flex;
     flex-wrap: wrap;
     gap: 8px 32px;
@@ -778,15 +778,15 @@ table.honors th {
     font-variant-numeric: tabular-nums;
 }
 
-#career-totals div, #team-totals div, #competition-totals div, #home-totals div {
+#career-totals div, #team-totals div, #competition-totals div div {
     display: flex;
     flex-direction: column;
     min-width: 72px;
 }
 
-#career-totals dt, #team-totals dt, #competition-totals dt, #home-totals dt { font-size: 12px; }
+#career-totals dt, #team-totals dt, #competition-totals dt dt { font-size: 12px; }
 
-#career-totals dd, #team-totals dd, #competition-totals dd, #home-totals dd {
+#career-totals dd, #team-totals dd, #competition-totals dd dd {
     order: -1;
     margin: 0;
     color: var(--ink);
@@ -1580,18 +1580,8 @@ td.result { width: 70px; }
     font-size: 16px;
 }
 
-/* The totals sit directly above the year chart, which is the same figure
-   broken out: how many games, then where in 160 years they fall. Centered to
-   hold the line the tagline and the search box set. */
-#home-totals {
-    justify-content: center;
-    margin: 24px 0 0;
-    border-bottom: 0;
-    padding-bottom: 0;
-}
-
-/* The year grid holds the same centre line as the totals above it; caption,
-   legend and note stay flush with the table's left edge. */
+/* The year grid holds the centre line the tagline and the search box set;
+   caption and legend stay flush with the table's left edge. */
 #home-intro .chart { margin: 4px auto 0; }
 
 #home-search {

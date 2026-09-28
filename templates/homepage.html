@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load humanize %}
 {% load charts %}
 
 
@@ -34,14 +33,7 @@ starting in <a href="{% url 'city_detail' 'waukesha-wi' %}">Waukesha, Wisconsin<
   <input type="submit" value="search">
 </form>
 
-<dl id="home-totals" aria-label="Recorded totals">
-  <div><dt>games</dt><dd>{{ games|intcomma }}</dd></div>
-  <div><dt>players</dt><dd>{{ players|intcomma }}</dd></div>
-  <div><dt>teams</dt><dd>{{ teams|intcomma }}</dd></div>
-  <div><dt>competitions</dt><dd>{{ competitions|intcomma }}</dd></div>
-</dl>
-
-{% year_grid game_counts "Games on record by year" note="A cell a year, from the first game on record to the current season, shaded by how many games that year has. A grey year inside the range has nothing on record. Select a year for its games; the dates page carries every count." %}
+{% year_grid game_counts "Games on record by year" %}
 
 </div>
 
