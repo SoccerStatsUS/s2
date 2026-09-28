@@ -143,6 +143,39 @@ minted by a different loader; fix each at its source rather than filtering here.
   the header search, `?` for the list. Small addition to
   `static/js/custom.js`, must not swallow the key while a field has focus.
 
+## Machine access
+
+The site will be scraped whatever is done (see the sentry case
+`2026-09-soccerstats-chrome-scraper`), and assistants will absorb the casual
+lookups. What they can't absorb is being the current, cited source. These
+items are about being cited, not about stopping anyone.
+
+- [ ] `llms.txt` at the root, served from nginx the way robots.txt is: what
+  the site holds, how its URLs are built, where the sources and coverage pages
+  are, and how to attribute.
+- [ ] Record the build date at load time and show it. Nothing on the site or
+  in the database says when the data was last built, so neither a page nor a
+  machine response can say how current it is.
+- [ ] Decide a license for the data. Every data repo is public on GitHub and
+  none carries one, so the terms of reuse are currently unstated. The material
+  scraped from the MLS, ESPN and NWSL sites is not ours to relicense and needs
+  to be carved out of whatever is chosen.
+- [ ] A read-only MCP server at `/mcp/`, as a Django app in s2 running in the
+  existing gunicorn workers — no second process on a 956MB box. Stateless,
+  JSON responses only, no SSE and no sessions, anonymous, with its own nginx
+  `limit_req` zone, a Postgres `statement_timeout` and a row cap per response.
+  Tools are plain functions returning dicts, keyed by slug since ids change
+  every rebuild: `search`, `get_game`, `games_on_date`, `team_season`,
+  `player_career`, `head_to_head`, `competition_season`. Every response
+  carries the canonical URL, the sources, an attribution line and the build
+  date, and marks what is not held rather than returning a zero or a blank.
+  Log tool name and arguments. Ship `search` and `get_game` first. If it
+  outgrows two workers, the same functions move under the `mcp` SDK in a
+  process of their own.
+- [ ] Once the server is up: a page at `/about/mcp/` with the URL and how to
+  connect, a line in `llms.txt`, and an entry in the MCP registry under a
+  DNS-verified `us.soccerstats` namespace.
+
 ## Deferred
 
 - Competition headquarters, commissioner, and founding/folding dates on the competition header. `Competition` has no such fields and `organizations.Organization` is commented out, so this is a migration plus sourcing across ~229 competitions; the recorded season span is coverage, not a founding date. The header ships with recorded facts only.
