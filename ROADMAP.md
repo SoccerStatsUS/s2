@@ -145,10 +145,9 @@ minted by a different loader; fix each at its source rather than filtering here.
 
 ## Machine access
 
-The site will be scraped whatever is done (see the sentry case
-`2026-09-soccerstats-chrome-scraper`), and assistants will absorb the casual
-lookups. What they can't absorb is being the current, cited source. These
-items are about being cited, not about stopping anyone.
+The site will be scraped whatever is done, and assistants will absorb the
+casual lookups. What they can't absorb is being the current, cited source.
+These items are about being cited, not about stopping anyone.
 
 - [ ] `llms.txt` at the root, served from nginx the way robots.txt is: what
   the site holds, how its URLs are built, where the sources and coverage pages
