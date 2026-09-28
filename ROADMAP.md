@@ -175,6 +175,11 @@ items are about being cited, not about stopping anyone.
 - [ ] Once the server is up: a page at `/about/mcp/` with the URL and how to
   connect, a line in `llms.txt`, and an entry in the MCP registry under a
   DNS-verified `us.soccerstats` namespace.
+- [ ] Idea, not yet decided: a downloadable copy of the whole database — the
+  `pg_dump` that `upload.sh` already makes, or a SQLite or per-table CSV
+  export — published with the build date and the license. The source repos
+  are already public, so what it adds is one built file with stated terms of
+  reuse. Waits on the license decision above.
 
 ## Deferred
 
