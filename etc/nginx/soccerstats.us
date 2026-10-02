@@ -11,6 +11,12 @@ server {
         return 200 "User-agent: Amazonbot\nDisallow: /\n\nUser-agent: Amzn-SearchBot\nDisallow: /\n\nUser-agent: Bytespider\nDisallow: /\n\nUser-agent: TikTokSpider\nDisallow: /\n\nUser-agent: SemrushBot\nDisallow: /\n\nUser-agent: ShapBot\nDisallow: /\n\nUser-agent: meta-externalagent\nDisallow: /\n\nUser-agent: DataForSeoBot\nDisallow: /\n\nUser-agent: AhrefsBot\nDisallow: /\n\nUser-agent: MJ12bot\nDisallow: /\n\nUser-agent: PetalBot\nCrawl-delay: 10\n\nUser-agent: ClaudeBot\nCrawl-delay: 10\n\nUser-agent: GPTBot\nCrawl-delay: 10\n\nUser-agent: PerplexityBot\nCrawl-delay: 10\n\nUser-agent: Reflectionbot\nCrawl-delay: 10\n\nUser-agent: *\nDisallow:\n\nSitemap: https://soccerstats.us/sitemap.xml\n";
     }
 
+    # Served from the checkout, so a git pull updates it without an nginx reload.
+    location = /llms.txt {
+        alias /home/chris/www/s2/etc/nginx/llms.txt;
+        charset utf-8;
+    }
+
     location /static/ {
         alias /home/chris/www/s2/staticfiles/;
     }

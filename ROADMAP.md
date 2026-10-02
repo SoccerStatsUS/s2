@@ -149,9 +149,6 @@ The site will be scraped whatever is done, and assistants will absorb the
 casual lookups. What they can't absorb is being the current, cited source.
 These items are about being cited, not about stopping anyone.
 
-- [ ] `llms.txt` at the root, served from nginx the way robots.txt is: what
-  the site holds, how its URLs are built, where the sources and coverage pages
-  are, and how to attribute.
 - [ ] Record the build date at load time and show it. Nothing on the site or
   in the database says when the data was last built, so neither a page nor a
   machine response can say how current it is.
@@ -159,9 +156,6 @@ These items are about being cited, not about stopping anyone.
   and check are public with no license, which legally reads as all rights
   reserved. So is `ltrack_data`, which mixes processing code with data and
   waits on the same decision.
-- [ ] State the data license on the site: a footer on every page saying the
-  data is CC BY 4.0, asking for a soccerstats.us citation, and pointing to
-  github.com/SoccerStatsUS, with the same in `llms.txt`.
 - [ ] A read-only MCP server at `/mcp/`, as a Django app in s2 running in the
   existing gunicorn workers — no second process on a 956MB box. Stateless,
   JSON responses only, no SSE and no sessions, anonymous, with its own nginx

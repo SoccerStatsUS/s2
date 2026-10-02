@@ -37,7 +37,8 @@ numbers `1`–`4` still work. Stages default to `build_settings`; use
 Production runs on the server "bert" at /home/chris/www/s2:
 
 * gunicorn via systemd (etc/systemd/s2.service), bound to 127.0.0.1:8100
-* nginx proxies soccerstats.us to it (etc/nginx/soccerstats.us);
+* nginx proxies soccerstats.us to it (etc/nginx/soccerstats.us) and serves
+  /llms.txt straight from etc/nginx/llms.txt in the checkout;
   etc/nginx/stats.soccerstats.us is now just the 301 to the apex
 * Crawler defenses, all in etc/nginx/conf.d/ and applied in the vhost's
   `location /`, which also serves robots.txt:

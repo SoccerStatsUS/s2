@@ -1,0 +1,25 @@
+# soccerstats.us
+
+> A historical record of American soccer from the 1860s to the present: games, lineups, goals, standings, players, coaches, referees and competitions, with sources for each. Researched and maintained independently.
+
+Data is licensed CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Cite as "soccerstats.us" with a link to the page used. Pages are rebuilt from the source repositories on each upload. Where coverage is incomplete, the page says so; missing data isn't zero.
+
+## Structure
+
+- [Games](https://soccerstats.us/games/): one page per game at /games/<date>/<competition>/<teams>/
+- [Competitions](https://soccerstats.us/c/): /c/<competition>/ and seasons at /c/<competition>/<season>/
+- [People](https://soccerstats.us/bios/): players, coaches and referees at /bios/<slug>/
+- [Teams](https://soccerstats.us/teams/): /teams/<team>/ and a year at /teams/<team>/<year>/
+- [Dates](https://soccerstats.us/dates/): every game on a given day at /dates/<year>/<month>/<day>/
+- [Places](https://soccerstats.us/places/): countries, states, cities and stadiums
+
+## Provenance
+
+- [Sources](https://soccerstats.us/sources/): where each record comes from
+- [Coverage](https://soccerstats.us/about/coverage/): what is and isn't held
+- [About](https://soccerstats.us/about/)
+
+## Data
+
+- [Source repositories](https://github.com/SoccerStatsUS): the raw data behind the site, CC BY 4.0
+- Bulk or commercial use: data@soccerstats.us
