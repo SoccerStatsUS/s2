@@ -175,7 +175,7 @@ These items are about being cited, not about stopping anyone.
   `pg_dump` that `upload.sh` already makes, or a SQLite or per-table CSV
   export — published with the build date and the license. The source repos
   are already public, so what it adds is one built file with stated terms of
-  reuse. Waits on the license decision above.
+  reuse.
 
 ## Deferred
 
