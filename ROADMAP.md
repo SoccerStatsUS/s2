@@ -155,16 +155,13 @@ These items are about being cited, not about stopping anyone.
 - [ ] Record the build date at load time and show it. Nothing on the site or
   in the database says when the data was last built, so neither a page nor a
   machine response can say how current it is.
-- [ ] Decide a license for the data. Every data repo is public on GitHub and
-  none carries one, which legally reads as all rights reserved: the careful
-  users — researchers, journalists, anyone licensing properly — are the ones
-  kept out. Candidates are CC BY 4.0 and ODC-By 1.0, with a "cite as" line in
-  each README. Check provenance repo by repo before licensing anything:
-  transcriptions from the Spalding guides, newspapers and other databases,
-  and the material scraped from the MLS, ESPN and NWSL sites, may not be ours
-  to license and need to be listed as exceptions. The code repos (s2, build,
-  parse, check) are a separate question. Once chosen, the footer and
-  `llms.txt` state it and point to github.com/SoccerStatsUS.
+- [ ] License the code. The data repos are CC BY 4.0, but s2, build, parse
+  and check are public with no license, which legally reads as all rights
+  reserved. So is `ltrack_data`, which mixes processing code with data and
+  waits on the same decision.
+- [ ] State the data license on the site: a footer on every page saying the
+  data is CC BY 4.0, asking for a soccerstats.us citation, and pointing to
+  github.com/SoccerStatsUS, with the same in `llms.txt`.
 - [ ] A read-only MCP server at `/mcp/`, as a Django app in s2 running in the
   existing gunicorn workers — no second process on a 956MB box. Stateless,
   JSON responses only, no SSE and no sessions, anonymous, with its own nginx
