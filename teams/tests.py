@@ -100,15 +100,19 @@ class TeamGamesTests(SimpleTestCase):
         team = team_model.objects.by_slug.return_value
         form_class.return_value.is_valid.return_value = False
         games = game_model.objects.team_filter.return_value.select_related.return_value.order_by.return_value
-        newest = MagicMock()
-        oldest = MagicMock()
-        games.filter.return_value.__getitem__.return_value = [newest, oldest]
+        played = dict(team1_score=1, team2_score=0, not_played=False, result_unknown=False)
+        newest = MagicMock(**played)
+        oldest = MagicMock(**played)
+        fixture = MagicMock(team1_score=None, team2_score=None,
+                            not_played=False, result_unknown=False)
         page = MagicMock()
+        page.object_list = [fixture, newest, oldest]
         paginator.return_value.get_page.return_value = page
 
         team_games(request, 'fc-dallas')
 
         standing_class.assert_called_once_with(games, team)
+        # The chart draws the played games on this page, oldest first.
         self.assertEqual(render.call_args.args[2]['chart_games'], [oldest, newest])
         paginator.assert_called_once_with(games, 100)
         paginator.return_value.get_page.assert_called_once_with('2')

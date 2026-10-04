@@ -232,14 +232,35 @@ class RecentResultsChartTests(SimpleTestCase):
 
         self.assertEqual([bar['result'] for bar in chart['bars']],
                          ['win', 'loss', 'tie'])
-        self.assertEqual([bar['value'] for bar in chart['bars']],
-                         ['+2', '\N{MINUS SIGN}3', '0'])
         self.assertLess(chart['bars'][0]['y'], chart['svg']['baseline'])
         self.assertEqual(chart['bars'][1]['y'], chart['svg']['baseline'])
         html = render_to_string('templatetags/charts/results.html', chart)
         self.assertIn('class="mark win"', html)
         self.assertIn('class="mark loss"', html)
         self.assertIn('class="mark tie"', html)
+
+    def test_bars_touch_and_carry_the_result_and_date_as_a_hover_tip(self):
+        team = SimpleNamespace(id=1)
+        opponent = SimpleNamespace(name='Mexico')
+        games = [
+            SimpleNamespace(id=i, date=datetime.date(2026, 10, i),
+                            get_absolute_url=lambda: '/games/x/',
+                            team1_id=1, team1=team, team2=opponent,
+                            team1_score=3, team2_score=0,
+                            team1_result='w', team2_result='l')
+            for i in range(1, 4)
+        ]
+
+        chart = recent_results_chart(team, games)
+        bars = chart['bars']
+
+        for before, after in zip(bars, bars[1:]):
+            self.assertAlmostEqual(before['x'] + before['width'], after['x'])
+        self.assertEqual(bars[2]['tip'], '3\N{EN DASH}0 win vs. Mexico|Oct 3, 2026')
+        html = render_to_string('templatetags/charts/results.html', chart)
+        self.assertIn('data-tip="3\N{EN DASH}0 win vs. Mexico|Oct 3, 2026"', html)
+        self.assertNotIn('<text class="value"', html)
+        self.assertNotIn('10/3/26', html)
 
 
 class GameUrlTests(SimpleTestCase):

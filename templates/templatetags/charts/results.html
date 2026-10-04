@@ -3,19 +3,17 @@
 <svg viewBox="0 0 {{ svg.width }} {{ svg.height }}" role="img" aria-label="{{ caption }}">
   <line class="grid" x1="{{ svg.left }}" x2="{{ svg.right_edge }}" y1="{{ svg.top }}" y2="{{ svg.top }}"/>
   <text x="{{ svg.left|add:"-8" }}" y="{{ svg.top }}" dy="4" text-anchor="end">+{{ maximum }}</text>
-  <line class="axis" x1="{{ svg.left }}" x2="{{ svg.right_edge }}" y1="{{ svg.baseline }}" y2="{{ svg.baseline }}"/>
-  <text x="{{ svg.left|add:"-8" }}" y="{{ svg.baseline }}" dy="4" text-anchor="end">0</text>
   <line class="grid" x1="{{ svg.left }}" x2="{{ svg.right_edge }}" y1="{{ svg.bottom }}" y2="{{ svg.bottom }}"/>
   <text x="{{ svg.left|add:"-8" }}" y="{{ svg.bottom }}" dy="4" text-anchor="end">&minus;{{ maximum }}</text>
+  <text x="{{ svg.left|add:"-8" }}" y="{{ svg.baseline }}" dy="4" text-anchor="end">0</text>
   {% for bar in bars %}
-  <a href="{{ bar.url }}">
-    <rect x="{{ bar.hit_x|floatformat:1 }}" y="{{ svg.top }}" width="{{ bar.hit_width|floatformat:1 }}" height="{{ svg.date_y|add:"8" }}" fill="transparent"/>
-    <rect class="mark {{ bar.result }}" x="{{ bar.x|floatformat:1 }}" y="{{ bar.y|floatformat:1 }}" width="{{ bar.width|floatformat:1 }}" height="{{ bar.height|floatformat:1 }}" rx="3"><title>{{ bar.title }}</title></rect>
-    <text class="value" x="{{ bar.center|floatformat:1 }}" y="{{ bar.value_y|floatformat:1 }}" text-anchor="middle">{{ bar.value }}</text>
-    <text x="{{ bar.center|floatformat:1 }}" y="{{ svg.date_y }}" text-anchor="middle">{{ bar.date }}</text>
+  <a href="{{ bar.url }}" aria-label="{{ bar.label }}" data-tip="{{ bar.tip }}">
+    <rect x="{{ bar.x|floatformat:2 }}" y="{{ svg.top }}" width="{{ bar.width|floatformat:2 }}" height="{{ svg.plot_height }}" fill="transparent"/>
+    <rect class="mark {{ bar.result }}" x="{{ bar.x|floatformat:2 }}" y="{{ bar.y|floatformat:1 }}" width="{{ bar.width|floatformat:2 }}" height="{{ bar.height|floatformat:1 }}"/>
   </a>
   {% endfor %}
+  <line class="axis" x1="{{ svg.left }}" x2="{{ svg.right_edge }}" y1="{{ svg.baseline }}" y2="{{ svg.baseline }}"/>
 </svg>
-<figcaption>{{ caption }}. Wins rise above zero in green, losses fall below it, and draws sit on the line. Select a bar for the game.</figcaption>
+<figcaption>{{ caption }}. Wins rise above zero in green, losses fall below it, and draws sit on the line. Hover over a bar for the result and date; select it for the game.</figcaption>
 </figure>
 {% endif %}

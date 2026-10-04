@@ -1,5 +1,3 @@
-import math
-
 from django import template
 
 register = template.Library()
@@ -21,12 +19,12 @@ def recent_results_chart(team, games):
     if not games:
         return {'bars': []}
 
-    width, height = 960, 198
-    left, right, top, half = 32, 16, 22, 58
+    width = 960
+    left, right, top, half = 32, 16, 12, 58
     baseline = top + half
     plot_width = width - left - right
-    slot = plot_width / len(games)
-    bar_width = min(26, max(8, slot * .58))
+    # Bars touch; a short list keeps a readable bar rather than stretching.
+    bar_width = min(26, plot_width / len(games))
 
     rows = []
     for game in games:
@@ -46,44 +44,33 @@ def recent_results_chart(team, games):
     bars = []
     result_classes = {'w': 'win', 'l': 'loss', 't': 'tie'}
     result_names = {'w': 'win', 'l': 'loss', 't': 'draw'}
-    label_every = max(1, math.ceil(70 / slot))
     for index, (game, opponent, goals_for, goals_against, margin, result) in enumerate(rows):
         if result not in result_names:
             result = 'w' if margin > 0 else 'l' if margin < 0 else 't'
         bar_height = abs(margin) * scale
         if margin > 0:
             y = baseline - bar_height
-            value_y = y - 5
-            value = f'+{margin}'
         elif margin < 0:
             y = baseline
-            value_y = y + bar_height + 13
-            value = str(margin).replace('-', '\N{MINUS SIGN}')
         else:
             y = baseline - 2
             bar_height = 4
-            value_y = baseline - 7
-            value = '0'
 
-        x = left + index * slot + (slot - bar_width) / 2
-        date_text = f'{game.date.strftime("%b")} {game.date.day}, {game.date.year}'
+        if game.date:
+            date_text = f'{game.date.strftime("%b")} {game.date.day}, {game.date.year}'
+        else:
+            date_text = 'Date unknown'
+        score = (f'{goals_for}\N{EN DASH}{goals_against} {result_names[result]} '
+                 f'vs. {opponent.name}')
         bars.append({
-            'hit_x': left + index * slot,
-            'hit_width': slot,
-            'x': x,
-            'center': x + bar_width / 2,
+            'x': left + index * bar_width,
             'y': y,
             'width': bar_width,
             'height': bar_height,
-            'value_y': value_y,
-            'value': value,
-            'date': (f'{game.date.month}/{game.date.day}/{str(game.date.year)[2:]}'
-                     if (len(rows) - 1 - index) % label_every == 0 else ''),
             'result': result_classes[result],
             'url': game.get_absolute_url(),
-            'title': (f'{date_text} vs. {opponent.name}: '
-                      f'{goals_for}\N{EN DASH}{goals_against} '
-                      f'{result_names[result]} ({value})'),
+            'tip': f'{score}|{date_text}',
+            'label': f'{date_text}: {score}',
         })
 
     count = len(bars)
@@ -91,15 +78,15 @@ def recent_results_chart(team, games):
         'bars': bars,
         'svg': {
             'width': width,
-            'height': height,
+            'height': baseline + half + top,
             'left': left,
             'right_edge': width - right,
             'top': top,
             'bottom': baseline + half,
             'baseline': baseline,
-            'date_y': baseline + half + 28,
+            'plot_height': half * 2,
         },
         'maximum': maximum,
-        'caption': (f'Goal difference in the {count} most recent recorded '
-                    f'result{"" if count == 1 else "s"}, oldest to newest'),
+        'caption': (f'Goal difference in the {count} '
+                    f'result{"" if count == 1 else "s"} listed below, oldest to newest'),
     }
