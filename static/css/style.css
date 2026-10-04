@@ -973,7 +973,7 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
 .position-table { overflow-x: auto; }
 .position-table td { text-align: right; font-variant-numeric: tabular-nums; }
 .position-table td:first-child { text-align: left; white-space: nowrap; }
-.results-chart .mark.loss { fill: var(--ink-soft); }
+.results-chart .mark.loss { fill: var(--loss-ink); }
 
 /* Clubs timeline: a block shaded by where the club finished, in fifths of the
    table. A bright green for the best, greens dulling to a sage in the
@@ -1073,11 +1073,11 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
     height: 11px;
     border: 1px solid var(--hairline);
 }
-.results-chart .mark.tie { fill: var(--tie); stroke: var(--ink-soft); stroke-width: 1; }
+.results-chart .mark.tie { fill: var(--ink-soft); }
 /* Bars touch; crisp edges keep antialiasing from drawing seams between them. */
 .results-chart .mark { shape-rendering: crispEdges; }
 .results-chart a:hover .mark.loss, .results-chart a:focus-visible .mark.loss { fill: var(--ink); }
-.results-chart a:hover .mark.tie, .results-chart a:focus-visible .mark.tie { fill: var(--tie); stroke: var(--ink); }
+.results-chart a:hover .mark.tie, .results-chart a:focus-visible .mark.tie { fill: var(--ink); }
 
 /* Goals by season stacks five competition tiers, so it needs a categorical
    palette rather than the accent. These five clear the CVD, normal-vision and

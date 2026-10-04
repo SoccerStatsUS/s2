@@ -53,8 +53,9 @@ def recent_results_chart(team, games):
         elif margin < 0:
             y = baseline
         else:
-            y = baseline - 2
-            bar_height = 4
+            # A draw is one goal tall, centred on the line.
+            y = baseline - scale / 2
+            bar_height = scale
 
         if game.date:
             date_text = f'{game.date.strftime("%b")} {game.date.day}, {game.date.year}'

@@ -234,6 +234,10 @@ class RecentResultsChartTests(SimpleTestCase):
                          ['win', 'loss', 'tie'])
         self.assertLess(chart['bars'][0]['y'], chart['svg']['baseline'])
         self.assertEqual(chart['bars'][1]['y'], chart['svg']['baseline'])
+        # A draw is one goal tall and straddles the line.
+        one_goal = chart['bars'][0]['height'] / 2
+        self.assertAlmostEqual(chart['bars'][2]['height'], one_goal)
+        self.assertAlmostEqual(chart['bars'][2]['y'], chart['svg']['baseline'] - one_goal / 2)
         html = render_to_string('templatetags/charts/results.html', chart)
         self.assertIn('class="mark win"', html)
         self.assertIn('class="mark loss"', html)
