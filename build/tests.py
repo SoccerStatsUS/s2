@@ -225,6 +225,26 @@ class CityGetterTests(SimpleTestCase):
         self.assertIsNone(get_city(''))
 
 
+class SalaryLoadTests(SimpleTestCase):
+    @patch('build.load.Salary')
+    @patch('build.load.Bio')
+    @patch('build.load.make_bio_getter')
+    @patch('build.load.soccer_db')
+    def test_loads_annual_salaries_only(self, soccer_db, make_bio_getter, bio, salary):
+        from build import load
+
+        soccer_db.salaries.find.return_value = [
+            {'_id': 1, 'name': 'David Beckham', 'base': '5500000.08', 'season': '2007', 'period': 'year'},
+            {'_id': 2, 'name': 'Alex McNab', 'base': '25', 'season': '1925', 'period': 'week'},
+        ]
+
+        # Past transaction.atomic, which SimpleTestCase has no database for.
+        load.load_salaries.__wrapped__()
+
+        salary.objects.create.assert_called_once_with(
+            person=bio.objects.get.return_value, amount='5500000.08', season='2007')
+
+
 class StadiumStandingTests(SimpleTestCase):
     def test_counts_both_sides_of_every_game(self):
         rows = [

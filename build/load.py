@@ -803,13 +803,17 @@ def load_salaries():
 
     for e in soccer_db.salaries.find():
         e.pop('_id')
-        
+
+        # Salary has no pay period; a weekly wage would read as an annual one.
+        if e['period'] != 'year':
+            continue
+
         bio = bg(e['name'])
         b = Bio.objects.get(id=bio)
         Salary.objects.create(
             person=b,
             amount=e['base'],
-            season=str(e['year']).strip()
+            season=e['season']
             )
                  
 
