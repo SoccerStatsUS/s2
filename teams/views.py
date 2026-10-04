@@ -322,15 +322,19 @@ def team_detail(request, team_slug):
                                 'draft__season')
                 .order_by('-draft__season__order', 'number'))
 
-    recent_games = team.game_set().filter(date__lt=today).order_by('-date').select_related()[:10]
+    recent_games = team.game_set().filter(date__lt=today).order_by('-date').select_related()[:20]
     if recent_games.count() == 0:
-        recent_games = team.game_set().select_related()[:10]
+        recent_games = team.game_set().select_related()[:20]
+    chart_games = [g for g in reversed(list(recent_games))
+                   if g.team1_score is not None and g.team2_score is not None
+                   and not g.not_played and not g.result_unknown]
 
     season_rates, career_rate = season_points_per_game(team)
 
     context = {
         'team': team,
         'recent_games': recent_games,
+        'chart_games': chart_games,
         'competition_standings': competition_standings,
         'league_standings': league_standings,
         'ladder': club_ladder(team),

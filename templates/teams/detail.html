@@ -6,6 +6,7 @@
 {% load games %}
 {% load stats %}
 {% load humanize %}
+{% load result_chart %}
 
 {% block title %}{{ team.name }}{% endblock %}
 {% block metadescription %}Game results, statistics, awards and more for {{ team.name }}{% endblock %}
@@ -120,6 +121,7 @@
 {% if games_count %}
 <div tab="games">
 <h3>Most recent games &mdash; <a href="{% url 'team_games' team.slug %}">all {{ games_count }} &rarr;</a></h3>
+{% recent_results_chart team chart_games %}
 {% games_table recent_games %}
 </div>
 {% endif %}
