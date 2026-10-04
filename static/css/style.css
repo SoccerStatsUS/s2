@@ -1073,11 +1073,11 @@ figure.chart figcaption { font-size: .9em; color: var(--ink-soft); margin-top: 6
     height: 11px;
     border: 1px solid var(--hairline);
 }
-.results-chart .mark.tie { fill: var(--ink-soft); }
+.results-chart .mark.tie { fill: #b4bcc3; }
 /* Bars touch; crisp edges keep antialiasing from drawing seams between them. */
 .results-chart .mark { shape-rendering: crispEdges; }
 .results-chart a:hover .mark.loss, .results-chart a:focus-visible .mark.loss { fill: var(--ink); }
-.results-chart a:hover .mark.tie, .results-chart a:focus-visible .mark.tie { fill: var(--ink); }
+.results-chart a:hover .mark.tie, .results-chart a:focus-visible .mark.tie { fill: var(--ink-soft); }
 
 /* Goals by season stacks five competition tiers, so it needs a categorical
    palette rather than the accent. These five clear the CVD, normal-vision and
