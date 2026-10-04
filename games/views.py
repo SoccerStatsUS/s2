@@ -147,8 +147,13 @@ def homepage(request):
 
     born = Bio.objects.born_on(month, day)
 
+    yesterday = today - datetime.timedelta(days=1)
+    latest = Game.objects.filter(date__in=[today, yesterday]).exclude(team1_result='') \
+        .order_by('-date', 'id').select_related()[:5]
+
     context = {
         'today': today,
+        'latest': latest,
         'oldest': oldest,
         'crowd': crowd,
         'born': born,

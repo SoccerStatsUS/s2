@@ -177,6 +177,27 @@ class HomepageTests(SimpleTestCase):
         self.assertIn('/games/1996-09-06/major-league-soccer/home-v-away/">1996 &middot;', html)
         self.assertIn('Player Name was born', html)
 
+    def test_results_from_today_and_yesterday_lead_the_strip(self):
+        def played(date, home, url):
+            return SimpleNamespace(
+                id=1, get_absolute_url=lambda: url, date=date,
+                team1=SimpleNamespace(), team2=SimpleNamespace(),
+                team1_original_name=home, team2_original_name='Mexico', winner=None,
+                score_or_result='3 - 0',
+                competition=SimpleNamespace(name='International Friendly', abbreviation='Fr'),
+            )
+
+        html = self.render(latest=[
+            played(datetime.date(2026, 9, 6), 'United States', '/games/today/'),
+            played(datetime.date(2026, 9, 5), 'Canada', '/games/yesterday/'),
+        ])
+
+        self.assertEqual(html.count('class="otd-item"'), 4)
+        self.assertIn('/games/today/">Today &middot; United States', html)
+        self.assertIn('/games/yesterday/">Yesterday &middot; Canada', html)
+        self.assertLess(html.index('/games/today/'), html.index('/games/yesterday/'))
+        self.assertLess(html.index('/games/yesterday/'), html.index('">1996 &middot;'))
+
     def test_a_day_with_nothing_on_record_says_so(self):
         html = self.render(oldest=None, born=None)
 

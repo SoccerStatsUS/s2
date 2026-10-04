@@ -8,12 +8,13 @@
   <h2><span class="otd-label-full">On this day &middot; {{ today|date:"F j" }}</span><span class="otd-label-short">Today</span></h2>
   <button class="otd-prev" type="button" aria-label="Previous on-this-day item" hidden>&larr;</button>
   <div class="otd-items" aria-live="polite" aria-atomic="true">
+    {% for game in latest %}{% if game.date == today %}{% include "homepage/otd_game.html" with label="Today" %}{% else %}{% include "homepage/otd_game.html" with label="Yesterday" %}{% endif %}{% endfor %}
     {% if oldest %}{% include "homepage/otd_game.html" with game=oldest %}{% endif %}
     {% if crowd %}{% include "homepage/otd_game.html" with game=crowd show_attendance=True %}{% endif %}
     {% if born %}
     <p class="otd-item"><a href="{% url 'person_detail' born.slug %}">{{ born.birthdate.year }} &middot; {{ born.name }} was born</a></p>
     {% endif %}
-    {% if not oldest and not born %}
+    {% if not latest and not oldest and not born %}
     <p class="otd-item"><a href="{% url 'dates_index' %}">No match or birthday recorded yet &middot; browse by year</a></p>
     {% endif %}
   </div>
